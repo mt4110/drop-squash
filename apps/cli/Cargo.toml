@@ -12,4 +12,5 @@ dropsquash-core.workspace = true
 dropsquash-encoder.workspace = true
 dropsquash-history.workspace = true
 dropsquash-license.workspace = true
+dropsquash-privacy.workspace = true
 tokio.workspace = true

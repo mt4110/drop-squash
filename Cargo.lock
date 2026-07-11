@@ -923,6 +923,7 @@ dependencies = [
  "dropsquash-encoder",
  "dropsquash-history",
  "dropsquash-license",
+ "dropsquash-privacy",
  "tokio",
 ]
 
@@ -948,6 +949,7 @@ dependencies = [
  "dropsquash-license",
  "dropsquash-platform",
  "dropsquash-postprocess",
+ "dropsquash-privacy",
  "serde",
  "tauri",
  "tauri-build",
@@ -1040,6 +1042,8 @@ version = "0.1.0"
 dependencies = [
  "dropsquash-core",
  "serde",
+ "serde_json",
+ "tempfile",
 ]
 
 [[package]]

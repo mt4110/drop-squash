@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use dropsquash_core::{default_history_path, AppError, EncodeJob, LicenseState, SourcePolicy};
 use dropsquash_encoder::EncoderBackend;
 use dropsquash_history::{append_successful_record, read_records, HistoryMetrics};
+use dropsquash_privacy::PrivacyReceipt;
 
 use crate::args::{OutputSizeArg, ProfileArg};
 
@@ -33,8 +34,10 @@ pub async fn run(
             source_policy: SourcePolicy::Ask,
         })
         .await?;
+    let receipt_path = PrivacyReceipt::save_for_result(&result)?;
     append_successful_record(&history, result.clone()).await?;
     println!("output: {}", result.output_path.display());
+    println!("privacy receipt: {}", receipt_path.display());
     println!("original bytes: {}", result.original_bytes);
     println!("squashed bytes: {}", result.output_bytes);
     println!("saved bytes: {}", result.saved_bytes());
