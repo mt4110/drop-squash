@@ -1,4 +1,4 @@
-use super::missing_manual_verified_evidence;
+use super::{missing_manual_verified_evidence, PACKAGED_MACOS_EVIDENCE};
 
 #[test]
 fn accepts_verified_manual_blocker_with_manual_result() {
@@ -89,9 +89,77 @@ fn reports_incomplete_packaged_macos_manual_qa() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_specific_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Choose recording conversion",
+        "conversion finished with output",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn accepts_packaged_macos_manual_qa_with_specific_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Choose recording conversion",
+        "saved clip.squashed.mp4 and original remained in place",
+    );
+
+    assert!(missing_manual_verified_evidence(blockers, &manual).is_empty());
+}
+
+#[test]
 fn ignores_blocked_manual_blockers() {
     let blockers = "| Gatekeeper clean-machine open | Blocked | Fresh macOS account opens app | TBD | `docs/manual-qa.md` |\n";
     let manual = "| Gatekeeper open test | Signed app opens cleanly |  |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+fn packaged_manual_qa_with(check: &str, result: &str) -> String {
+    PACKAGED_MACOS_EVIDENCE
+        .iter()
+        .map(|label| {
+            let result = if *label == check {
+                result
+            } else {
+                packaged_result(label)
+            };
+            format!("| {label} | Expected | {result} |\n")
+        })
+        .collect()
+}
+
+fn packaged_result(label: &str) -> &'static str {
+    match label {
+        "App build" => "0.1.0",
+        "App artifact" => "/tmp/DropSquash.app",
+        "macOS version" => "macOS 15.5",
+        "Machine" => "Apple silicon Mac",
+        "Input sample set" => "short, medium, and large local recordings",
+        "Output folder" => "/tmp/dropsquash-manual-qa-output",
+        "Tester" => "Manual tester",
+        "Date" => "2026-07-11",
+        "Choose recording conversion" => "saved clip.squashed.mp4 and original remained in place",
+        "Drag-and-drop conversion" => "saved drag.squashed.mp4 and original remained in place",
+        "Privacy receipt sidecar" => {
+            "clip.privacy.json recorded uploaded_bytes = 0 and metadata_policy = preserve"
+        }
+        "Reveal privacy receipt" => "Finder opened with clip.privacy.json selected",
+        "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix",
+        "Cancellation" => "app returned ready and trial history showed no new success",
+        "Multi-file queue" => "three recordings queued with one active sequential conversion",
+        "Queued job cancellation" => "queued row marked cancelled and never started",
+        "Batch summary" => "summary showed finished count and saved bytes",
+        "Ask source policy" => "Ask prompt let tester choose Trash or Keep",
+        "Trash source policy" => "original moved to Trash only after verified smaller output",
+        "Failed conversion" => "original remained and trial count unchanged after failure",
+        "Larger output" => "larger result failed and trial count unchanged",
+        "Reveal output" => "Finder opened with clip.squashed.mp4 selected",
+        _ => "concrete evidence",
+    }
 }
