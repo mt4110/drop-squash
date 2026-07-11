@@ -7,6 +7,7 @@ pub(super) struct Environment {
     macos_version: String,
     machine: String,
     output_folder: String,
+    app_state_dir: String,
     date: String,
 }
 
@@ -16,6 +17,7 @@ impl Environment {
             command_text("sw_vers", &["-productVersion"])?,
             machine_name()?,
             options.output_dir.display().to_string(),
+            options.app_state_dir.display().to_string(),
             command_text("date", &["+%F"])?,
         )
     }
@@ -25,6 +27,15 @@ impl Environment {
             format!("manual QA macOS version: macOS {}", self.macos_version),
             format!("manual QA Machine: {}", self.machine),
             format!("manual QA Output folder: {}", self.output_folder),
+            format!("manual QA Config path: {}/config.json", self.app_state_dir),
+            format!(
+                "manual QA History path: {}/history.jsonl",
+                self.app_state_dir
+            ),
+            format!(
+                "manual QA License cache path: {}/license.json",
+                self.app_state_dir
+            ),
             format!("manual QA Date: {}", self.date),
         ]
     }
@@ -33,12 +44,14 @@ impl Environment {
         macos_version: String,
         machine: String,
         output_folder: String,
+        app_state_dir: String,
         date: String,
     ) -> Result<Self, String> {
         if [
             macos_version.as_str(),
             machine.as_str(),
             output_folder.as_str(),
+            app_state_dir.as_str(),
             date.as_str(),
         ]
         .iter()
@@ -50,6 +63,7 @@ impl Environment {
             macos_version,
             machine,
             output_folder,
+            app_state_dir,
             date,
         })
     }

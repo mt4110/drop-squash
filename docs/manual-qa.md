@@ -46,7 +46,8 @@ run. Copy the printed `manual QA App build` value into the `App build` field.
 Copy the printed `manual QA App artifact` value into the `App artifact` field,
 or pass `--app-artifact <path>` when testing a DMG or a non-default app bundle.
 Copy the printed macOS version, Machine, Output folder, and Date values into
-the matching fields before starting observations.
+the matching fields before starting observations. Copy the printed Config path,
+History path, and License cache path values into the matching state path fields.
 
 Then start from a known trial state if the run is meant to verify trial counts:
 

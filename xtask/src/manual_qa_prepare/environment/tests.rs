@@ -6,6 +6,7 @@ fn formats_manual_qa_environment_lines() {
         "15.5".to_string(),
         "MacBookPro18,3 arm64".to_string(),
         "/tmp/output".to_string(),
+        "/Users/me/Library/Application Support/DropSquash".to_string(),
         "2026-07-11".to_string(),
     )
     .unwrap();
@@ -16,6 +17,9 @@ fn formats_manual_qa_environment_lines() {
             "manual QA macOS version: macOS 15.5",
             "manual QA Machine: MacBookPro18,3 arm64",
             "manual QA Output folder: /tmp/output",
+            "manual QA Config path: /Users/me/Library/Application Support/DropSquash/config.json",
+            "manual QA History path: /Users/me/Library/Application Support/DropSquash/history.jsonl",
+            "manual QA License cache path: /Users/me/Library/Application Support/DropSquash/license.json",
             "manual QA Date: 2026-07-11",
         ]
     );
@@ -27,6 +31,7 @@ fn rejects_empty_environment_fields() {
         "15.5".to_string(),
         String::new(),
         "/tmp/output".to_string(),
+        "/tmp/state".to_string(),
         "2026-07-11".to_string(),
     )
     .unwrap_err();
