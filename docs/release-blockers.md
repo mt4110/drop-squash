@@ -5,6 +5,8 @@ location. Keep secrets, license keys, certificates, and private store IDs out of
 this file.
 Use `Blocked` until the evidence exists. Change a row to `Verified` only after
 the evidence is recorded in the named location.
+Do not leave a row `Blocked` after adding an `Evidence reference`; update the
+status and keep the reference traceable.
 For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 `https://...` URL, `Release notes`, `GitHub Release`, or `Homebrew tap PR`.
 
