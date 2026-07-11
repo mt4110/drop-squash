@@ -1,5 +1,7 @@
 use std::path::{Path, PathBuf};
 
+mod release_copy;
+
 const REQUIRED_PAGES: [&str; 8] = [
     "index.html",
     "download.html",
@@ -24,7 +26,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 fn check_root(root: &Path) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
     check_required_pages(root, &mut errors);
-    check_release_copy(root, &mut errors);
+    release_copy::check(root, &mut errors);
     for path in html_files(root)? {
         check_html(root, &path, &mut errors)?;
     }
@@ -36,31 +38,6 @@ fn check_required_pages(root: &Path, errors: &mut Vec<String>) {
         if !root.join(page).is_file() {
             errors.push(format!("website is missing required page: {page}"));
         }
-    }
-}
-
-fn check_release_copy(root: &Path, errors: &mut Vec<String>) {
-    require_page_text(root, "index.html", "Release status", errors);
-    require_page_text(root, "download.html", "DropSquash.dmg", errors);
-    require_page_text(root, "download.html", "notarization", errors);
-    require_page_text(root, "download.html", "checksum", errors);
-    require_page_text(root, "pricing.html", "Checkout opens after", errors);
-    require_page_text(
-        root,
-        "support.html",
-        "Do not send screen recordings",
-        errors,
-    );
-    require_page_text(root, "support.html", "app version", errors);
-}
-
-fn require_page_text(root: &Path, page: &str, needle: &str, errors: &mut Vec<String>) {
-    let path = root.join(page);
-    let Ok(text) = std::fs::read_to_string(&path) else {
-        return;
-    };
-    if !text.contains(needle) {
-        errors.push(format!("{page} is missing required text: {needle}"));
     }
 }
 

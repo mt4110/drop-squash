@@ -83,6 +83,23 @@ fn rejects_missing_release_status_copy() {
 }
 
 #[test]
+fn rejects_missing_privacy_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "privacy.html",
+        "<p>Private by design.</p>",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("upload media")));
+    assert!(errors.iter().any(|error| error.contains("Telemetry")));
+    assert!(errors.iter().any(|error| error.contains("Lemon Squeezy")));
+}
+
+#[test]
 fn rejects_pre_release_download_or_checkout_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -123,6 +140,9 @@ fn required_page_text(page: &str) -> &'static str {
         "index.html" => "Release status",
         "download.html" => "DropSquash.dmg notarization checksum",
         "pricing.html" => "Checkout opens after",
+        "privacy.html" => {
+            "does not upload media Telemetry is off by default License activation contacts Lemon Squeezy"
+        }
         "support.html" => "Do not send screen recordings app version",
         _ => "<p>Page</p>",
     }
