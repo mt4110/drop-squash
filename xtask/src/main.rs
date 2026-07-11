@@ -1,3 +1,4 @@
+mod artifact_check;
 mod checksum;
 mod macos_signing_check;
 mod release_check;
@@ -5,6 +6,7 @@ mod release_check;
 fn main() {
     let mut args = std::env::args().skip(1);
     let result = match args.next().as_deref() {
+        Some("artifact-check") => artifact_check::run(args.collect()),
         Some("checksum") => checksum::run(args.collect()),
         Some("macos-signing-check") => macos_signing_check::run(),
         Some("release-check") => release_check::run(),
@@ -19,7 +21,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <release-check|checksum|macos-signing-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|checksum|macos-signing-check|release-check> [files...]"
     );
     std::process::exit(2);
 }

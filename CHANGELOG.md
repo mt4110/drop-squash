@@ -22,3 +22,4 @@
 - Add a static sales-site draft with landing, pricing, privacy, download, support, license, and changelog pages.
 - Add an `xtask checksum` command for release SHA-256 artifact manifests.
 - Add an `xtask macos-signing-check` command for preflight signing and notarization environment validation.
+- Add an `xtask artifact-check` command to reject release artifacts containing `/nix/store` references.

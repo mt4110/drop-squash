@@ -38,4 +38,11 @@ Generate SHA-256 checksum lines for release artifacts with:
 cargo run -p xtask -- checksum path/to/DropSquash.dmg > SHA256SUMS
 ```
 
+Reject release artifacts that accidentally capture development-only Nix store
+references:
+
+```sh
+cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
+```
+
 Publish the checksum file with the GitHub Release after notarization succeeds.
