@@ -50,6 +50,8 @@ fn render(input: &Input) -> String {
   homepage "{homepage}"
 
   app "DropSquash.app"
+
+  zap trash: "~/Library/Application Support/DropSquash"
 end"#,
         version = input.version,
         url = input.url,
