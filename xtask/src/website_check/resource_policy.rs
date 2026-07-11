@@ -11,6 +11,11 @@ pub(super) fn check(_root: &Path, path: &Path, src: &str, errors: &mut Vec<Strin
 }
 
 fn local_resource_exists(path: &Path, src: &str) -> bool {
+    let src = src_path(src);
     path.parent()
         .is_some_and(|parent| parent.join(src).is_file())
+}
+
+fn src_path(src: &str) -> &str {
+    src.split(['#', '?']).next().unwrap_or(src)
 }

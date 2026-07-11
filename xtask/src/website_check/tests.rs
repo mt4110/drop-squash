@@ -63,6 +63,20 @@ fn accepts_nested_release_status_page() {
 }
 
 #[test]
+fn accepts_local_resources_with_cache_busters() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "styles.css", "body {}");
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <script src="styles.css?v=1"></script>"#,
+    );
+
+    assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
 fn rejects_missing_local_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
