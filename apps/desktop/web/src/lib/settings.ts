@@ -10,9 +10,9 @@ export function savedConfigFromState(state: DropZoneState): SavedConfig {
   };
 }
 
-export function savedConfigWith(
+export function stateWithSavedConfigPatch(
   state: DropZoneState,
   patch: Partial<SavedConfig>,
-): SavedConfig {
-  return { ...savedConfigFromState(state), ...patch };
+): DropZoneState {
+  return { ...state, ...patch };
 }

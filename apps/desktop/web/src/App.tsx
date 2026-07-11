@@ -33,7 +33,7 @@ import {
   markSucceeded,
   nextQueued,
 } from "./lib/queue";
-import { savedConfigFromState } from "./lib/settings";
+import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
@@ -75,7 +75,7 @@ export function App() {
   }, []);
 
   const updateConfig = useCallback((patch: Partial<SavedConfig>) => {
-    const nextState = { ...stateRef.current, ...patch };
+    const nextState = stateWithSavedConfigPatch(stateRef.current, patch);
     stateRef.current = nextState;
     setState(nextState);
     void persistSettings(savedConfigFromState(nextState));
