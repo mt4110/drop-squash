@@ -69,7 +69,12 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])
         }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
-            Some(&[&["csv"], &["smaller"]])
+            Some(&[
+                &["csv"],
+                &["three", "3"],
+                &["smaller"],
+                &["outside repo", "outside repository"],
+            ])
         }
         "Benchmark sample set" => Some(&[
             &["short"],
