@@ -21,6 +21,13 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             Some(&[&["docs/release-blockers.md"], &["verified"], &["all rows"]])
         }
         "Manual QA record" => Some(&[&["docs/manual-qa.md"], &["dropsquash.dmg", ".app"]]),
+        "Trash source policy" => Some(&[
+            &["moving original", "moving"],
+            &["disabled"],
+            &["verified"],
+            &["smaller"],
+            &["trash"],
+        ]),
         "Lemon Squeezy product setup" => Some(&[
             &["dropsquash"],
             &["intended product"],

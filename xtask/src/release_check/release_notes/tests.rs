@@ -15,6 +15,7 @@ Apple notary log
 Gatekeeper
 docs/release-blockers.md
 Manual QA record
+Trash source policy
 Benchmark sample set
 Benchmark regression threshold
 Lemon Squeezy product setup

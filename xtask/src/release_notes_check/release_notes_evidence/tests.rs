@@ -27,6 +27,7 @@ fn accepts_concrete_production_urls() {
 - Gatekeeper clean-machine open: Gatekeeper opened app cleanly in fresh account
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
+- Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
 - Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
 - Benchmark regression threshold: no sample exceeded 20 percent regression
 - Lemon Squeezy product setup: DropSquash intended product has license keys enabled
@@ -68,6 +69,7 @@ fn rejects_weak_distribution_evidence() {
 - Gatekeeper clean-machine open: opened app
 - `docs/release-blockers.md` status: verified
 - Manual QA record: manual QA filled
+- Trash source policy: original trashed
 - Lemon Squeezy product setup: product ready
 - Lemon Squeezy sandbox purchase: purchase completed
 - Lemon Squeezy sandbox activation: activated
@@ -109,6 +111,9 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Lemon Squeezy product setup")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Trash source policy")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Known limitations")));

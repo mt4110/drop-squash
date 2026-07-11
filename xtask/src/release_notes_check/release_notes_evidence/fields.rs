@@ -9,7 +9,7 @@ pub(super) const URL: [(&str, url::Kind); 6] = [
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
 
-pub(super) const EVIDENCE: [&str; 19] = [
+pub(super) const EVIDENCE: [&str; 20] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -17,6 +17,7 @@ pub(super) const EVIDENCE: [&str; 19] = [
     "Gatekeeper clean-machine open",
     "`docs/release-blockers.md` status",
     "Manual QA record",
+    "Trash source policy",
     "Lemon Squeezy product setup",
     "Lemon Squeezy sandbox purchase",
     "Lemon Squeezy sandbox activation",
