@@ -9,31 +9,72 @@ fn accepts_concrete_production_urls() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- `codesign`: valid on DropSquash.app
-- `spctl`: accepted source Developer ID
-- `stapler`: ticket stapled successfully
+- `codesign`: codesign verified Developer ID Application signature
+- `spctl`: spctl accepted Developer ID source
+- `stapler`: stapler validate showed ticket stapled successfully
 - Apple notary log: notarytool accepted request abc123
-- Gatekeeper clean-machine open: fresh account opened app
+- Gatekeeper clean-machine open: Gatekeeper opened app cleanly in fresh account
 - `docs/release-blockers.md` status: all rows Verified
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
 - Benchmark sample set: short medium large local recordings recorded
 - Benchmark regression threshold: no sample exceeded 20 percent regression
 - Lemon Squeezy sandbox purchase: test buyer order abc123 completed
-- Lemon Squeezy sandbox activation: Pro state reached without raw key cache
-- Empty key activation: friendly validation shown without raw key cache
-- Invalid license key handling: friendly error shown without raw key cache
-- Local license forget: local cache removed and trial state restored
+- Lemon Squeezy sandbox activation: Pro state reached and raw key absent from cache
+- Empty key activation: friendly validation shown and raw key absent from cache
+- Invalid license key handling: friendly error shown and raw key absent from cache
+- Local license forget: license cache removed and trial state restored
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached to release
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR: cask update reviewed in tap PR
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
-- Homebrew install result: brew install completed
+- Homebrew install result: brew install dropsquash completed
 "#,
     );
 
     assert!(errors.is_empty());
+}
+
+#[test]
+fn rejects_weak_distribution_evidence() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Git commit: abc1234
+- `codesign`: signature ok
+- `spctl`: accepted
+- `stapler`: ticket ok
+- Apple notary log: request completed
+- Gatekeeper clean-machine open: opened app
+- `docs/release-blockers.md` status: verified
+- Manual QA record: manual QA filled
+- Lemon Squeezy sandbox purchase: purchase completed
+- Lemon Squeezy sandbox activation: activated
+- Empty key activation: empty key handled
+- Invalid license key handling: invalid key handled
+- Local license forget: forgot license
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release checksum: checksum attached
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR: reviewed
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+- Homebrew install result: installed
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("`codesign`")));
+    assert!(errors.iter().any(|error| error.contains("`stapler`")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Gatekeeper clean-machine open")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew install result")));
 }
 
 #[test]

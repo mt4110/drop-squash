@@ -3,6 +3,7 @@ use std::path::Path;
 mod benchmark;
 mod consistency;
 mod identity;
+mod quality;
 mod url;
 
 const URL_FIELDS: [(&str, url::Kind); 5] = [
@@ -76,7 +77,7 @@ fn validate_evidence_field(label: &'static str, text: &str) -> Option<String> {
     let Some(value) = field_value(label, text) else {
         return Some(format!("{label} must be present"));
     };
-    if is_concrete_evidence(value) {
+    if is_concrete_evidence(value) && !quality::lacks_required_evidence(label, value) {
         return None;
     }
     Some(format!("{label} must contain concrete release evidence"))
