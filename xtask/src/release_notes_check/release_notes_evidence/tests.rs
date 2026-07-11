@@ -207,6 +207,20 @@ fn rejects_nested_artifact_download_url() {
 }
 
 #[test]
+fn rejects_nested_github_release_tag_url() {
+    let errors = check_text(
+        r#"
+- Version: v0.1.0
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0/notes
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release URL")));
+}
+
+#[test]
 fn rejects_release_notes_without_specific_public_urls() {
     let errors = check_text(
         r#"
