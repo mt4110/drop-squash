@@ -34,3 +34,4 @@
 - Add an `xtask media-policy-check` command and share it between CI and release readiness.
 - Add a refund policy draft page to the static sales site before live checkout.
 - Add an `xtask privacy-policy-check` command for default telemetry and analytics guardrails.
+- Add an `xtask manual-qa-check` command for packaged-app QA completion records.

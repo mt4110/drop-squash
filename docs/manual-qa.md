@@ -4,6 +4,12 @@ Manual QA records real packaged-app behavior that automated tests cannot prove.
 Do not mark a productization phase complete from this file until the result and
 environment are filled in.
 
+Run this gate after filling every result:
+
+```sh
+cargo run -p xtask -- manual-qa-check
+```
+
 ## macOS Packaged App
 
 | Field | Value |
@@ -42,6 +48,9 @@ environment are filled in.
 |---|---|---|
 | `cargo run -p xtask -- release-check` | Passes |  |
 | `cargo run -p xtask -- file-size-check` | Passes |  |
+| `cargo run -p xtask -- media-policy-check` | Passes |  |
+| `cargo run -p xtask -- privacy-policy-check` | Passes |  |
+| `cargo run -p xtask -- website-check` | Passes |  |
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes |  |
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |

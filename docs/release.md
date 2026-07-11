@@ -48,6 +48,12 @@ notarization it accepts either the App Store Connect API variables
 variables `APPLE_ID`, `APPLE_PASSWORD`, and `APPLE_TEAM_ID`. Do not commit these
 values.
 
+After packaged-app testing, require the manual QA record to be complete:
+
+```sh
+cargo run -p xtask -- manual-qa-check
+```
+
 Generate SHA-256 checksum lines for release artifacts with:
 
 ```sh
