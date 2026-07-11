@@ -2,6 +2,7 @@ pub(super) const ALL: &[&str] = &[
     "Packaged macOS manual QA",
     "Lemon Squeezy product setup",
     "Lemon Squeezy sandbox purchase",
+    "Empty key activation",
     "Valid sandbox activation",
     "Invalid license key handling",
     "Local license forget",

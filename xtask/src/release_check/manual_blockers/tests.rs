@@ -78,6 +78,24 @@ fn reports_verified_invalid_key_blocker_without_manual_result() {
 }
 
 #[test]
+fn reports_verified_empty_key_blocker_without_cache_evidence() {
+    let blockers = "| Empty key activation | Verified | Friendly validation error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Empty key activation | Friendly validation error | friendly validation shown |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Empty key activation"));
+}
+
+#[test]
+fn accepts_verified_empty_key_blocker_with_cache_evidence() {
+    let blockers = "| Empty key activation | Verified | Friendly validation error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Empty key activation | Friendly validation error | friendly validation shown and license.json cache has no raw key |\n";
+
+    assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
 fn reports_verified_local_forget_blocker_without_manual_result() {
     let blockers = "| Local license forget | Verified | Local cache removed | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual =

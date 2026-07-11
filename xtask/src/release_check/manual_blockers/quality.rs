@@ -54,7 +54,7 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         ]),
         "Sandbox purchase" => Some(&[&["intended product"], &["test buyer"], &["order"]]),
         "Valid sandbox activation" => Some(&[&["cache", "license.json"], &["pro"], &["raw key"]]),
-        "Invalid key activation" => {
+        "Empty key activation" | "Invalid key activation" => {
             Some(&[&["cache", "license.json"], &["friendly"], &["raw key"]])
         }
         "Forget license on this Mac" => Some(&[&["cache", "license.json"], &["trial", "locked"]]),

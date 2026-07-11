@@ -62,6 +62,15 @@ fn reports_valid_activation_completion_without_cache() {
 }
 
 #[test]
+fn reports_empty_key_completion_without_cache() {
+    let text = "| Empty key activation | Blocked | Friendly validation error appears and raw key is absent | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Empty key activation"));
+}
+
+#[test]
 fn reports_invalid_key_completion_without_friendly_error() {
     let text = "| Invalid license key handling | Blocked | raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
 
@@ -121,6 +130,7 @@ fn described_blockers() -> String {
         "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
+        "| Empty key activation | Blocked | Friendly validation error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",

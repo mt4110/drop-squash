@@ -1,9 +1,10 @@
 use super::row;
 
-const EXPECTED_RECORD_TARGETS: [(&str, &str); 15] = [
+const EXPECTED_RECORD_TARGETS: [(&str, &str); 16] = [
     ("Packaged macOS manual QA", "`docs/manual-qa.md`"),
     ("Lemon Squeezy product setup", "`docs/manual-qa.md`"),
     ("Lemon Squeezy sandbox purchase", "`docs/manual-qa.md`"),
+    ("Empty key activation", "`docs/manual-qa.md`"),
     ("Valid sandbox activation", "`docs/manual-qa.md`"),
     ("Invalid license key handling", "`docs/manual-qa.md`"),
     ("Local license forget", "`docs/manual-qa.md`"),
