@@ -353,6 +353,20 @@ fn reports_privacy_receipt_without_zero_upload_policy() {
 }
 
 #[test]
+fn reports_reveal_results_without_selection_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Reveal privacy receipt | Successful conversion | Finder opens | Finder opened clip.privacy.json |\n\
+| Reveal output | Completed output link | Finder opens | Finder opened clip.squashed.mp4 |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Reveal privacy receipt")));
+    assert!(missing.iter().any(|error| error.contains("Reveal output")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\

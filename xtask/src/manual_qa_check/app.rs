@@ -48,7 +48,7 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["uploaded_bytes"],
             &["metadata_policy"],
         ],
-        "Reveal privacy receipt" => &[&["finder"], &[".privacy.json"]],
+        "Reveal privacy receipt" => &[&["finder"], &[".privacy.json"], &["selected"]],
         "Duplicate output naming" => &[&["squashed-2", "numbered"]],
         "Cancellation" => &[&["ready"], &["trial", "history"]],
         "Multi-file queue" => &[&["three", "3"], &["one active", "sequential"]],
@@ -61,7 +61,7 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["failure", "failed"],
             &["trial count unchanged", "trial unchanged"],
         ],
-        "Reveal output" => &[&["finder"], &[".mp4"]],
+        "Reveal output" => &[&["finder"], &[".mp4"], &["selected"]],
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
             &[&["artifact-check"], &["dropsquash.dmg", ".dmg"]]
         }
