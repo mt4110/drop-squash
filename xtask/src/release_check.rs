@@ -47,6 +47,10 @@ pub fn run() -> Result<(), String> {
     require_text("docs/productization.md", "docs/release-blockers.md")?;
     require_text("README.md", "macOS today")?;
     require_text("README.md", "Windows and Linux support is planned")?;
+    require_text(
+        "Cargo.toml",
+        "repository = \"https://github.com/mt4110/drop-squash\"",
+    )?;
     require_text("docs/product.md", "macOS today")?;
     require_text("docs/product.md", "Windows and Linux support is planned")?;
     require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
