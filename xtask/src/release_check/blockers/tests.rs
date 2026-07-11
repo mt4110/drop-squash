@@ -17,6 +17,14 @@ fn accepts_all_required_release_blockers() {
 }
 
 #[test]
+fn release_blockers_template_contains_required_rows() {
+    let text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+
+    assert!(missing_release_blockers(&text).is_empty());
+    assert!(invalid_status_rows(&text).is_empty());
+}
+
+#[test]
 fn reports_missing_release_blocker() {
     let missing = missing_release_blockers("");
 
