@@ -15,5 +15,9 @@ pub enum QueueEvent {
         id: QueueJobId,
         error: String,
     },
+    Blocked {
+        id: QueueJobId,
+        error: String,
+    },
     Cancelled(QueueJobId),
 }
