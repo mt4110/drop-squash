@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Default desktop window permissions for the DropSquash scaffold.",
+  "description": "Main DropSquash window permissions for choosing recordings and revealing completed outputs.",
   "windows": ["main"],
   "permissions": ["core:event:default", "dialog:allow-open", "opener:allow-reveal-item-in-dir"]
 }
