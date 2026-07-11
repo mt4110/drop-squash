@@ -32,3 +32,4 @@
 - Align Cargo workspace repository metadata with the current `mt4110/drop-squash` remote.
 - Add an `xtask website-check` command and CI gate for static sales-site links and placeholders.
 - Add an `xtask media-policy-check` command and share it between CI and release readiness.
+- Add a refund policy draft page to the static sales site before live checkout.
