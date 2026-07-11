@@ -1,12 +1,6 @@
 use std::path::{Path, PathBuf};
 
-const DISALLOWED: [&str; 5] = [
-    "ffmpeg",
-    "ffprobe",
-    "std::process::Command",
-    "tokio::process",
-    "Command::new",
-];
+mod markers;
 
 pub fn run() -> Result<(), String> {
     check_default_roots()?;
@@ -51,13 +45,8 @@ fn collect_violations(path: &Path, violations: &mut Vec<String>) -> Result<(), S
 fn scan_file(path: &Path, violations: &mut Vec<String>) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let lower = text.to_lowercase();
-    for needle in DISALLOWED {
-        let matches = if needle.chars().all(|value| value.is_ascii_lowercase()) {
-            lower.contains(needle)
-        } else {
-            text.contains(needle)
-        };
-        if matches {
+    for needle in markers::DISALLOWED {
+        if lower.contains(needle) {
             violations.push(format!("{} contains disallowed {needle}", path.display()));
         }
     }

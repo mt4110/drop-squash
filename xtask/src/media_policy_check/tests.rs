@@ -29,7 +29,43 @@ fn rejects_process_command_construction() {
 
     let error = check_roots(&[directory.path().join("apps")]).unwrap_err();
 
-    assert!(error.contains("std::process::Command"));
+    assert!(error.contains("std::process::command"));
+}
+
+#[test]
+fn rejects_javascript_media_process_packages() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "apps/desktop/web/src/media.ts",
+        "import cp from 'child_process'; import ffmpeg from 'fluent-ffmpeg';",
+    );
+    write(
+        directory.path(),
+        "apps/desktop/web/src/wasm.ts",
+        "import { FFmpeg } from '@ffmpeg/ffmpeg';",
+    );
+
+    let error = check_roots(&[directory.path().join("apps")]).unwrap_err();
+
+    assert!(error.contains("child_process"));
+    assert!(error.contains("fluent-ffmpeg"));
+    assert!(error.contains("@ffmpeg/"));
+}
+
+#[test]
+fn rejects_other_external_media_tools() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/media/src/lib.rs",
+        "\"mediainfo\"; \"avconv\";",
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("\"mediainfo\""));
+    assert!(error.contains("avconv"));
 }
 
 #[test]
