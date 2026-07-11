@@ -45,6 +45,13 @@ capabilities minimal, keep the unsigned release workflow blocked, and verify
 that the updater is not enabled before signing keys are ready.
 The `manual-qa-prepare` step preserves local DropSquash app state and creates a
 dedicated output folder before packaged-app QA evidence is recorded.
+If the QA run used a reset trial state, restore the backed up local state after
+recording evidence:
+
+```sh
+cargo run -p xtask -- manual-qa-prepare --restore-state
+```
+
 The unsigned Tauri build is only a packaging and QA input; public release still
 requires signing, notarization, stapling, artifact checks, and checksums.
 
