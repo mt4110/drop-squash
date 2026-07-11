@@ -1,6 +1,15 @@
 use std::path::{Path, PathBuf};
 
-const REQUIRED_FIELDS: [&str; 5] = ["App build", "macOS version", "Machine", "Tester", "Date"];
+const REQUIRED_FIELDS: [&str; 8] = [
+    "App build",
+    "App artifact",
+    "macOS version",
+    "Machine",
+    "Input sample set",
+    "Output folder",
+    "Tester",
+    "Date",
+];
 const REQUIRED_CHECKS: [&str; 24] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",

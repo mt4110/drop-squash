@@ -19,8 +19,11 @@ cargo run -p xtask -- manual-qa-check
 | Field | Value |
 |---|---|
 | App build |  |
+| App artifact |  |
 | macOS version |  |
 | Machine |  |
+| Input sample set |  |
+| Output folder |  |
 | Tester |  |
 | Date |  |
 

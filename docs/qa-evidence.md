@@ -36,4 +36,6 @@ These checks still require a packaged macOS app or external service state:
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |
 
-Only `docs/manual-qa.md` should be used to record those manual results.
+Only `docs/manual-qa.md` should be used to record those manual results. Record
+the exact app artifact, input sample set, and output folder so the evidence can
+be reproduced later.
