@@ -21,6 +21,26 @@ fn reports_empty_environment_fields() {
 }
 
 #[test]
+fn reports_app_build_without_commit_identity() {
+    let (_directory, path) = write_manual_qa("| App build | 0.1.0 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("version and git commit")));
+}
+
+#[test]
+fn reports_app_build_without_numeric_version() {
+    let (_directory, path) = write_manual_qa("| App build | DropSquash 0.x.0 git abc1234 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("version and git commit")));
+}
+
+#[test]
 fn reports_empty_four_column_results() {
     let (_directory, path) = write_manual_qa("| Convert | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
@@ -298,6 +318,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
     for field in REQUIRED_FIELDS {
         let value = match field {
             "App artifact" => artifact.display().to_string(),
+            "App build" => "DropSquash 0.1.0 git abc1234".to_string(),
             "Date" => "2026-07-11".to_string(),
             _ => "Concrete evidence".to_string(),
         };

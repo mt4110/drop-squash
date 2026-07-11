@@ -24,6 +24,8 @@ available.
 `App artifact` must point to the existing local artifact used for the run: a
 `.app` bundle directory or a UDIF `.dmg` file. `Date` must use a real
 `YYYY-MM-DD` calendar date in year 2000 or later.
+`App build` must include both the tested app version and the git commit, for
+example `DropSquash 0.1.0 git abc1234`.
 
 Before starting packaged-app QA, preserve the current local app state instead
 of deleting it:

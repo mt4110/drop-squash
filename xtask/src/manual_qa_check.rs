@@ -2,11 +2,12 @@ use std::path::{Path, PathBuf};
 
 mod app;
 mod benchmark;
+mod fields;
 mod license;
 mod requirements;
 mod validation;
 use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};
-use validation::{has_placeholder_evidence, validate_field, validate_result};
+use validation::{has_placeholder_evidence, validate_result};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let path = PathBuf::from(
@@ -62,7 +63,7 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
         ));
     }
     if cells.len() == 2 {
-        validate_field(cells[0], cells[1], missing);
+        fields::validate(cells[0], cells[1], missing);
     }
     if cells.len() == 4 {
         validate_result(cells[0], cells[3], missing);
