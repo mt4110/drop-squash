@@ -6,7 +6,7 @@ use dropsquash_core::{
 };
 use dropsquash_encoder::EncoderBackend;
 use dropsquash_fileguard::{wait_until_stable, StabilityOptions};
-use dropsquash_history::{append_record, ConversionRecord};
+use dropsquash_history::append_successful_record;
 use tokio_util::sync::CancellationToken;
 
 use super::dto::ConversionSummary;
@@ -77,12 +77,9 @@ async fn convert_inner(
         )
         .await
         .map_err(format_error)?;
-    append_record(
-        &default_history_path(),
-        &ConversionRecord::new(result.clone()),
-    )
-    .await
-    .map_err(format_error)?;
+    append_successful_record(&default_history_path(), result.clone())
+        .await
+        .map_err(format_error)?;
     let decision = handle_source_action(&result, source_policy)?;
     Ok(ConversionSummary::new(result, decision))
 }

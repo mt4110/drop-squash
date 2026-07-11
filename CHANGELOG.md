@@ -43,3 +43,4 @@
 - Wire the release workflow to the macOS signing and notarization preflight.
 - Require certificate-based macOS signing credentials in GitHub Actions preflight.
 - Avoid writing partial license cache data when activation fails.
+- Guard conversion history writes so only successful smaller outputs can count toward trial use.
