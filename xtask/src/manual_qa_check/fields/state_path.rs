@@ -1,4 +1,5 @@
 pub(super) fn validate(value: &str, file_name: &str, missing: &mut Vec<String>) {
+    let value = value.trim().trim_matches('`');
     if mentions_drop_squash_state(value) && value.ends_with(file_name) {
         return;
     }

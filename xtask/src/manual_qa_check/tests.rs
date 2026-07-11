@@ -85,6 +85,18 @@ fn reports_wrong_state_paths() {
 }
 
 #[test]
+fn accepts_inline_code_state_paths() {
+    let (_directory, path) = write_manual_qa(
+        "| Config path | `$HOME/Library/Application Support/DropSquash/config.json` |\n\
+| History path | `$HOME/Library/Application Support/DropSquash/history.jsonl` |\n\
+| License cache path | `$HOME/Library/Application Support/DropSquash/license.json` |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(!missing.iter().any(|error| error.contains("DropSquash/")));
+}
+
+#[test]
 fn reports_generic_tester_field() {
     let (_directory, path) = write_manual_qa("| Tester | Concrete evidence |\n");
     let missing = check_file(&path).unwrap();
