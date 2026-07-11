@@ -1,9 +1,11 @@
 use std::path::Path;
 
-const REQUIRED_BLOCKERS: [&str; 8] = [
+const REQUIRED_BLOCKERS: [&str; 10] = [
     "Packaged macOS manual QA",
     "Lemon Squeezy sandbox purchase",
     "Valid sandbox activation",
+    "Public website deployment",
+    "Live checkout link",
     "Signed DMG",
     "Notarized and stapled DMG",
     "Gatekeeper clean-machine open",
