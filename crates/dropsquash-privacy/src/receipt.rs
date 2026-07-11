@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use dropsquash_core::{EncodeResult, Result};
+use dropsquash_core::{AppError, EncodeResult, Result};
 use serde::{Deserialize, Serialize};
 
 use crate::MetadataPolicy;
@@ -28,6 +28,9 @@ impl From<&EncodeResult> for PrivacyReceipt {
 impl PrivacyReceipt {
     pub fn load_for_output(output_path: &Path) -> Result<(PathBuf, Self)> {
         let path = receipt_path_for(output_path);
+        if !path.is_file() {
+            return Err(AppError::FileNotFound(path));
+        }
         let text = std::fs::read_to_string(&path)?;
         Ok((path, serde_json::from_str(&text)?))
     }

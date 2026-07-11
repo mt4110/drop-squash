@@ -64,6 +64,16 @@ fn load_for_output_reads_matching_sidecar() {
     assert_eq!(receipt.uploaded_bytes, 0);
 }
 
+#[test]
+fn load_for_output_reports_missing_sidecar_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let output_path = directory.path().join("missing.mp4");
+
+    let error = PrivacyReceipt::load_for_output(&output_path).unwrap_err();
+
+    assert!(error.to_string().contains("missing.privacy.json"));
+}
+
 fn encode_result(input: impl Into<PathBuf>, output: impl Into<PathBuf>) -> EncodeResult {
     EncodeResult {
         input_path: input.into(),
