@@ -17,7 +17,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Release template synchronization | Manual QA, release blockers, evidence classes, release notes, release docs, workflows, and the actual website directory stay covered by xtask tests | `cargo test -p xtask` |
 | CI workflow shape | Pull-request CI runs format, file-size, website, release readiness, and Nix dev shell evaluation gates | `cargo run -p xtask -- release-check` |
 | Security workflow shape | Security CI runs advisory, license/source, media, and privacy gates | `cargo run -p xtask -- release-check` |
-| Manual QA completeness | Packaged-app evidence fields, concrete results, malformed table rows, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
+| Manual QA completeness | Packaged-app evidence fields, concrete identity fields, concrete results, malformed table rows, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
 | Manual QA preparation | App state backup, trial reset, and `--restore-state` are tested without deleting config by default | `cargo test -p xtask manual_qa_prepare` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
 | Static site | Required pages, local links/resources, approved external links, placeholders, unsupported platform availability claims, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links or form actions are checked | `cargo run -p xtask -- website-check` |
