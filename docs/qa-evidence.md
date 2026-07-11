@@ -38,6 +38,7 @@ These checks still require a packaged macOS app or external service state:
 | Drag-and-drop conversion | Packaged WebView drag/drop behavior can differ from dev mode |
 | Duplicate output naming | Repeated packaged-app conversions must show the user-facing numbered suffix |
 | Finder reveal | Finder selection behavior is macOS integration, not core logic |
+| Ask source policy | The post-conversion prompt and user choice need packaged UI observation |
 | Trash source policy | NSFileManager Trash behavior must be verified on the target macOS version |
 | Failed conversion | Packaged-app failure state must preserve the original and trial count |
 | Larger output | Packaged-app larger-output handling must show failure without trial count |

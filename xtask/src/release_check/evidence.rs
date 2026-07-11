@@ -1,10 +1,11 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 11] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 12] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Duplicate output naming", "Duplicate output naming"),
     ("Finder reveal", "Reveal output"),
+    ("Ask source policy", "Ask source policy"),
     ("Trash source policy", "Trash source policy"),
     ("Failed conversion", "Failed conversion"),
     ("Larger output", "Larger output"),
