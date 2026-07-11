@@ -55,6 +55,7 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     );
     require_page_text(root, "support.html", "FAQ", errors);
     require_page_text(root, "support.html", "What is a privacy receipt?", errors);
+    require_page_text(root, "support.html", "metadata_policy = preserve", errors);
     require_page_text(
         root,
         "support.html",
