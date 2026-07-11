@@ -45,6 +45,8 @@ pub fn run() -> Result<(), String> {
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
     require_text("docs/release.md", "docs/release-blockers.md")?;
     require_text("docs/productization.md", "docs/release-blockers.md")?;
+    require_text("docs/product.md", "macOS today")?;
+    require_text("docs/product.md", "Windows and Linux support is planned")?;
     require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
     require_text("docs/licensing.md", "Lemon Squeezy sandbox purchase")?;
     require_text("website/README.md", "docs/release-blockers.md")?;
