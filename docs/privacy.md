@@ -14,4 +14,5 @@ The CLI can inspect an existing sidecar with
 
 The media worker has no network capability. License validation is isolated from
 the media path and never receives media contents or media-derived metadata. The
-privacy gate rejects network clients outside the license provider.
+privacy gate rejects network clients outside the license provider, including
+browser fetch calls, generic HTTP clients, and Tauri HTTP plugin imports.

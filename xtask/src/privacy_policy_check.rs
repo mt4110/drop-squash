@@ -1,22 +1,6 @@
 use std::path::{Path, PathBuf};
 
-const DISALLOWED: [&str; 8] = [
-    "posthog",
-    "sentry",
-    "amplitude",
-    "mixpanel",
-    "google-analytics",
-    "gtag(",
-    "sendbeacon",
-    "xmlhttprequest",
-];
-const NETWORK_MARKERS: [&str; 5] = [
-    "fetch(",
-    "reqwest",
-    "TcpStream",
-    "WebSocket",
-    "connect_async",
-];
+mod markers;
 
 pub fn run() -> Result<(), String> {
     check_default_roots()?;
@@ -66,14 +50,14 @@ fn collect_violations(path: &Path, violations: &mut Vec<String>) -> Result<(), S
 fn scan_file(path: &Path, violations: &mut Vec<String>) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let lower = text.to_lowercase();
-    for needle in DISALLOWED {
+    for needle in markers::DISALLOWED {
         if lower.contains(needle) {
             violations.push(format!("{} contains disallowed {needle}", path.display()));
         }
     }
     if !is_license_network_source(path) {
-        for marker in NETWORK_MARKERS {
-            if text.contains(marker) {
+        for marker in markers::NETWORK {
+            if lower.contains(marker) {
                 violations.push(format!(
                     "{} contains disallowed network marker {marker}",
                     path.display()

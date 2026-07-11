@@ -95,6 +95,26 @@ fn rejects_frontend_fetch_calls() {
 }
 
 #[test]
+fn rejects_frontend_http_client_packages() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "apps/desktop/web/src/api.ts",
+        "import axios from 'axios';",
+    );
+    write(
+        directory.path(),
+        "apps/desktop/web/src/plugin.ts",
+        "import { fetch } from '@tauri-apps/plugin-http';",
+    );
+
+    let error = check_roots(&[directory.path().join("apps")]).unwrap_err();
+
+    assert!(error.contains("network marker axios"));
+    assert!(error.contains("network marker @tauri-apps/plugin-http"));
+}
+
+#[test]
 fn skips_built_dist_output() {
     let directory = tempfile::tempdir().unwrap();
     write(
