@@ -16,8 +16,10 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
     let lower = value.to_ascii_lowercase();
     match kind {
         Kind::Artifact => {
-            value.starts_with("https://github.com/mt4110/drop-squash/releases/download/")
-                && lower.ends_with(".dmg")
+            has_github_release_asset(
+                value,
+                "https://github.com/mt4110/drop-squash/releases/download/",
+            ) && lower.ends_with(".dmg")
         }
         Kind::Website => {
             has_release_status_path(&lower)
@@ -57,6 +59,13 @@ fn has_release_status_path(lower: &str) -> bool {
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
     value.strip_prefix(prefix).is_some_and(|suffix| {
         !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
+    })
+}
+
+fn has_github_release_asset(value: &str, prefix: &str) -> bool {
+    value.strip_prefix(prefix).is_some_and(|suffix| {
+        let parts = suffix.split('/').collect::<Vec<_>>();
+        parts.len() == 2 && parts.iter().all(|part| !part.is_empty())
     })
 }
 

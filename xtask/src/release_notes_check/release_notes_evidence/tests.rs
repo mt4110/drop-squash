@@ -196,6 +196,17 @@ fn rejects_placeholders_and_wrong_url_kinds() {
 }
 
 #[test]
+fn rejects_nested_artifact_download_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/nested/DropSquash.dmg
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("Artifact URL")));
+}
+
+#[test]
 fn rejects_release_notes_without_specific_public_urls() {
     let errors = check_text(
         r#"
