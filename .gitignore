@@ -1,5 +1,6 @@
 /target/
 /.codex/
+/.private_docs/
 /.idea/
 .DS_Store
 *.log

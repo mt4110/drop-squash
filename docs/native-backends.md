@@ -2,11 +2,13 @@
 
 DropSquash uses a backend-neutral Rust contract and one implementation per operating system.
 
-| Platform | Asset pipeline | Hardware path | Phase 0 status |
+| Platform | Asset pipeline | Hardware path | Current status |
 |---|---|---|---|
-| macOS | AVFoundation | VideoToolbox | capability stub |
-| Windows | Media Foundation | hardware Media Foundation Transform | capability stub |
-| Linux | allowlisted GStreamer through `gstreamer-rs` | approved hardware encoder element | capability stub |
+| macOS | AVFoundation export session | Apple native media pipeline | MVP conversion implemented |
+| Windows | Media Foundation | hardware Media Foundation Transform | not implemented |
+| Linux | allowlisted GStreamer through `gstreamer-rs` | approved hardware encoder element | not implemented |
+
+The current macOS path uses AVFoundation's export session and reports H.264 MP4 support for `.mov`, `.mp4`, and `.m4v` inputs. It should not be described as a verified explicit VideoToolbox hardware encoder path until runtime capability reporting proves that path.
 
 ## Product Invariants
 

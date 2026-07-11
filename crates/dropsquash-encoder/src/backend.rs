@@ -2,6 +2,7 @@ use async_trait::async_trait;
 use dropsquash_core::{EncodeJob, EncodeResult, Result};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+use tokio_util::sync::CancellationToken;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct EncoderCapabilities {
@@ -28,6 +29,19 @@ pub trait EncoderBackend: Send + Sync {
         job: EncodeJob,
         reporter: Arc<dyn EncodeProgressReporter>,
     ) -> Result<EncodeResult> {
+        self.encode_with_progress_and_cancel(job, reporter, CancellationToken::new())
+            .await
+    }
+
+    async fn encode_with_progress_and_cancel(
+        &self,
+        job: EncodeJob,
+        reporter: Arc<dyn EncodeProgressReporter>,
+        cancel: CancellationToken,
+    ) -> Result<EncodeResult> {
+        if cancel.is_cancelled() {
+            return Err(dropsquash_core::AppError::Cancelled);
+        }
         reporter.report(0.0);
         let result = self.encode(job).await;
         if result.is_ok() {

@@ -4,6 +4,13 @@ Nix is a developer and CI tool, not a product dependency.
 
 The committed `flake.lock` pins the Apple Silicon macOS/Linux shell. Native Windows builds and tests use a Windows runner because WSL exercises Linux, not Media Foundation or Windows packaging.
 
+The development shell also pins Node 24 and pnpm 10 for the desktop web build:
+
+```bash
+nix develop --command node -v
+nix develop --command pnpm -v
+```
+
 Release verification has two stages:
 
 1. Build and compare the unsigned payload from pinned source and dependencies.

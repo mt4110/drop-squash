@@ -38,3 +38,9 @@ export type ConversionSummary = {
   savedBytes: number;
   reductionPercent: number;
 };
+
+export type SavedConfig = {
+  outputDir: string;
+  profile: Profile;
+  outputSize: OutputSize;
+};

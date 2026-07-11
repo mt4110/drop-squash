@@ -1,12 +1,14 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 
-use crate::{default_output_dir, OutputSize, Profile, SourcePolicy};
+use crate::{default_output_dir, OutputSize, Profile, Result, SourcePolicy};
 
 pub const TRIAL_CONVERSION_LIMIT: u32 = 10;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
 pub struct AppConfig {
     pub output_dir: PathBuf,
     pub default_profile: Profile,
@@ -24,5 +26,102 @@ impl Default for AppConfig {
             source_policy: SourcePolicy::Ask,
             trial_conversion_limit: TRIAL_CONVERSION_LIMIT,
         }
+    }
+}
+
+impl AppConfig {
+    pub fn load_or_default(path: &Path) -> Result<Self> {
+        match std::fs::read(path) {
+            Ok(bytes) => Ok(serde_json::from_slice(&bytes)?),
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(Self::default()),
+            Err(error) => Err(error.into()),
+        }
+    }
+
+    pub fn save_to_path(&self, path: &Path) -> Result<()> {
+        if let Some(parent) = path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
+
+        let file_name = path
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or("config.json");
+        let unique_suffix = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|duration| duration.as_nanos())
+            .unwrap_or_default();
+        let temporary_path = path.with_file_name(format!(
+            ".{file_name}.{}.{}.tmp",
+            std::process::id(),
+            unique_suffix
+        ));
+        std::fs::write(&temporary_path, serde_json::to_vec_pretty(self)?)?;
+
+        #[cfg(target_os = "windows")]
+        if path.exists() {
+            std::fs::remove_file(path)?;
+        }
+
+        match std::fs::rename(&temporary_path, path) {
+            Ok(()) => {}
+            Err(error) => {
+                let _ = std::fs::remove_file(&temporary_path);
+                return Err(error.into());
+            }
+        }
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn missing_config_loads_defaults() {
+        let directory = tempfile::tempdir().unwrap();
+        let config = AppConfig::load_or_default(&directory.path().join("missing.json")).unwrap();
+
+        assert_eq!(config, AppConfig::default());
+    }
+
+    #[test]
+    fn saves_and_loads_config() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("nested").join("config.json");
+        let config = AppConfig {
+            output_dir: PathBuf::from("/tmp/DropSquash"),
+            default_profile: Profile::Docs,
+            default_output_size: OutputSize::P720,
+            source_policy: SourcePolicy::Ask,
+            trial_conversion_limit: TRIAL_CONVERSION_LIMIT,
+        };
+
+        config.save_to_path(&path).unwrap();
+
+        assert_eq!(AppConfig::load_or_default(&path).unwrap(), config);
+    }
+
+    #[test]
+    fn missing_fields_fall_back_to_defaults() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("config.json");
+        std::fs::write(
+            &path,
+            r#"{
+  "default_profile": "docs",
+  "default_output_size": "720p"
+}"#,
+        )
+        .unwrap();
+
+        let config = AppConfig::load_or_default(&path).unwrap();
+
+        assert_eq!(config.default_profile, Profile::Docs);
+        assert_eq!(config.default_output_size, OutputSize::P720);
+        assert_eq!(config.output_dir, default_output_dir());
+        assert_eq!(config.source_policy, SourcePolicy::Ask);
+        assert_eq!(config.trial_conversion_limit, TRIAL_CONVERSION_LIMIT);
     }
 }

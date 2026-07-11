@@ -12,6 +12,7 @@ import type {
   DropZoneState,
   OutputSize,
   Profile,
+  SavedConfig,
 } from "./lib/commands";
 
 const initialState: DropZoneState = {
@@ -52,6 +53,22 @@ export function App() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
+
+  const persistSettings = useCallback(async (settings: {
+    outputDir: string;
+    profile: Profile;
+    outputSize: OutputSize;
+  }) => {
+    if (!isTauri()) {
+      return;
+    }
+
+    try {
+      await invoke<SavedConfig>("save_config", settings);
+    } catch (reason) {
+      setError(String(reason));
+    }
+  }, []);
 
   const convert = useCallback(async (inputPath: string) => {
     if (!isTauri() || isBusy || state.isLocked) {
@@ -131,8 +148,31 @@ export function App() {
     });
     if (typeof outputDir === "string") {
       setState((current) => ({ ...current, outputDir }));
+      await persistSettings({
+        outputDir,
+        profile: state.profile,
+        outputSize: state.outputSize,
+      });
     }
-  }, [state.outputDir]);
+  }, [persistSettings, state.outputDir, state.outputSize, state.profile]);
+
+  const changeProfile = useCallback((profile: Profile) => {
+    setState((current) => ({ ...current, profile }));
+    void persistSettings({
+      outputDir: state.outputDir,
+      profile,
+      outputSize: state.outputSize,
+    });
+  }, [persistSettings, state.outputDir, state.outputSize]);
+
+  const changeOutputSize = useCallback((outputSize: OutputSize) => {
+    setState((current) => ({ ...current, outputSize }));
+    void persistSettings({
+      outputDir: state.outputDir,
+      profile: state.profile,
+      outputSize,
+    });
+  }, [persistSettings, state.outputDir, state.profile]);
 
   const revealOutput = useCallback(async (outputPath: string) => {
     if (!isTauri()) {
@@ -141,6 +181,18 @@ export function App() {
 
     try {
       await revealItemInDir(outputPath);
+    } catch (reason) {
+      setError(String(reason));
+    }
+  }, []);
+
+  const cancelConversion = useCallback(async () => {
+    if (!isTauri()) {
+      return;
+    }
+
+    try {
+      await invoke<boolean>("cancel_conversion");
     } catch (reason) {
       setError(String(reason));
     }
@@ -197,6 +249,7 @@ export function App() {
         inputPath={inputPath}
         inputExtensions={state.inputExtensions}
         onPick={() => void chooseRecording()}
+        onCancel={() => void cancelConversion()}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
       />
       <SettingsDrawer
@@ -206,8 +259,8 @@ export function App() {
         profiles={state.profiles}
         outputSizes={state.outputSizes}
         onChooseOutput={() => void chooseOutputDirectory()}
-        onProfileChange={(profile: Profile) => setState((current) => ({ ...current, profile }))}
-        onOutputSizeChange={(outputSize: OutputSize) => setState((current) => ({ ...current, outputSize }))}
+        onProfileChange={changeProfile}
+        onOutputSizeChange={changeOutputSize}
       />
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>

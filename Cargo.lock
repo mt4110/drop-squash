@@ -906,6 +906,7 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+ "tempfile",
  "thiserror 2.0.18",
 ]
 
@@ -933,11 +934,13 @@ dependencies = [
  "async-trait",
  "block2",
  "dropsquash-core",
+ "libc",
  "objc2",
  "objc2-av-foundation",
  "objc2-foundation",
  "serde",
  "tempfile",
+ "tokio-util",
 ]
 
 [[package]]

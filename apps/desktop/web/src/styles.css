@@ -56,18 +56,24 @@ body,
 }
 
 .drop-picker,
+.cancel-button,
 .help-button,
 .output-picker {
   font: inherit;
 }
 
-.drop-picker {
+.drop-picker,
+.cancel-button {
   background: transparent;
   border: 0;
   color: #146ef5;
   font-size: 13px;
   margin-top: 18px;
   padding: 0;
+}
+
+.cancel-button {
+  color: #6e6e73;
 }
 
 .source-path {

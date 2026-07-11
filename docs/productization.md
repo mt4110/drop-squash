@@ -1,0 +1,71 @@
+# Productization Plan
+
+DropSquash is currently a macOS MVP: a small local Drop Zone that converts user-selected screen recordings into numbered `.squashed.mp4` outputs through Apple's native AVFoundation export pipeline.
+
+The v1 promise stays intentionally narrow:
+
+```text
+Drag a screen recording.
+Get a smaller MP4.
+Original stays safe.
+Nothing uploads.
+```
+
+## Operating Rules
+
+| Rule | Decision |
+|---|---|
+| Media path | No `ffmpeg`, no `ffprobe`, no shell, no `PATH` lookup |
+| Privacy | No media upload, no default telemetry |
+| Original handling | Keep original unless verified success and user policy allow Trash |
+| Trial | Count successful, smaller verified conversions only |
+| UI | Keep the main window small, calm, and task-focused |
+| Platform order | macOS first; Windows and Linux after macOS product hardening |
+| Claims | Say AVFoundation/native macOS pipeline now; do not overclaim explicit VideoToolbox hardware encoding |
+| File size | Rust production files <= 128 lines; Rust test files may exceed 1000 lines; TS/TSX files <= 512 lines |
+
+## Plan Table
+
+| Phase | Status | Goal | Scope | Acceptance | Verification |
+|---|---|---|---|---|---|
+| 0.5 Repo alignment | In progress | Make names, docs, and metadata consistent before adding product surface | README/docs current-state wording, product invariants, repository URL decision | Docs match implementation; no unsupported hardware claims; no secrets added | `cargo fmt --all -- --check`; `cargo clippy --workspace --all-targets -- -D warnings`; `cargo test --workspace` |
+| 0.6 File-size architecture cleanup | Done | Bring existing code under the repository's size rules before adding more behavior | Split large Rust production files by responsibility; keep TS/TSX under 512 lines | No Rust production file exceeds 128 lines; no TS/TSX file exceeds 512 lines; behavior unchanged | `wc -l`; `cargo test --workspace`; `cargo clippy --workspace --all-targets -- -D warnings` |
+| 1 macOS encoder hardening | In progress | Make single-file macOS conversion safe enough for paid beta | Replace hard-link finalization, strengthen output verification, clean temp files, friendly failure states | Existing outputs are never overwritten; failed/larger/cancelled conversions do not count; original remains untouched | Unit tests plus manual `.mov` conversion |
+| 2 Cancellation | In progress | Let users stop an active conversion cleanly | Cancellation token through command/encoder boundary, UI cancel action, temp cleanup | Cancel returns app to ready state; no success history; no trial count | Unit tests pass; packaged-app manual test remains |
+| 3 Sequential queue | Pending | Handle multiple dropped files deterministically | Queue states, per-job progress, one active conversion at a time | Multiple drops create rows; one job runs at a time; failures do not block unrelated jobs | Queue unit tests and D&D manual test |
+| 4 Source postprocess | Pending | Safely move originals to Trash only after verified success | Source policy setting, macOS Trash adapter, ask-after-success flow | Keep never moves; Ask prompts; Trash moves only after all safety gates | Postprocess tests and macOS Trash manual test |
+| 5 License and trial UI | Pending | Convert trial usage into Pro unlock without account creation | License cache, instance id, activation/validation/deactivation, locked/Pro UI | Raw license key is not persisted; invalid/network errors are friendly; valid cache survives grace period | Mock provider tests; Lemon Squeezy sandbox manual test |
+| 6 Release pipeline | Pending | Ship a trusted macOS beta | Signed app, notarized DMG, checksums, release checklist, Homebrew cask draft | Gatekeeper opens cleanly; secrets stay in CI; artifact checksum published | GitHub Actions dry run; clean-machine install test |
+| 7 Sales site | Pending | Let a stranger understand, download, try, and buy | Landing, pricing, privacy, download, FAQ, support | Privacy claims match implementation; CTA works; download path works | Link check and manual purchase sandbox |
+| 8 Windows/Linux | Later | Expand after macOS signal | Media Foundation and GStreamer allowlist backends | Same core invariants; no silent software fallback | Native OS CI and real-device smoke tests |
+
+## Immediate Backlog
+
+| Order | Item | Status | Notes |
+|---:|---|---|---|
+| 1 | Persist output/profile/size settings | Done | Stored in platform app config path |
+| 2 | Update README/docs from Phase 0 wording | Done | Current macOS path is described as AVFoundation MVP |
+| 3 | Decide canonical repository slug | Decision needed | Either rename GitHub repo to `dropsquash` or align metadata to `drop-squash` |
+| 4 | Replace macOS hard-link finalization | Done | Uses no-clobber atomic rename on macOS |
+| 5 | Split oversized production files | Done | All Rust production files are now <= 128 lines; TS/TSX remain <= 512 lines |
+| 6 | Add output media validation beyond size | Done | Requires smaller `.mp4`, MP4 file-type box, and non-zero `mvhd` duration |
+| 7 | Add cancellation | In progress | Command/UI/encoder path is implemented; packaged-app manual test remains |
+| 8 | Add sequential queue | Pending | Keep concurrency at 1 |
+| 9 | Wire source policy and Trash | Pending | Never permanent delete |
+| 10 | Add license activation UI | Pending | After hardening and queue basics |
+| 11 | Build release pipeline | Pending | Signing/notarization before public beta |
+
+## Release Gate
+
+Do not start a public paid beta until all of these are true:
+
+```text
+macOS single-file conversion is verified
+cancel does not count trial
+failed conversion does not count trial
+larger output is treated as failure
+original is never moved without verified success
+app is signed and notarized
+privacy claims match implementation
+license secrets are not in the repository
+```

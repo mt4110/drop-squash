@@ -6,7 +6,9 @@ DropSquash turns large screen recordings into small, shareable MP4 files on macO
 
 ## Status
 
-Phase 0 scaffold. The repository contains the Rust workspace, core domain types, deterministic safety logic, JSONL history, trial counting, and placeholder CLI/desktop entry points.
+macOS MVP. The desktop app can convert user-selected `.mov`, `.mp4`, and `.m4v` recordings to numbered `.squashed.mp4` outputs through Apple's native AVFoundation export pipeline. The shared Rust workspace also contains the core domain types, deterministic safety logic, JSONL history, local trial counting, and backend contracts for Windows and Linux.
+
+Windows Media Foundation, Linux GStreamer, cancellation, multi-file queueing, license activation, signing, notarization, and release packaging are still planned work.
 
 ## Principles
 
@@ -21,13 +23,22 @@ Phase 0 scaffold. The repository contains the Rust workspace, core domain types,
 
 ## Local Commands
 
+Use the pinned Nix shell when you want the repository's Node and pnpm versions:
+
+```bash
+nix develop
+node -v
+pnpm -v
+```
+
 ```bash
 cargo fmt --all
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
+pnpm --dir apps/desktop/web build
 ```
 
-Phase 0 defines the native backend contracts but does not encode video yet. The command exits with a clear backend-not-implemented error and never starts an external media process:
+On macOS, the CLI uses the native encoder. On Windows and Linux, the backend contracts are present but the encoders still return a clear not-implemented error:
 
 ```bash
 cargo run -p dropsquash -- convert ./demo.mov --output-dir ./out --profile auto
@@ -52,7 +63,7 @@ nix develop
 cargo test --workspace
 ```
 
-The Nix shell supports Apple Silicon macOS and Linux development. Native Windows builds and media tests run on Windows.
+The Nix shell supports Apple Silicon macOS and Linux development and pins Node 24 with pnpm 10 for the desktop web build. Native Windows builds and media tests run on Windows.
 
 ## Architecture
 
