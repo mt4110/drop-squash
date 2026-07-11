@@ -28,7 +28,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for emptiness and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty DMG checksums can be generated deterministically | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
-| Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-HTTPS URLs, non-DMG URLs, and invalid checksums | `cargo test -p xtask homebrew_cask` |
+| Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, and invalid checksums | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence
 
