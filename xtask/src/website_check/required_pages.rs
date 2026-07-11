@@ -1,7 +1,8 @@
 use std::path::Path;
 
-const REQUIRED: [&str; 8] = [
+const REQUIRED: [&str; 9] = [
     "index.html",
+    "release-status.html",
     "download.html",
     "pricing.html",
     "privacy.html",

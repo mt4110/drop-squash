@@ -263,6 +263,7 @@ fn rejects_pre_release_links_with_single_quotes_or_uppercase_href() {
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",
+        "release-status.html",
         "download.html",
         "pricing.html",
         "privacy.html",
@@ -278,6 +279,9 @@ fn write_required_pages(root: &std::path::Path) {
 fn required_page_text(page: &str) -> &'static str {
     match page {
         "index.html" => "Release status",
+        "release-status.html" => {
+            "Paid beta is not public yet signed and notarized docs/release-blockers.md"
+        }
         "download.html" => "macOS beta DropSquash.dmg notarization checksum",
         "pricing.html" => {
             "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count License policy"
