@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 45] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 47] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -31,6 +31,10 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 45] = [
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "non-DMG targets are rejected"),
     ("docs/qa-evidence.md", "publish-check"),
+    (
+        "docs/qa-evidence.md",
+        "release blocker URLs matching the release notes URLs",
+    ),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
     (
@@ -59,6 +63,7 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 45] = [
     ("docs/release.md", "disabled while Activating"),
     ("docs/release.md", "disabled while Forgetting"),
     ("docs/release.md", "License network failure"),
+    ("docs/release.md", "release blocker URLs to match"),
     (
         "docs/benchmarking.md",
         "at least three private local samples",
