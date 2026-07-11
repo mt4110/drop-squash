@@ -16,15 +16,17 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let missing = missing_release_blockers(&text);
     let invalid = invalid_status_rows(&text);
     let unproven = unproven_verified_rows(&text);
-    if missing.is_empty() && invalid.is_empty() && unproven.is_empty() {
+    let stale = stale_blocked_rows(&text);
+    if missing.is_empty() && invalid.is_empty() && unproven.is_empty() && stale.is_empty() {
         return Ok(());
     }
     Err(format!(
-        "{} has release blocker issues: {}{}{}",
+        "{} has release blocker issues: {}{}{}{}",
         path.display(),
         join_prefix("missing ", missing),
         join_prefix(" invalid status ", invalid),
-        join_prefix(" unproven verified ", unproven)
+        join_prefix(" unproven verified ", unproven),
+        join_prefix(" stale blocked ", stale)
     ))
 }
 
@@ -67,6 +69,25 @@ fn missing_evidence_reference(line: &str) -> bool {
         Some(value) => !is_evidence_reference(value),
         None => true,
     }
+}
+
+fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
+    REQUIRED_BLOCKERS
+        .iter()
+        .copied()
+        .filter(|blocker| {
+            text.lines()
+                .find(|line| line.starts_with(&format!("| {blocker} | Blocked |")))
+                .is_some_and(has_evidence_reference)
+        })
+        .collect()
+}
+
+fn has_evidence_reference(line: &str) -> bool {
+    let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+    cells
+        .get(3)
+        .is_some_and(|value| is_evidence_reference(value))
 }
 
 fn is_evidence_reference(value: &str) -> bool {

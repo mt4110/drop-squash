@@ -1,5 +1,6 @@
 use super::{
-    invalid_status_rows, missing_release_blockers, unproven_verified_rows, REQUIRED_BLOCKERS,
+    invalid_status_rows, missing_release_blockers, stale_blocked_rows, unproven_verified_rows,
+    REQUIRED_BLOCKERS,
 };
 
 #[test]
@@ -12,6 +13,7 @@ fn accepts_all_required_release_blockers() {
     assert!(missing_release_blockers(&text).is_empty());
     assert!(invalid_status_rows(&text).is_empty());
     assert!(unproven_verified_rows(&text).is_empty());
+    assert!(stale_blocked_rows(&text).is_empty());
 }
 
 #[test]
@@ -65,4 +67,17 @@ fn reports_verified_rows_with_vague_evidence_reference() {
     let unproven = unproven_verified_rows(&text);
 
     assert!(unproven.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_blocked_rows_with_evidence_reference() {
+    let text = REQUIRED_BLOCKERS
+        .iter()
+        .map(|blocker| {
+            format!("| {blocker} | Blocked | Evidence required | `docs/manual-qa.md` |\n")
+        })
+        .collect::<String>();
+    let stale = stale_blocked_rows(&text);
+
+    assert!(stale.contains(&"Signed DMG"));
 }
