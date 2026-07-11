@@ -194,6 +194,26 @@ fn restore_requires_existing_backup_directory() {
 }
 
 #[test]
+fn restore_requires_restorable_state_files() {
+    let directory = tempfile::tempdir().unwrap();
+    let state_dir = directory.path().join("state");
+    std::fs::create_dir(&state_dir).unwrap();
+
+    let error = restore_state(&Options {
+        app_artifact: None,
+        app_state_dir: directory.path().join("app-state"),
+        input_sample_set: None,
+        output_dir: directory.path().join("output"),
+        reset_trial: false,
+        restore_state: true,
+        state_dir,
+    })
+    .unwrap_err();
+
+    assert!(error.contains("no restorable files"));
+}
+
+#[test]
 fn rejects_reset_and_restore_together() {
     let error = Options::parse(vec![
         "--reset-trial".to_string(),
