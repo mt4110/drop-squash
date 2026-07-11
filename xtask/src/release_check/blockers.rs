@@ -15,14 +15,16 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let missing = missing_release_blockers(&text);
     let invalid = invalid_status_rows(&text);
-    if missing.is_empty() && invalid.is_empty() {
+    let unproven = unproven_verified_rows(&text);
+    if missing.is_empty() && invalid.is_empty() && unproven.is_empty() {
         return Ok(());
     }
     Err(format!(
-        "{} has release blocker issues: {}{}",
+        "{} has release blocker issues: {}{}{}",
         path.display(),
         join_prefix("missing ", missing),
-        join_prefix(" invalid status ", invalid)
+        join_prefix(" invalid status ", invalid),
+        join_prefix(" unproven verified ", unproven)
     ))
 }
 
@@ -47,6 +49,26 @@ fn has_allowed_status(line: &str, blocker: &str) -> bool {
         || line.starts_with(&format!("| {blocker} | Verified |"))
 }
 
+fn unproven_verified_rows(text: &str) -> Vec<&'static str> {
+    REQUIRED_BLOCKERS
+        .iter()
+        .copied()
+        .filter(|blocker| {
+            text.lines()
+                .find(|line| line.starts_with(&format!("| {blocker} | Verified |")))
+                .is_some_and(missing_evidence_reference)
+        })
+        .collect()
+}
+
+fn missing_evidence_reference(line: &str) -> bool {
+    let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+    match cells.get(3) {
+        Some(value) => value.is_empty() || *value == "TBD",
+        None => true,
+    }
+}
+
 fn join_prefix(prefix: &str, values: Vec<&str>) -> String {
     if values.is_empty() {
         return String::new();
@@ -55,35 +77,4 @@ fn join_prefix(prefix: &str, values: Vec<&str>) -> String {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::{invalid_status_rows, missing_release_blockers, REQUIRED_BLOCKERS};
-
-    #[test]
-    fn accepts_all_required_release_blockers() {
-        let text = REQUIRED_BLOCKERS
-            .iter()
-            .map(|blocker| format!("| {blocker} | Blocked | Evidence required |\n"))
-            .collect::<String>();
-
-        assert!(missing_release_blockers(&text).is_empty());
-        assert!(invalid_status_rows(&text).is_empty());
-    }
-
-    #[test]
-    fn reports_missing_release_blocker() {
-        let missing = missing_release_blockers("");
-
-        assert!(missing.contains(&"Signed DMG"));
-    }
-
-    #[test]
-    fn reports_missing_release_blocker_status() {
-        let text = REQUIRED_BLOCKERS
-            .iter()
-            .map(|blocker| format!("| {blocker} | Evidence required |\n"))
-            .collect::<String>();
-        let invalid = invalid_status_rows(&text);
-
-        assert!(invalid.contains(&"Signed DMG"));
-    }
-}
+mod tests;
