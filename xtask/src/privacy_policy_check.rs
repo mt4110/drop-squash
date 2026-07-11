@@ -85,11 +85,7 @@ fn scan_file(path: &Path, violations: &mut Vec<String>) -> Result<(), String> {
 }
 
 fn is_license_network_source(path: &Path) -> bool {
-    path.components().any(|part| {
-        part.as_os_str()
-            .to_str()
-            .is_some_and(|value| value == "dropsquash-license")
-    })
+    path.ends_with("crates/dropsquash-license/src/lemonsqueezy/transport.rs")
 }
 
 fn is_text_source(path: &Path) -> bool {

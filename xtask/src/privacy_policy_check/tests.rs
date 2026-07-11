@@ -67,6 +67,20 @@ fn allows_license_provider_network_client() {
 }
 
 #[test]
+fn rejects_license_network_client_outside_transport() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/dropsquash-license/src/cache.rs",
+        "reqwest::Client::new()",
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("network marker reqwest"));
+}
+
+#[test]
 fn rejects_frontend_fetch_calls() {
     let directory = tempfile::tempdir().unwrap();
     write(
