@@ -102,7 +102,7 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["removed", "cleared", "deleted", "clears"],
             &["trial", "locked"],
         ]),
-        "Gatekeeper open test" => Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"], &["signed"], &["notarized", "notarised"]]),
+        "Gatekeeper open test" => Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"], &["signed"], &["notarized", "notarised"], &["without warning", "no warning", "without gatekeeper warning"]]),
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
             Some(&[
                 &["csv"],

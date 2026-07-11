@@ -305,7 +305,7 @@ fn reports_verified_gatekeeper_blocker_without_signed_notarized_evidence() {
 #[test]
 fn accepts_verified_gatekeeper_blocker_with_clean_machine_evidence() {
     let blockers = "| Gatekeeper clean-machine open | Verified | Fresh macOS account opens app | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed and notarized app cleanly in fresh macOS account |\n";
+    let manual = "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed and notarized app cleanly in fresh macOS account without Gatekeeper warning |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
 }

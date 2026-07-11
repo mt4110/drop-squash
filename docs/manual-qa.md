@@ -171,4 +171,4 @@ file.
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
 | Notarization staple verification | Public DMG/app artifact passes notary/staple assessment |  |
-| Gatekeeper open test | Signed and notarized app opens cleanly |  |
+| Gatekeeper open test | Signed and notarized app opens cleanly without Gatekeeper warning |  |

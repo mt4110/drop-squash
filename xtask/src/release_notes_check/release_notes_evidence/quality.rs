@@ -28,6 +28,11 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             &["clean", "fresh"],
             &["signed"],
             &["notarized", "notarised"],
+            &[
+                "without warning",
+                "no warning",
+                "without gatekeeper warning",
+            ],
         ]),
         "`docs/release-blockers.md` status" => {
             Some(&[&["docs/release-blockers.md"], &["verified"], &["all rows"]])
