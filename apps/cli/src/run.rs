@@ -6,7 +6,7 @@ use dropsquash_core::{
     SourcePolicy, TRIAL_CONVERSION_LIMIT,
 };
 use dropsquash_encoder::EncoderBackend;
-use dropsquash_history::{append_record, read_records, ConversionRecord, HistoryMetrics};
+use dropsquash_history::{append_successful_record, read_records, HistoryMetrics};
 use dropsquash_license::{LicenseCache, LicenseGate};
 
 use crate::args::{Cli, Command, OutputSizeArg, ProfileArg};
@@ -53,7 +53,7 @@ async fn convert(
             source_policy: SourcePolicy::Ask,
         })
         .await?;
-    append_record(&history, &ConversionRecord::new(result.clone())).await?;
+    append_successful_record(&history, result.clone()).await?;
     println!("output: {}", result.output_path.display());
     println!("saved bytes: {}", result.saved_bytes());
     println!("reduction: {:.2}%", result.reduction_percent());

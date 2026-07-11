@@ -16,6 +16,7 @@ app testing in `docs/manual-qa.md`.
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
 | Static site | Required pages, local links, and placeholders are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
+| CLI history writes | CLI conversion uses the same success-only history guard | `cargo test -p dropsquash && cargo test -p dropsquash-history` |
 | License cache safety | Raw key persistence, Pro identity requirements, temp-file cache writes, error redaction, trimmed activation, and failed activation partial writes are tested | `cargo test -p dropsquash-license && cargo test -p dropsquash-desktop license` |
 | Source movement safety | Postprocess gates and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
 | Queue order | Sequential queue state transitions are tested | `cargo test -p dropsquash-queue` |
