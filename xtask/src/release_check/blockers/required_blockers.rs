@@ -11,6 +11,7 @@ pub(super) const ALL: &[&str] = &[
     "Signed DMG",
     "Notarized and stapled DMG",
     "Gatekeeper clean-machine open",
+    "Benchmark release set",
     "Published checksum",
     "Homebrew cask install",
 ];

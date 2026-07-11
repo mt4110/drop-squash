@@ -1,10 +1,11 @@
 use super::REQUIRED_BLOCKERS;
 
-const ALLOWED_CLASSES: [&str; 5] = [
+const ALLOWED_CLASSES: [&str; 6] = [
     "Manual packaged-app",
     "License sandbox",
     "Public web",
     "Signing/notarization",
+    "Benchmark",
     "Distribution",
 ];
 

@@ -1,6 +1,6 @@
 use super::row;
 
-const EXPECTED_RECORD_TARGETS: [(&str, &str); 14] = [
+const EXPECTED_RECORD_TARGETS: [(&str, &str); 15] = [
     ("Packaged macOS manual QA", "`docs/manual-qa.md`"),
     ("Lemon Squeezy product setup", "`docs/manual-qa.md`"),
     ("Lemon Squeezy sandbox purchase", "`docs/manual-qa.md`"),
@@ -13,6 +13,7 @@ const EXPECTED_RECORD_TARGETS: [(&str, &str); 14] = [
     ("Signed DMG", "Release notes"),
     ("Notarized and stapled DMG", "Release notes"),
     ("Gatekeeper clean-machine open", "`docs/manual-qa.md`"),
+    ("Benchmark release set", "`docs/manual-qa.md`"),
     ("Published checksum", "GitHub Release"),
     ("Homebrew cask install", "Homebrew tap PR"),
 ];

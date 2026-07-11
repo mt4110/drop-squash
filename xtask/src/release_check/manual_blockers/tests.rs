@@ -202,6 +202,32 @@ fn accepts_verified_gatekeeper_blocker_with_clean_machine_evidence() {
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
 }
 
+#[test]
+fn reports_verified_benchmark_blocker_without_threshold() {
+    let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "\
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded | benchmark CSV recorded with smaller outputs |
+| Benchmark sample set | Passes | short, medium, and large samples recorded on MacBookPro18,4 macOS 26.5.2 |
+| Benchmark regression threshold | Passes | no regression recorded |
+";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Benchmark release set"));
+}
+
+#[test]
+fn accepts_verified_benchmark_blocker_with_release_set_evidence() {
+    let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "\
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded | benchmark CSV recorded with smaller outputs |
+| Benchmark sample set | Passes | short, medium, and large samples recorded on MacBookPro18,4 macOS 26.5.2 |
+| Benchmark regression threshold | Passes | no sample exceeded 20% regression |
+";
+
+    assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
 fn packaged_manual_qa_with(check: &str, result: &str) -> String {
     PACKAGED_MACOS_EVIDENCE
         .iter()

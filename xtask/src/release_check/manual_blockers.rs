@@ -28,7 +28,7 @@ const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "Reveal output",
 ];
 
-const MANUAL_BLOCKERS: [(&str, &[&str]); 7] = [
+const MANUAL_BLOCKERS: [(&str, &[&str]); 8] = [
     ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
     ("Lemon Squeezy product setup", &["Sandbox product setup"]),
     ("Lemon Squeezy sandbox purchase", &["Sandbox purchase"]),
@@ -36,6 +36,14 @@ const MANUAL_BLOCKERS: [(&str, &[&str]); 7] = [
     ("Invalid license key handling", &["Invalid key activation"]),
     ("Local license forget", &["Forget license on this Mac"]),
     ("Gatekeeper clean-machine open", &["Gatekeeper open test"]),
+    (
+        "Benchmark release set",
+        &[
+            "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`",
+            "Benchmark sample set",
+            "Benchmark regression threshold",
+        ],
+    ),
 ];
 
 pub(super) fn check(blockers_path: &Path, manual_path: &Path) -> Result<(), String> {

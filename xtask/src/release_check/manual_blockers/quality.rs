@@ -61,6 +61,17 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         "Gatekeeper open test" => {
             Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])
         }
+        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
+            Some(&[&["csv"], &["smaller"]])
+        }
+        "Benchmark sample set" => Some(&[
+            &["short"],
+            &["medium"],
+            &["large"],
+            &["machine", "macbook", "mac "],
+            &["macos", "os "],
+        ]),
+        "Benchmark regression threshold" => Some(&[&["20%"]]),
         _ => None,
     }
 }

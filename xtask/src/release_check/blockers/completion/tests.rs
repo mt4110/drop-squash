@@ -107,6 +107,15 @@ fn reports_homebrew_completion_without_zap() {
     assert!(incomplete.contains(&"Homebrew cask install"));
 }
 
+#[test]
+fn reports_benchmark_completion_without_threshold() {
+    let text = "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, and machine/OS context | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Benchmark release set"));
+}
+
 fn described_blockers() -> String {
     [
         "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |\n",
@@ -119,6 +128,7 @@ fn described_blockers() -> String {
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |\n",
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app | TBD | `docs/manual-qa.md` |\n",
+        "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |\n",
         "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]

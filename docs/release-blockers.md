@@ -25,6 +25,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app | TBD | `docs/manual-qa.md` |
+| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |
 | Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |
 
@@ -48,5 +49,6 @@ recorded in the location above.
 | Signed DMG | Signing/notarization | Sign the public DMG and capture Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public DMG with captured verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the stapled app from a fresh macOS account or clean machine | `docs/manual-qa.md` |
+| Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings and record threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS to the public GitHub Release | GitHub Release URL |
 | Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command plus `zap` cleanup path | Homebrew tap PR URL |
