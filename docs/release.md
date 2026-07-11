@@ -103,6 +103,10 @@ They cover:
 - Lemon Squeezy product setup
 - Lemon Squeezy sandbox purchase
 - Lemon Squeezy sandbox activation
+- Empty key activation
+- Invalid key activation
+- License network failure
+- Local license forget
 
 Record these rows:
 
@@ -111,10 +115,12 @@ Record these rows:
 - Empty key activation
 - Invalid key activation
 - Valid sandbox activation
+- License network failure
 - Forget license on this Mac
 
 Keep the matching release blockers in `docs/release-blockers.md` blocked until
-the sandbox purchase, activation, invalid-key, and local-forget evidence exist.
+the sandbox purchase, activation, empty-key, invalid-key, network-failure, and
+local-forget evidence exist.
 
 Generate SHA-256 checksum lines for release artifacts with:
 

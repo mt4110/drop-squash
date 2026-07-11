@@ -1,6 +1,6 @@
 use std::fs;
 
-const REQUIRED_TEXT: [(&str, &str); 31] = [
+const REQUIRED_TEXT: [(&str, &str); 32] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release-blockers.md", "must include the public URL"),
     ("docs/productization.md", "docs/release-blockers.md"),
@@ -38,6 +38,7 @@ const REQUIRED_TEXT: [(&str, &str); 31] = [
     ("docs/qa-evidence.md", "non-canonical homepages"),
     ("docs/licensing.md", "Lemon Squeezy sandbox purchase"),
     ("docs/release.md", "Empty key activation"),
+    ("docs/release.md", "License network failure"),
     (
         "docs/benchmarking.md",
         "at least three private local samples",
