@@ -44,7 +44,10 @@ const REQUIRED_TEXT: [(&str, &str); 40] = [
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
     ("docs/licensing.md", "Lemon Squeezy sandbox purchase"),
-    ("docs/licensing.md", "available during Trial and Locked states"),
+    (
+        "docs/licensing.md",
+        "available during Trial and Locked states",
+    ),
     ("docs/release.md", "Empty key activation"),
     ("docs/release.md", "License network failure"),
     (

@@ -372,7 +372,9 @@ fn packaged_result(label: &str) -> &'static str {
         "Cancellation" => "app returned ready and trial history showed no new success",
         "Multi-file queue" => "three recordings queued with one active sequential conversion",
         "Queued job cancellation" => "queued row marked cancelled and never started",
-        "Batch summary" => "summary showed finished count and saved bytes",
+        "Batch summary" => {
+            "summary showed finished count, saved bytes, and 1 cancelled mixed outcome"
+        }
         "Ask source policy" => "Ask prompt let tester choose Trash or Keep",
         "Trash source policy" => "original moved to Trash only after verified smaller output",
         "Failed conversion" => "original remained and trial count unchanged after failure",

@@ -36,7 +36,11 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         "Cancellation" => Some(&[&["ready"], &["trial", "history"]]),
         "Multi-file queue" => Some(&[&["three", "3"], &["one active", "sequential"]]),
         "Queued job cancellation" => Some(&[&["cancelled"], &["never starts", "never started"]]),
-        "Batch summary" => Some(&[&["finished"], &["saved bytes"]]),
+        "Batch summary" => Some(&[
+            &["finished"],
+            &["saved bytes"],
+            &["failed", "cancelled", "blocked"],
+        ]),
         "Ask source policy" => Some(&[&["ask", "choose"], &["trash", "keep"]]),
         "Trash source policy" => Some(&[&["trash"], &["verified", "smaller"]]),
         "Failed conversion" => {

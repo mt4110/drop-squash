@@ -607,7 +607,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started |\n");
         } else if check == "Batch summary" {
             text.push_str(
-                "| Batch summary | Passes | summary showed finished count and saved bytes |\n",
+                "| Batch summary | Passes | summary showed finished count, saved bytes, and 1 cancelled mixed outcome |\n",
             );
         } else if check == "Ask source policy" {
             text.push_str(

@@ -53,7 +53,11 @@ fn requirement_for(label: &str) -> Option<Requirement> {
         "Cancellation" => &[&["ready"], &["trial", "history"]],
         "Multi-file queue" => &[&["three", "3"], &["one active", "sequential"]],
         "Queued job cancellation" => &[&["cancelled"], &["never starts", "never started"]],
-        "Batch summary" => &[&["finished"], &["saved bytes"]],
+        "Batch summary" => &[
+            &["finished"],
+            &["saved bytes"],
+            &["failed", "cancelled", "blocked"],
+        ],
         "Ask source policy" => &[&["ask", "choose"], &["trash", "keep"]],
         "Trash source policy" => &[&["trash"], &["verified", "smaller"]],
         "Failed conversion" => &[&["original"], &["trial count unchanged", "trial unchanged"]],
