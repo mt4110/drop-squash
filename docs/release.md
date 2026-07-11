@@ -18,3 +18,11 @@ cargo run -p xtask -- release-check
 
 This gate rejects secret-like files, keeps the unsigned release workflow blocked,
 and verifies that the updater is not enabled before signing keys are ready.
+
+Generate SHA-256 checksum lines for release artifacts with:
+
+```sh
+cargo run -p xtask -- checksum path/to/DropSquash.dmg > SHA256SUMS
+```
+
+Publish the checksum file with the GitHub Release after notarization succeeds.
