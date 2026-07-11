@@ -2,6 +2,7 @@ use std::path::Path;
 
 mod artifact;
 mod date;
+mod environment;
 mod state_path;
 
 pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
@@ -12,10 +13,10 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
     }
     match label {
         "App artifact" => artifact::validate(value, missing),
-        "App build" => validate_app_build(value, missing),
-        "macOS version" => validate_macos_version(value, missing),
-        "Machine" => validate_machine(value, missing),
-        "Input sample set" => validate_input_sample_set(value, missing),
+        "App build" => environment::validate_app_build(value, missing),
+        "macOS version" => environment::validate_macos_version(value, missing),
+        "Machine" => environment::validate_machine(value, missing),
+        "Input sample set" => environment::validate_input_sample_set(value, missing),
         "Output folder" => validate_output_folder(value, missing),
         "Config path" => state_path::validate(value, "config.json", missing),
         "History path" => state_path::validate(value, "history.jsonl", missing),
@@ -28,46 +29,6 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
     }
 }
 
-fn validate_app_build(value: &str, missing: &mut Vec<String>) {
-    let lower = value.to_ascii_lowercase();
-    if has_version(value) && lower.contains("git ") && has_hex_run(value, 7) {
-        return;
-    }
-    missing.push("manual QA App build must include version and git commit".to_string());
-}
-
-fn has_version(value: &str) -> bool {
-    value.split_whitespace().any(|part| {
-        let cleaned =
-            part.trim_matches(|value: char| !value.is_ascii_alphanumeric() && value != '.');
-        let segments = cleaned.split('.').collect::<Vec<_>>();
-        segments.len() == 3
-            && segments.iter().all(|segment| {
-                !segment.is_empty() && segment.chars().all(|value| value.is_ascii_digit())
-            })
-    })
-}
-
-fn has_hex_run(value: &str, minimum: usize) -> bool {
-    value
-        .split(|value: char| !value.is_ascii_hexdigit())
-        .any(|part| part.len() >= minimum)
-}
-
-fn validate_macos_version(value: &str, missing: &mut Vec<String>) {
-    if value.starts_with("macOS ") && has_numeric_version(value.trim_start_matches("macOS ")) {
-        return;
-    }
-    missing.push("manual QA macOS version must look like macOS 15.5".to_string());
-}
-
-fn validate_machine(value: &str, missing: &mut Vec<String>) {
-    if value.contains("arm64") || value.contains("x86_64") {
-        return;
-    }
-    missing.push("manual QA Machine must include CPU architecture".to_string());
-}
-
 fn validate_output_folder(value: &str, missing: &mut Vec<String>) {
     let path = Path::new(value);
     if path.is_dir() {
@@ -76,32 +37,10 @@ fn validate_output_folder(value: &str, missing: &mut Vec<String>) {
     missing.push(format!("manual QA Output folder must exist: {value}"));
 }
 
-fn validate_input_sample_set(value: &str, missing: &mut Vec<String>) {
-    let lower = value.to_ascii_lowercase();
-    let has_sizes = ["short", "medium", "large"]
-        .iter()
-        .all(|needle| lower.contains(needle));
-    let has_media = lower.contains("recording") || lower.contains("sample");
-    if has_sizes && has_media {
-        return;
-    }
-    missing.push(
-        "manual QA Input sample set must mention short, medium, and large recordings".to_string(),
-    );
-}
-
 fn validate_tester(value: &str, missing: &mut Vec<String>) {
     let lower = value.to_ascii_lowercase();
     if value.len() >= 3 && !lower.contains("concrete evidence") && lower != "tester" {
         return;
     }
     missing.push("manual QA Tester must name the tester".to_string());
-}
-
-fn has_numeric_version(value: &str) -> bool {
-    let parts = value.split('.').collect::<Vec<_>>();
-    (2..=3).contains(&parts.len())
-        && parts
-            .iter()
-            .all(|part| !part.is_empty() && part.chars().all(|value| value.is_ascii_digit()))
 }
