@@ -49,6 +49,8 @@ fn render(input: &Input) -> String {
   desc "Local screen recording compressor"
   homepage "{homepage}"
 
+  auto_updates false
+
   app "DropSquash.app"
 
   zap trash: "~/Library/Application Support/DropSquash"

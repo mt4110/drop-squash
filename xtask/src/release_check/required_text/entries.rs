@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 47] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 48] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -53,6 +53,7 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 47] = [
     ("docs/qa-evidence.md", "Live checkout link"),
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
+    ("docs/qa-evidence.md", "declares no in-app auto-update"),
     ("docs/licensing.md", "Lemon Squeezy sandbox purchase"),
     (
         "docs/licensing.md",

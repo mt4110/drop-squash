@@ -17,6 +17,7 @@ fn renders_drop_squash_cask() {
     assert!(cask.contains("cask \"dropsquash\" do"));
     assert!(cask.contains("version \"0.1.0\""));
     assert!(cask.contains("app \"DropSquash.app\""));
+    assert!(cask.contains("auto_updates false"));
     assert!(cask.contains("zap trash: \"~/Library/Application Support/DropSquash\""));
 }
 
