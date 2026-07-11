@@ -69,11 +69,37 @@ fn rejects_identity_only_signing_in_ci() {
 }
 
 #[test]
+fn rejects_non_developer_id_identity() {
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Mac Developer: Example"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("Developer ID Application"));
+}
+
+#[test]
 fn rejects_missing_notarization_group() {
     let env = env([("APPLE_SIGNING_IDENTITY", "Developer ID Application")]);
     let error = check(&env).unwrap_err();
 
     assert!(error.contains("notarization requires"));
+}
+
+#[test]
+fn rejects_malformed_team_id() {
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_TEAM_ID", "not-a-team"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_TEAM_ID"));
 }
 
 #[test]
@@ -95,6 +121,22 @@ fn rejects_missing_api_key_file() {
         ("APPLE_API_KEY", "TEST"),
         ("APPLE_API_ISSUER", "issuer"),
         ("APPLE_API_KEY_PATH", "/missing/AuthKey_TEST.p8"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_API_KEY_PATH"));
+}
+
+#[test]
+fn rejects_api_key_path_without_p8_extension() {
+    let directory = tempfile::tempdir().unwrap();
+    let key_path = directory.path().join("AuthKey_TEST.txt");
+    std::fs::File::create(&key_path).unwrap();
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_API_KEY", "TEST"),
+        ("APPLE_API_ISSUER", "issuer"),
+        ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
     ]);
     let error = check(&env).unwrap_err();
 
