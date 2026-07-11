@@ -8,6 +8,7 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
             "cargo clippy --workspace --all-targets -- -D warnings",
             "cargo test --workspace",
             "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
+            "cargo run -p xtask -- manual-qa-prepare",
             "cargo run -p xtask -- manual-qa-check",
         ],
     ),

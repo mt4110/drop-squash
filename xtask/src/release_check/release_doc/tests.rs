@@ -7,6 +7,7 @@ cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+cargo run -p xtask -- manual-qa-prepare
 cargo run -p xtask -- manual-qa-check
 No signing secrets belong in the repository
 cargo run -p xtask -- media-policy-check

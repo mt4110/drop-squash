@@ -32,6 +32,7 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
+cargo run -p xtask -- manual-qa-prepare
 cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- release-check
 pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
@@ -43,6 +44,8 @@ manual QA evidence, require the external media process security gate, verify
 that production CSP does not open remote network origins, keep desktop
 capabilities minimal, keep the unsigned release workflow blocked, and verify
 that the updater is not enabled before signing keys are ready.
+The `manual-qa-prepare` step preserves local DropSquash app state and creates a
+dedicated output folder before packaged-app QA evidence is recorded.
 The unsigned Tauri build is only a packaging and QA input; public release still
 requires signing, notarization, stapling, artifact checks, and checksums.
 
