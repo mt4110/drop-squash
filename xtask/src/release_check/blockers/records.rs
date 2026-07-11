@@ -38,6 +38,8 @@ pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) ->
         "`https://...`" if blocker == "Public website deployment" => is_public_website(reference),
         "`https://...`" if blocker == "Live checkout link" => is_live_checkout(reference),
         "`https://...`" => reference.starts_with("https://"),
+        "GitHub Release" => has_named_url(reference, "GitHub Release"),
+        "Homebrew tap PR" => has_named_url(reference, "Homebrew tap PR"),
         other => reference == other,
     }
 }
@@ -54,6 +56,10 @@ fn is_live_checkout(reference: &str) -> bool {
     reference.starts_with("https://")
         && lower.contains("lemonsqueezy.com")
         && lower.contains("checkout")
+}
+
+fn has_named_url(reference: &str, label: &str) -> bool {
+    reference.starts_with(label) && reference.contains("https://")
 }
 
 #[cfg(test)]

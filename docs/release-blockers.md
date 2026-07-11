@@ -9,6 +9,7 @@ Do not leave a row `Blocked` after adding an `Evidence reference`; update the
 status and keep the reference traceable.
 For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 `https://...` URL, `Release notes`, `GitHub Release`, or `Homebrew tap PR`.
+`GitHub Release` and `Homebrew tap PR` references must include the public URL.
 
 | Blocker | Status | Completion evidence | Evidence reference | Record in |
 |---|---|---|---|---|

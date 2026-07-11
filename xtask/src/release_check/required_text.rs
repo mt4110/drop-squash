@@ -1,7 +1,8 @@
 use std::fs;
 
-const REQUIRED_TEXT: [(&str, &str); 20] = [
+const REQUIRED_TEXT: [(&str, &str); 21] = [
     ("docs/release.md", "docs/release-blockers.md"),
+    ("docs/release-blockers.md", "must include the public URL"),
     ("docs/productization.md", "docs/release-blockers.md"),
     (
         "docs/productization.md",
