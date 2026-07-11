@@ -31,23 +31,27 @@ pub async fn state(history: &Path) -> dropsquash_core::Result<LicenseState> {
 }
 
 pub fn print_state(state: LicenseState) {
-    match state {
-        LicenseState::Pro => println!("license state: Pro"),
-        LicenseState::Trial(trial) => {
-            println!("license state: Trial");
-            println!(
-                "trial: {}/{} successful conversions used",
-                trial.successful_conversions, trial.limit
-            );
-        }
-        LicenseState::Locked(trial) => {
-            println!("license state: Locked");
-            println!(
-                "trial: {}/{} successful conversions used",
-                trial.successful_conversions, trial.limit
-            );
-        }
+    for line in format_state(state) {
+        println!("{line}");
     }
+}
+
+fn format_state(state: LicenseState) -> Vec<String> {
+    match state {
+        LicenseState::Pro => vec!["license state: Pro".to_string()],
+        LicenseState::Trial(trial) => trial_lines("Trial", trial),
+        LicenseState::Locked(trial) => trial_lines("Locked", trial),
+    }
+}
+
+fn trial_lines(label: &str, trial: dropsquash_core::TrialState) -> Vec<String> {
+    vec![
+        format!("license state: {label}"),
+        format!(
+            "trial: {}/{} successful conversions used",
+            trial.successful_conversions, trial.limit
+        ),
+    ]
 }
 
 fn now_unix() -> u64 {
@@ -56,3 +60,6 @@ fn now_unix() -> u64 {
         .map(|duration| duration.as_secs())
         .unwrap_or_default()
 }
+
+#[cfg(test)]
+mod tests;
