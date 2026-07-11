@@ -2,7 +2,10 @@
 
 Drop huge screen recordings. Squash them locally.
 
-DropSquash turns large screen recordings into small, shareable MP4 files on macOS, Windows, and Linux without uploading videos to the cloud.
+DropSquash turns large screen recordings into small, shareable MP4 files on
+macOS today without uploading videos to the cloud.
+Windows and Linux support is planned after the macOS product path is hardened
+and verified.
 
 ## Status
 
@@ -51,8 +54,8 @@ The target backend matrix is:
 | Platform | Probe / pipeline | Encoder |
 |---|---|---|
 | macOS | AVFoundation | AVFoundation export MVP now; lower-level VideoToolbox may follow |
-| Windows | Media Foundation | Hardware MFT |
-| Linux | allowlisted GStreamer via `gstreamer-rs` | available hardware element |
+| Windows | Media Foundation | planned Hardware MFT backend; not implemented |
+| Linux | allowlisted GStreamer via `gstreamer-rs` | planned hardware element; not implemented |
 
 Runtime capability detection is authoritative. DropSquash does not silently switch to an unreviewed codec or external media executable.
 
