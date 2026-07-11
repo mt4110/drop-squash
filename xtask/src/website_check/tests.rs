@@ -128,6 +128,19 @@ fn rejects_missing_license_copy() {
 }
 
 #[test]
+fn rejects_missing_refund_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "refund.html", "<p>Refunds available.</p>");
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("draft policy")));
+    assert!(errors.iter().any(|error| error.contains("cannot activate")));
+    assert!(errors.iter().any(|error| error.contains("order email")));
+}
+
+#[test]
 fn rejects_pre_release_download_or_checkout_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -178,6 +191,9 @@ fn required_page_text(page: &str) -> &'static str {
         }
         "license.html" => {
             "license-key fingerprint does not persist the raw license key local license cache Offline grace"
+        }
+        "refund.html" => {
+            "draft policy checkout goes live cannot activate basic local conversion workflow order email Lemon Squeezy order flow"
         }
         _ => "<p>Page</p>",
     }

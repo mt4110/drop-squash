@@ -8,7 +8,7 @@ The public website deployment and live checkout link stay blocked in
 
 Run the static site gate before changing copy or links. It verifies required
 sales pages, local links, placeholder URLs, release-status, privacy, license,
-and support copy, and that download or checkout URLs are not live before
+refund, and support copy, and that download or checkout URLs are not live before
 release:
 
 ```bash

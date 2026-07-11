@@ -55,6 +55,17 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     );
     require_page_text(root, "support.html", "Does it use ffmpeg?", errors);
     require_page_text(root, "support.html", "app version", errors);
+    require_page_text(root, "refund.html", "draft policy", errors);
+    require_page_text(root, "refund.html", "checkout goes live", errors);
+    require_page_text(root, "refund.html", "cannot activate", errors);
+    require_page_text(
+        root,
+        "refund.html",
+        "basic local conversion workflow",
+        errors,
+    );
+    require_page_text(root, "refund.html", "order email", errors);
+    require_page_text(root, "refund.html", "Lemon Squeezy order flow", errors);
 }
 
 fn require_page_text(root: &Path, page: &str, needle: &str, errors: &mut Vec<String>) {
