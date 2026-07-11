@@ -971,6 +971,7 @@ dependencies = [
  "objc2-foundation",
  "serde",
  "tempfile",
+ "tokio",
  "tokio-util",
 ]
 
