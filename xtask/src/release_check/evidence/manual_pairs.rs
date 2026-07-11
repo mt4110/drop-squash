@@ -23,7 +23,9 @@ pub(super) const ALL: &[(&str, &str)] = &[
         "Lemon Squeezy sandbox activation",
         "Valid sandbox activation",
     ),
+    ("Empty key activation", "Empty key activation"),
     ("Invalid license key handling", "Invalid key activation"),
+    ("License network failure", "License network failure"),
     ("Local license forget", "Forget license on this Mac"),
     ("Signed DMG verification", "Codesign verification"),
     (
