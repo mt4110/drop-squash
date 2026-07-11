@@ -1,6 +1,7 @@
 pub(super) fn is_evidence_reference(value: &str) -> bool {
     !value.is_empty()
         && value != "TBD"
+        && !super::placeholders::has_token(value)
         && !has_placeholder_url(value)
         && (value.starts_with("`docs/")
             || value.starts_with("https://")

@@ -92,17 +92,17 @@ fn is_refund_policy(reference: &str) -> bool {
 }
 
 fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
-    if !reference.starts_with(label) {
+    if !reference.starts_with(label) || super::placeholders::has_token(reference) {
         return false;
     }
-    if label == "Homebrew tap PR" {
-        return reference
-            .split_whitespace()
-            .any(|part| has_numeric_suffix(part, prefix));
-    }
+    let matches = if label == "Homebrew tap PR" {
+        has_numeric_suffix
+    } else {
+        has_release_tag_suffix
+    };
     reference
         .split_whitespace()
-        .any(|part| has_release_tag_suffix(part, prefix))
+        .any(|part| matches(part, prefix))
 }
 
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {

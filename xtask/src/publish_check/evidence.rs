@@ -1,6 +1,6 @@
 pub(super) fn matches(blocker: &str, reference: &str) -> bool {
     let reference = reference.trim().trim_matches('`');
-    if matches!(reference, "" | "TBD") {
+    if reference.is_empty() || has_placeholder_token(reference) {
         return false;
     }
     match blocker {
@@ -12,6 +12,12 @@ pub(super) fn matches(blocker: &str, reference: &str) -> bool {
         "Live checkout link" => is_checkout(reference),
         _ => reference == "docs/manual-qa.md",
     }
+}
+
+fn has_placeholder_token(reference: &str) -> bool {
+    reference
+        .split(|character: char| !character.is_ascii_alphanumeric())
+        .any(|token| matches!(token.to_ascii_lowercase().as_str(), "tbd" | "todo"))
 }
 
 fn is_public_site(reference: &str) -> bool {

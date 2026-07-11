@@ -3,6 +3,7 @@ use std::path::Path;
 mod completion;
 mod evidence_class;
 mod evidence_ref;
+mod placeholders;
 mod records;
 mod required_blockers;
 pub(super) mod row;
