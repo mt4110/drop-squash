@@ -2,6 +2,8 @@ use std::path::Path;
 
 const ARTIFACT_CHECK: &str = "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`";
 const CHECKSUM: &str = "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`";
+const CODESIGN: &str = "Codesign verification";
+const NOTARIZATION: &str = "Notarization staple verification";
 
 pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
     let Some(name) = app_artifact_name(rows) else {
@@ -10,7 +12,7 @@ pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
     if !name.to_ascii_lowercase().ends_with(".dmg") {
         return;
     }
-    for label in [ARTIFACT_CHECK, CHECKSUM] {
+    for label in [ARTIFACT_CHECK, CHECKSUM, CODESIGN, NOTARIZATION] {
         if let Some(result) = value_for(rows, label) {
             require_same_artifact(label, result, &name, missing);
         }

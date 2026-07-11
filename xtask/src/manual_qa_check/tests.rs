@@ -269,6 +269,32 @@ fn reports_release_command_results_for_different_dmg_artifact() {
 }
 
 #[test]
+fn reports_signing_results_for_different_dmg_artifact() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("Other.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| Codesign verification | Passes | codesign verified Developer ID Application signature for DropSquash.dmg |\n\
+| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n",
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Codesign") && error.contains("Other.dmg")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization") && error.contains("Other.dmg")));
+}
+
+#[test]
 fn reports_non_iso_date() {
     let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
     let missing = check_file(&path).unwrap();

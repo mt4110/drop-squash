@@ -151,8 +151,9 @@ only the fingerprint/instance fields were present.
 Release candidate results must name the artifact or command evidence. Record
 the `DropSquash.dmg` path/name, SHA-256 line, Developer ID codesign result,
 notary/staple assessment, and Gatekeeper clean/fresh-machine observation where
-the row asks for them. When `App artifact` is a `.dmg`, the artifact-check and
-checksum result rows must name the same `.dmg` file.
+the row asks for them. When `App artifact` is a `.dmg`, artifact-check,
+checksum, codesign, and notary/staple result rows must name the same `.dmg`
+file.
 
 | Check | Expected | Result |
 |---|---|---|
