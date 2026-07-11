@@ -13,6 +13,9 @@ No signing secrets belong in the repository.
 The desktop bundle configuration produces both the macOS `.app` and `.dmg`
 artifacts. Use unsigned local builds only for QA; public release artifacts must
 be signed, notarized, stapled, checked, and checksummed before publication.
+The tag release workflow also builds an unsigned macOS DMG, runs the artifact
+check, and prints its checksum before blocking publication until signed release
+packaging is implemented.
 
 Run the local readiness gate before preparing any release artifact:
 

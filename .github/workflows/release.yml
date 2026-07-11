@@ -22,6 +22,33 @@ jobs:
         run: cargo run -p xtask -- website-check
       - name: Release readiness checks
         run: cargo run -p xtask -- release-check
+      - uses: pnpm/action-setup@v4
+        if: matrix.os == 'macos-latest'
+        with:
+          version: 10.34.0
+      - uses: actions/setup-node@v4
+        if: matrix.os == 'macos-latest'
+        with:
+          node-version: 24.16.0
+          cache: pnpm
+          cache-dependency-path: |
+            apps/desktop/pnpm-lock.yaml
+            apps/desktop/web/pnpm-lock.yaml
+      - name: Install desktop package
+        if: matrix.os == 'macos-latest'
+        run: pnpm --dir apps/desktop install --frozen-lockfile
+      - name: Install desktop web package
+        if: matrix.os == 'macos-latest'
+        run: pnpm --dir apps/desktop/web install --frozen-lockfile
+      - name: Build unsigned macOS DMG
+        if: matrix.os == 'macos-latest'
+        run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+      - name: Check unsigned DMG artifact
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg
+      - name: Print unsigned DMG checksum
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg
       - name: Block unsigned Phase 0 release
         shell: bash
         run: |
