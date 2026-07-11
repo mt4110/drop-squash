@@ -70,6 +70,15 @@ export function App() {
   const activeQueueId = useRef<number>();
   const nextQueueId = useRef(1);
 
+  const refreshState = useCallback(async () => {
+    if (!isTauri()) {
+      return;
+    }
+
+    const nextState = await invoke<DropZoneState>("load_state");
+    setState(nextState);
+  }, []);
+
   const persistSettings = useCallback(async (settings: {
     outputDir: string;
     profile: Profile;
@@ -130,11 +139,7 @@ export function App() {
       setQueue((current) => current.map((item) => (
         item.id === entry.id ? { ...item, status: "succeeded", progress: 100, result: summary } : item
       )));
-      setState((current) => ({
-        ...current,
-        successfulConversions: current.successfulConversions + 1,
-        isLocked: current.successfulConversions + 1 >= current.trialLimit,
-      }));
+      await refreshState();
     } catch (reason) {
       const status = isCancelReason(reason) ? "cancelled" : "failed";
       const message = String(reason);
@@ -149,7 +154,7 @@ export function App() {
       setIsBusy(false);
       setProgress(undefined);
     }
-  }, [isBusy, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
+  }, [isBusy, refreshState, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
   const enqueueRef = useRef(enqueueInputs);
 
   useEffect(() => {
@@ -336,7 +341,7 @@ export function App() {
       return;
     }
 
-    void invoke<DropZoneState>("load_state").then(setState).catch((reason) => setError(String(reason)));
+    void refreshState().catch((reason) => setError(String(reason)));
 
     let unlisten: (() => void) | undefined;
     let isDisposed = false;
@@ -364,7 +369,7 @@ export function App() {
       isDisposed = true;
       unlisten?.();
     };
-  }, []);
+  }, [refreshState]);
 
   return (
     <main className={`shell${queue.length > 0 ? " has-queue" : ""}`}>
