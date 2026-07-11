@@ -11,6 +11,18 @@ fn accepts_all_verified_blockers() {
 }
 
 #[test]
+fn reports_verified_blocker_without_evidence_reference() {
+    let text = crate::release_check::required_blockers()
+        .iter()
+        .map(|blocker| format!("| {blocker} | Verified | done | TBD | docs |\n"))
+        .collect::<String>();
+
+    let unverified = unverified_blockers(&text);
+
+    assert!(unverified.contains(&"Signed DMG"));
+}
+
+#[test]
 fn reports_blocked_and_missing_blockers() {
     let text = "| Signed DMG | Blocked | evidence required | TBD | Release notes |\n";
 

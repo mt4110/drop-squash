@@ -50,8 +50,16 @@ fn is_verified(text: &str, blocker: &str) -> bool {
         let Some(cells) = cells(line) else {
             return false;
         };
-        cells.first() == Some(&blocker) && cells.get(1) == Some(&"Verified")
+        cells.first() == Some(&blocker)
+            && cells.get(1) == Some(&"Verified")
+            && cells
+                .get(3)
+                .is_some_and(|reference| has_publish_evidence(reference))
     })
+}
+
+fn has_publish_evidence(reference: &str) -> bool {
+    !matches!(reference.trim(), "" | "TBD")
 }
 
 fn cells(line: &str) -> Option<Vec<&str>> {
