@@ -1,8 +1,33 @@
 use super::blockers::row;
 use std::path::Path;
 
+const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
+    "App build",
+    "App artifact",
+    "macOS version",
+    "Machine",
+    "Input sample set",
+    "Output folder",
+    "Tester",
+    "Date",
+    "Choose recording conversion",
+    "Drag-and-drop conversion",
+    "Privacy receipt sidecar",
+    "Reveal privacy receipt",
+    "Duplicate output naming",
+    "Cancellation",
+    "Multi-file queue",
+    "Queued job cancellation",
+    "Batch summary",
+    "Ask source policy",
+    "Trash source policy",
+    "Failed conversion",
+    "Larger output",
+    "Reveal output",
+];
+
 const MANUAL_BLOCKERS: [(&str, &[&str]); 4] = [
-    ("Packaged macOS manual QA", &["Choose recording conversion"]),
+    ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
     ("Lemon Squeezy sandbox purchase", &["Sandbox purchase"]),
     ("Valid sandbox activation", &["Valid sandbox activation"]),
     ("Gatekeeper clean-machine open", &["Gatekeeper open test"]),

@@ -20,6 +20,16 @@ fn reports_verified_manual_blocker_without_manual_result() {
 }
 
 #[test]
+fn reports_incomplete_packaged_macos_manual_qa() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Choose recording conversion | Small recording | Creates smaller MP4 | Concrete file output |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn ignores_blocked_manual_blockers() {
     let blockers = "| Gatekeeper clean-machine open | Blocked | Fresh macOS account opens app | TBD | `docs/manual-qa.md` |\n";
     let manual = "| Gatekeeper open test | Signed app opens cleanly |  |\n";
