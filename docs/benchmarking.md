@@ -26,9 +26,25 @@ Use at least three private local samples before a release candidate:
 - A medium recording around 2 to 5 minutes.
 - A large recording that is painful to share without compression.
 
+Record this context with the CSV in `docs/manual-qa.md`:
+
+- DropSquash app version or commit.
+- macOS version and machine model.
+- Whether the app was run from a packaged `.app` or `xtask`.
+- Profile and size arguments.
+- Output directory path.
+
 Acceptance notes:
 
 - The output must exist and be smaller than the original.
 - The app must remain responsive enough for cancellation/manual QA.
 - Benchmark outputs and private media samples must not be committed.
 - Compare results across the same machine, OS version, profile, and size.
+
+Release candidate rule:
+
+- The first release candidate establishes the baseline for the sample set.
+- A later release candidate should not regress throughput by more than 20%
+  on two or more samples without a documented reason.
+- Any sample that fails to produce a smaller output blocks the release
+  candidate until the profile, sample, or encoder behavior is understood.
