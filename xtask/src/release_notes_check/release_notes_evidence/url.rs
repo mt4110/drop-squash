@@ -24,7 +24,7 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
             value.starts_with("https://github.com/mt4110/drop-squash/releases/tag/")
         }
         Kind::HomebrewPullRequest => {
-            value.starts_with("https://github.com/") && value.contains("/pull/")
+            value.starts_with("https://github.com/mt4110/homebrew-tap/pull/")
         }
     }
 }

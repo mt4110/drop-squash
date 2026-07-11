@@ -61,6 +61,27 @@ fn rejects_placeholders_and_wrong_url_kinds() {
 }
 
 #[test]
+fn rejects_homebrew_pr_outside_expected_tap() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Git commit: abc1234
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com/someone/other-tap/pull/1
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew tap PR URL")));
+}
+
+#[test]
 fn rejects_missing_or_generic_release_evidence() {
     let errors = check_text(
         r#"
