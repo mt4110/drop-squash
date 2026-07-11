@@ -5,8 +5,10 @@ fn accepts_concrete_production_urls() {
     let errors = check_text(
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-- Git commit: abc1234 release source commit
+- Git commit: abc1234
 - `codesign`: valid on DropSquash.app
 - `spctl`: accepted source Developer ID
 - `stapler`: ticket stapled successfully
@@ -63,8 +65,10 @@ fn rejects_missing_or_generic_release_evidence() {
     let errors = check_text(
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: soon
+- Artifact: DropSquash.zip
 - SHA-256:
-- Git commit: Done
+- Git commit: release source commit
 - `codesign`: OK
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
@@ -75,6 +79,8 @@ fn rejects_missing_or_generic_release_evidence() {
 
     assert!(errors.iter().any(|error| error.contains("SHA-256")));
     assert!(errors.iter().any(|error| error.contains("Git commit")));
+    assert!(errors.iter().any(|error| error.contains("Version")));
+    assert!(errors.iter().any(|error| error.contains("Artifact")));
     assert!(errors.iter().any(|error| error.contains("`codesign`")));
     assert!(errors.iter().any(|error| error.contains("`spctl`")));
     assert!(errors
@@ -93,8 +99,10 @@ fn rejects_non_hex_sha256() {
     let errors = check_text(
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
 - SHA-256: 64 hex chars recorded in SHA256SUMS
-- Git commit: abc1234 release source commit
+- Git commit: abc1234
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0

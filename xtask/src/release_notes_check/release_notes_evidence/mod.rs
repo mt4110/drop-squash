@@ -1,5 +1,6 @@
 use std::path::Path;
 
+mod identity;
 mod url;
 
 const URL_FIELDS: [(&str, url::Kind); 5] = [
@@ -9,8 +10,7 @@ const URL_FIELDS: [(&str, url::Kind); 5] = [
     ("GitHub Release URL", url::Kind::GitHubRelease),
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
-const EVIDENCE_FIELDS: [&str; 15] = [
-    "Git commit",
+const EVIDENCE_FIELDS: [&str; 14] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -37,6 +37,7 @@ fn check_text(text: &str) -> Vec<String> {
         .iter()
         .filter_map(|(label, kind)| validate_url_field(label, *kind, text))
         .collect();
+    errors.extend(identity::validate(text));
     errors.extend(validate_sha256(text));
     errors.extend(
         EVIDENCE_FIELDS
