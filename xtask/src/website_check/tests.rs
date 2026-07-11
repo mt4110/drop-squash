@@ -101,6 +101,7 @@ fn required_page_text(page: &str) -> &'static str {
     match page {
         "download.html" => "DropSquash.dmg notarization checksum",
         "pricing.html" => "Checkout opens after",
+        "support.html" => "Do not send screen recordings app version",
         _ => "<p>Page</p>",
     }
 }

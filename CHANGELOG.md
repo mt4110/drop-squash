@@ -47,3 +47,4 @@
 - Add desktop source-action tests for Ask mode and explicit Trash output revalidation.
 - Add a QA evidence map separating automated coverage from packaged-app manual QA.
 - Align website download copy with DMG output and gate pre-release checkout/download messaging.
+- Add privacy-preserving conversion support guidance to the site and issue template.

@@ -44,6 +44,13 @@ fn check_release_copy(root: &Path, errors: &mut Vec<String>) {
     require_page_text(root, "download.html", "notarization", errors);
     require_page_text(root, "download.html", "checksum", errors);
     require_page_text(root, "pricing.html", "Checkout opens after", errors);
+    require_page_text(
+        root,
+        "support.html",
+        "Do not send screen recordings",
+        errors,
+    );
+    require_page_text(root, "support.html", "app version", errors);
 }
 
 fn require_page_text(root: &Path, page: &str, needle: &str, errors: &mut Vec<String>) {

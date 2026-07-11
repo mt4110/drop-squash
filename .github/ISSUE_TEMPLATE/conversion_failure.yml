@@ -7,6 +7,27 @@ body:
     id: input
     attributes:
       label: Input details
-      description: File type, approximate size, and where the recording came from.
+      description: File type, approximate size, selected profile, selected output size, and where the recording came from. Do not attach private recordings unless explicitly requested.
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS version
+      placeholder: "15.5"
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error text
+      description: Copy the exact error shown by DropSquash, if any.
     validations:
       required: true
