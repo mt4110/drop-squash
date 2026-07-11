@@ -2,14 +2,19 @@ use crate::{media_policy_check, privacy_policy_check};
 
 use std::path::{Path, PathBuf};
 
+const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
+const RELEASE_WORKFLOW_GATES: [&str; 4] = [
+    "cargo run -p xtask -- file-size-check",
+    "cargo run -p xtask -- website-check",
+    "cargo run -p xtask -- release-check",
+    "Block unsigned Phase 0 release",
+];
+
 pub fn run() -> Result<(), String> {
     reject_secret_files(Path::new("."))?;
     media_policy_check::check_default_roots()?;
     privacy_policy_check::check_default_roots()?;
-    require_text(
-        ".github/workflows/release.yml",
-        "Block unsigned Phase 0 release",
-    )?;
+    require_release_workflow_gates()?;
     require_text(
         "apps/desktop/src-tauri/tauri.conf.json",
         "\"connect-src\": \"ipc: http://ipc.localhost\"",
@@ -17,6 +22,26 @@ pub fn run() -> Result<(), String> {
     reject_text("apps/desktop/src-tauri/tauri.conf.json", "\"updater\"")?;
     println!("release readiness checks passed");
     Ok(())
+}
+
+fn require_release_workflow_gates() -> Result<(), String> {
+    let text = std::fs::read_to_string(RELEASE_WORKFLOW).map_err(|error| error.to_string())?;
+    let missing = missing_release_workflow_gates(&text);
+    if missing.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "{RELEASE_WORKFLOW} is missing release gates: {}",
+        missing.join(", ")
+    ))
+}
+
+fn missing_release_workflow_gates(text: &str) -> Vec<&'static str> {
+    RELEASE_WORKFLOW_GATES
+        .iter()
+        .copied()
+        .filter(|gate| !text.contains(gate))
+        .collect()
 }
 
 fn reject_secret_files(root: &Path) -> Result<(), String> {
@@ -38,6 +63,9 @@ fn reject_secret_files(root: &Path) -> Result<(), String> {
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests;
 
 fn repo_files(root: &Path) -> Result<Vec<PathBuf>, String> {
     let mut files = Vec::new();
