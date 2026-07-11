@@ -56,6 +56,15 @@ fn reports_public_website_without_release_status_reference() {
 }
 
 #[test]
+fn reports_public_website_with_html_release_status_reference() {
+    let text = "| Public website deployment | Verified | pages online | https://dropsquash.app/release-status.html | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Public website deployment"));
+}
+
+#[test]
 fn reports_live_checkout_without_buy_reference() {
     let text =
         "| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout | `https://...` |\n";

@@ -126,6 +126,19 @@ fn rejects_release_notes_without_specific_public_urls() {
 }
 
 #[test]
+fn rejects_html_release_status_url() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://dropsquash.app/release-status.html
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Public website URL")));
+}
+
+#[test]
 fn rejects_homebrew_pr_outside_expected_tap() {
     let errors = check_text(
         r#"

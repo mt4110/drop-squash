@@ -19,7 +19,7 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
                 && lower.ends_with(".dmg")
         }
         Kind::Website => {
-            lower.contains("/release-status")
+            has_release_status_path(&lower)
                 && !lower.contains("lemonsqueezy.com")
                 && !lower.contains("checkout")
         }
@@ -31,6 +31,10 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
             has_numeric_suffix(value, "https://github.com/mt4110/homebrew-tap/pull/")
         }
     }
+}
+
+fn has_release_status_path(lower: &str) -> bool {
+    lower.ends_with("/release-status") || lower.ends_with("/release-status/")
 }
 
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
