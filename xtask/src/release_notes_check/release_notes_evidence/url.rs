@@ -9,7 +9,7 @@ pub(super) enum Kind {
 }
 
 pub(super) fn is_valid(kind: Kind, value: &str) -> bool {
-    value.starts_with("https://") && matches_kind(kind, value)
+    value.starts_with("https://") && has_no_whitespace(value) && matches_kind(kind, value)
 }
 
 fn matches_kind(kind: Kind, value: &str) -> bool {
@@ -51,4 +51,8 @@ fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
     value.strip_prefix(prefix).is_some_and(|suffix| {
         !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
     })
+}
+
+fn has_no_whitespace(value: &str) -> bool {
+    !value.chars().any(char::is_whitespace)
 }

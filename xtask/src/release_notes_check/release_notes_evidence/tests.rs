@@ -149,6 +149,19 @@ fn rejects_release_notes_without_specific_public_urls() {
 }
 
 #[test]
+fn rejects_url_fields_with_inline_notes() {
+    let errors = check_text(
+        r#"
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123 TBD
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Live checkout URL")));
+}
+
+#[test]
 fn rejects_refund_policy_url_on_different_origin() {
     let errors = check_text(
         r#"
