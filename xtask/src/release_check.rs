@@ -5,6 +5,7 @@ mod evidence;
 mod manual_blockers;
 mod release_doc;
 mod release_notes;
+mod required_text;
 mod secret_files;
 mod tauri_config;
 
@@ -48,38 +49,7 @@ pub fn run() -> Result<(), String> {
     release_notes::check(Path::new("docs/release-notes-template.md"))?;
     require_release_workflow_gates()?;
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
-    require_text("docs/release.md", "docs/release-blockers.md")?;
-    require_text("docs/productization.md", "docs/release-blockers.md")?;
-    require_text(
-        "docs/productization.md",
-        "refund/support contact copy gates",
-    )?;
-    require_text("README.md", "macOS today")?;
-    require_text("README.md", "Windows and Linux support is planned")?;
-    require_text(
-        "Cargo.toml",
-        "repository = \"https://github.com/mt4110/drop-squash\"",
-    )?;
-    require_text("docs/product.md", "macOS today")?;
-    require_text("docs/product.md", "Windows and Linux support is planned")?;
-    require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
-    require_text(
-        "docs/qa-evidence.md",
-        "license, refund, support contact copy",
-    )?;
-    require_text("docs/qa-evidence.md", "file names")?;
-    require_text("docs/qa-evidence.md", "UDIF `.dmg` artifacts")?;
-    require_text("docs/qa-evidence.md", "non-DMG targets are rejected")?;
-    require_text("docs/qa-evidence.md", "UDIF trailer")?;
-    require_text("docs/qa-evidence.md", "non-canonical homepages")?;
-    require_text("docs/licensing.md", "Lemon Squeezy sandbox purchase")?;
-    require_text(
-        "docs/benchmarking.md",
-        "at least three private local samples",
-    )?;
-    require_text("docs/benchmarking.md", "20%")?;
-    require_text("website/README.md", "docs/release-blockers.md")?;
-    reject_text("apps/desktop/src-tauri/tauri.conf.json", "\"updater\"")?;
+    required_text::check()?;
     println!("release readiness checks passed");
     Ok(())
 }
@@ -106,19 +76,3 @@ fn missing_release_workflow_gates(text: &str) -> Vec<&'static str> {
 
 #[cfg(test)]
 mod tests;
-
-fn require_text(path: &str, needle: &str) -> Result<(), String> {
-    let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
-    if text.contains(needle) {
-        return Ok(());
-    }
-    Err(format!("{path} is missing required text: {needle}"))
-}
-
-fn reject_text(path: &str, needle: &str) -> Result<(), String> {
-    let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
-    if text.contains(needle) {
-        return Err(format!("{path} contains disallowed text: {needle}"));
-    }
-    Ok(())
-}
