@@ -34,6 +34,12 @@ Record this context with the CSV in `docs/manual-qa.md`:
 - Profile and size arguments.
 - Output directory path.
 
+Use this compact format in the manual QA result cell:
+
+```text
+Samples: short.mov 0.42x 18.2 MiB/s; medium.mov 0.38x 21.0 MiB/s; large.mov 0.44x 19.5 MiB/s. CSV saved outside repo: /tmp/dropsquash-bench/results.csv
+```
+
 Acceptance notes:
 
 - The output must exist and be smaller than the original.
