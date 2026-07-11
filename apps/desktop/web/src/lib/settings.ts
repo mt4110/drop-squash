@@ -6,6 +6,7 @@ export function savedConfigFromState(state: DropZoneState): SavedConfig {
     profile: state.profile,
     outputSize: state.outputSize,
     sourcePolicy: state.sourcePolicy,
+    writePrivacyReceipt: state.writePrivacyReceipt,
   };
 }
 

@@ -4,7 +4,7 @@ mod summary;
 pub use summary::ConversionSummary;
 
 use dropsquash_core::{AppConfig, LicenseState, OutputSize, Profile, SourcePolicy};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use options::{
     profile_options, size_options, source_policy_options, OutputSizeOption, ProfileOption,
@@ -24,6 +24,7 @@ pub struct DropZoneState {
     pub source_policy: SourcePolicy,
     pub source_policies: Vec<SourcePolicyOption>,
     pub privacy_mode: &'static str,
+    pub write_privacy_receipt: bool,
     pub successful_conversions: u32,
     pub trial_limit: u32,
     pub is_pro: bool,
@@ -37,6 +38,18 @@ pub struct SavedConfig {
     pub profile: Profile,
     pub output_size: OutputSize,
     pub source_policy: SourcePolicy,
+    pub write_privacy_receipt: bool,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ConvertRequest {
+    pub input_path: String,
+    pub output_dir: String,
+    pub profile: Profile,
+    pub output_size: OutputSize,
+    pub source_policy: SourcePolicy,
+    pub write_privacy_receipt: bool,
 }
 
 pub fn drop_zone_state(
@@ -64,6 +77,7 @@ pub fn drop_zone_state(
         source_policy: config.source_policy,
         source_policies: source_policy_options(),
         privacy_mode: "local-only",
+        write_privacy_receipt: config.write_privacy_receipt,
         successful_conversions: trial_state.successful_conversions,
         trial_limit: trial_state.limit,
         is_pro,

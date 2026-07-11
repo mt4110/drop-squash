@@ -49,6 +49,7 @@ pub fn save_config(
     profile: Profile,
     output_size: OutputSize,
     source_policy: SourcePolicy,
+    write_privacy_receipt: bool,
 ) -> std::result::Result<SavedConfig, String> {
     let output_dir = PathBuf::from(output_dir);
     if output_dir.as_os_str().is_empty() {
@@ -64,6 +65,7 @@ pub fn save_config(
     config.default_profile = profile;
     config.default_output_size = output_size;
     config.source_policy = source_policy;
+    config.write_privacy_receipt = write_privacy_receipt;
     config.save_to_path(&config_path).map_err(format_error)?;
     Ok(saved_config(config))
 }
@@ -85,5 +87,6 @@ fn saved_config(config: AppConfig) -> SavedConfig {
         profile: config.default_profile,
         output_size: config.default_output_size,
         source_policy: config.source_policy,
+        write_privacy_receipt: config.write_privacy_receipt,
     }
 }

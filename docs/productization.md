@@ -43,7 +43,7 @@ Nothing uploads.
 
 | Order | Item | Status | Notes |
 |---:|---|---|---|
-| 1 | Persist output/profile/size settings | Done | Stored in platform app config path |
+| 1 | Persist output/profile/size settings | Done | Stored in platform app config path, including the privacy receipt preference |
 | 2 | Update README/docs from Phase 0 wording | Done | Current macOS path is described as AVFoundation MVP |
 | 3 | Decide canonical repository slug | Done | Metadata follows the current GitHub remote, `mt4110/drop-squash` |
 | 4 | Replace macOS hard-link finalization | Done | Uses no-clobber atomic rename on macOS |

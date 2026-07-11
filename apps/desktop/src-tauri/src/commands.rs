@@ -26,30 +26,25 @@ pub fn save_config(
     profile: Profile,
     output_size: OutputSize,
     source_policy: SourcePolicy,
+    write_privacy_receipt: bool,
 ) -> std::result::Result<dto::SavedConfig, String> {
-    config::save_config(app_state, output_dir, profile, output_size, source_policy)
+    config::save_config(
+        app_state,
+        output_dir,
+        profile,
+        output_size,
+        source_policy,
+        write_privacy_receipt,
+    )
 }
 
 #[tauri::command(rename_all = "camelCase")]
 pub async fn convert(
     app_state: tauri::State<'_, crate::state::AppState>,
     window: tauri::WebviewWindow,
-    input_path: String,
-    output_dir: String,
-    profile: Profile,
-    output_size: OutputSize,
-    source_policy: SourcePolicy,
+    request: dto::ConvertRequest,
 ) -> std::result::Result<dto::ConversionSummary, String> {
-    conversion::convert(
-        app_state,
-        window,
-        input_path,
-        output_dir,
-        profile,
-        output_size,
-        source_policy,
-    )
-    .await
+    conversion::convert(app_state, window, request).await
 }
 
 #[tauri::command(rename_all = "camelCase")]

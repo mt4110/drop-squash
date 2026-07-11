@@ -14,6 +14,7 @@ pub struct AppConfig {
     pub default_profile: Profile,
     pub default_output_size: OutputSize,
     pub source_policy: SourcePolicy,
+    pub write_privacy_receipt: bool,
     pub trial_conversion_limit: u32,
 }
 
@@ -24,6 +25,7 @@ impl Default for AppConfig {
             default_profile: Profile::Auto,
             default_output_size: OutputSize::Auto,
             source_policy: SourcePolicy::Ask,
+            write_privacy_receipt: true,
             trial_conversion_limit: TRIAL_CONVERSION_LIMIT,
         }
     }
@@ -75,53 +77,4 @@ impl AppConfig {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn missing_config_loads_defaults() {
-        let directory = tempfile::tempdir().unwrap();
-        let config = AppConfig::load_or_default(&directory.path().join("missing.json")).unwrap();
-
-        assert_eq!(config, AppConfig::default());
-    }
-
-    #[test]
-    fn saves_and_loads_config() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("nested").join("config.json");
-        let config = AppConfig {
-            output_dir: PathBuf::from("/tmp/DropSquash"),
-            default_profile: Profile::Docs,
-            default_output_size: OutputSize::P720,
-            source_policy: SourcePolicy::Ask,
-            trial_conversion_limit: TRIAL_CONVERSION_LIMIT,
-        };
-
-        config.save_to_path(&path).unwrap();
-
-        assert_eq!(AppConfig::load_or_default(&path).unwrap(), config);
-    }
-
-    #[test]
-    fn missing_fields_fall_back_to_defaults() {
-        let directory = tempfile::tempdir().unwrap();
-        let path = directory.path().join("config.json");
-        std::fs::write(
-            &path,
-            r#"{
-  "default_profile": "docs",
-  "default_output_size": "720p"
-}"#,
-        )
-        .unwrap();
-
-        let config = AppConfig::load_or_default(&path).unwrap();
-
-        assert_eq!(config.default_profile, Profile::Docs);
-        assert_eq!(config.default_output_size, OutputSize::P720);
-        assert_eq!(config.output_dir, default_output_dir());
-        assert_eq!(config.source_policy, SourcePolicy::Ask);
-        assert_eq!(config.trial_conversion_limit, TRIAL_CONVERSION_LIMIT);
-    }
-}
+mod tests;

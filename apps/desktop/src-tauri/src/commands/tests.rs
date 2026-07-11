@@ -15,6 +15,7 @@ fn exposes_placeholder_drop_zone_state() {
     assert_eq!(state.product_name, "DropSquash");
     assert_eq!(state.privacy_mode, "local-only");
     assert_eq!(state.output_size, OutputSize::Auto);
+    assert!(state.write_privacy_receipt);
     assert_eq!(state.profiles.len(), Profile::DELIVERY.len());
     assert_eq!(state.output_sizes.len(), OutputSize::ALL.len());
     assert_eq!(state.input_extensions, ["mov", "mp4", "m4v"]);

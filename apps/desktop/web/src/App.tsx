@@ -97,11 +97,14 @@ export function App() {
     setQueue((current) => markRunning(current, entry.id));
     try {
       const summary = await invoke<ConversionSummary>("convert", {
-        inputPath: entry.inputPath,
-        outputDir: state.outputDir,
-        profile: state.profile,
-        outputSize: state.outputSize,
-        sourcePolicy: state.sourcePolicy,
+        request: {
+          inputPath: entry.inputPath,
+          outputDir: state.outputDir,
+          profile: state.profile,
+          outputSize: state.outputSize,
+          sourcePolicy: state.sourcePolicy,
+          writePrivacyReceipt: state.writePrivacyReceipt,
+        },
       });
       setResult(summary);
       setQueue((current) => markSucceeded(current, entry.id, summary));
@@ -118,7 +121,7 @@ export function App() {
       setIsBusy(false);
       setProgress(undefined);
     }
-  }, [isBusy, refreshState, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
+  }, [isBusy, refreshState, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy, state.writePrivacyReceipt]);
   useEffect(() => {
     if (isBusy || state.isLocked) {
       return;
@@ -192,6 +195,11 @@ export function App() {
   const changeSourcePolicy = useCallback((sourcePolicy: SourcePolicy) => {
     setState((current) => ({ ...current, sourcePolicy }));
     void persistSettings(savedConfigWith(state, { sourcePolicy }));
+  }, [persistSettings, state]);
+
+  const changeWritePrivacyReceipt = useCallback((writePrivacyReceipt: boolean) => {
+    setState((current) => ({ ...current, writePrivacyReceipt }));
+    void persistSettings(savedConfigWith(state, { writePrivacyReceipt }));
   }, [persistSettings, state]);
 
   const revealOutput = useCallback(async (outputPath: string) => {
@@ -301,6 +309,7 @@ export function App() {
         profile={state.profile}
         outputSize={state.outputSize}
         sourcePolicy={state.sourcePolicy}
+        writePrivacyReceipt={state.writePrivacyReceipt}
         profiles={state.profiles}
         outputSizes={state.outputSizes}
         sourcePolicies={state.sourcePolicies}
@@ -308,6 +317,7 @@ export function App() {
         onProfileChange={changeProfile}
         onOutputSizeChange={changeOutputSize}
         onSourcePolicyChange={changeSourcePolicy}
+        onWritePrivacyReceiptChange={changeWritePrivacyReceipt}
       />
       <QueuePanel
         items={queue}

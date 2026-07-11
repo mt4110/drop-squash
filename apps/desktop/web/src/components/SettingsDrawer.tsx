@@ -6,6 +6,7 @@ type SettingsDrawerProps = {
   profile: Profile;
   outputSize: OutputSize;
   sourcePolicy: SourcePolicy;
+  writePrivacyReceipt: boolean;
   profiles: SelectOption<Profile>[];
   outputSizes: SelectOption<OutputSize>[];
   sourcePolicies: SelectOption<SourcePolicy>[];
@@ -13,6 +14,7 @@ type SettingsDrawerProps = {
   onProfileChange: (profile: Profile) => void;
   onOutputSizeChange: (outputSize: OutputSize) => void;
   onSourcePolicyChange: (policy: SourcePolicy) => void;
+  onWritePrivacyReceiptChange: (enabled: boolean) => void;
 };
 
 export function SettingsDrawer({
@@ -20,6 +22,7 @@ export function SettingsDrawer({
   profile,
   outputSize,
   sourcePolicy,
+  writePrivacyReceipt,
   profiles,
   outputSizes,
   sourcePolicies,
@@ -27,6 +30,7 @@ export function SettingsDrawer({
   onProfileChange,
   onOutputSizeChange,
   onSourcePolicyChange,
+  onWritePrivacyReceiptChange,
 }: SettingsDrawerProps) {
   return (
     <section className="settings" aria-label="Settings">
@@ -54,6 +58,14 @@ export function SettingsDrawer({
         <select value={sourcePolicy} onChange={(event) => onSourcePolicyChange(event.target.value as SourcePolicy)}>
           {sourcePolicies.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
+      </label>
+      <label>
+        <span>Receipt</span>
+        <input
+          checked={writePrivacyReceipt}
+          type="checkbox"
+          onChange={(event) => onWritePrivacyReceiptChange(event.target.checked)}
+        />
       </label>
       <div><span>Privacy</span><strong>Local only &#x2713;</strong></div>
     </section>

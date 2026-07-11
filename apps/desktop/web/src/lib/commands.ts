@@ -29,6 +29,7 @@ export type DropZoneState = {
   sourcePolicy: SourcePolicy;
   sourcePolicies: SelectOption<SourcePolicy>[];
   privacyMode: "local-only";
+  writePrivacyReceipt: boolean;
   successfulConversions: number;
   trialLimit: number;
   isPro: boolean;
@@ -56,4 +57,5 @@ export type SavedConfig = {
   profile: Profile;
   outputSize: OutputSize;
   sourcePolicy: SourcePolicy;
+  writePrivacyReceipt: boolean;
 };

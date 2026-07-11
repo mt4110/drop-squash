@@ -29,6 +29,7 @@ export const initialState: DropZoneState = {
     { value: "trash", label: "Move to Trash" },
   ],
   privacyMode: "local-only",
+  writePrivacyReceipt: true,
   successfulConversions: 0,
   trialLimit: 10,
   isPro: false,
