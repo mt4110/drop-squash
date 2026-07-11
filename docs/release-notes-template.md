@@ -63,6 +63,8 @@ weak public evidence before the release is published.
 - Lemon Squeezy sandbox purchase: mention the `test buyer` and `order`.
 - License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
 - Local license forget: mention cache removal and trial or locked state.
+- Public website URL: use the production `/release-status` URL.
+- Live checkout URL: use the Lemon Squeezy `/checkout/buy/` URL for the product.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, `DropSquash.dmg`, and that it is attached.
 - Homebrew tap PR: mention the cask and PR.
 - Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash`.
