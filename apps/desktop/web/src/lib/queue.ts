@@ -19,6 +19,7 @@ export type QueueEntry = {
 
 export type QueueSummary = {
   total: number;
+  finished: number;
   queued: number;
   running: number;
   succeeded: number;
@@ -55,7 +56,10 @@ export function queueSummary(items: QueueEntry[]): QueueSummary {
   return items.reduce<QueueSummary>((summary, item) => {
     summary.total += 1;
     summary[item.status] += 1;
-    summary.savedBytes += item.result?.savedBytes ?? 0;
+    if (isFinishedStatus(item.status)) summary.finished += 1;
+    if (item.status === "succeeded") {
+      summary.savedBytes += Math.max(0, item.result?.savedBytes ?? 0);
+    }
     return summary;
   }, emptySummary());
 }
@@ -146,6 +150,7 @@ function isFinishedStatus(status: QueueStatus) {
 function emptySummary(): QueueSummary {
   return {
     total: 0,
+    finished: 0,
     queued: 0,
     running: 0,
     succeeded: 0,

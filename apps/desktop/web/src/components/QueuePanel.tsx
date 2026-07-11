@@ -16,13 +16,12 @@ export function QueuePanel({ items, onCancelQueued, onClearFinished, onRevealOut
   }
 
   const summary = queueSummary(items);
-  const finished = summary.succeeded + summary.failed + summary.cancelled + summary.blocked;
 
   return (
     <section className="queue" aria-label="Queue">
       {hasFinished(items) && (
         <div className="queue-actions">
-          <span>{finished} of {summary.total} finished - {formatBytes(summary.savedBytes)} saved</span>
+          <span>{summary.finished} of {summary.total} finished - {formatBytes(summary.savedBytes)} saved</span>
           <button type="button" onClick={onClearFinished}>Clear finished</button>
         </div>
       )}
