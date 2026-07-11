@@ -7,11 +7,15 @@ use super::write_activation_cache;
 
 struct FakeProvider {
     fail: bool,
+    expected_key: Option<&'static str>,
 }
 
 #[async_trait]
 impl LicenseProvider for FakeProvider {
     async fn activate(&self, license_key: &str, instance_id: &str) -> Result<LicenseActivation> {
+        if let Some(expected_key) = self.expected_key {
+            assert_eq!(license_key, expected_key);
+        }
         if self.fail {
             return Err(AppError::License("activation failed".to_string()));
         }
@@ -39,7 +43,10 @@ async fn activation_failure_does_not_write_partial_cache() {
     let result = write_activation_cache(
         "LS-SECRET-RAW-KEY",
         &path,
-        &FakeProvider { fail: true },
+        &FakeProvider {
+            fail: true,
+            expected_key: None,
+        },
         100,
     )
     .await;
@@ -56,7 +63,10 @@ async fn activation_success_writes_fingerprint_without_raw_key() {
     write_activation_cache(
         "LS-SECRET-RAW-KEY",
         &path,
-        &FakeProvider { fail: false },
+        &FakeProvider {
+            fail: false,
+            expected_key: None,
+        },
         100,
     )
     .await
@@ -68,4 +78,22 @@ async fn activation_success_writes_fingerprint_without_raw_key() {
     assert!(cache.valid);
     assert_eq!(cache.validated_at_unix, Some(100));
     assert_eq!(cache.offline_grace_until_unix, Some(2_592_100));
+}
+
+#[tokio::test]
+async fn activation_trims_license_key_before_provider_call() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+
+    write_activation_cache(
+        "  LS-SECRET-RAW-KEY  ",
+        &path,
+        &FakeProvider {
+            fail: false,
+            expected_key: Some("LS-SECRET-RAW-KEY"),
+        },
+        100,
+    )
+    .await
+    .unwrap();
 }

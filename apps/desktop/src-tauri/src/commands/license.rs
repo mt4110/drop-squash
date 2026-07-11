@@ -31,6 +31,7 @@ async fn write_activation_cache<P: LicenseProvider>(
     provider: &P,
     now: u64,
 ) -> dropsquash_core::Result<()> {
+    let license_key = license_key.trim();
     let mut cache = LicenseCache::load_or_default(path)?;
     let instance_name = cache
         .instance_name

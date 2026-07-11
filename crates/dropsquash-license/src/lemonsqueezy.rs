@@ -56,7 +56,7 @@ impl LicenseProvider for LemonSqueezyProvider {
         if response.deactivated.unwrap_or(false) {
             return Ok(());
         }
-        Err(AppError::License(response.friendly_error()))
+        Err(license_error(license_key, response))
     }
 }
 
@@ -66,7 +66,7 @@ fn activation_from_response(
 ) -> Result<LicenseActivation> {
     let valid = response.activated.unwrap_or(false);
     if !valid {
-        return Err(AppError::License(response.friendly_error()));
+        return Err(license_error(license_key, response));
     }
     let instance_id = response
         .instance
@@ -79,6 +79,18 @@ fn activation_from_response(
         instance_id,
         valid,
     })
+}
+
+fn license_error(license_key: &str, response: LicenseApiResponse) -> AppError {
+    AppError::License(redact_license_key(&response.friendly_error(), license_key))
+}
+
+fn redact_license_key(message: &str, license_key: &str) -> String {
+    let trimmed = license_key.trim();
+    if trimmed.is_empty() {
+        return message.to_string();
+    }
+    message.replace(trimmed, "[license key]")
 }
 
 #[cfg(test)]

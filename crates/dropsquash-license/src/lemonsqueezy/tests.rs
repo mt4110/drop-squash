@@ -41,3 +41,21 @@ fn activation_error_is_friendly() {
     assert!(error.to_string().contains("Activation limit reached."));
     assert!(!error.to_string().contains("LS-SECRET-RAW-KEY"));
 }
+
+#[test]
+fn activation_error_redacts_echoed_license_key() {
+    let error = activation_from_response(
+        "LS-SECRET-RAW-KEY",
+        LicenseApiResponse {
+            activated: Some(false),
+            valid: None,
+            deactivated: None,
+            error: Some("Key LS-SECRET-RAW-KEY is not valid.".to_string()),
+            instance: None,
+        },
+    )
+    .unwrap_err();
+
+    assert!(error.to_string().contains("[license key]"));
+    assert!(!error.to_string().contains("LS-SECRET-RAW-KEY"));
+}
