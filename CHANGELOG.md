@@ -30,3 +30,4 @@
 - Rename the desktop license removal affordance to clarify that it forgets the local cache only.
 - Add a manual QA checklist for packaged macOS, license sandbox, and release-candidate verification.
 - Align Cargo workspace repository metadata with the current `mt4110/drop-squash` remote.
+- Add an `xtask website-check` command and CI gate for static sales-site links and placeholders.

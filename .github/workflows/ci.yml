@@ -23,6 +23,9 @@ jobs:
       - name: file size
         if: runner.os == 'Linux'
         run: cargo run -p xtask -- file-size-check
+      - name: website
+        if: runner.os == 'Linux'
+        run: cargo run -p xtask -- website-check
       - name: clippy
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: test
