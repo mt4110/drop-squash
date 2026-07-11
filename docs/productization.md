@@ -28,7 +28,7 @@ Nothing uploads.
 
 | Phase | Status | Goal | Scope | Acceptance | Verification |
 |---|---|---|---|---|---|
-| 0.5 Repo alignment | In progress | Make names, docs, and metadata consistent before adding product surface | README/docs current-state wording, product invariants, repository URL decision | Docs match implementation; no unsupported hardware claims; no secrets added | `cargo fmt --all -- --check`; `cargo clippy --workspace --all-targets -- -D warnings`; `cargo test --workspace` |
+| 0.5 Repo alignment | Done | Make names, docs, and metadata consistent before adding product surface | README/docs current-state wording, product invariants, repository URL decision | Docs match implementation; no unsupported hardware claims; no secrets added | `cargo fmt --all -- --check`; `cargo clippy --workspace --all-targets -- -D warnings`; `cargo test --workspace` |
 | 0.6 File-size architecture cleanup | Done | Bring existing code under the repository's size rules before adding more behavior | Split large Rust production files by responsibility; keep TS/TSX under 512 lines | No Rust production file exceeds 128 lines; no TS/TSX file exceeds 512 lines; behavior unchanged | `cargo run -p xtask -- file-size-check`; `cargo test --workspace`; `cargo clippy --workspace --all-targets -- -D warnings` |
 | 1 macOS encoder hardening | In progress | Make single-file macOS conversion safe enough for paid beta | Replace hard-link finalization, strengthen output verification, clean temp files, friendly failure states | Existing outputs are never overwritten; failed/larger/cancelled conversions do not count; original remains untouched | Unit tests plus `docs/manual-qa.md` packaged-app conversion record |
 | 2 Cancellation | In progress | Let users stop an active conversion cleanly | Cancellation token through command/encoder boundary, UI cancel action, temp cleanup | Cancel returns app to ready state; no success history; no trial count | Unit tests plus `docs/manual-qa.md` cancellation record |
@@ -45,7 +45,7 @@ Nothing uploads.
 |---:|---|---|---|
 | 1 | Persist output/profile/size settings | Done | Stored in platform app config path |
 | 2 | Update README/docs from Phase 0 wording | Done | Current macOS path is described as AVFoundation MVP |
-| 3 | Decide canonical repository slug | Decision needed | Either rename GitHub repo to `dropsquash` or align metadata to `drop-squash` |
+| 3 | Decide canonical repository slug | Done | Metadata follows the current GitHub remote, `mt4110/drop-squash` |
 | 4 | Replace macOS hard-link finalization | Done | Uses no-clobber atomic rename on macOS |
 | 5 | Split oversized production files | Done | All Rust production files are now <= 128 lines; TS/TSX remain <= 512 lines |
 | 6 | Add output media validation beyond size | Done | Requires smaller `.mp4`, MP4 file-type box, and non-zero `mvhd` duration |
