@@ -105,7 +105,7 @@ Record these rows:
 - Forget license on this Mac
 
 Keep the matching release blockers in `docs/release-blockers.md` blocked until
-both the sandbox purchase evidence and activation evidence exist.
+the sandbox purchase, activation, invalid-key, and local-forget evidence exist.
 
 Generate SHA-256 checksum lines for release artifacts with:
 
