@@ -16,10 +16,15 @@ fn validate_sample_set(text: &str) -> Option<String> {
     if ["short", "medium", "large"]
         .iter()
         .all(|needle| lower.contains(needle))
+        && has_machine_context(&lower)
+        && has_os_context(&lower)
     {
         return None;
     }
-    Some("Benchmark sample set must mention short, medium, and large samples".to_string())
+    Some(
+        "Benchmark sample set must mention short, medium, large, machine, and OS context"
+            .to_string(),
+    )
 }
 
 fn validate_regression_threshold(text: &str) -> Option<String> {
@@ -37,4 +42,12 @@ fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
     let prefix = format!("- {label}:");
     text.lines()
         .find_map(|line| line.trim().strip_prefix(&prefix).map(str::trim))
+}
+
+fn has_machine_context(value: &str) -> bool {
+    value.contains("machine") || value.contains("macbook") || value.contains("mac ")
+}
+
+fn has_os_context(value: &str) -> bool {
+    value.contains("macos") || value.contains("os ")
 }

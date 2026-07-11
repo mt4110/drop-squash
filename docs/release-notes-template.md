@@ -59,6 +59,7 @@ weak public evidence before the release is published.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, and `clean` or `fresh`.
 - `docs/release-blockers.md` status: mention `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md` and the tested `DropSquash.dmg` or `.app`.
+- Benchmark sample set: mention short, medium, and large samples with machine and OS context.
 - Lemon Squeezy sandbox purchase: mention the `test buyer` and `order`.
 - License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
 - Local license forget: mention cache removal and trial or locked state.

@@ -16,7 +16,7 @@ fn accepts_concrete_production_urls() {
 - Gatekeeper clean-machine open: Gatekeeper opened app cleanly in fresh account
 - `docs/release-blockers.md` status: all rows Verified
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
-- Benchmark sample set: short medium large local recordings recorded
+- Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
 - Benchmark regression threshold: no sample exceeded 20 percent regression
 - Lemon Squeezy sandbox purchase: test buyer order abc123 completed
 - Lemon Squeezy sandbox activation: Pro state reached and raw key absent from cache
@@ -209,8 +209,31 @@ fn rejects_incomplete_benchmark_evidence() {
 
     assert!(errors
         .iter()
-        .any(|error| error.contains("short, medium, and large")));
+        .any(|error| error.contains("machine, and OS context")));
     assert!(errors.iter().any(|error| error.contains("20%")));
+}
+
+#[test]
+fn rejects_benchmark_sample_set_without_machine_context() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Git commit: abc1234
+- Benchmark sample set: short medium large local recordings recorded
+- Benchmark regression threshold: no sample exceeded 20% regression
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("machine, and OS context")));
 }
 
 #[test]
