@@ -55,8 +55,8 @@ fn html_files(root: &Path) -> Result<Vec<PathBuf>, String> {
 
 fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
-    if text.contains("example.com") {
-        errors.push(format!("{} contains example.com", path.display()));
+    if has_placeholder_url(&text) {
+        errors.push(format!("{} contains placeholder URL", path.display()));
     }
     for href in html_links::hrefs(&text) {
         check_insecure_href(path, &href, errors);
@@ -75,6 +75,15 @@ fn check_insecure_href(path: &Path, href: &str, errors: &mut Vec<String>) {
     if href.starts_with("http://") {
         errors.push(format!("{} contains insecure link: {href}", path.display()));
     }
+}
+
+fn has_placeholder_url(text: &str) -> bool {
+    let lower = text.to_ascii_lowercase();
+    lower.contains("example.")
+        || lower.contains(".example/")
+        || lower.contains("localhost")
+        || lower.contains(".test/")
+        || lower.contains(".test")
 }
 
 fn check_disallowed_live_href(path: &Path, href: &str, errors: &mut Vec<String>) {

@@ -47,7 +47,7 @@ fn rejects_example_dot_com_placeholders() {
     let errors = check_root(directory.path()).unwrap();
 
     assert_eq!(errors.len(), 1);
-    assert!(errors[0].contains("example.com"));
+    assert!(errors[0].contains("placeholder URL"));
 }
 
 #[test]
@@ -57,10 +57,25 @@ fn ignores_external_links_and_anchors() {
     write(
         directory.path(),
         "index.html",
-        r##"Release status <a href="#top">Top</a><a href="https://drop.test">External</a>"##,
+        r##"Release status <a href="#top">Top</a><a href="https://github.com/mt4110/drop-squash">External</a>"##,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
+fn rejects_placeholder_external_urls() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="https://download.test/DropSquash">Download</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("placeholder URL")));
 }
 
 #[test]
