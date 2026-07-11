@@ -92,10 +92,14 @@ cargo run -p xtask -- manual-qa-prepare --restore-state
 Record concrete results. The checker requires:
 
 - Sandbox purchase: mention the intended product and test buyer.
-- Empty key activation: mention a friendly validation error and absence of a raw key.
-- Invalid key activation: mention a friendly error and absence of a raw key.
-- Valid sandbox activation: mention Pro state and absence of a raw key.
+- Empty key activation: mention a friendly validation error and that `license.json` or the license cache has no raw key.
+- Invalid key activation: mention a friendly error and that `license.json` or the license cache has no raw key.
+- Valid sandbox activation: mention Pro state and that `license.json` or the license cache has no raw key.
 - Forget license on this Mac: mention cache removal and the resulting app state.
+
+Inspect the license cache without recording the sandbox key itself. A good
+result says the cache path was checked, that the raw key was absent, and whether
+only the fingerprint/instance fields were present.
 
 | Check | Expected | Result |
 |---|---|---|

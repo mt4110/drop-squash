@@ -284,11 +284,11 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Sandbox purchase" {
             text.push_str("| Sandbox purchase | Passes | intended product checkout completed by test buyer order abc123 |\n");
         } else if check == "Empty key activation" {
-            text.push_str("| Empty key activation | Passes | friendly validation shown and no raw key persisted |\n");
+            text.push_str("| Empty key activation | Passes | friendly validation shown and license.json cache has no raw key |\n");
         } else if check == "Invalid key activation" {
-            text.push_str("| Invalid key activation | Passes | friendly error shown and no raw key persisted |\n");
+            text.push_str("| Invalid key activation | Passes | friendly error shown and license.json cache has no raw key |\n");
         } else if check == "Valid sandbox activation" {
-            text.push_str("| Valid sandbox activation | Passes | Pro state reached and raw key absent from cache |\n");
+            text.push_str("| Valid sandbox activation | Passes | Pro state reached and raw key absent from license.json cache |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | license cache cleared and app returned to trial state |\n");
         } else {
