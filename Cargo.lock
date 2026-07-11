@@ -974,6 +974,8 @@ dependencies = [
  "dropsquash-core",
  "dropsquash-history",
  "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

@@ -1,11 +1,13 @@
 use std::path::PathBuf;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use dropsquash_core::{
-    default_history_path, AppError, EncodeJob, LicenseState, SourcePolicy, TRIAL_CONVERSION_LIMIT,
+    default_history_path, default_license_cache_path, AppError, EncodeJob, LicenseState,
+    SourcePolicy, TRIAL_CONVERSION_LIMIT,
 };
 use dropsquash_encoder::EncoderBackend;
 use dropsquash_history::{append_record, read_records, ConversionRecord, HistoryMetrics};
-use dropsquash_license::LicenseGate;
+use dropsquash_license::{LicenseCache, LicenseGate};
 
 use crate::args::{Cli, Command, OutputSizeArg, ProfileArg};
 
@@ -62,7 +64,7 @@ async fn stats(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
     let history = history.unwrap_or_else(default_history_path);
     let records = read_records(&history).await?;
     let metrics = HistoryMetrics::from_records(&records);
-    let state = license_gate().state_for_metrics(metrics);
+    let state = license_gate()?.state_for_metrics(metrics);
     println!(
         "successful conversions: {}",
         metrics.successful_conversion_count
@@ -97,7 +99,7 @@ async fn ensure_trial_available(history: &std::path::Path) -> dropsquash_core::R
     let records = read_records(history).await?;
     let metrics = HistoryMetrics::from_records(&records);
     if matches!(
-        license_gate().state_for_metrics(metrics),
+        license_gate()?.state_for_metrics(metrics),
         LicenseState::Locked(_)
     ) {
         return Err(AppError::License(
@@ -107,9 +109,17 @@ async fn ensure_trial_available(history: &std::path::Path) -> dropsquash_core::R
     Ok(())
 }
 
-fn license_gate() -> LicenseGate {
-    LicenseGate {
+fn license_gate() -> dropsquash_core::Result<LicenseGate> {
+    let cache = LicenseCache::load_or_default(&default_license_cache_path())?;
+    Ok(LicenseGate {
         trial_limit: TRIAL_CONVERSION_LIMIT,
-        has_valid_license: false,
-    }
+        has_valid_license: cache.permits_pro(now_unix()),
+    })
+}
+
+fn now_unix() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_secs())
+        .unwrap_or_default()
 }

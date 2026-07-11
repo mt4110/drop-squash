@@ -39,6 +39,7 @@ dropsquash-profiles = { path = "crates/dropsquash-profiles" }
 dropsquash-queue = { path = "crates/dropsquash-queue" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+sha2 = "0.10"
 tempfile = "3"
 thiserror = "2"
 tokio = { version = "1", features = ["fs", "io-util", "macros", "rt-multi-thread", "time"] }
