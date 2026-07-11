@@ -18,6 +18,7 @@ pub(super) const ALL: &[(&str, &str)] = &[
     ("Multi-file queue", "Multi-file queue"),
     ("Queued job cancellation", "Queued job cancellation"),
     ("Batch summary", "Batch summary"),
+    ("Lemon Squeezy product setup", "Sandbox product setup"),
     ("Lemon Squeezy sandbox purchase", "Sandbox purchase"),
     (
         "Lemon Squeezy sandbox activation",
