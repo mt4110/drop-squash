@@ -46,8 +46,7 @@ fn rejects_example_dot_com_placeholders() {
 
     let errors = check_root(directory.path()).unwrap();
 
-    assert_eq!(errors.len(), 1);
-    assert!(errors[0].contains("placeholder URL"));
+    assert!(errors.iter().any(|error| error.contains("placeholder URL")));
 }
 
 #[test]
@@ -61,6 +60,23 @@ fn ignores_external_links_and_anchors() {
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
+fn rejects_unapproved_external_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="https://social.example.invalid/dropsquash">Social</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unapproved external URL")));
 }
 
 #[test]
