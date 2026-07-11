@@ -1,9 +1,10 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 18] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 19] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Privacy receipt sidecar", "Privacy receipt sidecar"),
+    ("Privacy receipt Finder reveal", "Reveal privacy receipt"),
     ("Duplicate output naming", "Duplicate output naming"),
     ("Finder reveal", "Reveal output"),
     ("Ask source policy", "Ask source policy"),

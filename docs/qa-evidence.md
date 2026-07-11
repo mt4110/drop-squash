@@ -41,6 +41,7 @@ These checks still require a packaged macOS app or external service state:
 | Choose recording conversion | Native file picker and packaged app entitlements must be exercised on macOS |
 | Drag-and-drop conversion | Packaged WebView drag/drop behavior can differ from dev mode |
 | Privacy receipt sidecar | Packaged app file permissions must create the receipt next to the generated output and reveal it in Finder |
+| Privacy receipt Finder reveal | Finder selection behavior for generated receipt sidecars is macOS integration, not core logic |
 | Duplicate output naming | Repeated packaged-app conversions must show the user-facing numbered suffix |
 | Finder reveal | Finder selection behavior is macOS integration, not core logic |
 | Ask source policy | The post-conversion prompt and user choice need packaged UI observation |
