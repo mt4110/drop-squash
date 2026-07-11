@@ -3,7 +3,7 @@ use std::path::Path;
 mod completion;
 mod evidence_ref;
 mod records;
-mod row;
+pub(super) mod row;
 mod verified_ref;
 
 const REQUIRED_BLOCKERS: [&str; 10] = [

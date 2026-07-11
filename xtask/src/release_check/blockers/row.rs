@@ -5,13 +5,13 @@ const COMPLETION_EVIDENCE_COLUMN: usize = 2;
 const EVIDENCE_REFERENCE_COLUMN: usize = 3;
 const RECORD_IN_COLUMN: usize = 4;
 
-pub(super) fn find<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {
+pub(crate) fn find<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {
     text.lines().find(|line| {
         cells(line).and_then(|cells| cells.get(BLOCKER_COLUMN).copied()) == Some(blocker)
     })
 }
 
-pub(super) fn has_status(line: &str, blocker: &str, status: &str) -> bool {
+pub(crate) fn has_status(line: &str, blocker: &str, status: &str) -> bool {
     let Some(cells) = cells(line) else {
         return false;
     };

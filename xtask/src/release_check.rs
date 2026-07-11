@@ -2,6 +2,7 @@ use crate::{media_policy_check, privacy_policy_check};
 mod blockers;
 mod desktop_capability;
 mod evidence;
+mod manual_blockers;
 mod release_doc;
 mod release_notes;
 mod secret_files;
@@ -39,6 +40,10 @@ pub fn run() -> Result<(), String> {
         Path::new("docs/manual-qa.md"),
     )?;
     blockers::check_release_blockers(Path::new("docs/release-blockers.md"))?;
+    manual_blockers::check(
+        Path::new("docs/release-blockers.md"),
+        Path::new("docs/manual-qa.md"),
+    )?;
     release_doc::check(Path::new("docs/release.md"))?;
     release_notes::check(Path::new("docs/release-notes-template.md"))?;
     require_release_workflow_gates()?;
