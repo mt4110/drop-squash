@@ -3,13 +3,14 @@ use crate::{media_policy_check, privacy_policy_check};
 use std::path::{Path, PathBuf};
 
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
-const RELEASE_WORKFLOW_GATES: [&str; 7] = [
+const RELEASE_WORKFLOW_GATES: [&str; 8] = [
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
     "cargo run -p xtask -- release-check",
     "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
     "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg",
+    "cargo run -p xtask -- macos-signing-check",
     "Block unsigned Phase 0 release",
 ];
 
