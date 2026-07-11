@@ -15,8 +15,25 @@ fn checksum_line_uses_sha256sum_format() {
 
     assert!(!line.ends_with("  "));
     assert!(line.contains("  "));
-    assert!(line.ends_with("artifact.txt"));
+    assert!(line.ends_with("  artifact.txt"));
     assert!(line.starts_with("bd6403ba9c2b"));
+}
+
+#[test]
+fn checksum_line_omits_parent_directories() {
+    let directory = tempfile::tempdir().unwrap();
+    let nested = directory.path().join("bundle").join("dmg");
+    std::fs::create_dir_all(&nested).unwrap();
+    let path = nested.join("DropSquash.dmg");
+    std::fs::File::create(&path)
+        .unwrap()
+        .write_all(b"dropsquash")
+        .unwrap();
+
+    let line = checksum_line(&path).unwrap();
+
+    assert!(line.ends_with("  DropSquash.dmg"));
+    assert!(!line.contains("bundle/dmg"));
 }
 
 #[test]

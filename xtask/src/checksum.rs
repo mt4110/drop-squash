@@ -21,7 +21,14 @@ fn checksum_line(path: &Path) -> Result<String, String> {
     if path.metadata().map_err(|error| error.to_string())?.len() == 0 {
         return Err(format!("checksum target is empty: {}", path.display()));
     }
-    Ok(format!("{}  {}", sha256_hex(path)?, path.display()))
+    Ok(format!("{}  {}", sha256_hex(path)?, artifact_name(path)?))
+}
+
+fn artifact_name(path: &Path) -> Result<&str, String> {
+    path.file_name()
+        .and_then(|value| value.to_str())
+        .filter(|value| !value.is_empty())
+        .ok_or_else(|| format!("checksum target has no file name: {}", path.display()))
 }
 
 fn sha256_hex(path: &Path) -> Result<String, String> {
