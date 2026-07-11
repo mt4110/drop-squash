@@ -35,6 +35,8 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "License network failure" => Some(&[
             &["friendly"],
             &["network"],
+            &["existing"],
+            &["valid"],
             &["preserved", "intact"],
             &["raw key"],
             &["cache"],

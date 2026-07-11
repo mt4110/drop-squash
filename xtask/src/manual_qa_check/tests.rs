@@ -393,6 +393,18 @@ fn reports_forget_license_without_cache_removal() {
 }
 
 #[test]
+fn reports_network_failure_without_existing_valid_cache() {
+    let (_directory, path) = write_manual_qa(
+        "| License network failure | Friendly network error | friendly network error shown and license.json cache preserved with no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("License network failure")));
+}
+
+#[test]
 fn reports_incomplete_packaged_app_results() {
     let (_directory, path) = write_manual_qa(
         "| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\

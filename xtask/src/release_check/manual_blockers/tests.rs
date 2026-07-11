@@ -106,6 +106,16 @@ fn reports_verified_network_failure_without_preserved_cache() {
 }
 
 #[test]
+fn reports_verified_network_failure_without_existing_valid_cache() {
+    let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| License network failure | Friendly network error | friendly network error shown and license.json cache preserved with no raw key |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"License network failure"));
+}
+
+#[test]
 fn accepts_verified_network_failure_with_preserved_cache() {
     let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved with no raw key |\n";

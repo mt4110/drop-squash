@@ -61,6 +61,8 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["cache", "license.json"],
             &["friendly"],
             &["network"],
+            &["existing"],
+            &["valid"],
             &["preserved", "intact"],
             &["raw key"],
         ]),

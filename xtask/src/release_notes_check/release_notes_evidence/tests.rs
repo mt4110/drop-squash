@@ -129,6 +129,19 @@ fn rejects_local_license_forget_without_cache_removal() {
 }
 
 #[test]
+fn rejects_network_failure_without_existing_valid_cache() {
+    let errors = check_text(
+        r#"
+- License network failure: friendly network error shown, license cache preserved, raw key absent from cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("License network failure")));
+}
+
+#[test]
 fn rejects_duplicate_release_note_fields() {
     let errors = check_text(
         r#"
