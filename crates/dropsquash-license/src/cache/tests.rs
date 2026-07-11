@@ -29,6 +29,53 @@ fn serialized_cache_never_contains_raw_license_key() {
 }
 
 #[test]
+fn saves_and_loads_cache_without_temp_leftover() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    let cache = LicenseCache {
+        instance_id: Some("instance-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        valid: true,
+        ..LicenseCache::default()
+    };
+
+    cache.save_to_path(&path).unwrap();
+
+    assert_eq!(LicenseCache::load_or_default(&path).unwrap(), cache);
+    assert!(std::fs::read_dir(directory.path())
+        .unwrap()
+        .all(|entry| !entry
+            .unwrap()
+            .file_name()
+            .to_string_lossy()
+            .ends_with(".tmp")));
+}
+
+#[test]
+fn save_replaces_existing_cache() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    LicenseCache {
+        valid: false,
+        ..LicenseCache::default()
+    }
+    .save_to_path(&path)
+    .unwrap();
+
+    LicenseCache {
+        instance_id: Some("instance-2".to_string()),
+        valid: true,
+        ..LicenseCache::default()
+    }
+    .save_to_path(&path)
+    .unwrap();
+
+    let loaded = LicenseCache::load_or_default(&path).unwrap();
+    assert!(loaded.valid);
+    assert_eq!(loaded.instance_id.as_deref(), Some("instance-2"));
+}
+
+#[test]
 fn pro_requires_valid_cache_inside_grace_window() {
     let cache = LicenseCache {
         instance_id: Some("instance-1".to_string()),

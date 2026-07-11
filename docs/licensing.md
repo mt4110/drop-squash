@@ -20,6 +20,7 @@ The app stores a local license cache with:
 
 The app treats the cache as Pro only when it is valid, inside the offline grace
 window, and includes both the license fingerprint and Lemon Squeezy instance id.
+Cache updates are written through a temporary file and then renamed into place.
 
 The trimmed raw license key is sent to Lemon Squeezy only when the user
 activates a license in the current desktop flow. It is not persisted in the
