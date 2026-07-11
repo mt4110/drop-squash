@@ -80,6 +80,14 @@ fn reports_non_iso_date() {
 }
 
 #[test]
+fn reports_out_of_range_date() {
+    let (_directory, path) = write_manual_qa("| Date | 2026-99-99 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("YYYY-MM-DD")));
+}
+
+#[test]
 fn reports_vague_manual_results() {
     let (_directory, path) =
         write_manual_qa("| Cancellation | large.mov | Returns to ready | Pass |\n");

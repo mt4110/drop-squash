@@ -27,10 +27,16 @@ fn validate_artifact(value: &str, missing: &mut Vec<String>) {
 
 fn is_iso_date(value: &str) -> bool {
     let bytes = value.as_bytes();
-    bytes.len() == 10
+    if !(bytes.len() == 10
         && bytes[4] == b'-'
         && bytes[7] == b'-'
         && bytes[..4].iter().all(u8::is_ascii_digit)
         && bytes[5..7].iter().all(u8::is_ascii_digit)
-        && bytes[8..].iter().all(u8::is_ascii_digit)
+        && bytes[8..].iter().all(u8::is_ascii_digit))
+    {
+        return false;
+    }
+    let month = value[5..7].parse::<u8>().unwrap_or(0);
+    let day = value[8..].parse::<u8>().unwrap_or(0);
+    (1..=12).contains(&month) && (1..=31).contains(&day)
 }
