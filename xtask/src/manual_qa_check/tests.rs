@@ -57,6 +57,16 @@ fn reports_weak_environment_field_values() {
 }
 
 #[test]
+fn reports_weak_input_sample_set() {
+    let (_directory, path) = write_manual_qa("| Input sample set | local files |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("short, medium, and large")));
+}
+
+#[test]
 fn reports_empty_four_column_results() {
     let (_directory, path) = write_manual_qa("| Convert | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
@@ -339,6 +349,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             "App build" => "DropSquash 0.1.0 git abc1234".to_string(),
             "macOS version" => "macOS 26.5.2".to_string(),
             "Machine" => "MacBookPro18,4 arm64".to_string(),
+            "Input sample set" => "short, medium, and large local recordings".to_string(),
             "Output folder" => output.display().to_string(),
             "Date" => "2026-07-11".to_string(),
             _ => "Concrete evidence".to_string(),

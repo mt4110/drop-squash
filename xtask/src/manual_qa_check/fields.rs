@@ -14,6 +14,7 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
         "App build" => validate_app_build(value, missing),
         "macOS version" => validate_macos_version(value, missing),
         "Machine" => validate_machine(value, missing),
+        "Input sample set" => validate_input_sample_set(value, missing),
         "Output folder" => validate_output_folder(value, missing),
         "Date" if !date::is_iso(value) => {
             missing.push("manual QA Date must use YYYY-MM-DD".to_string());
@@ -68,6 +69,20 @@ fn validate_output_folder(value: &str, missing: &mut Vec<String>) {
         return;
     }
     missing.push(format!("manual QA Output folder must exist: {value}"));
+}
+
+fn validate_input_sample_set(value: &str, missing: &mut Vec<String>) {
+    let lower = value.to_ascii_lowercase();
+    let has_sizes = ["short", "medium", "large"]
+        .iter()
+        .all(|needle| lower.contains(needle));
+    let has_media = lower.contains("recording") || lower.contains("sample");
+    if has_sizes && has_media {
+        return;
+    }
+    missing.push(
+        "manual QA Input sample set must mention short, medium, and large recordings".to_string(),
+    );
 }
 
 fn has_numeric_version(value: &str) -> bool {

@@ -28,6 +28,8 @@ available.
 example `DropSquash 0.1.0 git abc1234`.
 `macOS version` must look like `macOS 15.5`, `Machine` must include the CPU
 architecture, and `Output folder` must point to an existing directory.
+`Input sample set` must mention the short, medium, and large local recordings
+used for the packaged-app run.
 
 Before starting packaged-app QA, preserve the current local app state instead
 of deleting it:
