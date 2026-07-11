@@ -55,10 +55,11 @@ async fn convert_inner(
                 source_policy: request.source_policy,
             },
             Arc::new(WindowProgressReporter { window }),
-            cancel,
+            cancel.clone(),
         )
         .await
         .map_err(format_error)?;
+    ensure_not_cancelled(&cancel)?;
     let receipt_path = if request.write_privacy_receipt {
         Some(PrivacyReceipt::save_for_result(&result).map_err(format_error)?)
     } else {
@@ -97,3 +98,13 @@ fn ensure_supported_input(input_path: &std::path::Path) -> Result<(), String> {
     }
     Err(format_error(AppError::UnsupportedMedia(extension)))
 }
+
+fn ensure_not_cancelled(cancel: &CancellationToken) -> Result<(), String> {
+    if cancel.is_cancelled() {
+        return Err("Conversion cancelled.".to_string());
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests;
