@@ -4,8 +4,10 @@ use super::requirements::{REQUIRED_CHECKS, REQUIRED_FIELDS};
 #[test]
 fn accepts_complete_manual_qa_tables() {
     let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.app");
+    std::fs::create_dir(&artifact).unwrap();
     let path = directory.path().join("manual-qa.md");
-    std::fs::write(&path, complete_manual_qa()).unwrap();
+    std::fs::write(&path, complete_manual_qa(&artifact)).unwrap();
 
     assert!(check_file(&path).unwrap().is_empty());
 }
@@ -43,6 +45,24 @@ fn reports_missing_required_checks() {
 }
 
 #[test]
+fn reports_missing_app_artifact_path() {
+    let (_directory, path) = write_manual_qa("| App artifact | /missing/DropSquash.app |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("artifact does not exist")));
+}
+
+#[test]
+fn reports_non_iso_date() {
+    let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("YYYY-MM-DD")));
+}
+
+#[test]
 fn reports_vague_manual_results() {
     let (_directory, path) =
         write_manual_qa("| Cancellation | large.mov | Returns to ready | Pass |\n");
@@ -58,10 +78,15 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     (directory, path)
 }
 
-fn complete_manual_qa() -> String {
+fn complete_manual_qa(artifact: &std::path::Path) -> String {
     let mut text = String::from("| Field | Value |\n|---|---|\n");
     for field in REQUIRED_FIELDS {
-        text.push_str(&format!("| {field} | Pass |\n"));
+        let value = match field {
+            "App artifact" => artifact.display().to_string(),
+            "Date" => "2026-07-11".to_string(),
+            _ => "Concrete evidence".to_string(),
+        };
+        text.push_str(&format!("| {field} | {value} |\n"));
     }
     text.push_str("| Check | Expected | Result |\n|---|---|---|\n");
     for check in REQUIRED_CHECKS {

@@ -1,7 +1,9 @@
 use std::path::{Path, PathBuf};
 
 mod requirements;
+mod validation;
 use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};
+use validation::validate_field;
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let path = PathBuf::from(
@@ -49,6 +51,9 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     }
     if cells.len() == 2 && cells[1].trim().is_empty() {
         missing.push(format!("manual QA field is empty: {}", cells[0].trim()));
+    }
+    if cells.len() == 2 {
+        validate_field(cells[0], cells[1], missing);
     }
     if cells.len() == 4 && cells[3].trim().is_empty() {
         missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
