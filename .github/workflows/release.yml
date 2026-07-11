@@ -15,6 +15,9 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+      - name: Release readiness checks
+        run: cargo run -p xtask -- release-check
       - name: Block unsigned Phase 0 release
         shell: bash
         run: |

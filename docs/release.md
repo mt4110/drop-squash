@@ -9,3 +9,12 @@ Signed macOS, Windows, and Linux builds are planned after the native backend and
 Unsigned payload creation is kept separate from signing and timestamping. CI must test each native backend on its own operating system and reject release artifacts containing `/nix/store` references.
 
 No signing secrets belong in the repository.
+
+Run the local readiness gate before preparing any release artifact:
+
+```sh
+cargo run -p xtask -- release-check
+```
+
+This gate rejects secret-like files, keeps the unsigned release workflow blocked,
+and verifies that the updater is not enabled before signing keys are ready.
