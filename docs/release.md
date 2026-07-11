@@ -119,6 +119,10 @@ cargo run -p xtask -- homebrew-cask 0.1.0 \
 ```
 
 Publish the checksum file with the GitHub Release after notarization succeeds.
-Use `docs/release-notes-template.md` for the public release notes so the
-codesign, spctl, stapler, notary, checksum, Gatekeeper, and Homebrew evidence is
-recorded in one place.
+Use `docs/release-notes-template.md` so codesign, spctl, stapler, notary,
+checksum, Gatekeeper, and Homebrew evidence is recorded in one place.
+Before publishing, verify the filled release notes use production URLs:
+
+```sh
+cargo run -p xtask -- release-notes-check path/to/release-notes.md
+```
