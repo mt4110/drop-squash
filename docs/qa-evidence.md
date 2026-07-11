@@ -16,7 +16,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Release workflow shape | Release workflow gates, Tauri distribution metadata, CSP, updater, media, privacy, and secret-like files are checked | `cargo run -p xtask -- release-check` |
 | Manual QA completeness | Packaged-app evidence fields and results are checked | `cargo run -p xtask -- manual-qa-check` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
-| Static site | Required pages, local links, placeholders, release-status, privacy, license, support copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
+| Static site | Required pages, local links, placeholders, release-status, privacy, license, refund, support copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
 | CLI history writes | CLI conversion uses the same success-only history guard | `cargo test -p dropsquash && cargo test -p dropsquash-history` |
 | CLI license commands | CLI reports local trial/license state and forgets the local cache without a raw key or network call | `cargo test -p dropsquash license && cargo run -p dropsquash -- license status --history /tmp/dropsquash-empty-history.jsonl` |
@@ -28,8 +28,8 @@ Public paid beta blockers and their evidence references are tracked in
 | Cancellation token path | File stability and desktop active-conversion cancellation are tested | `cargo test -p dropsquash-fileguard && cargo test -p dropsquash-desktop state` |
 | Unsupported OS backends | Windows/Linux placeholders report unavailable and reject encode instead of falling back | `cargo test -p dropsquash-encoder unimplemented_platform_backends` |
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
-| Release artifact hygiene | DMG artifacts can be checked for emptiness and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
-| Release checksum | Non-empty DMG checksums can be generated deterministically | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
+| Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
+| Release checksum | Non-empty `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, and invalid checksums | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence
