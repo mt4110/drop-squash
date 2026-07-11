@@ -155,4 +155,5 @@ checksum, Gatekeeper, and Homebrew evidence:
 cargo run -p xtask -- release-notes-check path/to/release-notes.md
 ```
 Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after every
-row in `docs/release-blockers.md` is `Verified` with concrete evidence.
+row in `docs/release-blockers.md` is `Verified` with a traceable Evidence
+reference.

@@ -1,4 +1,7 @@
-use super::{ensure_manual_qa_complete, ensure_website_complete, unverified_blockers};
+use super::{
+    ensure_manual_qa_complete, ensure_website_complete, unverified_blockers,
+    unverified_blockers_error,
+};
 
 #[test]
 fn accepts_all_verified_blockers() {
@@ -20,6 +23,14 @@ fn reports_verified_blocker_without_evidence_reference() {
     let unverified = unverified_blockers(&text);
 
     assert!(unverified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn publish_error_mentions_traceable_evidence_reference() {
+    let error = unverified_blockers_error(&["Signed DMG"]);
+
+    assert!(error.contains("traceable Evidence reference"));
+    assert!(error.contains("Signed DMG"));
 }
 
 #[test]

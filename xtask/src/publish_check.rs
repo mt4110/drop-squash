@@ -15,10 +15,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         println!("publish checks passed");
         return Ok(());
     }
-    Err(format!(
-        "release blockers must be Verified before publish: {}",
-        unverified.join(", ")
-    ))
+    Err(unverified_blockers_error(&unverified))
 }
 
 fn ensure_website_complete(path: &Path) -> Result<(), String> {
@@ -60,6 +57,13 @@ fn is_verified(text: &str, blocker: &str) -> bool {
 
 fn has_publish_evidence(reference: &str) -> bool {
     !matches!(reference.trim(), "" | "TBD")
+}
+
+fn unverified_blockers_error(blockers: &[&str]) -> String {
+    format!(
+        "release blockers must be Verified with traceable Evidence reference before publish: {}",
+        blockers.join(", ")
+    )
 }
 
 fn cells(line: &str) -> Option<Vec<&str>> {
