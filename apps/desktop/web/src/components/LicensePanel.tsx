@@ -39,7 +39,14 @@ export function LicensePanel({ isPro, isLocked, onActivate, onForget }: LicenseP
   return (
     <section className="license" aria-label="License">
       {isPro ? (
-        <button disabled={isSubmitting} type="button" onClick={() => void forget()}>Forget license on this Mac</button>
+        <button
+          disabled={isSubmitting}
+          title="Forgets the local cache only; server-side activation is unchanged"
+          type="button"
+          onClick={() => void forget()}
+        >
+          Forget license on this Mac
+        </button>
       ) : (
         <>
           <input
