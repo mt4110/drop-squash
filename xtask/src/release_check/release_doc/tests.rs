@@ -15,6 +15,7 @@ cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
 signed, notarized, stapled, checked, and checksummed
 cargo run -p xtask -- macos-signing-check
 docs/release-blockers.md
+Lemon Squeezy sandbox purchase
 Lemon Squeezy sandbox activation
 cargo run -p xtask -- homebrew-cask 0.1.0
 "#;

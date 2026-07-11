@@ -80,10 +80,13 @@ After packaged-app testing, require the manual QA record to be complete:
 cargo run -p xtask -- manual-qa-check
 ```
 
-Before a paid beta, complete the Lemon Squeezy sandbox activation row in
-`docs/manual-qa.md` and keep the matching release blocker in
-`docs/release-blockers.md` blocked until the sandbox purchase and activation
-evidence exists.
+Before a paid beta, complete both rows in `docs/manual-qa.md`:
+
+- Lemon Squeezy sandbox purchase
+- Lemon Squeezy sandbox activation
+
+Keep the matching release blockers in `docs/release-blockers.md` blocked until
+both the sandbox purchase evidence and activation evidence exist.
 
 Generate SHA-256 checksum lines for release artifacts with:
 
