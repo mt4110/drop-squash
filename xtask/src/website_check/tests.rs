@@ -19,6 +19,25 @@ fn accepts_local_links() {
 }
 
 #[test]
+fn accepts_nested_release_status_page() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "styles.css", "body {}");
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="release-status/">Release status</a>"#,
+    );
+    write(
+        directory.path(),
+        "release-status/index.html",
+        r#"Paid beta is not public yet signed and notarized docs/release-blockers.md <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
+    );
+
+    assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
 fn rejects_missing_local_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -263,7 +282,7 @@ fn rejects_pre_release_links_with_single_quotes_or_uppercase_href() {
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",
-        "release-status.html",
+        "release-status/index.html",
         "download.html",
         "pricing.html",
         "privacy.html",
@@ -279,7 +298,7 @@ fn write_required_pages(root: &std::path::Path) {
 fn required_page_text(page: &str) -> &'static str {
     match page {
         "index.html" => "Release status",
-        "release-status.html" => {
+        "release-status/index.html" => {
             "Paid beta is not public yet signed and notarized docs/release-blockers.md"
         }
         "download.html" => "macOS beta DropSquash.dmg notarization checksum",
@@ -303,5 +322,7 @@ fn required_page_text(page: &str) -> &'static str {
 }
 
 fn write(root: &std::path::Path, name: &str, text: &str) {
-    std::fs::write(root.join(name), text).unwrap();
+    let path = root.join(name);
+    std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+    std::fs::write(path, text).unwrap();
 }

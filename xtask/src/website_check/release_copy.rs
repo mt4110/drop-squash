@@ -4,14 +4,19 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     require_page_text(root, "index.html", "Release status", errors);
     require_page_text(
         root,
-        "release-status.html",
+        "release-status/index.html",
         "Paid beta is not public yet",
         errors,
     );
-    require_page_text(root, "release-status.html", "signed and notarized", errors);
     require_page_text(
         root,
-        "release-status.html",
+        "release-status/index.html",
+        "signed and notarized",
+        errors,
+    );
+    require_page_text(
+        root,
+        "release-status/index.html",
         "docs/release-blockers.md",
         errors,
     );

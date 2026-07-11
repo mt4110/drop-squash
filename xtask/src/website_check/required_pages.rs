@@ -2,7 +2,7 @@ use std::path::Path;
 
 const REQUIRED: [&str; 9] = [
     "index.html",
-    "release-status.html",
+    "release-status/index.html",
     "download.html",
     "pricing.html",
     "privacy.html",

@@ -37,13 +37,20 @@ fn check_root(root: &Path) -> Result<Vec<String>, String> {
 
 fn html_files(root: &Path) -> Result<Vec<PathBuf>, String> {
     let mut files = Vec::new();
-    for entry in std::fs::read_dir(root).map_err(|error| error.to_string())? {
+    collect_html_files(root, &mut files)?;
+    Ok(files)
+}
+
+fn collect_html_files(directory: &Path, files: &mut Vec<PathBuf>) -> Result<(), String> {
+    for entry in std::fs::read_dir(directory).map_err(|error| error.to_string())? {
         let path = entry.map_err(|error| error.to_string())?.path();
-        if path.extension().and_then(|value| value.to_str()) == Some("html") {
+        if path.is_dir() {
+            collect_html_files(&path, files)?;
+        } else if path.extension().and_then(|value| value.to_str()) == Some("html") {
             files.push(path);
         }
     }
-    Ok(files)
+    Ok(())
 }
 
 fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), String> {
@@ -57,7 +64,7 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         if href_policy::is_external_or_anchor(&href) {
             continue;
         }
-        if !root.join(&href).is_file() {
+        if !local_href_exists(path, &href) {
             errors.push(format!("{} links to missing {href}", path.display()));
         }
     }
@@ -65,6 +72,14 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         resource_policy::check(root, path, &src, errors);
     }
     Ok(())
+}
+
+fn local_href_exists(path: &Path, href: &str) -> bool {
+    let Some(parent) = path.parent() else {
+        return false;
+    };
+    let target = parent.join(href);
+    target.is_file() || target.join("index.html").is_file()
 }
 
 #[cfg(test)]
