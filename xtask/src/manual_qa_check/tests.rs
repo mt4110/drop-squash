@@ -85,6 +85,14 @@ fn reports_wrong_state_paths() {
 }
 
 #[test]
+fn reports_generic_tester_field() {
+    let (_directory, path) = write_manual_qa("| Tester | Concrete evidence |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Tester")));
+}
+
+#[test]
 fn reports_empty_four_column_results() {
     let (_directory, path) = write_manual_qa("| Convert | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
@@ -376,6 +384,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             "License cache path" => {
                 "$HOME/Library/Application Support/DropSquash/license.json".to_string()
             }
+            "Tester" => "masaki".to_string(),
             "Date" => "2026-07-11".to_string(),
             _ => "Concrete evidence".to_string(),
         };

@@ -20,6 +20,7 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
         "Config path" => state_path::validate(value, "config.json", missing),
         "History path" => state_path::validate(value, "history.jsonl", missing),
         "License cache path" => state_path::validate(value, "license.json", missing),
+        "Tester" => validate_tester(value, missing),
         "Date" if !date::is_iso(value) => {
             missing.push("manual QA Date must use YYYY-MM-DD".to_string());
         }
@@ -87,6 +88,14 @@ fn validate_input_sample_set(value: &str, missing: &mut Vec<String>) {
     missing.push(
         "manual QA Input sample set must mention short, medium, and large recordings".to_string(),
     );
+}
+
+fn validate_tester(value: &str, missing: &mut Vec<String>) {
+    let lower = value.to_ascii_lowercase();
+    if value.len() >= 3 && !lower.contains("concrete evidence") && lower != "tester" {
+        return;
+    }
+    missing.push("manual QA Tester must name the tester".to_string());
 }
 
 fn has_numeric_version(value: &str) -> bool {

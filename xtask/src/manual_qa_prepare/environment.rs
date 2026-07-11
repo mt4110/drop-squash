@@ -8,6 +8,7 @@ pub(super) struct Environment {
     machine: String,
     output_folder: String,
     app_state_dir: String,
+    tester: String,
     date: String,
 }
 
@@ -18,6 +19,7 @@ impl Environment {
             machine_name()?,
             options.output_dir.display().to_string(),
             options.app_state_dir.display().to_string(),
+            tester_name()?,
             command_text("date", &["+%F"])?,
         )
     }
@@ -36,6 +38,7 @@ impl Environment {
                 "manual QA License cache path: {}/license.json",
                 self.app_state_dir
             ),
+            format!("manual QA Tester: {}", self.tester),
             format!("manual QA Date: {}", self.date),
         ]
     }
@@ -45,6 +48,7 @@ impl Environment {
         machine: String,
         output_folder: String,
         app_state_dir: String,
+        tester: String,
         date: String,
     ) -> Result<Self, String> {
         if [
@@ -52,6 +56,7 @@ impl Environment {
             machine.as_str(),
             output_folder.as_str(),
             app_state_dir.as_str(),
+            tester.as_str(),
             date.as_str(),
         ]
         .iter()
@@ -64,6 +69,7 @@ impl Environment {
             machine,
             output_folder,
             app_state_dir,
+            tester,
             date,
         })
     }
@@ -76,6 +82,12 @@ fn machine_name() -> Result<String, String> {
         return Ok(arch);
     }
     Ok(format!("{model} {arch}"))
+}
+
+fn tester_name() -> Result<String, String> {
+    std::env::var("USER")
+        .or_else(|_| std::env::var("LOGNAME"))
+        .map_err(|_| "USER is not set".to_string())
 }
 
 fn command_text(command: &str, args: &[&str]) -> Result<String, String> {

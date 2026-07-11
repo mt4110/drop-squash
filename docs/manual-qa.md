@@ -31,7 +31,7 @@ architecture, and `Output folder` must point to an existing directory.
 `Input sample set` must mention the short, medium, and large local recordings
 used for the packaged-app run.
 State path fields must point to the DropSquash app support files shown in the
-table.
+table. `Tester` must name the tester, not a generic placeholder.
 
 Before starting packaged-app QA, preserve the current local app state instead
 of deleting it:
@@ -48,6 +48,7 @@ or pass `--app-artifact <path>` when testing a DMG or a non-default app bundle.
 Copy the printed macOS version, Machine, Output folder, and Date values into
 the matching fields before starting observations. Copy the printed Config path,
 History path, and License cache path values into the matching state path fields.
+Copy the printed Tester value into the matching field.
 
 Then start from a known trial state if the run is meant to verify trial counts:
 
