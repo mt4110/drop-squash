@@ -1,6 +1,7 @@
 use super::secret_files::{is_secret_file, reject_secret_files};
 use super::workflow::{
-    missing_ci_workflow_gates, missing_release_workflow_gates, missing_security_workflow_gates,
+    missing_ci_workflow_gates, missing_desktop_workflow_gates, missing_release_workflow_gates,
+    missing_security_workflow_gates,
 };
 
 #[test]
@@ -88,6 +89,36 @@ fn reports_missing_ci_workflow_gates() {
             "cargo test --workspace",
             "cachix/install-nix-action@v31",
             "nix flake check --no-build --all-systems"
+        ]
+    );
+}
+
+#[test]
+fn accepts_desktop_workflow_with_required_gates() {
+    let missing = missing_desktop_workflow_gates(
+        r#"
+run: pnpm --dir apps/desktop/web install --frozen-lockfile
+run: pnpm --dir apps/desktop/web lint
+run: pnpm --dir apps/desktop/web build
+uses: dtolnay/rust-toolchain@1.95.0
+run: cargo test -p dropsquash-desktop
+"#,
+    );
+
+    assert!(missing.is_empty());
+}
+
+#[test]
+fn reports_missing_desktop_workflow_gates() {
+    let missing = missing_desktop_workflow_gates("run: pnpm --dir apps/desktop/web lint");
+
+    assert_eq!(
+        missing,
+        vec![
+            "pnpm --dir apps/desktop/web install --frozen-lockfile",
+            "pnpm --dir apps/desktop/web build",
+            "dtolnay/rust-toolchain@1.95.0",
+            "cargo test -p dropsquash-desktop"
         ]
     );
 }

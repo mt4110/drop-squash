@@ -23,6 +23,8 @@ jobs:
         run: pnpm --dir apps/desktop/web install --frozen-lockfile
       - name: lint
         run: pnpm --dir apps/desktop/web lint
+      - name: build
+        run: pnpm --dir apps/desktop/web build
 
   desktop-rust:
     strategy:

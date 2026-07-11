@@ -1,6 +1,7 @@
 use std::path::Path;
 
 const CI_WORKFLOW: &str = ".github/workflows/ci.yml";
+const DESKTOP_WORKFLOW: &str = ".github/workflows/desktop-ci.yml";
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
 const SECURITY_WORKFLOW: &str = ".github/workflows/security.yml";
 
@@ -34,6 +35,14 @@ const RELEASE_WORKFLOW_GATES: [&str; 16] = [
     "Block unsigned Phase 0 release",
 ];
 
+const DESKTOP_WORKFLOW_GATES: [&str; 5] = [
+    "pnpm --dir apps/desktop/web install --frozen-lockfile",
+    "pnpm --dir apps/desktop/web lint",
+    "pnpm --dir apps/desktop/web build",
+    "dtolnay/rust-toolchain@1.95.0",
+    "cargo test -p dropsquash-desktop",
+];
+
 const SECURITY_WORKFLOW_GATES: [&str; 4] = [
     "cargo audit",
     "cargo deny check",
@@ -43,6 +52,7 @@ const SECURITY_WORKFLOW_GATES: [&str; 4] = [
 
 pub(super) fn check_all() -> Result<(), String> {
     check_workflow(CI_WORKFLOW, "CI", &CI_WORKFLOW_GATES)?;
+    check_workflow(DESKTOP_WORKFLOW, "desktop CI", &DESKTOP_WORKFLOW_GATES)?;
     check_workflow(SECURITY_WORKFLOW, "security", &SECURITY_WORKFLOW_GATES)?;
     check_workflow(RELEASE_WORKFLOW, "release", &RELEASE_WORKFLOW_GATES)
 }
@@ -75,6 +85,11 @@ pub(super) fn missing_ci_workflow_gates(text: &str) -> Vec<&'static str> {
 #[cfg(test)]
 pub(super) fn missing_release_workflow_gates(text: &str) -> Vec<&'static str> {
     missing_workflow_gates(text, &RELEASE_WORKFLOW_GATES)
+}
+
+#[cfg(test)]
+pub(super) fn missing_desktop_workflow_gates(text: &str) -> Vec<&'static str> {
+    missing_workflow_gates(text, &DESKTOP_WORKFLOW_GATES)
 }
 
 #[cfg(test)]
