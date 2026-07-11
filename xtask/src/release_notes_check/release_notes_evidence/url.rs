@@ -2,6 +2,7 @@
 pub(super) enum Kind {
     Artifact,
     Website,
+    Refund,
     Checkout,
     GitHubRelease,
     HomebrewPullRequest,
@@ -23,6 +24,7 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
                 && !lower.contains("lemonsqueezy.com")
                 && !lower.contains("checkout")
         }
+        Kind::Refund => has_refund_path(&lower) && !has_store_or_checkout(&lower),
         Kind::Checkout => lower.contains("lemonsqueezy.com") && lower.contains("/checkout/buy/"),
         Kind::GitHubRelease => {
             value.starts_with("https://github.com/mt4110/drop-squash/releases/tag/")
@@ -31,6 +33,14 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
             has_numeric_suffix(value, "https://github.com/mt4110/homebrew-tap/pull/")
         }
     }
+}
+
+fn has_refund_path(lower: &str) -> bool {
+    lower.ends_with("/refund") || lower.ends_with("/refund/")
+}
+
+fn has_store_or_checkout(lower: &str) -> bool {
+    lower.contains("lemonsqueezy.com") || lower.contains("checkout")
 }
 
 fn has_release_status_path(lower: &str) -> bool {

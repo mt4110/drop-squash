@@ -24,6 +24,7 @@ Empty key activation
 Invalid license key handling
 Local license forget
 Public website URL
+Refund policy URL
 Live checkout URL
 GitHub Release checksum
 GitHub Release URL
@@ -53,6 +54,7 @@ fn reports_missing_release_note_evidence_fields() {
     assert!(missing.contains(&"Benchmark sample set"));
     assert!(missing.contains(&"Lemon Squeezy product setup"));
     assert!(missing.contains(&"GitHub Release URL"));
+    assert!(missing.contains(&"Refund policy URL"));
     assert!(missing.contains(&"Live checkout URL"));
     assert!(missing.contains(&"Support contact"));
 }

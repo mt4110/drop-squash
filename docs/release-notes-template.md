@@ -33,6 +33,7 @@ license keys, private store IDs, or certificate material.
 - Invalid license key handling:
 - Local license forget:
 - Public website URL:
+- Refund policy URL:
 - Live checkout URL:
 
 ## Distribution
@@ -66,6 +67,7 @@ weak public evidence before the release is published.
 - License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
 - Local license forget: mention cache removal and trial or locked state.
 - Public website URL: use the production `/release-status` URL.
+- Refund policy URL: use the production `/refund` URL after the policy is final.
 - Live checkout URL: use the Lemon Squeezy `/checkout/buy/` URL for the product.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, `DropSquash.dmg`, and that it is attached.
 - Homebrew tap PR: mention the cask, PR, and `zap` cleanup path.

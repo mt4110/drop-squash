@@ -25,6 +25,7 @@ fn accepts_concrete_production_urls() {
 - Invalid license key handling: friendly error shown and raw key absent from cache
 - Local license forget: license cache removed and trial state restored
 - Public website URL: https://dropsquash.app/release-status
+- Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
@@ -62,6 +63,7 @@ fn rejects_weak_distribution_evidence() {
 - Invalid license key handling: invalid key handled
 - Local license forget: forgot license
 - Public website URL: https://dropsquash.app/release-status
+- Refund policy URL: https://dropsquash.app/pricing
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
@@ -78,6 +80,9 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Gatekeeper clean-machine open")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Refund policy URL")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Homebrew install result")));

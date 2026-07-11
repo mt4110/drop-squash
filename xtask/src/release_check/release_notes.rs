@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 35] = [
+const REQUIRED_TEXT: [&str; 36] = [
     "Version",
     "Artifact",
     "Artifact URL",
@@ -22,6 +22,7 @@ const REQUIRED_TEXT: [&str; 35] = [
     "Invalid license key handling",
     "Local license forget",
     "Public website URL",
+    "Refund policy URL",
     "Live checkout URL",
     "GitHub Release checksum",
     "GitHub Release URL",

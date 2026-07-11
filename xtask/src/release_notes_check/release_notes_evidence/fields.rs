@@ -1,8 +1,9 @@
 use super::url;
 
-pub(super) const URL: [(&str, url::Kind); 5] = [
+pub(super) const URL: [(&str, url::Kind); 6] = [
     ("Artifact URL", url::Kind::Artifact),
     ("Public website URL", url::Kind::Website),
+    ("Refund policy URL", url::Kind::Refund),
     ("Live checkout URL", url::Kind::Checkout),
     ("GitHub Release URL", url::Kind::GitHubRelease),
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
