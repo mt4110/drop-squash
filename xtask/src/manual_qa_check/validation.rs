@@ -24,8 +24,14 @@ fn has_vague_manual_result(label: &str, result: &str) -> bool {
 }
 
 pub(super) fn has_placeholder_evidence(value: &str) -> bool {
-    matches!(
-        value.trim().to_ascii_lowercase().as_str(),
-        "tbd" | "todo" | "n/a" | "na" | "none" | "blocked" | "skipped"
-    )
+    let lower = value.trim().to_ascii_lowercase();
+    lower.contains("n/a")
+        || lower
+            .split(|character: char| !character.is_ascii_alphanumeric())
+            .any(|token| {
+                matches!(
+                    token,
+                    "tbd" | "todo" | "na" | "none" | "blocked" | "skipped"
+                )
+            })
 }

@@ -380,6 +380,16 @@ fn reports_placeholder_three_column_results() {
 }
 
 #[test]
+fn reports_embedded_placeholder_results() {
+    let (_directory, path) = write_manual_qa(
+        "| Gatekeeper open test | Opens cleanly | Signed app opens cleanly; TBD after notarization |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Gatekeeper open test".to_string()));
+}
+
+#[test]
 fn reports_incomplete_benchmark_results() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | local samples recorded |\n\
