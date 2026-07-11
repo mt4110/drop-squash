@@ -4,10 +4,10 @@ type LicensePanelProps = {
   isPro: boolean;
   isLocked: boolean;
   onActivate: (licenseKey: string) => Promise<void>;
-  onDeactivate: () => Promise<void>;
+  onForget: () => Promise<void>;
 };
 
-export function LicensePanel({ isPro, isLocked, onActivate, onDeactivate }: LicensePanelProps) {
+export function LicensePanel({ isPro, isLocked, onActivate, onForget }: LicensePanelProps) {
   const [licenseKey, setLicenseKey] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const showForm = isLocked || isPro;
@@ -30,7 +30,7 @@ export function LicensePanel({ isPro, isLocked, onActivate, onDeactivate }: Lice
   async function forget() {
     setIsSubmitting(true);
     try {
-      await onDeactivate();
+      await onForget();
     } finally {
       setIsSubmitting(false);
     }

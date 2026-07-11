@@ -3,7 +3,7 @@ use dropsquash_core::{AppError, Result};
 use dropsquash_license::LicenseProvider;
 use dropsquash_license::{license_key_fingerprint, LicenseActivation, LicenseCache};
 
-use super::write_activation_cache;
+use super::{forget_license_at_path, write_activation_cache};
 
 struct FakeProvider {
     fail: bool,
@@ -126,4 +126,28 @@ async fn activation_trims_license_key_before_provider_call() {
     )
     .await
     .unwrap();
+}
+
+#[test]
+fn forget_license_clears_local_cache() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    LicenseCache {
+        instance_name: Some("device-1".to_string()),
+        instance_id: Some("remote-device-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        validated_at_unix: Some(100),
+        offline_grace_until_unix: Some(200),
+        valid: true,
+        ..LicenseCache::default()
+    }
+    .save_to_path(&path)
+    .unwrap();
+
+    forget_license_at_path(&path).unwrap();
+
+    assert_eq!(
+        LicenseCache::load_or_default(&path).unwrap(),
+        LicenseCache::default()
+    );
 }

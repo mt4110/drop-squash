@@ -73,8 +73,8 @@ pub async fn activate_license(
 }
 
 #[tauri::command(rename_all = "camelCase")]
-pub async fn deactivate_license() -> std::result::Result<dto::DropZoneState, String> {
-    let license_state = license::deactivate_license().await.map_err(format_error)?;
+pub async fn forget_license() -> std::result::Result<dto::DropZoneState, String> {
+    let license_state = license::forget_license().await.map_err(format_error)?;
     config::state_for_license(license_state).await
 }
 

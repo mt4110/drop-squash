@@ -262,13 +262,13 @@ export function App() {
     }
   }, []);
 
-  const deactivateLicense = useCallback(async () => {
+  const forgetLicense = useCallback(async () => {
     if (!isTauri()) {
       return;
     }
 
     try {
-      const nextState = await invoke<DropZoneState>("deactivate_license");
+      const nextState = await invoke<DropZoneState>("forget_license");
       setState(nextState);
       setError(undefined);
     } catch (reason) {
@@ -289,7 +289,7 @@ export function App() {
         isPro={state.isPro}
         isLocked={state.isLocked}
         onActivate={activateLicense}
-        onDeactivate={deactivateLicense}
+        onForget={forgetLicense}
       />
       <DropZone
         isBusy={isBusy}

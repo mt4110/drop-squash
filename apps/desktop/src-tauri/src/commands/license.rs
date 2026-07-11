@@ -52,9 +52,13 @@ fn generate_instance_id() -> String {
     format!("dropsquash-{}-{}", std::process::id(), now_unix())
 }
 
-pub async fn deactivate_license() -> dropsquash_core::Result<LicenseState> {
-    LicenseCache::default().save_to_path(&default_license_cache_path())?;
+pub async fn forget_license() -> dropsquash_core::Result<LicenseState> {
+    forget_license_at_path(&default_license_cache_path())?;
     current_license_state().await
+}
+
+fn forget_license_at_path(path: &Path) -> dropsquash_core::Result<()> {
+    LicenseCache::default().save_to_path(path)
 }
 
 pub async fn current_license_state() -> dropsquash_core::Result<LicenseState> {
