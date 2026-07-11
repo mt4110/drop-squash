@@ -57,6 +57,7 @@ pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) ->
 fn is_public_website(reference: &str) -> bool {
     let lower = reference.to_ascii_lowercase();
     reference.starts_with("https://")
+        && lower.contains("/release-status")
         && !lower.contains("lemonsqueezy.com")
         && !lower.contains("checkout")
 }
@@ -65,7 +66,7 @@ fn is_live_checkout(reference: &str) -> bool {
     let lower = reference.to_ascii_lowercase();
     reference.starts_with("https://")
         && lower.contains("lemonsqueezy.com")
-        && lower.contains("checkout")
+        && lower.contains("/checkout/buy/")
 }
 
 fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {

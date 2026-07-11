@@ -46,6 +46,26 @@ fn reports_public_website_with_checkout_reference() {
 }
 
 #[test]
+fn reports_public_website_without_release_status_reference() {
+    let text =
+        "| Public website deployment | Verified | pages online | https://dropsquash.app/ | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Public website deployment"));
+}
+
+#[test]
+fn reports_live_checkout_without_buy_reference() {
+    let text =
+        "| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_distribution_references_without_urls() {
     let text = "\
 | Published checksum | Verified | SHA-256 attached | GitHub Release | GitHub Release |
