@@ -99,3 +99,34 @@ fn pro_requires_activation_identity() {
 
     assert!(!cache.permits_pro(100));
 }
+
+#[test]
+fn pro_rejects_incomplete_activation_identity() {
+    let mut cache = LicenseCache {
+        instance_id: Some("instance-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        valid: true,
+        offline_grace_until_unix: Some(200),
+        ..LicenseCache::default()
+    };
+
+    cache.instance_id = None;
+    assert!(!cache.permits_pro(100));
+
+    cache.instance_id = Some("instance-1".to_string());
+    cache.license_key_fingerprint = None;
+    assert!(!cache.permits_pro(100));
+}
+
+#[test]
+fn pro_rejects_blank_activation_identity() {
+    let cache = LicenseCache {
+        instance_id: Some("   ".to_string()),
+        license_key_fingerprint: Some("   ".to_string()),
+        valid: true,
+        offline_grace_until_unix: Some(200),
+        ..LicenseCache::default()
+    };
+
+    assert!(!cache.permits_pro(100));
+}
