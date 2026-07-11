@@ -13,7 +13,7 @@ const CI_WORKFLOW_GATES: [&str; 6] = [
     "nix flake check --no-build --all-systems",
 ];
 
-const RELEASE_WORKFLOW_GATES: [&str; 15] = [
+const RELEASE_WORKFLOW_GATES: [&str; 16] = [
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
     "cargo clippy --workspace --all-targets -- -D warnings",
@@ -24,6 +24,7 @@ const RELEASE_WORKFLOW_GATES: [&str; 15] = [
     "cargo run -p xtask -- release-check",
     "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
+    "dropsquash-unsigned-dmg",
     "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
     "actions/upload-artifact@v4",
     "dropsquash-unsigned-dmg-checksum",

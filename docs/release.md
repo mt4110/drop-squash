@@ -17,8 +17,9 @@ The public paid beta remains blocked until every item in
 The desktop bundle configuration produces both the macOS `.app` and `.dmg`
 artifacts. Use unsigned local builds only for QA; public release artifacts must
 be signed, notarized, stapled, checked, and checksummed before publication.
-The tag release workflow builds an unsigned macOS DMG, checks it, writes
-`SHA256SUMS`, uploads it, then blocks publication until signed packaging exists.
+The tag release workflow builds an unsigned macOS DMG, checks it, uploads the
+unsigned DMG as a QA artifact, writes and uploads `SHA256SUMS`, then blocks
+publication until signed packaging exists.
 The macOS job maps signing and notarization secrets into `macos-signing-check`
 so missing CI credentials fail deterministically before signed packaging is
 enabled.
