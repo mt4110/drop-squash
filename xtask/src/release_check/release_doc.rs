@@ -23,6 +23,7 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
     (
         "macos",
         &[
+            "first public beta target",
             "signed, notarized, stapled, checked, and checksummed",
             "cargo run -p xtask -- macos-signing-check",
         ],

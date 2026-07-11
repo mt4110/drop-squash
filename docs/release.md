@@ -1,6 +1,8 @@
 # Release
 
-Signed macOS, Windows, and Linux builds are planned after the native backend and desktop MVPs.
+The first public beta target is a signed and notarized macOS build. Signed
+Windows and Linux builds are planned after their native backends and desktop
+MVPs are implemented and verified.
 
 - macOS: signed and notarized DMG.
 - Windows: signed installer.

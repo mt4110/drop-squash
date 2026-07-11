@@ -13,6 +13,7 @@ cargo run -p xtask -- media-policy-check
 cargo run -p xtask -- privacy-policy-check
 cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
 signed, notarized, stapled, checked, and checksummed
+first public beta target
 cargo run -p xtask -- macos-signing-check
 docs/release-blockers.md
 Lemon Squeezy sandbox purchase
