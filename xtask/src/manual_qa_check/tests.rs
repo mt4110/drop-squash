@@ -495,6 +495,18 @@ fn reports_checksum_result_without_digest() {
     assert!(missing.iter().any(|error| error.contains("checksum")));
 }
 
+#[test]
+fn reports_command_result_without_command_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| `cargo run -p xtask -- release-check` | Passes | Passes |\n\
+| `cargo run -p xtask -- website-check` | Passes | website-check passed |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("release-check")));
+    assert!(!missing.iter().any(|error| error.contains("website-check")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -625,6 +637,12 @@ fn command_result(check: &str) -> String {
         "`cargo run -p xtask -- macos-signing-check`" => {
             "macos-signing-check passed in release environment"
         }
+        "`cargo run -p xtask -- release-check`" => "release-check passed",
+        "`cargo run -p xtask -- file-size-check`" => "file-size-check passed",
+        "`cargo run -p xtask -- media-policy-check`" => "media-policy-check passed",
+        "`cargo run -p xtask -- privacy-policy-check`" => "privacy-policy-check passed",
+        "`cargo run -p xtask -- website-check`" => "website-check passed",
+        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed",
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
             "CSV recorded for three samples, outputs were smaller, saved outside repo at /tmp/dropsquash-bench/results.csv"
         }

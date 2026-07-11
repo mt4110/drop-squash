@@ -62,6 +62,17 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["trial count unchanged", "trial unchanged"],
         ],
         "Reveal output" => &[&["finder"], &[".mp4"], &["selected"]],
+        "`cargo run -p xtask -- release-check`" => &[&["release-check"], &["passed", "passes"]],
+        "`cargo run -p xtask -- file-size-check`" => {
+            &[&["file-size-check"], &["passed", "passes"]]
+        }
+        "`cargo run -p xtask -- media-policy-check`" => {
+            &[&["media-policy-check"], &["passed", "passes"]]
+        }
+        "`cargo run -p xtask -- privacy-policy-check`" => {
+            &[&["privacy-policy-check"], &["passed", "passes"]]
+        }
+        "`cargo run -p xtask -- website-check`" => &[&["website-check"], &["passed", "passes"]],
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
             &[&["artifact-check"], &["dropsquash.dmg", ".dmg"]]
         }
@@ -70,6 +81,9 @@ fn requirement_for(label: &str) -> Option<Requirement> {
         }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
             &[&["csv"], &["three", "3"], &["smaller"], &["outside repo", "outside repository"]]
+        }
+        "`cargo run -p xtask -- manual-qa-check`" => {
+            &[&["manual-qa-check"], &["passed", "passes"]]
         }
         "`cargo run -p xtask -- macos-signing-check`" => &[&["macos-signing-check"]],
         "Codesign verification" => &[&["codesign"], &["developer id"]],
