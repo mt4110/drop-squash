@@ -18,7 +18,11 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 }
 
 pub(crate) fn check_default_root() -> Result<(), String> {
-    let errors = check_root(Path::new("website"))?;
+    check_path(Path::new("website"))
+}
+
+pub(crate) fn check_path(root: &Path) -> Result<(), String> {
+    let errors = check_root(root)?;
     if errors.is_empty() {
         return Ok(());
     }

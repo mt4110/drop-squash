@@ -5,6 +5,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         .first()
         .ok_or_else(|| "publish-check requires <release-notes.md>".to_string())?;
     crate::release_check::run()?;
+    ensure_website_complete(Path::new("website"))?;
     ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;
     crate::release_notes_check::check_file(&PathBuf::from(notes))?;
     let blockers =
@@ -18,6 +19,11 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         "release blockers must be Verified before publish: {}",
         unverified.join(", ")
     ))
+}
+
+fn ensure_website_complete(path: &Path) -> Result<(), String> {
+    crate::website_check::check_path(path)
+        .map_err(|error| format!("website must pass before publish:\n{error}"))
 }
 
 fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {

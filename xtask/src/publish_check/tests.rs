@@ -1,4 +1,4 @@
-use super::{ensure_manual_qa_complete, unverified_blockers};
+use super::{ensure_manual_qa_complete, ensure_website_complete, unverified_blockers};
 
 #[test]
 fn accepts_all_verified_blockers() {
@@ -45,4 +45,15 @@ fn publish_requires_complete_manual_qa() {
 
     assert!(error.contains("manual QA must pass before publish"));
     assert!(error.contains("manual QA field needs evidence"));
+}
+
+#[test]
+fn publish_requires_valid_website() {
+    let directory = tempfile::tempdir().unwrap();
+    std::fs::write(directory.path().join("index.html"), "<p>DropSquash</p>").unwrap();
+
+    let error = ensure_website_complete(directory.path()).unwrap_err();
+
+    assert!(error.contains("website must pass before publish"));
+    assert!(error.contains("pricing.html"));
 }
