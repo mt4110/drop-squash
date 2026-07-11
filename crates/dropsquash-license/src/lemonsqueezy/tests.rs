@@ -78,3 +78,36 @@ fn activation_rejects_empty_instance_id() {
 
     assert!(error.to_string().contains("empty instance id"));
 }
+
+#[test]
+fn deactivation_accepts_confirmed_response() {
+    deactivation_from_response(
+        "LS-SECRET-RAW-KEY",
+        LicenseApiResponse {
+            activated: None,
+            valid: None,
+            deactivated: Some(true),
+            error: None,
+            instance: None,
+        },
+    )
+    .unwrap();
+}
+
+#[test]
+fn deactivation_error_redacts_echoed_license_key() {
+    let error = deactivation_from_response(
+        "LS-SECRET-RAW-KEY",
+        LicenseApiResponse {
+            activated: None,
+            valid: None,
+            deactivated: Some(false),
+            error: Some("Cannot deactivate LS-SECRET-RAW-KEY.".to_string()),
+            instance: None,
+        },
+    )
+    .unwrap_err();
+
+    assert!(error.to_string().contains("[license key]"));
+    assert!(!error.to_string().contains("LS-SECRET-RAW-KEY"));
+}
