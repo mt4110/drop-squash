@@ -286,6 +286,23 @@ fn rejects_pre_release_links_with_single_quotes_or_uppercase_href() {
     assert!(errors.iter().any(|error| error.contains("DropSquash.dmg")));
 }
 
+#[test]
+fn rejects_unsupported_platform_availability_claims() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta DropSquash.dmg notarization checksum Download for Windows",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unsupported platform")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",

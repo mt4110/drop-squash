@@ -20,7 +20,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Manual QA completeness | Packaged-app evidence fields, concrete results, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
 | Manual QA preparation | App state backup, trial reset, and `--restore-state` are tested without deleting config by default | `cargo test -p xtask manual_qa_prepare` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
-| Static site | Required pages, local links/resources, approved external links, placeholders, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
+| Static site | Required pages, local links/resources, approved external links, placeholders, unsupported platform availability claims, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
 | CLI history writes | CLI conversion uses the same success-only history guard | `cargo test -p dropsquash && cargo test -p dropsquash-history` |
 | CLI license commands | CLI reports local trial/license state and forgets the local cache without a raw key or network call | `cargo test -p dropsquash license && cargo run -p dropsquash -- license status --history /tmp/dropsquash-empty-history.jsonl` |
