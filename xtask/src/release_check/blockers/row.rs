@@ -2,6 +2,7 @@ const COLUMN_COUNT: usize = 5;
 const BLOCKER_COLUMN: usize = 0;
 const STATUS_COLUMN: usize = 1;
 const EVIDENCE_REFERENCE_COLUMN: usize = 3;
+const RECORD_IN_COLUMN: usize = 4;
 
 pub(super) fn find<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {
     text.lines().find(|line| {
@@ -18,6 +19,10 @@ pub(super) fn has_status(line: &str, blocker: &str, status: &str) -> bool {
 
 pub(super) fn evidence_reference(line: &str) -> Option<&str> {
     cells(line).and_then(|cells| cells.get(EVIDENCE_REFERENCE_COLUMN).copied())
+}
+
+pub(super) fn record_in(line: &str) -> Option<&str> {
+    cells(line).and_then(|cells| cells.get(RECORD_IN_COLUMN).copied())
 }
 
 fn cells(line: &str) -> Option<Vec<&str>> {

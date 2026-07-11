@@ -1,5 +1,6 @@
 use std::path::Path;
 
+mod records;
 mod row;
 
 const REQUIRED_BLOCKERS: [&str; 10] = [
@@ -21,16 +22,23 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let invalid = invalid_status_rows(&text);
     let unproven = unproven_verified_rows(&text);
     let stale = stale_blocked_rows(&text);
-    if missing.is_empty() && invalid.is_empty() && unproven.is_empty() && stale.is_empty() {
+    let misplaced = records::misplaced_record_targets(&text);
+    if missing.is_empty()
+        && invalid.is_empty()
+        && unproven.is_empty()
+        && stale.is_empty()
+        && misplaced.is_empty()
+    {
         return Ok(());
     }
     Err(format!(
-        "{} has release blocker issues: {}{}{}{}",
+        "{} has release blocker issues: {}{}{}{}{}",
         path.display(),
         join_prefix("missing ", missing),
         join_prefix(" invalid status ", invalid),
         join_prefix(" unproven verified ", unproven),
-        join_prefix(" stale blocked ", stale)
+        join_prefix(" stale blocked ", stale),
+        join_prefix(" misplaced record target ", misplaced)
     ))
 }
 
