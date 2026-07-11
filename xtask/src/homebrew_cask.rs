@@ -28,7 +28,7 @@ impl Input {
 
     fn validate(&self) -> Result<(), String> {
         require_clean("version", &self.version)?;
-        require_https_url(&self.url)?;
+        require_dmg_url(&self.url)?;
         require_sha256(&self.sha256)?;
         require_https_url(&self.homepage)?;
         Ok(())
@@ -62,6 +62,14 @@ fn require_clean(label: &str, value: &str) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+fn require_dmg_url(url: &str) -> Result<(), String> {
+    require_https_url(url)?;
+    if url.ends_with(".dmg") {
+        return Ok(());
+    }
+    Err("url must point to a .dmg file".to_string())
 }
 
 fn require_https_url(url: &str) -> Result<(), String> {
