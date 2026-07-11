@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 13] = [
+const REQUIRED_PHRASES: [(&str, &str); 16] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy sandbox purchase", "Sandbox checkout"),
     ("Valid sandbox activation", "raw key is absent"),
@@ -9,7 +9,10 @@ const REQUIRED_PHRASES: [(&str, &str); 13] = [
     ("Public website deployment", "Production website serves"),
     ("Live checkout link", "Public pricing page opens"),
     ("Signed DMG", "`codesign`"),
+    ("Signed DMG", "Developer ID"),
     ("Notarized and stapled DMG", "`spctl`"),
+    ("Notarized and stapled DMG", "notary"),
+    ("Notarized and stapled DMG", "stapled"),
     ("Gatekeeper clean-machine open", "Fresh macOS account"),
     ("Published checksum", "SHA-256"),
     ("Homebrew cask install", "brew install --cask"),

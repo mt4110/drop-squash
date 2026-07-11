@@ -26,6 +26,24 @@ fn reports_vague_completion_evidence() {
 }
 
 #[test]
+fn reports_signed_completion_without_developer_id() {
+    let text = "| Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_notarization_completion_without_staple() {
+    let text = "| Notarized and stapled DMG | Blocked | `spctl` and notary evidence for the public DMG artifact | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Notarized and stapled DMG"));
+}
+
+#[test]
 fn reports_homebrew_completion_without_zap() {
     let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact | TBD | Homebrew tap PR |\n";
 
@@ -41,8 +59,8 @@ fn described_blockers() -> String {
         "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
-        "| Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |\n",
-        "| Notarized and stapled DMG | Blocked | `spctl`/notary evidence for the public DMG artifact | TBD | Release notes |\n",
+        "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |\n",
+        "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |\n",
         "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n",
