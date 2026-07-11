@@ -17,7 +17,9 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "Gatekeeper clean-machine open" => {
             Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])
         }
-        "`docs/release-blockers.md` status" => Some(&[&["verified"], &["all rows"]]),
+        "`docs/release-blockers.md` status" => {
+            Some(&[&["docs/release-blockers.md"], &["verified"], &["all rows"]])
+        }
         "Manual QA record" => Some(&[&["docs/manual-qa.md"], &["dropsquash.dmg", ".app"]]),
         "Lemon Squeezy product setup" => Some(&[
             &["dropsquash"],

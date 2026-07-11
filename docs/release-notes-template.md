@@ -60,7 +60,7 @@ weak public evidence before the release is published.
 - `stapler`: include `stapler` or `staple`, plus `stapled` or `validate`.
 - Apple notary log: include `notary` or `notarytool`, plus `accepted`.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, and `clean` or `fresh`.
-- `docs/release-blockers.md` status: mention `all rows Verified`.
+- `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md` and the tested `DropSquash.dmg` or `.app`.
 - Benchmark sample set: mention short, medium, and large samples with machine and OS context.
 - Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.

@@ -14,7 +14,7 @@ fn accepts_concrete_production_urls() {
 - `stapler`: stapler validate showed ticket stapled successfully
 - Apple notary log: notarytool accepted request abc123
 - Gatekeeper clean-machine open: Gatekeeper opened app cleanly in fresh account
-- `docs/release-blockers.md` status: all rows Verified
+- `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
 - Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
 - Benchmark regression threshold: no sample exceeded 20 percent regression
@@ -92,6 +92,9 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("GitHub Release checksum")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("docs/release-blockers.md")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Lemon Squeezy product setup")));
