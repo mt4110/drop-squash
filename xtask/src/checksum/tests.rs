@@ -5,7 +5,7 @@ use super::checksum_line;
 #[test]
 fn checksum_line_uses_sha256sum_format() {
     let directory = tempfile::tempdir().unwrap();
-    let path = directory.path().join("artifact.txt");
+    let path = directory.path().join("DropSquash.dmg");
     std::fs::File::create(&path)
         .unwrap()
         .write_all(b"dropsquash")
@@ -15,7 +15,7 @@ fn checksum_line_uses_sha256sum_format() {
 
     assert!(!line.ends_with("  "));
     assert!(line.contains("  "));
-    assert!(line.ends_with("  artifact.txt"));
+    assert!(line.ends_with("  DropSquash.dmg"));
     assert!(line.starts_with("bd6403ba9c2b"));
 }
 
@@ -53,4 +53,18 @@ fn empty_files_are_rejected() {
     let error = checksum_line(&path).unwrap_err();
 
     assert!(error.contains("empty"));
+}
+
+#[test]
+fn non_dmg_files_are_rejected() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("DropSquash.zip");
+    std::fs::File::create(&path)
+        .unwrap()
+        .write_all(b"dropsquash")
+        .unwrap();
+
+    let error = checksum_line(&path).unwrap_err();
+
+    assert!(error.contains("must be a DMG"));
 }

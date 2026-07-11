@@ -18,6 +18,9 @@ fn checksum_line(path: &Path) -> Result<String, String> {
     if !path.is_file() {
         return Err(format!("checksum target is not a file: {}", path.display()));
     }
+    if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
+        return Err(format!("checksum target must be a DMG: {}", path.display()));
+    }
     if path.metadata().map_err(|error| error.to_string())?.len() == 0 {
         return Err(format!("checksum target is empty: {}", path.display()));
     }
