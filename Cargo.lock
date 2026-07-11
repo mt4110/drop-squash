@@ -5408,9 +5408,12 @@ dependencies = [
 name = "xtask"
 version = "0.1.0"
 dependencies = [
+ "dropsquash-core",
+ "dropsquash-encoder",
  "serde_json",
  "sha2",
  "tempfile",
+ "tokio",
 ]
 
 [[package]]
