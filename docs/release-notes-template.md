@@ -8,6 +8,7 @@ license keys, private store IDs, or certificate material.
 
 - Version:
 - Artifact:
+- Artifact URL:
 - SHA-256:
 - Git commit:
 
@@ -33,7 +34,9 @@ license keys, private store IDs, or certificate material.
 ## Distribution
 
 - GitHub Release checksum:
+- GitHub Release URL:
 - Homebrew tap PR:
+- Homebrew tap PR URL:
 - Homebrew install result:
 
 ## Notes

@@ -1,8 +1,9 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 25] = [
+const REQUIRED_TEXT: [&str; 28] = [
     "Version",
     "Artifact",
+    "Artifact URL",
     "SHA-256",
     "Git commit",
     "codesign",
@@ -19,7 +20,9 @@ const REQUIRED_TEXT: [&str; 25] = [
     "Public website URL",
     "Live checkout URL",
     "GitHub Release checksum",
+    "GitHub Release URL",
     "Homebrew tap PR",
+    "Homebrew tap PR URL",
     "Homebrew install result",
     "Known limitations",
     "Support contact",
