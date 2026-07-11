@@ -28,11 +28,12 @@ Before starting packaged-app QA, preserve the current local app state instead
 of deleting it:
 
 ```sh
-mkdir -p /tmp/dropsquash-qa-state
-cp "$HOME/Library/Application Support/DropSquash/config.json" /tmp/dropsquash-qa-state/ 2>/dev/null || true
-cp "$HOME/Library/Application Support/DropSquash/history.jsonl" /tmp/dropsquash-qa-state/ 2>/dev/null || true
-cp "$HOME/Library/Application Support/DropSquash/license.json" /tmp/dropsquash-qa-state/ 2>/dev/null || true
+cargo run -p xtask -- manual-qa-prepare
 ```
+
+This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
+and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
+run.
 
 Then start from a known trial state if the run is meant to verify trial counts:
 
