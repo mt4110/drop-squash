@@ -25,14 +25,16 @@ Run the local readiness gate before preparing any release artifact:
 ```sh
 cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
+cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- release-check
 ```
 
 These gates keep production files within the repository size rules, verify the
 static sales site links and required pages, reject secret-like files, require
-the external media process security gate, verify that production CSP does not
-open remote network origins, keep the unsigned release workflow blocked, and
-verify that the updater is not enabled before signing keys are ready.
+manual QA evidence, require the external media process security gate, verify
+that production CSP does not open remote network origins, keep the unsigned
+release workflow blocked, and verify that the updater is not enabled before
+signing keys are ready.
 
 Run the media policy gate directly after touching native backends or desktop
 commands:

@@ -4,9 +4,10 @@ mod secret_files;
 use std::path::Path;
 
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
-const RELEASE_WORKFLOW_GATES: [&str; 10] = [
+const RELEASE_WORKFLOW_GATES: [&str; 11] = [
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
+    "cargo run -p xtask -- manual-qa-check",
     "cargo run -p xtask -- release-check",
     "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",

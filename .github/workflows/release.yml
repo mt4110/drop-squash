@@ -20,6 +20,8 @@ jobs:
         run: cargo run -p xtask -- file-size-check
       - name: Static website check
         run: cargo run -p xtask -- website-check
+      - name: Manual QA evidence check
+        run: cargo run -p xtask -- manual-qa-check
       - name: Release readiness checks
         run: cargo run -p xtask -- release-check
       - uses: pnpm/action-setup@v4

@@ -7,6 +7,7 @@ fn accepts_release_workflow_with_required_gates() {
         r#"
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
+run: cargo run -p xtask -- manual-qa-check
 run: cargo run -p xtask -- release-check
 run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg
@@ -30,6 +31,7 @@ fn reports_missing_release_workflow_gates() {
         vec![
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
+            "cargo run -p xtask -- manual-qa-check",
             "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
             "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
             "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
