@@ -33,7 +33,7 @@ impl Input {
         validation::require_dmg_url(&self.url)?;
         validation::require_versioned_url(&self.version, &self.url)?;
         validation::require_sha256(&self.sha256)?;
-        validation::require_https_url(&self.homepage)?;
+        validation::require_homepage(&self.homepage)?;
         Ok(())
     }
 }

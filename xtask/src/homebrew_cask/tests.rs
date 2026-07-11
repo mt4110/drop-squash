@@ -130,3 +130,17 @@ fn rejects_invalid_sha256() {
 
     assert!(error.contains("64 hex"));
 }
+
+#[test]
+fn rejects_non_canonical_homepage() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://dropsquash.app".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("canonical DropSquash repository"));
+}

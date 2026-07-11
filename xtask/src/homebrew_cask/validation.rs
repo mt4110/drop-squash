@@ -34,6 +34,14 @@ pub(super) fn require_https_url(url: &str) -> Result<(), String> {
     Err("url must start with https://".to_string())
 }
 
+pub(super) fn require_homepage(url: &str) -> Result<(), String> {
+    require_https_url(url)?;
+    if url == "https://github.com/mt4110/drop-squash" {
+        return Ok(());
+    }
+    Err("homepage must be the canonical DropSquash repository".to_string())
+}
+
 pub(super) fn require_sha256(value: &str) -> Result<(), String> {
     require_clean("sha256", value)?;
     if value.len() == 64 && value.chars().all(|char| char.is_ascii_hexdigit()) {
