@@ -20,6 +20,12 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
         "docs/release-blockers.md",
         errors,
     );
+    require_page_text(
+        root,
+        "release-status/index.html",
+        "Evidence reference",
+        errors,
+    );
     require_page_text(root, "download.html", "macOS beta", errors);
     require_page_text(root, "download.html", "DropSquash.dmg", errors);
     require_page_text(root, "download.html", "notarization", errors);
