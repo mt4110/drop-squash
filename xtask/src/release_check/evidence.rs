@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 15] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 17] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Duplicate output naming", "Duplicate output naming"),
@@ -10,6 +10,11 @@ const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 15] = [
     ("Failed conversion", "Failed conversion"),
     ("Larger output", "Larger output"),
     ("Large-recording cancellation", "Cancellation"),
+    ("Benchmark sample set", "Benchmark sample set"),
+    (
+        "Benchmark regression threshold",
+        "Benchmark regression threshold",
+    ),
     ("Multi-file queue", "Multi-file queue"),
     ("Lemon Squeezy sandbox purchase", "Sandbox purchase"),
     (

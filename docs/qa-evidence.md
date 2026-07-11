@@ -46,6 +46,8 @@ These checks still require a packaged macOS app or external service state:
 | Larger output | Packaged-app larger-output handling must show failure without trial count |
 | Large-recording cancellation | User-visible timing, progress, and cleanup need real media and packaged app behavior |
 | Benchmark sample results | Compression ratio and throughput depend on private local media and target Mac hardware |
+| Benchmark sample set | Release coverage needs private short, medium, and large local recordings |
+| Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, and test buyer evidence outside the repository |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
