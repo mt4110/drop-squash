@@ -341,6 +341,18 @@ fn reports_incomplete_packaged_app_results() {
 }
 
 #[test]
+fn reports_privacy_receipt_without_zero_upload_policy() {
+    let (_directory, path) = write_manual_qa(
+        "| Privacy receipt sidecar | Successful conversion | Creates receipt | clip.privacy.json recorded uploaded_bytes and metadata_policy |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Privacy receipt sidecar")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\

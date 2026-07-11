@@ -8,6 +8,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         .iter()
         .all(|group| group.iter().any(|needle| lower.contains(needle)))
         && checksum_evidence_ok(label, result)
+        && privacy_receipt_evidence_ok(label, result)
     {
         return;
     }
@@ -27,6 +28,14 @@ fn checksum_evidence_ok(label: &str, result: &str) -> bool {
     result
         .split(|value: char| !value.is_ascii_hexdigit())
         .any(|part| part.len() == 64)
+}
+
+fn privacy_receipt_evidence_ok(label: &str, result: &str) -> bool {
+    if label != "Privacy receipt sidecar" {
+        return true;
+    }
+    let compact = result.to_ascii_lowercase().replace(' ', "");
+    compact.contains("uploaded_bytes=0") && compact.contains("metadata_policy=preserve")
 }
 
 fn requirement_for(label: &str) -> Option<Requirement> {
