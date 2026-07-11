@@ -100,6 +100,7 @@ They cover:
 Record these rows:
 
 - Sandbox purchase
+- Empty key activation
 - Invalid key activation
 - Valid sandbox activation
 - Forget license on this Mac
