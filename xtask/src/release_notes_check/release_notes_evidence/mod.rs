@@ -1,5 +1,6 @@
 use std::path::Path;
 
+mod consistency;
 mod identity;
 mod url;
 
@@ -38,6 +39,7 @@ fn check_text(text: &str) -> Vec<String> {
         .filter_map(|(label, kind)| validate_url_field(label, *kind, text))
         .collect();
     errors.extend(identity::validate(text));
+    errors.extend(consistency::validate(text));
     errors.extend(validate_sha256(text));
     errors.extend(
         EVIDENCE_FIELDS

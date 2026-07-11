@@ -114,3 +114,30 @@ fn rejects_non_hex_sha256() {
         .iter()
         .any(|error| error.contains("64-character hex checksum")));
 }
+
+#[test]
+fn rejects_mismatched_release_identity_values() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v9.9.9/Other.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Git commit: abc1234
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v9.9.9
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Artifact URL must match Version")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release URL must match Version")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Artifact must match Artifact URL")));
+}
