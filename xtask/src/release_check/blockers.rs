@@ -64,9 +64,20 @@ fn unproven_verified_rows(text: &str) -> Vec<&'static str> {
 fn missing_evidence_reference(line: &str) -> bool {
     let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
     match cells.get(3) {
-        Some(value) => value.is_empty() || *value == "TBD",
+        Some(value) => !is_evidence_reference(value),
         None => true,
     }
+}
+
+fn is_evidence_reference(value: &str) -> bool {
+    !value.is_empty()
+        && value != "TBD"
+        && (value.starts_with("`docs/")
+            || value.starts_with("https://")
+            || matches!(
+                value,
+                "Release notes" | "GitHub Release" | "Homebrew tap PR"
+            ))
 }
 
 fn join_prefix(prefix: &str, values: Vec<&str>) -> String {
