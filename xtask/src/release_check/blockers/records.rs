@@ -96,12 +96,24 @@ fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
             .split_whitespace()
             .any(|part| has_numeric_suffix(part, prefix));
     }
-    reference.contains(prefix)
+    reference
+        .split_whitespace()
+        .any(|part| has_release_tag_suffix(part, prefix))
 }
 
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
     value.strip_prefix(prefix).is_some_and(|suffix| {
         !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
+    })
+}
+
+fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
+    value.strip_prefix(prefix).is_some_and(|suffix| {
+        suffix.starts_with('v')
+            && suffix.chars().any(|value| value == '.')
+            && suffix.chars().all(|value| {
+                value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
+            })
     })
 }
 
