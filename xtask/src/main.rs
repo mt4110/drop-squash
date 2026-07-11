@@ -9,6 +9,7 @@ mod manual_qa_check;
 mod manual_qa_prepare;
 mod media_policy_check;
 mod privacy_policy_check;
+mod publish_check;
 mod release_check;
 mod release_notes_check;
 mod website_check;
@@ -26,6 +27,7 @@ fn main() {
         Some("macos-signing-check") => macos_signing_check::run(),
         Some("media-policy-check") => media_policy_check::run(),
         Some("privacy-policy-check") => privacy_policy_check::run(),
+        Some("publish-check") => publish_check::run(args.collect()),
         Some("release-check") => release_check::run(),
         Some("release-notes-check") => release_notes_check::run(args.collect()),
         Some("website-check") => website_check::run(args.collect()),
@@ -40,7 +42,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|manual-qa-check|manual-qa-prepare|macos-signing-check|media-policy-check|privacy-policy-check|release-check|release-notes-check|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|manual-qa-check|manual-qa-prepare|macos-signing-check|media-policy-check|privacy-policy-check|publish-check|release-check|release-notes-check|website-check> [files...]"
     );
     std::process::exit(2);
 }

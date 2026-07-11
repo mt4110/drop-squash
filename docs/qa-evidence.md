@@ -31,6 +31,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, UDIF trailer, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty UDIF `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
 | Release notes evidence | Filled public release notes reject placeholder URLs, checkout/website mix-up, missing signing/notary evidence, and generic verification results | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
+| Publish gate | Public beta publication requires release readiness, filled release notes evidence, and every release blocker marked Verified | `cargo run -p xtask -- publish-check path/to/release-notes.md` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, non-canonical homepages, and invalid checksums | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence

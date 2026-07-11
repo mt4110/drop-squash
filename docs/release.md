@@ -17,12 +17,11 @@ The public paid beta remains blocked until every item in
 The desktop bundle configuration produces both the macOS `.app` and `.dmg`
 artifacts. Use unsigned local builds only for QA; public release artifacts must
 be signed, notarized, stapled, checked, and checksummed before publication.
-The tag release workflow also builds an unsigned macOS DMG, runs the artifact
-check, writes `SHA256SUMS`, and uploads that checksum file before blocking
-publication until signed release packaging is implemented. The macOS job maps
-signing and notarization secrets
-into `macos-signing-check` so missing CI credentials fail deterministically
-before signed packaging is enabled.
+The tag release workflow builds an unsigned macOS DMG, checks it, writes
+`SHA256SUMS`, uploads it, then blocks publication until signed packaging exists.
+The macOS job maps signing and notarization secrets into `macos-signing-check`
+so missing CI credentials fail deterministically before signed packaging is
+enabled.
 
 Run the local readiness gate before preparing any release artifact:
 
@@ -118,11 +117,12 @@ cargo run -p xtask -- homebrew-cask 0.1.0 \
   https://github.com/mt4110/drop-squash > packaging/homebrew/Casks/dropsquash.rb
 ```
 
-Publish the checksum file with the GitHub Release after notarization succeeds.
-Use `docs/release-notes-template.md` so codesign, spctl, stapler, notary,
-checksum, Gatekeeper, and Homebrew evidence is recorded in one place.
-Before publishing, verify the filled release notes use production URLs:
+After notarization succeeds, publish the checksum with the GitHub Release and
+fill `docs/release-notes-template.md` with codesign, spctl, stapler, notary,
+checksum, Gatekeeper, and Homebrew evidence:
 
 ```sh
 cargo run -p xtask -- release-notes-check path/to/release-notes.md
 ```
+Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after every
+row in `docs/release-blockers.md` is `Verified` with concrete evidence.
