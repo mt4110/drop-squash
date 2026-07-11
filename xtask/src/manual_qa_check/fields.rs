@@ -2,6 +2,7 @@ use std::path::Path;
 
 mod artifact;
 mod date;
+mod state_path;
 
 pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
     let label = label.trim();
@@ -16,6 +17,9 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
         "Machine" => validate_machine(value, missing),
         "Input sample set" => validate_input_sample_set(value, missing),
         "Output folder" => validate_output_folder(value, missing),
+        "Config path" => state_path::validate(value, "config.json", missing),
+        "History path" => state_path::validate(value, "history.jsonl", missing),
+        "License cache path" => state_path::validate(value, "license.json", missing),
         "Date" if !date::is_iso(value) => {
             missing.push("manual QA Date must use YYYY-MM-DD".to_string());
         }

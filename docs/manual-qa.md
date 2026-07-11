@@ -30,6 +30,8 @@ example `DropSquash 0.1.0 git abc1234`.
 architecture, and `Output folder` must point to an existing directory.
 `Input sample set` must mention the short, medium, and large local recordings
 used for the packaged-app run.
+State path fields must point to the DropSquash app support files shown in the
+table.
 
 Before starting packaged-app QA, preserve the current local app state instead
 of deleting it:

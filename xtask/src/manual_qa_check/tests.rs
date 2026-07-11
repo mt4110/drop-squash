@@ -67,6 +67,24 @@ fn reports_weak_input_sample_set() {
 }
 
 #[test]
+fn reports_wrong_state_paths() {
+    let (_directory, path) = write_manual_qa(
+        "| Config path | /tmp/config.json |\n\
+| History path | /tmp/history.jsonl |\n\
+| License cache path | /tmp/license.json |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert_eq!(
+        missing
+            .iter()
+            .filter(|error| error.contains("DropSquash/"))
+            .count(),
+        3
+    );
+}
+
+#[test]
 fn reports_empty_four_column_results() {
     let (_directory, path) = write_manual_qa("| Convert | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
@@ -351,6 +369,13 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             "Machine" => "MacBookPro18,4 arm64".to_string(),
             "Input sample set" => "short, medium, and large local recordings".to_string(),
             "Output folder" => output.display().to_string(),
+            "Config path" => "$HOME/Library/Application Support/DropSquash/config.json".to_string(),
+            "History path" => {
+                "$HOME/Library/Application Support/DropSquash/history.jsonl".to_string()
+            }
+            "License cache path" => {
+                "$HOME/Library/Application Support/DropSquash/license.json".to_string()
+            }
             "Date" => "2026-07-11".to_string(),
             _ => "Concrete evidence".to_string(),
         };
