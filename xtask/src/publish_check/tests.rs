@@ -9,7 +9,8 @@ fn accepts_all_verified_blockers() {
         .iter()
         .map(|blocker| {
             format!(
-                "| {blocker} | Verified | done | {} | docs |\n",
+                "| {blocker} | Verified | {} | {} | docs |\n",
+                evidence(blocker),
                 reference(blocker)
             )
         })
@@ -51,8 +52,8 @@ fn reports_verified_blocker_without_evidence_reference() {
 fn accepts_public_release_evidence_references() {
     let text = "\
 | Signed DMG | Verified | done | Release notes | Release notes |
-| Published checksum | Verified | done | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | done | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | versioned DropSquash.dmg cask includes auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
 
     let unverified = unverified_blockers(text);
@@ -140,5 +141,16 @@ fn reference(blocker: &str) -> &'static str {
         "Refund policy finalized" => "https://dropsquash.app/refund",
         "Live checkout link" => "https://store.lemonsqueezy.com/checkout/buy/abc123",
         _ => "`docs/manual-qa.md`",
+    }
+}
+
+fn evidence(blocker: &str) -> &'static str {
+    match blocker {
+        "Signed DMG" => "codesign verified Developer ID for DropSquash.dmg",
+        "Notarized and stapled DMG" => "spctl, notary, and stapled DropSquash.dmg",
+        "Gatekeeper clean-machine open" => "opened without Gatekeeper warning",
+        "Published checksum" => "SHA256SUMS attached for DropSquash.dmg",
+        "Homebrew cask install" => "DropSquash.dmg cask has auto_updates false and zap",
+        _ => "concrete evidence recorded",
     }
 }

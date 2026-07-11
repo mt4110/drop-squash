@@ -6,8 +6,8 @@ fn accepts_matching_release_note_references() {
 | Public website deployment | Verified | done | https://dropsquash.app/release-status | `https://...` |
 | Refund policy finalized | Verified | done | https://dropsquash.app/refund | `https://...` |
 | Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |
-| Published checksum | Verified | done | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | done | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Published checksum | Verified | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | DropSquash.dmg cask has auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
     let notes = release_notes("v0.1.0", "1");
 
@@ -17,8 +17,8 @@ fn accepts_matching_release_note_references() {
 #[test]
 fn reports_distribution_references_that_do_not_match_release_notes() {
     let blockers = "\
-| Published checksum | Verified | done | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
-| Homebrew cask install | Verified | done | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
+| Published checksum | Verified | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
+| Homebrew cask install | Verified | DropSquash.dmg cask has auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
 ";
     let notes = release_notes("v0.1.0", "1");
     let mismatched = mismatched(blockers, &notes);
@@ -30,7 +30,7 @@ fn reports_distribution_references_that_do_not_match_release_notes() {
 #[test]
 fn ignores_blocked_references() {
     let blockers = "\
-| Published checksum | Blocked | done | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
+| Published checksum | Blocked | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
 ";
     let notes = release_notes("v0.1.0", "1");
 
