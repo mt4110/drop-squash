@@ -39,9 +39,11 @@ run.
 Then start from a known trial state if the run is meant to verify trial counts:
 
 ```sh
-rm -f "$HOME/Library/Application Support/DropSquash/history.jsonl"
-rm -f "$HOME/Library/Application Support/DropSquash/license.json"
+cargo run -p xtask -- manual-qa-prepare --reset-trial
 ```
+
+`--reset-trial` removes only `history.jsonl` and `license.json`, and only after
+copying any existing state into the backup directory.
 
 ## macOS Packaged App
 
