@@ -79,7 +79,7 @@ fn rejects_example_dot_com_url() {
 fn rejects_non_dmg_url() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
-        "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.zip".to_string(),
         SHA256.to_string(),
         "https://github.com/mt4110/drop-squash".to_string(),
     ])
@@ -87,6 +87,20 @@ fn rejects_non_dmg_url() {
     .unwrap();
 
     assert!(error.contains(".dmg"));
+}
+
+#[test]
+fn rejects_non_github_release_url() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://downloads.example.test/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("GitHub Release"));
 }
 
 #[test]

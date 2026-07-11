@@ -80,10 +80,18 @@ fn is_numeric_part(value: &str) -> bool {
 
 fn require_dmg_url(url: &str) -> Result<(), String> {
     require_https_url(url)?;
+    require_github_release_url(url)?;
     if url.ends_with(".dmg") {
         return Ok(());
     }
     Err("url must point to a .dmg file".to_string())
+}
+
+fn require_github_release_url(url: &str) -> Result<(), String> {
+    if url.starts_with("https://github.com/mt4110/drop-squash/releases/download/") {
+        return Ok(());
+    }
+    Err("url must point to the DropSquash GitHub Release download".to_string())
 }
 
 fn require_versioned_url(version: &str, url: &str) -> Result<(), String> {
