@@ -6,6 +6,7 @@ mod evidence_ref;
 mod records;
 mod required_blockers;
 pub(super) mod row;
+mod url_pairs;
 mod verified_ref;
 
 const REQUIRED_BLOCKERS: &[&str] = required_blockers::ALL;
@@ -23,6 +24,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let misplaced_ref = verified_ref::misplaced_verified_references(&text);
     let incomplete = completion::incomplete_requirements(&text);
     let misplaced = records::misplaced_record_targets(&text);
+    let mismatched_urls = url_pairs::mismatched_verified_url_pairs(&text);
     let unclassified = evidence_class::unclassified_blockers(&text);
     if missing.is_empty()
         && invalid.is_empty()
@@ -31,12 +33,13 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         && misplaced_ref.is_empty()
         && incomplete.is_empty()
         && misplaced.is_empty()
+        && mismatched_urls.is_empty()
         && unclassified.is_empty()
     {
         return Ok(());
     }
     Err(format!(
-        "{} has release blocker issues: {}{}{}{}{}{}{}{}",
+        "{} has release blocker issues: {}{}{}{}{}{}{}{}{}",
         path.display(),
         join_prefix("missing ", missing),
         join_prefix(" invalid status ", invalid),
@@ -45,6 +48,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         join_prefix(" misplaced verified reference ", misplaced_ref),
         join_prefix(" incomplete requirement ", incomplete),
         join_prefix(" misplaced record target ", misplaced),
+        join_prefix(" mismatched URL pair ", mismatched_urls),
         join_prefix(" unclassified ", unclassified)
     ))
 }
