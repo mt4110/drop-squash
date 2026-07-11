@@ -72,7 +72,8 @@ cargo run -p xtask -- manual-qa-prepare --restore-state
 ```
 
 `--restore-state` copies only backed up `config.json`, `history.jsonl`, and
-`license.json` files back into the app state directory.
+`license.json` files back into the app state directory. It fails if the backup
+directory does not exist, so an empty restore cannot be mistaken for success.
 
 ## macOS Packaged App
 

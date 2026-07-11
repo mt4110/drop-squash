@@ -177,6 +177,23 @@ fn restores_backed_up_state_files() {
 }
 
 #[test]
+fn restore_requires_existing_backup_directory() {
+    let directory = tempfile::tempdir().unwrap();
+    let error = restore_state(&Options {
+        app_artifact: None,
+        app_state_dir: directory.path().join("app-state"),
+        input_sample_set: None,
+        output_dir: directory.path().join("output"),
+        reset_trial: false,
+        restore_state: true,
+        state_dir: directory.path().join("missing-state"),
+    })
+    .unwrap_err();
+
+    assert!(error.contains("state backup does not exist"));
+}
+
+#[test]
 fn rejects_reset_and_restore_together() {
     let error = Options::parse(vec![
         "--reset-trial".to_string(),

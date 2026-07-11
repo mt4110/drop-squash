@@ -14,6 +14,12 @@ pub(super) fn backup_state(options: &Options) -> Result<Vec<String>, String> {
 }
 
 pub(super) fn restore_state(options: &Options) -> Result<Vec<String>, String> {
+    if !options.state_dir.is_dir() {
+        return Err(format!(
+            "manual QA state backup does not exist: {}",
+            options.state_dir.display()
+        ));
+    }
     std::fs::create_dir_all(&options.app_state_dir).map_err(|error| error.to_string())?;
     copy_existing_files(&options.state_dir, &options.app_state_dir)
 }
