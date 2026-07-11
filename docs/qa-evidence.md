@@ -17,6 +17,7 @@ app testing in `docs/manual-qa.md`.
 | Static site | Required pages, local links, and placeholders are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
 | CLI history writes | CLI conversion uses the same success-only history guard | `cargo test -p dropsquash && cargo test -p dropsquash-history` |
+| CLI license status | CLI reports local trial/license state without a raw key or network call | `cargo run -p dropsquash -- license status --history /tmp/dropsquash-empty-history.jsonl` |
 | License cache safety | Raw key persistence, Pro identity requirements, temp-file cache writes, error redaction, trimmed activation, and failed activation partial writes are tested | `cargo test -p dropsquash-license && cargo test -p dropsquash-desktop license` |
 | Source movement safety | Postprocess gates and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
 | Queue order | Sequential queue state transitions are tested | `cargo test -p dropsquash-queue` |

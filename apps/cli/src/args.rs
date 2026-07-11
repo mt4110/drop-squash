@@ -28,7 +28,19 @@ pub enum Command {
         #[arg(long)]
         history: Option<PathBuf>,
     },
+    License {
+        #[command(subcommand)]
+        command: LicenseCommand,
+    },
     Doctor,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum LicenseCommand {
+    Status {
+        #[arg(long)]
+        history: Option<PathBuf>,
+    },
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]

@@ -3,7 +3,7 @@ mod doctor;
 mod license;
 mod stats;
 
-use crate::args::{Cli, Command};
+use crate::args::{Cli, Command, LicenseCommand};
 
 #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos")))]
 compile_error!("DropSquash supports macOS, Windows, and Linux");
@@ -18,6 +18,9 @@ pub async fn run(cli: Cli) -> dropsquash_core::Result<()> {
             history,
         } => convert::run(input, output_dir, profile, output_size, history).await,
         Command::Stats { history } => stats::run(history).await,
+        Command::License {
+            command: LicenseCommand::Status { history },
+        } => license::status(history).await,
         Command::Doctor => doctor::run(),
     }
 }
