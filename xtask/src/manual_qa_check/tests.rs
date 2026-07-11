@@ -96,6 +96,14 @@ fn reports_impossible_calendar_date() {
 }
 
 #[test]
+fn reports_unusable_historical_date() {
+    let (_directory, path) = write_manual_qa("| Date | 0000-01-01 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("YYYY-MM-DD")));
+}
+
+#[test]
 fn accepts_leap_day() {
     let (_directory, path) = write_manual_qa("| Date | 2028-02-29 |\n");
     let missing = check_file(&path).unwrap();

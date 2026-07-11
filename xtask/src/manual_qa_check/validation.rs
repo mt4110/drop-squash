@@ -37,6 +37,9 @@ fn is_iso_date(value: &str) -> bool {
         return false;
     }
     let year = value[..4].parse::<u16>().unwrap_or(0);
+    if year < 2000 {
+        return false;
+    }
     let month = value[5..7].parse::<u8>().unwrap_or(0);
     let day = value[8..].parse::<u8>().unwrap_or(0);
     (1..=days_in_month(year, month)).contains(&day)
