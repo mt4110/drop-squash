@@ -6,6 +6,18 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     require_page_text(root, "download.html", "notarization", errors);
     require_page_text(root, "download.html", "checksum", errors);
     require_page_text(root, "pricing.html", "Checkout opens after", errors);
+    require_page_text(
+        root,
+        "pricing.html",
+        "10 successful conversions are free",
+        errors,
+    );
+    require_page_text(
+        root,
+        "pricing.html",
+        "Failed or cancelled conversions do not count",
+        errors,
+    );
     require_page_text(root, "privacy.html", "does not upload media", errors);
     require_page_text(root, "privacy.html", "Telemetry is off by default", errors);
     require_page_text(

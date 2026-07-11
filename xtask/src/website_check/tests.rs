@@ -9,7 +9,11 @@ fn accepts_local_links() {
         "index.html",
         r#"Release status <a href="pricing.html">Pricing</a>"#,
     );
-    write(directory.path(), "pricing.html", "Checkout opens after");
+    write(
+        directory.path(),
+        "pricing.html",
+        required_page_text("pricing.html"),
+    );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
 }
@@ -139,7 +143,9 @@ fn required_page_text(page: &str) -> &'static str {
     match page {
         "index.html" => "Release status",
         "download.html" => "DropSquash.dmg notarization checksum",
-        "pricing.html" => "Checkout opens after",
+        "pricing.html" => {
+            "Checkout opens after 10 successful conversions are free Failed or cancelled conversions do not count"
+        }
         "privacy.html" => {
             "does not upload media Telemetry is off by default License activation contacts Lemon Squeezy"
         }
