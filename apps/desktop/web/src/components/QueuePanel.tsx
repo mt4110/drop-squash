@@ -28,7 +28,9 @@ export function QueuePanel({ items, onClearFinished, onRevealOutput }: QueuePane
               {formatBytes(item.result.savedBytes)}
             </button>
           ) : (
-            <strong>{item.progress ? `${item.progress}%` : statusLabel(item.status)}</strong>
+            <strong title={item.error}>
+              {item.progress ? `${item.progress}%` : statusLabel(item.status)}
+            </strong>
           )}
         </div>
       ))}

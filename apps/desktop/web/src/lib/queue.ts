@@ -5,7 +5,8 @@ export type QueueStatus =
   | "running"
   | "succeeded"
   | "failed"
-  | "cancelled";
+  | "cancelled"
+  | "blocked";
 
 export type QueueEntry = {
   id: number;
@@ -37,6 +38,12 @@ export function hasFinished(items: QueueEntry[]) {
 
 export function clearFinished(items: QueueEntry[]) {
   return items.filter((item) => !isFinishedStatus(item.status));
+}
+
+export function blockQueued(items: QueueEntry[], error: string) {
+  return items.map((item) => (
+    item.status === "queued" ? { ...item, status: "blocked" as const, error } : item
+  ));
 }
 
 export function markRunning(items: QueueEntry[], id: number) {
@@ -90,6 +97,8 @@ export function statusLabel(status: QueueStatus) {
       return "Failed";
     case "cancelled":
       return "Cancelled";
+    case "blocked":
+      return "Blocked";
   }
 }
 
@@ -98,5 +107,10 @@ export function isCancelReason(reason: unknown) {
 }
 
 function isFinishedStatus(status: QueueStatus) {
-  return status === "succeeded" || status === "failed" || status === "cancelled";
+  return (
+    status === "succeeded"
+    || status === "failed"
+    || status === "cancelled"
+    || status === "blocked"
+  );
 }

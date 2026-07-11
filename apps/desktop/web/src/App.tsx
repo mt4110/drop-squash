@@ -22,8 +22,9 @@ import type {
 import { initialState } from "./lib/initialState";
 import type { QueueEntry } from "./lib/queue";
 import {
-  entriesForInputPaths,
+  blockQueued,
   clearFinished,
+  entriesForInputPaths,
   isCancelReason,
   markFailed,
   markRunning,
@@ -135,6 +136,14 @@ export function App() {
       void runQueued(next);
     }
   }, [isBusy, queue, runQueued, state.isLocked]);
+
+  useEffect(() => {
+    if (state.isLocked) {
+      setQueue((current) => (
+        blockQueued(current, "Trial complete. Enter a license key to continue.")
+      ));
+    }
+  }, [state.isLocked]);
 
   useEffect(() => {
     if (!isTauri()) {
