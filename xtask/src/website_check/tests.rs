@@ -142,9 +142,9 @@ fn write_required_pages(root: &std::path::Path) {
 fn required_page_text(page: &str) -> &'static str {
     match page {
         "index.html" => "Release status",
-        "download.html" => "DropSquash.dmg notarization checksum",
+        "download.html" => "macOS beta DropSquash.dmg notarization checksum",
         "pricing.html" => {
-            "Checkout opens after 10 successful conversions are free Failed or cancelled conversions do not count"
+            "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count"
         }
         "privacy.html" => {
             "does not upload media Telemetry is off by default License activation contacts Lemon Squeezy"

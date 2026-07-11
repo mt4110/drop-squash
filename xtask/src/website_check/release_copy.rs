@@ -2,10 +2,12 @@ use std::path::Path;
 
 pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     require_page_text(root, "index.html", "Release status", errors);
+    require_page_text(root, "download.html", "macOS beta", errors);
     require_page_text(root, "download.html", "DropSquash.dmg", errors);
     require_page_text(root, "download.html", "notarization", errors);
     require_page_text(root, "download.html", "checksum", errors);
     require_page_text(root, "pricing.html", "Checkout opens after", errors);
+    require_page_text(root, "pricing.html", "signed beta release", errors);
     require_page_text(
         root,
         "pricing.html",
