@@ -11,11 +11,15 @@ fn require_sample_set(result: &str, missing: &mut Vec<String>) {
     if ["short", "medium", "large"]
         .iter()
         .all(|needle| lower.contains(needle))
+        && has_machine_context(&lower)
+        && has_os_context(&lower)
     {
         return;
     }
-    missing
-        .push("manual QA benchmark sample set must mention short, medium, and large".to_string());
+    missing.push(
+        "manual QA benchmark sample set must mention short, medium, large, machine, and OS"
+            .to_string(),
+    );
 }
 
 fn require_threshold(result: &str, missing: &mut Vec<String>) {
@@ -24,4 +28,12 @@ fn require_threshold(result: &str, missing: &mut Vec<String>) {
         return;
     }
     missing.push("manual QA benchmark threshold must mention 20%".to_string());
+}
+
+fn has_machine_context(value: &str) -> bool {
+    value.contains("machine") || value.contains("macbook") || value.contains("mac ")
+}
+
+fn has_os_context(value: &str) -> bool {
+    value.contains("macos") || value.contains("os ")
 }
