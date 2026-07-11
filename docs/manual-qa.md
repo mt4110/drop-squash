@@ -63,7 +63,9 @@ cargo run -p xtask -- manual-qa-prepare --reset-trial --input-sample-set "short,
 ```
 
 `--reset-trial` removes only `history.jsonl` and `license.json`, and only after
-copying any existing state into the backup directory.
+copying any existing state into the backup directory. The command prints the
+app state source and reset path; confirm they point to the DropSquash app
+support directory before starting observations.
 
 After QA, restore the backed up local state when needed:
 

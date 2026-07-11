@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use super::options::Options;
 use super::require_reset_artifact;
+use super::reset_trial_lines;
 use super::sample_set_line;
 use super::state::{backup_state, restore_state};
 
@@ -106,6 +107,24 @@ fn prints_provided_sample_set() {
         sample_set_line(&options),
         "manual QA Input sample set: short, medium, and large local recordings"
     );
+}
+
+#[test]
+fn reset_trial_output_names_state_directory_and_files() {
+    let options = Options::parse(vec![
+        "--app-state-dir".to_string(),
+        "/tmp/dropsquash-state".to_string(),
+        "--input-sample-set".to_string(),
+        "short, medium, and large local recordings".to_string(),
+        "--reset-trial".to_string(),
+    ])
+    .unwrap();
+
+    let lines = reset_trial_lines(&options).join("\n");
+
+    assert!(lines.contains("/tmp/dropsquash-state"));
+    assert!(lines.contains("history.jsonl"));
+    assert!(lines.contains("license.json"));
 }
 
 #[test]
