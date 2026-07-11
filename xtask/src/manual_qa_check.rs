@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 mod benchmark;
+mod license;
 mod requirements;
 mod validation;
 use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};

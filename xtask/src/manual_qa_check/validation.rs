@@ -26,6 +26,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         missing.push(format!("manual QA result needs evidence: {label}"));
     }
     super::benchmark::validate_result(label, result, missing);
+    super::license::validate_result(label, result, missing);
 }
 
 fn validate_artifact(value: &str, missing: &mut Vec<String>) {

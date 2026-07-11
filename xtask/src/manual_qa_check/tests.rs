@@ -224,6 +224,30 @@ fn reports_incomplete_benchmark_results() {
     assert!(missing.iter().any(|error| error.contains("20%")));
 }
 
+#[test]
+fn reports_incomplete_license_sandbox_results() {
+    let (_directory, path) = write_manual_qa(
+        "| Sandbox purchase | Checkout completes | order completed |\n\
+| Invalid key activation | Friendly license error; no raw key persisted | error shown |\n\
+| Valid sandbox activation | Pro state; raw key absent from cache | activated |\n\
+| Forget license on this Mac | Local cache clears; app returns to trial or locked state | forgotten |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Sandbox purchase")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Invalid key activation")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Forget license on this Mac")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -253,6 +277,14 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str(
                 "| Benchmark regression threshold | Passes | no sample exceeded 20% regression |\n",
             );
+        } else if check == "Sandbox purchase" {
+            text.push_str("| Sandbox purchase | Passes | intended product checkout completed by test buyer order abc123 |\n");
+        } else if check == "Invalid key activation" {
+            text.push_str("| Invalid key activation | Passes | friendly error shown and no raw key persisted |\n");
+        } else if check == "Valid sandbox activation" {
+            text.push_str("| Valid sandbox activation | Passes | Pro state reached and raw key absent from cache |\n");
+        } else if check == "Forget license on this Mac" {
+            text.push_str("| Forget license on this Mac | Passes | license cache cleared and app returned to trial state |\n");
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"
