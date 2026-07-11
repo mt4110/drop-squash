@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 48] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 49] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -30,6 +30,10 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 48] = [
     ("docs/qa-evidence.md", "concrete identity fields"),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "non-DMG targets are rejected"),
+    (
+        "docs/qa-evidence.md",
+        "artifact file name instead of local parent directories",
+    ),
     ("docs/qa-evidence.md", "publish-check"),
     (
         "docs/qa-evidence.md",
