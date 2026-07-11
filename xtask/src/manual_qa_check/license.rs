@@ -59,11 +59,19 @@ fn require_license_cache_evidence(
 fn require_any_state(result: &str, missing: &mut Vec<String>) {
     let lower = result.to_ascii_lowercase();
     let mentions_cache = lower.contains("cache") || lower.contains("license.json");
+    let mentions_removal = mentions_cache_removal(&lower);
     let mentions_state = lower.contains("trial") || lower.contains("locked");
-    if mentions_cache && mentions_state {
+    if mentions_cache && mentions_removal && mentions_state {
         return;
     }
     missing.push(
-        "manual QA Forget license on this Mac needs cache and app-state evidence".to_string(),
+        "manual QA Forget license on this Mac needs cache removal and app-state evidence"
+            .to_string(),
     );
+}
+
+fn mentions_cache_removal(value: &str) -> bool {
+    ["removed", "cleared", "deleted", "clears"]
+        .iter()
+        .any(|needle| value.contains(needle))
 }

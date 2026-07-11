@@ -99,6 +99,15 @@ fn reports_local_forget_completion_without_app_state() {
 }
 
 #[test]
+fn reports_local_forget_completion_without_cache_removal() {
+    let text = "| Local license forget | Blocked | Local cache is checked and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Local license forget"));
+}
+
+#[test]
 fn reports_signed_completion_without_developer_id() {
     let text = "| Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |\n";
 

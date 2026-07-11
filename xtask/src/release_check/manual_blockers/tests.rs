@@ -125,6 +125,16 @@ fn reports_verified_local_forget_blocker_without_manual_result() {
 }
 
 #[test]
+fn reports_verified_local_forget_without_cache_removal() {
+    let blockers = "| Local license forget | Verified | Local cache removed | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Forget license on this Mac | Local cache clears; app returns to trial or locked state | license cache checked and app returned to trial state |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Local license forget"));
+}
+
+#[test]
 fn reports_verified_license_blocker_without_cache_evidence() {
     let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Pro reached and raw key absent |\n";

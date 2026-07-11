@@ -381,6 +381,18 @@ fn reports_incomplete_license_sandbox_results() {
 }
 
 #[test]
+fn reports_forget_license_without_cache_removal() {
+    let (_directory, path) = write_manual_qa(
+        "| Forget license on this Mac | Local cache clears | license cache checked and app returned to trial state |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("cache removal")));
+}
+
+#[test]
 fn reports_incomplete_packaged_app_results() {
     let (_directory, path) = write_manual_qa(
         "| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\

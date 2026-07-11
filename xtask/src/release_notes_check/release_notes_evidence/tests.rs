@@ -116,6 +116,19 @@ fn rejects_weak_distribution_evidence() {
 }
 
 #[test]
+fn rejects_local_license_forget_without_cache_removal() {
+    let errors = check_text(
+        r#"
+- Local license forget: license cache checked and trial state restored
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Local license forget")));
+}
+
+#[test]
 fn rejects_duplicate_release_note_fields() {
     let errors = check_text(
         r#"
