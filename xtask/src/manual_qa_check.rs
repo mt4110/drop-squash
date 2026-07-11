@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 mod app;
+mod artifact_consistency;
 mod benchmark;
 mod fields;
 mod license;
@@ -27,9 +28,11 @@ pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let mut missing = Vec::new();
     let mut labels = Vec::new();
+    let mut rows = Vec::new();
     for line in text.lines() {
-        check_line(line, &mut missing, &mut labels);
+        check_line(line, &mut missing, &mut labels, &mut rows);
     }
+    artifact_consistency::validate(&rows, &mut missing);
     require_labels(
         "manual QA field is missing",
         &REQUIRED_FIELDS,
@@ -45,7 +48,12 @@ pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
     Ok(missing)
 }
 
-fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
+fn check_line(
+    line: &str,
+    missing: &mut Vec<String>,
+    labels: &mut Vec<String>,
+    rows: &mut Vec<(String, String)>,
+) {
     if !line.starts_with('|') || line.contains("---") {
         return;
     }
@@ -71,12 +79,15 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     }
     if cells.len() == 2 {
         fields::validate(cells[0], cells[1], missing);
+        rows.push((cells[0].trim().to_string(), cells[1].trim().to_string()));
     }
     if cells.len() == 4 {
         validate_result(cells[0], cells[3], missing);
+        rows.push((cells[0].trim().to_string(), cells[3].trim().to_string()));
     }
     if cells.len() == 3 {
         validate_result(cells[0], cells[2], missing);
+        rows.push((cells[0].trim().to_string(), cells[2].trim().to_string()));
     }
 }
 

@@ -243,6 +243,32 @@ fn reports_dmg_artifact_without_udif_trailer() {
 }
 
 #[test]
+fn reports_release_command_results_for_different_dmg_artifact() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("Other.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for DropSquash.dmg |\n\
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("artifact-check") && error.contains("Other.dmg")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("checksum") && error.contains("Other.dmg")));
+}
+
+#[test]
 fn reports_non_iso_date() {
     let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
     let missing = check_file(&path).unwrap();
@@ -695,4 +721,12 @@ fn command_result(check: &str) -> String {
         _ => "Pass",
     };
     format!("| {check} | Passes | {result} |\n")
+}
+
+fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
+    let mut bytes = prefix.to_vec();
+    let mut trailer = [0_u8; 512];
+    trailer[..4].copy_from_slice(b"koly");
+    bytes.extend_from_slice(&trailer);
+    bytes
 }
