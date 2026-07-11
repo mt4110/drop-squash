@@ -1,6 +1,6 @@
 use std::fs;
 
-const REQUIRED_TEXT: [(&str, &str); 36] = [
+const REQUIRED_TEXT: [(&str, &str); 37] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release-blockers.md", "must include the public URL"),
     ("docs/productization.md", "docs/release-blockers.md"),
@@ -27,6 +27,7 @@ const REQUIRED_TEXT: [(&str, &str); 36] = [
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "non-DMG targets are rejected"),
     ("docs/qa-evidence.md", "publish-check"),
+    ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
     (
         "docs/qa-evidence.md",
