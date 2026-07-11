@@ -157,6 +157,32 @@ fn reports_vague_manual_results() {
     assert!(missing.contains(&"manual QA result needs evidence: Cancellation".to_string()));
 }
 
+#[test]
+fn reports_placeholder_field_values() {
+    let (_directory, path) = write_manual_qa("| App build | TBD |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA field needs evidence: App build".to_string()));
+}
+
+#[test]
+fn reports_placeholder_four_column_results() {
+    let (_directory, path) =
+        write_manual_qa("| Cancellation | large.mov | Returns to ready | N/A |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Cancellation".to_string()));
+}
+
+#[test]
+fn reports_placeholder_three_column_results() {
+    let (_directory, path) =
+        write_manual_qa("| Gatekeeper open test | Opens cleanly | Blocked |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Gatekeeper open test".to_string()));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");

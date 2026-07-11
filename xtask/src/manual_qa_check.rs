@@ -52,11 +52,23 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     if cells.len() == 2 && cells[1].trim().is_empty() {
         missing.push(format!("manual QA field is empty: {}", cells[0].trim()));
     }
+    if cells.len() == 2 && has_placeholder_evidence(cells[1]) {
+        missing.push(format!(
+            "manual QA field needs evidence: {}",
+            cells[0].trim()
+        ));
+    }
     if cells.len() == 2 {
         validate_field(cells[0], cells[1], missing);
     }
     if cells.len() == 4 && cells[3].trim().is_empty() {
         missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
+    }
+    if cells.len() == 4 && has_placeholder_evidence(cells[3]) {
+        missing.push(format!(
+            "manual QA result needs evidence: {}",
+            cells[0].trim()
+        ));
     }
     if cells.len() == 4 && has_vague_manual_result(cells[0], cells[3]) {
         missing.push(format!(
@@ -66,6 +78,12 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     }
     if cells.len() == 3 && cells[2].trim().is_empty() {
         missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
+    }
+    if cells.len() == 3 && has_placeholder_evidence(cells[2]) {
+        missing.push(format!(
+            "manual QA result needs evidence: {}",
+            cells[0].trim()
+        ));
     }
     if cells.len() == 3 && has_vague_manual_result(cells[0], cells[2]) {
         missing.push(format!(
@@ -83,6 +101,13 @@ fn has_vague_manual_result(label: &str, result: &str) -> bool {
     matches!(
         result.trim().to_ascii_lowercase().as_str(),
         "pass" | "ok" | "done"
+    )
+}
+
+fn has_placeholder_evidence(value: &str) -> bool {
+    matches!(
+        value.trim().to_ascii_lowercase().as_str(),
+        "tbd" | "todo" | "n/a" | "na" | "none" | "blocked" | "skipped"
     )
 }
 
