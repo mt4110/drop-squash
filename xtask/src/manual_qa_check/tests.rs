@@ -313,7 +313,8 @@ fn reports_incomplete_benchmark_results() {
 #[test]
 fn reports_incomplete_license_sandbox_results() {
     let (_directory, path) = write_manual_qa(
-        "| Sandbox purchase | Checkout completes | order completed |\n\
+        "| Sandbox product setup | Product exists | product ready |\n\
+| Sandbox purchase | Checkout completes | order completed |\n\
 | Empty key activation | Friendly validation error | empty message |\n\
 | Invalid key activation | Friendly license error; no raw key persisted | error shown |\n\
 | Valid sandbox activation | Pro state; raw key absent from cache | activated |\n\
@@ -321,6 +322,9 @@ fn reports_incomplete_license_sandbox_results() {
     );
     let missing = check_file(&path).unwrap();
 
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Sandbox product setup")));
     assert!(missing
         .iter()
         .any(|error| error.contains("Sandbox purchase")));
@@ -462,6 +466,8 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str(
                 "| Benchmark regression threshold | Passes | no sample exceeded 20% regression |\n",
             );
+        } else if check == "Sandbox product setup" {
+            text.push_str("| Sandbox product setup | Passes | DropSquash intended product confirmed and license keys enabled |\n");
         } else if check == "Sandbox purchase" {
             text.push_str("| Sandbox purchase | Passes | intended product checkout completed by test buyer order abc123 |\n");
         } else if check == "Empty key activation" {

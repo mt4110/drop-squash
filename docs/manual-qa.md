@@ -120,8 +120,8 @@ selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, and
 
 Record concrete results. The checker requires:
 
-- Sandbox purchase: mention the intended product, test buyer, and order.
 - Sandbox product setup: mention DropSquash, the intended product, and license keys enabled.
+- Sandbox purchase: mention the intended product, test buyer, and order.
 - Empty key activation: mention a friendly validation error and that `license.json` or the license cache has no raw key.
 - Invalid key activation: mention a friendly error and that `license.json` or the license cache has no raw key.
 - Valid sandbox activation: mention Pro state and that `license.json` or the license cache has no raw key.

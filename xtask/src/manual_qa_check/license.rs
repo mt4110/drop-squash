@@ -1,5 +1,11 @@
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
+        "Sandbox product setup" => require_all(
+            label,
+            result,
+            &["dropsquash", "intended product", "license keys enabled"],
+            missing,
+        ),
         "Sandbox purchase" => require_all(
             label,
             result,
