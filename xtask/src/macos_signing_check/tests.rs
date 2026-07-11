@@ -38,6 +38,37 @@ fn accepts_certificate_and_api_key_notarization() {
 }
 
 #[test]
+fn accepts_certificate_signing_in_ci() {
+    let env = env([
+        ("GITHUB_ACTIONS", "true"),
+        ("APPLE_CERTIFICATE", "base64"),
+        ("APPLE_CERTIFICATE_PASSWORD", "password"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+
+    assert!(check(&env).is_ok());
+}
+
+#[test]
+fn rejects_identity_only_signing_in_ci() {
+    let env = env([
+        ("GITHUB_ACTIONS", "true"),
+        (
+            "APPLE_SIGNING_IDENTITY",
+            "Developer ID Application: Example",
+        ),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("CI macOS signing requires"));
+}
+
+#[test]
 fn rejects_missing_notarization_group() {
     let env = env([("APPLE_SIGNING_IDENTITY", "Developer ID Application")]);
     let error = check(&env).unwrap_err();

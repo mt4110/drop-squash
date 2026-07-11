@@ -58,7 +58,9 @@ The preflight accepts either `APPLE_SIGNING_IDENTITY` or
 notarization it accepts either the App Store Connect API variables
 `APPLE_API_KEY`, `APPLE_API_ISSUER`, and `APPLE_API_KEY_PATH`, or the Apple ID
 variables `APPLE_ID`, `APPLE_PASSWORD`, and `APPLE_TEAM_ID`. Do not commit these
-values.
+values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
+`APPLE_CERTIFICATE_PASSWORD`; a local keychain identity name is not enough for a
+fresh runner.
 
 After packaged-app testing, require the manual QA record to be complete:
 

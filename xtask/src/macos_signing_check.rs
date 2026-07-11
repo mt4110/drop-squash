@@ -16,6 +16,14 @@ fn check(env: &BTreeMap<String, String>) -> Result<(), String> {
 }
 
 fn check_signing(env: &BTreeMap<String, String>) -> Result<(), String> {
+    if present(env, "GITHUB_ACTIONS") {
+        return require_pair(
+            env,
+            "APPLE_CERTIFICATE",
+            "APPLE_CERTIFICATE_PASSWORD",
+            "CI macOS signing requires APPLE_CERTIFICATE with password",
+        );
+    }
     if present(env, "APPLE_SIGNING_IDENTITY") {
         return Ok(());
     }

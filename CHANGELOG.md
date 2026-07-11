@@ -41,3 +41,4 @@
 - Configure the desktop bundle to produce a macOS DMG alongside the app bundle.
 - Add unsigned macOS DMG build, artifact check, and checksum steps to the tag release workflow.
 - Wire the release workflow to the macOS signing and notarization preflight.
+- Require certificate-based macOS signing credentials in GitHub Actions preflight.
