@@ -68,10 +68,14 @@ These checks still require a packaged macOS app or external service state:
 | Invalid license key handling | Requires packaged-app UI and local cache inspection after an invalid key |
 | License network failure | Requires packaged-app UI and local cache inspection after a failed activation request |
 | Local license forget | Requires packaged-app state and local cache inspection after forgetting the license |
+| Public website deployment | Requires the production website URL and public release pages |
 | Refund policy finalized | Requires the production refund policy URL before checkout goes live |
+| Live checkout link | Requires the live Lemon Squeezy checkout URL for the intended product |
 | Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state |
 | Notarized/stapled DMG verification | Requires the public DMG/app artifact and Apple notary/staple assessment |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |
+| Published checksum | Requires SHA256SUMS attached to the public GitHub Release |
+| Homebrew cask install | Requires the Homebrew tap PR and install evidence for the versioned artifact |
 
 Only `docs/manual-qa.md` should be used to record those manual results. Record
 the exact app artifact, input sample set, and output folder so the evidence can
