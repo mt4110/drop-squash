@@ -6,9 +6,9 @@ const SHA256: &str = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789
 fn renders_drop_squash_cask() {
     let input = Input::parse(vec![
         "0.1.0".to_string(),
-        "https://example.com/DropSquash.dmg".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
         SHA256.to_string(),
-        "https://example.com/dropsquash".to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
     ])
     .unwrap();
 
@@ -23,9 +23,9 @@ fn renders_drop_squash_cask() {
 fn rejects_non_https_url() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
-        "http://example.com/DropSquash.dmg".to_string(),
+        "http://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
         SHA256.to_string(),
-        "https://example.com/dropsquash".to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
     ])
     .err()
     .unwrap();
@@ -34,12 +34,26 @@ fn rejects_non_https_url() {
 }
 
 #[test]
-fn rejects_invalid_sha256() {
+fn rejects_example_dot_com_url() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
         "https://example.com/DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("example.com"));
+}
+
+#[test]
+fn rejects_invalid_sha256() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
         "abc".to_string(),
-        "https://example.com/dropsquash".to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
     ])
     .err()
     .unwrap();

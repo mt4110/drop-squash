@@ -91,9 +91,9 @@ Generate the Homebrew cask after the public release URL and checksum are known:
 
 ```sh
 cargo run -p xtask -- homebrew-cask 0.1.0 \
-  https://example.com/DropSquash.dmg \
-  SHA256_HEX \
-  https://example.com/dropsquash > packaging/homebrew/Casks/dropsquash.rb
+  "$DROPSQUASH_DMG_URL" \
+  "$DROPSQUASH_SHA256" \
+  https://github.com/mt4110/drop-squash > packaging/homebrew/Casks/dropsquash.rb
 ```
 
 Publish the checksum file with the GitHub Release after notarization succeeds.

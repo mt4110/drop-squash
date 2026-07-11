@@ -66,6 +66,9 @@ fn require_clean(label: &str, value: &str) -> Result<(), String> {
 
 fn require_https_url(url: &str) -> Result<(), String> {
     require_clean("url", url)?;
+    if url.contains("example.com") {
+        return Err("url must not contain example.com".to_string());
+    }
     if url.starts_with("https://") {
         return Ok(());
     }
