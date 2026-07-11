@@ -36,21 +36,33 @@ impl BenchmarkRow {
 }
 
 pub fn print(rows: &[BenchmarkRow]) {
-    println!(
-        "input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,throughput_mib_s"
+    print!("{}", csv(rows));
+}
+
+fn csv(rows: &[BenchmarkRow]) -> String {
+    let mut output = String::from(
+        "input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,throughput_mib_s\n",
     );
     for row in rows {
-        println!(
-            "{},{},{},{},{:.3},{:.3},{:.3}",
-            row.input,
-            row.output,
+        output.push_str(&format!(
+            "{},{},{},{},{:.3},{:.3},{:.3}\n",
+            csv_cell(&row.input),
+            csv_cell(&row.output),
             row.original_bytes,
             row.output_bytes,
             row.elapsed.as_secs_f64(),
             row.compression_ratio(),
             row.throughput_mib_s()
-        );
+        ));
     }
+    output
+}
+
+fn csv_cell(value: &str) -> String {
+    if !value.contains([',', '"', '\n']) {
+        return value.to_string();
+    }
+    format!("\"{}\"", value.replace('"', "\"\""))
 }
 
 fn ratio(numerator: u64, denominator: u64) -> f64 {
@@ -59,3 +71,6 @@ fn ratio(numerator: u64, denominator: u64) -> f64 {
     }
     numerator as f64 / denominator as f64
 }
+
+#[cfg(test)]
+mod tests;
