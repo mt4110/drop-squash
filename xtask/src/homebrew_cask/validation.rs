@@ -60,7 +60,10 @@ fn require_clean(label: &str, value: &str) -> Result<(), String> {
 }
 
 fn require_github_release_url(url: &str) -> Result<(), String> {
-    if has_github_release_asset(url, "https://github.com/mt4110/drop-squash/releases/download/") {
+    if has_github_release_asset(
+        url,
+        "https://github.com/mt4110/drop-squash/releases/download/",
+    ) {
         return Ok(());
     }
     Err("url must point to the DropSquash GitHub Release download".to_string())

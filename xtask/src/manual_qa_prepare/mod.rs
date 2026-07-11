@@ -78,7 +78,10 @@ fn sample_set_line(options: &Options) -> String {
 
 fn reset_trial_lines(options: &Options) -> Vec<String> {
     vec![
-        format!("trial state reset path: {}", options.app_state_dir.display()),
+        format!(
+            "trial state reset path: {}",
+            options.app_state_dir.display()
+        ),
         format!("trial state reset: {}", RESET_FILES.join(", ")),
     ]
 }

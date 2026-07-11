@@ -115,9 +115,9 @@ fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
     value.strip_prefix(prefix).is_some_and(|suffix| {
         suffix.starts_with('v')
             && suffix.chars().any(|value| value == '.')
-            && suffix.chars().all(|value| {
-                value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
-            })
+            && suffix
+                .chars()
+                .all(|value| value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_'))
     })
 }
 

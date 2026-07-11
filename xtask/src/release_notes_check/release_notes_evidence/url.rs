@@ -28,10 +28,9 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
         }
         Kind::Refund => has_refund_path(&lower) && !has_store_or_checkout(&lower),
         Kind::Checkout => lower.contains("lemonsqueezy.com") && has_checkout_buy_id(&lower),
-        Kind::GitHubRelease => has_release_tag_suffix(
-            value,
-            "https://github.com/mt4110/drop-squash/releases/tag/",
-        ),
+        Kind::GitHubRelease => {
+            has_release_tag_suffix(value, "https://github.com/mt4110/drop-squash/releases/tag/")
+        }
         Kind::HomebrewPullRequest => {
             has_numeric_suffix(value, "https://github.com/mt4110/homebrew-tap/pull/")
         }
@@ -67,9 +66,9 @@ fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
     value.strip_prefix(prefix).is_some_and(|suffix| {
         suffix.starts_with('v')
             && suffix.chars().any(|value| value == '.')
-            && suffix.chars().all(|value| {
-                value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
-            })
+            && suffix
+                .chars()
+                .all(|value| value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_'))
     })
 }
 

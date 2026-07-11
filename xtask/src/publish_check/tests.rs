@@ -7,10 +7,32 @@ use super::{
 fn accepts_all_verified_blockers() {
     let text = crate::release_check::required_blockers()
         .iter()
-        .map(|blocker| format!("| {blocker} | Verified | done | `docs/manual-qa.md` | docs |\n"))
+        .map(|blocker| {
+            format!(
+                "| {blocker} | Verified | done | {} | docs |\n",
+                reference(blocker)
+            )
+        })
         .collect::<String>();
 
     assert!(unverified_blockers(&text).is_empty());
+}
+
+#[test]
+fn rejects_verified_blockers_with_wrong_reference_kind() {
+    let text = "\
+| Signed DMG | Verified | done | `docs/manual-qa.md` | Release notes |
+| Public website deployment | Verified | done | `docs/manual-qa.md` | `https://...` |
+| Published checksum | Verified | done | `docs/manual-qa.md` | GitHub Release |
+| Homebrew cask install | Verified | done | `docs/manual-qa.md` | Homebrew tap PR |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Signed DMG"));
+    assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Published checksum"));
+    assert!(unverified.contains(&"Homebrew cask install"));
 }
 
 #[test]
@@ -105,4 +127,18 @@ fn publish_requires_valid_website() {
 
     assert!(error.contains("website must pass before publish"));
     assert!(error.contains("pricing.html"));
+}
+
+fn reference(blocker: &str) -> &'static str {
+    match blocker {
+        "Signed DMG" | "Notarized and stapled DMG" => "Release notes",
+        "Published checksum" => {
+            "GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
+        }
+        "Homebrew cask install" => "Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1",
+        "Public website deployment" => "https://dropsquash.app/release-status",
+        "Refund policy finalized" => "https://dropsquash.app/refund",
+        "Live checkout link" => "https://store.lemonsqueezy.com/checkout/buy/abc123",
+        _ => "`docs/manual-qa.md`",
+    }
 }

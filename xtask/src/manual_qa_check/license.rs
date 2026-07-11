@@ -24,7 +24,14 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         "License network failure" => require_license_cache_evidence(
             label,
             result,
-            &["friendly", "network", "existing", "valid", "preserved", "raw key"],
+            &[
+                "friendly",
+                "network",
+                "existing",
+                "valid",
+                "preserved",
+                "raw key",
+            ],
             missing,
         ),
         "Forget license on this Mac" => require_any_state(result, missing),

@@ -144,9 +144,8 @@ fn reports_empty_three_column_results() {
 
 #[test]
 fn reports_rows_with_unexpected_column_count() {
-    let (_directory, path) = write_manual_qa(
-        "| Release gate | Passes | evidence before | evidence after | extra |\n",
-    );
+    let (_directory, path) =
+        write_manual_qa("| Release gate | Passes | evidence before | evidence after | extra |\n");
     let missing = check_file(&path).unwrap();
 
     assert!(missing
@@ -387,9 +386,7 @@ fn reports_forget_license_without_cache_removal() {
     );
     let missing = check_file(&path).unwrap();
 
-    assert!(missing
-        .iter()
-        .any(|error| error.contains("cache removal")));
+    assert!(missing.iter().any(|error| error.contains("cache removal")));
 }
 
 #[test]

@@ -15,7 +15,8 @@ fn reports_blocked_manual_blocker_with_complete_manual_evidence() {
 fn ignores_blocked_manual_blocker_without_complete_manual_evidence() {
     let blockers =
         "| Valid sandbox activation | Blocked | raw key is absent | TBD | `docs/manual-qa.md` |\n";
-    let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Pro reached |\n";
+    let manual =
+        "| Valid sandbox activation | Pro state; raw key absent from cache | Pro reached |\n";
 
     assert!(manual_evidence_left_blocked(blockers, manual).is_empty());
 }

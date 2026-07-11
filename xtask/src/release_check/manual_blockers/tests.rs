@@ -80,7 +80,8 @@ fn reports_verified_invalid_key_blocker_without_manual_result() {
 #[test]
 fn reports_verified_empty_key_blocker_without_cache_evidence() {
     let blockers = "| Empty key activation | Verified | Friendly validation error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| Empty key activation | Friendly validation error | friendly validation shown |\n";
+    let manual =
+        "| Empty key activation | Friendly validation error | friendly validation shown |\n";
 
     let missing = missing_manual_verified_evidence(blockers, manual);
 
@@ -98,7 +99,8 @@ fn accepts_verified_empty_key_blocker_with_cache_evidence() {
 #[test]
 fn reports_verified_network_failure_without_preserved_cache() {
     let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| License network failure | Friendly network error | friendly network error shown |\n";
+    let manual =
+        "| License network failure | Friendly network error | friendly network error shown |\n";
 
     let missing = missing_manual_verified_evidence(blockers, manual);
 

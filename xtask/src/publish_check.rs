@@ -1,5 +1,7 @@
 use std::path::{Path, PathBuf};
 
+mod evidence;
+
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes = args
         .first()
@@ -59,20 +61,8 @@ fn is_verified(text: &str, blocker: &str) -> bool {
             && cells.get(1) == Some(&"Verified")
             && cells
                 .get(3)
-                .is_some_and(|reference| has_publish_evidence(reference))
+                .is_some_and(|reference| evidence::matches(blocker, reference))
     })
-}
-
-fn has_publish_evidence(reference: &str) -> bool {
-    let reference = reference.trim().trim_matches('`');
-    if matches!(reference, "" | "TBD") {
-        return false;
-    }
-    reference.starts_with("docs/")
-        || reference.starts_with("https://")
-        || reference == "Release notes"
-        || reference.starts_with("GitHub Release https://")
-        || reference.starts_with("Homebrew tap PR https://")
 }
 
 fn unverified_blockers_error(blockers: &[&str]) -> String {
