@@ -61,6 +61,7 @@ pub fn run() -> Result<(), String> {
     require_text("docs/product.md", "Windows and Linux support is planned")?;
     require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
     require_text("docs/qa-evidence.md", "license, refund, support copy")?;
+    require_text("docs/qa-evidence.md", "file names")?;
     require_text("docs/qa-evidence.md", "non-DMG targets are rejected")?;
     require_text("docs/qa-evidence.md", "UDIF trailer")?;
     require_text("docs/qa-evidence.md", "non-canonical homepages")?;

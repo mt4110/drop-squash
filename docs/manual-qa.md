@@ -63,7 +63,7 @@ rm -f "$HOME/Library/Application Support/DropSquash/license.json"
 |---|---|---|---|
 | Choose recording conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |
 | Drag-and-drop conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |
-| Privacy receipt sidecar | Successful conversion | Creates matching `.privacy.json` with `uploaded_bytes = 0` and `metadata_policy = preserve` |  |
+| Privacy receipt sidecar | Successful conversion | Creates matching `.privacy.json` with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve` |  |
 | Reveal privacy receipt | Successful conversion with receipts enabled | Finder opens with generated `.privacy.json` selected |  |
 | Duplicate output naming | Same recording twice | Second output uses numbered suffix |  |
 | Cancellation | Large recording | App returns to ready; no success history; no trial count |  |

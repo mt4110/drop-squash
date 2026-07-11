@@ -27,6 +27,12 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     require_page_text(
         root,
         "privacy.html",
+        "file names instead of absolute paths",
+        errors,
+    );
+    require_page_text(
+        root,
+        "privacy.html",
         "License activation contacts Lemon Squeezy",
         errors,
     );

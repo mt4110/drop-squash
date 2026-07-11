@@ -7,12 +7,26 @@ use crate::MetadataPolicy;
 
 #[test]
 fn receipt_records_local_only_without_metadata_overclaim() {
-    let result = encode_result("input.mov", "output.mp4");
+    let result = encode_result("/private/source/input.mov", "/tmp/out/output.mp4");
 
     let receipt = PrivacyReceipt::from(&result);
 
+    assert_eq!(receipt.input_name, "input.mov");
+    assert_eq!(receipt.output_name, "output.mp4");
     assert_eq!(receipt.uploaded_bytes, 0);
     assert_eq!(receipt.metadata_policy, MetadataPolicy::Preserve);
+}
+
+#[test]
+fn receipt_json_omits_absolute_paths() {
+    let result = encode_result("/Users/me/Secret/input.mov", "/tmp/out/output.mp4");
+    let receipt = PrivacyReceipt::from(&result);
+    let json = serde_json::to_string(&receipt).unwrap();
+
+    assert!(json.contains("\"input_name\":\"input.mov\""));
+    assert!(json.contains("\"output_name\":\"output.mp4\""));
+    assert!(!json.contains("/Users/me/Secret"));
+    assert!(!json.contains("/tmp/out"));
 }
 
 #[test]

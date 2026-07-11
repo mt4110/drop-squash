@@ -199,7 +199,7 @@ fn required_page_text(page: &str) -> &'static str {
             "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count"
         }
         "privacy.html" => {
-            "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 License activation contacts Lemon Squeezy"
+            "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 file names instead of absolute paths License activation contacts Lemon Squeezy"
         }
         "support.html" => {
             "FAQ What is a privacy receipt? Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version"
