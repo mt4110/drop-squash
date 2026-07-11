@@ -65,4 +65,4 @@ weak public evidence before the release is published.
 - Local license forget: mention cache removal and trial or locked state.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, `DropSquash.dmg`, and that it is attached.
 - Homebrew tap PR: mention the cask and PR.
-- Homebrew install result: mention `brew install` and `dropsquash`.
+- Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash`.
