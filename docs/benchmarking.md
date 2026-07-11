@@ -11,7 +11,8 @@ nix develop --command cargo run -p xtask -- benchmark \
   --input ~/Movies/sample-b.mp4 \
   --output-dir /tmp/dropsquash-bench \
   --profile auto \
-  --size auto
+  --size auto \
+  > /tmp/dropsquash-bench/results.csv
 ```
 
 The command prints CSV to stdout:
