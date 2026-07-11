@@ -22,9 +22,13 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             &["accepted"],
             &["dropsquash.dmg"],
         ]),
-        "Gatekeeper clean-machine open" => {
-            Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])
-        }
+        "Gatekeeper clean-machine open" => Some(&[
+            &["gatekeeper"],
+            &["opened", "opens"],
+            &["clean", "fresh"],
+            &["signed"],
+            &["notarized", "notarised"],
+        ]),
         "`docs/release-blockers.md` status" => {
             Some(&[&["docs/release-blockers.md"], &["verified"], &["all rows"]])
         }
