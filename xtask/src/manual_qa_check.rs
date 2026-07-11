@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+mod app;
 mod benchmark;
 mod license;
 mod requirements;

@@ -252,6 +252,22 @@ fn reports_incomplete_license_sandbox_results() {
         .any(|error| error.contains("Forget license on this Mac")));
 }
 
+#[test]
+fn reports_incomplete_packaged_app_results() {
+    let (_directory, path) = write_manual_qa(
+        "| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\
+| Cancellation | Large recording | App returns ready | stopped |\n\
+| Reveal output | Completed output link | Finder opens | opened |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Choose recording conversion")));
+    assert!(missing.iter().any(|error| error.contains("Cancellation")));
+    assert!(missing.iter().any(|error| error.contains("Reveal output")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -291,6 +307,42 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Valid sandbox activation | Passes | Pro state reached and raw key absent from license.json cache |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | license cache cleared and app returned to trial state |\n");
+        } else if check == "Choose recording conversion" {
+            text.push_str("| Choose recording conversion | Passes | saved clip.squashed.mp4 and original remained in place |\n");
+        } else if check == "Drag-and-drop conversion" {
+            text.push_str("| Drag-and-drop conversion | Passes | saved drag.squashed.mp4 and original remained in place |\n");
+        } else if check == "Privacy receipt sidecar" {
+            text.push_str("| Privacy receipt sidecar | Passes | clip.privacy.json recorded uploaded_bytes = 0 and metadata_policy = preserve |\n");
+        } else if check == "Reveal privacy receipt" {
+            text.push_str("| Reveal privacy receipt | Passes | Finder opened with clip.privacy.json selected |\n");
+        } else if check == "Duplicate output naming" {
+            text.push_str("| Duplicate output naming | Passes | second output used numbered clip.squashed-2.mp4 suffix |\n");
+        } else if check == "Cancellation" {
+            text.push_str("| Cancellation | Passes | app returned ready and trial history showed no new success |\n");
+        } else if check == "Multi-file queue" {
+            text.push_str("| Multi-file queue | Passes | three recordings queued with one active sequential conversion |\n");
+        } else if check == "Queued job cancellation" {
+            text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started |\n");
+        } else if check == "Batch summary" {
+            text.push_str(
+                "| Batch summary | Passes | summary showed finished count and saved bytes |\n",
+            );
+        } else if check == "Ask source policy" {
+            text.push_str(
+                "| Ask source policy | Passes | Ask prompt let tester choose Trash or Keep |\n",
+            );
+        } else if check == "Trash source policy" {
+            text.push_str("| Trash source policy | Passes | original moved to Trash only after verified smaller output |\n");
+        } else if check == "Failed conversion" {
+            text.push_str("| Failed conversion | Passes | original remained and trial count unchanged after failure |\n");
+        } else if check == "Larger output" {
+            text.push_str(
+                "| Larger output | Passes | larger result failed and trial count unchanged |\n",
+            );
+        } else if check == "Reveal output" {
+            text.push_str(
+                "| Reveal output | Passes | Finder opened with clip.squashed.mp4 selected |\n",
+            );
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"

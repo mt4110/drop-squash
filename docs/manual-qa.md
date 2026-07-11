@@ -70,6 +70,11 @@ cargo run -p xtask -- manual-qa-prepare --restore-state
 | Tester |  |
 | Date |  |
 
+Packaged-app results must include the concrete thing observed, not only that
+the row passed. Use output file names such as `.squashed.mp4`, Finder selection
+targets, queue counts, trial/history observations, or Trash/source state as
+appropriate for the row.
+
 | Check | Input | Expected | Result |
 |---|---|---|---|
 | Choose recording conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |
