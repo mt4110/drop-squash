@@ -75,6 +75,7 @@ fn has_release_status_path(lower: &str) -> bool {
 fn is_live_checkout(reference: &str) -> bool {
     let lower = reference.to_ascii_lowercase();
     reference.starts_with("https://")
+        && has_no_whitespace(reference)
         && lower.contains("lemonsqueezy.com")
         && lower.contains("/checkout/buy/")
 }
@@ -115,6 +116,10 @@ fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
                 value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
             })
     })
+}
+
+fn has_no_whitespace(value: &str) -> bool {
+    !value.chars().any(char::is_whitespace)
 }
 
 #[cfg(test)]

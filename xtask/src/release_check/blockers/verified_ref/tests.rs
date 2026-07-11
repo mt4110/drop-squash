@@ -94,6 +94,15 @@ fn reports_live_checkout_without_buy_reference() {
 }
 
 #[test]
+fn reports_live_checkout_reference_with_inline_note() {
+    let text = "| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout/buy/example TBD | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_distribution_references_without_urls() {
     let text = "\
 | Published checksum | Verified | SHA-256 attached | GitHub Release | GitHub Release |
