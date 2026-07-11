@@ -33,7 +33,7 @@ import {
   markSucceeded,
   nextQueued,
 } from "./lib/queue";
-import { savedConfigWith } from "./lib/settings";
+import { savedConfigFromState } from "./lib/settings";
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
@@ -45,8 +45,13 @@ export function App() {
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
   const [queue, setQueue] = useState<QueueEntry[]>([]);
+  const stateRef = useRef<DropZoneState>(initialState);
   const activeQueueId = useRef<number>();
   const nextQueueId = useRef(1);
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   const refreshState = useCallback(async () => {
     if (!isTauri()) {
@@ -68,6 +73,13 @@ export function App() {
       setError(String(reason));
     }
   }, []);
+
+  const updateConfig = useCallback((patch: Partial<SavedConfig>) => {
+    const nextState = { ...stateRef.current, ...patch };
+    stateRef.current = nextState;
+    setState(nextState);
+    void persistSettings(savedConfigFromState(nextState));
+  }, [persistSettings]);
 
   const enqueueInputs = useCallback((inputPaths: string[]) => {
     if (!isTauri() || state.isLocked) {
@@ -178,30 +190,25 @@ export function App() {
       title: "Choose an output folder",
     });
     if (typeof outputDir === "string") {
-      setState((current) => ({ ...current, outputDir }));
-      await persistSettings(savedConfigWith(state, { outputDir }));
+      updateConfig({ outputDir });
     }
-  }, [persistSettings, state]);
+  }, [state.outputDir, updateConfig]);
 
   const changeProfile = useCallback((profile: Profile) => {
-    setState((current) => ({ ...current, profile }));
-    void persistSettings(savedConfigWith(state, { profile }));
-  }, [persistSettings, state]);
+    updateConfig({ profile });
+  }, [updateConfig]);
 
   const changeOutputSize = useCallback((outputSize: OutputSize) => {
-    setState((current) => ({ ...current, outputSize }));
-    void persistSettings(savedConfigWith(state, { outputSize }));
-  }, [persistSettings, state]);
+    updateConfig({ outputSize });
+  }, [updateConfig]);
 
   const changeSourcePolicy = useCallback((sourcePolicy: SourcePolicy) => {
-    setState((current) => ({ ...current, sourcePolicy }));
-    void persistSettings(savedConfigWith(state, { sourcePolicy }));
-  }, [persistSettings, state]);
+    updateConfig({ sourcePolicy });
+  }, [updateConfig]);
 
   const changeWritePrivacyReceipt = useCallback((writePrivacyReceipt: boolean) => {
-    setState((current) => ({ ...current, writePrivacyReceipt }));
-    void persistSettings(savedConfigWith(state, { writePrivacyReceipt }));
-  }, [persistSettings, state]);
+    updateConfig({ writePrivacyReceipt });
+  }, [updateConfig]);
 
   const revealOutput = useCallback(async (outputPath: string) => {
     if (!isTauri()) {
