@@ -55,6 +55,7 @@ cargo run -p xtask -- manual-qa-check
 | `cargo run -p xtask -- media-policy-check` | Passes |  |
 | `cargo run -p xtask -- privacy-policy-check` | Passes |  |
 | `cargo run -p xtask -- website-check` | Passes |  |
+| `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes |  |
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |

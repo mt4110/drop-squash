@@ -1,24 +1,10 @@
-use super::check_file;
+use super::{check_file, REQUIRED_CHECKS, REQUIRED_FIELDS};
 
 #[test]
 fn accepts_complete_manual_qa_tables() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
-    std::fs::write(
-        &path,
-        r#"
-| Field | Value |
-|---|---|
-| App build | 0.1.0 |
-| Check | Input | Expected | Result |
-|---|---|---|---|
-| Convert | sample.mov | Smaller output | Pass |
-| Check | Expected | Result |
-|---|---|---|
-| Release gate | Passes | Pass |
-"#,
-    )
-    .unwrap();
+    std::fs::write(&path, complete_manual_qa()).unwrap();
 
     assert!(check_file(&path).unwrap().is_empty());
 }
@@ -28,7 +14,7 @@ fn reports_empty_environment_fields() {
     let (_directory, path) = write_manual_qa("| App build |  |\n");
     let missing = check_file(&path).unwrap();
 
-    assert_eq!(missing, vec!["manual QA field is empty: App build"]);
+    assert!(missing.contains(&"manual QA field is empty: App build".to_string()));
 }
 
 #[test]
@@ -36,7 +22,7 @@ fn reports_empty_four_column_results() {
     let (_directory, path) = write_manual_qa("| Convert | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
 
-    assert_eq!(missing, vec!["manual QA result is empty: Convert"]);
+    assert!(missing.contains(&"manual QA result is empty: Convert".to_string()));
 }
 
 #[test]
@@ -44,7 +30,15 @@ fn reports_empty_three_column_results() {
     let (_directory, path) = write_manual_qa("| Release gate | Passes |  |\n");
     let missing = check_file(&path).unwrap();
 
-    assert_eq!(missing, vec!["manual QA result is empty: Release gate"]);
+    assert!(missing.contains(&"manual QA result is empty: Release gate".to_string()));
+}
+
+#[test]
+fn reports_missing_required_checks() {
+    let (_directory, path) = write_manual_qa("| App build | 0.1.0 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA check is missing: Cancellation".to_string()));
 }
 
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
@@ -52,4 +46,16 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let path = directory.path().join("manual-qa.md");
     std::fs::write(&path, text).unwrap();
     (directory, path)
+}
+
+fn complete_manual_qa() -> String {
+    let mut text = String::from("| Field | Value |\n|---|---|\n");
+    for field in REQUIRED_FIELDS {
+        text.push_str(&format!("| {field} | Pass |\n"));
+    }
+    text.push_str("| Check | Expected | Result |\n|---|---|---|\n");
+    for check in REQUIRED_CHECKS {
+        text.push_str(&format!("| {check} | Passes | Pass |\n"));
+    }
+    text
 }
