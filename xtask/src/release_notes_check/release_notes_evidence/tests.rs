@@ -18,7 +18,7 @@ fn accepts_concrete_production_urls() {
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
 - Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
 - Benchmark regression threshold: no sample exceeded 20 percent regression
-- Lemon Squeezy sandbox purchase: test buyer order abc123 completed
+- Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
 - Lemon Squeezy sandbox activation: Pro state reached and raw key absent from cache
 - Empty key activation: friendly validation shown and raw key absent from cache
 - Invalid license key handling: friendly error shown and raw key absent from cache
@@ -221,6 +221,19 @@ fn rejects_missing_or_generic_release_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Local license forget")));
+}
+
+#[test]
+fn rejects_sandbox_purchase_without_intended_product() {
+    let errors = check_text(
+        r#"
+- Lemon Squeezy sandbox purchase: test buyer order abc123 completed
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
 }
 
 #[test]

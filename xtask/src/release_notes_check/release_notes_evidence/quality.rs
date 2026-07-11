@@ -19,7 +19,9 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         }
         "`docs/release-blockers.md` status" => Some(&[&["verified"], &["all rows"]]),
         "Manual QA record" => Some(&[&["docs/manual-qa.md"], &["dropsquash.dmg", ".app"]]),
-        "Lemon Squeezy sandbox purchase" => Some(&[&["test buyer"], &["order"]]),
+        "Lemon Squeezy sandbox purchase" => {
+            Some(&[&["intended product"], &["test buyer"], &["order"]])
+        }
         "Lemon Squeezy sandbox activation" => Some(&[&["pro"], &["raw key"], &["cache"]]),
         "Empty key activation" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
         "Invalid license key handling" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
