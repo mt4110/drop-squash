@@ -1,5 +1,6 @@
 mod args;
 mod report;
+mod validate;
 
 use std::fs;
 use std::time::Instant;
@@ -46,6 +47,7 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
             })
             .await
             .map_err(|error| error.to_string())?;
+        validate::result(&result)?;
         rows.push(BenchmarkRow::from_result(result, started.elapsed()));
     }
     report::print(&rows);
