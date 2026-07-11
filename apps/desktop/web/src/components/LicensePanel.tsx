@@ -36,7 +36,7 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
   }
 
   return (
-    <section className="license" aria-label="License">
+    <section className="license" aria-busy={isSubmitting} aria-label="License">
       {isPro ? (
         <button
           disabled={isSubmitting}
@@ -44,7 +44,7 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
           type="button"
           onClick={() => void forget()}
         >
-          Forget license on this Mac
+          {isSubmitting ? "Forgetting..." : "Forget license on this Mac"}
         </button>
       ) : (
         <form onSubmit={(event) => void submit(event)}>
@@ -54,6 +54,7 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
             autoComplete="off"
             autoCorrect="off"
             disabled={isSubmitting}
+            name="license-key"
             placeholder="License key"
             spellCheck={false}
             type="password"
