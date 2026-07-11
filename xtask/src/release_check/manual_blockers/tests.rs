@@ -40,6 +40,27 @@ fn reports_verified_manual_blocker_with_vague_result() {
 }
 
 #[test]
+fn reports_verified_invalid_key_blocker_without_manual_result() {
+    let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Invalid key activation | Friendly license error; no raw key persisted |  |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Invalid license key handling"));
+}
+
+#[test]
+fn reports_verified_local_forget_blocker_without_manual_result() {
+    let blockers = "| Local license forget | Verified | Local cache removed | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual =
+        "| Forget license on this Mac | Local cache clears; app returns to trial or locked state | TBD |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Local license forget"));
+}
+
+#[test]
 fn reports_incomplete_packaged_macos_manual_qa() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Choose recording conversion | Small recording | Creates smaller MP4 | Concrete file output |\n";
