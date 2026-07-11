@@ -13,8 +13,11 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const key = licenseKey.trim();
+    if (key.length === 0) {
+      return;
+    }
     setIsSubmitting(true);
-    const key = licenseKey;
     setLicenseKey("");
     try {
       await onActivate(key);

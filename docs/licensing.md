@@ -26,6 +26,8 @@ The trimmed raw license key is sent to Lemon Squeezy only when the user
 activates a license in the current desktop flow. It is not persisted in the
 config, history, or license cache, and license error messages redact echoed raw
 keys before they reach the UI.
+The desktop activation form is available during Trial and Locked states, trims
+the submitted key, and clears the input before the activation request resolves.
 
 The Lemon Squeezy provider supports validation and deactivation requests when a
 raw key is supplied. The desktop app deliberately does not retain that key, so
