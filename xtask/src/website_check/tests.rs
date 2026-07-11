@@ -325,9 +325,9 @@ fn required_page_text(page: &str) -> &'static str {
         "release-status/index.html" => {
             "Paid beta is not public yet signed and notarized docs/release-blockers.md Evidence reference"
         }
-        "download.html" => "macOS beta DropSquash.dmg notarization checksum",
+        "download.html" => "macOS beta DropSquash.dmg notarization checksum release-status/",
         "pricing.html" => {
-            "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count License policy"
+            "Checkout opens after signed beta release release-status/ 10 successful conversions are free Failed or cancelled conversions do not count License policy"
         }
         "privacy.html" => {
             "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 metadata_policy = preserve file names instead of absolute paths License activation contacts Lemon Squeezy"
