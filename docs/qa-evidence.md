@@ -22,7 +22,7 @@ Public paid beta blockers and their evidence references are tracked in
 | CLI license status | CLI reports local trial/license state without a raw key or network call | `cargo test -p dropsquash license && cargo run -p dropsquash -- license status --history /tmp/dropsquash-empty-history.jsonl` |
 | License cache safety | Raw key persistence, Pro identity requirements, temp-file cache writes, error redaction, trimmed activation, and failed activation partial writes are tested | `cargo test -p dropsquash-license && cargo test -p dropsquash-desktop license` |
 | Source movement safety | Postprocess gates and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
-| Queue order | Sequential queue state transitions are tested; trial-lock queue blocking is type-checked in the web UI | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
+| Queue order | Sequential queue state transitions and trial-lock pending-job blocking are tested | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
 | Cancellation token path | File stability and desktop active-conversion cancellation are tested | `cargo test -p dropsquash-fileguard && cargo test -p dropsquash-desktop state` |
 | Unsupported OS backends | Windows/Linux placeholders report unavailable and reject encode instead of falling back | `cargo test -p dropsquash-encoder unimplemented_platform_backends` |
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
