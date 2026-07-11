@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 56] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 59] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -11,6 +11,15 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 56] = [
     (
         "docs/productization.md",
         "conversion/queue/Trash/license action-state release notes evidence",
+    ),
+    (
+        "docs/productization.md",
+        "same-DMG manual QA signing evidence",
+    ),
+    ("docs/productization.md", "Gatekeeper no-warning evidence"),
+    (
+        "docs/productization.md",
+        "release-notes URL reference matching",
     ),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
