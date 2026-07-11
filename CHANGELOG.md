@@ -28,3 +28,4 @@
 - Add an `xtask file-size-check` command and CI gate for the repository file-size rules.
 - Strengthen release readiness checks for media process and production CSP safety gates.
 - Rename the desktop license removal affordance to clarify that it forgets the local cache only.
+- Add a manual QA checklist for packaged macOS, license sandbox, and release-candidate verification.
