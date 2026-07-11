@@ -74,7 +74,7 @@ fn requirement_for(label: &str) -> Option<Requirement> {
         }
         "`cargo run -p xtask -- website-check`" => &[&["website-check"], &["passed", "passes"]],
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
-            &[&["artifact-check"], &["dropsquash.dmg", ".dmg"]]
+            &[&["artifact-check"], &["passed", "passes"], &["dropsquash.dmg", ".dmg"]]
         }
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
             &[&["sha-256", "sha256"], &["dropsquash.dmg", ".dmg"]]
@@ -85,7 +85,9 @@ fn requirement_for(label: &str) -> Option<Requirement> {
         "`cargo run -p xtask -- manual-qa-check`" => {
             &[&["manual-qa-check"], &["passed", "passes"]]
         }
-        "`cargo run -p xtask -- macos-signing-check`" => &[&["macos-signing-check"]],
+        "`cargo run -p xtask -- macos-signing-check`" => {
+            &[&["macos-signing-check"], &["passed", "passes"], &["release environment"]]
+        }
         "Codesign verification" => &[&["codesign"], &["developer id"]],
         "Notarization staple verification" => &[&["notary", "notarization"], &["staple", "spctl"]],
         "Gatekeeper open test" => &[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]],

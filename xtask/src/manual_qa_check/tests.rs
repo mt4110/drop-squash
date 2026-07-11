@@ -507,6 +507,20 @@ fn reports_command_result_without_command_evidence() {
     assert!(!missing.iter().any(|error| error.contains("website-check")));
 }
 
+#[test]
+fn reports_release_artifact_commands_without_pass_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check DropSquash.dmg |\n\
+| `cargo run -p xtask -- macos-signing-check` | Passes | macos-signing-check release environment |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("artifact-check")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("macos-signing-check")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
