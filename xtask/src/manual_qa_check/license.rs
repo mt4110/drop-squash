@@ -3,6 +3,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         "Sandbox purchase" => {
             require_all(label, result, &["intended product", "test buyer"], missing)
         }
+        "Empty key activation" => require_all(label, result, &["friendly", "raw key"], missing),
         "Invalid key activation" => require_all(label, result, &["friendly", "raw key"], missing),
         "Valid sandbox activation" => require_all(label, result, &["pro", "raw key"], missing),
         "Forget license on this Mac" => require_any_state(result, missing),

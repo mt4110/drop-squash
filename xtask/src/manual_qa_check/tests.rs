@@ -228,6 +228,7 @@ fn reports_incomplete_benchmark_results() {
 fn reports_incomplete_license_sandbox_results() {
     let (_directory, path) = write_manual_qa(
         "| Sandbox purchase | Checkout completes | order completed |\n\
+| Empty key activation | Friendly validation error | empty message |\n\
 | Invalid key activation | Friendly license error; no raw key persisted | error shown |\n\
 | Valid sandbox activation | Pro state; raw key absent from cache | activated |\n\
 | Forget license on this Mac | Local cache clears; app returns to trial or locked state | forgotten |\n",
@@ -237,6 +238,9 @@ fn reports_incomplete_license_sandbox_results() {
     assert!(missing
         .iter()
         .any(|error| error.contains("Sandbox purchase")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Empty key activation")));
     assert!(missing
         .iter()
         .any(|error| error.contains("Invalid key activation")));
@@ -279,6 +283,8 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             );
         } else if check == "Sandbox purchase" {
             text.push_str("| Sandbox purchase | Passes | intended product checkout completed by test buyer order abc123 |\n");
+        } else if check == "Empty key activation" {
+            text.push_str("| Empty key activation | Passes | friendly validation shown and no raw key persisted |\n");
         } else if check == "Invalid key activation" {
             text.push_str("| Invalid key activation | Passes | friendly error shown and no raw key persisted |\n");
         } else if check == "Valid sandbox activation" {
