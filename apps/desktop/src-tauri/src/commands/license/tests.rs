@@ -8,6 +8,7 @@ use super::{activate_license, forget_license_at_path, write_activation_cache};
 struct FakeProvider {
     fail: bool,
     expected_key: Option<&'static str>,
+    expected_instance_name: Option<&'static str>,
     valid: bool,
 }
 
@@ -16,6 +17,9 @@ impl LicenseProvider for FakeProvider {
     async fn activate(&self, license_key: &str, instance_id: &str) -> Result<LicenseActivation> {
         if let Some(expected_key) = self.expected_key {
             assert_eq!(license_key, expected_key);
+        }
+        if let Some(expected_instance_name) = self.expected_instance_name {
+            assert_eq!(instance_id, expected_instance_name);
         }
         if self.fail {
             return Err(AppError::License("activation failed".to_string()));
@@ -54,6 +58,7 @@ async fn activation_failure_does_not_write_partial_cache() {
         &FakeProvider {
             fail: true,
             expected_key: None,
+            expected_instance_name: None,
             valid: false,
         },
         100,
@@ -85,6 +90,7 @@ async fn activation_failure_preserves_existing_cache() {
         &FakeProvider {
             fail: true,
             expected_key: Some("LS-NEW-KEY"),
+            expected_instance_name: None,
             valid: false,
         },
         100,
@@ -106,6 +112,7 @@ async fn activation_success_writes_fingerprint_without_raw_key() {
         &FakeProvider {
             fail: false,
             expected_key: None,
+            expected_instance_name: None,
             valid: true,
         },
         100,
@@ -132,6 +139,7 @@ async fn invalid_activation_does_not_write_cache() {
         &FakeProvider {
             fail: false,
             expected_key: None,
+            expected_instance_name: None,
             valid: false,
         },
         100,
@@ -153,6 +161,33 @@ async fn activation_trims_license_key_before_provider_call() {
         &FakeProvider {
             fail: false,
             expected_key: Some("LS-SECRET-RAW-KEY"),
+            expected_instance_name: None,
+            valid: true,
+        },
+        100,
+    )
+    .await
+    .unwrap();
+}
+
+#[tokio::test]
+async fn activation_reuses_existing_instance_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    LicenseCache {
+        instance_name: Some("device-1".to_string()),
+        ..LicenseCache::default()
+    }
+    .save_to_path(&path)
+    .unwrap();
+
+    write_activation_cache(
+        "LS-SECRET-RAW-KEY",
+        &path,
+        &FakeProvider {
+            fail: false,
+            expected_key: None,
+            expected_instance_name: Some("device-1"),
             valid: true,
         },
         100,
