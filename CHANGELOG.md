@@ -25,3 +25,4 @@
 - Add an `xtask artifact-check` command to reject release artifacts containing `/nix/store` references.
 - Add an `xtask homebrew-cask` command to generate the desktop cask from release metadata.
 - Align README and development docs with the current AVFoundation MVP and Nix-first tooling policy.
+- Add an `xtask file-size-check` command and CI gate for the repository file-size rules.

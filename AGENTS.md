@@ -25,6 +25,7 @@
 - When a file would exceed its limit, split by responsibility before adding more code.
 - Prefer small modules with clear ownership over broad utility files.
 - Do not hide complexity by creating vague helpers, catch-all modules, or arbitrary constants.
+- Run `cargo run -p xtask -- file-size-check` before committing code changes.
 
 ## Architecture Rules
 

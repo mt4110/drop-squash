@@ -6,6 +6,7 @@ Before opening a change, run:
 
 ```bash
 cargo fmt --all
+cargo run -p xtask -- file-size-check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 nix flake check --no-build --all-systems
