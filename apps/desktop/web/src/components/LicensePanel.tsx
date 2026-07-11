@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { FormEvent } from "react";
 
 type LicensePanelProps = {
   isPro: boolean;
@@ -10,7 +11,8 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
   const [licenseKey, setLicenseKey] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function submit() {
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setIsSubmitting(true);
     const key = licenseKey;
     setLicenseKey("");
@@ -42,7 +44,7 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
           Forget license on this Mac
         </button>
       ) : (
-        <>
+        <form onSubmit={(event) => void submit(event)}>
           <input
             aria-label="License key"
             autoComplete="off"
@@ -51,10 +53,10 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
             value={licenseKey}
             onChange={(event) => setLicenseKey(event.target.value)}
           />
-          <button disabled={isSubmitting || licenseKey.trim().length === 0} type="button" onClick={() => void submit()}>
+          <button disabled={isSubmitting || licenseKey.trim().length === 0} type="submit">
             Activate
           </button>
-        </>
+        </form>
       )}
     </section>
   );

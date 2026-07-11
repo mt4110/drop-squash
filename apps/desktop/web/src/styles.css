@@ -177,6 +177,13 @@ body,
   margin: 0 0 8px;
 }
 
+.license form {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+
 .license input {
   background: #ffffff;
   border: 1px solid #d2d2d7;
