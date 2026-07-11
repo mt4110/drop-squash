@@ -58,13 +58,8 @@ fn reports_verified_rows_without_evidence_reference() {
 
 #[test]
 fn accepts_verified_rows_with_traceable_evidence_reference() {
-    let text = REQUIRED_BLOCKERS
-        .iter()
-        .map(|blocker| {
-            format!("| {blocker} | Verified | Evidence required | `docs/manual-qa.md` | docs |\n")
-        })
-        .collect::<String>();
-    let unproven = unproven_verified_rows(&text);
+    let text = "| Signed DMG | Verified | codesign output | Release notes | Release notes |\n";
+    let unproven = unproven_verified_rows(text);
 
     assert!(unproven.is_empty());
 }

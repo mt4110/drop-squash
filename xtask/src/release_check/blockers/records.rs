@@ -26,5 +26,19 @@ pub(super) fn misplaced_record_targets(text: &str) -> Vec<&'static str> {
         .collect()
 }
 
+pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) -> bool {
+    let Some((_, target)) = EXPECTED_RECORD_TARGETS
+        .iter()
+        .find(|(candidate, _)| *candidate == blocker)
+    else {
+        return false;
+    };
+    match *target {
+        "`docs/manual-qa.md`" => reference.starts_with("`docs/manual-qa.md"),
+        "`https://...`" => reference.starts_with("https://"),
+        other => reference == other,
+    }
+}
+
 #[cfg(test)]
 mod tests;

@@ -4,6 +4,7 @@ mod completion;
 mod evidence_ref;
 mod records;
 mod row;
+mod verified_ref;
 
 const REQUIRED_BLOCKERS: [&str; 10] = [
     "Packaged macOS manual QA",
@@ -24,24 +25,27 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let invalid = invalid_status_rows(&text);
     let unproven = unproven_verified_rows(&text);
     let stale = stale_blocked_rows(&text);
+    let misplaced_ref = verified_ref::misplaced_verified_references(&text);
     let incomplete = completion::incomplete_requirements(&text);
     let misplaced = records::misplaced_record_targets(&text);
     if missing.is_empty()
         && invalid.is_empty()
         && unproven.is_empty()
         && stale.is_empty()
+        && misplaced_ref.is_empty()
         && incomplete.is_empty()
         && misplaced.is_empty()
     {
         return Ok(());
     }
     Err(format!(
-        "{} has release blocker issues: {}{}{}{}{}{}",
+        "{} has release blocker issues: {}{}{}{}{}{}{}",
         path.display(),
         join_prefix("missing ", missing),
         join_prefix(" invalid status ", invalid),
         join_prefix(" unproven verified ", unproven),
         join_prefix(" stale blocked ", stale),
+        join_prefix(" misplaced verified reference ", misplaced_ref),
         join_prefix(" incomplete requirement ", incomplete),
         join_prefix(" misplaced record target ", misplaced)
     ))
