@@ -35,6 +35,34 @@ fn reports_sandbox_purchase_completion_without_order() {
 }
 
 #[test]
+fn reports_valid_activation_completion_without_cache() {
+    let text = "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn reports_invalid_key_completion_without_friendly_error() {
+    let text = "| Invalid license key handling | Blocked | raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Invalid license key handling"));
+}
+
+#[test]
+fn reports_local_forget_completion_without_app_state() {
+    let text =
+        "| Local license forget | Blocked | Local cache is removed | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Local license forget"));
+}
+
+#[test]
 fn reports_signed_completion_without_developer_id() {
     let text = "| Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |\n";
 
