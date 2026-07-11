@@ -25,6 +25,7 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     require_page_text(root, "privacy.html", "Telemetry is off by default", errors);
     require_page_text(root, "privacy.html", "privacy receipts", errors);
     require_page_text(root, "privacy.html", "uploaded_bytes = 0", errors);
+    require_page_text(root, "privacy.html", "metadata_policy = preserve", errors);
     require_page_text(
         root,
         "privacy.html",
