@@ -31,6 +31,7 @@ import {
   nextQueued,
   updateProgress,
 } from "./lib/queue";
+import { savedConfigWith } from "./lib/settings";
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
@@ -54,12 +55,7 @@ export function App() {
     setState(nextState);
   }, []);
 
-  const persistSettings = useCallback(async (settings: {
-    outputDir: string;
-    profile: Profile;
-    outputSize: OutputSize;
-    sourcePolicy: SourcePolicy;
-  }) => {
+  const persistSettings = useCallback(async (settings: SavedConfig) => {
     if (!isTauri()) {
       return;
     }
@@ -185,44 +181,24 @@ export function App() {
     });
     if (typeof outputDir === "string") {
       setState((current) => ({ ...current, outputDir }));
-      await persistSettings({
-        outputDir,
-        profile: state.profile,
-        outputSize: state.outputSize,
-        sourcePolicy: state.sourcePolicy,
-      });
+      await persistSettings(savedConfigWith(state, { outputDir }));
     }
-  }, [persistSettings, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
+  }, [persistSettings, state]);
 
   const changeProfile = useCallback((profile: Profile) => {
     setState((current) => ({ ...current, profile }));
-    void persistSettings({
-      outputDir: state.outputDir,
-      profile,
-      outputSize: state.outputSize,
-      sourcePolicy: state.sourcePolicy,
-    });
-  }, [persistSettings, state.outputDir, state.outputSize, state.sourcePolicy]);
+    void persistSettings(savedConfigWith(state, { profile }));
+  }, [persistSettings, state]);
 
   const changeOutputSize = useCallback((outputSize: OutputSize) => {
     setState((current) => ({ ...current, outputSize }));
-    void persistSettings({
-      outputDir: state.outputDir,
-      profile: state.profile,
-      outputSize,
-      sourcePolicy: state.sourcePolicy,
-    });
-  }, [persistSettings, state.outputDir, state.profile, state.sourcePolicy]);
+    void persistSettings(savedConfigWith(state, { outputSize }));
+  }, [persistSettings, state]);
 
   const changeSourcePolicy = useCallback((sourcePolicy: SourcePolicy) => {
     setState((current) => ({ ...current, sourcePolicy }));
-    void persistSettings({
-      outputDir: state.outputDir,
-      profile: state.profile,
-      outputSize: state.outputSize,
-      sourcePolicy,
-    });
-  }, [persistSettings, state.outputDir, state.outputSize, state.profile]);
+    void persistSettings(savedConfigWith(state, { sourcePolicy }));
+  }, [persistSettings, state]);
 
   const revealOutput = useCallback(async (outputPath: string) => {
     if (!isTauri()) {
