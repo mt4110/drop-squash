@@ -19,6 +19,13 @@ fn accepts_local_links() {
 }
 
 #[test]
+fn website_directory_passes_check() {
+    assert!(check_root(std::path::Path::new("../website"))
+        .unwrap()
+        .is_empty());
+}
+
+#[test]
 fn accepts_nested_release_status_page() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
