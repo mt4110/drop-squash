@@ -18,8 +18,4 @@ jobs:
       - name: License and source policy
         run: cargo deny check
       - name: Reject external media process code
-        shell: bash
-        run: |
-          if rg -n -i 'ffmpeg|ffprobe|std::process::Command|tokio::process' apps crates; then
-            exit 1
-          fi
+        run: cargo run -p xtask -- media-policy-check

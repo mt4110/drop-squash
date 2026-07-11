@@ -21,6 +21,13 @@ gate, verifies that production CSP does not open remote network origins, keeps
 the unsigned release workflow blocked, and verifies that the updater is not
 enabled before signing keys are ready.
 
+Run the media policy gate directly after touching native backends or desktop
+commands:
+
+```sh
+cargo run -p xtask -- media-policy-check
+```
+
 Check the local macOS signing and notarization environment before a signed build:
 
 ```sh

@@ -1,14 +1,13 @@
+use crate::media_policy_check;
+
 use std::path::{Path, PathBuf};
 
 pub fn run() -> Result<(), String> {
     reject_secret_files(Path::new("."))?;
+    media_policy_check::check_default_roots()?;
     require_text(
         ".github/workflows/release.yml",
         "Block unsigned Phase 0 release",
-    )?;
-    require_text(
-        ".github/workflows/security.yml",
-        "ffmpeg|ffprobe|std::process::Command|tokio::process",
     )?;
     require_text(
         "apps/desktop/src-tauri/tauri.conf.json",

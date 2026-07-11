@@ -12,6 +12,7 @@
 
 - Preserve the local-first promise: no media upload, no default telemetry.
 - Never add `ffmpeg`, `ffprobe`, shell execution, or `PATH` lookup to the media path.
+- Run `cargo run -p xtask -- media-policy-check` after touching media, CLI, or desktop command code.
 - Never move or delete originals unless conversion success, output verification, and user policy all permit it.
 - Do not overclaim hardware acceleration or metadata removal unless the implementation verifies it.
 - Keep the UI small, calm, and focused on dropping recordings and getting smaller MP4 files.
