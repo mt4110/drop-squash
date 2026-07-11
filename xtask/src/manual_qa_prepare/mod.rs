@@ -45,15 +45,22 @@ fn print_paths(options: &Options) -> Result<(), String> {
     } else {
         println!("manual QA App artifact unavailable: pass --app-artifact <path>");
     }
-    if let Some(sample_set) = &options.input_sample_set {
-        println!("manual QA Input sample set: {sample_set}");
-    }
+    println!("{}", sample_set_line(options));
     if let Ok(environment) = Environment::current(options) {
         for line in environment.manual_qa_lines() {
             println!("{line}");
         }
     }
     Ok(())
+}
+
+fn sample_set_line(options: &Options) -> String {
+    match &options.input_sample_set {
+        Some(sample_set) => format!("manual QA Input sample set: {sample_set}"),
+        None => {
+            "manual QA Input sample set unavailable: pass --input-sample-set <text>".to_string()
+        }
+    }
 }
 
 #[cfg(test)]

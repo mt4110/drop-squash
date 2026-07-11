@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use super::options::Options;
+use super::sample_set_line;
 use super::state::{backup_state, restore_state};
 
 #[test]
@@ -83,6 +84,27 @@ fn parses_custom_directories() {
     assert!(options.reset_trial);
     assert!(!options.restore_state);
     assert_eq!(options.state_dir, PathBuf::from("/tmp/state"));
+}
+
+#[test]
+fn prints_sample_set_prompt_when_missing() {
+    let options = Options::parse(Vec::new()).unwrap();
+
+    assert!(sample_set_line(&options).contains("--input-sample-set"));
+}
+
+#[test]
+fn prints_provided_sample_set() {
+    let options = Options::parse(vec![
+        "--input-sample-set".to_string(),
+        "short, medium, and large local recordings".to_string(),
+    ])
+    .unwrap();
+
+    assert_eq!(
+        sample_set_line(&options),
+        "manual QA Input sample set: short, medium, and large local recordings"
+    );
 }
 
 #[test]
