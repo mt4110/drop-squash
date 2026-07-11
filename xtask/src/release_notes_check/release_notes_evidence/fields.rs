@@ -8,7 +8,7 @@ pub(super) const URL: [(&str, url::Kind); 5] = [
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
 
-pub(super) const EVIDENCE: [&str; 15] = [
+pub(super) const EVIDENCE: [&str; 17] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -24,4 +24,6 @@ pub(super) const EVIDENCE: [&str; 15] = [
     "GitHub Release checksum",
     "Homebrew tap PR",
     "Homebrew install result",
+    "Known limitations",
+    "Support contact",
 ];

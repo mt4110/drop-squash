@@ -30,6 +30,8 @@ fn accepts_concrete_production_urls() {
 - Homebrew tap PR: cask update reviewed in tap PR with zap cleanup path
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
 - Homebrew install result: brew install --cask mt4110/tap/dropsquash completed
+- Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased
+- Support contact: support handled through GitHub Issues until paid support opens
 "#,
     );
 
@@ -64,6 +66,8 @@ fn rejects_weak_distribution_evidence() {
 - Homebrew tap PR: reviewed
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
 - Homebrew install result: installed
+- Known limitations: none
+- Support contact: support soon
 "#,
     );
 
@@ -79,6 +83,10 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("GitHub Release checksum")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+    assert!(errors.iter().any(|error| error.contains("Support contact")));
 }
 
 #[test]
@@ -221,6 +229,10 @@ fn rejects_missing_or_generic_release_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Local license forget")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+    assert!(errors.iter().any(|error| error.contains("Support contact")));
 }
 
 #[test]

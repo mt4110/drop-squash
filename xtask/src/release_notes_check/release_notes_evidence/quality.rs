@@ -35,6 +35,8 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "Homebrew install result" => {
             Some(&[&["brew install"], &["--cask"], &["mt4110/tap/dropsquash"]])
         }
+        "Known limitations" => Some(&[&["macos"], &["windows", "linux", "platform"]]),
+        "Support contact" => Some(&[&["support"], &["github issues", "@"]]),
         _ => None,
     }
 }
