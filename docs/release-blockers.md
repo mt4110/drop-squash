@@ -20,6 +20,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Invalid license key handling | Blocked | Friendly error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Local cache is removed and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
+| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |
 | Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |
@@ -42,6 +43,7 @@ recorded in the location above.
 | Invalid license key handling | License sandbox | Enter an invalid key and inspect the local license cache | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify every public release page | Public website URL |
+| Refund policy finalized | Public web | Publish the final refund policy before checkout goes live | Refund policy URL |
 | Live checkout link | Public web | Verify the pricing page opens the live checkout for the product | Public website URL |
 | Signed DMG | Signing/notarization | Sign the public DMG and capture Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public DMG with captured verification output | Release notes |

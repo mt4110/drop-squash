@@ -6,6 +6,7 @@ pub(super) const ALL: &[&str] = &[
     "Invalid license key handling",
     "Local license forget",
     "Public website deployment",
+    "Refund policy finalized",
     "Live checkout link",
     "Signed DMG",
     "Notarized and stapled DMG",

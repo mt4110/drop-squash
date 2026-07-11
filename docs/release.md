@@ -71,6 +71,10 @@ privacy-sensitive code:
 cargo run -p xtask -- privacy-policy-check
 ```
 
+Before live checkout is enabled, publish the final refund policy and update the
+`Refund policy finalized` row in `docs/release-blockers.md` with the production
+`/refund` URL. Do not treat the draft refund page as paid-beta evidence.
+
 Check the local macOS signing and notarization environment before a signed build:
 
 ```sh

@@ -1,6 +1,6 @@
 use super::row;
 
-const EXPECTED_RECORD_TARGETS: [(&str, &str); 13] = [
+const EXPECTED_RECORD_TARGETS: [(&str, &str); 14] = [
     ("Packaged macOS manual QA", "`docs/manual-qa.md`"),
     ("Lemon Squeezy product setup", "`docs/manual-qa.md`"),
     ("Lemon Squeezy sandbox purchase", "`docs/manual-qa.md`"),
@@ -8,6 +8,7 @@ const EXPECTED_RECORD_TARGETS: [(&str, &str); 13] = [
     ("Invalid license key handling", "`docs/manual-qa.md`"),
     ("Local license forget", "`docs/manual-qa.md`"),
     ("Public website deployment", "`https://...`"),
+    ("Refund policy finalized", "`https://...`"),
     ("Live checkout link", "`https://...`"),
     ("Signed DMG", "Release notes"),
     ("Notarized and stapled DMG", "Release notes"),
@@ -39,6 +40,7 @@ pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) ->
     match *target {
         "`docs/manual-qa.md`" => reference.starts_with("`docs/manual-qa.md"),
         "`https://...`" if blocker == "Public website deployment" => is_public_website(reference),
+        "`https://...`" if blocker == "Refund policy finalized" => is_refund_policy(reference),
         "`https://...`" if blocker == "Live checkout link" => is_live_checkout(reference),
         "`https://...`" => reference.starts_with("https://"),
         "GitHub Release" => has_expected_url(
@@ -72,6 +74,14 @@ fn is_live_checkout(reference: &str) -> bool {
     reference.starts_with("https://")
         && lower.contains("lemonsqueezy.com")
         && lower.contains("/checkout/buy/")
+}
+
+fn is_refund_policy(reference: &str) -> bool {
+    let lower = reference.to_ascii_lowercase();
+    reference.starts_with("https://")
+        && (lower.ends_with("/refund") || lower.ends_with("/refund/"))
+        && !lower.contains("lemonsqueezy.com")
+        && !lower.contains("checkout")
 }
 
 fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {

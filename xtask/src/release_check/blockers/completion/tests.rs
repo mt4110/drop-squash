@@ -44,6 +44,15 @@ fn reports_product_setup_without_license_keys() {
 }
 
 #[test]
+fn reports_refund_policy_without_final_policy() {
+    let text = "| Refund policy finalized | Blocked | Refund page exists | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_valid_activation_completion_without_cache() {
     let text = "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
@@ -105,6 +114,7 @@ fn described_blockers() -> String {
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
+        "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |\n",
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |\n",

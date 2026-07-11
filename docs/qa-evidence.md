@@ -65,6 +65,7 @@ These checks still require a packaged macOS app or external service state:
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Invalid license key handling | Requires packaged-app UI and local cache inspection after an invalid key |
 | Local license forget | Requires packaged-app state and local cache inspection after forgetting the license |
+| Refund policy finalized | Requires the production refund policy URL before checkout goes live |
 | Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state |
 | Notarized/stapled DMG verification | Requires the public DMG/app artifact and Apple notary/staple assessment |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |
