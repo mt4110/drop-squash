@@ -92,3 +92,14 @@ fn reports_blocked_rows_with_evidence_reference() {
 
     assert!(stale.contains(&"Signed DMG"));
 }
+
+#[test]
+fn reports_blocked_rows_with_vague_reference() {
+    let text = REQUIRED_BLOCKERS
+        .iter()
+        .map(|blocker| format!("| {blocker} | Blocked | Evidence required | checked | docs |\n"))
+        .collect::<String>();
+    let stale = stale_blocked_rows(&text);
+
+    assert!(stale.contains(&"Signed DMG"));
+}

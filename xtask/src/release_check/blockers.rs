@@ -81,13 +81,13 @@ fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
         .filter(|blocker| {
             row::find(text, blocker)
                 .filter(|line| row::has_status(line, blocker, "Blocked"))
-                .is_some_and(has_evidence_reference)
+                .is_some_and(has_stale_blocked_reference)
         })
         .collect()
 }
 
-fn has_evidence_reference(line: &str) -> bool {
-    row::evidence_reference(line).is_some_and(is_evidence_reference)
+fn has_stale_blocked_reference(line: &str) -> bool {
+    row::evidence_reference(line) != Some("TBD")
 }
 
 fn is_evidence_reference(value: &str) -> bool {
