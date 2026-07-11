@@ -1,39 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 23] = [
-    ("Choose recording conversion", "Choose recording conversion"),
-    ("Drag-and-drop conversion", "Drag-and-drop conversion"),
-    ("Privacy receipt sidecar", "Privacy receipt sidecar"),
-    ("Privacy receipt Finder reveal", "Reveal privacy receipt"),
-    ("Duplicate output naming", "Duplicate output naming"),
-    ("Finder reveal", "Reveal output"),
-    ("Ask source policy", "Ask source policy"),
-    ("Trash source policy", "Trash source policy"),
-    ("Failed conversion", "Failed conversion"),
-    ("Larger output", "Larger output"),
-    ("Large-recording cancellation", "Cancellation"),
-    ("Benchmark sample set", "Benchmark sample set"),
-    (
-        "Benchmark regression threshold",
-        "Benchmark regression threshold",
-    ),
-    ("Multi-file queue", "Multi-file queue"),
-    ("Queued job cancellation", "Queued job cancellation"),
-    ("Batch summary", "Batch summary"),
-    ("Lemon Squeezy sandbox purchase", "Sandbox purchase"),
-    (
-        "Lemon Squeezy sandbox activation",
-        "Valid sandbox activation",
-    ),
-    ("Invalid license key handling", "Invalid key activation"),
-    ("Local license forget", "Forget license on this Mac"),
-    ("Signed DMG verification", "Codesign verification"),
-    (
-        "Notarized/stapled DMG verification",
-        "Notarization staple verification",
-    ),
-    ("Signed/notarized Gatekeeper open", "Gatekeeper open test"),
-];
+mod manual_pairs;
 
 pub(super) fn check_manual_only_coverage(
     qa_evidence: &Path,
@@ -52,7 +19,7 @@ pub(super) fn check_manual_only_coverage(
 }
 
 fn missing_manual_only_coverage(evidence: &str, manual: &str) -> Vec<String> {
-    REQUIRED_MANUAL_EVIDENCE
+    manual_pairs::ALL
         .iter()
         .filter_map(|(area, check)| missing_pair(evidence, manual, area, check))
         .collect()
@@ -70,15 +37,15 @@ fn missing_pair(evidence: &str, manual: &str, area: &str, check: &str) -> Option
 
 #[cfg(test)]
 mod tests {
-    use super::{missing_manual_only_coverage, REQUIRED_MANUAL_EVIDENCE};
+    use super::{manual_pairs, missing_manual_only_coverage};
 
     #[test]
     fn accepts_matching_evidence_and_manual_checks() {
-        let evidence = REQUIRED_MANUAL_EVIDENCE
+        let evidence = manual_pairs::ALL
             .iter()
             .map(|(area, _)| format!("| {area} | Requires manual proof |\n"))
             .collect::<String>();
-        let manual = REQUIRED_MANUAL_EVIDENCE
+        let manual = manual_pairs::ALL
             .iter()
             .map(|(_, check)| format!("| {check} | Input | Expected | Evidence |\n"))
             .collect::<String>();
@@ -97,7 +64,7 @@ mod tests {
 
     #[test]
     fn reports_missing_manual_qa_check() {
-        let evidence = REQUIRED_MANUAL_EVIDENCE
+        let evidence = manual_pairs::ALL
             .iter()
             .map(|(area, _)| format!("| {area} | Requires manual proof |\n"))
             .collect::<String>();
