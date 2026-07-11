@@ -34,6 +34,34 @@ fn rejects_non_https_url() {
 }
 
 #[test]
+fn rejects_v_prefixed_version() {
+    let error = Input::parse(vec![
+        "v0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("major.minor.patch"));
+}
+
+#[test]
+fn rejects_partial_version() {
+    let error = Input::parse(vec![
+        "0.1".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("major.minor.patch"));
+}
+
+#[test]
 fn rejects_example_dot_com_url() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),

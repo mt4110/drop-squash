@@ -27,7 +27,7 @@ impl Input {
     }
 
     fn validate(&self) -> Result<(), String> {
-        require_clean("version", &self.version)?;
+        require_version(&self.version)?;
         require_dmg_url(&self.url)?;
         require_sha256(&self.sha256)?;
         require_https_url(&self.homepage)?;
@@ -62,6 +62,19 @@ fn require_clean(label: &str, value: &str) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+fn require_version(version: &str) -> Result<(), String> {
+    require_clean("version", version)?;
+    let parts: Vec<&str> = version.split('.').collect();
+    if parts.len() == 3 && parts.iter().all(|part| is_numeric_part(part)) {
+        return Ok(());
+    }
+    Err("version must use major.minor.patch digits".to_string())
+}
+
+fn is_numeric_part(value: &str) -> bool {
+    !value.is_empty() && value.chars().all(|char| char.is_ascii_digit())
 }
 
 fn require_dmg_url(url: &str) -> Result<(), String> {
