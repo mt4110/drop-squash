@@ -59,3 +59,22 @@ fn activation_error_redacts_echoed_license_key() {
     assert!(error.to_string().contains("[license key]"));
     assert!(!error.to_string().contains("LS-SECRET-RAW-KEY"));
 }
+
+#[test]
+fn activation_rejects_empty_instance_id() {
+    let error = activation_from_response(
+        "LS-SECRET-RAW-KEY",
+        LicenseApiResponse {
+            activated: Some(true),
+            valid: None,
+            deactivated: None,
+            error: None,
+            instance: Some(LicenseInstance {
+                id: " ".to_string(),
+            }),
+        },
+    )
+    .unwrap_err();
+
+    assert!(error.to_string().contains("empty instance id"));
+}

@@ -74,6 +74,11 @@ fn activation_from_response(
         .ok_or_else(|| {
             AppError::License("License activation did not return an instance id.".to_string())
         })?;
+    if instance_id.trim().is_empty() {
+        return Err(AppError::License(
+            "License activation returned an empty instance id.".to_string(),
+        ));
+    }
     Ok(LicenseActivation {
         license_key_fingerprint: license_key_fingerprint(license_key),
         instance_id,
