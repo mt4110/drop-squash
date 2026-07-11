@@ -116,6 +116,11 @@ only the fingerprint/instance fields were present.
 
 ## Release Candidate
 
+Release candidate results must name the artifact or command evidence. Record
+the `DropSquash.dmg` path/name, SHA-256 line, Developer ID codesign result,
+notary/staple assessment, and Gatekeeper clean/fresh-machine observation where
+the row asks for them.
+
 | Check | Expected | Result |
 |---|---|---|
 | `cargo run -p xtask -- release-check` | Passes |  |

@@ -268,6 +268,24 @@ fn reports_incomplete_packaged_app_results() {
     assert!(missing.iter().any(|error| error.contains("Reveal output")));
 }
 
+#[test]
+fn reports_incomplete_release_candidate_results() {
+    let (_directory, path) = write_manual_qa(
+        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
+| Codesign verification | Developer ID signature | signature ok |\n\
+| Gatekeeper open test | Signed app opens cleanly | opened |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("checksum")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Codesign verification")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Gatekeeper open test")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -288,7 +306,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
     text.push_str("| Check | Expected | Result |\n|---|---|---|\n");
     for check in REQUIRED_CHECKS {
         if check.starts_with('`') {
-            text.push_str(&format!("| {check} | Passes | Pass |\n"));
+            text.push_str(&command_result(check));
         } else if check == "Benchmark sample set" {
             text.push_str(
                 "| Benchmark sample set | Passes | short, medium, and large samples recorded |\n",
@@ -343,6 +361,12 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str(
                 "| Reveal output | Passes | Finder opened with clip.squashed.mp4 selected |\n",
             );
+        } else if check == "Codesign verification" {
+            text.push_str("| Codesign verification | Passes | codesign verified Developer ID Application signature for DropSquash.dmg |\n");
+        } else if check == "Notarization staple verification" {
+            text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n");
+        } else if check == "Gatekeeper open test" {
+            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened app cleanly in fresh macOS account |\n");
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"
@@ -350,4 +374,20 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         }
     }
     text
+}
+
+fn command_result(check: &str) -> String {
+    let result = match check {
+        "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
+            "artifact-check passed for DropSquash.dmg"
+        }
+        "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
+            "SHA-256 line recorded for DropSquash.dmg"
+        }
+        "`cargo run -p xtask -- macos-signing-check`" => {
+            "macos-signing-check passed in release environment"
+        }
+        _ => "Pass",
+    };
+    format!("| {check} | Passes | {result} |\n")
 }

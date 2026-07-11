@@ -43,6 +43,16 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["trial count unchanged", "trial unchanged"],
         ],
         "Reveal output" => &[&["finder"], &[".mp4"]],
+        "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
+            &[&["artifact-check"], &["dropsquash.dmg", ".dmg"]]
+        }
+        "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
+            &[&["sha-256", "sha256"], &["dropsquash.dmg", ".dmg"]]
+        }
+        "`cargo run -p xtask -- macos-signing-check`" => &[&["macos-signing-check"]],
+        "Codesign verification" => &[&["codesign"], &["developer id"]],
+        "Notarization staple verification" => &[&["notary", "notarization"], &["staple", "spctl"]],
+        "Gatekeeper open test" => &[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]],
         _ => return None,
     };
     Some(Requirement { groups })
