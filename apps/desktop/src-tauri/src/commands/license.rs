@@ -1,3 +1,4 @@
+use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use dropsquash_core::AppError;
@@ -14,27 +15,40 @@ pub async fn activate_license(license_key: String) -> dropsquash_core::Result<Li
         return Err(AppError::License("Enter a license key.".to_string()));
     }
     let path = default_license_cache_path();
-    let mut cache = LicenseCache::load_or_default(&path)?;
+    write_activation_cache(
+        &license_key,
+        &path,
+        &LemonSqueezyProvider::default(),
+        now_unix(),
+    )
+    .await?;
+    current_license_state().await
+}
+
+async fn write_activation_cache<P: LicenseProvider>(
+    license_key: &str,
+    path: &Path,
+    provider: &P,
+    now: u64,
+) -> dropsquash_core::Result<()> {
+    let mut cache = LicenseCache::load_or_default(path)?;
     let instance_name = cache
         .instance_name
         .clone()
         .unwrap_or_else(generate_instance_id);
-    cache.instance_name = Some(instance_name.clone());
-    cache.save_to_path(&path)?;
-    let activation = LemonSqueezyProvider::default()
-        .activate(&license_key, &instance_name)
-        .await?;
-    LicenseCache {
-        instance_name: Some(instance_name),
-        instance_id: Some(activation.instance_id),
-        license_key_fingerprint: Some(activation.license_key_fingerprint),
-        activation_id: None,
-        validated_at_unix: Some(now_unix()),
-        offline_grace_until_unix: Some(now_unix() + OFFLINE_GRACE_SECONDS),
-        valid: activation.valid,
-    }
-    .save_to_path(&path)?;
-    current_license_state().await
+    let activation = provider.activate(license_key, &instance_name).await?;
+    cache.instance_name = Some(instance_name);
+    cache.instance_id = Some(activation.instance_id);
+    cache.license_key_fingerprint = Some(activation.license_key_fingerprint);
+    cache.activation_id = None;
+    cache.validated_at_unix = Some(now);
+    cache.offline_grace_until_unix = Some(now + OFFLINE_GRACE_SECONDS);
+    cache.valid = activation.valid;
+    cache.save_to_path(path)
+}
+
+fn generate_instance_id() -> String {
+    format!("dropsquash-{}-{}", std::process::id(), now_unix())
 }
 
 pub async fn deactivate_license() -> dropsquash_core::Result<LicenseState> {
@@ -63,6 +77,5 @@ fn now_unix() -> u64 {
         .unwrap_or_default()
 }
 
-fn generate_instance_id() -> String {
-    format!("dropsquash-{}-{}", std::process::id(), now_unix())
-}
+#[cfg(test)]
+mod tests;

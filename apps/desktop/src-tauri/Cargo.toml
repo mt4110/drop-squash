@@ -22,3 +22,8 @@ tokio-util.workspace = true
 
 [build-dependencies]
 tauri-build = { version = "2.6.3", features = [] }
+
+[dev-dependencies]
+async-trait.workspace = true
+tempfile.workspace = true
+tokio.workspace = true

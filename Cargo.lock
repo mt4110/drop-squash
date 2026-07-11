@@ -940,6 +940,7 @@ dependencies = [
 name = "dropsquash-desktop"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "dropsquash-core",
  "dropsquash-encoder",
  "dropsquash-fileguard",
@@ -952,6 +953,8 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
+ "tempfile",
+ "tokio",
  "tokio-util",
 ]
 
