@@ -45,6 +45,15 @@ cargo run -p xtask -- manual-qa-prepare --reset-trial
 `--reset-trial` removes only `history.jsonl` and `license.json`, and only after
 copying any existing state into the backup directory.
 
+After QA, restore the backed up local state when needed:
+
+```sh
+cargo run -p xtask -- manual-qa-prepare --restore-state
+```
+
+`--restore-state` copies only backed up `config.json`, `history.jsonl`, and
+`license.json` files back into the app state directory.
+
 ## macOS Packaged App
 
 | Field | Value |

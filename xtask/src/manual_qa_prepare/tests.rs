@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
-use super::{prepare, Options};
+use super::options::Options;
+use super::state::{backup_state, restore_state};
 
 #[test]
 fn creates_output_and_backs_up_existing_state_files() {
@@ -12,10 +13,11 @@ fn creates_output_and_backs_up_existing_state_files() {
     std::fs::write(app_state_dir.join("config.json"), "config").unwrap();
     std::fs::write(app_state_dir.join("history.jsonl"), "history").unwrap();
 
-    let copied = prepare(&Options {
+    let copied = backup_state(&Options {
         app_state_dir,
         output_dir: output_dir.clone(),
         reset_trial: false,
+        restore_state: false,
         state_dir: state_dir.clone(),
     })
     .unwrap();
@@ -35,10 +37,11 @@ fn skips_missing_state_files() {
     let state_dir = directory.path().join("state");
     let output_dir = directory.path().join("output");
 
-    let copied = prepare(&Options {
+    let copied = backup_state(&Options {
         app_state_dir,
         output_dir,
         reset_trial: false,
+        restore_state: false,
         state_dir,
     })
     .unwrap();
@@ -62,7 +65,16 @@ fn parses_custom_directories() {
     assert_eq!(options.app_state_dir, PathBuf::from("/tmp/app-state"));
     assert_eq!(options.output_dir, PathBuf::from("/tmp/output"));
     assert!(options.reset_trial);
+    assert!(!options.restore_state);
     assert_eq!(options.state_dir, PathBuf::from("/tmp/state"));
+}
+
+#[test]
+fn parses_restore_state() {
+    let options = Options::parse(vec!["--restore-state".to_string()]).unwrap();
+
+    assert!(!options.reset_trial);
+    assert!(options.restore_state);
 }
 
 #[test]
@@ -76,10 +88,11 @@ fn resets_trial_state_after_backup_when_requested() {
     std::fs::write(app_state_dir.join("history.jsonl"), "history").unwrap();
     std::fs::write(app_state_dir.join("license.json"), "license").unwrap();
 
-    let copied = prepare(&Options {
+    let copied = backup_state(&Options {
         app_state_dir: app_state_dir.clone(),
         output_dir,
         reset_trial: true,
+        restore_state: false,
         state_dir: state_dir.clone(),
     })
     .unwrap();
@@ -92,6 +105,43 @@ fn resets_trial_state_after_backup_when_requested() {
         std::fs::read_to_string(state_dir.join("history.jsonl")).unwrap(),
         "history"
     );
+}
+
+#[test]
+fn restores_backed_up_state_files() {
+    let directory = tempfile::tempdir().unwrap();
+    let app_state_dir = directory.path().join("app-state");
+    let state_dir = directory.path().join("state");
+    let output_dir = directory.path().join("output");
+    std::fs::create_dir(&state_dir).unwrap();
+    std::fs::write(state_dir.join("config.json"), "config").unwrap();
+    std::fs::write(state_dir.join("license.json"), "license").unwrap();
+
+    let copied = restore_state(&Options {
+        app_state_dir: app_state_dir.clone(),
+        output_dir,
+        reset_trial: false,
+        restore_state: true,
+        state_dir,
+    })
+    .unwrap();
+
+    assert_eq!(copied, vec!["config.json", "license.json"]);
+    assert_eq!(
+        std::fs::read_to_string(app_state_dir.join("license.json")).unwrap(),
+        "license"
+    );
+}
+
+#[test]
+fn rejects_reset_and_restore_together() {
+    let error = Options::parse(vec![
+        "--reset-trial".to_string(),
+        "--restore-state".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("cannot be combined"));
 }
 
 #[test]
