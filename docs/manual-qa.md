@@ -14,9 +14,10 @@ Run this gate after filling every result:
 cargo run -p xtask -- manual-qa-check
 ```
 
-For manual observation rows, do not write only `Pass`, `OK`, or `Done` in the
-result. Record the concrete evidence you saw, such as the generated file name,
-trial count, Finder selection, or cache state.
+For manual observation rows, do not write only `Pass`, `OK`, `Done`, `Works`,
+`Verified`, or `Observed expected behavior` in the result. Record the concrete
+evidence you saw, such as the generated file name, trial count, Finder
+selection, or cache state.
 Do not use placeholders such as `TBD`, `N/A`, `None`, `Blocked`, or `Skipped`
 as field values or results; leave unfinished rows empty until real evidence is
 available.

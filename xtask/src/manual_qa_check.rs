@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
 mod requirements;
 mod validation;
 use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};
-use validation::validate_field;
+use validation::{has_placeholder_evidence, validate_field, validate_result};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let path = PathBuf::from(
@@ -61,54 +61,12 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     if cells.len() == 2 {
         validate_field(cells[0], cells[1], missing);
     }
-    if cells.len() == 4 && cells[3].trim().is_empty() {
-        missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
+    if cells.len() == 4 {
+        validate_result(cells[0], cells[3], missing);
     }
-    if cells.len() == 4 && has_placeholder_evidence(cells[3]) {
-        missing.push(format!(
-            "manual QA result needs evidence: {}",
-            cells[0].trim()
-        ));
+    if cells.len() == 3 {
+        validate_result(cells[0], cells[2], missing);
     }
-    if cells.len() == 4 && has_vague_manual_result(cells[0], cells[3]) {
-        missing.push(format!(
-            "manual QA result needs evidence: {}",
-            cells[0].trim()
-        ));
-    }
-    if cells.len() == 3 && cells[2].trim().is_empty() {
-        missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
-    }
-    if cells.len() == 3 && has_placeholder_evidence(cells[2]) {
-        missing.push(format!(
-            "manual QA result needs evidence: {}",
-            cells[0].trim()
-        ));
-    }
-    if cells.len() == 3 && has_vague_manual_result(cells[0], cells[2]) {
-        missing.push(format!(
-            "manual QA result needs evidence: {}",
-            cells[0].trim()
-        ));
-    }
-}
-
-fn has_vague_manual_result(label: &str, result: &str) -> bool {
-    let label = label.trim();
-    if label.starts_with('`') {
-        return false;
-    }
-    matches!(
-        result.trim().to_ascii_lowercase().as_str(),
-        "pass" | "ok" | "done"
-    )
-}
-
-fn has_placeholder_evidence(value: &str) -> bool {
-    matches!(
-        value.trim().to_ascii_lowercase().as_str(),
-        "tbd" | "todo" | "n/a" | "na" | "none" | "blocked" | "skipped"
-    )
 }
 
 fn cells(line: &str) -> Vec<&str> {

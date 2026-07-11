@@ -158,6 +158,16 @@ fn reports_vague_manual_results() {
 }
 
 #[test]
+fn reports_generic_manual_results() {
+    let (_directory, path) = write_manual_qa(
+        "| Cancellation | large.mov | Returns to ready | Observed expected behavior |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Cancellation".to_string()));
+}
+
+#[test]
 fn reports_placeholder_field_values() {
     let (_directory, path) = write_manual_qa("| App build | TBD |\n");
     let missing = check_file(&path).unwrap();
@@ -206,7 +216,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str(&format!("| {check} | Passes | Pass |\n"));
         } else {
             text.push_str(&format!(
-                "| {check} | Passes | Observed expected behavior |\n"
+                "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"
             ));
         }
     }

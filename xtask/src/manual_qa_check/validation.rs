@@ -14,6 +14,18 @@ pub(super) fn validate_field(label: &str, value: &str, missing: &mut Vec<String>
     }
 }
 
+pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
+    let label = label.trim();
+    let result = result.trim();
+    if result.is_empty() {
+        missing.push(format!("manual QA result is empty: {label}"));
+        return;
+    }
+    if has_placeholder_evidence(result) || has_vague_manual_result(label, result) {
+        missing.push(format!("manual QA result needs evidence: {label}"));
+    }
+}
+
 fn validate_artifact(value: &str, missing: &mut Vec<String>) {
     let path = Path::new(value);
     if !path.exists() {
@@ -29,6 +41,23 @@ fn validate_artifact(value: &str, missing: &mut Vec<String>) {
     if extension == Some("dmg") && !path.is_file() {
         missing.push("manual QA .dmg artifact must be a file".to_string());
     }
+}
+
+fn has_vague_manual_result(label: &str, result: &str) -> bool {
+    if label.starts_with('`') {
+        return false;
+    }
+    matches!(
+        result.trim().to_ascii_lowercase().as_str(),
+        "pass" | "ok" | "done" | "works" | "verified" | "observed expected behavior"
+    )
+}
+
+pub(super) fn has_placeholder_evidence(value: &str) -> bool {
+    matches!(
+        value.trim().to_ascii_lowercase().as_str(),
+        "tbd" | "todo" | "n/a" | "na" | "none" | "blocked" | "skipped"
+    )
 }
 
 fn is_iso_date(value: &str) -> bool {
