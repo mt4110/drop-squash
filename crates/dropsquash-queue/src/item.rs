@@ -11,6 +11,7 @@ pub enum QueueJobStatus {
     Succeeded,
     Failed,
     Cancelled,
+    Blocked,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -38,6 +39,12 @@ impl QueueItem {
 
     pub fn failed(mut self, error: String) -> Self {
         self.status = QueueJobStatus::Failed;
+        self.error = Some(error);
+        self
+    }
+
+    pub fn blocked(mut self, error: String) -> Self {
+        self.status = QueueJobStatus::Blocked;
         self.error = Some(error);
         self
     }

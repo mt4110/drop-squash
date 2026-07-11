@@ -55,3 +55,28 @@ fn empty_only_when_no_pending_or_active_job_exists() {
     queue.cancel_active();
     assert!(queue.is_empty());
 }
+
+#[test]
+fn blocks_pending_jobs_without_touching_active_job() {
+    let mut queue = InMemoryQueue::default();
+    queue.enqueue(job("first.mov"));
+    let second = queue.enqueue(job("second.mov"));
+    let third = queue.enqueue(job("third.mov"));
+
+    let active = queue.start_next().unwrap();
+    let blocked = queue.block_pending("trial locked".to_string());
+
+    assert_eq!(queue.active().map(|item| item.id), Some(active.id));
+    assert_eq!(queue.len(), 0);
+    assert_eq!(
+        blocked.iter().map(|item| item.id).collect::<Vec<_>>(),
+        vec![second.id, third.id]
+    );
+    assert!(blocked
+        .iter()
+        .all(|item| item.status == QueueJobStatus::Blocked));
+    assert!(blocked
+        .iter()
+        .all(|item| item.error.as_deref() == Some("trial locked")));
+    assert_eq!(queue.completed(), blocked.as_slice());
+}

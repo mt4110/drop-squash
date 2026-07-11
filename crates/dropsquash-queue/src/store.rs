@@ -41,6 +41,16 @@ impl InMemoryQueue {
         self.complete_active(QueueJobStatus::Cancelled, None)
     }
 
+    pub fn block_pending(&mut self, error: String) -> Vec<QueueItem> {
+        let blocked = self
+            .pending
+            .drain(..)
+            .map(|item| item.blocked(error.clone()))
+            .collect::<Vec<_>>();
+        self.completed.extend(blocked.iter().cloned());
+        blocked
+    }
+
     pub fn active(&self) -> Option<&QueueItem> {
         self.active.as_ref()
     }
