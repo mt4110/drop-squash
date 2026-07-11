@@ -35,3 +35,4 @@
 - Add a refund policy draft page to the static sales site before live checkout.
 - Add an `xtask privacy-policy-check` command for default telemetry and analytics guardrails.
 - Add an `xtask manual-qa-check` command for packaged-app QA completion records.
+- Extend `xtask website-check` to require the core static sales-site pages.

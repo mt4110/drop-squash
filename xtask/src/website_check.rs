@@ -1,5 +1,16 @@
 use std::path::{Path, PathBuf};
 
+const REQUIRED_PAGES: [&str; 8] = [
+    "index.html",
+    "download.html",
+    "pricing.html",
+    "privacy.html",
+    "support.html",
+    "license.html",
+    "refund.html",
+    "changelog.html",
+];
+
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let root = PathBuf::from(args.first().map(String::as_str).unwrap_or("website"));
     let errors = check_root(&root)?;
@@ -12,10 +23,19 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 
 fn check_root(root: &Path) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
+    check_required_pages(root, &mut errors);
     for path in html_files(root)? {
         check_html(root, &path, &mut errors)?;
     }
     Ok(errors)
+}
+
+fn check_required_pages(root: &Path, errors: &mut Vec<String>) {
+    for page in REQUIRED_PAGES {
+        if !root.join(page).is_file() {
+            errors.push(format!("website is missing required page: {page}"));
+        }
+    }
 }
 
 fn html_files(root: &Path) -> Result<Vec<PathBuf>, String> {
