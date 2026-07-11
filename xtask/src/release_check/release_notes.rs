@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 9] = [
+const REQUIRED_TEXT: [&str; 11] = [
     "Artifact",
     "SHA-256",
     "codesign",
@@ -8,6 +8,8 @@ const REQUIRED_TEXT: [&str; 9] = [
     "stapler",
     "notary",
     "Gatekeeper",
+    "Benchmark sample set",
+    "Benchmark regression threshold",
     "Homebrew",
     "docs/release-blockers.md",
 ];

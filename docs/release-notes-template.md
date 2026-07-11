@@ -23,6 +23,8 @@ license keys, private store IDs, or certificate material.
 
 - `docs/release-blockers.md` status:
 - Manual QA record:
+- Benchmark sample set:
+- Benchmark regression threshold:
 - Lemon Squeezy sandbox purchase:
 - Lemon Squeezy sandbox activation:
 - Public website URL:

@@ -10,6 +10,8 @@ spctl
 stapler
 notary
 Gatekeeper
+Benchmark sample set
+Benchmark regression threshold
 Homebrew
 docs/release-blockers.md
 "#;
@@ -23,5 +25,6 @@ fn reports_missing_release_note_evidence_fields() {
 
     assert!(missing.contains(&"codesign"));
     assert!(missing.contains(&"SHA-256"));
+    assert!(missing.contains(&"Benchmark sample set"));
     assert!(missing.contains(&"Homebrew"));
 }
