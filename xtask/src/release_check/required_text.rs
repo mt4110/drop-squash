@@ -1,6 +1,6 @@
 use std::fs;
 
-const REQUIRED_TEXT: [(&str, &str); 40] = [
+const REQUIRED_TEXT: [(&str, &str); 43] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -49,6 +49,9 @@ const REQUIRED_TEXT: [(&str, &str); 40] = [
         "available during Trial and Locked states",
     ),
     ("docs/release.md", "Empty key activation"),
+    ("docs/release.md", "Activate is disabled"),
+    ("docs/release.md", "disabled while Activating"),
+    ("docs/release.md", "disabled while Forgetting"),
     ("docs/release.md", "License network failure"),
     (
         "docs/benchmarking.md",
