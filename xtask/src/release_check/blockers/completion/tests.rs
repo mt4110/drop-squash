@@ -117,7 +117,16 @@ fn reports_local_forget_completion_without_cache_removal() {
 
 #[test]
 fn reports_signed_completion_without_developer_id() {
-    let text = "| Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |\n";
+    let text = "| Signed DMG | Blocked | `codesign` verification for the public DropSquash.dmg artifact | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_signed_completion_without_public_artifact_name() {
+    let text = "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -126,7 +135,16 @@ fn reports_signed_completion_without_developer_id() {
 
 #[test]
 fn reports_notarization_completion_without_staple() {
-    let text = "| Notarized and stapled DMG | Blocked | `spctl` and notary evidence for the public DMG artifact | TBD | Release notes |\n";
+    let text = "| Notarized and stapled DMG | Blocked | `spctl` and notary evidence for the public DropSquash.dmg artifact | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Notarized and stapled DMG"));
+}
+
+#[test]
+fn reports_notarization_completion_without_public_artifact_name() {
+    let text = "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -191,8 +209,8 @@ fn described_blockers() -> String {
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
-        "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public DMG artifact | TBD | Release notes |\n",
-        "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |\n",
+        "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
+        "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",
         "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |\n",
