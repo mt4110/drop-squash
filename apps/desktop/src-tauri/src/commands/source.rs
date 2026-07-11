@@ -107,8 +107,17 @@ fn output_belongs_to_source(source_path: &std::path::Path, output_path: &std::pa
         return false;
     };
     output_name == format!("{source_stem}.squashed.mp4")
-        || (output_name.starts_with(&format!("{source_stem}.squashed-"))
-            && output_name.ends_with(".mp4"))
+        || numbered_output_belongs_to_source(source_stem, output_name)
+}
+
+fn numbered_output_belongs_to_source(source_stem: &str, output_name: &str) -> bool {
+    let Some(number) = output_name
+        .strip_prefix(&format!("{source_stem}.squashed-"))
+        .and_then(|value| value.strip_suffix(".mp4"))
+    else {
+        return false;
+    };
+    !number.is_empty() && number.chars().all(|value| value.is_ascii_digit())
 }
 
 #[cfg(test)]
