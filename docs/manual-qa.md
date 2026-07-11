@@ -36,7 +36,7 @@ cargo run -p xtask -- manual-qa-prepare
 
 This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
-run.
+run. Copy the printed `manual QA App build` value into the `App build` field.
 
 Then start from a known trial state if the run is meant to verify trial counts:
 

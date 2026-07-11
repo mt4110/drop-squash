@@ -1,6 +1,8 @@
+mod build_identity;
 mod options;
 mod state;
 
+use build_identity::BuildIdentity;
 use options::Options;
 use state::{backup_state, restore_state, RESET_FILES};
 
@@ -29,6 +31,10 @@ fn print_paths(options: &Options) {
     println!("manual QA state backup: {}", options.state_dir.display());
     println!("manual QA output folder: {}", options.output_dir.display());
     println!("app state source: {}", options.app_state_dir.display());
+    match BuildIdentity::current() {
+        Ok(identity) => println!("manual QA App build: {}", identity.app_build()),
+        Err(error) => println!("manual QA App build unavailable: {error}"),
+    }
 }
 
 #[cfg(test)]
