@@ -22,6 +22,8 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     );
     require_page_text(root, "privacy.html", "does not upload media", errors);
     require_page_text(root, "privacy.html", "Telemetry is off by default", errors);
+    require_page_text(root, "privacy.html", "privacy receipts", errors);
+    require_page_text(root, "privacy.html", "uploaded_bytes = 0", errors);
     require_page_text(
         root,
         "privacy.html",
@@ -35,6 +37,7 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
         errors,
     );
     require_page_text(root, "support.html", "FAQ", errors);
+    require_page_text(root, "support.html", "What is a privacy receipt?", errors);
     require_page_text(
         root,
         "support.html",

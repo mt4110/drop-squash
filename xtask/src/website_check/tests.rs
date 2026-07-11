@@ -100,6 +100,12 @@ fn rejects_missing_privacy_copy() {
 
     assert!(errors.iter().any(|error| error.contains("upload media")));
     assert!(errors.iter().any(|error| error.contains("Telemetry")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("privacy receipts")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("uploaded_bytes = 0")));
     assert!(errors.iter().any(|error| error.contains("Lemon Squeezy")));
 }
 
@@ -147,10 +153,10 @@ fn required_page_text(page: &str) -> &'static str {
             "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count"
         }
         "privacy.html" => {
-            "does not upload media Telemetry is off by default License activation contacts Lemon Squeezy"
+            "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 License activation contacts Lemon Squeezy"
         }
         "support.html" => {
-            "FAQ Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version"
+            "FAQ What is a privacy receipt? Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version"
         }
         _ => "<p>Page</p>",
     }
