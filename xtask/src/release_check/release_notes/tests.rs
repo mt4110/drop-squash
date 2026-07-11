@@ -3,17 +3,31 @@ use super::missing_text;
 #[test]
 fn accepts_required_release_note_evidence_fields() {
     let text = r#"
+Version
 Artifact
 SHA-256
+Git commit
 codesign
 spctl
 stapler
-notary
+Apple notary log
 Gatekeeper
+docs/release-blockers.md
+Manual QA record
 Benchmark sample set
 Benchmark regression threshold
+Lemon Squeezy sandbox purchase
+Lemon Squeezy sandbox activation
+Public website URL
+Live checkout URL
+GitHub Release checksum
+Homebrew tap PR
+Homebrew install result
+Known limitations
+Support contact
+Do not paste signing secrets
+license keys
 Homebrew
-docs/release-blockers.md
 "#;
 
     assert!(missing_text(text).is_empty());
@@ -26,5 +40,6 @@ fn reports_missing_release_note_evidence_fields() {
     assert!(missing.contains(&"codesign"));
     assert!(missing.contains(&"SHA-256"));
     assert!(missing.contains(&"Benchmark sample set"));
-    assert!(missing.contains(&"Homebrew"));
+    assert!(missing.contains(&"Live checkout URL"));
+    assert!(missing.contains(&"Support contact"));
 }

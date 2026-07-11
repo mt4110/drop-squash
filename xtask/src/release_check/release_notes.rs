@@ -1,17 +1,31 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 11] = [
+const REQUIRED_TEXT: [&str; 25] = [
+    "Version",
     "Artifact",
     "SHA-256",
+    "Git commit",
     "codesign",
     "spctl",
     "stapler",
-    "notary",
+    "Apple notary log",
     "Gatekeeper",
+    "docs/release-blockers.md",
+    "Manual QA record",
     "Benchmark sample set",
     "Benchmark regression threshold",
+    "Lemon Squeezy sandbox purchase",
+    "Lemon Squeezy sandbox activation",
+    "Public website URL",
+    "Live checkout URL",
+    "GitHub Release checksum",
+    "Homebrew tap PR",
+    "Homebrew install result",
+    "Known limitations",
+    "Support contact",
+    "Do not paste signing secrets",
+    "license keys",
     "Homebrew",
-    "docs/release-blockers.md",
 ];
 
 pub(super) fn check(path: &Path) -> Result<(), String> {
