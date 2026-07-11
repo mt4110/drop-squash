@@ -25,7 +25,7 @@ fn accepts_concrete_production_urls() {
 - Local license forget: license cache removed and trial state restored
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
-- GitHub Release checksum: SHA256SUMS attached to release
+- GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR: cask update reviewed in tap PR
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -59,7 +59,7 @@ fn rejects_weak_distribution_evidence() {
 - Local license forget: forgot license
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
-- GitHub Release checksum: checksum attached
+- GitHub Release checksum: SHA256SUMS attached
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR: reviewed
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -75,6 +75,9 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Homebrew install result")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum")));
 }
 
 #[test]

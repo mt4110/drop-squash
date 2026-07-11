@@ -24,7 +24,11 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "Empty key activation" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
         "Invalid license key handling" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
         "Local license forget" => Some(&[&["cache"], &["trial", "locked"]]),
-        "GitHub Release checksum" => Some(&[&["sha256sums", "sha-256"], &["attached"]]),
+        "GitHub Release checksum" => Some(&[
+            &["sha256sums", "sha-256"],
+            &["attached"],
+            &["dropsquash.dmg"],
+        ]),
         "Homebrew tap PR" => Some(&[&["cask"], &["pr"]]),
         "Homebrew install result" => Some(&[&["brew install"], &["dropsquash"]]),
         _ => None,
