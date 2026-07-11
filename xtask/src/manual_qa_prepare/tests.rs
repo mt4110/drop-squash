@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use super::options::Options;
+use super::require_reset_artifact;
 use super::sample_set_line;
 use super::state::{backup_state, restore_state};
 
@@ -191,6 +192,23 @@ fn reset_trial_requires_sample_set() {
     let error = Options::parse(vec!["--reset-trial".to_string()]).unwrap_err();
 
     assert!(error.contains("--input-sample-set"));
+}
+
+#[test]
+fn reset_trial_requires_existing_artifact() {
+    let directory = tempfile::tempdir().unwrap();
+    let options = Options::parse(vec![
+        "--reset-trial".to_string(),
+        "--input-sample-set".to_string(),
+        "short, medium, and large local recordings".to_string(),
+        "--app-artifact".to_string(),
+        directory.path().join("missing.app").display().to_string(),
+    ])
+    .unwrap();
+
+    let error = require_reset_artifact(&options).unwrap_err();
+
+    assert!(error.contains(".app artifact"));
 }
 
 #[test]

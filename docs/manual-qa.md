@@ -54,7 +54,9 @@ Copy the printed Tester value into the matching field.
 
 Then start from a known trial state if the run is meant to verify trial counts.
 The reset command requires the sample-set description so the run cannot begin
-without naming the short, medium, and large recordings:
+without naming the short, medium, and large recordings. It also requires an
+existing `.app` or `.dmg` artifact, either at the default packaged-app path or
+through `--app-artifact <path>`:
 
 ```sh
 cargo run -p xtask -- manual-qa-prepare --reset-trial --input-sample-set "short, medium, and large local recordings"

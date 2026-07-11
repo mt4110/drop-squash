@@ -20,6 +20,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         }
         return Ok(());
     }
+    require_reset_artifact(&options)?;
     let copied = backup_state(&options)?;
     print_paths(&options)?;
     for file in copied {
@@ -29,6 +30,16 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         println!("trial state reset: {}", RESET_FILES.join(", "));
     }
     Ok(())
+}
+
+fn require_reset_artifact(options: &Options) -> Result<(), String> {
+    if !options.reset_trial {
+        return Ok(());
+    }
+    if qa_artifact(options)?.is_some() {
+        return Ok(());
+    }
+    Err("manual QA --reset-trial requires an existing .app or .dmg artifact".to_string())
 }
 
 fn print_paths(options: &Options) -> Result<(), String> {
