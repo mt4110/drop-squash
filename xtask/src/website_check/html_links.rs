@@ -1,15 +1,23 @@
 pub(super) fn hrefs(text: &str) -> Vec<String> {
-    let mut hrefs = Vec::new();
+    attr_values(text, "href")
+}
+
+pub(super) fn srcs(text: &str) -> Vec<String> {
+    attr_values(text, "src")
+}
+
+fn attr_values(text: &str, name: &str) -> Vec<String> {
+    let mut values = Vec::new();
     let mut rest = text;
-    while let Some(index) = rest.to_ascii_lowercase().find("href") {
-        rest = &rest[index + 4..];
+    while let Some(index) = rest.to_ascii_lowercase().find(name) {
+        rest = &rest[index + name.len()..];
         let Some((href, next)) = take_href(rest) else {
             continue;
         };
-        hrefs.push(href.to_string());
+        values.push(href.to_string());
         rest = next;
     }
-    hrefs
+    values
 }
 
 fn take_href(text: &str) -> Option<(&str, &str)> {

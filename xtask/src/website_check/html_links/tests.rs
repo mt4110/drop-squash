@@ -1,4 +1,4 @@
-use super::hrefs;
+use super::{hrefs, srcs};
 
 #[test]
 fn extracts_double_single_and_uppercase_hrefs() {
@@ -12,4 +12,11 @@ fn ignores_unquoted_href_values() {
     let links = hrefs(r#"<a href=a.html></a>"#);
 
     assert!(links.is_empty());
+}
+
+#[test]
+fn extracts_src_values() {
+    let sources = srcs(r#"<script src="app.js"></script><img SRC='logo.png'>"#);
+
+    assert_eq!(sources, vec!["app.js", "logo.png"]);
 }

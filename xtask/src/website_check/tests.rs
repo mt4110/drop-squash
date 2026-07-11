@@ -94,6 +94,38 @@ fn rejects_insecure_external_links() {
 }
 
 #[test]
+fn rejects_external_loaded_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <script src="https://cdn.example.invalid/app.js"></script>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("loads external resource")));
+}
+
+#[test]
+fn rejects_missing_local_loaded_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <img src="missing.png" alt="" />"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("missing.png")));
+}
+
+#[test]
 fn rejects_missing_required_pages() {
     let directory = tempfile::tempdir().unwrap();
     write(directory.path(), "index.html", "<p>Home</p>");

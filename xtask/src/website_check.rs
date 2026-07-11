@@ -68,7 +68,20 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
             errors.push(format!("{} links to missing {href}", path.display()));
         }
     }
+    for src in html_links::srcs(&text) {
+        check_src(root, path, &src, errors);
+    }
     Ok(())
+}
+
+fn check_src(root: &Path, path: &Path, src: &str, errors: &mut Vec<String>) {
+    if src.starts_with("http://") || src.starts_with("https://") || src.starts_with("//") {
+        errors.push(format!("{} loads external resource: {src}", path.display()));
+        return;
+    }
+    if !src.is_empty() && !src.starts_with('#') && !root.join(src).is_file() {
+        errors.push(format!("{} loads missing {src}", path.display()));
+    }
 }
 
 fn check_insecure_href(path: &Path, href: &str, errors: &mut Vec<String>) {
