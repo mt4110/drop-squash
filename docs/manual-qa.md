@@ -91,4 +91,6 @@ rm -f "$HOME/Library/Application Support/DropSquash/license.json"
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes |  |
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
+| Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
+| Notarization staple verification | Public DMG/app artifact passes notary/staple assessment |  |
 | Gatekeeper open test | Signed and notarized app opens cleanly |  |

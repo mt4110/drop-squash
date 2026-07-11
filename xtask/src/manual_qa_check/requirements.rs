@@ -12,7 +12,7 @@ pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 26] = [
+pub(super) const REQUIRED_CHECKS: [&str; 28] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Duplicate output naming",
@@ -38,6 +38,8 @@ pub(super) const REQUIRED_CHECKS: [&str; 26] = [
     "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`",
     "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`",
     "`cargo run -p xtask -- macos-signing-check`",
+    "Codesign verification",
+    "Notarization staple verification",
     "Gatekeeper open test",
 ];
 

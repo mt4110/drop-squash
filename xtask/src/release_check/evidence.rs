@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 13] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 15] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Duplicate output naming", "Duplicate output naming"),
@@ -15,6 +15,11 @@ const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 13] = [
     (
         "Lemon Squeezy sandbox activation",
         "Valid sandbox activation",
+    ),
+    ("Signed DMG verification", "Codesign verification"),
+    (
+        "Notarized/stapled DMG verification",
+        "Notarization staple verification",
     ),
     ("Signed/notarized Gatekeeper open", "Gatekeeper open test"),
 ];

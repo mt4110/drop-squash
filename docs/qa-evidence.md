@@ -49,6 +49,8 @@ These checks still require a packaged macOS app or external service state:
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, and test buyer evidence outside the repository |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
+| Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state |
+| Notarized/stapled DMG verification | Requires the public DMG/app artifact and Apple notary/staple assessment |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |
 
 Only `docs/manual-qa.md` should be used to record those manual results. Record
