@@ -12,6 +12,13 @@ mod tauri_config;
 use std::path::Path;
 
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
+const CI_WORKFLOW: &str = ".github/workflows/ci.yml";
+const CI_WORKFLOW_GATES: [&str; 4] = [
+    "cargo fmt --all -- --check",
+    "cargo run -p xtask -- file-size-check",
+    "cargo run -p xtask -- website-check",
+    "cargo run -p xtask -- release-check",
+];
 const RELEASE_WORKFLOW_GATES: [&str; 15] = [
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
@@ -48,11 +55,24 @@ pub fn run() -> Result<(), String> {
     )?;
     release_doc::check(Path::new("docs/release.md"))?;
     release_notes::check(Path::new("docs/release-notes-template.md"))?;
+    require_ci_workflow_gates()?;
     require_release_workflow_gates()?;
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
     required_text::check()?;
     println!("release readiness checks passed");
     Ok(())
+}
+
+fn require_ci_workflow_gates() -> Result<(), String> {
+    let text = std::fs::read_to_string(CI_WORKFLOW).map_err(|error| error.to_string())?;
+    let missing = missing_ci_workflow_gates(&text);
+    if missing.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "{CI_WORKFLOW} is missing CI gates: {}",
+        missing.join(", ")
+    ))
 }
 
 pub(crate) fn required_blockers() -> &'static [&'static str] {
@@ -73,6 +93,14 @@ fn require_release_workflow_gates() -> Result<(), String> {
 
 fn missing_release_workflow_gates(text: &str) -> Vec<&'static str> {
     RELEASE_WORKFLOW_GATES
+        .iter()
+        .copied()
+        .filter(|gate| !text.contains(gate))
+        .collect()
+}
+
+fn missing_ci_workflow_gates(text: &str) -> Vec<&'static str> {
+    CI_WORKFLOW_GATES
         .iter()
         .copied()
         .filter(|gate| !text.contains(gate))

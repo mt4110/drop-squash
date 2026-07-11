@@ -1,5 +1,5 @@
-use super::missing_release_workflow_gates;
 use super::secret_files::{is_secret_file, reject_secret_files};
+use super::{missing_ci_workflow_gates, missing_release_workflow_gates};
 
 #[test]
 fn accepts_release_workflow_with_required_gates() {
@@ -48,6 +48,34 @@ fn reports_missing_release_workflow_gates() {
             "dropsquash-unsigned-dmg-checksum",
             "cargo run -p xtask -- macos-signing-check",
             "Block unsigned Phase 0 release"
+        ]
+    );
+}
+
+#[test]
+fn accepts_ci_workflow_with_required_gates() {
+    let missing = missing_ci_workflow_gates(
+        r#"
+run: cargo fmt --all -- --check
+run: cargo run -p xtask -- file-size-check
+run: cargo run -p xtask -- website-check
+run: cargo run -p xtask -- release-check
+"#,
+    );
+
+    assert!(missing.is_empty());
+}
+
+#[test]
+fn reports_missing_ci_workflow_gates() {
+    let missing = missing_ci_workflow_gates("run: cargo fmt --all -- --check");
+
+    assert_eq!(
+        missing,
+        vec![
+            "cargo run -p xtask -- file-size-check",
+            "cargo run -p xtask -- website-check",
+            "cargo run -p xtask -- release-check"
         ]
     );
 }

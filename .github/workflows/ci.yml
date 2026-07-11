@@ -26,6 +26,9 @@ jobs:
       - name: website
         if: runner.os == 'Linux'
         run: cargo run -p xtask -- website-check
+      - name: release readiness
+        if: runner.os == 'Linux'
+        run: cargo run -p xtask -- release-check
       - name: clippy
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: test
