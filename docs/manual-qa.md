@@ -14,6 +14,10 @@ Run this gate after filling every result:
 cargo run -p xtask -- manual-qa-check
 ```
 
+For manual observation rows, do not write only `Pass`, `OK`, or `Done` in the
+result. Record the concrete evidence you saw, such as the generated file name,
+trial count, Finder selection, or cache state.
+
 ## macOS Packaged App
 
 | Field | Value |

@@ -1,4 +1,5 @@
-use super::{check_file, REQUIRED_CHECKS, REQUIRED_FIELDS};
+use super::check_file;
+use super::requirements::{REQUIRED_CHECKS, REQUIRED_FIELDS};
 
 #[test]
 fn accepts_complete_manual_qa_tables() {
@@ -41,6 +42,15 @@ fn reports_missing_required_checks() {
     assert!(missing.contains(&"manual QA check is missing: Cancellation".to_string()));
 }
 
+#[test]
+fn reports_vague_manual_results() {
+    let (_directory, path) =
+        write_manual_qa("| Cancellation | large.mov | Returns to ready | Pass |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Cancellation".to_string()));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -55,7 +65,13 @@ fn complete_manual_qa() -> String {
     }
     text.push_str("| Check | Expected | Result |\n|---|---|---|\n");
     for check in REQUIRED_CHECKS {
-        text.push_str(&format!("| {check} | Passes | Pass |\n"));
+        if check.starts_with('`') {
+            text.push_str(&format!("| {check} | Passes | Pass |\n"));
+        } else {
+            text.push_str(&format!(
+                "| {check} | Passes | Observed expected behavior |\n"
+            ));
+        }
     }
     text
 }

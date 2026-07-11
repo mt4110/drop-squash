@@ -1,41 +1,7 @@
 use std::path::{Path, PathBuf};
 
-const REQUIRED_FIELDS: [&str; 8] = [
-    "App build",
-    "App artifact",
-    "macOS version",
-    "Machine",
-    "Input sample set",
-    "Output folder",
-    "Tester",
-    "Date",
-];
-const REQUIRED_CHECKS: [&str; 24] = [
-    "Choose recording conversion",
-    "Drag-and-drop conversion",
-    "Duplicate output naming",
-    "Cancellation",
-    "Multi-file queue",
-    "Ask source policy",
-    "Trash source policy",
-    "Failed conversion",
-    "Larger output",
-    "Reveal output",
-    "Empty key activation",
-    "Invalid key activation",
-    "Valid sandbox activation",
-    "Forget license on this Mac",
-    "`cargo run -p xtask -- release-check`",
-    "`cargo run -p xtask -- file-size-check`",
-    "`cargo run -p xtask -- media-policy-check`",
-    "`cargo run -p xtask -- privacy-policy-check`",
-    "`cargo run -p xtask -- website-check`",
-    "`cargo run -p xtask -- manual-qa-check`",
-    "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`",
-    "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`",
-    "`cargo run -p xtask -- macos-signing-check`",
-    "Gatekeeper open test",
-];
+mod requirements;
+use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let path = PathBuf::from(
@@ -87,17 +53,32 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     if cells.len() == 4 && cells[3].trim().is_empty() {
         missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
     }
+    if cells.len() == 4 && has_vague_manual_result(cells[0], cells[3]) {
+        missing.push(format!(
+            "manual QA result needs evidence: {}",
+            cells[0].trim()
+        ));
+    }
     if cells.len() == 3 && cells[2].trim().is_empty() {
         missing.push(format!("manual QA result is empty: {}", cells[0].trim()));
     }
+    if cells.len() == 3 && has_vague_manual_result(cells[0], cells[2]) {
+        missing.push(format!(
+            "manual QA result needs evidence: {}",
+            cells[0].trim()
+        ));
+    }
 }
 
-fn require_labels(prefix: &str, required: &[&str], labels: &[String], missing: &mut Vec<String>) {
-    for label in required {
-        if !labels.iter().any(|value| value == label) {
-            missing.push(format!("{prefix}: {label}"));
-        }
+fn has_vague_manual_result(label: &str, result: &str) -> bool {
+    let label = label.trim();
+    if label.starts_with('`') {
+        return false;
     }
+    matches!(
+        result.trim().to_ascii_lowercase().as_str(),
+        "pass" | "ok" | "done"
+    )
 }
 
 fn cells(line: &str) -> Vec<&str> {
