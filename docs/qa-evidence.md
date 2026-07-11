@@ -17,7 +17,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Release template synchronization | Manual QA, release blockers, evidence classes, release notes, release docs, workflows, and the actual website directory stay covered by xtask tests | `cargo test -p xtask` |
 | CI workflow shape | Pull-request CI runs format, file-size, website, release readiness, and Nix dev shell evaluation gates | `cargo run -p xtask -- release-check` |
 | Security workflow shape | Security CI runs advisory, license/source, media, and privacy gates | `cargo run -p xtask -- release-check` |
-| Manual QA completeness | Packaged-app evidence fields, concrete results, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
+| Manual QA completeness | Packaged-app evidence fields, concrete results, malformed table rows, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
 | Manual QA preparation | App state backup, trial reset, and `--restore-state` are tested without deleting config by default | `cargo test -p xtask manual_qa_prepare` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
 | Static site | Required pages, local links/resources, approved external links, placeholders, unsupported platform availability claims, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
@@ -34,7 +34,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Benchmark harness | Local encoder benchmark argument parsing, release-set sample count, output acceptance checks, and release blocker/manual QA linkage are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, UDIF trailer, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty UDIF `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
-| Release notes evidence | Filled public release notes reject placeholder URLs, checkout/website/refund mix-up, missing signing/notary evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
+| Release notes evidence | Filled public release notes reject duplicate fields, placeholder URLs, checkout/website/refund mix-up, missing signing/notary evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
 | Publish gate | Public beta publication requires release readiness, valid static website pages, complete manual QA evidence, filled release notes evidence, and every release blocker marked Verified with a traceable Evidence reference | `cargo run -p xtask -- publish-check path/to/release-notes.md` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, wrong DMG names, non-canonical homepages, invalid checksums, and includes the DropSquash app-state `zap` path | `cargo test -p xtask homebrew_cask` |
 
