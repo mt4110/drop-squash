@@ -61,6 +61,24 @@ fn activation_error_redacts_echoed_license_key() {
 }
 
 #[test]
+fn activation_error_redacts_normalized_license_key() {
+    let error = activation_from_response(
+        "LS-SECRET\nRAW-KEY",
+        LicenseApiResponse {
+            activated: Some(false),
+            valid: None,
+            deactivated: None,
+            error: Some("Key LS-SECRET RAW-KEY is not valid.".to_string()),
+            instance: None,
+        },
+    )
+    .unwrap_err();
+
+    assert!(error.to_string().contains("[license key]"));
+    assert!(!error.to_string().contains("LS-SECRET RAW-KEY"));
+}
+
+#[test]
 fn activation_rejects_empty_instance_id() {
     let error = activation_from_response(
         "LS-SECRET-RAW-KEY",
