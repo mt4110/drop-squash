@@ -1,6 +1,7 @@
 use std::path::Path;
 
 mod completion;
+mod evidence_ref;
 mod records;
 mod row;
 
@@ -81,7 +82,7 @@ fn unproven_verified_rows(text: &str) -> Vec<&'static str> {
 
 fn missing_evidence_reference(line: &str) -> bool {
     match row::evidence_reference(line) {
-        Some(value) => !is_evidence_reference(value),
+        Some(value) => !evidence_ref::is_evidence_reference(value),
         None => true,
     }
 }
@@ -100,17 +101,6 @@ fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
 
 fn has_stale_blocked_reference(line: &str) -> bool {
     row::evidence_reference(line) != Some("TBD")
-}
-
-fn is_evidence_reference(value: &str) -> bool {
-    !value.is_empty()
-        && value != "TBD"
-        && (value.starts_with("`docs/")
-            || value.starts_with("https://")
-            || matches!(
-                value,
-                "Release notes" | "GitHub Release" | "Homebrew tap PR"
-            ))
 }
 
 fn join_prefix(prefix: &str, values: Vec<&str>) -> String {
