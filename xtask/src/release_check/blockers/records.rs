@@ -38,8 +38,16 @@ pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) ->
         "`https://...`" if blocker == "Public website deployment" => is_public_website(reference),
         "`https://...`" if blocker == "Live checkout link" => is_live_checkout(reference),
         "`https://...`" => reference.starts_with("https://"),
-        "GitHub Release" => has_named_url(reference, "GitHub Release"),
-        "Homebrew tap PR" => has_named_url(reference, "Homebrew tap PR"),
+        "GitHub Release" => has_expected_url(
+            reference,
+            "GitHub Release",
+            "https://github.com/mt4110/drop-squash/releases/tag/",
+        ),
+        "Homebrew tap PR" => has_expected_url(
+            reference,
+            "Homebrew tap PR",
+            "https://github.com/mt4110/homebrew-tap/pull/",
+        ),
         other => reference == other,
     }
 }
@@ -58,8 +66,8 @@ fn is_live_checkout(reference: &str) -> bool {
         && lower.contains("checkout")
 }
 
-fn has_named_url(reference: &str, label: &str) -> bool {
-    reference.starts_with(label) && reference.contains("https://")
+fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
+    reference.starts_with(label) && reference.contains(prefix)
 }
 
 #[cfg(test)]

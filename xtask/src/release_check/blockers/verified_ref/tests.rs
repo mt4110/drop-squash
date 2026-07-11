@@ -59,6 +59,19 @@ fn reports_distribution_references_without_urls() {
 }
 
 #[test]
+fn reports_distribution_references_with_wrong_repositories() {
+    let text = "\
+| Published checksum | Verified | SHA-256 attached | GitHub Release https://github.com/example/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install output | Homebrew tap PR https://github.com/example/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Published checksum"));
+    assert!(misplaced.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn ignores_blocked_rows() {
     let text = "| Signed DMG | Blocked | codesign output | TBD | Release notes |\n";
 
