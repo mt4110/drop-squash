@@ -176,6 +176,21 @@ fn rejects_pre_release_download_or_checkout_links() {
     assert!(errors.iter().any(|error| error.contains("lemonsqueezy")));
 }
 
+#[test]
+fn rejects_pre_release_links_with_single_quotes_or_uppercase_href() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        r#"<a HREF='https://downloads.test/DropSquash.dmg'>Download</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("DropSquash.dmg")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",

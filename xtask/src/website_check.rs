@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+mod html_links;
 mod release_copy;
 
 const REQUIRED_PAGES: [&str; 8] = [
@@ -57,7 +58,7 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
     if text.contains("example.com") {
         errors.push(format!("{} contains example.com", path.display()));
     }
-    for href in hrefs(&text) {
+    for href in html_links::hrefs(&text) {
         check_insecure_href(path, &href, errors);
         check_disallowed_live_href(path, &href, errors);
         if is_external_or_anchor(&href) {
@@ -84,14 +85,6 @@ fn check_disallowed_live_href(path: &Path, href: &str, errors: &mut Vec<String>)
             path.display()
         ));
     }
-}
-
-fn hrefs(text: &str) -> Vec<String> {
-    text.split("href=\"")
-        .skip(1)
-        .filter_map(|part| part.split('"').next())
-        .map(str::to_string)
-        .collect()
 }
 
 fn is_external_or_anchor(href: &str) -> bool {
