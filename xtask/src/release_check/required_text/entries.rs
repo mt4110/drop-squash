@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 53] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 56] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -28,6 +28,8 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 53] = [
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
     ("docs/qa-evidence.md", "concrete identity fields"),
+    ("docs/qa-evidence.md", "same `.dmg` file evidence"),
+    ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "non-DMG targets are rejected"),
     (
@@ -38,6 +40,10 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 53] = [
     (
         "docs/qa-evidence.md",
         "release blocker URLs matching the release notes URLs",
+    ),
+    (
+        "docs/qa-evidence.md",
+        "public publish references that point to the release notes URLs",
     ),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),

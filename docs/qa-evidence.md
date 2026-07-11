@@ -17,7 +17,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Release template synchronization | Manual QA, release blockers, evidence classes, release notes, release docs, workflows, and the actual website directory stay covered by xtask tests | `cargo test -p xtask` |
 | CI workflow shape | Pull-request CI runs format, file-size, website, release readiness, and Nix dev shell evaluation gates | `cargo run -p xtask -- release-check` |
 | Security workflow shape | Security CI runs advisory, license/source, media, and privacy gates | `cargo run -p xtask -- release-check` |
-| Manual QA completeness | Packaged-app evidence fields, concrete identity fields, concrete results, malformed table rows, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
+| Manual QA completeness | Packaged-app evidence fields, concrete identity fields, concrete results, malformed table rows, UDIF `.dmg` artifacts, same `.dmg` file evidence for artifact/checksum/signing rows, and Gatekeeper no-warning evidence are checked | `cargo run -p xtask -- manual-qa-check` |
 | Manual QA preparation | App state backup, trial reset, and `--restore-state` are tested without deleting config by default | `cargo test -p xtask manual_qa_prepare` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
 | Static site | Required pages, local links/resources, approved external links, placeholders, unsupported platform availability claims, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links or form actions are checked | `cargo run -p xtask -- website-check` |
@@ -34,8 +34,8 @@ Public paid beta blockers and their evidence references are tracked in
 | Benchmark harness | Local encoder benchmark argument parsing, release-set sample count, output acceptance checks, and release blocker/manual QA linkage are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, UDIF trailer, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty UDIF `.dmg` checksums can be generated deterministically, SHA256SUMS lines use the artifact file name instead of local parent directories, and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
-| Release notes evidence | Filled public release notes reject duplicate fields, placeholder URLs, nested artifact URLs, checkout/website/refund mix-up, missing signing/notary evidence, missing conversion/queue/Trash/license action-state evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
-| Publish gate | Public beta publication requires release readiness, valid static website pages, complete manual QA evidence, filled release notes evidence, every release blocker marked Verified with a traceable Evidence reference, and release blocker URLs matching the release notes URLs | `cargo run -p xtask -- publish-check path/to/release-notes.md` |
+| Release notes evidence | Filled public release notes reject duplicate fields, placeholder URLs, nested artifact URLs, checkout/website/refund mix-up, missing public `DropSquash.dmg` signing/notary/Gatekeeper no-warning evidence, missing conversion/queue/Trash/license action-state evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
+| Publish gate | Public beta publication requires release readiness, valid static website pages, complete manual QA evidence, filled release notes evidence, every release blocker marked Verified with a traceable Evidence reference, release blocker URLs matching the release notes URLs, and public publish references that point to the release notes URLs | `cargo run -p xtask -- publish-check path/to/release-notes.md` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, nested artifact URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, wrong DMG names, non-canonical homepages, invalid checksums, declares no in-app auto-update, and includes the DropSquash app-state `zap` path | `cargo test -p xtask homebrew_cask` |
 | macOS signing preflight | Signing preflight rejects local-only CI identities, placeholder certificates, malformed App Store Connect key ids, malformed issuer UUIDs, missing `.p8` files, and malformed Apple team IDs | `cargo test -p xtask macos_signing_check && cargo run -p xtask -- macos-signing-check` |
 
@@ -72,9 +72,9 @@ These checks still require a packaged macOS app or external service state:
 | Public website deployment | Requires the production website URL and public release pages |
 | Refund policy finalized | Requires the production refund policy URL before checkout goes live |
 | Live checkout link | Requires the live Lemon Squeezy checkout URL for the intended product |
-| Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state |
-| Notarized/stapled DMG verification | Requires the public DMG/app artifact and Apple notary/staple assessment |
-| Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |
+| Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state for the same `.dmg` file |
+| Notarized/stapled DMG verification | Requires the public DMG/app artifact and Apple notary/staple assessment for the same `.dmg` file |
+| Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, a clean machine, and no Gatekeeper warning |
 | Published checksum | Requires SHA256SUMS attached to the public GitHub Release |
 | Homebrew cask install | Requires the Homebrew tap PR and install evidence for the versioned artifact |
 
