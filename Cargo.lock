@@ -919,6 +919,8 @@ dependencies = [
  "dropsquash-fileguard",
  "dropsquash-history",
  "dropsquash-license",
+ "dropsquash-platform",
+ "dropsquash-postprocess",
  "serde",
  "tauri",
  "tauri-build",
@@ -986,6 +988,8 @@ name = "dropsquash-platform"
 version = "0.1.0"
 dependencies = [
  "dropsquash-core",
+ "objc2",
+ "objc2-foundation",
 ]
 
 [[package]]

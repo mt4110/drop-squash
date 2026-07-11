@@ -3,7 +3,9 @@ mod conversion;
 mod dto;
 mod license;
 mod progress;
+mod source;
 
+use dropsquash_core::SourcePolicy;
 use dropsquash_core::{OutputSize, Profile};
 
 fn format_error(error: dropsquash_core::AppError) -> String {
@@ -23,8 +25,9 @@ pub fn save_config(
     output_dir: String,
     profile: Profile,
     output_size: OutputSize,
+    source_policy: SourcePolicy,
 ) -> std::result::Result<dto::SavedConfig, String> {
-    config::save_config(app_state, output_dir, profile, output_size)
+    config::save_config(app_state, output_dir, profile, output_size, source_policy)
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -35,6 +38,7 @@ pub async fn convert(
     output_dir: String,
     profile: Profile,
     output_size: OutputSize,
+    source_policy: SourcePolicy,
 ) -> std::result::Result<dto::ConversionSummary, String> {
     conversion::convert(
         app_state,
@@ -43,6 +47,7 @@ pub async fn convert(
         output_dir,
         profile,
         output_size,
+        source_policy,
     )
     .await
 }

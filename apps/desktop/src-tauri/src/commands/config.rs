@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
-use dropsquash_core::{default_config_path, AppConfig, AppError, OutputSize, Profile};
+use dropsquash_core::{
+    default_config_path, AppConfig, AppError, OutputSize, Profile, SourcePolicy,
+};
 use dropsquash_encoder::EncoderBackend;
 
 use crate::state::AppState;
@@ -34,6 +36,7 @@ pub fn save_config(
     output_dir: String,
     profile: Profile,
     output_size: OutputSize,
+    source_policy: SourcePolicy,
 ) -> std::result::Result<SavedConfig, String> {
     let output_dir = PathBuf::from(output_dir);
     if output_dir.as_os_str().is_empty() {
@@ -48,6 +51,7 @@ pub fn save_config(
     config.output_dir = output_dir;
     config.default_profile = profile;
     config.default_output_size = output_size;
+    config.source_policy = source_policy;
     config.save_to_path(&config_path).map_err(format_error)?;
     Ok(saved_config(config))
 }
@@ -68,5 +72,6 @@ fn saved_config(config: AppConfig) -> SavedConfig {
         output_dir: config.output_dir.display().to_string(),
         profile: config.default_profile,
         output_size: config.default_output_size,
+        source_policy: config.source_policy,
     }
 }

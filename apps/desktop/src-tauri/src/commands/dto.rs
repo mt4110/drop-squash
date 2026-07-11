@@ -1,5 +1,15 @@
-use dropsquash_core::{AppConfig, EncodeResult, LicenseState, OutputSize, Profile, SourcePolicy};
+mod options;
+mod summary;
+
+pub use summary::ConversionSummary;
+
+use dropsquash_core::{AppConfig, LicenseState, OutputSize, Profile, SourcePolicy};
 use serde::Serialize;
+
+use options::{
+    profile_options, size_options, source_policy_options, OutputSizeOption, ProfileOption,
+    SourcePolicyOption,
+};
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -12,6 +22,7 @@ pub struct DropZoneState {
     pub output_sizes: Vec<OutputSizeOption>,
     pub input_extensions: Vec<String>,
     pub source_policy: SourcePolicy,
+    pub source_policies: Vec<SourcePolicyOption>,
     pub privacy_mode: &'static str,
     pub successful_conversions: u32,
     pub trial_limit: u32,
@@ -20,46 +31,11 @@ pub struct DropZoneState {
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ProfileOption {
-    pub value: Profile,
-    pub label: &'static str,
-}
-
-#[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OutputSizeOption {
-    pub value: OutputSize,
-    pub label: &'static str,
-}
-
-#[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ConversionSummary {
-    pub output_path: String,
-    pub original_bytes: u64,
-    pub output_bytes: u64,
-    pub saved_bytes: u64,
-    pub reduction_percent: f64,
-}
-
-impl From<EncodeResult> for ConversionSummary {
-    fn from(result: EncodeResult) -> Self {
-        Self {
-            output_path: result.output_path.display().to_string(),
-            original_bytes: result.original_bytes,
-            output_bytes: result.output_bytes,
-            saved_bytes: result.saved_bytes(),
-            reduction_percent: result.reduction_percent(),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct SavedConfig {
     pub output_dir: String,
     pub profile: Profile,
     pub output_size: OutputSize,
+    pub source_policy: SourcePolicy,
 }
 
 pub fn drop_zone_state(
@@ -80,33 +56,14 @@ pub fn drop_zone_state(
         output_dir: config.output_dir.display().to_string(),
         profile: config.default_profile,
         output_size: config.default_output_size,
-        profiles: select_options(Profile::DELIVERY),
+        profiles: profile_options(Profile::DELIVERY),
         output_sizes: size_options(OutputSize::ALL),
         input_extensions,
         source_policy: config.source_policy,
+        source_policies: source_policy_options(),
         privacy_mode: "local-only",
         successful_conversions: trial_state.successful_conversions,
         trial_limit: trial_state.limit,
         is_locked: trial_state.is_locked(),
     }
-}
-
-fn select_options(values: [Profile; 8]) -> Vec<ProfileOption> {
-    values
-        .into_iter()
-        .map(|value| ProfileOption {
-            value,
-            label: value.display_name(),
-        })
-        .collect()
-}
-
-fn size_options(values: [OutputSize; 4]) -> Vec<OutputSizeOption> {
-    values
-        .into_iter()
-        .map(|value| OutputSizeOption {
-            value,
-            label: value.display_name(),
-        })
-        .collect()
 }

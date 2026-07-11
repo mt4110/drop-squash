@@ -14,6 +14,7 @@ import type {
   OutputSize,
   Profile,
   SavedConfig,
+  SourcePolicy,
 } from "./lib/commands";
 import type { QueueEntry } from "./lib/queue";
 import { isCancelReason } from "./lib/queue";
@@ -41,6 +42,11 @@ const initialState: DropZoneState = {
   ],
   inputExtensions: ["mov", "mp4", "m4v"],
   sourcePolicy: "ask",
+  sourcePolicies: [
+    { value: "ask", label: "Ask after saving" },
+    { value: "keep", label: "Keep original" },
+    { value: "trash", label: "Move to Trash" },
+  ],
   privacyMode: "local-only",
   successfulConversions: 0,
   trialLimit: 10,
@@ -64,6 +70,7 @@ export function App() {
     outputDir: string;
     profile: Profile;
     outputSize: OutputSize;
+    sourcePolicy: SourcePolicy;
   }) => {
     if (!isTauri()) {
       return;
@@ -113,6 +120,7 @@ export function App() {
         outputDir: state.outputDir,
         profile: state.profile,
         outputSize: state.outputSize,
+        sourcePolicy: state.sourcePolicy,
       });
       setResult(summary);
       setQueue((current) => current.map((item) => (
@@ -137,7 +145,7 @@ export function App() {
       setIsBusy(false);
       setProgress(undefined);
     }
-  }, [isBusy, state.isLocked, state.outputDir, state.outputSize, state.profile]);
+  }, [isBusy, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
   const enqueueRef = useRef(enqueueInputs);
 
   useEffect(() => {
@@ -207,9 +215,10 @@ export function App() {
         outputDir,
         profile: state.profile,
         outputSize: state.outputSize,
+        sourcePolicy: state.sourcePolicy,
       });
     }
-  }, [persistSettings, state.outputDir, state.outputSize, state.profile]);
+  }, [persistSettings, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
 
   const changeProfile = useCallback((profile: Profile) => {
     setState((current) => ({ ...current, profile }));
@@ -217,8 +226,9 @@ export function App() {
       outputDir: state.outputDir,
       profile,
       outputSize: state.outputSize,
+      sourcePolicy: state.sourcePolicy,
     });
-  }, [persistSettings, state.outputDir, state.outputSize]);
+  }, [persistSettings, state.outputDir, state.outputSize, state.sourcePolicy]);
 
   const changeOutputSize = useCallback((outputSize: OutputSize) => {
     setState((current) => ({ ...current, outputSize }));
@@ -226,8 +236,19 @@ export function App() {
       outputDir: state.outputDir,
       profile: state.profile,
       outputSize,
+      sourcePolicy: state.sourcePolicy,
     });
-  }, [persistSettings, state.outputDir, state.profile]);
+  }, [persistSettings, state.outputDir, state.profile, state.sourcePolicy]);
+
+  const changeSourcePolicy = useCallback((sourcePolicy: SourcePolicy) => {
+    setState((current) => ({ ...current, sourcePolicy }));
+    void persistSettings({
+      outputDir: state.outputDir,
+      profile: state.profile,
+      outputSize: state.outputSize,
+      sourcePolicy,
+    });
+  }, [persistSettings, state.outputDir, state.outputSize, state.profile]);
 
   const revealOutput = useCallback(async (outputPath: string) => {
     if (!isTauri()) {
@@ -308,11 +329,14 @@ export function App() {
         outputDir={state.outputDir}
         profile={state.profile}
         outputSize={state.outputSize}
+        sourcePolicy={state.sourcePolicy}
         profiles={state.profiles}
         outputSizes={state.outputSizes}
+        sourcePolicies={state.sourcePolicies}
         onChooseOutput={() => void chooseOutputDirectory()}
         onProfileChange={changeProfile}
         onOutputSizeChange={changeOutputSize}
+        onSourcePolicyChange={changeSourcePolicy}
       />
       <QueuePanel
         items={queue}

@@ -13,6 +13,7 @@ use super::dto::ConversionSummary;
 use super::format_error;
 use super::license::current_license_state;
 use super::progress::WindowProgressReporter;
+use super::source::handle_source_action;
 use crate::state::AppState;
 
 #[cfg(target_os = "linux")]
@@ -29,9 +30,19 @@ pub async fn convert(
     output_dir: String,
     profile: Profile,
     output_size: OutputSize,
+    source_policy: SourcePolicy,
 ) -> std::result::Result<ConversionSummary, String> {
     let cancel = app_state.start_conversion()?;
-    let result = convert_inner(window, input_path, output_dir, profile, output_size, cancel).await;
+    let result = convert_inner(
+        window,
+        input_path,
+        output_dir,
+        profile,
+        output_size,
+        source_policy,
+        cancel,
+    )
+    .await;
     app_state.finish_conversion();
     result
 }
@@ -42,6 +53,7 @@ async fn convert_inner(
     output_dir: String,
     profile: Profile,
     output_size: OutputSize,
+    source_policy: SourcePolicy,
     cancel: CancellationToken,
 ) -> std::result::Result<ConversionSummary, String> {
     ensure_trial_open().await?;
@@ -58,7 +70,7 @@ async fn convert_inner(
                 output_dir: PathBuf::from(output_dir),
                 profile,
                 output_size,
-                source_policy: SourcePolicy::Ask,
+                source_policy,
             },
             Arc::new(WindowProgressReporter { window }),
             cancel,
@@ -71,7 +83,8 @@ async fn convert_inner(
     )
     .await
     .map_err(format_error)?;
-    Ok(ConversionSummary::from(result))
+    let decision = handle_source_action(&result, source_policy)?;
+    Ok(ConversionSummary::new(result, decision))
 }
 
 async fn ensure_trial_open() -> Result<(), String> {

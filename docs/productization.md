@@ -33,7 +33,7 @@ Nothing uploads.
 | 1 macOS encoder hardening | In progress | Make single-file macOS conversion safe enough for paid beta | Replace hard-link finalization, strengthen output verification, clean temp files, friendly failure states | Existing outputs are never overwritten; failed/larger/cancelled conversions do not count; original remains untouched | Unit tests plus manual `.mov` conversion |
 | 2 Cancellation | In progress | Let users stop an active conversion cleanly | Cancellation token through command/encoder boundary, UI cancel action, temp cleanup | Cancel returns app to ready state; no success history; no trial count | Unit tests pass; packaged-app manual test remains |
 | 3 Sequential queue | In progress | Handle multiple dropped files deterministically | Queue states, per-job progress, one active conversion at a time | Multiple drops create rows; one job runs at a time; failures do not block unrelated jobs | Queue unit tests pass; D&D manual test remains |
-| 4 Source postprocess | Pending | Safely move originals to Trash only after verified success | Source policy setting, macOS Trash adapter, ask-after-success flow | Keep never moves; Ask prompts; Trash moves only after all safety gates | Postprocess tests and macOS Trash manual test |
+| 4 Source postprocess | In progress | Safely move originals to Trash only after verified success | Source policy setting, macOS Trash adapter, ask-after-success flow | Keep never moves; Ask prompts; Trash moves only after all safety gates | Setting and Trash adapter build; Ask UI and macOS Trash manual test remain |
 | 5 License and trial UI | Pending | Convert trial usage into Pro unlock without account creation | License cache, instance id, activation/validation/deactivation, locked/Pro UI | Raw license key is not persisted; invalid/network errors are friendly; valid cache survives grace period | Mock provider tests; Lemon Squeezy sandbox manual test |
 | 6 Release pipeline | Pending | Ship a trusted macOS beta | Signed app, notarized DMG, checksums, release checklist, Homebrew cask draft | Gatekeeper opens cleanly; secrets stay in CI; artifact checksum published | GitHub Actions dry run; clean-machine install test |
 | 7 Sales site | Pending | Let a stranger understand, download, try, and buy | Landing, pricing, privacy, download, FAQ, support | Privacy claims match implementation; CTA works; download path works | Link check and manual purchase sandbox |
@@ -51,7 +51,7 @@ Nothing uploads.
 | 6 | Add output media validation beyond size | Done | Requires smaller `.mp4`, MP4 file-type box, and non-zero `mvhd` duration |
 | 7 | Add cancellation | In progress | Command/UI/encoder path is implemented; packaged-app manual test remains |
 | 8 | Add sequential queue | In progress | Queue model and React sequential runner are implemented; multiple-file D&D manual test remains |
-| 9 | Wire source policy and Trash | Pending | Never permanent delete |
+| 9 | Wire source policy and Trash | In progress | Setting is persisted; Trash uses macOS NSFileManager after safety gates; Ask confirmation UI remains |
 | 10 | Add license activation UI | Pending | After hardening and queue basics |
 | 11 | Build release pipeline | Pending | Signing/notarization before public beta |
 

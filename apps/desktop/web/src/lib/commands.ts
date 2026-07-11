@@ -10,6 +10,7 @@ export type Profile =
   | "archive"
   | "privacy";
 export type OutputSize = "auto" | "1080p" | "720p" | "480p";
+export type SourcePolicy = "keep" | "trash" | "ask";
 
 export type SelectOption<T> = {
   value: T;
@@ -24,7 +25,8 @@ export type DropZoneState = {
   profiles: SelectOption<Profile>[];
   outputSizes: SelectOption<OutputSize>[];
   inputExtensions: string[];
-  sourcePolicy: "keep" | "trash" | "ask";
+  sourcePolicy: SourcePolicy;
+  sourcePolicies: SelectOption<SourcePolicy>[];
   privacyMode: "local-only";
   successfulConversions: number;
   trialLimit: number;
@@ -37,10 +39,13 @@ export type ConversionSummary = {
   outputBytes: number;
   savedBytes: number;
   reductionPercent: number;
+  sourceAction: "keep-original" | "ask-user" | "move-original-to-trash";
+  sourcePath: string;
 };
 
 export type SavedConfig = {
   outputDir: string;
   profile: Profile;
   outputSize: OutputSize;
+  sourcePolicy: SourcePolicy;
 };
