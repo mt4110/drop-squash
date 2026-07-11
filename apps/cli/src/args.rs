@@ -41,6 +41,7 @@ pub enum LicenseCommand {
         #[arg(long)]
         history: Option<PathBuf>,
     },
+    Forget,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]

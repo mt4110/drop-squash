@@ -924,6 +924,7 @@ dependencies = [
  "dropsquash-history",
  "dropsquash-license",
  "dropsquash-privacy",
+ "tempfile",
  "tokio",
 ]
 

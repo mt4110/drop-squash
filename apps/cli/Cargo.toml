@@ -14,3 +14,6 @@ dropsquash-history.workspace = true
 dropsquash-license.workspace = true
 dropsquash-privacy.workspace = true
 tokio.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

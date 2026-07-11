@@ -24,6 +24,17 @@ pub async fn status(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
     Ok(())
 }
 
+pub fn forget() -> dropsquash_core::Result<()> {
+    forget_at_path(&default_license_cache_path())?;
+    println!("local license cache forgotten");
+    println!("server-side license activation unchanged");
+    Ok(())
+}
+
+fn forget_at_path(path: &Path) -> dropsquash_core::Result<()> {
+    LicenseCache::default().save_to_path(path)
+}
+
 pub async fn state(history: &Path) -> dropsquash_core::Result<LicenseState> {
     let records = read_records(history).await?;
     let metrics = HistoryMetrics::from_records(&records);

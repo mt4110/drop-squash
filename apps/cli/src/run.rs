@@ -21,6 +21,9 @@ pub async fn run(cli: Cli) -> dropsquash_core::Result<()> {
         Command::License {
             command: LicenseCommand::Status { history },
         } => license::status(history).await,
+        Command::License {
+            command: LicenseCommand::Forget,
+        } => license::forget(),
         Command::Doctor => doctor::run(),
     }
 }
