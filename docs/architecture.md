@@ -14,13 +14,14 @@ Drop / Watch event
   -> queue::enqueue
   -> encoder::encode
   -> verifier::verify_output
-  -> history::record
+  -> history::append_successful_record
   -> postprocess::decide_source_action
-  -> license::record_successful_conversion
+  -> license::state_for_metrics
   -> platform::notify
 ```
 
-Original movement is never decided by encoder code.
+Original movement is never decided by encoder code. Trial usage is derived from
+JSONL history metrics, and history only accepts successful smaller conversions.
 
 ## Backend Boundary
 
@@ -29,7 +30,7 @@ Tauri command / CLI
   -> queue and policy crates (safe Rust)
   -> EncoderBackend (backend-neutral settings)
   -> platform module (reviewed FFI boundary)
-  -> OS hardware media stack
+  -> OS native media stack
 ```
 
 | Platform | Backend |
