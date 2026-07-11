@@ -1,8 +1,11 @@
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
-        "Sandbox purchase" => {
-            require_all(label, result, &["intended product", "test buyer"], missing)
-        }
+        "Sandbox purchase" => require_all(
+            label,
+            result,
+            &["intended product", "test buyer", "order"],
+            missing,
+        ),
         "Empty key activation" => {
             require_license_cache_evidence(label, result, &["friendly", "raw key"], missing)
         }

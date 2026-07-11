@@ -47,6 +47,7 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["trial count unchanged", "trial unchanged"],
         ]),
         "Reveal output" => Some(&[&["finder"], &[".mp4"], &["selected"]]),
+        "Sandbox purchase" => Some(&[&["intended product"], &["test buyer"], &["order"]]),
         "Valid sandbox activation" => Some(&[&["cache", "license.json"], &["pro"], &["raw key"]]),
         "Invalid key activation" => {
             Some(&[&["cache", "license.json"], &["friendly"], &["raw key"]])
