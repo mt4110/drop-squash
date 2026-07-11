@@ -12,7 +12,7 @@ const URL_FIELDS: [(&str, url::Kind); 5] = [
     ("GitHub Release URL", url::Kind::GitHubRelease),
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
-const EVIDENCE_FIELDS: [&str; 14] = [
+const EVIDENCE_FIELDS: [&str; 15] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -22,6 +22,7 @@ const EVIDENCE_FIELDS: [&str; 14] = [
     "Manual QA record",
     "Lemon Squeezy sandbox purchase",
     "Lemon Squeezy sandbox activation",
+    "Empty key activation",
     "Invalid license key handling",
     "Local license forget",
     "GitHub Release checksum",

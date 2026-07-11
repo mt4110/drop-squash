@@ -20,6 +20,7 @@ fn accepts_concrete_production_urls() {
 - Benchmark regression threshold: no sample exceeded 20 percent regression
 - Lemon Squeezy sandbox purchase: test buyer order abc123 completed
 - Lemon Squeezy sandbox activation: Pro state reached without raw key cache
+- Empty key activation: friendly validation shown without raw key cache
 - Invalid license key handling: friendly error shown without raw key cache
 - Local license forget: local cache removed and trial state restored
 - Public website URL: https://dropsquash.app
@@ -115,6 +116,9 @@ fn rejects_missing_or_generic_release_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Empty key activation")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Invalid license key handling")));

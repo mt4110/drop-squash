@@ -28,6 +28,7 @@ license keys, private store IDs, or certificate material.
 - Benchmark regression threshold:
 - Lemon Squeezy sandbox purchase:
 - Lemon Squeezy sandbox activation:
+- Empty key activation:
 - Invalid license key handling:
 - Local license forget:
 - Public website URL:

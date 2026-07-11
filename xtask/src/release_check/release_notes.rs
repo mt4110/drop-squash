@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 30] = [
+const REQUIRED_TEXT: [&str; 31] = [
     "Version",
     "Artifact",
     "Artifact URL",
@@ -17,6 +17,7 @@ const REQUIRED_TEXT: [&str; 30] = [
     "Benchmark regression threshold",
     "Lemon Squeezy sandbox purchase",
     "Lemon Squeezy sandbox activation",
+    "Empty key activation",
     "Invalid license key handling",
     "Local license forget",
     "Public website URL",
