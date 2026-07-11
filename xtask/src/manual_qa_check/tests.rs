@@ -298,7 +298,8 @@ fn reports_placeholder_three_column_results() {
 fn reports_incomplete_benchmark_results() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | local samples recorded |\n\
-| Benchmark regression threshold | Throughput does not regress by more than 20% | no regression |\n",
+| Benchmark regression threshold | Throughput does not regress by more than 20% | no regression |\n\
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded | Pass |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -306,6 +307,7 @@ fn reports_incomplete_benchmark_results() {
         .iter()
         .any(|error| error.contains("machine, and OS")));
     assert!(missing.iter().any(|error| error.contains("20%")));
+    assert!(missing.iter().any(|error| error.contains("benchmark")));
 }
 
 #[test]
@@ -531,6 +533,9 @@ fn command_result(check: &str) -> String {
         }
         "`cargo run -p xtask -- macos-signing-check`" => {
             "macos-signing-check passed in release environment"
+        }
+        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
+            "CSV recorded for three samples, outputs were smaller, saved outside repo at /tmp/dropsquash-bench/results.csv"
         }
         _ => "Pass",
     };

@@ -68,6 +68,9 @@ fn requirement_for(label: &str) -> Option<Requirement> {
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
             &[&["sha-256", "sha256"], &["dropsquash.dmg", ".dmg"]]
         }
+        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
+            &[&["csv"], &["three", "3"], &["smaller"], &["outside repo", "outside repository"]]
+        }
         "`cargo run -p xtask -- macos-signing-check`" => &[&["macos-signing-check"]],
         "Codesign verification" => &[&["codesign"], &["developer id"]],
         "Notarization staple verification" => &[&["notary", "notarization"], &["staple", "spctl"]],
