@@ -1,10 +1,19 @@
-use dropsquash_core::{EncodeJob, EncodeResult};
+use dropsquash_core::EncodeResult;
 use serde::{Deserialize, Serialize};
+
+use crate::{QueueItem, QueueJobId};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum QueueEvent {
-    Enqueued(EncodeJob),
-    Started(EncodeJob),
-    Finished(EncodeResult),
-    Failed(String),
+    Enqueued(QueueItem),
+    Started(QueueItem),
+    Finished {
+        id: QueueJobId,
+        result: EncodeResult,
+    },
+    Failed {
+        id: QueueJobId,
+        error: String,
+    },
+    Cancelled(QueueJobId),
 }

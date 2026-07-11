@@ -11,3 +11,4 @@
 - Split oversized Rust production files to keep modules within the repository size rules.
 - Require verified outputs to be smaller `.mp4` files with an MP4 file-type box and non-zero MP4 duration.
 - Add a desktop cancel action wired through the active conversion state and native encoder path.
+- Add the first sequential queue model and desktop queue UI for multi-file drops.

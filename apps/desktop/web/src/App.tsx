@@ -6,6 +6,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { DropZone } from "./components/DropZone";
 import { HelpPopover } from "./components/HelpPopover";
+import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
 import type {
   ConversionSummary,
@@ -14,6 +15,8 @@ import type {
   Profile,
   SavedConfig,
 } from "./lib/commands";
+import type { QueueEntry } from "./lib/queue";
+import { isCancelReason } from "./lib/queue";
 
 const initialState: DropZoneState = {
   productName: "DropSquash",
@@ -53,6 +56,9 @@ export function App() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
+  const [queue, setQueue] = useState<QueueEntry[]>([]);
+  const activeQueueId = useRef<number>();
+  const nextQueueId = useRef(1);
 
   const persistSettings = useCallback(async (settings: {
     outputDir: string;
@@ -70,41 +76,84 @@ export function App() {
     }
   }, []);
 
-  const convert = useCallback(async (inputPath: string) => {
-    if (!isTauri() || isBusy || state.isLocked) {
+  const enqueueInputs = useCallback((inputPaths: string[]) => {
+    if (!isTauri() || state.isLocked) {
       return;
     }
 
-    setInputPath(inputPath);
+    const entries = inputPaths.map((inputPath) => ({
+      id: nextQueueId.current++,
+      inputPath,
+      status: "queued" as const,
+    }));
+    if (entries.length > 0) {
+      setError(undefined);
+      setResult(undefined);
+      setQueue((current) => [...current, ...entries]);
+    }
+  }, [state.isLocked]);
+
+  const runQueued = useCallback(async (entry: QueueEntry) => {
+    if (!isTauri() || isBusy || state.isLocked || activeQueueId.current) {
+      return;
+    }
+
+    activeQueueId.current = entry.id;
+    setInputPath(entry.inputPath);
     setIsBusy(true);
     setProgress(0);
     setError(undefined);
     setResult(undefined);
+    setQueue((current) => current.map((item) => (
+      item.id === entry.id ? { ...item, status: "running", progress: 0 } : item
+    )));
     try {
       const summary = await invoke<ConversionSummary>("convert", {
-        inputPath,
+        inputPath: entry.inputPath,
         outputDir: state.outputDir,
         profile: state.profile,
         outputSize: state.outputSize,
       });
       setResult(summary);
+      setQueue((current) => current.map((item) => (
+        item.id === entry.id ? { ...item, status: "succeeded", progress: 100, result: summary } : item
+      )));
       setState((current) => ({
         ...current,
         successfulConversions: current.successfulConversions + 1,
         isLocked: current.successfulConversions + 1 >= current.trialLimit,
       }));
     } catch (reason) {
-      setError(String(reason));
+      const status = isCancelReason(reason) ? "cancelled" : "failed";
+      const message = String(reason);
+      setQueue((current) => current.map((item) => (
+        item.id === entry.id ? { ...item, status, error: message } : item
+      )));
+      if (status === "failed") {
+        setError(message);
+      }
     } finally {
+      activeQueueId.current = undefined;
       setIsBusy(false);
       setProgress(undefined);
     }
   }, [isBusy, state.isLocked, state.outputDir, state.outputSize, state.profile]);
-  const convertRef = useRef(convert);
+  const enqueueRef = useRef(enqueueInputs);
 
   useEffect(() => {
-    convertRef.current = convert;
-  }, [convert]);
+    enqueueRef.current = enqueueInputs;
+  }, [enqueueInputs]);
+
+  useEffect(() => {
+    if (isBusy || state.isLocked) {
+      return;
+    }
+
+    const next = queue.find((item) => item.status === "queued");
+    if (next) {
+      void runQueued(next);
+    }
+  }, [isBusy, queue, runQueued, state.isLocked]);
 
   useEffect(() => {
     if (!isTauri()) {
@@ -114,6 +163,12 @@ export function App() {
     let unlisten: (() => void) | undefined;
     void listen<number>("conversion-progress", (event) => {
       setProgress(event.payload);
+      const id = activeQueueId.current;
+      if (id) {
+        setQueue((current) => current.map((item) => (
+          item.id === id ? { ...item, progress: event.payload } : item
+        )));
+      }
     }).then((listener) => {
       unlisten = listener;
     });
@@ -131,9 +186,9 @@ export function App() {
       title: "Choose a recording",
     });
     if (typeof inputPath === "string") {
-      await convert(inputPath);
+      enqueueInputs([inputPath]);
     }
-  }, [convert, state.inputExtensions]);
+  }, [enqueueInputs, state.inputExtensions]);
 
   const chooseOutputDirectory = useCallback(async () => {
     if (!isTauri()) {
@@ -215,10 +270,7 @@ export function App() {
       }
 
       if (event.payload.type === "drop") {
-        const [inputPath] = event.payload.paths;
-        if (inputPath) {
-          void convertRef.current(inputPath);
-        }
+        enqueueRef.current(event.payload.paths);
       }
     }).then((listener) => {
       if (isDisposed) {
@@ -237,7 +289,7 @@ export function App() {
   }, []);
 
   return (
-    <main className="shell">
+    <main className={`shell${queue.length > 0 ? " has-queue" : ""}`}>
       <button aria-label="Show quick tips" className="help-button" title="Show quick tips" type="button" onClick={() => setIsHelpOpen(true)}>?</button>
       <DropZone
         isBusy={isBusy}
@@ -261,6 +313,10 @@ export function App() {
         onChooseOutput={() => void chooseOutputDirectory()}
         onProfileChange={changeProfile}
         onOutputSizeChange={changeOutputSize}
+      />
+      <QueuePanel
+        items={queue}
+        onRevealOutput={(outputPath) => void revealOutput(outputPath)}
       />
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>
