@@ -61,6 +61,24 @@ fn reports_verified_local_forget_blocker_without_manual_result() {
 }
 
 #[test]
+fn reports_verified_license_blocker_without_cache_evidence() {
+    let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Pro reached and raw key absent |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn accepts_verified_license_blocker_with_cache_evidence() {
+    let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Invalid key activation | Friendly license error; no raw key persisted | friendly error shown; license.json cache checked; raw key absent |\n";
+
+    assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
 fn reports_incomplete_packaged_macos_manual_qa() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Choose recording conversion | Small recording | Creates smaller MP4 | Concrete file output |\n";

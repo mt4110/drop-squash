@@ -67,10 +67,30 @@ fn missing_result(manual: &str, check: &str) -> bool {
         .find(|line| line.starts_with('|') && line.contains(&format!("| {check} |")))
     {
         Some(line) => match line.trim_matches('|').split('|').next_back() {
-            Some(result) => unusable_result(result),
+            Some(result) => {
+                unusable_result(result) || lacks_required_license_evidence(check, result)
+            }
             None => true,
         },
         None => true,
+    }
+}
+
+fn lacks_required_license_evidence(check: &str, result: &str) -> bool {
+    let lower = result.to_ascii_lowercase();
+    let mentions_cache = lower.contains("cache") || lower.contains("license.json");
+    match check {
+        "Valid sandbox activation" => {
+            !(mentions_cache && lower.contains("pro") && lower.contains("raw key"))
+        }
+        "Invalid key activation" => {
+            !(mentions_cache && lower.contains("friendly") && lower.contains("raw key"))
+        }
+        "Forget license on this Mac" => {
+            let mentions_state = lower.contains("trial") || lower.contains("locked");
+            !(mentions_cache && mentions_state)
+        }
+        _ => false,
     }
 }
 
