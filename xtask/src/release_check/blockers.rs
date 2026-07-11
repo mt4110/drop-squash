@@ -6,10 +6,12 @@ mod records;
 pub(super) mod row;
 mod verified_ref;
 
-const REQUIRED_BLOCKERS: [&str; 10] = [
+const REQUIRED_BLOCKERS: [&str; 12] = [
     "Packaged macOS manual QA",
     "Lemon Squeezy sandbox purchase",
     "Valid sandbox activation",
+    "Invalid license key handling",
+    "Local license forget",
     "Public website deployment",
     "Live checkout link",
     "Signed DMG",

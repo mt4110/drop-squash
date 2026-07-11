@@ -26,10 +26,12 @@ const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "Reveal output",
 ];
 
-const MANUAL_BLOCKERS: [(&str, &[&str]); 4] = [
+const MANUAL_BLOCKERS: [(&str, &[&str]); 6] = [
     ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
     ("Lemon Squeezy sandbox purchase", &["Sandbox purchase"]),
     ("Valid sandbox activation", &["Valid sandbox activation"]),
+    ("Invalid license key handling", &["Invalid key activation"]),
+    ("Local license forget", &["Forget license on this Mac"]),
     ("Gatekeeper clean-machine open", &["Gatekeeper open test"]),
 ];
 

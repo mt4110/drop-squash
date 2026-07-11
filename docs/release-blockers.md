@@ -16,6 +16,8 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product and test buyer | TBD | `docs/manual-qa.md` |
 | Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| Invalid license key handling | Blocked | Friendly error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| Local license forget | Blocked | Local cache is removed and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
 | Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |
