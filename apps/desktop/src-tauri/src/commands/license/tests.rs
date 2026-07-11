@@ -3,7 +3,7 @@ use dropsquash_core::{AppError, Result};
 use dropsquash_license::LicenseProvider;
 use dropsquash_license::{license_key_fingerprint, LicenseActivation, LicenseCache};
 
-use super::{forget_license_at_path, write_activation_cache};
+use super::{activate_license, forget_license_at_path, write_activation_cache};
 
 struct FakeProvider {
     fail: bool,
@@ -34,6 +34,13 @@ impl LicenseProvider for FakeProvider {
     async fn deactivate(&self, _license_key: &str, _instance_id: &str) -> Result<()> {
         Ok(())
     }
+}
+
+#[tokio::test]
+async fn empty_license_key_returns_friendly_error() {
+    let error = activate_license("   ".to_string()).await.unwrap_err();
+
+    assert_eq!(error.to_string(), "license error: Enter a license key.");
 }
 
 #[tokio::test]
