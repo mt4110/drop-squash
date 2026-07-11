@@ -109,6 +109,23 @@ fn reports_dmg_artifact_that_is_not_file() {
 }
 
 #[test]
+fn reports_dmg_artifact_without_udif_trailer() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, "not really a dmg").unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!("| App artifact | {} |\n", artifact.display()),
+    )
+    .unwrap();
+
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("UDIF DMG")));
+}
+
+#[test]
 fn reports_non_iso_date() {
     let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
     let missing = check_file(&path).unwrap();
