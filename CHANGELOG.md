@@ -14,3 +14,4 @@
 - Add the first sequential queue model and desktop queue UI for multi-file drops.
 - Persist the original-file policy and wire safe post-conversion Trash handling through macOS NSFileManager.
 - Add an explicit Ask-mode action for moving the original to Trash after re-validating the output.
+- Show trial usage in the desktop window so the 10-conversion limit is visible before lockout.

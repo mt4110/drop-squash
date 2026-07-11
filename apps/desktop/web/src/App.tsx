@@ -8,6 +8,7 @@ import { DropZone } from "./components/DropZone";
 import { HelpPopover } from "./components/HelpPopover";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
+import { TrialBanner } from "./components/TrialBanner";
 import type {
   ConversionSummary,
   DropZoneState,
@@ -338,6 +339,11 @@ export function App() {
   return (
     <main className={`shell${queue.length > 0 ? " has-queue" : ""}`}>
       <button aria-label="Show quick tips" className="help-button" title="Show quick tips" type="button" onClick={() => setIsHelpOpen(true)}>?</button>
+      <TrialBanner
+        successfulConversions={state.successfulConversions}
+        trialLimit={state.trialLimit}
+        isLocked={state.isLocked}
+      />
       <DropZone
         isBusy={isBusy}
         isDragging={isDragging}
