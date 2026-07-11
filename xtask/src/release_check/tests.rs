@@ -58,6 +58,13 @@ fn reports_missing_release_workflow_gates() {
 }
 
 #[test]
+fn release_workflow_file_has_required_gates() {
+    let text = std::fs::read_to_string("../.github/workflows/release.yml").unwrap();
+
+    assert!(missing_release_workflow_gates(&text).is_empty());
+}
+
+#[test]
 fn accepts_ci_workflow_with_required_gates() {
     let missing = missing_ci_workflow_gates(
         r#"
@@ -73,6 +80,13 @@ run: nix flake check --no-build --all-systems
     );
 
     assert!(missing.is_empty());
+}
+
+#[test]
+fn ci_workflow_file_has_required_gates() {
+    let text = std::fs::read_to_string("../.github/workflows/ci.yml").unwrap();
+
+    assert!(missing_ci_workflow_gates(&text).is_empty());
 }
 
 #[test]
@@ -124,6 +138,13 @@ fn reports_missing_desktop_workflow_gates() {
 }
 
 #[test]
+fn desktop_workflow_file_has_required_gates() {
+    let text = std::fs::read_to_string("../.github/workflows/desktop-ci.yml").unwrap();
+
+    assert!(missing_desktop_workflow_gates(&text).is_empty());
+}
+
+#[test]
 fn accepts_security_workflow_with_required_gates() {
     let missing = missing_security_workflow_gates(
         r#"
@@ -135,6 +156,13 @@ run: cargo run -p xtask -- privacy-policy-check
     );
 
     assert!(missing.is_empty());
+}
+
+#[test]
+fn security_workflow_file_has_required_gates() {
+    let text = std::fs::read_to_string("../.github/workflows/security.yml").unwrap();
+
+    assert!(missing_security_workflow_gates(&text).is_empty());
 }
 
 #[test]
