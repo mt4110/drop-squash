@@ -35,6 +35,15 @@ fn reports_sandbox_purchase_completion_without_order() {
 }
 
 #[test]
+fn reports_sandbox_purchase_completion_without_intended_product() {
+    let text = "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with test buyer and order | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
 fn reports_product_setup_without_license_keys() {
     let text = "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash | TBD | `docs/manual-qa.md` |\n";
 
