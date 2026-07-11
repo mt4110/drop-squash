@@ -50,14 +50,18 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
         <form onSubmit={(event) => void submit(event)}>
           <input
             aria-label="License key"
+            autoCapitalize="off"
             autoComplete="off"
+            autoCorrect="off"
+            disabled={isSubmitting}
             placeholder="License key"
+            spellCheck={false}
             type="password"
             value={licenseKey}
             onChange={(event) => setLicenseKey(event.target.value)}
           />
           <button disabled={isSubmitting || licenseKey.trim().length === 0} type="submit">
-            Activate
+            {isSubmitting ? "Activating..." : "Activate"}
           </button>
         </form>
       )}
