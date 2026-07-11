@@ -1,5 +1,7 @@
 use super::secret_files::{is_secret_file, reject_secret_files};
-use super::{missing_ci_workflow_gates, missing_release_workflow_gates};
+use super::workflow::{
+    missing_ci_workflow_gates, missing_release_workflow_gates, missing_security_workflow_gates,
+};
 
 #[test]
 fn accepts_release_workflow_with_required_gates() {
@@ -76,6 +78,34 @@ fn reports_missing_ci_workflow_gates() {
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- release-check"
+        ]
+    );
+}
+
+#[test]
+fn accepts_security_workflow_with_required_gates() {
+    let missing = missing_security_workflow_gates(
+        r#"
+run: cargo audit
+run: cargo deny check
+run: cargo run -p xtask -- media-policy-check
+run: cargo run -p xtask -- privacy-policy-check
+"#,
+    );
+
+    assert!(missing.is_empty());
+}
+
+#[test]
+fn reports_missing_security_workflow_gates() {
+    let missing = missing_security_workflow_gates("run: cargo audit");
+
+    assert_eq!(
+        missing,
+        vec![
+            "cargo deny check",
+            "cargo run -p xtask -- media-policy-check",
+            "cargo run -p xtask -- privacy-policy-check"
         ]
     );
 }

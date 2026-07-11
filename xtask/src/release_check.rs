@@ -8,34 +8,10 @@ mod release_notes;
 mod required_text;
 mod secret_files;
 mod tauri_config;
+mod workflow;
 
 use std::path::Path;
 
-const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
-const CI_WORKFLOW: &str = ".github/workflows/ci.yml";
-const CI_WORKFLOW_GATES: [&str; 4] = [
-    "cargo fmt --all -- --check",
-    "cargo run -p xtask -- file-size-check",
-    "cargo run -p xtask -- website-check",
-    "cargo run -p xtask -- release-check",
-];
-const RELEASE_WORKFLOW_GATES: [&str; 15] = [
-    "components: rustfmt, clippy",
-    "cargo fmt --all -- --check",
-    "cargo clippy --workspace --all-targets -- -D warnings",
-    "cargo test --workspace",
-    "cargo run -p xtask -- file-size-check",
-    "cargo run -p xtask -- website-check",
-    "cargo run -p xtask -- manual-qa-check",
-    "cargo run -p xtask -- release-check",
-    "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
-    "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
-    "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
-    "actions/upload-artifact@v4",
-    "dropsquash-unsigned-dmg-checksum",
-    "cargo run -p xtask -- macos-signing-check",
-    "Block unsigned Phase 0 release",
-];
 pub fn run() -> Result<(), String> {
     secret_files::reject_secret_files(Path::new("."))?;
     desktop_capability::check_default_capability(Path::new(
@@ -55,56 +31,15 @@ pub fn run() -> Result<(), String> {
     )?;
     release_doc::check(Path::new("docs/release.md"))?;
     release_notes::check(Path::new("docs/release-notes-template.md"))?;
-    require_ci_workflow_gates()?;
-    require_release_workflow_gates()?;
+    workflow::check_all()?;
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
     required_text::check()?;
     println!("release readiness checks passed");
     Ok(())
 }
 
-fn require_ci_workflow_gates() -> Result<(), String> {
-    let text = std::fs::read_to_string(CI_WORKFLOW).map_err(|error| error.to_string())?;
-    let missing = missing_ci_workflow_gates(&text);
-    if missing.is_empty() {
-        return Ok(());
-    }
-    Err(format!(
-        "{CI_WORKFLOW} is missing CI gates: {}",
-        missing.join(", ")
-    ))
-}
-
 pub(crate) fn required_blockers() -> &'static [&'static str] {
     blockers::required()
-}
-
-fn require_release_workflow_gates() -> Result<(), String> {
-    let text = std::fs::read_to_string(RELEASE_WORKFLOW).map_err(|error| error.to_string())?;
-    let missing = missing_release_workflow_gates(&text);
-    if missing.is_empty() {
-        return Ok(());
-    }
-    Err(format!(
-        "{RELEASE_WORKFLOW} is missing release gates: {}",
-        missing.join(", ")
-    ))
-}
-
-fn missing_release_workflow_gates(text: &str) -> Vec<&'static str> {
-    RELEASE_WORKFLOW_GATES
-        .iter()
-        .copied()
-        .filter(|gate| !text.contains(gate))
-        .collect()
-}
-
-fn missing_ci_workflow_gates(text: &str) -> Vec<&'static str> {
-    CI_WORKFLOW_GATES
-        .iter()
-        .copied()
-        .filter(|gate| !text.contains(gate))
-        .collect()
 }
 
 #[cfg(test)]
