@@ -34,9 +34,9 @@ Public paid beta blockers and their evidence references are tracked in
 | Benchmark harness | Local encoder benchmark argument parsing, release-set sample count, output acceptance checks, and release blocker/manual QA linkage are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, UDIF trailer, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty UDIF `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
-| Release notes evidence | Filled public release notes reject duplicate fields, placeholder URLs, checkout/website/refund mix-up, missing signing/notary evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
+| Release notes evidence | Filled public release notes reject duplicate fields, placeholder URLs, nested artifact URLs, checkout/website/refund mix-up, missing signing/notary evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
 | Publish gate | Public beta publication requires release readiness, valid static website pages, complete manual QA evidence, filled release notes evidence, and every release blocker marked Verified with a traceable Evidence reference | `cargo run -p xtask -- publish-check path/to/release-notes.md` |
-| Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, wrong DMG names, non-canonical homepages, invalid checksums, and includes the DropSquash app-state `zap` path | `cargo test -p xtask homebrew_cask` |
+| Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, nested artifact URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, wrong DMG names, non-canonical homepages, invalid checksums, and includes the DropSquash app-state `zap` path | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence
 
