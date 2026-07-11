@@ -37,6 +37,24 @@ fn explicit_trash_revalidates_output_before_moving_original() {
 }
 
 #[test]
+fn explicit_trash_requires_matching_output_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let source = directory.path().join("recording.mov");
+    let output = directory.path().join("other.squashed.mp4");
+    std::fs::write(&source, vec![0; 100]).unwrap();
+    std::fs::write(&output, vec![0; 20]).unwrap();
+
+    let decision = trash_original(
+        source.to_string_lossy().into_owned(),
+        output.to_string_lossy().into_owned(),
+    )
+    .unwrap();
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(source.exists());
+}
+
+#[test]
 fn failed_result_keeps_original_even_when_sizes_are_smaller() {
     let directory = tempfile::tempdir().unwrap();
     let source = directory.path().join("recording.mov");
@@ -59,6 +77,21 @@ fn trash_policy_revalidates_output_before_moving_original() {
     let output = directory.path().join("recording.squashed.mp4");
     std::fs::write(&source, vec![0; 100]).unwrap();
     std::fs::write(&output, b"not an mp4").unwrap();
+
+    let decision =
+        handle_source_action(&result(source.clone(), output), SourcePolicy::Trash).unwrap();
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(source.exists());
+}
+
+#[test]
+fn trash_policy_requires_matching_output_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let source = directory.path().join("recording.mov");
+    let output = directory.path().join("other.squashed.mp4");
+    std::fs::write(&source, vec![0; 100]).unwrap();
+    std::fs::write(&output, vec![0; 20]).unwrap();
 
     let decision =
         handle_source_action(&result(source.clone(), output), SourcePolicy::Trash).unwrap();
