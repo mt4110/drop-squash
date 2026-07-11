@@ -26,7 +26,8 @@ Packaged-app manual QA remains for cancellation, multi-file queueing, Trash hand
 
 ## Local Commands
 
-Use the pinned Nix shell when you want the repository's Node and pnpm versions:
+Use the pinned Nix shell when you want the repository's Rust, Node, and pnpm
+versions:
 
 ```bash
 nix develop
@@ -68,7 +69,10 @@ nix develop
 cargo test --workspace
 ```
 
-The Nix shell supports Apple Silicon macOS and Linux development and pins Node 24 with pnpm 10 for the desktop web build. Native Windows builds and media tests run on Windows.
+The Nix shell supports Apple Silicon macOS and Linux development and pins Rust
+1.95.0, Node 24.16.0, and pnpm 10.34.0 for the desktop build. Native Windows
+builds and media tests run on Windows. Do not add mise or another version
+manager unless Nix cannot express a required tool.
 
 ## Architecture
 
