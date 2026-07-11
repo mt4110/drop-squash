@@ -1,5 +1,6 @@
 use crate::{media_policy_check, privacy_policy_check};
 mod desktop_capability;
+mod evidence;
 mod secret_files;
 
 use std::path::Path;
@@ -29,6 +30,10 @@ pub fn run() -> Result<(), String> {
     ))?;
     media_policy_check::check_default_roots()?;
     privacy_policy_check::check_default_roots()?;
+    evidence::check_manual_only_coverage(
+        Path::new("docs/qa-evidence.md"),
+        Path::new("docs/manual-qa.md"),
+    )?;
     require_release_workflow_gates()?;
     require_text(
         "apps/desktop/src-tauri/tauri.conf.json",
