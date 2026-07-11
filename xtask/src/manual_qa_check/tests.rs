@@ -210,6 +210,20 @@ fn reports_placeholder_three_column_results() {
     assert!(missing.contains(&"manual QA result needs evidence: Gatekeeper open test".to_string()));
 }
 
+#[test]
+fn reports_incomplete_benchmark_results() {
+    let (_directory, path) = write_manual_qa(
+        "| Benchmark sample set | Short, medium, and large samples | local samples recorded |\n\
+| Benchmark regression threshold | Throughput does not regress by more than 20% | no regression |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("short, medium, and large")));
+    assert!(missing.iter().any(|error| error.contains("20%")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -231,6 +245,14 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
     for check in REQUIRED_CHECKS {
         if check.starts_with('`') {
             text.push_str(&format!("| {check} | Passes | Pass |\n"));
+        } else if check == "Benchmark sample set" {
+            text.push_str(
+                "| Benchmark sample set | Passes | short, medium, and large samples recorded |\n",
+            );
+        } else if check == "Benchmark regression threshold" {
+            text.push_str(
+                "| Benchmark regression threshold | Passes | no sample exceeded 20% regression |\n",
+            );
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"

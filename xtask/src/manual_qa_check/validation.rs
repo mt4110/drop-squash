@@ -25,6 +25,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
     if has_placeholder_evidence(result) || has_vague_manual_result(label, result) {
         missing.push(format!("manual QA result needs evidence: {label}"));
     }
+    super::benchmark::validate_result(label, result, missing);
 }
 
 fn validate_artifact(value: &str, missing: &mut Vec<String>) {
