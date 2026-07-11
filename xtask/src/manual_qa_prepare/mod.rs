@@ -1,7 +1,9 @@
+mod artifact;
 mod build_identity;
 mod options;
 mod state;
 
+use artifact::qa_artifact;
 use build_identity::BuildIdentity;
 use options::Options;
 use state::{backup_state, restore_state, RESET_FILES};
@@ -10,14 +12,14 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     let options = Options::parse(args)?;
     if options.restore_state {
         let restored = restore_state(&options)?;
-        print_paths(&options);
+        print_paths(&options)?;
         for file in restored {
             println!("restored: {file}");
         }
         return Ok(());
     }
     let copied = backup_state(&options)?;
-    print_paths(&options);
+    print_paths(&options)?;
     for file in copied {
         println!("copied: {file}");
     }
@@ -27,7 +29,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
-fn print_paths(options: &Options) {
+fn print_paths(options: &Options) -> Result<(), String> {
     println!("manual QA state backup: {}", options.state_dir.display());
     println!("manual QA output folder: {}", options.output_dir.display());
     println!("app state source: {}", options.app_state_dir.display());
@@ -35,6 +37,13 @@ fn print_paths(options: &Options) {
         Ok(identity) => println!("manual QA App build: {}", identity.app_build()),
         Err(error) => println!("manual QA App build unavailable: {error}"),
     }
+    let artifact = qa_artifact(options)?;
+    if let Some(path) = artifact {
+        println!("manual QA App artifact: {}", path.display());
+    } else {
+        println!("manual QA App artifact unavailable: pass --app-artifact <path>");
+    }
+    Ok(())
 }
 
 #[cfg(test)]

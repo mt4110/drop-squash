@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 #[derive(Debug)]
 pub(super) struct Options {
+    pub(super) app_artifact: Option<PathBuf>,
     pub(super) app_state_dir: PathBuf,
     pub(super) output_dir: PathBuf,
     pub(super) reset_trial: bool,
@@ -33,6 +34,7 @@ impl Options {
 
     fn set_path(&mut self, arg: &str, value: String) -> Result<(), String> {
         match arg {
+            "--app-artifact" => self.app_artifact = Some(PathBuf::from(value)),
             "--app-state-dir" => self.app_state_dir = PathBuf::from(value),
             "--output-dir" => self.output_dir = PathBuf::from(value),
             "--state-dir" => self.state_dir = PathBuf::from(value),
@@ -51,6 +53,7 @@ impl Options {
     fn default() -> Result<Self, String> {
         let home = std::env::var("HOME").map_err(|_| "HOME is not set".to_string())?;
         Ok(Self {
+            app_artifact: None,
             app_state_dir: PathBuf::from(home)
                 .join("Library")
                 .join("Application Support")
@@ -64,6 +67,6 @@ impl Options {
 }
 
 fn usage() -> String {
-    "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
+    "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
         .to_string()
 }

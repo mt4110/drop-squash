@@ -14,6 +14,7 @@ fn creates_output_and_backs_up_existing_state_files() {
     std::fs::write(app_state_dir.join("history.jsonl"), "history").unwrap();
 
     let copied = backup_state(&Options {
+        app_artifact: None,
         app_state_dir,
         output_dir: output_dir.clone(),
         reset_trial: false,
@@ -38,6 +39,7 @@ fn skips_missing_state_files() {
     let output_dir = directory.path().join("output");
 
     let copied = backup_state(&Options {
+        app_artifact: None,
         app_state_dir,
         output_dir,
         reset_trial: false,
@@ -54,6 +56,8 @@ fn parses_custom_directories() {
     let options = Options::parse(vec![
         "--app-state-dir".to_string(),
         "/tmp/app-state".to_string(),
+        "--app-artifact".to_string(),
+        "/tmp/DropSquash.app".to_string(),
         "--reset-trial".to_string(),
         "--output-dir".to_string(),
         "/tmp/output".to_string(),
@@ -62,6 +66,10 @@ fn parses_custom_directories() {
     ])
     .unwrap();
 
+    assert_eq!(
+        options.app_artifact,
+        Some(PathBuf::from("/tmp/DropSquash.app"))
+    );
     assert_eq!(options.app_state_dir, PathBuf::from("/tmp/app-state"));
     assert_eq!(options.output_dir, PathBuf::from("/tmp/output"));
     assert!(options.reset_trial);
@@ -89,6 +97,7 @@ fn resets_trial_state_after_backup_when_requested() {
     std::fs::write(app_state_dir.join("license.json"), "license").unwrap();
 
     let copied = backup_state(&Options {
+        app_artifact: None,
         app_state_dir: app_state_dir.clone(),
         output_dir,
         reset_trial: true,
@@ -118,6 +127,7 @@ fn restores_backed_up_state_files() {
     std::fs::write(state_dir.join("license.json"), "license").unwrap();
 
     let copied = restore_state(&Options {
+        app_artifact: None,
         app_state_dir: app_state_dir.clone(),
         output_dir,
         reset_trial: false,
