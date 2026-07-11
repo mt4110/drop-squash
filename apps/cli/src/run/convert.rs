@@ -35,8 +35,11 @@ pub async fn run(
         .await?;
     append_successful_record(&history, result.clone()).await?;
     println!("output: {}", result.output_path.display());
+    println!("original bytes: {}", result.original_bytes);
+    println!("squashed bytes: {}", result.output_bytes);
     println!("saved bytes: {}", result.saved_bytes());
     println!("reduction: {:.2}%", result.reduction_percent());
+    license::print_state(license::state(&history).await?);
     Ok(())
 }
 

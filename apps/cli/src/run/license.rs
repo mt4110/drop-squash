@@ -1,6 +1,5 @@
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
-
-use std::path::PathBuf;
 
 use dropsquash_core::{
     default_history_path, default_license_cache_path, LicenseState, TRIAL_CONVERSION_LIMIT,
@@ -18,9 +17,20 @@ pub fn gate() -> dropsquash_core::Result<LicenseGate> {
 
 pub async fn status(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
     let history = history.unwrap_or_else(default_history_path);
-    let records = read_records(&history).await?;
+    let state = state(&history).await?;
+    print_state(state);
+    println!("license cache: {}", default_license_cache_path().display());
+    println!("raw license key persisted: no");
+    Ok(())
+}
+
+pub async fn state(history: &Path) -> dropsquash_core::Result<LicenseState> {
+    let records = read_records(history).await?;
     let metrics = HistoryMetrics::from_records(&records);
-    let state = gate()?.state_for_metrics(metrics);
+    Ok(gate()?.state_for_metrics(metrics))
+}
+
+pub fn print_state(state: LicenseState) {
     match state {
         LicenseState::Pro => println!("license state: Pro"),
         LicenseState::Trial(trial) => {
@@ -38,9 +48,6 @@ pub async fn status(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
             );
         }
     }
-    println!("license cache: {}", default_license_cache_path().display());
-    println!("raw license key persisted: no");
-    Ok(())
 }
 
 fn now_unix() -> u64 {
