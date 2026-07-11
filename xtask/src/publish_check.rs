@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 mod evidence;
+mod references;
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes = args
@@ -9,14 +10,17 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     crate::release_check::run()?;
     ensure_website_complete(Path::new("website"))?;
     ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;
-    crate::release_notes_check::check_file(&PathBuf::from(notes))?;
+    let notes_path = PathBuf::from(notes);
+    crate::release_notes_check::check_file(&notes_path)?;
+    let notes_text = read_release_notes(&notes_path)?;
     let blockers = read_release_blockers(Path::new("docs/release-blockers.md"))?;
     let unverified = unverified_blockers(&blockers);
-    if unverified.is_empty() {
+    let mismatched = references::mismatched(&blockers, &notes_text);
+    if unverified.is_empty() && mismatched.is_empty() {
         println!("publish checks passed");
         return Ok(());
     }
-    Err(unverified_blockers_error(&unverified))
+    Err(publish_blockers_error(&unverified, &mismatched))
 }
 
 fn ensure_website_complete(path: &Path) -> Result<(), String> {
@@ -42,6 +46,11 @@ fn read_release_blockers(path: &Path) -> Result<String, String> {
             path.display()
         )
     })
+}
+
+fn read_release_notes(path: &Path) -> Result<String, String> {
+    std::fs::read_to_string(path)
+        .map_err(|error| format!("failed to read release notes {}: {error}", path.display()))
 }
 
 fn unverified_blockers(text: &str) -> Vec<&'static str> {
@@ -70,6 +79,20 @@ fn unverified_blockers_error(blockers: &[&str]) -> String {
         "release blockers must be Verified with traceable Evidence reference before publish: {}",
         blockers.join(", ")
     )
+}
+
+fn publish_blockers_error(unverified: &[&str], mismatched: &[&str]) -> String {
+    let mut errors = Vec::new();
+    if !unverified.is_empty() {
+        errors.push(unverified_blockers_error(unverified));
+    }
+    if !mismatched.is_empty() {
+        errors.push(format!(
+            "release blocker references must match release notes URLs before publish: {}",
+            mismatched.join(", ")
+        ));
+    }
+    errors.join("\n")
 }
 
 fn cells(line: &str) -> Option<Vec<&str>> {
