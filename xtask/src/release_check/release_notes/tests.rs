@@ -45,6 +45,13 @@ SHA256SUMS
 }
 
 #[test]
+fn release_notes_template_contains_required_fields() {
+    let text = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+
+    assert!(missing_text(&text).is_empty());
+}
+
+#[test]
 fn reports_missing_release_note_evidence_fields() {
     let missing = missing_text("");
 
