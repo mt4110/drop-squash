@@ -2,34 +2,10 @@ use std::path::Path;
 
 mod benchmark;
 mod consistency;
+mod fields;
 mod identity;
 mod quality;
 mod url;
-
-const URL_FIELDS: [(&str, url::Kind); 5] = [
-    ("Artifact URL", url::Kind::Artifact),
-    ("Public website URL", url::Kind::Website),
-    ("Live checkout URL", url::Kind::Checkout),
-    ("GitHub Release URL", url::Kind::GitHubRelease),
-    ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
-];
-const EVIDENCE_FIELDS: [&str; 15] = [
-    "`codesign`",
-    "`spctl`",
-    "`stapler`",
-    "Apple notary log",
-    "Gatekeeper clean-machine open",
-    "`docs/release-blockers.md` status",
-    "Manual QA record",
-    "Lemon Squeezy sandbox purchase",
-    "Lemon Squeezy sandbox activation",
-    "Empty key activation",
-    "Invalid license key handling",
-    "Local license forget",
-    "GitHub Release checksum",
-    "Homebrew tap PR",
-    "Homebrew install result",
-];
 
 pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
@@ -37,7 +13,7 @@ pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
 }
 
 fn check_text(text: &str) -> Vec<String> {
-    let mut errors: Vec<String> = URL_FIELDS
+    let mut errors: Vec<String> = fields::URL
         .iter()
         .filter_map(|(label, kind)| validate_url_field(label, *kind, text))
         .collect();
@@ -46,7 +22,7 @@ fn check_text(text: &str) -> Vec<String> {
     errors.extend(benchmark::validate(text));
     errors.extend(validate_sha256(text));
     errors.extend(
-        EVIDENCE_FIELDS
+        fields::EVIDENCE
             .iter()
             .filter_map(|label| validate_evidence_field(label, text)),
     );
