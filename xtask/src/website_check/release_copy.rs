@@ -73,6 +73,8 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
     );
     require_page_text(root, "license.html", "local license cache", errors);
     require_page_text(root, "license.html", "Offline grace", errors);
+    require_page_text(root, "license.html", "Server-side deactivation", errors);
+    require_page_text(root, "license.html", "not automatic", errors);
     require_page_text(
         root,
         "support.html",
