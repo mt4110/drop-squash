@@ -50,6 +50,20 @@ fn save_for_result_writes_pretty_json() {
     assert!(json.contains("\"metadata_policy\": \"preserve\""));
 }
 
+#[test]
+fn load_for_output_reads_matching_sidecar() {
+    let directory = tempfile::tempdir().unwrap();
+    let output_path = directory.path().join("recording.squashed.mp4");
+    let result = encode_result("input.mov", &output_path);
+    let saved = PrivacyReceipt::save_for_result(&result).unwrap();
+
+    let (loaded_path, receipt) = PrivacyReceipt::load_for_output(&output_path).unwrap();
+
+    assert_eq!(loaded_path, saved);
+    assert_eq!(receipt.output_name, "recording.squashed.mp4");
+    assert_eq!(receipt.uploaded_bytes, 0);
+}
+
 fn encode_result(input: impl Into<PathBuf>, output: impl Into<PathBuf>) -> EncodeResult {
     EncodeResult {
         input_path: input.into(),

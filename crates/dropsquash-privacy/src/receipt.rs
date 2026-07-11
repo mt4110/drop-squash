@@ -26,6 +26,12 @@ impl From<&EncodeResult> for PrivacyReceipt {
 }
 
 impl PrivacyReceipt {
+    pub fn load_for_output(output_path: &Path) -> Result<(PathBuf, Self)> {
+        let path = receipt_path_for(output_path);
+        let text = std::fs::read_to_string(&path)?;
+        Ok((path, serde_json::from_str(&text)?))
+    }
+
     pub fn save_for_result(result: &EncodeResult) -> Result<PathBuf> {
         let path = receipt_path_for(&result.output_path);
         Self::from(result).save_to_path(&path)?;

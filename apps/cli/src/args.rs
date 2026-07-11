@@ -32,6 +32,9 @@ pub enum Command {
         #[command(subcommand)]
         command: LicenseCommand,
     },
+    Receipt {
+        output: PathBuf,
+    },
     Doctor,
 }
 

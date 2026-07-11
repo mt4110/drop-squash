@@ -54,7 +54,7 @@ Nothing uploads.
 | 9 | Wire source policy and Trash | In progress | Setting is persisted; Ask has explicit Trash action; Trash uses macOS NSFileManager after command-side output revalidation; reproducible `docs/manual-qa.md` Trash evidence remains |
 | 10 | Add license activation UI | In progress | Trial UI, locked activation form, local forget action, provider networking, local CLI status/forget, raw-key-free cache, failed-activation cache safety, and deactivation-error redaction exist; sandbox/manual validation remains |
 | 11 | Build release pipeline | In progress | Unsigned DMG, release gates, artifact/checksum checks, final publish gate, and CI signing preflight exist; signed/notarized publication remains |
-| 12 | Generate privacy receipt | Done | Successful CLI/desktop conversions write a local sidecar receipt with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve`; desktop can reveal the saved receipt in Finder |
+| 12 | Generate privacy receipt | Done | Successful CLI/desktop conversions write a local sidecar receipt with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve`; desktop can reveal the saved receipt in Finder; CLI can inspect an existing sidecar |
 
 ## Release Gate
 

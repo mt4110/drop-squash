@@ -48,6 +48,7 @@ On macOS, the CLI uses the native encoder. On Windows and Linux, the backend con
 
 ```bash
 cargo run -p dropsquash -- convert ./demo.mov --output-dir ./out --profile auto
+cargo run -p dropsquash -- receipt ./out/demo.squashed.mp4
 ```
 
 The target backend matrix is:

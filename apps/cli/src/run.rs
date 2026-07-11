@@ -1,6 +1,7 @@
 mod convert;
 mod doctor;
 mod license;
+mod receipt;
 mod stats;
 
 use crate::args::{Cli, Command, LicenseCommand};
@@ -24,6 +25,7 @@ pub async fn run(cli: Cli) -> dropsquash_core::Result<()> {
         Command::License {
             command: LicenseCommand::Forget,
         } => license::forget(),
+        Command::Receipt { output } => receipt::run(output),
         Command::Doctor => doctor::run(),
     }
 }

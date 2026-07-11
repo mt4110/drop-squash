@@ -6,3 +6,12 @@ pub enum MetadataPolicy {
     Preserve,
     Strip,
 }
+
+impl MetadataPolicy {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Preserve => "preserve",
+            Self::Strip => "strip",
+        }
+    }
+}
