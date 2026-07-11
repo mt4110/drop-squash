@@ -26,3 +26,14 @@ fn directories_are_rejected() {
 
     assert!(error.contains("not a file"));
 }
+
+#[test]
+fn empty_files_are_rejected() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("empty.dmg");
+    std::fs::File::create(&path).unwrap();
+
+    let error = checksum_line(&path).unwrap_err();
+
+    assert!(error.contains("empty"));
+}
