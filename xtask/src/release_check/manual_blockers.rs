@@ -1,6 +1,7 @@
 use super::blockers::row;
 use std::path::Path;
 
+mod field_quality;
 mod quality;
 mod stale;
 
@@ -84,7 +85,9 @@ fn missing_result(manual: &str, check: &str) -> bool {
     {
         Some(line) => match line.trim_matches('|').split('|').next_back() {
             Some(result) => {
-                unusable_result(result) || quality::lacks_required_evidence(check, result)
+                unusable_result(result)
+                    || field_quality::lacks_required_evidence(check, result)
+                    || quality::lacks_required_evidence(check, result)
             }
             None => true,
         },

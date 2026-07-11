@@ -198,6 +198,16 @@ fn reports_packaged_macos_manual_qa_without_specific_evidence() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_weak_environment_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("App build", "0.1.0");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -324,10 +334,10 @@ fn packaged_manual_qa_with(check: &str, result: &str) -> String {
 
 fn packaged_result(label: &str) -> &'static str {
     match label {
-        "App build" => "0.1.0",
+        "App build" => "DropSquash 0.1.0 git abc1234",
         "App artifact" => "/tmp/DropSquash.app",
         "macOS version" => "macOS 15.5",
-        "Machine" => "Apple silicon Mac",
+        "Machine" => "Apple silicon Mac arm64",
         "Input sample set" => "short, medium, and large local recordings",
         "Output folder" => "/tmp/dropsquash-manual-qa-output",
         "Tester" => "Manual tester",
