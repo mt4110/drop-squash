@@ -4,11 +4,13 @@ const CI_WORKFLOW: &str = ".github/workflows/ci.yml";
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
 const SECURITY_WORKFLOW: &str = ".github/workflows/security.yml";
 
-const CI_WORKFLOW_GATES: [&str; 6] = [
+const CI_WORKFLOW_GATES: [&str; 8] = [
     "cargo fmt --all -- --check",
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
     "cargo run -p xtask -- release-check",
+    "cargo clippy --workspace --all-targets -- -D warnings",
+    "cargo test --workspace",
     "cachix/install-nix-action@v31",
     "nix flake check --no-build --all-systems",
 ];
