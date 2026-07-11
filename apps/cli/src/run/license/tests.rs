@@ -1,7 +1,7 @@
 use dropsquash_core::{LicenseState, TrialState};
 use dropsquash_license::{license_key_fingerprint, LicenseCache};
 
-use super::{forget_at_path, format_state};
+use super::{forget_at_path, forget_lines, format_state};
 
 #[test]
 fn formats_pro_state_without_trial_count() {
@@ -57,5 +57,16 @@ fn forget_clears_only_local_license_cache() {
     assert_eq!(
         LicenseCache::load_or_default(&path).unwrap(),
         LicenseCache::default()
+    );
+}
+
+#[test]
+fn forget_output_says_server_activation_is_unchanged() {
+    assert_eq!(
+        forget_lines(),
+        vec![
+            "local license cache forgotten".to_string(),
+            "server-side license activation unchanged".to_string(),
+        ]
     );
 }

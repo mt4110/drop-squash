@@ -26,13 +26,21 @@ pub async fn status(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
 
 pub fn forget() -> dropsquash_core::Result<()> {
     forget_at_path(&default_license_cache_path())?;
-    println!("local license cache forgotten");
-    println!("server-side license activation unchanged");
+    for line in forget_lines() {
+        println!("{line}");
+    }
     Ok(())
 }
 
 fn forget_at_path(path: &Path) -> dropsquash_core::Result<()> {
     LicenseCache::default().save_to_path(path)
+}
+
+fn forget_lines() -> Vec<String> {
+    vec![
+        "local license cache forgotten".to_string(),
+        "server-side license activation unchanged".to_string(),
+    ]
 }
 
 pub async fn state(history: &Path) -> dropsquash_core::Result<LicenseState> {
