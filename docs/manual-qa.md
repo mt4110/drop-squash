@@ -90,6 +90,10 @@ Packaged-app results must include the concrete thing observed, not only that
 the row passed. Use output file names such as `.squashed.mp4`, Finder selection
 targets, queue counts, trial/history observations, or Trash/source state as
 appropriate for the row.
+For receipt and reveal rows, record the exact privacy values and Finder
+selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, and
+`selected`. For duplicate output naming, record the numbered file name such as
+`.squashed-2.mp4`.
 
 | Check | Input | Expected | Result |
 |---|---|---|---|
@@ -97,7 +101,7 @@ appropriate for the row.
 | Drag-and-drop conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |
 | Privacy receipt sidecar | Successful conversion | Creates matching `.privacy.json` with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve` |  |
 | Reveal privacy receipt | Successful conversion with receipts enabled | Finder opens with generated `.privacy.json` selected |  |
-| Duplicate output naming | Same recording twice | Second output uses numbered suffix |  |
+| Duplicate output naming | Same recording twice | Second output uses `.squashed-2.mp4` style numbered suffix |  |
 | Cancellation | Large recording | App returns to ready; no success history; no trial count |  |
 | Multi-file queue | Three recordings | One active job at a time; unrelated failures do not block queue |  |
 | Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled and it never starts |  |
