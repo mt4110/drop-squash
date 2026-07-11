@@ -294,7 +294,6 @@ export function App() {
       />
       <LicensePanel
         isPro={state.isPro}
-        isLocked={state.isLocked}
         onActivate={activateLicense}
         onForget={forgetLicense}
       />

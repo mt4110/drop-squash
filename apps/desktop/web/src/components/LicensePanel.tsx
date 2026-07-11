@@ -2,19 +2,13 @@ import { useState } from "react";
 
 type LicensePanelProps = {
   isPro: boolean;
-  isLocked: boolean;
   onActivate: (licenseKey: string) => Promise<void>;
   onForget: () => Promise<void>;
 };
 
-export function LicensePanel({ isPro, isLocked, onActivate, onForget }: LicensePanelProps) {
+export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps) {
   const [licenseKey, setLicenseKey] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const showForm = isLocked || isPro;
-
-  if (!showForm) {
-    return null;
-  }
 
   async function submit() {
     setIsSubmitting(true);
