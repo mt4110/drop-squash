@@ -59,7 +59,12 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["failed", "cancelled", "blocked"],
         ],
         "Ask source policy" => &[&["ask", "choose"], &["trash", "keep"]],
-        "Trash source policy" => &[&["trash"], &["verified", "smaller"]],
+        "Trash source policy" => &[
+            &["trash"],
+            &["moving original", "moving"],
+            &["disabled"],
+            &["verified", "smaller"],
+        ],
         "Failed conversion" => &[&["original"], &["trial count unchanged", "trial unchanged"]],
         "Larger output" => &[
             &["failure", "failed"],

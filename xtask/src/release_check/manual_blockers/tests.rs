@@ -376,7 +376,9 @@ fn packaged_result(label: &str) -> &'static str {
             "summary showed finished count, saved bytes, and 1 cancelled mixed outcome"
         }
         "Ask source policy" => "Ask prompt let tester choose Trash or Keep",
-        "Trash source policy" => "original moved to Trash only after verified smaller output",
+        "Trash source policy" => {
+            "button showed Moving original and was disabled; original moved to Trash only after verified smaller output"
+        }
         "Failed conversion" => "original remained and trial count unchanged after failure",
         "Larger output" => "larger result failed and trial count unchanged",
         "Reveal output" => "Finder opened with clip.squashed.mp4 selected",

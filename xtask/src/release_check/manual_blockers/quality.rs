@@ -42,7 +42,12 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["failed", "cancelled", "blocked"],
         ]),
         "Ask source policy" => Some(&[&["ask", "choose"], &["trash", "keep"]]),
-        "Trash source policy" => Some(&[&["trash"], &["verified", "smaller"]]),
+        "Trash source policy" => Some(&[
+            &["trash"],
+            &["moving original", "moving"],
+            &["disabled"],
+            &["verified", "smaller"],
+        ]),
         "Failed conversion" => {
             Some(&[&["original"], &["trial count unchanged", "trial unchanged"]])
         }

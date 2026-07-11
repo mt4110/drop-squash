@@ -115,7 +115,7 @@ selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, and
 | Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled and it never starts |  |
 | Batch summary | Three recordings with at least one mixed outcome | Queue summary shows finished count, total saved bytes, and any failed/cancelled/blocked counts |  |
 | Ask source policy | Successful conversion | User can choose whether to Trash original |  |
-| Trash source policy | Successful conversion | Original moves to Trash only after verified smaller output |  |
+| Trash source policy | Successful conversion | Trash button shows moving/disabled state; original moves to Trash only after verified smaller output |  |
 | Failed conversion | Unsupported or intentionally bad input | Original remains; trial count unchanged |  |
 | Larger output | Input that cannot be made smaller | Treated as failure; original remains; trial count unchanged |  |
 | Reveal output | Completed output link | Finder opens with generated MP4 selected |  |

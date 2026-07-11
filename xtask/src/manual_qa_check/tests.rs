@@ -468,6 +468,18 @@ fn reports_duplicate_output_without_numbered_file_name() {
 }
 
 #[test]
+fn reports_trash_source_without_progress_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Trash source policy | Successful conversion | Original moves | original moved to Trash after verified smaller output |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Trash source policy")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
@@ -614,7 +626,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
                 "| Ask source policy | Passes | Ask prompt let tester choose Trash or Keep |\n",
             );
         } else if check == "Trash source policy" {
-            text.push_str("| Trash source policy | Passes | original moved to Trash only after verified smaller output |\n");
+            text.push_str("| Trash source policy | Passes | button showed Moving original and was disabled; original moved to Trash only after verified smaller output |\n");
         } else if check == "Failed conversion" {
             text.push_str("| Failed conversion | Passes | original remained and trial count unchanged after failure |\n");
         } else if check == "Larger output" {
