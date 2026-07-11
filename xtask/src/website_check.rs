@@ -1,20 +1,11 @@
 use std::path::{Path, PathBuf};
 
 mod external_policy;
+mod href_policy;
 mod html_links;
 mod release_copy;
+mod required_pages;
 mod resource_policy;
-
-const REQUIRED_PAGES: [&str; 8] = [
-    "index.html",
-    "download.html",
-    "pricing.html",
-    "privacy.html",
-    "support.html",
-    "license.html",
-    "refund.html",
-    "changelog.html",
-];
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let root = PathBuf::from(args.first().map(String::as_str).unwrap_or("website"));
@@ -36,20 +27,12 @@ pub(crate) fn check_default_root() -> Result<(), String> {
 
 fn check_root(root: &Path) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
-    check_required_pages(root, &mut errors);
+    required_pages::check(root, &mut errors);
     release_copy::check(root, &mut errors);
     for path in html_files(root)? {
         check_html(root, &path, &mut errors)?;
     }
     Ok(errors)
-}
-
-fn check_required_pages(root: &Path, errors: &mut Vec<String>) {
-    for page in REQUIRED_PAGES {
-        if !root.join(page).is_file() {
-            errors.push(format!("website is missing required page: {page}"));
-        }
-    }
 }
 
 fn html_files(root: &Path) -> Result<Vec<PathBuf>, String> {
@@ -65,14 +48,13 @@ fn html_files(root: &Path) -> Result<Vec<PathBuf>, String> {
 
 fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
-    if has_placeholder_url(&text) {
+    if href_policy::has_placeholder_url(&text) {
         errors.push(format!("{} contains placeholder URL", path.display()));
     }
     for href in html_links::hrefs(&text) {
-        check_insecure_href(path, &href, errors);
-        check_disallowed_live_href(path, &href, errors);
+        href_policy::check(path, &href, errors);
         external_policy::check(path, &href, errors);
-        if is_external_or_anchor(&href) {
+        if href_policy::is_external_or_anchor(&href) {
             continue;
         }
         if !root.join(&href).is_file() {
@@ -83,40 +65,6 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         resource_policy::check(root, path, &src, errors);
     }
     Ok(())
-}
-
-fn check_insecure_href(path: &Path, href: &str, errors: &mut Vec<String>) {
-    if href.starts_with("http://") {
-        errors.push(format!("{} contains insecure link: {href}", path.display()));
-    }
-}
-
-fn has_placeholder_url(text: &str) -> bool {
-    let lower = text.to_ascii_lowercase();
-    lower.contains("example.")
-        || lower.contains(".example/")
-        || lower.contains("localhost")
-        || lower.contains(".test/")
-        || lower.contains(".test")
-}
-
-fn check_disallowed_live_href(path: &Path, href: &str, errors: &mut Vec<String>) {
-    let lower = href.to_ascii_lowercase();
-    if lower.contains(".dmg") || lower.contains("lemonsqueezy") || lower.contains("checkout") {
-        errors.push(format!(
-            "{} contains pre-release live link: {href}",
-            path.display()
-        ));
-    }
-}
-
-fn is_external_or_anchor(href: &str) -> bool {
-    href.is_empty()
-        || href.starts_with('#')
-        || href.starts_with("http://")
-        || href.starts_with("https://")
-        || href.starts_with("mailto:")
-        || href.starts_with("tel:")
 }
 
 #[cfg(test)]

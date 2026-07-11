@@ -1,0 +1,20 @@
+use std::path::Path;
+
+const REQUIRED: [&str; 8] = [
+    "index.html",
+    "download.html",
+    "pricing.html",
+    "privacy.html",
+    "support.html",
+    "license.html",
+    "refund.html",
+    "changelog.html",
+];
+
+pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
+    for page in REQUIRED {
+        if !root.join(page).is_file() {
+            errors.push(format!("website is missing required page: {page}"));
+        }
+    }
+}
