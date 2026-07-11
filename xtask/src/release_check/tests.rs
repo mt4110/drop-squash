@@ -218,6 +218,15 @@ fn scans_repository_tree_for_secret_like_files() {
     assert!(error.contains("AuthKey_TEST.p8"));
 }
 
+#[test]
+fn ignores_local_agent_state_when_scanning_for_secrets() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "docs/release.md", "safe");
+    write(directory.path(), ".codex/.env", "local-only");
+
+    reject_secret_files(directory.path()).unwrap();
+}
+
 fn write(root: &std::path::Path, name: &str, text: &str) {
     let path = root.join(name);
     std::fs::create_dir_all(path.parent().unwrap()).unwrap();

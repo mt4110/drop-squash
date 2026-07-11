@@ -58,5 +58,10 @@ fn collect_files(path: &Path, files: &mut Vec<PathBuf>) -> Result<(), String> {
 fn should_skip(path: &Path) -> bool {
     path.file_name()
         .and_then(|value| value.to_str())
-        .is_some_and(|name| matches!(name, ".git" | ".private_docs" | "target" | "node_modules"))
+        .is_some_and(|name| {
+            matches!(
+                name,
+                ".codex" | ".git" | ".private_docs" | "target" | "node_modules"
+            )
+        })
 }
