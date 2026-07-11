@@ -35,7 +35,7 @@ Nothing uploads.
 | 3 Sequential queue | In progress | Handle multiple dropped files deterministically | Queue states, per-job progress, one active conversion at a time | Multiple drops create rows; one job runs at a time; failures do not block unrelated jobs | Queue unit tests, `docs/qa-evidence.md`, plus reproducible `docs/manual-qa.md` multi-file evidence; `manual-qa-check` before completion |
 | 4 Source postprocess | In progress | Safely move originals to Trash only after verified success | Source policy setting, macOS Trash adapter, ask-after-success flow | Keep never moves; Ask prompts; Trash moves only after all safety gates | Setting, Ask UI, command revalidation tests, Trash adapter, and reproducible `docs/manual-qa.md` Trash evidence; `manual-qa-check` before completion |
 | 5 License and trial UI | In progress | Convert trial usage into Pro unlock without account creation | License cache, instance id, activation/validation provider, local forget action, locked/Pro UI, local CLI status | Raw license key is not persisted; invalid/network/deactivation errors are friendly; valid cache survives grace period | Provider, trial UI, activation shell, local raw-key-free forget action, failed activation avoids partial cache writes, local CLI status, and safe cache/grace are implemented; Lemon Squeezy sandbox test remains |
-| 6 Release pipeline | In progress | Ship a trusted macOS beta | Signed app, notarized DMG, checksums, release checklist, Homebrew cask draft | Gatekeeper opens cleanly; secrets stay in CI; artifact checksum published | Readiness, media/privacy security, unsigned DMG build, artifact, checksum, CI signing preflight, DMG bundle target, and cask generation gates exist; signing/notarization remain |
+| 6 Release pipeline | In progress | Ship a trusted macOS beta | Signed app, notarized DMG, checksums, release checklist, Homebrew cask draft | Gatekeeper opens cleanly; secrets stay in CI; artifact checksum published | Readiness, media/privacy security, unsigned DMG build, artifact, checksum, CI signing preflight, DMG bundle target, and cask generation gates exist; `docs/release-blockers.md` tracks external evidence; signing/notarization remain |
 | 7 Sales site | In progress | Let a stranger understand, download, try, and buy | Landing, pricing, privacy, download, refund, FAQ, support | Privacy claims match implementation; CTA works; download path works | Static site draft, required-page gate, release-status copy gate, and live checkout/download link guard exist; hosting and live checkout remain |
 | 8 Windows/Linux | Later | Expand after macOS signal | Media Foundation and GStreamer allowlist backends | Same core invariants; no silent software fallback | Placeholder backends report unavailable and reject encode; native OS CI and real-device smoke tests remain |
 
@@ -66,6 +66,7 @@ failed conversion does not count trial
 larger output is treated as failure
 original is never moved without verified success
 app is signed and notarized
+`docs/release-blockers.md` rows are Verified with traceable evidence
 privacy claims match implementation
 license secrets are not in the repository
 ```
