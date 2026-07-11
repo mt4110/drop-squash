@@ -4,7 +4,7 @@ use super::misplaced_verified_references;
 fn accepts_verified_reference_in_expected_record_target() {
     let text = "\
 | Signed DMG | Verified | codesign output | Release notes | Release notes |
-| Public website deployment | Verified | pages online | https://dropsquash.example/release-status | `https://...` |
+| Public website deployment | Verified | pages online | https://dropsquash.app/release-status | `https://...` |
 | Packaged macOS manual QA | Verified | table filled | `docs/manual-qa.md` | `docs/manual-qa.md` |
 ";
 

@@ -76,6 +76,16 @@ fn reports_verified_rows_with_vague_evidence_reference() {
 }
 
 #[test]
+fn reports_verified_rows_with_placeholder_url_reference() {
+    let text =
+        "| Public website deployment | Verified | Production website serves pages | https://example.com | `https://...` |\n";
+
+    let unproven = unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Public website deployment"));
+}
+
+#[test]
 fn reports_blocked_rows_with_evidence_reference() {
     let text = REQUIRED_BLOCKERS
         .iter()
