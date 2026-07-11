@@ -24,6 +24,14 @@ impl LicenseApiClient {
         }
     }
 
+    #[cfg(test)]
+    pub fn test(base_url: String) -> Self {
+        Self {
+            client: reqwest::Client::new(),
+            base_url,
+        }
+    }
+
     pub async fn post(&self, endpoint: &str, form: &[(&str, &str)]) -> Result<LicenseApiResponse> {
         let url = format!("{}/{}", self.base_url, endpoint);
         let response = self
