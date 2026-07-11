@@ -69,7 +69,21 @@ fn is_live_checkout(reference: &str) -> bool {
 }
 
 fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
-    reference.starts_with(label) && reference.contains(prefix)
+    if !reference.starts_with(label) {
+        return false;
+    }
+    if label == "Homebrew tap PR" {
+        return reference
+            .split_whitespace()
+            .any(|part| has_numeric_suffix(part, prefix));
+    }
+    reference.contains(prefix)
+}
+
+fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
+    value.strip_prefix(prefix).is_some_and(|suffix| {
+        !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
+    })
 }
 
 #[cfg(test)]

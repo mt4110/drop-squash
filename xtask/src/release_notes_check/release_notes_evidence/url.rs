@@ -24,7 +24,13 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
             value.starts_with("https://github.com/mt4110/drop-squash/releases/tag/")
         }
         Kind::HomebrewPullRequest => {
-            value.starts_with("https://github.com/mt4110/homebrew-tap/pull/")
+            has_numeric_suffix(value, "https://github.com/mt4110/homebrew-tap/pull/")
         }
     }
+}
+
+fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
+    value.strip_prefix(prefix).is_some_and(|suffix| {
+        !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
+    })
 }
