@@ -3,6 +3,7 @@ mod blockers;
 mod desktop_capability;
 mod evidence;
 mod release_doc;
+mod release_notes;
 mod secret_files;
 mod tauri_config;
 
@@ -39,6 +40,7 @@ pub fn run() -> Result<(), String> {
     )?;
     blockers::check_release_blockers(Path::new("docs/release-blockers.md"))?;
     release_doc::check(Path::new("docs/release.md"))?;
+    release_notes::check(Path::new("docs/release-notes-template.md"))?;
     require_release_workflow_gates()?;
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
     require_text("docs/release.md", "docs/release-blockers.md")?;
