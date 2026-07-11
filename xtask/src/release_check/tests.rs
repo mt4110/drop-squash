@@ -1,4 +1,5 @@
-use super::{is_secret_file, missing_release_workflow_gates, reject_secret_files};
+use super::missing_release_workflow_gates;
+use super::secret_files::{is_secret_file, reject_secret_files};
 
 #[test]
 fn accepts_release_workflow_with_required_gates() {
