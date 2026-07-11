@@ -64,6 +64,21 @@ fn ignores_external_links_and_anchors() {
 }
 
 #[test]
+fn rejects_insecure_external_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "support.html",
+        r#"FAQ What is a privacy receipt? Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version <a href="http://dropsquash.app">Support</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("insecure link")));
+}
+
+#[test]
 fn rejects_missing_required_pages() {
     let directory = tempfile::tempdir().unwrap();
     write(directory.path(), "index.html", "<p>Home</p>");
