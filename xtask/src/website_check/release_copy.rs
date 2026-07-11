@@ -34,6 +34,14 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
         "Do not send screen recordings",
         errors,
     );
+    require_page_text(root, "support.html", "FAQ", errors);
+    require_page_text(
+        root,
+        "support.html",
+        "Does DropSquash upload my videos?",
+        errors,
+    );
+    require_page_text(root, "support.html", "Does it use ffmpeg?", errors);
     require_page_text(root, "support.html", "app version", errors);
 }
 

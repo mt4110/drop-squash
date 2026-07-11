@@ -149,7 +149,9 @@ fn required_page_text(page: &str) -> &'static str {
         "privacy.html" => {
             "does not upload media Telemetry is off by default License activation contacts Lemon Squeezy"
         }
-        "support.html" => "Do not send screen recordings app version",
+        "support.html" => {
+            "FAQ Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version"
+        }
         _ => "<p>Page</p>",
     }
 }
