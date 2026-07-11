@@ -5,6 +5,7 @@ use std::path::Path;
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct LicenseCache {
+    pub instance_name: Option<String>,
     pub instance_id: Option<String>,
     pub license_key_fingerprint: Option<String>,
     pub activation_id: Option<String>,

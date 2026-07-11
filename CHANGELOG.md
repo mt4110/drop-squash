@@ -18,3 +18,4 @@
 - Add a raw-key-free license cache with offline grace checks for future Pro activation.
 - Add a locked-state license activation form wired to the provider boundary without adding license networking.
 - Add a release readiness gate that rejects secret-like files and keeps unsigned releases blocked.
+- Implement the Lemon Squeezy License API provider with form-encoded HTTPS requests and raw-key-free cache writes.

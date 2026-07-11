@@ -12,6 +12,6 @@ pub struct LicenseActivation {
 #[async_trait]
 pub trait LicenseProvider: Send + Sync {
     async fn activate(&self, license_key: &str, instance_id: &str) -> Result<LicenseActivation>;
-    async fn validate(&self, activation: &LicenseActivation) -> Result<bool>;
-    async fn deactivate(&self, activation: &LicenseActivation) -> Result<()>;
+    async fn validate(&self, license_key: &str, instance_id: &str) -> Result<bool>;
+    async fn deactivate(&self, license_key: &str, instance_id: &str) -> Result<()>;
 }

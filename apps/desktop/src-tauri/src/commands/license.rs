@@ -14,12 +14,18 @@ pub async fn activate_license(license_key: String) -> dropsquash_core::Result<Li
         return Err(AppError::License("Enter a license key.".to_string()));
     }
     let path = default_license_cache_path();
-    let cache = LicenseCache::load_or_default(&path)?;
-    let instance_id = cache.instance_id.unwrap_or_else(generate_instance_id);
-    let activation = LemonSqueezyProvider
-        .activate(&license_key, &instance_id)
+    let mut cache = LicenseCache::load_or_default(&path)?;
+    let instance_name = cache
+        .instance_name
+        .clone()
+        .unwrap_or_else(generate_instance_id);
+    cache.instance_name = Some(instance_name.clone());
+    cache.save_to_path(&path)?;
+    let activation = LemonSqueezyProvider::default()
+        .activate(&license_key, &instance_name)
         .await?;
     LicenseCache {
+        instance_name: Some(instance_name),
         instance_id: Some(activation.instance_id),
         license_key_fingerprint: Some(activation.license_key_fingerprint),
         activation_id: None,

@@ -13,6 +13,7 @@ fn fingerprint_is_stable_and_does_not_include_raw_key() {
 fn serialized_cache_never_contains_raw_license_key() {
     let key = "LS-SECRET-RAW-KEY";
     let cache = LicenseCache {
+        instance_name: Some("device-1".to_string()),
         instance_id: Some("device-1".to_string()),
         license_key_fingerprint: Some(license_key_fingerprint(key)),
         activation_id: Some("activation-1".to_string()),
