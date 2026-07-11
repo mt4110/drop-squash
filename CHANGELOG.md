@@ -44,3 +44,4 @@
 - Require certificate-based macOS signing credentials in GitHub Actions preflight.
 - Avoid writing partial license cache data when activation fails.
 - Guard conversion history writes so only successful smaller outputs can count toward trial use.
+- Add desktop source-action tests for Ask mode and explicit Trash output revalidation.

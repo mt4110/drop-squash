@@ -56,3 +56,6 @@ pub fn trash_original(
         .map_err(format_error)?;
     Ok(decision)
 }
+
+#[cfg(test)]
+mod tests;
