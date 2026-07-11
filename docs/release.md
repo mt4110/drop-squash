@@ -96,11 +96,13 @@ cargo run -p xtask -- manual-qa-check
 Before a paid beta, complete the license sandbox rows in `docs/manual-qa.md`.
 They cover:
 
+- Lemon Squeezy product setup
 - Lemon Squeezy sandbox purchase
 - Lemon Squeezy sandbox activation
 
 Record these rows:
 
+- Sandbox product setup
 - Sandbox purchase
 - Empty key activation
 - Invalid key activation

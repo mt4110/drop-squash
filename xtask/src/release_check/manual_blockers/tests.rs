@@ -50,6 +50,24 @@ fn reports_verified_sandbox_purchase_without_order() {
 }
 
 #[test]
+fn reports_verified_product_setup_without_license_keys() {
+    let blockers = "| Lemon Squeezy product setup | Verified | Sandbox product configured | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Sandbox product setup | DropSquash sandbox product exists | intended product confirmed |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Lemon Squeezy product setup"));
+}
+
+#[test]
+fn accepts_verified_product_setup_with_license_keys() {
+    let blockers = "| Lemon Squeezy product setup | Verified | Sandbox product configured | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Sandbox product setup | DropSquash sandbox product exists | DropSquash intended product confirmed; license keys enabled |\n";
+
+    assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
 fn reports_verified_invalid_key_blocker_without_manual_result() {
     let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Invalid key activation | Friendly license error; no raw key persisted |  |\n";

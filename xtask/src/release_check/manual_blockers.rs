@@ -28,8 +28,9 @@ const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "Reveal output",
 ];
 
-const MANUAL_BLOCKERS: [(&str, &[&str]); 6] = [
+const MANUAL_BLOCKERS: [(&str, &[&str]); 7] = [
     ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
+    ("Lemon Squeezy product setup", &["Sandbox product setup"]),
     ("Lemon Squeezy sandbox purchase", &["Sandbox purchase"]),
     ("Valid sandbox activation", &["Valid sandbox activation"]),
     ("Invalid license key handling", &["Invalid key activation"]),

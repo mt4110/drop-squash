@@ -26,6 +26,7 @@ license keys, private store IDs, or certificate material.
 - Manual QA record:
 - Benchmark sample set:
 - Benchmark regression threshold:
+- Lemon Squeezy product setup:
 - Lemon Squeezy sandbox purchase:
 - Lemon Squeezy sandbox activation:
 - Empty key activation:
@@ -60,6 +61,7 @@ weak public evidence before the release is published.
 - `docs/release-blockers.md` status: mention `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md` and the tested `DropSquash.dmg` or `.app`.
 - Benchmark sample set: mention short, medium, and large samples with machine and OS context.
+- Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.
 - Lemon Squeezy sandbox purchase: mention the intended product, `test buyer`, and `order`.
 - License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
 - Local license forget: mention cache removal and trial or locked state.

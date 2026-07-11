@@ -14,6 +14,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Blocker | Status | Completion evidence | Evidence reference | Record in |
 |---|---|---|---|---|
 | Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |
+| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |
 | Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Invalid license key handling | Blocked | Friendly error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
@@ -35,6 +36,7 @@ recorded in the location above.
 | Blocker | Class | Next action | Evidence owner |
 |---|---|---|---|
 | Packaged macOS manual QA | Manual packaged-app | Run the packaged artifact through the manual QA table | `docs/manual-qa.md` |
+| Lemon Squeezy product setup | License sandbox | Confirm the sandbox product is DropSquash and license keys are enabled | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | License sandbox | Complete sandbox checkout for the intended product, test buyer, and order | `docs/manual-qa.md` |
 | Valid sandbox activation | License sandbox | Activate the packaged app and inspect the local license cache | `docs/manual-qa.md` |
 | Invalid license key handling | License sandbox | Enter an invalid key and inspect the local license cache | `docs/manual-qa.md` |

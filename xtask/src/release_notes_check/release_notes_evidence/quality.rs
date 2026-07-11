@@ -19,6 +19,11 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         }
         "`docs/release-blockers.md` status" => Some(&[&["verified"], &["all rows"]]),
         "Manual QA record" => Some(&[&["docs/manual-qa.md"], &["dropsquash.dmg", ".app"]]),
+        "Lemon Squeezy product setup" => Some(&[
+            &["dropsquash"],
+            &["intended product"],
+            &["license keys enabled"],
+        ]),
         "Lemon Squeezy sandbox purchase" => {
             Some(&[&["intended product"], &["test buyer"], &["order"]])
         }

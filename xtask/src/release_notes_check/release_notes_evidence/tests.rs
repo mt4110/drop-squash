@@ -18,6 +18,7 @@ fn accepts_concrete_production_urls() {
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
 - Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
 - Benchmark regression threshold: no sample exceeded 20 percent regression
+- Lemon Squeezy product setup: DropSquash intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
 - Lemon Squeezy sandbox activation: Pro state reached and raw key absent from cache
 - Empty key activation: friendly validation shown and raw key absent from cache
@@ -54,6 +55,7 @@ fn rejects_weak_distribution_evidence() {
 - Gatekeeper clean-machine open: opened app
 - `docs/release-blockers.md` status: verified
 - Manual QA record: manual QA filled
+- Lemon Squeezy product setup: product ready
 - Lemon Squeezy sandbox purchase: purchase completed
 - Lemon Squeezy sandbox activation: activated
 - Empty key activation: empty key handled
@@ -83,6 +85,9 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("GitHub Release checksum")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy product setup")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Known limitations")));
@@ -217,6 +222,9 @@ fn rejects_missing_or_generic_release_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Manual QA record")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy product setup")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Lemon Squeezy sandbox purchase")));

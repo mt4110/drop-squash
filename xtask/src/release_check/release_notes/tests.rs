@@ -17,6 +17,7 @@ docs/release-blockers.md
 Manual QA record
 Benchmark sample set
 Benchmark regression threshold
+Lemon Squeezy product setup
 Lemon Squeezy sandbox purchase
 Lemon Squeezy sandbox activation
 Empty key activation
@@ -50,6 +51,7 @@ fn reports_missing_release_note_evidence_fields() {
     assert!(missing.contains(&"SHA-256"));
     assert!(missing.contains(&"Artifact URL"));
     assert!(missing.contains(&"Benchmark sample set"));
+    assert!(missing.contains(&"Lemon Squeezy product setup"));
     assert!(missing.contains(&"GitHub Release URL"));
     assert!(missing.contains(&"Live checkout URL"));
     assert!(missing.contains(&"Support contact"));
