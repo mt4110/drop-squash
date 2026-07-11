@@ -1,6 +1,6 @@
 use std::fs;
 
-const REQUIRED_TEXT: [(&str, &str); 30] = [
+const REQUIRED_TEXT: [(&str, &str); 31] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release-blockers.md", "must include the public URL"),
     ("docs/productization.md", "docs/release-blockers.md"),
@@ -43,6 +43,7 @@ const REQUIRED_TEXT: [(&str, &str); 30] = [
         "at least three private local samples",
     ),
     ("docs/benchmarking.md", "--release-set"),
+    ("docs/benchmarking.md", "absolute `--output-dir`"),
     ("docs/benchmarking.md", "20%"),
     ("website/README.md", "docs/release-blockers.md"),
     ("apps/desktop/src-tauri/tauri.conf.json", "!\"updater\""),

@@ -63,11 +63,29 @@ fn release_set_requires_three_inputs() {
         "--input".to_string(),
         "c.mov".to_string(),
         "--output-dir".to_string(),
-        "bench-out".to_string(),
+        tempfile::tempdir().unwrap().path().display().to_string(),
     ])
     .unwrap();
 
     assert!(args.release_set);
+}
+
+#[test]
+fn release_set_requires_output_outside_repository() {
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--input".to_string(),
+        "b.mov".to_string(),
+        "--input".to_string(),
+        "c.mov".to_string(),
+        "--output-dir".to_string(),
+        "bench-out".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("outside the repository"));
 }
 
 #[test]

@@ -3,6 +3,8 @@ use std::str::FromStr;
 
 use dropsquash_core::{OutputSize, Profile};
 
+mod output_dir_policy;
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BenchmarkArgs {
     pub inputs: Vec<PathBuf>,
@@ -96,11 +98,13 @@ impl Parser {
                 usage()
             ));
         }
+        let output_dir = self
+            .output_dir
+            .ok_or_else(|| format!("benchmark requires --output-dir\n{}", usage()))?;
+        output_dir_policy::validate(self.release_set, &output_dir)?;
         Ok(BenchmarkArgs {
             inputs: self.inputs,
-            output_dir: self
-                .output_dir
-                .ok_or_else(|| format!("benchmark requires --output-dir\n{}", usage()))?,
+            output_dir,
             profile: self.profile,
             release_set: self.release_set,
             output_size: self.output_size,
