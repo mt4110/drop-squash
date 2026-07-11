@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 52] = [
+const REQUIRED_PHRASES: [(&str, &str); 53] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy product setup", "Sandbox product"),
     ("Lemon Squeezy product setup", "DropSquash"),
@@ -57,7 +57,8 @@ const REQUIRED_PHRASES: [(&str, &str); 52] = [
     ("Benchmark release set", "machine/OS context"),
     ("Benchmark release set", "20% regression threshold"),
     ("Published checksum", "SHA-256"),
-    ("Published checksum", "public DMG"),
+    ("Published checksum", "SHA256SUMS"),
+    ("Published checksum", "DropSquash.dmg"),
     ("Published checksum", "attached"),
     ("Homebrew cask install", "brew install --cask"),
     ("Homebrew cask install", "versioned artifact"),

@@ -171,7 +171,25 @@ fn reports_homebrew_completion_without_zap() {
 
 #[test]
 fn reports_checksum_completion_without_public_attachment() {
-    let text = "| Published checksum | Blocked | SHA-256 line recorded | TBD | GitHub Release |\n";
+    let text = "| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public DropSquash.dmg is generated | TBD | GitHub Release |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Published checksum"));
+}
+
+#[test]
+fn reports_checksum_completion_without_artifact_name() {
+    let text = "| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public DMG is attached to the release | TBD | GitHub Release |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Published checksum"));
+}
+
+#[test]
+fn reports_checksum_completion_without_sha256sums() {
+    let text = "| Published checksum | Blocked | SHA-256 line for public DropSquash.dmg is attached to the release | TBD | GitHub Release |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -213,7 +231,7 @@ fn described_blockers() -> String {
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",
         "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
-        "| Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |\n",
+        "| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the release | TBD | GitHub Release |\n",
         "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]
     .join("")
