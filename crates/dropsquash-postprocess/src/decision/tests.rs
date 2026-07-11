@@ -87,3 +87,13 @@ fn larger_output_keeps_original() {
         SourceAction::KeepOriginal
     );
 }
+
+#[test]
+fn equal_size_output_keeps_original() {
+    let mut safety = safe();
+    safety.output_bytes = safety.original_bytes;
+    assert_eq!(
+        action(SourcePolicy::Trash, safety),
+        SourceAction::KeepOriginal
+    );
+}
