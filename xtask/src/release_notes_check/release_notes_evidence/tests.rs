@@ -5,7 +5,7 @@ fn accepts_concrete_production_urls() {
     let errors = check_text(
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
-- SHA-256: 64 hex chars recorded in SHA256SUMS
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234 release source commit
 - `codesign`: valid on DropSquash.app
 - `spctl`: accepted source Developer ID
@@ -86,4 +86,23 @@ fn rejects_missing_or_generic_release_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
+}
+
+#[test]
+fn rejects_non_hex_sha256() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 64 hex chars recorded in SHA256SUMS
+- Git commit: abc1234 release source commit
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("64-character hex checksum")));
 }
