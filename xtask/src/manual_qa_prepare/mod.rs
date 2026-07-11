@@ -1,10 +1,12 @@
 mod artifact;
 mod build_identity;
+mod environment;
 mod options;
 mod state;
 
 use artifact::qa_artifact;
 use build_identity::BuildIdentity;
+use environment::Environment;
 use options::Options;
 use state::{backup_state, restore_state, RESET_FILES};
 
@@ -42,6 +44,11 @@ fn print_paths(options: &Options) -> Result<(), String> {
         println!("manual QA App artifact: {}", path.display());
     } else {
         println!("manual QA App artifact unavailable: pass --app-artifact <path>");
+    }
+    if let Ok(environment) = Environment::current(options) {
+        for line in environment.manual_qa_lines() {
+            println!("{line}");
+        }
     }
     Ok(())
 }
