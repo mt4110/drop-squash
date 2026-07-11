@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 49] = [
+const REQUIRED_PHRASES: [(&str, &str); 50] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy product setup", "Sandbox product"),
     ("Lemon Squeezy product setup", "DropSquash"),
@@ -45,6 +45,10 @@ const REQUIRED_PHRASES: [(&str, &str); 49] = [
     ("Notarized and stapled DMG", "notary"),
     ("Notarized and stapled DMG", "stapled"),
     ("Gatekeeper clean-machine open", "Fresh macOS account"),
+    (
+        "Gatekeeper clean-machine open",
+        "without Gatekeeper warning",
+    ),
     ("Benchmark release set", "Release-set benchmark CSV"),
     ("Benchmark release set", "short, medium, and large"),
     ("Benchmark release set", "smaller outputs"),
