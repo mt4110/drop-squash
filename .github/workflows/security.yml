@@ -1,0 +1,25 @@
+name: security
+
+on:
+  pull_request:
+  schedule:
+    - cron: "0 17 * * 0"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+      - uses: taiki-e/install-action@cargo-audit
+      - uses: taiki-e/install-action@cargo-deny
+      - name: Advisory audit
+        run: cargo audit
+      - name: License and source policy
+        run: cargo deny check
+      - name: Reject external media process code
+        shell: bash
+        run: |
+          if rg -n -i 'ffmpeg|ffprobe|std::process::Command|tokio::process' apps crates; then
+            exit 1
+          fi

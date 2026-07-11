@@ -1,0 +1,11 @@
+name: Bug report
+description: Report something that is not working.
+title: "[Bug]: "
+labels: ["kind/bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+    validations:
+      required: true

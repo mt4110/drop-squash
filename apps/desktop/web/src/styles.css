@@ -1,0 +1,238 @@
+:root {
+  color: #1d1d1f;
+  background: #f6f7fb;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+
+body,
+#root {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.shell {
+  box-sizing: border-box;
+  display: grid;
+  gap: 0;
+  grid-template-rows: minmax(160px, 1fr) auto;
+  height: 100%;
+  min-height: 0;
+  padding: 18px;
+}
+
+.drop-zone {
+  align-content: center;
+  background: #ffffff;
+  border: 1px dashed #9ea2ae;
+  border-radius: 8px 8px 0 0;
+  box-sizing: border-box;
+  display: grid;
+  justify-items: center;
+  min-height: 160px;
+  padding: 18px;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.drop-zone.is-dragging {
+  background: #eff4ff;
+  border-color: #146ef5;
+}
+
+.drop-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.drop-meta {
+  color: #6e6e73;
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+
+.drop-meta.is-error {
+  color: #b42318;
+}
+
+.drop-picker,
+.help-button,
+.output-picker {
+  font: inherit;
+}
+
+.drop-picker {
+  background: transparent;
+  border: 0;
+  color: #146ef5;
+  font-size: 13px;
+  margin-top: 18px;
+  padding: 0;
+}
+
+.source-path {
+  color: #6e6e73;
+  font: 11px ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 12px 0 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress {
+  background: #d2d2d7;
+  border-radius: 999px;
+  height: 4px;
+  margin-top: 16px;
+  overflow: hidden;
+  width: min(260px, 78%);
+}
+
+.progress span {
+  background: #146ef5;
+  display: block;
+  height: 100%;
+  transition: width 120ms linear;
+}
+
+.saved-destination {
+  background: transparent;
+  border: 0;
+  color: #146ef5;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 12px 0 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-destination:hover,
+.saved-destination:focus-visible {
+  text-decoration: underline;
+}
+
+.help-button {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 50%;
+  color: #6e6e73;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 600;
+  height: 22px;
+  justify-content: center;
+  position: absolute;
+  right: 26px;
+  top: 26px;
+  width: 22px;
+}
+
+.settings {
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 0 0 8px 8px;
+  border-top: 0;
+  display: grid;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.settings div,
+.settings label,
+.settings-row {
+  display: flex;
+  font-size: 13px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.settings span {
+  color: #6e6e73;
+}
+
+.settings select {
+  background: transparent;
+  border: 0;
+  box-sizing: border-box;
+  color: #1d1d1f;
+  font: inherit;
+  min-width: 0;
+  padding: 0;
+  text-align: right;
+}
+
+.settings select {
+  max-width: 190px;
+  width: 190px;
+}
+
+.output-picker {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #1d1d1f;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+.output-picker span {
+  color: #1d1d1f;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.output-picker strong {
+  color: #146ef5;
+  font-weight: 400;
+}
+
+.help-backdrop {
+  align-items: center;
+  background: rgba(29, 29, 31, 0.16);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+}
+
+.help-popover {
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(29, 29, 31, 0.2);
+  box-sizing: border-box;
+  font-size: 13px;
+  max-width: 320px;
+  padding: 18px;
+}
+
+.help-popover p {
+  color: #6e6e73;
+  line-height: 1.45;
+  margin: 10px 0;
+}
+
+.help-popover button {
+  background: #146ef5;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  float: right;
+  font: inherit;
+  padding: 6px 10px;
+}

@@ -1,0 +1,12 @@
+name: Conversion failure
+description: Report a failed or unsafe conversion.
+title: "[Conversion]: "
+labels: ["kind/bug", "area/encoder"]
+body:
+  - type: textarea
+    id: input
+    attributes:
+      label: Input details
+      description: File type, approximate size, and where the recording came from.
+    validations:
+      required: true

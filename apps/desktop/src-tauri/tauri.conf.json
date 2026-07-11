@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "DropSquash",
+  "version": "0.1.0",
+  "identifier": "io.github.mt4110.dropsquash",
+  "build": {
+    "beforeDevCommand": "pnpm --dir web dev",
+    "beforeBuildCommand": "pnpm --dir web build",
+    "devUrl": "http://127.0.0.1:5173",
+    "frontendDist": "../web/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "DropSquash",
+        "width": 420,
+        "height": 360,
+        "dragDropEnabled": true,
+        "resizable": false
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "connect-src": "ipc: http://ipc.localhost",
+        "img-src": "'self' asset: data:",
+        "style-src": "'self'"
+      },
+      "devCsp": {
+        "default-src": "'self' http://127.0.0.1:5173",
+        "connect-src": "ipc: http://ipc.localhost http://127.0.0.1:5173 ws://127.0.0.1:5173",
+        "img-src": "'self' asset: data: http://127.0.0.1:5173",
+        "style-src": "'self' 'unsafe-inline' http://127.0.0.1:5173"
+      },
+      "headers": {
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+        "X-Content-Type-Options": "nosniff"
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app"],
+    "icon": ["icons/icon.icns"]
+  }
+}
