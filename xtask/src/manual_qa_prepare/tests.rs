@@ -16,6 +16,7 @@ fn creates_output_and_backs_up_existing_state_files() {
     let copied = backup_state(&Options {
         app_artifact: None,
         app_state_dir,
+        input_sample_set: None,
         output_dir: output_dir.clone(),
         reset_trial: false,
         restore_state: false,
@@ -41,6 +42,7 @@ fn skips_missing_state_files() {
     let copied = backup_state(&Options {
         app_artifact: None,
         app_state_dir,
+        input_sample_set: None,
         output_dir,
         reset_trial: false,
         restore_state: false,
@@ -58,6 +60,8 @@ fn parses_custom_directories() {
         "/tmp/app-state".to_string(),
         "--app-artifact".to_string(),
         "/tmp/DropSquash.app".to_string(),
+        "--input-sample-set".to_string(),
+        "short, medium, and large local recordings".to_string(),
         "--reset-trial".to_string(),
         "--output-dir".to_string(),
         "/tmp/output".to_string(),
@@ -69,6 +73,10 @@ fn parses_custom_directories() {
     assert_eq!(
         options.app_artifact,
         Some(PathBuf::from("/tmp/DropSquash.app"))
+    );
+    assert_eq!(
+        options.input_sample_set,
+        Some("short, medium, and large local recordings".to_string())
     );
     assert_eq!(options.app_state_dir, PathBuf::from("/tmp/app-state"));
     assert_eq!(options.output_dir, PathBuf::from("/tmp/output"));
@@ -99,6 +107,7 @@ fn resets_trial_state_after_backup_when_requested() {
     let copied = backup_state(&Options {
         app_artifact: None,
         app_state_dir: app_state_dir.clone(),
+        input_sample_set: None,
         output_dir,
         reset_trial: true,
         restore_state: false,
@@ -129,6 +138,7 @@ fn restores_backed_up_state_files() {
     let copied = restore_state(&Options {
         app_artifact: None,
         app_state_dir: app_state_dir.clone(),
+        input_sample_set: None,
         output_dir,
         reset_trial: false,
         restore_state: true,
@@ -159,4 +169,15 @@ fn rejects_unknown_arguments() {
     let error = Options::parse(vec!["--mystery".to_string(), "value".to_string()]).unwrap_err();
 
     assert!(error.contains("unknown manual QA prepare argument"));
+}
+
+#[test]
+fn rejects_weak_input_sample_set() {
+    let error = Options::parse(vec![
+        "--input-sample-set".to_string(),
+        "local files".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("short, medium, and large"));
 }

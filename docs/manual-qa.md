@@ -45,6 +45,8 @@ and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
 run. Copy the printed `manual QA App build` value into the `App build` field.
 Copy the printed `manual QA App artifact` value into the `App artifact` field,
 or pass `--app-artifact <path>` when testing a DMG or a non-default app bundle.
+Pass `--input-sample-set <text>` and copy the printed value into the `Input
+sample set` field.
 Copy the printed macOS version, Machine, Output folder, and Date values into
 the matching fields before starting observations. Copy the printed Config path,
 History path, and License cache path values into the matching state path fields.

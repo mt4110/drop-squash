@@ -33,6 +33,7 @@ fn options(app_artifact: Option<std::path::PathBuf>) -> Options {
     Options {
         app_artifact,
         app_state_dir: "/tmp/app-state".into(),
+        input_sample_set: None,
         output_dir: "/tmp/output".into(),
         reset_trial: false,
         restore_state: false,

@@ -4,6 +4,7 @@ use std::path::PathBuf;
 pub(super) struct Options {
     pub(super) app_artifact: Option<PathBuf>,
     pub(super) app_state_dir: PathBuf,
+    pub(super) input_sample_set: Option<String>,
     pub(super) output_dir: PathBuf,
     pub(super) reset_trial: bool,
     pub(super) restore_state: bool,
@@ -36,6 +37,7 @@ impl Options {
         match arg {
             "--app-artifact" => self.app_artifact = Some(PathBuf::from(value)),
             "--app-state-dir" => self.app_state_dir = PathBuf::from(value),
+            "--input-sample-set" => self.input_sample_set = Some(value),
             "--output-dir" => self.output_dir = PathBuf::from(value),
             "--state-dir" => self.state_dir = PathBuf::from(value),
             other => return Err(format!("unknown manual QA prepare argument: {other}")),
@@ -46,6 +48,15 @@ impl Options {
     fn validate(&self) -> Result<(), String> {
         if self.reset_trial && self.restore_state {
             return Err("--reset-trial and --restore-state cannot be combined".to_string());
+        }
+        if self
+            .input_sample_set
+            .as_deref()
+            .is_some_and(|value| !is_sample_set(value))
+        {
+            return Err(
+                "--input-sample-set must mention short, medium, and large recordings".to_string(),
+            );
         }
         Ok(())
     }
@@ -58,6 +69,7 @@ impl Options {
                 .join("Library")
                 .join("Application Support")
                 .join("DropSquash"),
+            input_sample_set: None,
             output_dir: PathBuf::from("/tmp/dropsquash-manual-qa-output"),
             reset_trial: false,
             restore_state: false,
@@ -67,6 +79,14 @@ impl Options {
 }
 
 fn usage() -> String {
-    "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
+    "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--input-sample-set <text>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
         .to_string()
+}
+
+fn is_sample_set(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    ["short", "medium", "large"]
+        .iter()
+        .all(|needle| lower.contains(needle))
+        && (lower.contains("recording") || lower.contains("sample"))
 }

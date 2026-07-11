@@ -45,6 +45,9 @@ fn print_paths(options: &Options) -> Result<(), String> {
     } else {
         println!("manual QA App artifact unavailable: pass --app-artifact <path>");
     }
+    if let Some(sample_set) = &options.input_sample_set {
+        println!("manual QA Input sample set: {sample_set}");
+    }
     if let Ok(environment) = Environment::current(options) {
         for line in environment.manual_qa_lines() {
             println!("{line}");
