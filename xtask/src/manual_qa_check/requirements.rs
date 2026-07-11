@@ -12,10 +12,11 @@ pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 31] = [
+pub(super) const REQUIRED_CHECKS: [&str; 32] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",
+    "Reveal privacy receipt",
     "Duplicate output naming",
     "Cancellation",
     "Multi-file queue",

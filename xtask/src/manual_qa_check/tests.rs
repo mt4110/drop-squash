@@ -42,6 +42,7 @@ fn reports_missing_required_checks() {
     let missing = check_file(&path).unwrap();
 
     assert!(missing.contains(&"manual QA check is missing: Cancellation".to_string()));
+    assert!(missing.contains(&"manual QA check is missing: Reveal privacy receipt".to_string()));
 }
 
 #[test]
