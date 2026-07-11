@@ -16,6 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          components: rustfmt, clippy
+      - name: Rust format check
+        run: cargo fmt --all -- --check
+      - name: Rust clippy check
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Rust tests
+        run: cargo test --workspace
       - name: File size architecture check
         run: cargo run -p xtask -- file-size-check
       - name: Static website check

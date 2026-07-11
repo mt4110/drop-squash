@@ -23,6 +23,9 @@ before signed packaging is enabled.
 Run the local readiness gate before preparing any release artifact:
 
 ```sh
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace
 cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
 cargo run -p xtask -- manual-qa-check

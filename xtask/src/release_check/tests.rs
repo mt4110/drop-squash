@@ -5,6 +5,11 @@ use super::secret_files::{is_secret_file, reject_secret_files};
 fn accepts_release_workflow_with_required_gates() {
     let missing = missing_release_workflow_gates(
         r#"
+with:
+  components: rustfmt, clippy
+run: cargo fmt --all -- --check
+run: cargo clippy --workspace --all-targets -- -D warnings
+run: cargo test --workspace
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- manual-qa-check
@@ -29,6 +34,10 @@ fn reports_missing_release_workflow_gates() {
     assert_eq!(
         missing,
         vec![
+            "components: rustfmt, clippy",
+            "cargo fmt --all -- --check",
+            "cargo clippy --workspace --all-targets -- -D warnings",
+            "cargo test --workspace",
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- manual-qa-check",

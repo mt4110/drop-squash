@@ -4,7 +4,11 @@ mod secret_files;
 use std::path::Path;
 
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
-const RELEASE_WORKFLOW_GATES: [&str; 11] = [
+const RELEASE_WORKFLOW_GATES: [&str; 15] = [
+    "components: rustfmt, clippy",
+    "cargo fmt --all -- --check",
+    "cargo clippy --workspace --all-targets -- -D warnings",
+    "cargo test --workspace",
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
     "cargo run -p xtask -- manual-qa-check",
