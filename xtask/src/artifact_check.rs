@@ -18,6 +18,9 @@ fn check_file(path: &Path) -> Result<(), String> {
         return Err(format!("artifact target is not a file: {}", path.display()));
     }
     let bytes = std::fs::read(path).map_err(|error| error.to_string())?;
+    if bytes.is_empty() {
+        return Err(format!("artifact is empty: {}", path.display()));
+    }
     if contains_bytes(&bytes, DISALLOWED_BYTES) {
         return Err(format!(
             "artifact contains disallowed /nix/store reference: {}",

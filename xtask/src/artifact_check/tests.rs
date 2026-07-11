@@ -25,6 +25,14 @@ fn rejects_directories() {
     assert!(error.contains("not a file"));
 }
 
+#[test]
+fn rejects_empty_artifacts() {
+    let (_directory, path) = write_artifact(b"");
+    let error = check_file(&path).unwrap_err();
+
+    assert!(error.contains("empty"));
+}
+
 fn write_artifact(bytes: &[u8]) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("DropSquash.dmg");
