@@ -41,6 +41,22 @@ fn reports_app_build_without_numeric_version() {
 }
 
 #[test]
+fn reports_weak_environment_field_values() {
+    let (_directory, path) = write_manual_qa(
+        "| macOS version | Concrete evidence |\n\
+| Machine | MacBookPro18,4 |\n\
+| Output folder | /missing/dropsquash-output |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("macOS version")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("CPU architecture")));
+    assert!(missing.iter().any(|error| error.contains("Output folder")));
+}
+
+#[test]
 fn reports_empty_four_column_results() {
     let (_directory, path) = write_manual_qa("| Convert | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
@@ -314,11 +330,16 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
 }
 
 fn complete_manual_qa(artifact: &std::path::Path) -> String {
+    let output = artifact.parent().unwrap().join("qa-output");
+    std::fs::create_dir(&output).unwrap();
     let mut text = String::from("| Field | Value |\n|---|---|\n");
     for field in REQUIRED_FIELDS {
         let value = match field {
             "App artifact" => artifact.display().to_string(),
             "App build" => "DropSquash 0.1.0 git abc1234".to_string(),
+            "macOS version" => "macOS 26.5.2".to_string(),
+            "Machine" => "MacBookPro18,4 arm64".to_string(),
+            "Output folder" => output.display().to_string(),
             "Date" => "2026-07-11".to_string(),
             _ => "Concrete evidence".to_string(),
         };
