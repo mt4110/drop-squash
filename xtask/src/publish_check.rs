@@ -8,8 +8,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     ensure_website_complete(Path::new("website"))?;
     ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;
     crate::release_notes_check::check_file(&PathBuf::from(notes))?;
-    let blockers =
-        std::fs::read_to_string("docs/release-blockers.md").map_err(|error| error.to_string())?;
+    let blockers = read_release_blockers(Path::new("docs/release-blockers.md"))?;
     let unverified = unverified_blockers(&blockers);
     if unverified.is_empty() {
         println!("publish checks passed");
@@ -32,6 +31,15 @@ fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {
         "manual QA must pass before publish:\n{}",
         missing.join("\n")
     ))
+}
+
+fn read_release_blockers(path: &Path) -> Result<String, String> {
+    std::fs::read_to_string(path).map_err(|error| {
+        format!(
+            "failed to read release blockers {}: {error}",
+            path.display()
+        )
+    })
 }
 
 fn unverified_blockers(text: &str) -> Vec<&'static str> {

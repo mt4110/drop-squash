@@ -1,5 +1,5 @@
 use super::{
-    ensure_manual_qa_complete, ensure_website_complete, unverified_blockers,
+    ensure_manual_qa_complete, ensure_website_complete, read_release_blockers, unverified_blockers,
     unverified_blockers_error,
 };
 
@@ -46,6 +46,17 @@ fn publish_error_mentions_traceable_evidence_reference() {
 
     assert!(error.contains("traceable Evidence reference"));
     assert!(error.contains("Signed DMG"));
+}
+
+#[test]
+fn reports_missing_release_blockers_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("missing-release-blockers.md");
+
+    let error = read_release_blockers(&path).unwrap_err();
+
+    assert!(error.contains("failed to read release blockers"));
+    assert!(error.contains("missing-release-blockers.md"));
 }
 
 #[test]
