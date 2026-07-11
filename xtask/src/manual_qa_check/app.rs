@@ -99,7 +99,13 @@ fn requirement_for(label: &str) -> Option<Requirement> {
         }
         "Codesign verification" => &[&["codesign"], &["developer id"]],
         "Notarization staple verification" => &[&["notary", "notarization"], &["staple", "spctl"]],
-        "Gatekeeper open test" => &[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]],
+        "Gatekeeper open test" => &[
+            &["gatekeeper"],
+            &["opened", "opens"],
+            &["clean", "fresh"],
+            &["signed"],
+            &["notarized", "notarised"],
+        ],
         _ => return None,
     };
     Some(Requirement { groups })

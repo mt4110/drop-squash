@@ -662,7 +662,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Notarization staple verification" {
             text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n");
         } else if check == "Gatekeeper open test" {
-            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened app cleanly in fresh macOS account |\n");
+            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed and notarized app cleanly in fresh macOS account |\n");
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"
