@@ -35,7 +35,8 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 
 Use this table to group the remaining release work without weakening the
 blocker table. Every row still stays `Blocked` until its concrete evidence is
-recorded in the location above.
+recorded in the location above. Do not use placeholder text such as `TBD`,
+`TODO`, or `...` in `Next action` or `Evidence owner`.
 
 | Blocker | Class | Next action | Evidence owner |
 |---|---|---|---|

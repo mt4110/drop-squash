@@ -44,12 +44,16 @@ fn matches_classification(cells: &[&str], blocker: &str) -> bool {
 
 fn is_actionable(value: &str) -> bool {
     let value = value.trim();
-    value.len() >= 16 && value != "TBD" && !value.contains("...")
+    value.len() >= 16 && !has_placeholder(value)
 }
 
 fn is_named_owner(value: &str) -> bool {
     let value = value.trim();
-    value.len() >= 10 && value != "TBD" && !value.contains("...")
+    value.len() >= 10 && !has_placeholder(value)
+}
+
+fn has_placeholder(value: &str) -> bool {
+    value.contains("...") || super::placeholders::has_token(value)
 }
 
 #[cfg(test)]

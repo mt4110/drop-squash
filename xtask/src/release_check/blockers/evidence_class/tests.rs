@@ -46,6 +46,22 @@ fn reports_placeholder_next_action() {
 }
 
 #[test]
+fn reports_embedded_placeholder_classification() {
+    let text = REQUIRED_BLOCKERS
+        .iter()
+        .map(|blocker| {
+            format!(
+                "| {blocker} | Distribution | Capture concrete release evidence TBD | TODO owner |\n"
+            )
+        })
+        .collect::<String>();
+
+    let unclassified = unclassified_blockers(&text);
+
+    assert!(unclassified.contains(&"Published checksum"));
+}
+
+#[test]
 fn reports_unknown_evidence_class() {
     let text = REQUIRED_BLOCKERS
         .iter()
