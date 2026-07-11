@@ -8,6 +8,7 @@ use super::{forget_license_at_path, write_activation_cache};
 struct FakeProvider {
     fail: bool,
     expected_key: Option<&'static str>,
+    valid: bool,
 }
 
 #[async_trait]
@@ -22,7 +23,7 @@ impl LicenseProvider for FakeProvider {
         Ok(LicenseActivation {
             license_key_fingerprint: license_key_fingerprint(license_key),
             instance_id: format!("remote-{instance_id}"),
-            valid: true,
+            valid: self.valid,
         })
     }
 
@@ -46,6 +47,7 @@ async fn activation_failure_does_not_write_partial_cache() {
         &FakeProvider {
             fail: true,
             expected_key: None,
+            valid: false,
         },
         100,
     )
@@ -76,6 +78,7 @@ async fn activation_failure_preserves_existing_cache() {
         &FakeProvider {
             fail: true,
             expected_key: Some("LS-NEW-KEY"),
+            valid: false,
         },
         100,
     )
@@ -96,6 +99,7 @@ async fn activation_success_writes_fingerprint_without_raw_key() {
         &FakeProvider {
             fail: false,
             expected_key: None,
+            valid: true,
         },
         100,
     )
@@ -111,6 +115,27 @@ async fn activation_success_writes_fingerprint_without_raw_key() {
 }
 
 #[tokio::test]
+async fn invalid_activation_does_not_write_cache() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+
+    let result = write_activation_cache(
+        "LS-SECRET-RAW-KEY",
+        &path,
+        &FakeProvider {
+            fail: false,
+            expected_key: None,
+            valid: false,
+        },
+        100,
+    )
+    .await;
+
+    assert!(result.unwrap_err().to_string().contains("valid license"));
+    assert!(!path.exists());
+}
+
+#[tokio::test]
 async fn activation_trims_license_key_before_provider_call() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("license.json");
@@ -121,6 +146,7 @@ async fn activation_trims_license_key_before_provider_call() {
         &FakeProvider {
             fail: false,
             expected_key: Some("LS-SECRET-RAW-KEY"),
+            valid: true,
         },
         100,
     )

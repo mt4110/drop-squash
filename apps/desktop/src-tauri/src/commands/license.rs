@@ -38,6 +38,11 @@ async fn write_activation_cache<P: LicenseProvider>(
         .clone()
         .unwrap_or_else(generate_instance_id);
     let activation = provider.activate(license_key, &instance_name).await?;
+    if !activation.valid {
+        return Err(AppError::License(
+            "License activation did not return a valid license.".to_string(),
+        ));
+    }
     cache.instance_name = Some(instance_name);
     cache.instance_id = Some(activation.instance_id);
     cache.license_key_fingerprint = Some(activation.license_key_fingerprint);
