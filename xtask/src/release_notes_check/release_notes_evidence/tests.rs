@@ -20,10 +20,10 @@ fn accepts_concrete_production_urls() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- `codesign`: codesign verified Developer ID Application signature
-- `spctl`: spctl accepted Developer ID source
-- `stapler`: stapler validate showed ticket stapled successfully
-- Apple notary log: notarytool accepted request abc123
+- `codesign`: codesign verified Developer ID Application signature for DropSquash.dmg
+- `spctl`: spctl accepted Developer ID source for DropSquash.dmg
+- `stapler`: stapler validate showed ticket stapled successfully for DropSquash.dmg
+- Apple notary log: notarytool accepted request abc123 for DropSquash.dmg
 - Gatekeeper clean-machine open: Gatekeeper opened app cleanly in fresh account
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
@@ -126,6 +126,25 @@ fn rejects_weak_distribution_evidence() {
         .iter()
         .any(|error| error.contains("Known limitations")));
     assert!(errors.iter().any(|error| error.contains("Support contact")));
+}
+
+#[test]
+fn rejects_signing_evidence_without_public_artifact_name() {
+    let errors = check_text(
+        r#"
+- `codesign`: codesign verified Developer ID Application signature
+- `spctl`: spctl accepted Developer ID source
+- `stapler`: stapler validate showed ticket stapled successfully
+- Apple notary log: notarytool accepted request abc123
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("`codesign`")));
+    assert!(errors.iter().any(|error| error.contains("`spctl`")));
+    assert!(errors.iter().any(|error| error.contains("`stapler`")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Apple notary log")));
 }
 
 #[test]

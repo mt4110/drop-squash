@@ -10,10 +10,18 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
 
 fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
     match label {
-        "`codesign`" => Some(&[&["codesign"], &["developer id"]]),
-        "`spctl`" => Some(&[&["spctl"], &["accepted"]]),
-        "`stapler`" => Some(&[&["stapler", "staple"], &["stapled", "validate"]]),
-        "Apple notary log" => Some(&[&["notary", "notarytool"], &["accepted"]]),
+        "`codesign`" => Some(&[&["codesign"], &["developer id"], &["dropsquash.dmg"]]),
+        "`spctl`" => Some(&[&["spctl"], &["accepted"], &["dropsquash.dmg"]]),
+        "`stapler`" => Some(&[
+            &["stapler", "staple"],
+            &["stapled", "validate"],
+            &["dropsquash.dmg"],
+        ]),
+        "Apple notary log" => Some(&[
+            &["notary", "notarytool"],
+            &["accepted"],
+            &["dropsquash.dmg"],
+        ]),
         "Gatekeeper clean-machine open" => {
             Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])
         }

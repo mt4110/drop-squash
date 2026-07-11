@@ -58,10 +58,10 @@ license keys, private store IDs, or certificate material.
 Use concrete wording in each filled field so `release-notes-check` can reject
 weak public evidence before the release is published.
 
-- `codesign`: include `codesign` and `Developer ID`.
-- `spctl`: include `spctl` and `accepted`.
-- `stapler`: include `stapler` or `staple`, plus `stapled` or `validate`.
-- Apple notary log: include `notary` or `notarytool`, plus `accepted`.
+- `codesign`: include `codesign`, `Developer ID`, and `DropSquash.dmg`.
+- `spctl`: include `spctl`, `accepted`, and `DropSquash.dmg`.
+- `stapler`: include `stapler` or `staple`, `stapled` or `validate`, and `DropSquash.dmg`.
+- Apple notary log: include `notary` or `notarytool`, `accepted`, and `DropSquash.dmg`.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, and `clean` or `fresh`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md` and the tested `DropSquash.dmg` or `.app`.
