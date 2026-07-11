@@ -10,6 +10,7 @@ pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- manual-qa-prepare
 cargo run -p xtask -- manual-qa-prepare --restore-state
 cargo run -p xtask -- manual-qa-check
+unsigned DMG as a QA artifact
 No signing secrets belong in the repository
 cargo run -p xtask -- media-policy-check
 cargo run -p xtask -- privacy-policy-check
