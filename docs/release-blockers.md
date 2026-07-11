@@ -24,7 +24,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Notarized and stapled DMG | Blocked | `spctl`/notary evidence for the public DMG artifact | TBD | Release notes |
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |
-| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact | TBD | Homebrew tap PR |
+| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |
 
 ## Evidence Classes
 
@@ -45,4 +45,4 @@ recorded in the location above.
 | Notarized and stapled DMG | Signing/notarization | Notarize and staple the public DMG and capture verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the stapled app from a fresh macOS account or clean machine | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS to the public GitHub Release | GitHub Release URL |
-| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command | Homebrew tap PR URL |
+| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command plus `zap` cleanup path | Homebrew tap PR URL |

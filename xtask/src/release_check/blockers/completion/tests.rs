@@ -25,6 +25,15 @@ fn reports_vague_completion_evidence() {
     assert!(incomplete.contains(&"Signed DMG"));
 }
 
+#[test]
+fn reports_homebrew_completion_without_zap() {
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact | TBD | Homebrew tap PR |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Homebrew cask install"));
+}
+
 fn described_blockers() -> String {
     [
         "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |\n",
@@ -36,7 +45,7 @@ fn described_blockers() -> String {
         "| Notarized and stapled DMG | Blocked | `spctl`/notary evidence for the public DMG artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |\n",
-        "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact | TBD | Homebrew tap PR |\n",
+        "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]
     .join("")
 }

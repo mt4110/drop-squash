@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 12] = [
+const REQUIRED_PHRASES: [(&str, &str); 13] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy sandbox purchase", "Sandbox checkout"),
     ("Valid sandbox activation", "raw key is absent"),
@@ -13,6 +13,7 @@ const REQUIRED_PHRASES: [(&str, &str); 12] = [
     ("Gatekeeper clean-machine open", "Fresh macOS account"),
     ("Published checksum", "SHA-256"),
     ("Homebrew cask install", "brew install --cask"),
+    ("Homebrew cask install", "zap"),
 ];
 
 pub(super) fn incomplete_requirements(text: &str) -> Vec<&'static str> {
@@ -31,14 +32,17 @@ fn is_missing_requirement(blocker: &str, value: &str) -> bool {
     let value = value.trim();
     value.is_empty()
         || value == "TBD"
-        || required_phrase(blocker).is_some_and(|phrase| !value.contains(phrase))
+        || required_phrases(blocker)
+            .iter()
+            .any(|phrase| !value.contains(phrase))
 }
 
-fn required_phrase(blocker: &str) -> Option<&'static str> {
+fn required_phrases(blocker: &str) -> Vec<&'static str> {
     REQUIRED_PHRASES
         .iter()
-        .find(|(candidate, _)| *candidate == blocker)
+        .filter(|(candidate, _)| *candidate == blocker)
         .map(|(_, phrase)| *phrase)
+        .collect()
 }
 
 #[cfg(test)]
