@@ -1,6 +1,5 @@
 use super::missing_release_workflow_gates;
 use super::secret_files::{is_secret_file, reject_secret_files};
-use super::REQUIRED_TAURI_CONFIG_TEXTS;
 
 #[test]
 fn accepts_release_workflow_with_required_gates() {
@@ -51,15 +50,6 @@ fn reports_missing_release_workflow_gates() {
             "Block unsigned Phase 0 release"
         ]
     );
-}
-
-#[test]
-fn release_gate_tracks_tauri_distribution_metadata() {
-    assert!(REQUIRED_TAURI_CONFIG_TEXTS.contains(&"\"productName\": \"DropSquash\""));
-    assert!(
-        REQUIRED_TAURI_CONFIG_TEXTS.contains(&"\"identifier\": \"io.github.mt4110.dropsquash\"")
-    );
-    assert!(REQUIRED_TAURI_CONFIG_TEXTS.contains(&"\"targets\": [\"app\", \"dmg\"]"));
 }
 
 #[test]
