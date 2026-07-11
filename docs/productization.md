@@ -36,7 +36,7 @@ Nothing uploads.
 | 4 Source postprocess | In progress | Safely move originals to Trash only after verified success | Source policy setting, macOS Trash adapter, ask-after-success flow | Keep never moves; Ask prompts; Trash moves only after all safety gates | Setting, Ask UI, and Trash adapter build; macOS Trash manual test remains |
 | 5 License and trial UI | In progress | Convert trial usage into Pro unlock without account creation | License cache, instance id, activation/validation/deactivation, locked/Pro UI | Raw license key is not persisted; invalid/network errors are friendly; valid cache survives grace period | Provider, trial UI, activation shell, and safe cache/grace are implemented; Lemon Squeezy sandbox test remains |
 | 6 Release pipeline | In progress | Ship a trusted macOS beta | Signed app, notarized DMG, checksums, release checklist, Homebrew cask draft | Gatekeeper opens cleanly; secrets stay in CI; artifact checksum published | Local release readiness gate exists; signing/notarization remain |
-| 7 Sales site | Pending | Let a stranger understand, download, try, and buy | Landing, pricing, privacy, download, FAQ, support | Privacy claims match implementation; CTA works; download path works | Link check and manual purchase sandbox |
+| 7 Sales site | In progress | Let a stranger understand, download, try, and buy | Landing, pricing, privacy, download, FAQ, support | Privacy claims match implementation; CTA works; download path works | Static site draft and link check exist; hosting and live checkout remain |
 | 8 Windows/Linux | Later | Expand after macOS signal | Media Foundation and GStreamer allowlist backends | Same core invariants; no silent software fallback | Native OS CI and real-device smoke tests |
 
 ## Immediate Backlog
