@@ -7,7 +7,7 @@ const URL_FIELDS: [(&str, UrlKind); 5] = [
     ("GitHub Release URL", UrlKind::GitHubRelease),
     ("Homebrew tap PR URL", UrlKind::HomebrewPullRequest),
 ];
-const EVIDENCE_FIELDS: [&str; 9] = [
+const EVIDENCE_FIELDS: [&str; 16] = [
     "SHA-256",
     "Git commit",
     "`codesign`",
@@ -15,7 +15,14 @@ const EVIDENCE_FIELDS: [&str; 9] = [
     "`stapler`",
     "Apple notary log",
     "Gatekeeper clean-machine open",
+    "`docs/release-blockers.md` status",
+    "Manual QA record",
+    "Benchmark sample set",
+    "Benchmark regression threshold",
+    "Lemon Squeezy sandbox purchase",
+    "Lemon Squeezy sandbox activation",
     "GitHub Release checksum",
+    "Homebrew tap PR",
     "Homebrew install result",
 ];
 

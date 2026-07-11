@@ -12,10 +12,17 @@ fn accepts_concrete_production_urls() {
 - `stapler`: ticket stapled successfully
 - Apple notary log: notarytool accepted request abc123
 - Gatekeeper clean-machine open: fresh account opened app
+- `docs/release-blockers.md` status: all rows Verified
+- Manual QA record: docs/manual-qa.md filled for DropSquash.dmg
+- Benchmark sample set: short medium large local recordings recorded
+- Benchmark regression threshold: no sample exceeded 20 percent regression
+- Lemon Squeezy sandbox purchase: test buyer order abc123 completed
+- Lemon Squeezy sandbox activation: Pro state reached without raw key cache
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached to release
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR: cask update reviewed in tap PR
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
 - Homebrew install result: brew install completed
 "#,
@@ -73,4 +80,10 @@ fn rejects_missing_or_generic_release_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("GitHub Release checksum")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Manual QA record")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
 }
