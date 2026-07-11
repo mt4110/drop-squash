@@ -1,6 +1,7 @@
 mod artifact_check;
 mod benchmark;
 mod checksum;
+mod dmg;
 mod file_size_check;
 mod homebrew_cask;
 mod macos_signing_check;

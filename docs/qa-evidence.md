@@ -29,7 +29,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Unsupported OS backends | Windows/Linux placeholders report unavailable and reject encode instead of falling back | `cargo test -p dropsquash-encoder unimplemented_platform_backends` |
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, UDIF trailer, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
-| Release checksum | Non-empty `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
+| Release checksum | Non-empty UDIF `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, non-canonical homepages, and invalid checksums | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence

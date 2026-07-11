@@ -1,4 +1,4 @@
-use std::io::Read;
+use crate::dmg;
 use std::path::{Path, PathBuf};
 
 use sha2::{Digest, Sha256};
@@ -15,16 +15,8 @@ pub fn run(paths: Vec<String>) -> Result<(), String> {
 }
 
 fn checksum_line(path: &Path) -> Result<String, String> {
-    if !path.is_file() {
-        return Err(format!("checksum target is not a file: {}", path.display()));
-    }
-    if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
-        return Err(format!("checksum target must be a DMG: {}", path.display()));
-    }
-    if path.metadata().map_err(|error| error.to_string())?.len() == 0 {
-        return Err(format!("checksum target is empty: {}", path.display()));
-    }
-    Ok(format!("{}  {}", sha256_hex(path)?, artifact_name(path)?))
+    let bytes = dmg::read(path, "checksum")?;
+    Ok(format!("{}  {}", sha256_hex(&bytes), artifact_name(path)?))
 }
 
 fn artifact_name(path: &Path) -> Result<&str, String> {
@@ -34,22 +26,14 @@ fn artifact_name(path: &Path) -> Result<&str, String> {
         .ok_or_else(|| format!("checksum target has no file name: {}", path.display()))
 }
 
-fn sha256_hex(path: &Path) -> Result<String, String> {
-    let mut file = std::fs::File::open(path).map_err(|error| error.to_string())?;
+fn sha256_hex(bytes: &[u8]) -> String {
     let mut hasher = Sha256::new();
-    let mut buffer = [0_u8; 16 * 1024];
-    loop {
-        let bytes = file.read(&mut buffer).map_err(|error| error.to_string())?;
-        if bytes == 0 {
-            break;
-        }
-        hasher.update(&buffer[..bytes]);
-    }
-    Ok(hasher
+    hasher.update(bytes);
+    hasher
         .finalize()
         .iter()
         .map(|byte| format!("{byte:02x}"))
-        .collect())
+        .collect()
 }
 
 #[cfg(test)]
