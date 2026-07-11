@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 31] = [
+const REQUIRED_TEXT: [&str; 34] = [
     "Version",
     "Artifact",
     "Artifact URL",
@@ -32,6 +32,9 @@ const REQUIRED_TEXT: [&str; 31] = [
     "Do not paste signing secrets",
     "license keys",
     "Homebrew",
+    "Evidence Wording Checklist",
+    "all rows Verified",
+    "SHA256SUMS",
 ];
 
 pub(super) fn check(path: &Path) -> Result<(), String> {

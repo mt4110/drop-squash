@@ -46,3 +46,22 @@ license keys, private store IDs, or certificate material.
 
 - Known limitations:
 - Support contact:
+
+## Evidence Wording Checklist
+
+Use concrete wording in each filled field so `release-notes-check` can reject
+weak public evidence before the release is published.
+
+- `codesign`: include `codesign` and `Developer ID`.
+- `spctl`: include `spctl` and `accepted`.
+- `stapler`: include `stapler` or `staple`, plus `stapled` or `validate`.
+- Apple notary log: include `notary` or `notarytool`, plus `accepted`.
+- Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, and `clean` or `fresh`.
+- `docs/release-blockers.md` status: mention `all rows Verified`.
+- Manual QA record: mention `docs/manual-qa.md` and the tested `DropSquash.dmg` or `.app`.
+- Lemon Squeezy sandbox purchase: mention the `test buyer` and `order`.
+- License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
+- Local license forget: mention cache removal and trial or locked state.
+- GitHub Release checksum: mention `SHA256SUMS` or `SHA-256` and that it is attached.
+- Homebrew tap PR: mention the cask and PR.
+- Homebrew install result: mention `brew install` and `dropsquash`.

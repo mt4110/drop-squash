@@ -34,6 +34,9 @@ Support contact
 Do not paste signing secrets
 license keys
 Homebrew
+Evidence Wording Checklist
+all rows Verified
+SHA256SUMS
 "#;
 
     assert!(missing_text(text).is_empty());
