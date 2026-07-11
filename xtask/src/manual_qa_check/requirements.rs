@@ -1,10 +1,13 @@
-pub(super) const REQUIRED_FIELDS: [&str; 8] = [
+pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "App build",
     "App artifact",
     "macOS version",
     "Machine",
     "Input sample set",
     "Output folder",
+    "Config path",
+    "History path",
+    "License cache path",
     "Tester",
     "Date",
 ];

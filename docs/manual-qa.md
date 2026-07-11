@@ -18,6 +18,23 @@ For manual observation rows, do not write only `Pass`, `OK`, or `Done` in the
 result. Record the concrete evidence you saw, such as the generated file name,
 trial count, Finder selection, or cache state.
 
+Before starting packaged-app QA, preserve the current local app state instead
+of deleting it:
+
+```sh
+mkdir -p /tmp/dropsquash-qa-state
+cp "$HOME/Library/Application Support/DropSquash/config.json" /tmp/dropsquash-qa-state/ 2>/dev/null || true
+cp "$HOME/Library/Application Support/DropSquash/history.jsonl" /tmp/dropsquash-qa-state/ 2>/dev/null || true
+cp "$HOME/Library/Application Support/DropSquash/license.json" /tmp/dropsquash-qa-state/ 2>/dev/null || true
+```
+
+Then start from a known trial state if the run is meant to verify trial counts:
+
+```sh
+rm -f "$HOME/Library/Application Support/DropSquash/history.jsonl"
+rm -f "$HOME/Library/Application Support/DropSquash/license.json"
+```
+
 ## macOS Packaged App
 
 | Field | Value |
@@ -28,6 +45,9 @@ trial count, Finder selection, or cache state.
 | Machine |  |
 | Input sample set |  |
 | Output folder |  |
+| Config path | `$HOME/Library/Application Support/DropSquash/config.json` |
+| History path | `$HOME/Library/Application Support/DropSquash/history.jsonl` |
+| License cache path | `$HOME/Library/Application Support/DropSquash/license.json` |
 | Tester |  |
 | Date |  |
 
