@@ -25,7 +25,7 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
                 && !lower.contains("checkout")
         }
         Kind::Refund => has_refund_path(&lower) && !has_store_or_checkout(&lower),
-        Kind::Checkout => lower.contains("lemonsqueezy.com") && lower.contains("/checkout/buy/"),
+        Kind::Checkout => lower.contains("lemonsqueezy.com") && has_checkout_buy_id(&lower),
         Kind::GitHubRelease => {
             value.starts_with("https://github.com/mt4110/drop-squash/releases/tag/")
         }
@@ -41,6 +41,13 @@ fn has_refund_path(lower: &str) -> bool {
 
 fn has_store_or_checkout(lower: &str) -> bool {
     lower.contains("lemonsqueezy.com") || lower.contains("checkout")
+}
+
+fn has_checkout_buy_id(lower: &str) -> bool {
+    lower
+        .split("/checkout/buy/")
+        .nth(1)
+        .is_some_and(|value| !value.is_empty())
 }
 
 fn has_release_status_path(lower: &str) -> bool {

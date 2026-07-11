@@ -75,9 +75,12 @@ fn has_release_status_path(lower: &str) -> bool {
 fn is_live_checkout(reference: &str) -> bool {
     let lower = reference.to_ascii_lowercase();
     reference.starts_with("https://")
-        && has_no_whitespace(reference)
+        && !reference.chars().any(char::is_whitespace)
         && lower.contains("lemonsqueezy.com")
-        && lower.contains("/checkout/buy/")
+        && lower
+            .split("/checkout/buy/")
+            .nth(1)
+            .is_some_and(|value| !value.is_empty())
 }
 
 fn is_refund_policy(reference: &str) -> bool {
@@ -116,10 +119,6 @@ fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
                 value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
             })
     })
-}
-
-fn has_no_whitespace(value: &str) -> bool {
-    !value.chars().any(char::is_whitespace)
 }
 
 #[cfg(test)]
