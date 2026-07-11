@@ -4,26 +4,14 @@ mod completion;
 mod evidence_class;
 mod evidence_ref;
 mod records;
+mod required_blockers;
 pub(super) mod row;
 mod verified_ref;
 
-const REQUIRED_BLOCKERS: [&str; 12] = [
-    "Packaged macOS manual QA",
-    "Lemon Squeezy sandbox purchase",
-    "Valid sandbox activation",
-    "Invalid license key handling",
-    "Local license forget",
-    "Public website deployment",
-    "Live checkout link",
-    "Signed DMG",
-    "Notarized and stapled DMG",
-    "Gatekeeper clean-machine open",
-    "Published checksum",
-    "Homebrew cask install",
-];
+const REQUIRED_BLOCKERS: &[&str] = required_blockers::ALL;
 
 pub(super) fn required() -> &'static [&'static str] {
-    &REQUIRED_BLOCKERS
+    REQUIRED_BLOCKERS
 }
 
 pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
