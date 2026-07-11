@@ -2,6 +2,7 @@ use super::blockers::row;
 use std::path::Path;
 
 mod quality;
+mod stale;
 
 const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "App build",
@@ -52,12 +53,14 @@ pub(super) fn check(blockers_path: &Path, manual_path: &Path) -> Result<(), Stri
     let blockers = std::fs::read_to_string(blockers_path).map_err(|error| error.to_string())?;
     let manual = std::fs::read_to_string(manual_path).map_err(|error| error.to_string())?;
     let missing = missing_manual_verified_evidence(&blockers, &manual);
-    if missing.is_empty() {
+    let stale = stale::manual_evidence_left_blocked(&blockers, &manual);
+    if missing.is_empty() && stale.is_empty() {
         return Ok(());
     }
     Err(format!(
-        "verified release blockers need manual QA evidence: {}",
-        missing.join(", ")
+        "manual QA release blocker mismatch: missing verified evidence [{}] stale blocked [{}]",
+        missing.join(", "),
+        stale.join(", ")
     ))
 }
 
