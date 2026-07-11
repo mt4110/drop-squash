@@ -46,9 +46,9 @@ jobs:
       - name: Check unsigned DMG artifact
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg
-      - name: Print unsigned DMG checksum
+      - name: Write unsigned DMG checksum
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg
+        run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS
       - name: Check macOS signing environment
         if: matrix.os == 'macos-latest'
         env:

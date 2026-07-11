@@ -9,7 +9,7 @@ run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- release-check
 run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg
-run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg
+run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS
 run: cargo run -p xtask -- macos-signing-check
 name: Block unsigned Phase 0 release
 "#,
@@ -29,7 +29,7 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- website-check",
             "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
             "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
-            "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg",
+            "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
             "cargo run -p xtask -- macos-signing-check",
             "Block unsigned Phase 0 release"
         ]
