@@ -13,10 +13,12 @@ pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
 }
 
 fn check_text(text: &str) -> Vec<String> {
-    let mut errors: Vec<String> = fields::URL
-        .iter()
-        .filter_map(|(label, kind)| validate_url_field(label, *kind, text))
-        .collect();
+    let mut errors = duplicate_fields(text);
+    errors.extend(
+        fields::URL
+            .iter()
+            .filter_map(|(label, kind)| validate_url_field(label, *kind, text)),
+    );
     errors.extend(identity::validate(text));
     errors.extend(consistency::validate(text));
     errors.extend(benchmark::validate(text));
@@ -27,6 +29,35 @@ fn check_text(text: &str) -> Vec<String> {
             .filter_map(|label| validate_evidence_field(label, text)),
     );
     errors
+}
+
+fn duplicate_fields(text: &str) -> Vec<String> {
+    release_note_labels()
+        .into_iter()
+        .filter(|label| field_count(label, text) > 1)
+        .map(|label| format!("{label} must appear only once"))
+        .collect()
+}
+
+fn release_note_labels() -> Vec<&'static str> {
+    let mut labels = vec![
+        "Version",
+        "Artifact",
+        "SHA-256",
+        "Git commit",
+        "Benchmark sample set",
+        "Benchmark regression threshold",
+    ];
+    labels.extend(fields::URL.iter().map(|(label, _)| *label));
+    labels.extend(fields::EVIDENCE);
+    labels
+}
+
+fn field_count(label: &str, text: &str) -> usize {
+    let prefix = format!("- {label}:");
+    text.lines()
+        .filter(|line| line.trim().starts_with(&prefix))
+        .count()
 }
 
 fn validate_url_field(label: &'static str, kind: url::Kind, text: &str) -> Option<String> {

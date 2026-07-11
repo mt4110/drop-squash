@@ -105,6 +105,20 @@ fn rejects_weak_distribution_evidence() {
 }
 
 #[test]
+fn rejects_duplicate_release_note_fields() {
+    let errors = check_text(
+        r#"
+- Version: v0.1.0
+- Version: v0.1.1
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Version must appear only once")));
+}
+
+#[test]
 fn rejects_placeholders_and_wrong_url_kinds() {
     let errors = check_text(
         r#"
