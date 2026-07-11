@@ -82,6 +82,27 @@ fn rejects_missing_release_status_copy() {
     assert!(errors.iter().any(|error| error.contains("checksum")));
 }
 
+#[test]
+fn rejects_pre_release_download_or_checkout_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        r#"<a href="https://downloads.test/DropSquash.dmg">Download</a>"#,
+    );
+    write(
+        directory.path(),
+        "pricing.html",
+        r#"<a href="https://store.lemonsqueezy.com/checkout/test">Buy</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("DropSquash.dmg")));
+    assert!(errors.iter().any(|error| error.contains("lemonsqueezy")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",

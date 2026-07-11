@@ -48,3 +48,4 @@
 - Add a QA evidence map separating automated coverage from packaged-app manual QA.
 - Align website download copy with DMG output and gate pre-release checkout/download messaging.
 - Add privacy-preserving conversion support guidance to the site and issue template.
+- Reject live DMG or checkout links in the pre-release website gate.

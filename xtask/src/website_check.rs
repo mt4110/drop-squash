@@ -80,6 +80,7 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         errors.push(format!("{} contains example.com", path.display()));
     }
     for href in hrefs(&text) {
+        check_disallowed_live_href(path, &href, errors);
         if is_external_or_anchor(&href) {
             continue;
         }
@@ -88,6 +89,16 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         }
     }
     Ok(())
+}
+
+fn check_disallowed_live_href(path: &Path, href: &str, errors: &mut Vec<String>) {
+    let lower = href.to_ascii_lowercase();
+    if lower.contains(".dmg") || lower.contains("lemonsqueezy") || lower.contains("checkout") {
+        errors.push(format!(
+            "{} contains pre-release live link: {href}",
+            path.display()
+        ));
+    }
 }
 
 fn hrefs(text: &str) -> Vec<String> {
