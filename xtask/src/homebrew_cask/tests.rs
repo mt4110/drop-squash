@@ -133,6 +133,21 @@ fn rejects_url_for_different_version() {
 }
 
 #[test]
+fn rejects_nested_github_release_asset_url() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/nested/DropSquash.dmg"
+            .to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("GitHub Release"));
+}
+
+#[test]
 fn rejects_invalid_sha256() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),

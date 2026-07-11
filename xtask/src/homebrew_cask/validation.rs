@@ -60,10 +60,17 @@ fn require_clean(label: &str, value: &str) -> Result<(), String> {
 }
 
 fn require_github_release_url(url: &str) -> Result<(), String> {
-    if url.starts_with("https://github.com/mt4110/drop-squash/releases/download/") {
+    if has_github_release_asset(url, "https://github.com/mt4110/drop-squash/releases/download/") {
         return Ok(());
     }
     Err("url must point to the DropSquash GitHub Release download".to_string())
+}
+
+fn has_github_release_asset(url: &str, prefix: &str) -> bool {
+    url.strip_prefix(prefix).is_some_and(|suffix| {
+        let parts = suffix.split('/').collect::<Vec<_>>();
+        parts.len() == 2 && parts.iter().all(|part| !part.is_empty())
+    })
 }
 
 fn is_numeric_part(value: &str) -> bool {
