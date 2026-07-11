@@ -9,6 +9,8 @@ Signed macOS, Windows, and Linux builds are planned after the native backend and
 Unsigned payload creation is kept separate from signing and timestamping. CI must test each native backend on its own operating system and reject release artifacts containing `/nix/store` references.
 
 No signing secrets belong in the repository.
+The public paid beta remains blocked until every item in
+`docs/release-blockers.md` has concrete evidence in the named location.
 
 The desktop bundle configuration produces both the macOS `.app` and `.dmg`
 artifacts. Use unsigned local builds only for QA; public release artifacts must

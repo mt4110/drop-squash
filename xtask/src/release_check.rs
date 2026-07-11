@@ -1,4 +1,5 @@
 use crate::{media_policy_check, privacy_policy_check};
+mod blockers;
 mod desktop_capability;
 mod evidence;
 mod secret_files;
@@ -34,6 +35,7 @@ pub fn run() -> Result<(), String> {
         Path::new("docs/qa-evidence.md"),
         Path::new("docs/manual-qa.md"),
     )?;
+    blockers::check_release_blockers(Path::new("docs/release-blockers.md"))?;
     require_release_workflow_gates()?;
     require_text(
         "apps/desktop/src-tauri/tauri.conf.json",
