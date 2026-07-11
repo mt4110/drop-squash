@@ -19,3 +19,5 @@ jobs:
         run: cargo deny check
       - name: Reject external media process code
         run: cargo run -p xtask -- media-policy-check
+      - name: Reject default telemetry code
+        run: cargo run -p xtask -- privacy-policy-check

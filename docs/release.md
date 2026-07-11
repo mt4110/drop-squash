@@ -28,6 +28,13 @@ commands:
 cargo run -p xtask -- media-policy-check
 ```
 
+Run the privacy policy gate after touching the desktop app, website, or
+privacy-sensitive code:
+
+```sh
+cargo run -p xtask -- privacy-policy-check
+```
+
 Check the local macOS signing and notarization environment before a signed build:
 
 ```sh

@@ -11,6 +11,7 @@
 ## Product Principles
 
 - Preserve the local-first promise: no media upload, no default telemetry.
+- Run `cargo run -p xtask -- privacy-policy-check` after touching app, website, or privacy-sensitive code.
 - Never add `ffmpeg`, `ffprobe`, shell execution, or `PATH` lookup to the media path.
 - Run `cargo run -p xtask -- media-policy-check` after touching media, CLI, or desktop command code.
 - Never move or delete originals unless conversion success, output verification, and user policy all permit it.
