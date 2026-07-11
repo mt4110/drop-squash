@@ -49,7 +49,7 @@ recorded in the location above.
 | Local license forget | License sandbox | Use the local forget action and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify every public release page | Public website URL |
 | Refund policy finalized | Public web | Publish the final refund policy before checkout goes live | Refund policy URL |
-| Live checkout link | Public web | Verify the pricing page opens the live checkout for the product | Public website URL |
+| Live checkout link | Public web | Verify the pricing page opens the live checkout for the product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public DMG and capture Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public DMG with captured verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the stapled app from a fresh macOS account or clean machine | `docs/manual-qa.md` |
