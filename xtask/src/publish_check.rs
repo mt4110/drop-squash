@@ -56,7 +56,15 @@ fn is_verified(text: &str, blocker: &str) -> bool {
 }
 
 fn has_publish_evidence(reference: &str) -> bool {
-    !matches!(reference.trim(), "" | "TBD")
+    let reference = reference.trim().trim_matches('`');
+    if matches!(reference, "" | "TBD") {
+        return false;
+    }
+    reference.starts_with("docs/")
+        || reference.starts_with("https://")
+        || reference == "Release notes"
+        || reference.starts_with("GitHub Release https://")
+        || reference.starts_with("Homebrew tap PR https://")
 }
 
 fn unverified_blockers_error(blockers: &[&str]) -> String {

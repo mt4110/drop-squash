@@ -7,7 +7,7 @@ use super::{
 fn accepts_all_verified_blockers() {
     let text = crate::release_check::required_blockers()
         .iter()
-        .map(|blocker| format!("| {blocker} | Verified | done | evidence | docs |\n"))
+        .map(|blocker| format!("| {blocker} | Verified | done | `docs/manual-qa.md` | docs |\n"))
         .collect::<String>();
 
     assert!(unverified_blockers(&text).is_empty());
@@ -17,12 +17,27 @@ fn accepts_all_verified_blockers() {
 fn reports_verified_blocker_without_evidence_reference() {
     let text = crate::release_check::required_blockers()
         .iter()
-        .map(|blocker| format!("| {blocker} | Verified | done | TBD | docs |\n"))
+        .map(|blocker| format!("| {blocker} | Verified | done | evidence | docs |\n"))
         .collect::<String>();
 
     let unverified = unverified_blockers(&text);
 
     assert!(unverified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn accepts_public_release_evidence_references() {
+    let text = "\
+| Signed DMG | Verified | done | Release notes | Release notes |
+| Published checksum | Verified | done | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | done | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(!unverified.contains(&"Signed DMG"));
+    assert!(!unverified.contains(&"Published checksum"));
+    assert!(!unverified.contains(&"Homebrew cask install"));
 }
 
 #[test]
