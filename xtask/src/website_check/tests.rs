@@ -226,7 +226,7 @@ fn required_page_text(page: &str) -> &'static str {
         "index.html" => "Release status",
         "download.html" => "macOS beta DropSquash.dmg notarization checksum",
         "pricing.html" => {
-            "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count"
+            "Checkout opens after signed beta release 10 successful conversions are free Failed or cancelled conversions do not count License policy"
         }
         "privacy.html" => {
             "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 file names instead of absolute paths License activation contacts Lemon Squeezy"

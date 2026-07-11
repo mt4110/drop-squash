@@ -20,6 +20,7 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
         "Failed or cancelled conversions do not count",
         errors,
     );
+    require_page_text(root, "pricing.html", "License policy", errors);
     require_page_text(root, "privacy.html", "does not upload media", errors);
     require_page_text(root, "privacy.html", "Telemetry is off by default", errors);
     require_page_text(root, "privacy.html", "privacy receipts", errors);
