@@ -1,5 +1,7 @@
 use std::path::Path;
 
+mod row;
+
 const REQUIRED_BLOCKERS: [&str; 10] = [
     "Packaged macOS manual QA",
     "Lemon Squeezy sandbox purchase",
@@ -36,7 +38,7 @@ fn missing_release_blockers(text: &str) -> Vec<&'static str> {
     REQUIRED_BLOCKERS
         .iter()
         .copied()
-        .filter(|blocker| !text.contains(&format!("| {blocker} |")))
+        .filter(|blocker| row::find(text, blocker).is_none())
         .collect()
 }
 
@@ -44,13 +46,13 @@ fn invalid_status_rows(text: &str) -> Vec<&'static str> {
     REQUIRED_BLOCKERS
         .iter()
         .copied()
-        .filter(|blocker| !text.lines().any(|line| has_allowed_status(line, blocker)))
+        .filter(|blocker| {
+            !row::find(text, blocker).is_some_and(|line| {
+                row::has_status(line, blocker, "Blocked")
+                    || row::has_status(line, blocker, "Verified")
+            })
+        })
         .collect()
-}
-
-fn has_allowed_status(line: &str, blocker: &str) -> bool {
-    line.starts_with(&format!("| {blocker} | Blocked |"))
-        || line.starts_with(&format!("| {blocker} | Verified |"))
 }
 
 fn unproven_verified_rows(text: &str) -> Vec<&'static str> {
@@ -58,16 +60,15 @@ fn unproven_verified_rows(text: &str) -> Vec<&'static str> {
         .iter()
         .copied()
         .filter(|blocker| {
-            text.lines()
-                .find(|line| line.starts_with(&format!("| {blocker} | Verified |")))
+            row::find(text, blocker)
+                .filter(|line| row::has_status(line, blocker, "Verified"))
                 .is_some_and(missing_evidence_reference)
         })
         .collect()
 }
 
 fn missing_evidence_reference(line: &str) -> bool {
-    let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-    match cells.get(3) {
+    match row::evidence_reference(line) {
         Some(value) => !is_evidence_reference(value),
         None => true,
     }
@@ -78,18 +79,15 @@ fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
         .iter()
         .copied()
         .filter(|blocker| {
-            text.lines()
-                .find(|line| line.starts_with(&format!("| {blocker} | Blocked |")))
+            row::find(text, blocker)
+                .filter(|line| row::has_status(line, blocker, "Blocked"))
                 .is_some_and(has_evidence_reference)
         })
         .collect()
 }
 
 fn has_evidence_reference(line: &str) -> bool {
-    let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-    cells
-        .get(3)
-        .is_some_and(|value| is_evidence_reference(value))
+    row::evidence_reference(line).is_some_and(is_evidence_reference)
 }
 
 fn is_evidence_reference(value: &str) -> bool {
