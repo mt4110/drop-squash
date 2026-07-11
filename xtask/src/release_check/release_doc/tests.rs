@@ -28,6 +28,13 @@ cargo run -p xtask -- homebrew-cask 0.1.0
 }
 
 #[test]
+fn release_doc_covers_checklist_categories() {
+    let text = std::fs::read_to_string("../docs/release.md").unwrap();
+
+    assert!(missing_requirements(&text).is_empty());
+}
+
+#[test]
 fn reports_missing_release_doc_checklist_coverage() {
     let missing = missing_requirements("");
 
