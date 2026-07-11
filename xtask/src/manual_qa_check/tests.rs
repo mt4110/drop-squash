@@ -55,6 +55,23 @@ fn reports_missing_app_artifact_path() {
 }
 
 #[test]
+fn reports_non_app_or_dmg_artifact() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.zip");
+    std::fs::write(&artifact, "artifact").unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!("| App artifact | {} |\n", artifact.display()),
+    )
+    .unwrap();
+
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains(".app or .dmg")));
+}
+
+#[test]
 fn reports_non_iso_date() {
     let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
     let missing = check_file(&path).unwrap();

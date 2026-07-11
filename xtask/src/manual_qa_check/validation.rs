@@ -6,11 +6,22 @@ pub(super) fn validate_field(label: &str, value: &str, missing: &mut Vec<String>
     if value.is_empty() {
         return;
     }
-    if label == "App artifact" && !Path::new(value).exists() {
-        missing.push(format!("manual QA artifact does not exist: {value}"));
+    if label == "App artifact" {
+        validate_artifact(value, missing);
     }
     if label == "Date" && !is_iso_date(value) {
         missing.push("manual QA Date must use YYYY-MM-DD".to_string());
+    }
+}
+
+fn validate_artifact(value: &str, missing: &mut Vec<String>) {
+    let path = Path::new(value);
+    if !path.exists() {
+        missing.push(format!("manual QA artifact does not exist: {value}"));
+    }
+    let extension = path.extension().and_then(|value| value.to_str());
+    if !matches!(extension, Some("app" | "dmg")) {
+        missing.push("manual QA App artifact must be a .app or .dmg".to_string());
     }
 }
 
