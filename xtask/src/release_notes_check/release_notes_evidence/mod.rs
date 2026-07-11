@@ -101,6 +101,7 @@ fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
 fn is_placeholder(value: &str) -> bool {
     let lower = value.to_ascii_lowercase();
     value.is_empty()
+        || has_placeholder_token(value)
         || lower == "tbd"
         || lower == "n/a"
         || lower == "none"
@@ -111,6 +112,12 @@ fn is_placeholder(value: &str) -> bool {
         || lower.contains("localhost")
         || lower.contains(".test/")
         || lower.ends_with(".test")
+}
+
+fn has_placeholder_token(value: &str) -> bool {
+    value
+        .split(|character: char| !character.is_ascii_alphanumeric())
+        .any(|token| matches!(token.to_ascii_lowercase().as_str(), "tbd" | "todo"))
 }
 
 fn is_concrete_evidence(value: &str) -> bool {

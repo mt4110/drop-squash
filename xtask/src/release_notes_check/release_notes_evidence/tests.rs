@@ -456,6 +456,21 @@ fn rejects_missing_or_generic_release_evidence() {
 }
 
 #[test]
+fn rejects_release_evidence_with_embedded_placeholders() {
+    let errors = check_text(
+        r#"
+- Known limitations: macOS MVP only; Windows and Linux platform builds TODO
+- Support contact: support through GitHub Issues; email TBD
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+    assert!(errors.iter().any(|error| error.contains("Support contact")));
+}
+
+#[test]
 fn rejects_sandbox_purchase_without_intended_product() {
     let errors = check_text(
         r#"
