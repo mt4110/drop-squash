@@ -21,7 +21,16 @@ import type {
 } from "./lib/commands";
 import { initialState } from "./lib/initialState";
 import type { QueueEntry } from "./lib/queue";
-import { isCancelReason } from "./lib/queue";
+import {
+  entriesForInputPaths,
+  isCancelReason,
+  markFailed,
+  markRunning,
+  markSourceAction,
+  markSucceeded,
+  nextQueued,
+  updateProgress,
+} from "./lib/queue";
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
@@ -67,11 +76,9 @@ export function App() {
       return;
     }
 
-    const entries = inputPaths.map((inputPath) => ({
-      id: nextQueueId.current++,
-      inputPath,
-      status: "queued" as const,
-    }));
+    const queued = entriesForInputPaths(inputPaths, nextQueueId.current);
+    nextQueueId.current = queued.nextId;
+    const { entries } = queued;
     if (entries.length > 0) {
       setError(undefined);
       setResult(undefined);
@@ -90,9 +97,7 @@ export function App() {
     setProgress(0);
     setError(undefined);
     setResult(undefined);
-    setQueue((current) => current.map((item) => (
-      item.id === entry.id ? { ...item, status: "running", progress: 0 } : item
-    )));
+    setQueue((current) => markRunning(current, entry.id));
     try {
       const summary = await invoke<ConversionSummary>("convert", {
         inputPath: entry.inputPath,
@@ -102,16 +107,12 @@ export function App() {
         sourcePolicy: state.sourcePolicy,
       });
       setResult(summary);
-      setQueue((current) => current.map((item) => (
-        item.id === entry.id ? { ...item, status: "succeeded", progress: 100, result: summary } : item
-      )));
+      setQueue((current) => markSucceeded(current, entry.id, summary));
       await refreshState();
     } catch (reason) {
       const status = isCancelReason(reason) ? "cancelled" : "failed";
       const message = String(reason);
-      setQueue((current) => current.map((item) => (
-        item.id === entry.id ? { ...item, status, error: message } : item
-      )));
+      setQueue((current) => markFailed(current, entry.id, status, message));
       if (status === "failed") {
         setError(message);
       }
@@ -132,7 +133,7 @@ export function App() {
       return;
     }
 
-    const next = queue.find((item) => item.status === "queued");
+    const next = nextQueued(queue);
     if (next) {
       void runQueued(next);
     }
@@ -148,9 +149,7 @@ export function App() {
       setProgress(event.payload);
       const id = activeQueueId.current;
       if (id) {
-        setQueue((current) => current.map((item) => (
-          item.id === id ? { ...item, progress: event.payload } : item
-        )));
+        setQueue((current) => updateProgress(current, id, event.payload));
       }
     }).then((listener) => {
       unlisten = listener;
@@ -264,11 +263,7 @@ export function App() {
         return;
       }
       setResult((current) => current ? { ...current, sourceAction: decision.action } : current);
-      setQueue((current) => current.map((item) => (
-        item.result?.outputPath === outputPath
-          ? { ...item, result: { ...item.result, sourceAction: decision.action } }
-          : item
-      )));
+      setQueue((current) => markSourceAction(current, outputPath, decision.action));
     } catch (reason) {
       setError(String(reason));
     }
