@@ -89,6 +89,13 @@ cargo run -p xtask -- manual-qa-prepare --restore-state
 
 ## License Sandbox
 
+Record concrete results. The checker requires:
+
+- Sandbox purchase: mention the intended product and test buyer.
+- Invalid key activation: mention a friendly error and absence of a raw key.
+- Valid sandbox activation: mention Pro state and absence of a raw key.
+- Forget license on this Mac: mention cache removal and the resulting app state.
+
 | Check | Expected | Result |
 |---|---|---|
 | Sandbox purchase | Checkout completes for the intended product and test buyer |  |

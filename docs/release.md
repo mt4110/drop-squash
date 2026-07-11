@@ -91,10 +91,18 @@ After packaged-app testing, require the manual QA record to be complete:
 cargo run -p xtask -- manual-qa-check
 ```
 
-Before a paid beta, complete both rows in `docs/manual-qa.md`:
+Before a paid beta, complete the license sandbox rows in `docs/manual-qa.md`.
+They cover:
 
 - Lemon Squeezy sandbox purchase
 - Lemon Squeezy sandbox activation
+
+Record these rows:
+
+- Sandbox purchase
+- Invalid key activation
+- Valid sandbox activation
+- Forget license on this Mac
 
 Keep the matching release blockers in `docs/release-blockers.md` blocked until
 both the sandbox purchase evidence and activation evidence exist.
