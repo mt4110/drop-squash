@@ -1,4 +1,4 @@
-use super::missing_release_workflow_gates;
+use super::{is_secret_file, missing_release_workflow_gates, reject_secret_files};
 
 #[test]
 fn accepts_release_workflow_with_required_gates() {
@@ -34,4 +34,49 @@ fn reports_missing_release_workflow_gates() {
             "Block unsigned Phase 0 release"
         ]
     );
+}
+
+#[test]
+fn accepts_public_release_files() {
+    assert!(!is_secret_file("release.yml", Some("yml")));
+    assert!(!is_secret_file("pricing.html", Some("html")));
+    assert!(!is_secret_file("README.md", Some("md")));
+}
+
+#[test]
+fn rejects_environment_files() {
+    assert!(is_secret_file(".env", None));
+    assert!(is_secret_file(".env.local", Some("local")));
+    assert!(is_secret_file(".env.production", Some("production")));
+}
+
+#[test]
+fn rejects_signing_secret_extensions() {
+    assert!(is_secret_file("Distribution.p12", Some("p12")));
+    assert!(is_secret_file("AuthKey_TEST.p8", Some("p8")));
+    assert!(is_secret_file(
+        "profile.mobileprovision",
+        Some("mobileprovision")
+    ));
+    assert!(is_secret_file(
+        "profile.provisionprofile",
+        Some("provisionprofile")
+    ));
+}
+
+#[test]
+fn scans_repository_tree_for_secret_like_files() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "docs/release.md", "safe");
+    write(directory.path(), "secrets/AuthKey_TEST.p8", "private");
+
+    let error = reject_secret_files(directory.path()).unwrap_err();
+
+    assert!(error.contains("AuthKey_TEST.p8"));
+}
+
+fn write(root: &std::path::Path, name: &str, text: &str) {
+    let path = root.join(name);
+    std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+    std::fs::write(path, text).unwrap();
 }

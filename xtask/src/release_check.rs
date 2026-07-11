@@ -13,6 +13,14 @@ const RELEASE_WORKFLOW_GATES: [&str; 8] = [
     "cargo run -p xtask -- macos-signing-check",
     "Block unsigned Phase 0 release",
 ];
+const SECRET_EXTENSIONS: [&str; 6] = [
+    "key",
+    "mobileprovision",
+    "p12",
+    "p8",
+    "pem",
+    "provisionprofile",
+];
 
 pub fn run() -> Result<(), String> {
     reject_secret_files(Path::new("."))?;
@@ -54,11 +62,7 @@ fn reject_secret_files(root: &Path) -> Result<(), String> {
             .file_name()
             .and_then(|value| value.to_str())
             .unwrap_or("");
-        let extension = path
-            .extension()
-            .and_then(|value| value.to_str())
-            .unwrap_or("");
-        if matches!(name, ".env" | ".env.local") || matches!(extension, "p12" | "pem" | "key") {
+        if is_secret_file(name, path.extension().and_then(|value| value.to_str())) {
             return Err(format!(
                 "release secret-like file is present: {}",
                 path.display()
@@ -66,6 +70,15 @@ fn reject_secret_files(root: &Path) -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+fn is_secret_file(name: &str, extension: Option<&str>) -> bool {
+    name == ".env"
+        || name.starts_with(".env.")
+        || extension.is_some_and(|value| {
+            let lower = value.to_ascii_lowercase();
+            SECRET_EXTENSIONS.contains(&lower.as_str())
+        })
 }
 
 #[cfg(test)]
