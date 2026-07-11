@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke, isTauri } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
-import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { open } from "@tauri-apps/plugin-dialog";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { DropZone } from "./components/DropZone";
@@ -10,6 +8,8 @@ import { LicensePanel } from "./components/LicensePanel";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
 import { TrialBanner } from "./components/TrialBanner";
+import { useConversionProgress } from "./hooks/useConversionProgress";
+import { useRecordingDropEvents } from "./hooks/useRecordingDropEvents";
 import type {
   ConversionSummary,
   DropZoneState,
@@ -31,7 +31,6 @@ import {
   markSourceAction,
   markSucceeded,
   nextQueued,
-  updateProgress,
 } from "./lib/queue";
 import { savedConfigWith } from "./lib/settings";
 
@@ -120,12 +119,6 @@ export function App() {
       setProgress(undefined);
     }
   }, [isBusy, refreshState, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy]);
-  const enqueueRef = useRef(enqueueInputs);
-
-  useEffect(() => {
-    enqueueRef.current = enqueueInputs;
-  }, [enqueueInputs]);
-
   useEffect(() => {
     if (isBusy || state.isLocked) {
       return;
@@ -145,24 +138,15 @@ export function App() {
     }
   }, [state.isLocked]);
 
-  useEffect(() => {
-    if (!isTauri()) {
-      return;
-    }
+  useConversionProgress({ activeQueueId, setProgress, setQueue });
 
-    let unlisten: (() => void) | undefined;
-    void listen<number>("conversion-progress", (event) => {
-      setProgress(event.payload);
-      const id = activeQueueId.current;
-      if (id) {
-        setQueue((current) => updateProgress(current, id, event.payload));
-      }
-    }).then((listener) => {
-      unlisten = listener;
-    });
+  useRecordingDropEvents({
+    enqueueInputs,
+    refreshState,
+    setError,
+    setIsDragging,
+  });
 
-    return () => unlisten?.();
-  }, []);
   const chooseRecording = useCallback(async () => {
     if (!isTauri()) {
       return;
@@ -282,41 +266,6 @@ export function App() {
       setError(String(reason));
     }
   }, []);
-
-  useEffect(() => {
-    if (!isTauri()) {
-      return;
-    }
-
-    void refreshState().catch((reason) => setError(String(reason)));
-
-    let unlisten: (() => void) | undefined;
-    let isDisposed = false;
-    void getCurrentWebview().onDragDropEvent((event) => {
-      if (event.payload.type === "enter" || event.payload.type === "over") {
-        setIsDragging(true);
-      } else {
-        setIsDragging(false);
-      }
-
-      if (event.payload.type === "drop") {
-        enqueueRef.current(event.payload.paths);
-      }
-    }).then((listener) => {
-      if (isDisposed) {
-        listener();
-      } else {
-        unlisten = listener;
-      }
-    }).catch((reason) => {
-      setError(`Drag and drop is unavailable: ${String(reason)}`);
-    });
-
-    return () => {
-      isDisposed = true;
-      unlisten?.();
-    };
-  }, [refreshState]);
 
   return (
     <main className={`shell${queue.length > 0 ? " has-queue" : ""}`}>
