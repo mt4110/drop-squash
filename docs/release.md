@@ -10,6 +10,10 @@ Unsigned payload creation is kept separate from signing and timestamping. CI mus
 
 No signing secrets belong in the repository.
 
+The desktop bundle configuration produces both the macOS `.app` and `.dmg`
+artifacts. Use unsigned local builds only for QA; public release artifacts must
+be signed, notarized, stapled, checked, and checksummed before publication.
+
 Run the local readiness gate before preparing any release artifact:
 
 ```sh
