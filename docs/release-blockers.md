@@ -25,3 +25,24 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA-256 line for the public DMG is attached to the release | TBD | GitHub Release |
 | Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact | TBD | Homebrew tap PR |
+
+## Evidence Classes
+
+Use this table to group the remaining release work without weakening the
+blocker table. Every row still stays `Blocked` until its concrete evidence is
+recorded in the location above.
+
+| Blocker | Class | Next action | Evidence owner |
+|---|---|---|---|
+| Packaged macOS manual QA | Manual packaged-app | Run the packaged artifact through the manual QA table | `docs/manual-qa.md` |
+| Lemon Squeezy sandbox purchase | License sandbox | Complete sandbox checkout for the intended product and test buyer | `docs/manual-qa.md` |
+| Valid sandbox activation | License sandbox | Activate the packaged app and inspect the local license cache | `docs/manual-qa.md` |
+| Invalid license key handling | License sandbox | Enter an invalid key and inspect the local license cache | `docs/manual-qa.md` |
+| Local license forget | License sandbox | Use the local forget action and inspect the returned app state | `docs/manual-qa.md` |
+| Public website deployment | Public web | Deploy the production site and verify every public release page | Public website URL |
+| Live checkout link | Public web | Verify the pricing page opens the live checkout for the product | Public website URL |
+| Signed DMG | Signing/notarization | Sign the public DMG and capture Developer ID verification output | Release notes |
+| Notarized and stapled DMG | Signing/notarization | Notarize and staple the public DMG and capture verification output | Release notes |
+| Gatekeeper clean-machine open | Manual packaged-app | Open the stapled app from a fresh macOS account or clean machine | `docs/manual-qa.md` |
+| Published checksum | Distribution | Attach SHA256SUMS to the public GitHub Release | GitHub Release URL |
+| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command | Homebrew tap PR URL |
