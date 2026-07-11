@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use dropsquash_core::EncodeResult;
 use dropsquash_postprocess::{SourceAction, SourceActionDecision};
 use serde::Serialize;
@@ -12,10 +14,16 @@ pub struct ConversionSummary {
     pub reduction_percent: f64,
     pub source_action: SourceAction,
     pub source_path: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy_receipt_path: Option<String>,
 }
 
 impl ConversionSummary {
-    pub fn new(result: EncodeResult, decision: SourceActionDecision) -> Self {
+    pub fn new(
+        result: EncodeResult,
+        decision: SourceActionDecision,
+        privacy_receipt_path: Option<PathBuf>,
+    ) -> Self {
         Self {
             source_action: decision.action,
             source_path: decision.source_path.display().to_string(),
@@ -24,6 +32,7 @@ impl ConversionSummary {
             output_bytes: result.output_bytes,
             saved_bytes: result.saved_bytes(),
             reduction_percent: result.reduction_percent(),
+            privacy_receipt_path: privacy_receipt_path.map(|path| path.display().to_string()),
         }
     }
 }

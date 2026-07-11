@@ -302,6 +302,7 @@ export function App() {
         onPick={() => void chooseRecording()}
         onCancel={() => void cancelConversion()}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
+        onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
         onTrashOriginal={(sourcePath, outputPath) => void trashOriginal(sourcePath, outputPath)}
       />
       <SettingsDrawer
@@ -323,6 +324,7 @@ export function App() {
         items={queue}
         onClearFinished={() => setQueue((current) => clearFinished(current))}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
+        onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
       />
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>

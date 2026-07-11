@@ -59,14 +59,16 @@ async fn convert_inner(
         )
         .await
         .map_err(format_error)?;
-    if request.write_privacy_receipt {
-        PrivacyReceipt::save_for_result(&result).map_err(format_error)?;
-    }
+    let receipt_path = if request.write_privacy_receipt {
+        Some(PrivacyReceipt::save_for_result(&result).map_err(format_error)?)
+    } else {
+        None
+    };
     append_successful_record(&default_history_path(), result.clone())
         .await
         .map_err(format_error)?;
     let decision = handle_source_action(&result, request.source_policy)?;
-    Ok(ConversionSummary::new(result, decision))
+    Ok(ConversionSummary::new(result, decision, receipt_path))
 }
 
 async fn ensure_trial_open() -> Result<(), String> {

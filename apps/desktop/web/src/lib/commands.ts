@@ -44,6 +44,7 @@ export type ConversionSummary = {
   reductionPercent: number;
   sourceAction: SourceAction;
   sourcePath: string;
+  privacyReceiptPath?: string;
 };
 
 export type SourceActionDecision = {

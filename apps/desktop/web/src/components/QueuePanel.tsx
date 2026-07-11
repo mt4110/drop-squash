@@ -6,9 +6,10 @@ type QueuePanelProps = {
   items: QueueEntry[];
   onClearFinished: () => void;
   onRevealOutput: (outputPath: string) => void;
+  onRevealReceipt: (receiptPath: string) => void;
 };
 
-export function QueuePanel({ items, onClearFinished, onRevealOutput }: QueuePanelProps) {
+export function QueuePanel({ items, onClearFinished, onRevealOutput, onRevealReceipt }: QueuePanelProps) {
   if (items.length === 0) {
     return null;
   }
@@ -20,20 +21,32 @@ export function QueuePanel({ items, onClearFinished, onRevealOutput }: QueuePane
           <button type="button" onClick={onClearFinished}>Clear finished</button>
         </div>
       )}
-      {items.map((item) => (
-        <div className="queue-row" key={item.id}>
-          <span>{fileName(item.inputPath)}</span>
-          {item.result ? (
-            <button type="button" onClick={() => onRevealOutput(item.result!.outputPath)}>
-              {formatBytes(item.result.savedBytes)}
-            </button>
-          ) : (
-            <strong title={item.error}>
-              {item.progress ? `${item.progress}%` : statusLabel(item.status)}
-            </strong>
-          )}
-        </div>
-      ))}
+      {items.map((item) => {
+        const result = item.result;
+        const receiptPath = result?.privacyReceiptPath;
+
+        return (
+          <div className="queue-row" key={item.id}>
+            <span>{fileName(item.inputPath)}</span>
+            {result ? (
+              <span className="queue-result">
+                <button type="button" onClick={() => onRevealOutput(result.outputPath)}>
+                  {formatBytes(result.savedBytes)}
+                </button>
+                {receiptPath && (
+                  <button type="button" onClick={() => onRevealReceipt(receiptPath)}>
+                    Receipt
+                  </button>
+                )}
+              </span>
+            ) : (
+              <strong title={item.error}>
+                {item.progress ? `${item.progress}%` : statusLabel(item.status)}
+              </strong>
+            )}
+          </div>
+        );
+      })}
     </section>
   );
 }

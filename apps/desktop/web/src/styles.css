@@ -59,6 +59,7 @@ body,
 .cancel-button,
 .help-button,
 .output-picker,
+.receipt-link,
 .trash-original {
   font: inherit;
 }
@@ -78,9 +79,18 @@ body,
   color: #6e6e73;
 }
 
+.receipt-link,
 .trash-original {
   color: #6e6e73;
   margin-top: 10px;
+}
+
+.receipt-link {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
 }
 
 .source-path {
@@ -126,7 +136,9 @@ body,
 }
 
 .saved-destination:hover,
-.saved-destination:focus-visible {
+.saved-destination:focus-visible,
+.receipt-link:hover,
+.receipt-link:focus-visible {
   text-decoration: underline;
 }
 
@@ -292,6 +304,13 @@ body,
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.queue-row .queue-result {
+  display: flex;
+  gap: 10px;
+  min-width: max-content;
+  overflow: visible;
 }
 
 .queue-row button,
