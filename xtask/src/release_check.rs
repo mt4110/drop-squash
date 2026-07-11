@@ -46,6 +46,7 @@ pub fn run() -> Result<(), String> {
     require_text("docs/release.md", "docs/release-blockers.md")?;
     require_text("docs/productization.md", "docs/release-blockers.md")?;
     require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
+    require_text("docs/licensing.md", "Lemon Squeezy sandbox purchase")?;
     require_text("website/README.md", "docs/release-blockers.md")?;
     reject_text("apps/desktop/src-tauri/tauri.conf.json", "\"updater\"")?;
     println!("release readiness checks passed");

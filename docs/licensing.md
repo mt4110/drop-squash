@@ -37,4 +37,5 @@ The CLI exposes `dropsquash license status` as a local read-only diagnostic.
 It reports trial usage, Pro/Trial/Locked state, and the license cache path
 without contacting Lemon Squeezy or asking for a raw license key.
 
-Lemon Squeezy sandbox activation still needs manual verification before paid beta.
+Lemon Squeezy sandbox purchase and Lemon Squeezy sandbox activation still need
+manual verification before paid beta.
