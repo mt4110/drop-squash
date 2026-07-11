@@ -56,6 +56,36 @@ async fn activation_failure_does_not_write_partial_cache() {
 }
 
 #[tokio::test]
+async fn activation_failure_preserves_existing_cache() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    let existing = LicenseCache {
+        instance_name: Some("device-1".to_string()),
+        instance_id: Some("remote-device-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-OLD-KEY")),
+        validated_at_unix: Some(90),
+        offline_grace_until_unix: Some(1000),
+        valid: true,
+        ..LicenseCache::default()
+    };
+    existing.save_to_path(&path).unwrap();
+
+    let result = write_activation_cache(
+        "LS-NEW-KEY",
+        &path,
+        &FakeProvider {
+            fail: true,
+            expected_key: Some("LS-NEW-KEY"),
+        },
+        100,
+    )
+    .await;
+
+    assert!(result.is_err());
+    assert_eq!(LicenseCache::load_or_default(&path).unwrap(), existing);
+}
+
+#[tokio::test]
 async fn activation_success_writes_fingerprint_without_raw_key() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("license.json");
