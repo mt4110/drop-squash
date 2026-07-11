@@ -66,7 +66,8 @@ notarization it accepts either the App Store Connect API variables
 variables `APPLE_ID`, `APPLE_PASSWORD`, and `APPLE_TEAM_ID`. Do not commit these
 values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
 `APPLE_CERTIFICATE_PASSWORD`; a local keychain identity name is not enough for a
-fresh runner.
+fresh runner. The certificate value must be base64-encoded certificate data, not
+a placeholder such as `base64`.
 
 After packaged-app testing, require the manual QA record to be complete:
 

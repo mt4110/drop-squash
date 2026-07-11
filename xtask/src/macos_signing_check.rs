@@ -10,6 +10,7 @@ pub fn run() -> Result<(), String> {
 
 fn check(env: &BTreeMap<String, String>) -> Result<(), String> {
     check_signing(env)?;
+    check_certificate(env)?;
     check_notarization(env)?;
     check_api_key_path(env)?;
     Ok(())
@@ -65,6 +66,24 @@ fn check_signing_identity(env: &BTreeMap<String, String>) -> Result<(), String> 
         return Ok(());
     }
     Err("APPLE_SIGNING_IDENTITY must be a Developer ID Application identity".to_string())
+}
+
+fn check_certificate(env: &BTreeMap<String, String>) -> Result<(), String> {
+    let Some(certificate) = value(env, "APPLE_CERTIFICATE") else {
+        return Ok(());
+    };
+    let compact: String = certificate
+        .chars()
+        .filter(|value| !value.is_ascii_whitespace())
+        .collect();
+    if compact.len() >= 32 && compact.chars().all(is_base64_char) {
+        return Ok(());
+    }
+    Err("APPLE_CERTIFICATE must be base64-encoded certificate data".to_string())
+}
+
+fn is_base64_char(value: char) -> bool {
+    value.is_ascii_alphanumeric() || matches!(value, '+' | '/' | '=')
 }
 
 fn check_team_id(env: &BTreeMap<String, String>) -> Result<(), String> {
