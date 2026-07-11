@@ -24,7 +24,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Settings persistence | Output folder, profile, size, source policy, and privacy receipt preference persist through AppConfig | `cargo test -p dropsquash-core -p dropsquash-desktop && pnpm --dir apps/desktop/web lint` |
 | Privacy receipt generation | Successful conversions create a local sidecar receipt with `uploaded_bytes = 0` and `metadata_policy = preserve`; desktop summaries expose the saved receipt path | `cargo test -p dropsquash-privacy -p dropsquash -p dropsquash-desktop` |
 | Source movement safety | Postprocess gates, equal-or-larger output boundaries, and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
-| Queue order | Sequential queue state transitions and trial-lock pending-job blocking are tested | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
+| Queue order | Sequential queue state transitions, queued cancellation, and trial-lock pending-job blocking are tested | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
 | Cancellation token path | File stability and desktop active-conversion cancellation are tested | `cargo test -p dropsquash-fileguard && cargo test -p dropsquash-desktop state` |
 | Unsupported OS backends | Windows/Linux placeholders report unavailable and reject encode instead of falling back | `cargo test -p dropsquash-encoder unimplemented_platform_backends` |
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |

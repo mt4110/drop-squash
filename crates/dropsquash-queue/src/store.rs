@@ -41,6 +41,13 @@ impl InMemoryQueue {
         self.complete_active(QueueJobStatus::Cancelled, None)
     }
 
+    pub fn cancel_pending(&mut self, id: QueueJobId) -> Option<QueueItem> {
+        let index = self.pending.iter().position(|item| item.id == id)?;
+        let item = self.pending.remove(index)?.cancelled();
+        self.completed.push(item.clone());
+        Some(item)
+    }
+
     pub fn block_pending(&mut self, error: String) -> Vec<QueueItem> {
         let blocked = self
             .pending

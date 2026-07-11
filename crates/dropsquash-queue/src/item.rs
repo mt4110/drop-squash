@@ -48,4 +48,9 @@ impl QueueItem {
         self.error = Some(error);
         self
     }
+
+    pub fn cancelled(mut self) -> Self {
+        self.status = QueueJobStatus::Cancelled;
+        self
+    }
 }

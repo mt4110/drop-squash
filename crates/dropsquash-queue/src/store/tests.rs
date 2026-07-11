@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use dropsquash_core::{EncodeJob, OutputSize, Profile, SourcePolicy};
 
 use super::InMemoryQueue;
-use crate::QueueJobStatus;
+use crate::{QueueJobId, QueueJobStatus};
 
 fn job(path: &str) -> EncodeJob {
     EncodeJob {
@@ -79,4 +79,33 @@ fn blocks_pending_jobs_without_touching_active_job() {
         .iter()
         .all(|item| item.error.as_deref() == Some("trial locked")));
     assert_eq!(queue.completed(), blocked.as_slice());
+}
+
+#[test]
+fn cancels_pending_job_without_touching_active_job() {
+    let mut queue = InMemoryQueue::default();
+    let first = queue.enqueue(job("first.mov"));
+    let second = queue.enqueue(job("second.mov"));
+    let third = queue.enqueue(job("third.mov"));
+
+    let active = queue.start_next().unwrap();
+    let cancelled = queue.cancel_pending(second.id).unwrap();
+
+    assert_eq!(active.id, first.id);
+    assert_eq!(queue.active().map(|item| item.id), Some(first.id));
+    assert_eq!(cancelled.status, QueueJobStatus::Cancelled);
+    assert_eq!(queue.completed(), &[cancelled]);
+
+    queue.finish_active();
+    assert_eq!(queue.start_next().map(|item| item.id), Some(third.id));
+}
+
+#[test]
+fn cancel_pending_ignores_active_or_unknown_ids() {
+    let mut queue = InMemoryQueue::default();
+    let active = queue.enqueue(job("first.mov"));
+    queue.start_next();
+
+    assert!(queue.cancel_pending(active.id).is_none());
+    assert!(queue.cancel_pending(QueueJobId(999)).is_none());
 }
