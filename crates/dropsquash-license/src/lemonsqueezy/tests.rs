@@ -134,6 +134,25 @@ fn deactivation_error_redacts_echoed_license_key() {
 }
 
 #[tokio::test]
+async fn activate_posts_license_key_and_instance_name() {
+    let response = r#"{"activated":true,"instance":{"id":"remote-instance-1"}}"#;
+    let (base_url, request) = capture_one_request(response).await;
+    let provider = LemonSqueezyProvider {
+        client: LicenseApiClient::test(base_url),
+    };
+
+    let activation = provider
+        .activate("LS-SECRET-RAW-KEY", "device-1")
+        .await
+        .unwrap();
+
+    let request = request.await.unwrap();
+    assert_eq!(activation.instance_id, "remote-instance-1");
+    assert!(request.starts_with("POST /activate HTTP/1.1"));
+    assert!(request.contains("license_key=LS-SECRET-RAW-KEY&instance_name=device-1"));
+}
+
+#[tokio::test]
 async fn validate_posts_license_key_and_instance_id() {
     let (base_url, request) = capture_one_request(r#"{"valid":true}"#).await;
     let provider = LemonSqueezyProvider {
