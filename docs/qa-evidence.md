@@ -37,6 +37,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Release notes evidence | Filled public release notes reject duplicate fields, placeholder URLs, nested artifact URLs, checkout/website/refund mix-up, missing signing/notary evidence, missing conversion/queue/Trash/license action-state evidence, generic verification results, vague limitations, and vague support contact | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
 | Publish gate | Public beta publication requires release readiness, valid static website pages, complete manual QA evidence, filled release notes evidence, every release blocker marked Verified with a traceable Evidence reference, and release blocker URLs matching the release notes URLs | `cargo run -p xtask -- publish-check path/to/release-notes.md` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, nested artifact URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, wrong DMG names, non-canonical homepages, invalid checksums, declares no in-app auto-update, and includes the DropSquash app-state `zap` path | `cargo test -p xtask homebrew_cask` |
+| macOS signing preflight | Signing preflight rejects local-only CI identities, placeholder certificates, malformed App Store Connect key ids, malformed issuer UUIDs, missing `.p8` files, and malformed Apple team IDs | `cargo test -p xtask macos_signing_check && cargo run -p xtask -- macos-signing-check` |
 
 ## Manual-Only Evidence
 

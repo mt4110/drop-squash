@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 49] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 53] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -58,6 +58,8 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 49] = [
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
     ("docs/qa-evidence.md", "declares no in-app auto-update"),
+    ("docs/qa-evidence.md", "malformed App Store Connect key ids"),
+    ("docs/qa-evidence.md", "malformed issuer UUIDs"),
     ("docs/licensing.md", "Lemon Squeezy sandbox purchase"),
     (
         "docs/licensing.md",
@@ -69,6 +71,8 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 49] = [
     ("docs/release.md", "disabled while Forgetting"),
     ("docs/release.md", "License network failure"),
     ("docs/release.md", "release blocker URLs to match"),
+    ("docs/release.md", "10-character `APPLE_API_KEY`"),
+    ("docs/release.md", "APPLE_API_ISSUER"),
     (
         "docs/benchmarking.md",
         "at least three private local samples",
