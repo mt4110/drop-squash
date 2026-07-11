@@ -82,7 +82,7 @@ pub(super) fn incomplete_requirements(text: &str) -> Vec<&'static str> {
 fn is_missing_requirement(blocker: &str, value: &str) -> bool {
     let value = value.trim();
     value.is_empty()
-        || value == "TBD"
+        || super::placeholders::has_token(value)
         || required_phrases(blocker)
             .iter()
             .any(|phrase| !value.contains(phrase))

@@ -26,6 +26,15 @@ fn reports_vague_completion_evidence() {
 }
 
 #[test]
+fn reports_completion_evidence_with_embedded_placeholder() {
+    let text = "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact TODO | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Signed DMG"));
+}
+
+#[test]
 fn reports_sandbox_purchase_completion_without_order() {
     let text = "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product and test buyer | TBD | `docs/manual-qa.md` |\n";
 
