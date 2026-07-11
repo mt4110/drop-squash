@@ -6,6 +6,10 @@ pub(super) fn srcs(text: &str) -> Vec<String> {
     attr_values(text, "src")
 }
 
+pub(super) fn actions(text: &str) -> Vec<String> {
+    attr_values(text, "action")
+}
+
 fn attr_values(text: &str, name: &str) -> Vec<String> {
     let mut values = Vec::new();
     let mut rest = text;

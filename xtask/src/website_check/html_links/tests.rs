@@ -1,4 +1,4 @@
-use super::{hrefs, srcs};
+use super::{actions, hrefs, srcs};
 
 #[test]
 fn extracts_double_single_and_uppercase_hrefs() {
@@ -19,4 +19,11 @@ fn extracts_src_values() {
     let sources = srcs(r#"<script src="app.js"></script><img SRC='logo.png'>"#);
 
     assert_eq!(sources, vec!["app.js", "logo.png"]);
+}
+
+#[test]
+fn extracts_form_action_values() {
+    let actions = actions(r#"<form action="submit.html"></form><form ACTION='buy.html'>"#);
+
+    assert_eq!(actions, vec!["submit.html", "buy.html"]);
 }

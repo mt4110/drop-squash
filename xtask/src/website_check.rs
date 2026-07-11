@@ -77,6 +77,13 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
     for src in html_links::srcs(&text) {
         resource_policy::check(root, path, &src, errors);
     }
+    for action in html_links::actions(&text) {
+        href_policy::check(path, &action, errors);
+        external_policy::check(path, &action, errors);
+        if !href_policy::is_external_or_anchor(&action) && !local_href_exists(path, &action) {
+            errors.push(format!("{} links to missing {action}", path.display()));
+        }
+    }
     Ok(())
 }
 
