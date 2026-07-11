@@ -36,3 +36,4 @@
 - Add an `xtask privacy-policy-check` command for default telemetry and analytics guardrails.
 - Add an `xtask manual-qa-check` command for packaged-app QA completion records.
 - Extend `xtask website-check` to require the core static sales-site pages.
+- Run file-size and static website gates in the tag release workflow.

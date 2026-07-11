@@ -16,6 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@1.95.0
+      - name: File size architecture check
+        run: cargo run -p xtask -- file-size-check
+      - name: Static website check
+        run: cargo run -p xtask -- website-check
       - name: Release readiness checks
         run: cargo run -p xtask -- release-check
       - name: Block unsigned Phase 0 release
