@@ -58,12 +58,14 @@ body,
 .drop-picker,
 .cancel-button,
 .help-button,
-.output-picker {
+.output-picker,
+.trash-original {
   font: inherit;
 }
 
 .drop-picker,
-.cancel-button {
+.cancel-button,
+.trash-original {
   background: transparent;
   border: 0;
   color: #146ef5;
@@ -74,6 +76,11 @@ body,
 
 .cancel-button {
   color: #6e6e73;
+}
+
+.trash-original {
+  color: #6e6e73;
+  margin-top: 10px;
 }
 
 .source-path {

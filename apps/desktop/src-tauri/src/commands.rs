@@ -59,5 +59,13 @@ pub fn cancel_conversion(
     app_state.cancel_conversion()
 }
 
+#[tauri::command(rename_all = "camelCase")]
+pub fn trash_original(
+    source_path: String,
+    output_path: String,
+) -> std::result::Result<dropsquash_postprocess::SourceActionDecision, String> {
+    source::trash_original(source_path, output_path)
+}
+
 #[cfg(test)]
 mod tests;

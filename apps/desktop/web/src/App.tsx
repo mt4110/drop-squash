@@ -14,6 +14,7 @@ import type {
   OutputSize,
   Profile,
   SavedConfig,
+  SourceActionDecision,
   SourcePolicy,
 } from "./lib/commands";
 import type { QueueEntry } from "./lib/queue";
@@ -274,6 +275,31 @@ export function App() {
     }
   }, []);
 
+  const trashOriginal = useCallback(async (sourcePath: string, outputPath: string) => {
+    if (!isTauri()) {
+      return;
+    }
+
+    try {
+      const decision = await invoke<SourceActionDecision>("trash_original", {
+        sourcePath,
+        outputPath,
+      });
+      if (decision.action !== "move-original-to-trash") {
+        setError(decision.reason);
+        return;
+      }
+      setResult((current) => current ? { ...current, sourceAction: decision.action } : current);
+      setQueue((current) => current.map((item) => (
+        item.result?.outputPath === outputPath
+          ? { ...item, result: { ...item.result, sourceAction: decision.action } }
+          : item
+      )));
+    } catch (reason) {
+      setError(String(reason));
+    }
+  }, []);
+
   useEffect(() => {
     if (!isTauri()) {
       return;
@@ -324,6 +350,7 @@ export function App() {
         onPick={() => void chooseRecording()}
         onCancel={() => void cancelConversion()}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
+        onTrashOriginal={(sourcePath, outputPath) => void trashOriginal(sourcePath, outputPath)}
       />
       <SettingsDrawer
         outputDir={state.outputDir}

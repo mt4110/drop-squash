@@ -13,6 +13,7 @@ type DropZoneProps = {
   onPick: () => void;
   onCancel: () => void;
   onRevealOutput: (outputPath: string) => void;
+  onTrashOriginal: (sourcePath: string, outputPath: string) => void;
 };
 
 export function DropZone({
@@ -27,7 +28,10 @@ export function DropZone({
   onPick,
   onCancel,
   onRevealOutput,
+  onTrashOriginal,
 }: DropZoneProps) {
+  const canTrashOriginal = result?.sourceAction === "ask-user";
+
   return (
     <section
       className={`drop-zone${isDragging ? " is-dragging" : ""}`}
@@ -46,6 +50,7 @@ export function DropZone({
             : `${inputExtensions.map((extension) => extension.toUpperCase()).join(" / ")} here`}
       </p>
       {result && <button className="saved-destination" title="Show output in Finder" type="button" onClick={() => onRevealOutput(result.outputPath)}>Saved {formatBytes(result.savedBytes)} to {displayPath(parentPath(result.outputPath))}</button>}
+      {canTrashOriginal && <button className="trash-original" type="button" onClick={() => onTrashOriginal(result.sourcePath, result.outputPath)}>Move original to Trash</button>}
       {!result && inputPath && <p className="source-path" title={inputPath}>{inputPath}</p>}
       {isBusy && <div className="progress" aria-label="Conversion progress" aria-valuemax={100} aria-valuemin={0} aria-valuenow={progress ?? 0} role="progressbar"><span style={{ width: `${Math.max(3, progress ?? 0)}%` }} /></div>}
       {isBusy && <button className="cancel-button" type="button" onClick={onCancel}>Cancel</button>}

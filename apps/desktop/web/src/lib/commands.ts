@@ -11,6 +11,7 @@ export type Profile =
   | "privacy";
 export type OutputSize = "auto" | "1080p" | "720p" | "480p";
 export type SourcePolicy = "keep" | "trash" | "ask";
+export type SourceAction = "keep-original" | "ask-user" | "move-original-to-trash";
 
 export type SelectOption<T> = {
   value: T;
@@ -39,7 +40,13 @@ export type ConversionSummary = {
   outputBytes: number;
   savedBytes: number;
   reductionPercent: number;
-  sourceAction: "keep-original" | "ask-user" | "move-original-to-trash";
+  sourceAction: SourceAction;
+  sourcePath: string;
+};
+
+export type SourceActionDecision = {
+  action: SourceAction;
+  reason: string;
   sourcePath: string;
 };
 
