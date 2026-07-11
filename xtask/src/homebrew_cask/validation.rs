@@ -10,10 +10,10 @@ pub(super) fn require_version(version: &str) -> Result<(), String> {
 pub(super) fn require_dmg_url(url: &str) -> Result<(), String> {
     require_https_url(url)?;
     require_github_release_url(url)?;
-    if url.ends_with(".dmg") {
+    if url.ends_with("/DropSquash.dmg") {
         return Ok(());
     }
-    Err("url must point to a .dmg file".to_string())
+    Err("url must point to DropSquash.dmg".to_string())
 }
 
 pub(super) fn require_versioned_url(version: &str, url: &str) -> Result<(), String> {

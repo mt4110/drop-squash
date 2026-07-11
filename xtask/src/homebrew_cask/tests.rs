@@ -86,7 +86,21 @@ fn rejects_non_dmg_url() {
     .err()
     .unwrap();
 
-    assert!(error.contains(".dmg"));
+    assert!(error.contains("DropSquash.dmg"));
+}
+
+#[test]
+fn rejects_wrong_dmg_name() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/Other.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("DropSquash.dmg"));
 }
 
 #[test]
