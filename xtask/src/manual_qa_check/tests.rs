@@ -13,6 +13,28 @@ fn accepts_complete_manual_qa_tables() {
 }
 
 #[test]
+fn manual_qa_template_contains_required_labels() {
+    let text = std::fs::read_to_string("../docs/manual-qa.md").unwrap();
+    let labels = template_labels(&text);
+    let mut missing = Vec::new();
+
+    super::requirements::require_labels(
+        "manual QA field is missing",
+        &REQUIRED_FIELDS,
+        &labels,
+        &mut missing,
+    );
+    super::requirements::require_labels(
+        "manual QA check is missing",
+        &REQUIRED_CHECKS,
+        &labels,
+        &mut missing,
+    );
+
+    assert!(missing.is_empty(), "{missing:?}");
+}
+
+#[test]
 fn reports_empty_environment_fields() {
     let (_directory, path) = write_manual_qa("| App build |  |\n");
     let missing = check_file(&path).unwrap();
@@ -429,6 +451,18 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let path = directory.path().join("manual-qa.md");
     std::fs::write(&path, text).unwrap();
     (directory, path)
+}
+
+fn template_labels(text: &str) -> Vec<String> {
+    text.lines()
+        .filter(|line| line.starts_with('|') && !line.contains("---"))
+        .filter_map(|line| {
+            super::cells(line)
+                .first()
+                .map(|label| label.trim().to_string())
+        })
+        .filter(|label| label != "Field" && label != "Check")
+        .collect()
 }
 
 fn complete_manual_qa(artifact: &std::path::Path) -> String {
