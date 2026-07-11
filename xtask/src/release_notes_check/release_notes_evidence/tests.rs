@@ -1,4 +1,15 @@
-use super::check_text;
+use super::{check, check_text};
+
+#[test]
+fn reports_missing_release_notes_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("missing-release-notes.md");
+
+    let error = check(&path).unwrap_err();
+
+    assert!(error.contains("failed to read release notes"));
+    assert!(error.contains("missing-release-notes.md"));
+}
 
 #[test]
 fn accepts_concrete_production_urls() {

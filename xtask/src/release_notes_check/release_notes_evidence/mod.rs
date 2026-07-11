@@ -8,7 +8,8 @@ mod quality;
 mod url;
 
 pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
-    let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
+    let text = std::fs::read_to_string(path)
+        .map_err(|error| format!("failed to read release notes {}: {error}", path.display()))?;
     Ok(check_text(&text))
 }
 
