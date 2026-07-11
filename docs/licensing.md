@@ -18,6 +18,9 @@ The app stores a local license cache with:
 - validation and offline grace timestamps
 - validity flag
 
+The app treats the cache as Pro only when it is valid, inside the offline grace
+window, and includes both the license fingerprint and Lemon Squeezy instance id.
+
 The trimmed raw license key is sent to Lemon Squeezy only when the user
 activates a license in the current desktop flow. It is not persisted in the
 config, history, or license cache, and license error messages redact echoed raw

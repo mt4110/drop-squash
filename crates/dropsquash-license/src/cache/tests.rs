@@ -31,6 +31,8 @@ fn serialized_cache_never_contains_raw_license_key() {
 #[test]
 fn pro_requires_valid_cache_inside_grace_window() {
     let cache = LicenseCache {
+        instance_id: Some("instance-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
         valid: true,
         offline_grace_until_unix: Some(200),
         ..LicenseCache::default()
@@ -38,4 +40,15 @@ fn pro_requires_valid_cache_inside_grace_window() {
 
     assert!(cache.permits_pro(200));
     assert!(!cache.permits_pro(201));
+}
+
+#[test]
+fn pro_requires_activation_identity() {
+    let cache = LicenseCache {
+        valid: true,
+        offline_grace_until_unix: Some(200),
+        ..LicenseCache::default()
+    };
+
+    assert!(!cache.permits_pro(100));
 }

@@ -33,9 +33,20 @@ impl LicenseCache {
 
     pub fn permits_pro(&self, now_unix: u64) -> bool {
         self.valid
+            && self.has_activation_identity()
             && self
                 .offline_grace_until_unix
                 .is_some_and(|until| now_unix <= until)
+    }
+
+    fn has_activation_identity(&self) -> bool {
+        self.instance_id
+            .as_deref()
+            .is_some_and(|value| !value.trim().is_empty())
+            && self
+                .license_key_fingerprint
+                .as_deref()
+                .is_some_and(|value| !value.trim().is_empty())
     }
 }
 
