@@ -62,6 +62,7 @@ pub fn run() -> Result<(), String> {
     require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
     require_text("docs/qa-evidence.md", "license, refund, support copy")?;
     require_text("docs/qa-evidence.md", "non-DMG targets are rejected")?;
+    require_text("docs/qa-evidence.md", "UDIF trailer")?;
     require_text("docs/qa-evidence.md", "non-canonical homepages")?;
     require_text("docs/licensing.md", "Lemon Squeezy sandbox purchase")?;
     require_text(

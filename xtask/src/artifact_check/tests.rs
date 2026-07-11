@@ -4,14 +4,14 @@ use super::check_file;
 
 #[test]
 fn accepts_artifact_without_nix_store_reference() {
-    let (_directory, path) = write_artifact(b"DropSquash artifact");
+    let (_directory, path) = write_artifact(&dmg_bytes(b"DropSquash artifact"));
 
     assert!(check_file(&path).is_ok());
 }
 
 #[test]
 fn rejects_artifact_with_nix_store_reference() {
-    let (_directory, path) = write_artifact(b"linked to /nix/store/abc-drop-squash");
+    let (_directory, path) = write_artifact(&dmg_bytes(b"linked to /nix/store/abc"));
     let error = check_file(&path).unwrap_err();
 
     assert!(error.contains("/nix/store"));
@@ -34,6 +34,14 @@ fn rejects_empty_artifacts() {
 }
 
 #[test]
+fn rejects_non_udif_dmg_artifacts() {
+    let (_directory, path) = write_artifact(b"not really a dmg");
+    let error = check_file(&path).unwrap_err();
+
+    assert!(error.contains("UDIF DMG"));
+}
+
+#[test]
 fn rejects_non_dmg_artifacts() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("DropSquash.zip");
@@ -45,6 +53,14 @@ fn rejects_non_dmg_artifacts() {
     let error = check_file(&path).unwrap_err();
 
     assert!(error.contains("must be a DMG"));
+}
+
+fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
+    let mut bytes = prefix.to_vec();
+    let mut trailer = vec![0; 512];
+    trailer[..4].copy_from_slice(b"koly");
+    bytes.extend(trailer);
+    bytes
 }
 
 fn write_artifact(bytes: &[u8]) -> (tempfile::TempDir, std::path::PathBuf) {
