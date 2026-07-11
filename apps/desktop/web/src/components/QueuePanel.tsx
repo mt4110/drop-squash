@@ -21,7 +21,12 @@ export function QueuePanel({ items, onCancelQueued, onClearFinished, onRevealOut
     <section className="queue" aria-label="Queue">
       {hasFinished(items) && (
         <div className="queue-actions">
-          <span>{summary.finished} of {summary.total} finished - {formatBytes(summary.savedBytes)} saved</span>
+          <span>
+            {summary.finished} of {summary.total} finished - {formatBytes(summary.savedBytes)} saved
+            {summary.failed > 0 && ` - ${summary.failed} failed`}
+            {summary.cancelled > 0 && ` - ${summary.cancelled} cancelled`}
+            {summary.blocked > 0 && ` - ${summary.blocked} blocked`}
+          </span>
           <button type="button" onClick={onClearFinished}>Clear finished</button>
         </div>
       )}
