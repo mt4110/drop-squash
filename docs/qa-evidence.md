@@ -19,6 +19,7 @@ app testing in `docs/manual-qa.md`.
 | Source movement safety | Postprocess gates and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
 | Queue order | Sequential queue state transitions are tested | `cargo test -p dropsquash-queue` |
 | Cancellation token path | File stability and desktop active-conversion cancellation are tested | `cargo test -p dropsquash-fileguard && cargo test -p dropsquash-desktop state` |
+| Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for emptiness and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty DMG checksums can be generated deterministically | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-HTTPS URLs, non-DMG URLs, and invalid checksums | `cargo test -p xtask homebrew_cask` |
@@ -34,6 +35,7 @@ These checks still require a packaged macOS app or external service state:
 | Finder reveal | Finder selection behavior is macOS integration, not core logic |
 | Trash source policy | NSFileManager Trash behavior must be verified on the target macOS version |
 | Large-recording cancellation | User-visible timing, progress, and cleanup need real media and packaged app behavior |
+| Benchmark sample results | Compression ratio and throughput depend on private local media and target Mac hardware |
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |

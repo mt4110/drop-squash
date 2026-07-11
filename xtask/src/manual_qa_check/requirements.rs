@@ -9,7 +9,7 @@ pub(super) const REQUIRED_FIELDS: [&str; 8] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 24] = [
+pub(super) const REQUIRED_CHECKS: [&str; 25] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Duplicate output naming",
@@ -29,6 +29,7 @@ pub(super) const REQUIRED_CHECKS: [&str; 24] = [
     "`cargo run -p xtask -- media-policy-check`",
     "`cargo run -p xtask -- privacy-policy-check`",
     "`cargo run -p xtask -- website-check`",
+    "`cargo run -p xtask -- benchmark --input <sample> --output-dir <tmp>`",
     "`cargo run -p xtask -- manual-qa-check`",
     "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`",
     "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`",
