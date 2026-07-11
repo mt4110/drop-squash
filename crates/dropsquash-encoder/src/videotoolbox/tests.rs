@@ -13,8 +13,9 @@ fn job_in(directory: &tempfile::TempDir) -> EncodeJob {
 
 #[test]
 fn avfoundation_backend_reports_available() {
-    let capabilities = VideoToolboxEncoder.probe_capabilities().unwrap();
+    let capabilities = AppleNativeEncoder.probe_capabilities().unwrap();
 
+    assert_eq!(capabilities.backend_name, "apple-native");
     assert!(capabilities.available);
     assert!(capabilities.supports_h264);
     assert!(!capabilities.hardware_acceleration);

@@ -8,7 +8,7 @@ pub use backend::{EncodeProgressReporter, EncoderBackend, EncoderCapabilities};
 pub use gstreamer::GStreamerEncoder;
 pub use media_foundation::MediaFoundationEncoder;
 pub use verify::{verify_output, OutputVerification};
-pub use videotoolbox::VideoToolboxEncoder;
+pub use videotoolbox::AppleNativeEncoder;
 
 #[cfg(test)]
 pub use backend::NoopEncoder;

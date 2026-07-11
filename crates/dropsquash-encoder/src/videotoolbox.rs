@@ -20,12 +20,12 @@ mod session;
 use objc2::rc::autoreleasepool;
 
 #[derive(Debug, Clone, Default)]
-pub struct VideoToolboxEncoder;
+pub struct AppleNativeEncoder;
 
 #[async_trait]
-impl EncoderBackend for VideoToolboxEncoder {
+impl EncoderBackend for AppleNativeEncoder {
     fn name(&self) -> &'static str {
-        "videotoolbox"
+        "apple-native"
     }
 
     fn probe_capabilities(&self) -> Result<EncoderCapabilities> {
@@ -64,7 +64,7 @@ impl EncoderBackend for VideoToolboxEncoder {
 
         #[cfg(not(target_os = "macos"))]
         Err(dropsquash_core::AppError::Encoder(
-            "VideoToolbox backend is not implemented in Phase 0".to_string(),
+            "Apple native backend is only implemented on macOS in Phase 0".to_string(),
         ))
     }
 

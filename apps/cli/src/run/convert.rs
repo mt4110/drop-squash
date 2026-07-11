@@ -8,12 +8,12 @@ use crate::args::{OutputSizeArg, ProfileArg};
 
 use super::license;
 
+#[cfg(target_os = "macos")]
+use dropsquash_encoder::AppleNativeEncoder as NativeEncoder;
 #[cfg(target_os = "linux")]
 use dropsquash_encoder::GStreamerEncoder as NativeEncoder;
 #[cfg(target_os = "windows")]
 use dropsquash_encoder::MediaFoundationEncoder as NativeEncoder;
-#[cfg(target_os = "macos")]
-use dropsquash_encoder::VideoToolboxEncoder as NativeEncoder;
 
 pub async fn run(
     input: PathBuf,

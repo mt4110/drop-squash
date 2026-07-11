@@ -16,12 +16,12 @@ use super::progress::WindowProgressReporter;
 use super::source::handle_source_action;
 use crate::state::AppState;
 
+#[cfg(target_os = "macos")]
+use dropsquash_encoder::AppleNativeEncoder as NativeEncoder;
 #[cfg(target_os = "linux")]
 use dropsquash_encoder::GStreamerEncoder as NativeEncoder;
 #[cfg(target_os = "windows")]
 use dropsquash_encoder::MediaFoundationEncoder as NativeEncoder;
-#[cfg(target_os = "macos")]
-use dropsquash_encoder::VideoToolboxEncoder as NativeEncoder;
 
 pub async fn convert(
     app_state: tauri::State<'_, AppState>,

@@ -11,12 +11,12 @@ use dropsquash_encoder::EncoderBackend;
 use args::BenchmarkArgs;
 use report::BenchmarkRow;
 
+#[cfg(target_os = "macos")]
+use dropsquash_encoder::AppleNativeEncoder as NativeEncoder;
 #[cfg(target_os = "linux")]
 use dropsquash_encoder::GStreamerEncoder as NativeEncoder;
 #[cfg(target_os = "windows")]
 use dropsquash_encoder::MediaFoundationEncoder as NativeEncoder;
-#[cfg(target_os = "macos")]
-use dropsquash_encoder::VideoToolboxEncoder as NativeEncoder;
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let args = BenchmarkArgs::parse(args)?;
