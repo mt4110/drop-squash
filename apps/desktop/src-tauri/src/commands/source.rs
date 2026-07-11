@@ -17,7 +17,7 @@ pub fn handle_source_action(
         result.input_path.clone(),
         source_policy,
         SourceSafety {
-            conversion_succeeded: true,
+            conversion_succeeded: result.success,
             output_exists: result.output_path.exists(),
             original_bytes: result.original_bytes,
             output_bytes: result.output_bytes,
