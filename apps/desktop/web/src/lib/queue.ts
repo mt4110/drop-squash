@@ -17,6 +17,17 @@ export type QueueEntry = {
   error?: string;
 };
 
+export type QueueSummary = {
+  total: number;
+  queued: number;
+  running: number;
+  succeeded: number;
+  failed: number;
+  cancelled: number;
+  blocked: number;
+  savedBytes: number;
+};
+
 export function entriesForInputPaths(inputPaths: string[], nextId: number) {
   return {
     entries: inputPaths.map((inputPath, index) => ({
@@ -38,6 +49,15 @@ export function hasFinished(items: QueueEntry[]) {
 
 export function clearFinished(items: QueueEntry[]) {
   return items.filter((item) => !isFinishedStatus(item.status));
+}
+
+export function queueSummary(items: QueueEntry[]): QueueSummary {
+  return items.reduce<QueueSummary>((summary, item) => {
+    summary.total += 1;
+    summary[item.status] += 1;
+    summary.savedBytes += item.result?.savedBytes ?? 0;
+    return summary;
+  }, emptySummary());
 }
 
 export function cancelQueued(items: QueueEntry[], id: number) {
@@ -121,4 +141,17 @@ function isFinishedStatus(status: QueueStatus) {
     || status === "cancelled"
     || status === "blocked"
   );
+}
+
+function emptySummary(): QueueSummary {
+  return {
+    total: 0,
+    queued: 0,
+    running: 0,
+    succeeded: 0,
+    failed: 0,
+    cancelled: 0,
+    blocked: 0,
+    savedBytes: 0,
+  };
 }

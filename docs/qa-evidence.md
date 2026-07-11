@@ -24,7 +24,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Settings persistence | Output folder, profile, size, source policy, and privacy receipt preference persist through AppConfig | `cargo test -p dropsquash-core -p dropsquash-desktop && pnpm --dir apps/desktop/web lint` |
 | Privacy receipt generation | Successful conversions create a local sidecar receipt with `uploaded_bytes = 0` and `metadata_policy = preserve`; desktop summaries expose the saved receipt path | `cargo test -p dropsquash-privacy -p dropsquash -p dropsquash-desktop` |
 | Source movement safety | Postprocess gates, equal-or-larger output boundaries, and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
-| Queue order | Sequential queue state transitions, QueueWorker events, queued cancellation, and trial-lock pending-job blocking are tested | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
+| Queue order | Sequential queue state transitions, QueueWorker events, queued cancellation, batch summary, and trial-lock pending-job blocking are tested | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
 | Cancellation token path | File stability and desktop active-conversion cancellation are tested | `cargo test -p dropsquash-fileguard && cargo test -p dropsquash-desktop state` |
 | Unsupported OS backends | Windows/Linux placeholders report unavailable and reject encode instead of falling back | `cargo test -p dropsquash-encoder unimplemented_platform_backends` |
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
@@ -54,6 +54,7 @@ These checks still require a packaged macOS app or external service state:
 | Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
 | Queued job cancellation | User-visible queue cancellation needs packaged app observation with repeated drops |
+| Batch summary | User-visible queue totals need packaged app observation after mixed queue outcomes |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, and test buyer evidence outside the repository |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state |

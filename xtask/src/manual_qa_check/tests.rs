@@ -44,6 +44,7 @@ fn reports_missing_required_checks() {
     assert!(missing.contains(&"manual QA check is missing: Cancellation".to_string()));
     assert!(missing.contains(&"manual QA check is missing: Reveal privacy receipt".to_string()));
     assert!(missing.contains(&"manual QA check is missing: Queued job cancellation".to_string()));
+    assert!(missing.contains(&"manual QA check is missing: Batch summary".to_string()));
 }
 
 #[test]

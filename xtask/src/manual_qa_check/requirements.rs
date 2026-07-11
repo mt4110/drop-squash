@@ -12,7 +12,7 @@ pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 33] = [
+pub(super) const REQUIRED_CHECKS: [&str; 34] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",
@@ -21,6 +21,7 @@ pub(super) const REQUIRED_CHECKS: [&str; 33] = [
     "Cancellation",
     "Multi-file queue",
     "Queued job cancellation",
+    "Batch summary",
     "Ask source policy",
     "Trash source policy",
     "Failed conversion",

@@ -289,10 +289,17 @@ body,
 }
 
 .queue-actions {
+  align-items: center;
   border-top: 1px solid #f0f0f2;
   display: flex;
+  gap: 12px;
   justify-content: flex-end;
   padding: 6px 16px;
+}
+
+.queue-actions span {
+  color: #6e6e73;
+  font-size: 12px;
 }
 
 .queue-row:first-child {
