@@ -52,10 +52,12 @@ the matching fields before starting observations. Copy the printed Config path,
 History path, and License cache path values into the matching state path fields.
 Copy the printed Tester value into the matching field.
 
-Then start from a known trial state if the run is meant to verify trial counts:
+Then start from a known trial state if the run is meant to verify trial counts.
+The reset command requires the sample-set description so the run cannot begin
+without naming the short, medium, and large recordings:
 
 ```sh
-cargo run -p xtask -- manual-qa-prepare --reset-trial
+cargo run -p xtask -- manual-qa-prepare --reset-trial --input-sample-set "short, medium, and large local recordings"
 ```
 
 `--reset-trial` removes only `history.jsonl` and `license.json`, and only after

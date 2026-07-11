@@ -49,6 +49,12 @@ impl Options {
         if self.reset_trial && self.restore_state {
             return Err("--reset-trial and --restore-state cannot be combined".to_string());
         }
+        if self.reset_trial && self.input_sample_set.is_none() {
+            return Err(
+                "--reset-trial requires --input-sample-set with short, medium, and large recordings"
+                    .to_string(),
+            );
+        }
         if self
             .input_sample_set
             .as_deref()

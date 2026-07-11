@@ -187,6 +187,13 @@ fn rejects_reset_and_restore_together() {
 }
 
 #[test]
+fn reset_trial_requires_sample_set() {
+    let error = Options::parse(vec!["--reset-trial".to_string()]).unwrap_err();
+
+    assert!(error.contains("--input-sample-set"));
+}
+
+#[test]
 fn rejects_unknown_arguments() {
     let error = Options::parse(vec!["--mystery".to_string(), "value".to_string()]).unwrap_err();
 
