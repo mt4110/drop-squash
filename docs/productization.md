@@ -34,7 +34,7 @@ Nothing uploads.
 | 2 Cancellation | In progress | Let users stop an active conversion cleanly | Cancellation token through command/encoder boundary, UI cancel action, temp cleanup | Cancel returns app to ready state; no success history; no trial count | Unit tests pass; packaged-app manual test remains |
 | 3 Sequential queue | In progress | Handle multiple dropped files deterministically | Queue states, per-job progress, one active conversion at a time | Multiple drops create rows; one job runs at a time; failures do not block unrelated jobs | Queue unit tests pass; D&D manual test remains |
 | 4 Source postprocess | In progress | Safely move originals to Trash only after verified success | Source policy setting, macOS Trash adapter, ask-after-success flow | Keep never moves; Ask prompts; Trash moves only after all safety gates | Setting, Ask UI, and Trash adapter build; macOS Trash manual test remains |
-| 5 License and trial UI | In progress | Convert trial usage into Pro unlock without account creation | License cache, instance id, activation/validation/deactivation, locked/Pro UI | Raw license key is not persisted; invalid/network errors are friendly; valid cache survives grace period | Provider, trial UI, activation shell, and safe cache/grace are implemented; Lemon Squeezy sandbox test remains |
+| 5 License and trial UI | In progress | Convert trial usage into Pro unlock without account creation | License cache, instance id, activation/validation provider, local forget action, locked/Pro UI | Raw license key is not persisted; invalid/network errors are friendly; valid cache survives grace period | Provider, trial UI, activation shell, local raw-key-free forget action, and safe cache/grace are implemented; Lemon Squeezy sandbox test remains |
 | 6 Release pipeline | In progress | Ship a trusted macOS beta | Signed app, notarized DMG, checksums, release checklist, Homebrew cask draft | Gatekeeper opens cleanly; secrets stay in CI; artifact checksum published | Readiness, security, artifact, checksum, signing preflight, and cask generation gates exist; signing/notarization remain |
 | 7 Sales site | In progress | Let a stranger understand, download, try, and buy | Landing, pricing, privacy, download, FAQ, support | Privacy claims match implementation; CTA works; download path works | Static site draft and link check exist; hosting and live checkout remain |
 | 8 Windows/Linux | Later | Expand after macOS signal | Media Foundation and GStreamer allowlist backends | Same core invariants; no silent software fallback | Native OS CI and real-device smoke tests |
@@ -52,7 +52,7 @@ Nothing uploads.
 | 7 | Add cancellation | In progress | Command/UI/encoder path is implemented; packaged-app manual test remains |
 | 8 | Add sequential queue | In progress | Queue model and React sequential runner are implemented; multiple-file D&D manual test remains |
 | 9 | Wire source policy and Trash | In progress | Setting is persisted; Ask has explicit Trash action; Trash uses macOS NSFileManager after safety gates; manual test remains |
-| 10 | Add license activation UI | In progress | Trial UI, locked activation form, deactivate action, provider networking, and raw-key-free cache exist; sandbox/manual validation remains |
+| 10 | Add license activation UI | In progress | Trial UI, locked activation form, local forget action, provider networking, and raw-key-free cache exist; sandbox/manual validation remains |
 | 11 | Build release pipeline | Pending | Signing/notarization before public beta |
 
 ## Release Gate

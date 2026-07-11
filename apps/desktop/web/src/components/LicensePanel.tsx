@@ -30,7 +30,7 @@ export function LicensePanel({ isPro, isLocked, onActivate, onDeactivate }: Lice
   return (
     <section className="license" aria-label="License">
       {isPro ? (
-        <button type="button" onClick={() => void onDeactivate()}>Deactivate license</button>
+        <button type="button" onClick={() => void onDeactivate()}>Forget license on this Mac</button>
       ) : (
         <>
           <input

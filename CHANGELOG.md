@@ -27,3 +27,4 @@
 - Align README and development docs with the current AVFoundation MVP and Nix-first tooling policy.
 - Add an `xtask file-size-check` command and CI gate for the repository file-size rules.
 - Strengthen release readiness checks for media process and production CSP safety gates.
+- Rename the desktop license removal affordance to clarify that it forgets the local cache only.

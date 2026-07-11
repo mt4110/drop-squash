@@ -18,8 +18,14 @@ The app stores a local license cache with:
 - validation and offline grace timestamps
 - validity flag
 
-The raw license key is sent only to Lemon Squeezy License API activation,
-validation, and deactivation endpoints. It is not persisted in the config,
-history, or license cache.
+The raw license key is sent to Lemon Squeezy only when the user activates a
+license in the current desktop flow. It is not persisted in the config, history,
+or license cache.
+
+The Lemon Squeezy provider supports validation and deactivation requests when a
+raw key is supplied. The desktop app deliberately does not retain that key, so
+its current Pro removal action only forgets the local license cache on this Mac.
+Server-side deactivation needs a future key-confirmed flow or a customer portal
+handoff.
 
 Lemon Squeezy sandbox activation still needs manual verification before paid beta.
