@@ -60,7 +60,7 @@ These checks still require a packaged macOS app or external service state:
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
 | Queued job cancellation | User-visible queue cancellation needs packaged app observation with repeated drops |
 | Batch summary | User-visible queue totals need packaged app observation after mixed queue outcomes |
-| Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, and test buyer evidence outside the repository |
+| Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, test buyer, and order evidence outside the repository |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Invalid license key handling | Requires packaged-app UI and local cache inspection after an invalid key |
 | Local license forget | Requires packaged-app state and local cache inspection after forgetting the license |

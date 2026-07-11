@@ -26,6 +26,15 @@ fn reports_vague_completion_evidence() {
 }
 
 #[test]
+fn reports_sandbox_purchase_completion_without_order() {
+    let text = "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product and test buyer | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
 fn reports_signed_completion_without_developer_id() {
     let text = "| Signed DMG | Blocked | `codesign` verification for the public DMG artifact | TBD | Release notes |\n";
 
@@ -55,7 +64,7 @@ fn reports_homebrew_completion_without_zap() {
 fn described_blockers() -> String {
     [
         "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |\n",
-        "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product and test buyer | TBD | `docs/manual-qa.md` |\n",
+        "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",

@@ -1,8 +1,10 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 16] = [
+const REQUIRED_PHRASES: [(&str, &str); 18] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy sandbox purchase", "Sandbox checkout"),
+    ("Lemon Squeezy sandbox purchase", "test buyer"),
+    ("Lemon Squeezy sandbox purchase", "order"),
     ("Valid sandbox activation", "raw key is absent"),
     ("Invalid license key handling", "raw key is absent"),
     ("Local license forget", "Local cache"),
