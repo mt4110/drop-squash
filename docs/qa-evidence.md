@@ -3,6 +3,8 @@
 This file separates automated evidence from packaged-app manual QA. Automated
 checks reduce the manual surface, but they do not replace real macOS packaged
 app testing in `docs/manual-qa.md`.
+Public paid beta blockers and their evidence references are tracked in
+`docs/release-blockers.md`.
 
 ## Automated Coverage
 
