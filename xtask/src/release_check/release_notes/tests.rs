@@ -19,6 +19,8 @@ Benchmark sample set
 Benchmark regression threshold
 Lemon Squeezy sandbox purchase
 Lemon Squeezy sandbox activation
+Invalid license key handling
+Local license forget
 Public website URL
 Live checkout URL
 GitHub Release checksum
