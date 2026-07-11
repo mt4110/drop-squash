@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 59] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 61] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -72,6 +72,8 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 59] = [
     ("docs/qa-evidence.md", "Live checkout link"),
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
+    ("docs/qa-evidence.md", "versioned `DropSquash.dmg` artifact"),
+    ("docs/qa-evidence.md", "`auto_updates false`"),
     ("docs/qa-evidence.md", "declares no in-app auto-update"),
     ("docs/qa-evidence.md", "malformed App Store Connect key ids"),
     ("docs/qa-evidence.md", "malformed issuer UUIDs"),
