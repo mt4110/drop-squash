@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
-use std::path::Path;
 
+mod api_key;
 mod env;
 use env::{all_present, present, require_pair, value};
 
@@ -15,7 +15,8 @@ fn check(env: &BTreeMap<String, String>) -> Result<(), String> {
     check_signing(env)?;
     check_certificate(env)?;
     check_notarization(env)?;
-    check_api_key_path(env)?;
+    api_key::check_identity(env)?;
+    api_key::check_path(env)?;
     Ok(())
 }
 
@@ -50,17 +51,6 @@ fn check_notarization(env: &BTreeMap<String, String>) -> Result<(), String> {
         return Ok(());
     }
     Err("notarization requires APPLE_API_KEY/APPLE_API_ISSUER/APPLE_API_KEY_PATH or APPLE_ID/APPLE_PASSWORD/APPLE_TEAM_ID".to_string())
-}
-
-fn check_api_key_path(env: &BTreeMap<String, String>) -> Result<(), String> {
-    let Some(path) = value(env, "APPLE_API_KEY_PATH") else {
-        return Ok(());
-    };
-    let path = Path::new(path);
-    if path.is_file() && path.extension().is_some_and(|value| value == "p8") {
-        return Ok(());
-    }
-    Err("APPLE_API_KEY_PATH must point to a .p8 file".to_string())
 }
 
 fn check_signing_identity(env: &BTreeMap<String, String>) -> Result<(), String> {

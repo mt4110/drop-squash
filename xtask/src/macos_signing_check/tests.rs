@@ -29,8 +29,8 @@ fn accepts_certificate_and_api_key_notarization() {
     let env = env([
         ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
         ("APPLE_CERTIFICATE_PASSWORD", "password"),
-        ("APPLE_API_KEY", "TEST"),
-        ("APPLE_API_ISSUER", "issuer"),
+        ("APPLE_API_KEY", "ABCDEF1234"),
+        ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
         ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
     ]);
 
@@ -132,8 +132,8 @@ fn rejects_missing_signing_source() {
 fn rejects_missing_api_key_file() {
     let env = env([
         ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
-        ("APPLE_API_KEY", "TEST"),
-        ("APPLE_API_ISSUER", "issuer"),
+        ("APPLE_API_KEY", "ABCDEF1234"),
+        ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
         ("APPLE_API_KEY_PATH", "/missing/AuthKey_TEST.p8"),
     ]);
     let error = check(&env).unwrap_err();
@@ -148,13 +148,45 @@ fn rejects_api_key_path_without_p8_extension() {
     std::fs::File::create(&key_path).unwrap();
     let env = env([
         ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
-        ("APPLE_API_KEY", "TEST"),
-        ("APPLE_API_ISSUER", "issuer"),
+        ("APPLE_API_KEY", "ABCDEF1234"),
+        ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
         ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
     ]);
     let error = check(&env).unwrap_err();
 
     assert!(error.contains("APPLE_API_KEY_PATH"));
+}
+
+#[test]
+fn rejects_placeholder_api_key_id() {
+    let directory = tempfile::tempdir().unwrap();
+    let key_path = directory.path().join("AuthKey_TEST.p8");
+    std::fs::File::create(&key_path).unwrap();
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_API_KEY", "TEST"),
+        ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
+        ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_API_KEY"));
+}
+
+#[test]
+fn rejects_placeholder_api_issuer() {
+    let directory = tempfile::tempdir().unwrap();
+    let key_path = directory.path().join("AuthKey_TEST.p8");
+    std::fs::File::create(&key_path).unwrap();
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_API_KEY", "ABCDEF1234"),
+        ("APPLE_API_ISSUER", "issuer"),
+        ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_API_ISSUER"));
 }
 
 fn env<const N: usize>(pairs: [(&str, &str); N]) -> BTreeMap<String, String> {
