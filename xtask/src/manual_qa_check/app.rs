@@ -49,7 +49,7 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["metadata_policy"],
         ],
         "Reveal privacy receipt" => &[&["finder"], &[".privacy.json"], &["selected"]],
-        "Duplicate output naming" => &[&["squashed-2", "numbered"]],
+        "Duplicate output naming" => &[&["squashed-2"], &[".mp4"]],
         "Cancellation" => &[&["ready"], &["trial", "history"]],
         "Multi-file queue" => &[&["three", "3"], &["one active", "sequential"]],
         "Queued job cancellation" => &[&["cancelled"], &["never starts", "never started"]],

@@ -367,6 +367,18 @@ fn reports_reveal_results_without_selection_evidence() {
 }
 
 #[test]
+fn reports_duplicate_output_without_numbered_file_name() {
+    let (_directory, path) = write_manual_qa(
+        "| Duplicate output naming | Same recording twice | Numbered suffix | second output used numbered suffix |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Duplicate output naming")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
