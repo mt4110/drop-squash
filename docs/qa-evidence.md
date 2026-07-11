@@ -13,11 +13,11 @@ Public paid beta blockers and their evidence references are tracked in
 | File-size architecture | Rust production and TS/TSX limits are enforced | `cargo run -p xtask -- file-size-check` |
 | External media process ban | Product sources reject `ffmpeg`, `ffprobe`, and process command construction | `cargo run -p xtask -- media-policy-check` |
 | Privacy guardrails | Product sources reject default telemetry, browser analytics markers, and network clients outside the license provider | `cargo run -p xtask -- privacy-policy-check` |
-| Release workflow shape | Release workflow gates, Tauri distribution metadata, CSP, updater, media, privacy, and secret-like files are checked | `cargo run -p xtask -- release-check` |
+| Release workflow shape | Release workflow gates, Tauri distribution metadata, CSP, updater, media, privacy, static site policy, and secret-like files are checked | `cargo run -p xtask -- release-check` |
 | Manual QA completeness | Packaged-app evidence fields, concrete results, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
 | Manual QA preparation | App state backup, trial reset, and `--restore-state` are tested without deleting config by default | `cargo test -p xtask manual_qa_prepare` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
-| Static site | Required pages, local links, placeholders, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
+| Static site | Required pages, local links/resources, approved external links, placeholders, release-status, privacy, license, refund, support contact copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
 | CLI history writes | CLI conversion uses the same success-only history guard | `cargo test -p dropsquash && cargo test -p dropsquash-history` |
 | CLI license commands | CLI reports local trial/license state and forgets the local cache without a raw key or network call | `cargo test -p dropsquash license && cargo run -p dropsquash -- license status --history /tmp/dropsquash-empty-history.jsonl` |

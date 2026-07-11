@@ -1,4 +1,4 @@
-use crate::{media_policy_check, privacy_policy_check};
+use crate::{media_policy_check, privacy_policy_check, website_check};
 mod blockers;
 mod desktop_capability;
 mod evidence;
@@ -36,6 +36,7 @@ pub fn run() -> Result<(), String> {
     ))?;
     media_policy_check::check_default_roots()?;
     privacy_policy_check::check_default_roots()?;
+    website_check::check_default_root()?;
     evidence::check_manual_only_coverage(
         Path::new("docs/qa-evidence.md"),
         Path::new("docs/manual-qa.md"),

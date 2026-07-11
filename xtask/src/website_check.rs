@@ -26,6 +26,14 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     Err(errors.join("\n"))
 }
 
+pub(crate) fn check_default_root() -> Result<(), String> {
+    let errors = check_root(Path::new("website"))?;
+    if errors.is_empty() {
+        return Ok(());
+    }
+    Err(errors.join("\n"))
+}
+
 fn check_root(root: &Path) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
     check_required_pages(root, &mut errors);
