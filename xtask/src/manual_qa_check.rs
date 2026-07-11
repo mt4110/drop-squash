@@ -53,6 +53,13 @@ fn check_line(line: &str, missing: &mut Vec<String>, labels: &mut Vec<String>) {
     if let Some(label) = cells.first().map(|value| value.trim()) {
         labels.push(label.to_string());
     }
+    if !matches!(cells.len(), 2..=4) {
+        missing.push(format!(
+            "manual QA row has unexpected column count: {}",
+            cells[0].trim()
+        ));
+        return;
+    }
     if cells.len() == 2 && cells[1].trim().is_empty() {
         missing.push(format!("manual QA field is empty: {}", cells[0].trim()));
     }

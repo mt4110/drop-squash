@@ -143,6 +143,18 @@ fn reports_empty_three_column_results() {
 }
 
 #[test]
+fn reports_rows_with_unexpected_column_count() {
+    let (_directory, path) = write_manual_qa(
+        "| Release gate | Passes | evidence before | evidence after | extra |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("unexpected column count: Release gate")));
+}
+
+#[test]
 fn reports_missing_required_checks() {
     let (_directory, path) = write_manual_qa("| App build | 0.1.0 |\n");
     let missing = check_file(&path).unwrap();
