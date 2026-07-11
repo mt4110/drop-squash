@@ -63,7 +63,7 @@ fn reports_refund_policy_without_final_policy() {
 
 #[test]
 fn reports_valid_activation_completion_without_cache() {
-    let text = "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent | TBD | `docs/manual-qa.md` |\n";
+    let text = "| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -72,7 +72,7 @@ fn reports_valid_activation_completion_without_cache() {
 
 #[test]
 fn reports_empty_key_completion_without_cache() {
-    let text = "| Empty key activation | Blocked | Friendly validation error appears and raw key is absent | TBD | `docs/manual-qa.md` |\n";
+    let text = "| Empty key activation | Blocked | Activate stays disabled and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -81,7 +81,7 @@ fn reports_empty_key_completion_without_cache() {
 
 #[test]
 fn reports_invalid_key_completion_without_friendly_error() {
-    let text = "| Invalid license key handling | Blocked | raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+    let text = "| Invalid license key handling | Blocked | Activating state disables submit and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -99,8 +99,7 @@ fn reports_network_failure_completion_without_cache_preservation() {
 
 #[test]
 fn reports_local_forget_completion_without_app_state() {
-    let text =
-        "| Local license forget | Blocked | Local cache is removed | TBD | `docs/manual-qa.md` |\n";
+    let text = "| Local license forget | Blocked | Forgetting state disables action and local cache is removed | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -109,7 +108,7 @@ fn reports_local_forget_completion_without_app_state() {
 
 #[test]
 fn reports_local_forget_completion_without_cache_removal() {
-    let text = "| Local license forget | Blocked | Local cache is checked and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n";
+    let text = "| Local license forget | Blocked | Forgetting state disables action and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -175,9 +174,11 @@ fn described_blockers() -> String {
         "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
-        "| Empty key activation | Blocked | Friendly validation error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
-        "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| License network failure | Blocked | Friendly network error appears, existing valid local cache remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",

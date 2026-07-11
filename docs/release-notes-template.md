@@ -65,9 +65,9 @@ weak public evidence before the release is published.
 - Benchmark sample set: mention short, medium, and large samples with machine and OS context.
 - Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.
 - Lemon Squeezy sandbox purchase: mention the intended product, `test buyer`, and `order`.
-- License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
+- License activation and key checks: mention disabled action state, Pro/friendly state, `raw key`, and cache evidence.
 - License network failure: mention a friendly network error, preserved existing valid cache, and `raw key` absence.
-- Local license forget: mention cache removal and trial or locked state.
+- Local license forget: mention disabled action state, cache removal, and trial or locked state.
 - Public website URL: use the production `/release-status` URL.
 - Refund policy URL: use the production `/refund` URL after the policy is final.
 - Live checkout URL: use the Lemon Squeezy `/checkout/buy/` URL for the product.

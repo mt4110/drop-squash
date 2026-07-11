@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 46] = [
+const REQUIRED_PHRASES: [(&str, &str); 49] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy product setup", "Sandbox product"),
     ("Lemon Squeezy product setup", "DropSquash"),
@@ -9,20 +9,29 @@ const REQUIRED_PHRASES: [(&str, &str); 46] = [
     ("Lemon Squeezy sandbox purchase", "intended product"),
     ("Lemon Squeezy sandbox purchase", "test buyer"),
     ("Lemon Squeezy sandbox purchase", "order"),
-    ("Empty key activation", "Friendly validation error"),
+    ("Empty key activation", "Activate stays disabled"),
     ("Empty key activation", "raw key is absent"),
     ("Empty key activation", "local cache"),
+    (
+        "Valid sandbox activation",
+        "Activating state disables submit",
+    ),
     ("Valid sandbox activation", "Pro state"),
     ("Valid sandbox activation", "raw key is absent"),
     ("Valid sandbox activation", "local cache"),
-    ("Invalid license key handling", "Friendly error"),
+    (
+        "Invalid license key handling",
+        "Activating state disables submit",
+    ),
+    ("Invalid license key handling", "friendly error"),
     ("Invalid license key handling", "raw key is absent"),
     ("Invalid license key handling", "local cache"),
     ("License network failure", "Friendly network error"),
     ("License network failure", "existing valid local cache"),
     ("License network failure", "raw key is absent"),
     ("License network failure", "local cache"),
-    ("Local license forget", "Local cache"),
+    ("Local license forget", "Forgetting state disables action"),
+    ("Local license forget", "local cache"),
     ("Local license forget", "removed"),
     ("Local license forget", "trial or locked"),
     ("Public website deployment", "Production website serves"),

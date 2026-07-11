@@ -31,11 +31,11 @@ fn accepts_concrete_production_urls() {
 - Benchmark regression threshold: no sample exceeded 20 percent regression
 - Lemon Squeezy product setup: DropSquash intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
-- Lemon Squeezy sandbox activation: Pro state reached and raw key absent from cache
-- Empty key activation: friendly validation shown and raw key absent from cache
-- Invalid license key handling: friendly error shown and raw key absent from cache
+- Lemon Squeezy sandbox activation: Activating state disabled submit; Pro state reached and raw key absent from cache
+- Empty key activation: Activate disabled for empty input and raw key absent from cache
+- Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache
 - License network failure: friendly network error shown, existing valid cache preserved, raw key absent from cache
-- Local license forget: license cache removed and trial state restored
+- Local license forget: Forgetting state disabled action; license cache removed and trial state restored
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
@@ -145,7 +145,7 @@ fn rejects_network_failure_without_existing_valid_cache() {
 fn rejects_activation_with_persisted_raw_key() {
     let errors = check_text(
         r#"
-- Lemon Squeezy sandbox activation: Pro state reached and raw key persisted in cache
+- Lemon Squeezy sandbox activation: Activating state disabled submit; Pro state reached and raw key persisted in cache
 "#,
     );
 
