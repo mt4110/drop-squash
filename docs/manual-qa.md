@@ -63,6 +63,7 @@ rm -f "$HOME/Library/Application Support/DropSquash/license.json"
 | Duplicate output naming | Same recording twice | Second output uses numbered suffix |  |
 | Cancellation | Large recording | App returns to ready; no success history; no trial count |  |
 | Multi-file queue | Three recordings | One active job at a time; unrelated failures do not block queue |  |
+| Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled and it never starts |  |
 | Ask source policy | Successful conversion | User can choose whether to Trash original |  |
 | Trash source policy | Successful conversion | Original moves to Trash only after verified smaller output |  |
 | Failed conversion | Unsupported or intentionally bad input | Original remains; trial count unchanged |  |

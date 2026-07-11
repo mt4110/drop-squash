@@ -23,6 +23,7 @@ import { initialState } from "./lib/initialState";
 import type { QueueEntry } from "./lib/queue";
 import {
   blockQueued,
+  cancelQueued,
   clearFinished,
   entriesForInputPaths,
   isCancelReason,
@@ -322,6 +323,7 @@ export function App() {
       />
       <QueuePanel
         items={queue}
+        onCancelQueued={(id) => setQueue((current) => cancelQueued(current, id))}
         onClearFinished={() => setQueue((current) => clearFinished(current))}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
         onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}

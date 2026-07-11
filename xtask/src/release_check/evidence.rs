@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 19] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 20] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Privacy receipt sidecar", "Privacy receipt sidecar"),
@@ -18,6 +18,7 @@ const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 19] = [
         "Benchmark regression threshold",
     ),
     ("Multi-file queue", "Multi-file queue"),
+    ("Queued job cancellation", "Queued job cancellation"),
     ("Lemon Squeezy sandbox purchase", "Sandbox purchase"),
     (
         "Lemon Squeezy sandbox activation",

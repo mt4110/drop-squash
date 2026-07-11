@@ -4,12 +4,13 @@ import { hasFinished, statusLabel } from "../lib/queue";
 
 type QueuePanelProps = {
   items: QueueEntry[];
+  onCancelQueued: (id: number) => void;
   onClearFinished: () => void;
   onRevealOutput: (outputPath: string) => void;
   onRevealReceipt: (receiptPath: string) => void;
 };
 
-export function QueuePanel({ items, onClearFinished, onRevealOutput, onRevealReceipt }: QueuePanelProps) {
+export function QueuePanel({ items, onCancelQueued, onClearFinished, onRevealOutput, onRevealReceipt }: QueuePanelProps) {
   if (items.length === 0) {
     return null;
   }
@@ -40,9 +41,16 @@ export function QueuePanel({ items, onClearFinished, onRevealOutput, onRevealRec
                 )}
               </span>
             ) : (
-              <strong title={item.error}>
-                {item.progress ? `${item.progress}%` : statusLabel(item.status)}
-              </strong>
+              <span className="queue-result">
+                <strong title={item.error}>
+                  {item.progress ? `${item.progress}%` : statusLabel(item.status)}
+                </strong>
+                {item.status === "queued" && (
+                  <button type="button" onClick={() => onCancelQueued(item.id)}>
+                    Cancel
+                  </button>
+                )}
+              </span>
             )}
           </div>
         );

@@ -40,6 +40,14 @@ export function clearFinished(items: QueueEntry[]) {
   return items.filter((item) => !isFinishedStatus(item.status));
 }
 
+export function cancelQueued(items: QueueEntry[], id: number) {
+  return items.map((item) => (
+    item.id === id && item.status === "queued"
+      ? { ...item, status: "cancelled" as const, error: "Cancelled before starting" }
+      : item
+  ));
+}
+
 export function blockQueued(items: QueueEntry[], error: string) {
   return items.map((item) => (
     item.status === "queued" ? { ...item, status: "blocked" as const, error } : item

@@ -53,6 +53,7 @@ These checks still require a packaged macOS app or external service state:
 | Benchmark sample set | Release coverage needs private short, medium, and large local recordings |
 | Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
+| Queued job cancellation | User-visible queue cancellation needs packaged app observation with repeated drops |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, and test buyer evidence outside the repository |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Signed DMG verification | Requires the public DMG/app artifact and Developer ID signature state |
