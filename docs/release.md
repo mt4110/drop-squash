@@ -83,6 +83,9 @@ Generate SHA-256 checksum lines for release artifacts with:
 cargo run -p xtask -- checksum path/to/DropSquash.dmg > SHA256SUMS
 ```
 
+The generated `SHA256SUMS` line uses the artifact file name, not the local
+build directory path, so it can be attached directly to the public release.
+
 Reject release artifacts that accidentally capture development-only Nix store
 references:
 
