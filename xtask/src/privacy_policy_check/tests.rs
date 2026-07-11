@@ -41,6 +41,46 @@ fn rejects_browser_beacon_api() {
 }
 
 #[test]
+fn rejects_network_clients_outside_license_provider() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/dropsquash-encoder/src/lib.rs",
+        "reqwest::Client::new()",
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("network marker reqwest"));
+}
+
+#[test]
+fn allows_license_provider_network_client() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/dropsquash-license/src/lemonsqueezy/transport.rs",
+        "reqwest::Client::new()",
+    );
+
+    assert!(check_roots(&[directory.path().join("crates")]).is_ok());
+}
+
+#[test]
+fn rejects_frontend_fetch_calls() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "apps/desktop/web/src/App.tsx",
+        "fetch('/upload')",
+    );
+
+    let error = check_roots(&[directory.path().join("apps")]).unwrap_err();
+
+    assert!(error.contains("network marker fetch("));
+}
+
+#[test]
 fn skips_built_dist_output() {
     let directory = tempfile::tempdir().unwrap();
     write(

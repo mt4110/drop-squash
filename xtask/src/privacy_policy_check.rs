@@ -10,6 +10,13 @@ const DISALLOWED: [&str; 8] = [
     "sendbeacon",
     "xmlhttprequest",
 ];
+const NETWORK_MARKERS: [&str; 5] = [
+    "fetch(",
+    "reqwest",
+    "TcpStream",
+    "WebSocket",
+    "connect_async",
+];
 
 pub fn run() -> Result<(), String> {
     check_default_roots()?;
@@ -64,7 +71,25 @@ fn scan_file(path: &Path, violations: &mut Vec<String>) -> Result<(), String> {
             violations.push(format!("{} contains disallowed {needle}", path.display()));
         }
     }
+    if !is_license_network_source(path) {
+        for marker in NETWORK_MARKERS {
+            if text.contains(marker) {
+                violations.push(format!(
+                    "{} contains disallowed network marker {marker}",
+                    path.display()
+                ));
+            }
+        }
+    }
     Ok(())
+}
+
+fn is_license_network_source(path: &Path) -> bool {
+    path.components().any(|part| {
+        part.as_os_str()
+            .to_str()
+            .is_some_and(|value| value == "dropsquash-license")
+    })
 }
 
 fn is_text_source(path: &Path) -> bool {
