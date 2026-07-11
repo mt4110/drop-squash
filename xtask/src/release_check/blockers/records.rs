@@ -35,10 +35,18 @@ pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) ->
     };
     match *target {
         "`docs/manual-qa.md`" => reference.starts_with("`docs/manual-qa.md"),
+        "`https://...`" if blocker == "Public website deployment" => is_public_website(reference),
         "`https://...`" if blocker == "Live checkout link" => is_live_checkout(reference),
         "`https://...`" => reference.starts_with("https://"),
         other => reference == other,
     }
+}
+
+fn is_public_website(reference: &str) -> bool {
+    let lower = reference.to_ascii_lowercase();
+    reference.starts_with("https://")
+        && !lower.contains("lemonsqueezy.com")
+        && !lower.contains("checkout")
 }
 
 fn is_live_checkout(reference: &str) -> bool {

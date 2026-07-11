@@ -35,6 +35,15 @@ fn reports_live_checkout_without_lemonsqueezy_checkout_url() {
 }
 
 #[test]
+fn reports_public_website_with_checkout_reference() {
+    let text = "| Public website deployment | Verified | pages online | https://store.lemonsqueezy.com/checkout/buy/example | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Public website deployment"));
+}
+
+#[test]
 fn ignores_blocked_rows() {
     let text = "| Signed DMG | Blocked | codesign output | TBD | Release notes |\n";
 
