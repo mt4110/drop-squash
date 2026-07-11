@@ -126,11 +126,11 @@ Record concrete results. The checker requires:
 
 - Sandbox product setup: mention DropSquash, the intended product, and license keys enabled.
 - Sandbox purchase: mention the intended product, test buyer, and order.
-- Empty key activation: mention a friendly validation error and that `license.json` or the license cache has no raw key.
-- Invalid key activation: mention a friendly error and that `license.json` or the license cache has no raw key.
-- Valid sandbox activation: mention Pro state and that `license.json` or the license cache has no raw key.
+- Empty key activation: mention the disabled Activate state and that `license.json` or the license cache has no raw key.
+- Invalid key activation: mention the Activating/disabled state, a friendly error, and that `license.json` or the license cache has no raw key.
+- Valid sandbox activation: mention the Activating/disabled state, Pro state, and that `license.json` or the license cache has no raw key.
 - License network failure: mention a friendly network error, preserved existing valid cache, and no raw key in `license.json` or the license cache.
-- Forget license on this Mac: mention cache removal and the resulting app state.
+- Forget license on this Mac: mention the Forgetting/disabled state, cache removal, and the resulting app state.
 
 Inspect the license cache without recording the sandbox key itself. A good
 result says the cache path was checked, that the raw key was absent, and whether
@@ -140,11 +140,11 @@ only the fingerprint/instance fields were present.
 |---|---|---|
 | Sandbox product setup | DropSquash sandbox product exists with license keys enabled |  |
 | Sandbox purchase | Checkout completes for the intended product and test buyer order |  |
-| Empty key activation | Friendly validation error |  |
-| Invalid key activation | Friendly license error; no raw key persisted |  |
-| Valid sandbox activation | Pro state; raw key absent from cache |  |
+| Empty key activation | Empty key leaves Activate disabled; no raw key persisted |  |
+| Invalid key activation | Activating state disables submit; friendly license error; no raw key persisted |  |
+| Valid sandbox activation | Activating state disables submit; Pro state; raw key absent from cache |  |
 | License network failure | Friendly network error; existing valid cache remains intact |  |
-| Forget license on this Mac | Local cache clears; app returns to trial or locked state |  |
+| Forget license on this Mac | Forgetting state disables action; local cache clears; app returns to trial or locked state |  |
 
 ## Release Candidate
 

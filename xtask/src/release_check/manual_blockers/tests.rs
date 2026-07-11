@@ -91,7 +91,7 @@ fn reports_verified_empty_key_blocker_without_cache_evidence() {
 #[test]
 fn accepts_verified_empty_key_blocker_with_cache_evidence() {
     let blockers = "| Empty key activation | Verified | Friendly validation error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| Empty key activation | Friendly validation error | friendly validation shown and license.json cache has no raw key |\n";
+    let manual = "| Empty key activation | Empty key leaves Activate disabled | Activate disabled for empty input and license.json cache has no raw key |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
 }
@@ -169,7 +169,7 @@ fn reports_verified_license_blocker_with_persisted_raw_key() {
 #[test]
 fn accepts_verified_license_blocker_with_cache_evidence() {
     let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| Invalid key activation | Friendly license error; no raw key persisted | friendly error shown; license.json cache checked; raw key absent |\n";
+    let manual = "| Invalid key activation | Friendly license error; no raw key persisted | Activating state disabled submit; friendly error shown; license.json cache checked; raw key absent |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
 }

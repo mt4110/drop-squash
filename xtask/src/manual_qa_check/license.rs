@@ -13,13 +13,16 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
             missing,
         ),
         "Empty key activation" => {
-            require_license_cache_evidence(label, result, &["friendly", "raw key"], missing)
+            require_license_cache_evidence(label, result, &["raw key"], missing);
+            require_action_state(label, result, &["activate", "disabled"], missing);
         }
         "Invalid key activation" => {
-            require_license_cache_evidence(label, result, &["friendly", "raw key"], missing)
+            require_license_cache_evidence(label, result, &["friendly", "raw key"], missing);
+            require_action_state(label, result, &["activating", "disabled"], missing);
         }
         "Valid sandbox activation" => {
-            require_license_cache_evidence(label, result, &["pro", "raw key"], missing)
+            require_license_cache_evidence(label, result, &["pro", "raw key"], missing);
+            require_action_state(label, result, &["activating", "disabled"], missing);
         }
         "License network failure" => require_license_cache_evidence(
             label,
@@ -34,7 +37,10 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
             ],
             missing,
         ),
-        "Forget license on this Mac" => require_any_state(result, missing),
+        "Forget license on this Mac" => {
+            require_any_state(result, missing);
+            require_action_state(label, result, &["forgetting", "disabled"], missing);
+        }
         _ => {}
     }
 }
@@ -71,6 +77,16 @@ fn raw_key_absent(value: &str) -> bool {
         || value.contains("raw key is absent")
         || value.contains("no raw key")
         || value.contains("without raw key")
+}
+
+fn require_action_state(label: &str, result: &str, needles: &[&str], missing: &mut Vec<String>) {
+    let lower = result.to_ascii_lowercase();
+    if needles.iter().all(|needle| lower.contains(needle)) {
+        return;
+    }
+    missing.push(format!(
+        "manual QA {label} needs license action state evidence"
+    ));
 }
 
 fn require_any_state(result: &str, missing: &mut Vec<String>) {

@@ -63,19 +63,28 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         ]),
         "Sandbox purchase" => Some(&[&["intended product"], &["test buyer"], &["order"]]),
         "Valid sandbox activation" => Some(&[
+            &["activating"],
+            &["disabled"],
             &["cache", "license.json"],
             &["pro"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
         ]),
-        "Empty key activation" | "Invalid key activation" => {
-            Some(&[
-                &["cache", "license.json"],
-                &["friendly"],
-                &["raw key"],
-                &["absent", "no raw key", "without raw key"],
-            ])
-        }
+        "Empty key activation" => Some(&[
+            &["activate"],
+            &["disabled"],
+            &["cache", "license.json"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+        ]),
+        "Invalid key activation" => Some(&[
+            &["activating"],
+            &["disabled"],
+            &["cache", "license.json"],
+            &["friendly"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+        ]),
         "License network failure" => Some(&[
             &["cache", "license.json"],
             &["friendly"],
@@ -87,6 +96,8 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["absent", "no raw key", "without raw key"],
         ]),
         "Forget license on this Mac" => Some(&[
+            &["forgetting"],
+            &["disabled"],
             &["cache", "license.json"],
             &["removed", "cleared", "deleted", "clears"],
             &["trial", "locked"],
