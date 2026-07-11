@@ -1,10 +1,40 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use dropsquash_core::AppError;
 use dropsquash_core::{
     default_history_path, default_license_cache_path, LicenseState, TRIAL_CONVERSION_LIMIT,
 };
 use dropsquash_history::{read_records, HistoryMetrics};
-use dropsquash_license::{LicenseCache, LicenseGate};
+use dropsquash_license::{LemonSqueezyProvider, LicenseCache, LicenseGate, LicenseProvider};
+
+const OFFLINE_GRACE_SECONDS: u64 = 60 * 60 * 24 * 30;
+
+pub async fn activate_license(license_key: String) -> dropsquash_core::Result<LicenseState> {
+    if license_key.trim().is_empty() {
+        return Err(AppError::License("Enter a license key.".to_string()));
+    }
+    let path = default_license_cache_path();
+    let cache = LicenseCache::load_or_default(&path)?;
+    let instance_id = cache.instance_id.unwrap_or_else(generate_instance_id);
+    let activation = LemonSqueezyProvider
+        .activate(&license_key, &instance_id)
+        .await?;
+    LicenseCache {
+        instance_id: Some(activation.instance_id),
+        license_key_fingerprint: Some(activation.license_key_fingerprint),
+        activation_id: None,
+        validated_at_unix: Some(now_unix()),
+        offline_grace_until_unix: Some(now_unix() + OFFLINE_GRACE_SECONDS),
+        valid: activation.valid,
+    }
+    .save_to_path(&path)?;
+    current_license_state().await
+}
+
+pub async fn deactivate_license() -> dropsquash_core::Result<LicenseState> {
+    LicenseCache::default().save_to_path(&default_license_cache_path())?;
+    current_license_state().await
+}
 
 pub async fn current_license_state() -> dropsquash_core::Result<LicenseState> {
     let records = read_records(&default_history_path()).await?;
@@ -25,4 +55,8 @@ fn now_unix() -> u64 {
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_secs())
         .unwrap_or_default()
+}
+
+fn generate_instance_id() -> String {
+    format!("dropsquash-{}-{}", std::process::id(), now_unix())
 }

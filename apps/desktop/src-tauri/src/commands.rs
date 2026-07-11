@@ -67,5 +67,21 @@ pub fn trash_original(
     source::trash_original(source_path, output_path)
 }
 
+#[tauri::command(rename_all = "camelCase")]
+pub async fn activate_license(
+    license_key: String,
+) -> std::result::Result<dto::DropZoneState, String> {
+    let license_state = license::activate_license(license_key)
+        .await
+        .map_err(format_error)?;
+    config::state_for_license(license_state).await
+}
+
+#[tauri::command(rename_all = "camelCase")]
+pub async fn deactivate_license() -> std::result::Result<dto::DropZoneState, String> {
+    let license_state = license::deactivate_license().await.map_err(format_error)?;
+    config::state_for_license(license_state).await
+}
+
 #[cfg(test)]
 mod tests;

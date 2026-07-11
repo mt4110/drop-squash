@@ -6,6 +6,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { DropZone } from "./components/DropZone";
 import { HelpPopover } from "./components/HelpPopover";
+import { LicensePanel } from "./components/LicensePanel";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
 import { TrialBanner } from "./components/TrialBanner";
@@ -52,6 +53,7 @@ const initialState: DropZoneState = {
   privacyMode: "local-only",
   successfulConversions: 0,
   trialLimit: 10,
+  isPro: false,
   isLocked: false,
 };
 
@@ -301,6 +303,34 @@ export function App() {
     }
   }, []);
 
+  const activateLicense = useCallback(async (licenseKey: string) => {
+    if (!isTauri()) {
+      return;
+    }
+
+    try {
+      const nextState = await invoke<DropZoneState>("activate_license", { licenseKey });
+      setState(nextState);
+      setError(undefined);
+    } catch (reason) {
+      setError(String(reason));
+    }
+  }, []);
+
+  const deactivateLicense = useCallback(async () => {
+    if (!isTauri()) {
+      return;
+    }
+
+    try {
+      const nextState = await invoke<DropZoneState>("deactivate_license");
+      setState(nextState);
+      setError(undefined);
+    } catch (reason) {
+      setError(String(reason));
+    }
+  }, []);
+
   useEffect(() => {
     if (!isTauri()) {
       return;
@@ -342,7 +372,14 @@ export function App() {
       <TrialBanner
         successfulConversions={state.successfulConversions}
         trialLimit={state.trialLimit}
+        isPro={state.isPro}
         isLocked={state.isLocked}
+      />
+      <LicensePanel
+        isPro={state.isPro}
+        isLocked={state.isLocked}
+        onActivate={activateLicense}
+        onDeactivate={deactivateLicense}
       />
       <DropZone
         isBusy={isBusy}

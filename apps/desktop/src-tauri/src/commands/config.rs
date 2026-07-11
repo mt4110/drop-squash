@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use dropsquash_core::{
-    default_config_path, AppConfig, AppError, OutputSize, Profile, SourcePolicy,
+    default_config_path, AppConfig, AppError, LicenseState, OutputSize, Profile, SourcePolicy,
 };
 use dropsquash_encoder::EncoderBackend;
 
@@ -23,6 +23,18 @@ pub async fn load_state(
 ) -> std::result::Result<DropZoneState, String> {
     let config = load_config(&app_state)?;
     let license_state = current_license_state().await.map_err(format_error)?;
+    let capabilities = NativeEncoder.probe_capabilities().map_err(format_error)?;
+    Ok(drop_zone_state(
+        &config,
+        license_state,
+        capabilities.input_extensions,
+    ))
+}
+
+pub async fn state_for_license(
+    license_state: LicenseState,
+) -> std::result::Result<DropZoneState, String> {
+    let config = AppConfig::load_or_default(&default_config_path()).map_err(format_error)?;
     let capabilities = NativeEncoder.probe_capabilities().map_err(format_error)?;
     Ok(drop_zone_state(
         &config,

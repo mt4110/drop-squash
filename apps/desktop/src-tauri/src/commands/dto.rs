@@ -26,6 +26,7 @@ pub struct DropZoneState {
     pub privacy_mode: &'static str,
     pub successful_conversions: u32,
     pub trial_limit: u32,
+    pub is_pro: bool,
     pub is_locked: bool,
 }
 
@@ -43,6 +44,7 @@ pub fn drop_zone_state(
     license_state: LicenseState,
     input_extensions: Vec<String>,
 ) -> DropZoneState {
+    let is_pro = matches!(license_state, LicenseState::Pro);
     let trial_state = match license_state {
         LicenseState::Trial(state) | LicenseState::Locked(state) => state,
         LicenseState::Pro => dropsquash_core::TrialState {
@@ -64,6 +66,7 @@ pub fn drop_zone_state(
         privacy_mode: "local-only",
         successful_conversions: trial_state.successful_conversions,
         trial_limit: trial_state.limit,
+        is_pro,
         is_locked: trial_state.is_locked(),
     }
 }

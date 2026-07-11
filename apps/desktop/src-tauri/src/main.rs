@@ -11,7 +11,9 @@ fn main() {
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,
-            commands::trash_original
+            commands::trash_original,
+            commands::activate_license,
+            commands::deactivate_license
         ])
         .run(tauri::generate_context!())
         .expect("failed to run DropSquash desktop application");

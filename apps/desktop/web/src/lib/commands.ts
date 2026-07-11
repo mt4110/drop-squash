@@ -31,6 +31,7 @@ export type DropZoneState = {
   privacyMode: "local-only";
   successfulConversions: number;
   trialLimit: number;
+  isPro: boolean;
   isLocked: boolean;
 };
 
