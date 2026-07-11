@@ -88,6 +88,22 @@ fn reports_out_of_range_date() {
 }
 
 #[test]
+fn reports_impossible_calendar_date() {
+    let (_directory, path) = write_manual_qa("| Date | 2026-02-31 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("YYYY-MM-DD")));
+}
+
+#[test]
+fn accepts_leap_day() {
+    let (_directory, path) = write_manual_qa("| Date | 2028-02-29 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(!missing.iter().any(|error| error.contains("manual QA Date")));
+}
+
+#[test]
 fn reports_vague_manual_results() {
     let (_directory, path) =
         write_manual_qa("| Cancellation | large.mov | Returns to ready | Pass |\n");
