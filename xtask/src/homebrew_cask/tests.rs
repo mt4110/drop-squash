@@ -90,6 +90,20 @@ fn rejects_non_dmg_url() {
 }
 
 #[test]
+fn rejects_url_for_different_version() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.2.0/DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("matching"));
+}
+
+#[test]
 fn rejects_invalid_sha256() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),

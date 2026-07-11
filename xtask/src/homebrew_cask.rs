@@ -29,6 +29,7 @@ impl Input {
     fn validate(&self) -> Result<(), String> {
         require_version(&self.version)?;
         require_dmg_url(&self.url)?;
+        require_versioned_url(&self.version, &self.url)?;
         require_sha256(&self.sha256)?;
         require_https_url(&self.homepage)?;
         Ok(())
@@ -83,6 +84,13 @@ fn require_dmg_url(url: &str) -> Result<(), String> {
         return Ok(());
     }
     Err("url must point to a .dmg file".to_string())
+}
+
+fn require_versioned_url(version: &str, url: &str) -> Result<(), String> {
+    if url.contains(&format!("/v{version}/")) {
+        return Ok(());
+    }
+    Err("url must point to the matching v<version> release".to_string())
 }
 
 fn require_https_url(url: &str) -> Result<(), String> {
