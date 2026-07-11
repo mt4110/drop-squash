@@ -55,7 +55,8 @@ cargo run -p xtask -- manual-qa-prepare --restore-state
 ```
 
 The unsigned Tauri build is only a packaging and QA input; public release still
-requires signing, notarization, stapling, artifact checks, and checksums.
+requires signing, notarization, stapling, artifact checks, checksums, and
+Gatekeeper no-warning evidence for the signed app.
 
 Run the media policy gate directly after touching native backends or desktop
 commands:
@@ -142,7 +143,8 @@ references:
 cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
 ```
 
-Generate the Homebrew cask after the public release URL and checksum are known:
+Generate the Homebrew cask after the public `DropSquash.dmg` release URL and
+checksum are known:
 
 ```sh
 cargo run -p xtask -- homebrew-cask 0.1.0 \
@@ -153,7 +155,10 @@ cargo run -p xtask -- homebrew-cask 0.1.0 \
 
 After notarization succeeds, publish the checksum with the GitHub Release and
 fill `docs/release-notes-template.md` with codesign, spctl, stapler, notary,
-checksum, Gatekeeper, and Homebrew evidence:
+checksum, Gatekeeper, and Homebrew evidence. The public release notes must name
+`DropSquash.dmg` in the signing, notarization, checksum, and Homebrew evidence;
+Gatekeeper evidence must mention no warning; Homebrew evidence must mention
+`auto_updates false` and `zap` cleanup:
 
 ```sh
 cargo run -p xtask -- release-notes-check path/to/release-notes.md
@@ -162,4 +167,5 @@ Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after ev
 row in `docs/release-blockers.md` is `Verified` with a traceable Evidence
 reference. The publish check also requires release blocker URLs to match the
 release notes URLs for the public website, refund policy, live checkout, GitHub
-Release, and Homebrew tap PR.
+Release, and Homebrew tap PR. Public publish references must point to the same
+release notes URLs, not to a different release or tap PR.

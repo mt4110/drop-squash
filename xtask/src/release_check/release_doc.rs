@@ -28,6 +28,7 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
         &[
             "first public beta target",
             "signed, notarized, stapled, checked, and checksummed",
+            "Gatekeeper no-warning evidence",
             "cargo run -p xtask -- macos-signing-check",
         ],
     ),
@@ -39,7 +40,14 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
             "Lemon Squeezy sandbox activation",
         ],
     ),
-    ("homebrew", &["cargo run -p xtask -- homebrew-cask 0.1.0"]),
+    (
+        "homebrew",
+        &[
+            "cargo run -p xtask -- homebrew-cask 0.1.0",
+            "auto_updates false",
+            "zap",
+        ],
+    ),
 ];
 
 pub(super) fn check(path: &Path) -> Result<(), String> {
