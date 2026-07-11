@@ -50,7 +50,10 @@ pub fn run() -> Result<(), String> {
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
     require_text("docs/release.md", "docs/release-blockers.md")?;
     require_text("docs/productization.md", "docs/release-blockers.md")?;
-    require_text("docs/productization.md", "refund/support copy gates")?;
+    require_text(
+        "docs/productization.md",
+        "refund/support contact copy gates",
+    )?;
     require_text("README.md", "macOS today")?;
     require_text("README.md", "Windows and Linux support is planned")?;
     require_text(
