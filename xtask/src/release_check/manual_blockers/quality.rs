@@ -39,6 +39,9 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             Some(&[&["cache", "license.json"], &["friendly"], &["raw key"]])
         }
         "Forget license on this Mac" => Some(&[&["cache", "license.json"], &["trial", "locked"]]),
+        "Gatekeeper open test" => {
+            Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])
+        }
         _ => None,
     }
 }

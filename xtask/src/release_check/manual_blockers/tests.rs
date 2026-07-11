@@ -120,6 +120,24 @@ fn ignores_blocked_manual_blockers() {
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
 }
 
+#[test]
+fn reports_verified_gatekeeper_blocker_without_clean_machine_evidence() {
+    let blockers = "| Gatekeeper clean-machine open | Verified | Fresh macOS account opens app | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Gatekeeper open test | Signed app opens cleanly | app opened |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Gatekeeper clean-machine open"));
+}
+
+#[test]
+fn accepts_verified_gatekeeper_blocker_with_clean_machine_evidence() {
+    let blockers = "| Gatekeeper clean-machine open | Verified | Fresh macOS account opens app | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened app cleanly in fresh macOS account |\n";
+
+    assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
 fn packaged_manual_qa_with(check: &str, result: &str) -> String {
     PACKAGED_MACOS_EVIDENCE
         .iter()
