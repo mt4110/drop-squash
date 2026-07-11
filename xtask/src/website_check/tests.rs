@@ -19,6 +19,24 @@ fn accepts_local_links() {
 }
 
 #[test]
+fn accepts_local_links_with_fragments() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r##"Release status <a href="pricing.html#plans">Pricing</a>"##,
+    );
+    write(
+        directory.path(),
+        "pricing.html",
+        required_page_text("pricing.html"),
+    );
+
+    assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
 fn website_directory_passes_check() {
     assert!(check_root(std::path::Path::new("../website"))
         .unwrap()
