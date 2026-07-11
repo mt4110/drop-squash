@@ -1,6 +1,9 @@
 use std::collections::BTreeMap;
 use std::path::Path;
 
+mod env;
+use env::{all_present, present, require_pair, value};
+
 pub fn run() -> Result<(), String> {
     let env = std::env::vars().collect();
     check(&env)?;
@@ -94,30 +97,6 @@ fn check_team_id(env: &BTreeMap<String, String>) -> Result<(), String> {
         return Ok(());
     }
     Err("APPLE_TEAM_ID must be a 10-character Apple team id".to_string())
-}
-
-fn require_pair(
-    env: &BTreeMap<String, String>,
-    left: &str,
-    right: &str,
-    error: &str,
-) -> Result<(), String> {
-    if present(env, left) && present(env, right) {
-        return Ok(());
-    }
-    Err(error.to_string())
-}
-
-fn all_present(env: &BTreeMap<String, String>, keys: &[&str]) -> bool {
-    keys.iter().all(|key| present(env, key))
-}
-
-fn present(env: &BTreeMap<String, String>, key: &str) -> bool {
-    value(env, key).is_some_and(|value| !value.trim().is_empty())
-}
-
-fn value<'a>(env: &'a BTreeMap<String, String>, key: &str) -> Option<&'a str> {
-    env.get(key).map(String::as_str)
 }
 
 #[cfg(test)]
