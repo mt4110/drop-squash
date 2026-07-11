@@ -3,6 +3,8 @@
 Do not publish a paid beta until every row has concrete evidence in the named
 location. Keep secrets, license keys, certificates, and private store IDs out of
 this file.
+Use `Blocked` until the evidence exists. Change a row to `Verified` only after
+the evidence is recorded in the named location.
 
 | Blocker | Status | Completion evidence | Record in |
 |---|---|---|---|
