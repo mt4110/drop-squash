@@ -7,6 +7,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         .groups
         .iter()
         .all(|group| group.iter().any(|needle| lower.contains(needle)))
+        && checksum_evidence_ok(label, result)
     {
         return;
     }
@@ -17,6 +18,15 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
 
 struct Requirement {
     groups: &'static [&'static [&'static str]],
+}
+
+fn checksum_evidence_ok(label: &str, result: &str) -> bool {
+    if label != "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" {
+        return true;
+    }
+    result
+        .split(|value: char| !value.is_ascii_hexdigit())
+        .any(|part| part.len() == 64)
 }
 
 fn requirement_for(label: &str) -> Option<Requirement> {

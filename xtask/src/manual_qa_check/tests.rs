@@ -358,6 +358,16 @@ fn reports_incomplete_release_candidate_results() {
         .any(|error| error.contains("Gatekeeper open test")));
 }
 
+#[test]
+fn reports_checksum_result_without_digest() {
+    let (_directory, path) = write_manual_qa(
+        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 line recorded for DropSquash.dmg |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("checksum")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -469,7 +479,7 @@ fn command_result(check: &str) -> String {
             "artifact-check passed for DropSquash.dmg"
         }
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
-            "SHA-256 line recorded for DropSquash.dmg"
+            "SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg"
         }
         "`cargo run -p xtask -- macos-signing-check`" => {
             "macos-signing-check passed in release environment"
