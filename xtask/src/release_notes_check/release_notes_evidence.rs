@@ -7,6 +7,17 @@ const URL_FIELDS: [(&str, UrlKind); 5] = [
     ("GitHub Release URL", UrlKind::GitHubRelease),
     ("Homebrew tap PR URL", UrlKind::HomebrewPullRequest),
 ];
+const EVIDENCE_FIELDS: [&str; 9] = [
+    "SHA-256",
+    "Git commit",
+    "`codesign`",
+    "`spctl`",
+    "`stapler`",
+    "Apple notary log",
+    "Gatekeeper clean-machine open",
+    "GitHub Release checksum",
+    "Homebrew install result",
+];
 
 #[derive(Clone, Copy)]
 enum UrlKind {
@@ -23,10 +34,16 @@ pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
 }
 
 fn check_text(text: &str) -> Vec<String> {
-    URL_FIELDS
+    let mut errors: Vec<String> = URL_FIELDS
         .iter()
         .filter_map(|(label, kind)| validate_field(label, *kind, text))
-        .collect()
+        .collect();
+    errors.extend(
+        EVIDENCE_FIELDS
+            .iter()
+            .filter_map(|label| validate_evidence_field(label, text)),
+    );
+    errors
 }
 
 fn validate_field(label: &'static str, kind: UrlKind, text: &str) -> Option<String> {
@@ -37,6 +54,16 @@ fn validate_field(label: &'static str, kind: UrlKind, text: &str) -> Option<Stri
         return None;
     }
     Some(format!("{label} must contain a concrete production URL"))
+}
+
+fn validate_evidence_field(label: &'static str, text: &str) -> Option<String> {
+    let Some(value) = field_value(label, text) else {
+        return Some(format!("{label} must be present"));
+    };
+    if is_concrete_evidence(value) {
+        return None;
+    }
+    Some(format!("{label} must contain concrete release evidence"))
 }
 
 fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
@@ -53,10 +80,19 @@ fn is_placeholder(value: &str) -> bool {
     let lower = value.to_ascii_lowercase();
     value.is_empty()
         || lower == "tbd"
+        || lower == "n/a"
+        || lower == "none"
+        || lower == "pass"
+        || lower == "ok"
+        || lower == "done"
         || lower.contains("example.")
         || lower.contains("localhost")
         || lower.contains(".test/")
         || lower.ends_with(".test")
+}
+
+fn is_concrete_evidence(value: &str) -> bool {
+    !is_placeholder(value) && value.split_whitespace().count() >= 2
 }
 
 fn matches_kind(kind: UrlKind, value: &str) -> bool {

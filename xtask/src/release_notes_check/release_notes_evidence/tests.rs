@@ -5,10 +5,19 @@ fn accepts_concrete_production_urls() {
     let errors = check_text(
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 64 hex chars recorded in SHA256SUMS
+- Git commit: abc1234 release source commit
+- `codesign`: valid on DropSquash.app
+- `spctl`: accepted source Developer ID
+- `stapler`: ticket stapled successfully
+- Apple notary log: notarytool accepted request abc123
+- Gatekeeper clean-machine open: fresh account opened app
 - Public website URL: https://dropsquash.app
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release checksum: SHA256SUMS attached to release
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+- Homebrew install result: brew install completed
 "#,
     );
 
@@ -40,4 +49,28 @@ fn rejects_placeholders_and_wrong_url_kinds() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Homebrew tap PR URL")));
+}
+
+#[test]
+fn rejects_missing_or_generic_release_evidence() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256:
+- Git commit: Done
+- `codesign`: OK
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("SHA-256")));
+    assert!(errors.iter().any(|error| error.contains("Git commit")));
+    assert!(errors.iter().any(|error| error.contains("`codesign`")));
+    assert!(errors.iter().any(|error| error.contains("`spctl`")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum")));
 }
