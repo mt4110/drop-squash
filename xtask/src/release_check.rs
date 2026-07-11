@@ -4,13 +4,15 @@ mod secret_files;
 use std::path::Path;
 
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
-const RELEASE_WORKFLOW_GATES: [&str; 8] = [
+const RELEASE_WORKFLOW_GATES: [&str; 10] = [
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
     "cargo run -p xtask -- release-check",
     "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
     "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
+    "actions/upload-artifact@v4",
+    "dropsquash-unsigned-dmg-checksum",
     "cargo run -p xtask -- macos-signing-check",
     "Block unsigned Phase 0 release",
 ];
