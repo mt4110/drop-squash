@@ -125,6 +125,7 @@ Record concrete results. The checker requires:
 - Empty key activation: mention a friendly validation error and that `license.json` or the license cache has no raw key.
 - Invalid key activation: mention a friendly error and that `license.json` or the license cache has no raw key.
 - Valid sandbox activation: mention Pro state and that `license.json` or the license cache has no raw key.
+- License network failure: mention a friendly network error, preserved existing valid cache, and no raw key in `license.json` or the license cache.
 - Forget license on this Mac: mention cache removal and the resulting app state.
 
 Inspect the license cache without recording the sandbox key itself. A good
@@ -138,6 +139,7 @@ only the fingerprint/instance fields were present.
 | Empty key activation | Friendly validation error |  |
 | Invalid key activation | Friendly license error; no raw key persisted |  |
 | Valid sandbox activation | Pro state; raw key absent from cache |  |
+| License network failure | Friendly network error; existing valid cache remains intact |  |
 | Forget license on this Mac | Local cache clears; app returns to trial or locked state |  |
 
 ## Release Candidate

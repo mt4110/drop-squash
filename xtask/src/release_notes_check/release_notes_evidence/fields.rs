@@ -9,7 +9,7 @@ pub(super) const URL: [(&str, url::Kind); 6] = [
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
 
-pub(super) const EVIDENCE: [&str; 18] = [
+pub(super) const EVIDENCE: [&str; 19] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -22,6 +22,7 @@ pub(super) const EVIDENCE: [&str; 18] = [
     "Lemon Squeezy sandbox activation",
     "Empty key activation",
     "Invalid license key handling",
+    "License network failure",
     "Local license forget",
     "GitHub Release checksum",
     "Homebrew tap PR",

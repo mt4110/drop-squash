@@ -30,6 +30,13 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "Lemon Squeezy sandbox activation" => Some(&[&["pro"], &["raw key"], &["cache"]]),
         "Empty key activation" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
         "Invalid license key handling" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
+        "License network failure" => Some(&[
+            &["friendly"],
+            &["network"],
+            &["preserved", "intact"],
+            &["raw key"],
+            &["cache"],
+        ]),
         "Local license forget" => Some(&[&["cache"], &["trial", "locked"]]),
         "GitHub Release checksum" => Some(&[
             &["sha256sums", "sha-256"],

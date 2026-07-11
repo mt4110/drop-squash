@@ -80,6 +80,15 @@ fn reports_invalid_key_completion_without_friendly_error() {
 }
 
 #[test]
+fn reports_network_failure_completion_without_cache_preservation() {
+    let text = "| License network failure | Blocked | Friendly network error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"License network failure"));
+}
+
+#[test]
 fn reports_local_forget_completion_without_app_state() {
     let text =
         "| Local license forget | Blocked | Local cache is removed | TBD | `docs/manual-qa.md` |\n";
@@ -132,6 +141,7 @@ fn described_blockers() -> String {
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
         "| Empty key activation | Blocked | Friendly validation error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| License network failure | Blocked | Friendly network error appears, existing valid local cache remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",

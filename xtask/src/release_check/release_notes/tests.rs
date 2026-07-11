@@ -22,6 +22,7 @@ Lemon Squeezy sandbox purchase
 Lemon Squeezy sandbox activation
 Empty key activation
 Invalid license key handling
+License network failure
 Local license forget
 Public website URL
 Refund policy URL

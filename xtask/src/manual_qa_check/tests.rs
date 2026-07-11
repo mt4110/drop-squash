@@ -340,6 +340,7 @@ fn reports_incomplete_license_sandbox_results() {
 | Empty key activation | Friendly validation error | empty message |\n\
 | Invalid key activation | Friendly license error; no raw key persisted | error shown |\n\
 | Valid sandbox activation | Pro state; raw key absent from cache | activated |\n\
+| License network failure | Friendly network error; existing valid cache remains intact | network failed |\n\
 | Forget license on this Mac | Local cache clears; app returns to trial or locked state | forgotten |\n",
     );
     let missing = check_file(&path).unwrap();
@@ -359,6 +360,9 @@ fn reports_incomplete_license_sandbox_results() {
     assert!(missing
         .iter()
         .any(|error| error.contains("Valid sandbox activation")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("License network failure")));
     assert!(missing
         .iter()
         .any(|error| error.contains("Forget license on this Mac")));
@@ -510,6 +514,8 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Invalid key activation | Passes | friendly error shown and license.json cache has no raw key |\n");
         } else if check == "Valid sandbox activation" {
             text.push_str("| Valid sandbox activation | Passes | Pro state reached and raw key absent from license.json cache |\n");
+        } else if check == "License network failure" {
+            text.push_str("| License network failure | Passes | friendly network error shown and existing valid license.json cache preserved with no raw key |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | license cache cleared and app returned to trial state |\n");
         } else if check == "Choose recording conversion" {

@@ -31,6 +31,7 @@ license keys, private store IDs, or certificate material.
 - Lemon Squeezy sandbox activation:
 - Empty key activation:
 - Invalid license key handling:
+- License network failure:
 - Local license forget:
 - Public website URL:
 - Refund policy URL:
@@ -65,6 +66,7 @@ weak public evidence before the release is published.
 - Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.
 - Lemon Squeezy sandbox purchase: mention the intended product, `test buyer`, and `order`.
 - License activation and key checks: mention Pro/friendly state, `raw key`, and cache evidence.
+- License network failure: mention a friendly network error, preserved existing valid cache, and `raw key` absence.
 - Local license forget: mention cache removal and trial or locked state.
 - Public website URL: use the production `/release-status` URL.
 - Refund policy URL: use the production `/refund` URL after the policy is final.

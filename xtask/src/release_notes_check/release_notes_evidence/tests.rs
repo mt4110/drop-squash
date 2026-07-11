@@ -23,6 +23,7 @@ fn accepts_concrete_production_urls() {
 - Lemon Squeezy sandbox activation: Pro state reached and raw key absent from cache
 - Empty key activation: friendly validation shown and raw key absent from cache
 - Invalid license key handling: friendly error shown and raw key absent from cache
+- License network failure: friendly network error shown, existing valid cache preserved, raw key absent from cache
 - Local license forget: license cache removed and trial state restored
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
@@ -61,6 +62,7 @@ fn rejects_weak_distribution_evidence() {
 - Lemon Squeezy sandbox activation: activated
 - Empty key activation: empty key handled
 - Invalid license key handling: invalid key handled
+- License network failure: network failed
 - Local license forget: forgot license
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/pricing

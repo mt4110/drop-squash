@@ -57,6 +57,13 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         "Empty key activation" | "Invalid key activation" => {
             Some(&[&["cache", "license.json"], &["friendly"], &["raw key"]])
         }
+        "License network failure" => Some(&[
+            &["cache", "license.json"],
+            &["friendly"],
+            &["network"],
+            &["preserved", "intact"],
+            &["raw key"],
+        ]),
         "Forget license on this Mac" => Some(&[&["cache", "license.json"], &["trial", "locked"]]),
         "Gatekeeper open test" => {
             Some(&[&["gatekeeper"], &["opened", "opens"], &["clean", "fresh"]])

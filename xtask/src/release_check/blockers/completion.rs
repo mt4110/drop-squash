@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 37] = [
+const REQUIRED_PHRASES: [(&str, &str); 41] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy product setup", "Sandbox product"),
     ("Lemon Squeezy product setup", "DropSquash"),
@@ -17,6 +17,10 @@ const REQUIRED_PHRASES: [(&str, &str); 37] = [
     ("Invalid license key handling", "Friendly error"),
     ("Invalid license key handling", "raw key is absent"),
     ("Invalid license key handling", "local cache"),
+    ("License network failure", "Friendly network error"),
+    ("License network failure", "existing valid local cache"),
+    ("License network failure", "raw key is absent"),
+    ("License network failure", "local cache"),
     ("Local license forget", "Local cache"),
     ("Local license forget", "trial or locked"),
     ("Public website deployment", "Production website serves"),

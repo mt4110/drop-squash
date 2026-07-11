@@ -19,6 +19,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Empty key activation | Blocked | Friendly validation error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Valid sandbox activation | Blocked | App reaches Pro state and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Invalid license key handling | Blocked | Friendly error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| License network failure | Blocked | Friendly network error appears, existing valid local cache remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Local cache is removed and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
 | Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |
@@ -44,6 +45,7 @@ recorded in the location above.
 | Empty key activation | License sandbox | Submit an empty key and inspect the friendly validation error plus local license cache | `docs/manual-qa.md` |
 | Valid sandbox activation | License sandbox | Activate the packaged app and inspect the local license cache | `docs/manual-qa.md` |
 | Invalid license key handling | License sandbox | Enter an invalid key and inspect the local license cache | `docs/manual-qa.md` |
+| License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify every public release page | Public website URL |
 | Refund policy finalized | Public web | Publish the final refund policy before checkout goes live | Refund policy URL |

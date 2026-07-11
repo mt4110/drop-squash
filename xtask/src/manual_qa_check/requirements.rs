@@ -12,7 +12,7 @@ pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 35] = [
+pub(super) const REQUIRED_CHECKS: [&str; 36] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",
@@ -32,6 +32,7 @@ pub(super) const REQUIRED_CHECKS: [&str; 35] = [
     "Empty key activation",
     "Invalid key activation",
     "Valid sandbox activation",
+    "License network failure",
     "Forget license on this Mac",
     "`cargo run -p xtask -- release-check`",
     "`cargo run -p xtask -- file-size-check`",
