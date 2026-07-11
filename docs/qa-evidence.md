@@ -14,6 +14,7 @@ Public paid beta blockers and their evidence references are tracked in
 | External media process ban | Product sources reject `ffmpeg`, `ffprobe`, common JS media process packages, and process command construction | `cargo run -p xtask -- media-policy-check` |
 | Privacy guardrails | Product sources reject default telemetry, browser analytics markers, and network clients outside the license provider | `cargo run -p xtask -- privacy-policy-check` |
 | Release workflow shape | Release workflow gates, unsigned DMG QA artifact upload, Tauri distribution metadata, CSP, updater, media, privacy, static site policy, and secret-like files are checked | `cargo run -p xtask -- release-check` |
+| Release template synchronization | Manual QA, release blockers, evidence classes, release notes, release docs, workflows, and the actual website directory stay covered by xtask tests | `cargo test -p xtask` |
 | CI workflow shape | Pull-request CI runs format, file-size, website, release readiness, and Nix dev shell evaluation gates | `cargo run -p xtask -- release-check` |
 | Security workflow shape | Security CI runs advisory, license/source, media, and privacy gates | `cargo run -p xtask -- release-check` |
 | Manual QA completeness | Packaged-app evidence fields, concrete results, and UDIF `.dmg` artifacts are checked | `cargo run -p xtask -- manual-qa-check` |
