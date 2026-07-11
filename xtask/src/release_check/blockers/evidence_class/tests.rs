@@ -18,6 +18,13 @@ fn accepts_complete_evidence_classes() {
 }
 
 #[test]
+fn release_blockers_template_classifies_required_rows() {
+    let text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+
+    assert!(unclassified_blockers(&text).is_empty());
+}
+
+#[test]
 fn reports_missing_evidence_classification() {
     let unclassified = unclassified_blockers("");
 
