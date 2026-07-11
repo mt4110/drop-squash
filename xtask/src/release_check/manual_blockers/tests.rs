@@ -102,6 +102,42 @@ fn reports_packaged_macos_manual_qa_without_specific_evidence() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Privacy receipt sidecar",
+        "clip.privacy.json recorded uploaded_bytes and metadata_policy",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_packaged_macos_manual_qa_with_weak_reveal_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("Reveal output", "Finder opened with clip.squashed.mp4");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_packaged_macos_manual_qa_with_weak_duplicate_name() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Duplicate output naming",
+        "second output used numbered suffix",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn accepts_packaged_macos_manual_qa_with_specific_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(

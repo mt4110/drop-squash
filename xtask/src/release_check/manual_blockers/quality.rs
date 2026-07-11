@@ -6,6 +6,19 @@ pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
     !groups
         .iter()
         .all(|group| group.iter().any(|needle| lower.contains(needle)))
+        || lacks_special_evidence(check, result)
+}
+
+fn lacks_special_evidence(check: &str, result: &str) -> bool {
+    match check {
+        "Privacy receipt sidecar" => lacks_privacy_receipt_values(result),
+        _ => false,
+    }
+}
+
+fn lacks_privacy_receipt_values(result: &str) -> bool {
+    let compact = result.to_ascii_lowercase().replace(' ', "");
+    !compact.contains("uploaded_bytes=0") || !compact.contains("metadata_policy=preserve")
 }
 
 fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
@@ -18,8 +31,8 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["uploaded_bytes"],
             &["metadata_policy"],
         ]),
-        "Reveal privacy receipt" => Some(&[&["finder"], &[".privacy.json"]]),
-        "Duplicate output naming" => Some(&[&["squashed-2", "numbered"]]),
+        "Reveal privacy receipt" => Some(&[&["finder"], &[".privacy.json"], &["selected"]]),
+        "Duplicate output naming" => Some(&[&["squashed-2"], &[".mp4"]]),
         "Cancellation" => Some(&[&["ready"], &["trial", "history"]]),
         "Multi-file queue" => Some(&[&["three", "3"], &["one active", "sequential"]]),
         "Queued job cancellation" => Some(&[&["cancelled"], &["never starts", "never started"]]),
@@ -33,7 +46,7 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["failure", "failed"],
             &["trial count unchanged", "trial unchanged"],
         ]),
-        "Reveal output" => Some(&[&["finder"], &[".mp4"]]),
+        "Reveal output" => Some(&[&["finder"], &[".mp4"], &["selected"]]),
         "Valid sandbox activation" => Some(&[&["cache", "license.json"], &["pro"], &["raw key"]]),
         "Invalid key activation" => {
             Some(&[&["cache", "license.json"], &["friendly"], &["raw key"]])
