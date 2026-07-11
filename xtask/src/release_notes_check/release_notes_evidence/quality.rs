@@ -29,9 +29,18 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "Lemon Squeezy sandbox purchase" => {
             Some(&[&["intended product"], &["test buyer"], &["order"]])
         }
-        "Lemon Squeezy sandbox activation" => Some(&[&["pro"], &["raw key"], &["cache"]]),
-        "Empty key activation" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
-        "Invalid license key handling" => Some(&[&["friendly"], &["raw key"], &["cache"]]),
+        "Lemon Squeezy sandbox activation" => Some(&[
+            &["pro"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+            &["cache"],
+        ]),
+        "Empty key activation" | "Invalid license key handling" => Some(&[
+            &["friendly"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+            &["cache"],
+        ]),
         "License network failure" => Some(&[
             &["friendly"],
             &["network"],
@@ -39,6 +48,7 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             &["valid"],
             &["preserved", "intact"],
             &["raw key"],
+            &["absent", "no raw key", "without raw key"],
             &["cache"],
         ]),
         "Local license forget" => Some(&[

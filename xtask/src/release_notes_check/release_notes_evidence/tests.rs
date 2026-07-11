@@ -142,6 +142,19 @@ fn rejects_network_failure_without_existing_valid_cache() {
 }
 
 #[test]
+fn rejects_activation_with_persisted_raw_key() {
+    let errors = check_text(
+        r#"
+- Lemon Squeezy sandbox activation: Pro state reached and raw key persisted in cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy sandbox activation")));
+}
+
+#[test]
 fn rejects_duplicate_release_note_fields() {
     let errors = check_text(
         r#"

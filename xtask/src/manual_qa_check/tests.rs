@@ -405,6 +405,18 @@ fn reports_network_failure_without_existing_valid_cache() {
 }
 
 #[test]
+fn reports_activation_with_persisted_raw_key() {
+    let (_directory, path) = write_manual_qa(
+        "| Empty key activation | Friendly validation error | friendly validation shown and license.json cache checked with raw key persisted |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Empty key activation")));
+}
+
+#[test]
 fn reports_incomplete_packaged_app_results() {
     let (_directory, path) = write_manual_qa(
         "| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\

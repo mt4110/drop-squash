@@ -48,12 +48,22 @@ fn require_license_cache_evidence(
 ) {
     let lower = result.to_ascii_lowercase();
     let mentions_cache = lower.contains("cache") || lower.contains("license.json");
-    if mentions_cache && needles.iter().all(|needle| lower.contains(needle)) {
+    if mentions_cache
+        && needles.iter().all(|needle| lower.contains(needle))
+        && raw_key_absent(&lower)
+    {
         return;
     }
     missing.push(format!(
         "manual QA {label} needs license cache and raw-key evidence"
     ));
+}
+
+fn raw_key_absent(value: &str) -> bool {
+    value.contains("raw key absent")
+        || value.contains("raw key is absent")
+        || value.contains("no raw key")
+        || value.contains("without raw key")
 }
 
 fn require_any_state(result: &str, missing: &mut Vec<String>) {
