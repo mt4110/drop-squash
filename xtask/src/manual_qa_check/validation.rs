@@ -23,6 +23,12 @@ fn validate_artifact(value: &str, missing: &mut Vec<String>) {
     if !matches!(extension, Some("app" | "dmg")) {
         missing.push("manual QA App artifact must be a .app or .dmg".to_string());
     }
+    if extension == Some("app") && !path.is_dir() {
+        missing.push("manual QA .app artifact must be a directory".to_string());
+    }
+    if extension == Some("dmg") && !path.is_file() {
+        missing.push("manual QA .dmg artifact must be a file".to_string());
+    }
 }
 
 fn is_iso_date(value: &str) -> bool {

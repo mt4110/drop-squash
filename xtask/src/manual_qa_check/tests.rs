@@ -72,6 +72,40 @@ fn reports_non_app_or_dmg_artifact() {
 }
 
 #[test]
+fn reports_app_artifact_that_is_not_directory() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.app");
+    std::fs::write(&artifact, "not a bundle").unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!("| App artifact | {} |\n", artifact.display()),
+    )
+    .unwrap();
+
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains(".app artifact")));
+}
+
+#[test]
+fn reports_dmg_artifact_that_is_not_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::create_dir(&artifact).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!("| App artifact | {} |\n", artifact.display()),
+    )
+    .unwrap();
+
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains(".dmg artifact")));
+}
+
+#[test]
 fn reports_non_iso_date() {
     let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
     let missing = check_file(&path).unwrap();
