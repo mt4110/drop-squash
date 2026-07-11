@@ -83,7 +83,7 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
             &["machine", "macbook", "mac "],
             &["macos", "os "],
         ]),
-        "Benchmark regression threshold" => Some(&[&["20%"]]),
+        "Benchmark regression threshold" => Some(&[&["20%", "20 percent"]]),
         _ => None,
     }
 }
