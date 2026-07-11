@@ -30,6 +30,15 @@ pub(super) fn check(root: &Path, errors: &mut Vec<String>) {
         "License activation contacts Lemon Squeezy",
         errors,
     );
+    require_page_text(root, "license.html", "license-key fingerprint", errors);
+    require_page_text(
+        root,
+        "license.html",
+        "does not persist the raw license key",
+        errors,
+    );
+    require_page_text(root, "license.html", "local license cache", errors);
+    require_page_text(root, "license.html", "Offline grace", errors);
     require_page_text(
         root,
         "support.html",

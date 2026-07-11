@@ -110,6 +110,24 @@ fn rejects_missing_privacy_copy() {
 }
 
 #[test]
+fn rejects_missing_license_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "license.html", "<p>License active.</p>");
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("license-key fingerprint")));
+    assert!(errors.iter().any(|error| error.contains("raw license key")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("local license cache")));
+    assert!(errors.iter().any(|error| error.contains("Offline grace")));
+}
+
+#[test]
 fn rejects_pre_release_download_or_checkout_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -157,6 +175,9 @@ fn required_page_text(page: &str) -> &'static str {
         }
         "support.html" => {
             "FAQ What is a privacy receipt? Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version"
+        }
+        "license.html" => {
+            "license-key fingerprint does not persist the raw license key local license cache Offline grace"
         }
         _ => "<p>Page</p>",
     }
