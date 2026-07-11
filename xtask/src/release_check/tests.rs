@@ -62,6 +62,8 @@ run: cargo fmt --all -- --check
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- release-check
+uses: cachix/install-nix-action@v31
+run: nix flake check --no-build --all-systems
 "#,
     );
 
@@ -77,7 +79,9 @@ fn reports_missing_ci_workflow_gates() {
         vec![
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
-            "cargo run -p xtask -- release-check"
+            "cargo run -p xtask -- release-check",
+            "cachix/install-nix-action@v31",
+            "nix flake check --no-build --all-systems"
         ]
     );
 }
