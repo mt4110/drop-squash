@@ -7,6 +7,7 @@ mod secret_files;
 use std::path::Path;
 
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
+const TAURI_CONFIG: &str = "apps/desktop/src-tauri/tauri.conf.json";
 const RELEASE_WORKFLOW_GATES: [&str; 15] = [
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
@@ -24,6 +25,13 @@ const RELEASE_WORKFLOW_GATES: [&str; 15] = [
     "cargo run -p xtask -- macos-signing-check",
     "Block unsigned Phase 0 release",
 ];
+const REQUIRED_TAURI_CONFIG_TEXTS: [&str; 4] = [
+    "\"connect-src\": \"ipc: http://ipc.localhost\"",
+    "\"productName\": \"DropSquash\"",
+    "\"identifier\": \"io.github.mt4110.dropsquash\"",
+    "\"targets\": [\"app\", \"dmg\"]",
+];
+
 pub fn run() -> Result<(), String> {
     secret_files::reject_secret_files(Path::new("."))?;
     desktop_capability::check_default_capability(Path::new(
@@ -37,16 +45,20 @@ pub fn run() -> Result<(), String> {
     )?;
     blockers::check_release_blockers(Path::new("docs/release-blockers.md"))?;
     require_release_workflow_gates()?;
-    require_text(
-        "apps/desktop/src-tauri/tauri.conf.json",
-        "\"connect-src\": \"ipc: http://ipc.localhost\"",
-    )?;
+    require_tauri_config_texts()?;
     require_text("docs/release.md", "docs/release-blockers.md")?;
     require_text("docs/productization.md", "docs/release-blockers.md")?;
     require_text("docs/qa-evidence.md", "docs/release-blockers.md")?;
     require_text("website/README.md", "docs/release-blockers.md")?;
     reject_text("apps/desktop/src-tauri/tauri.conf.json", "\"updater\"")?;
     println!("release readiness checks passed");
+    Ok(())
+}
+
+fn require_tauri_config_texts() -> Result<(), String> {
+    for text in REQUIRED_TAURI_CONFIG_TEXTS {
+        require_text(TAURI_CONFIG, text)?;
+    }
     Ok(())
 }
 
