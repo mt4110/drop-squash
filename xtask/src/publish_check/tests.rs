@@ -1,8 +1,8 @@
-use super::{unverified_blockers, BLOCKERS};
+use super::unverified_blockers;
 
 #[test]
 fn accepts_all_verified_blockers() {
-    let text = BLOCKERS
+    let text = crate::release_check::required_blockers()
         .iter()
         .map(|blocker| format!("| {blocker} | Verified | done | evidence | docs |\n"))
         .collect::<String>();

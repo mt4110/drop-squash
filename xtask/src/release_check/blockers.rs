@@ -19,6 +19,10 @@ const REQUIRED_BLOCKERS: [&str; 10] = [
     "Homebrew cask install",
 ];
 
+pub(super) fn required() -> &'static [&'static str] {
+    &REQUIRED_BLOCKERS
+}
+
 pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let missing = missing_release_blockers(&text);

@@ -1,18 +1,5 @@
 use std::path::PathBuf;
 
-const BLOCKERS: [&str; 10] = [
-    "Packaged macOS manual QA",
-    "Lemon Squeezy sandbox purchase",
-    "Valid sandbox activation",
-    "Public website deployment",
-    "Live checkout link",
-    "Signed DMG",
-    "Notarized and stapled DMG",
-    "Gatekeeper clean-machine open",
-    "Published checksum",
-    "Homebrew cask install",
-];
-
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes = args
         .first()
@@ -33,7 +20,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 }
 
 fn unverified_blockers(text: &str) -> Vec<&'static str> {
-    BLOCKERS
+    crate::release_check::required_blockers()
         .iter()
         .copied()
         .filter(|blocker| !is_verified(text, blocker))

@@ -54,6 +54,10 @@ pub fn run() -> Result<(), String> {
     Ok(())
 }
 
+pub(crate) fn required_blockers() -> &'static [&'static str] {
+    blockers::required()
+}
+
 fn require_release_workflow_gates() -> Result<(), String> {
     let text = std::fs::read_to_string(RELEASE_WORKFLOW).map_err(|error| error.to_string())?;
     let missing = missing_release_workflow_gates(&text);
