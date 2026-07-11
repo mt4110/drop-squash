@@ -13,7 +13,7 @@ pub fn handle_source_action(
     result: &EncodeResult,
     source_policy: SourcePolicy,
 ) -> Result<SourceActionDecision, String> {
-    let decision = decide_source_action(
+    let mut decision = decide_source_action(
         result.input_path.clone(),
         source_policy,
         SourceSafety {
@@ -24,11 +24,29 @@ pub fn handle_source_action(
         },
     );
     if decision.action == SourceAction::MoveOriginalToTrash {
+        decision = verified_trash_decision(result)?;
+    }
+    if decision.action == SourceAction::MoveOriginalToTrash {
         TrashService
             .move_to_trash(&decision.source_path)
             .map_err(format_error)?;
     }
     Ok(decision)
+}
+
+fn verified_trash_decision(result: &EncodeResult) -> Result<SourceActionDecision, String> {
+    let verification =
+        verify_output(&result.input_path, &result.output_path).map_err(format_error)?;
+    Ok(decide_source_action(
+        result.input_path.clone(),
+        SourcePolicy::Trash,
+        SourceSafety {
+            conversion_succeeded: verification.is_valid_output,
+            output_exists: verification.output_exists,
+            original_bytes: verification.original_bytes,
+            output_bytes: verification.output_bytes,
+        },
+    ))
 }
 
 pub fn trash_original(

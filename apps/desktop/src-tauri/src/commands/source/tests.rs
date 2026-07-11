@@ -52,6 +52,21 @@ fn failed_result_keeps_original_even_when_sizes_are_smaller() {
     assert!(source.exists());
 }
 
+#[test]
+fn trash_policy_revalidates_output_before_moving_original() {
+    let directory = tempfile::tempdir().unwrap();
+    let source = directory.path().join("recording.mov");
+    let output = directory.path().join("recording.squashed.mp4");
+    std::fs::write(&source, vec![0; 100]).unwrap();
+    std::fs::write(&output, b"not an mp4").unwrap();
+
+    let decision =
+        handle_source_action(&result(source.clone(), output), SourcePolicy::Trash).unwrap();
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(source.exists());
+}
+
 fn result(input_path: std::path::PathBuf, output_path: std::path::PathBuf) -> EncodeResult {
     EncodeResult {
         input_path,
