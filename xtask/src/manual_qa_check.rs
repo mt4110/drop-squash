@@ -23,7 +23,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     Err(missing.join("\n"))
 }
 
-fn check_file(path: &Path) -> Result<Vec<String>, String> {
+pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let mut missing = Vec::new();
     let mut labels = Vec::new();

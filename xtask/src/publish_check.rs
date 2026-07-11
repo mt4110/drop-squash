@@ -1,10 +1,11 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes = args
         .first()
         .ok_or_else(|| "publish-check requires <release-notes.md>".to_string())?;
     crate::release_check::run()?;
+    ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;
     crate::release_notes_check::check_file(&PathBuf::from(notes))?;
     let blockers =
         std::fs::read_to_string("docs/release-blockers.md").map_err(|error| error.to_string())?;
@@ -16,6 +17,17 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     Err(format!(
         "release blockers must be Verified before publish: {}",
         unverified.join(", ")
+    ))
+}
+
+fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {
+    let missing = crate::manual_qa_check::check_file(path)?;
+    if missing.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "manual QA must pass before publish:\n{}",
+        missing.join("\n")
     ))
 }
 

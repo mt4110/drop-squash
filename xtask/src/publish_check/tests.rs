@@ -1,4 +1,4 @@
-use super::unverified_blockers;
+use super::{ensure_manual_qa_complete, unverified_blockers};
 
 #[test]
 fn accepts_all_verified_blockers() {
@@ -33,4 +33,16 @@ fn includes_license_safety_blockers() {
 
     assert!(unverified.contains(&"Invalid license key handling"));
     assert!(unverified.contains(&"Local license forget"));
+}
+
+#[test]
+fn publish_requires_complete_manual_qa() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(&path, "| App build | TBD |\n").unwrap();
+
+    let error = ensure_manual_qa_complete(&path).unwrap_err();
+
+    assert!(error.contains("manual QA must pass before publish"));
+    assert!(error.contains("manual QA field needs evidence"));
 }
