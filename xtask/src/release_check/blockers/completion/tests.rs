@@ -126,6 +126,24 @@ fn reports_homebrew_completion_without_zap() {
 }
 
 #[test]
+fn reports_checksum_completion_without_public_attachment() {
+    let text = "| Published checksum | Blocked | SHA-256 line recorded | TBD | GitHub Release |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Published checksum"));
+}
+
+#[test]
+fn reports_homebrew_completion_without_versioned_artifact() {
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` works and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_benchmark_completion_without_threshold() {
     let text = "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, and machine/OS context | TBD | `docs/manual-qa.md` |\n";
 
