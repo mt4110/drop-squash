@@ -9,7 +9,7 @@ fn accepts_local_links() {
         "index.html",
         r#"<a href="pricing.html">Pricing</a>"#,
     );
-    write(directory.path(), "pricing.html", "<p>Pricing</p>");
+    write(directory.path(), "pricing.html", "Checkout opens after");
 
     assert!(check_root(directory.path()).unwrap().is_empty());
 }
@@ -69,6 +69,19 @@ fn rejects_missing_required_pages() {
     assert!(errors.iter().any(|error| error.contains("pricing.html")));
 }
 
+#[test]
+fn rejects_missing_release_status_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "download.html", "<p>Download now</p>");
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("DropSquash.dmg")));
+    assert!(errors.iter().any(|error| error.contains("notarization")));
+    assert!(errors.iter().any(|error| error.contains("checksum")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",
@@ -80,7 +93,15 @@ fn write_required_pages(root: &std::path::Path) {
         "refund.html",
         "changelog.html",
     ] {
-        write(root, page, "<p>Page</p>");
+        write(root, page, required_page_text(page));
+    }
+}
+
+fn required_page_text(page: &str) -> &'static str {
+    match page {
+        "download.html" => "DropSquash.dmg notarization checksum",
+        "pricing.html" => "Checkout opens after",
+        _ => "<p>Page</p>",
     }
 }
 
