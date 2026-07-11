@@ -12,7 +12,7 @@ pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 25] = [
+pub(super) const REQUIRED_CHECKS: [&str; 26] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Duplicate output naming",
@@ -23,6 +23,7 @@ pub(super) const REQUIRED_CHECKS: [&str; 25] = [
     "Failed conversion",
     "Larger output",
     "Reveal output",
+    "Sandbox purchase",
     "Empty key activation",
     "Invalid key activation",
     "Valid sandbox activation",

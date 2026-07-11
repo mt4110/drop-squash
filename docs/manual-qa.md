@@ -71,6 +71,7 @@ rm -f "$HOME/Library/Application Support/DropSquash/license.json"
 
 | Check | Expected | Result |
 |---|---|---|
+| Sandbox purchase | Checkout completes for the intended product and test buyer |  |
 | Empty key activation | Friendly validation error |  |
 | Invalid key activation | Friendly license error; no raw key persisted |  |
 | Valid sandbox activation | Pro state; raw key absent from cache |  |

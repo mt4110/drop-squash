@@ -47,6 +47,7 @@ These checks still require a packaged macOS app or external service state:
 | Large-recording cancellation | User-visible timing, progress, and cleanup need real media and packaged app behavior |
 | Benchmark sample results | Compression ratio and throughput depend on private local media and target Mac hardware |
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
+| Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, and test buyer evidence outside the repository |
 | Lemon Squeezy sandbox activation | Requires sandbox product, keys, and server response outside the repository |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, and a clean machine |
 

@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 12] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 13] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Duplicate output naming", "Duplicate output naming"),
@@ -11,6 +11,7 @@ const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 12] = [
     ("Larger output", "Larger output"),
     ("Large-recording cancellation", "Cancellation"),
     ("Multi-file queue", "Multi-file queue"),
+    ("Lemon Squeezy sandbox purchase", "Sandbox purchase"),
     (
         "Lemon Squeezy sandbox activation",
         "Valid sandbox activation",
