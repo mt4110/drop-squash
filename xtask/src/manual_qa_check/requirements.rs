@@ -37,7 +37,7 @@ pub(super) const REQUIRED_CHECKS: [&str; 34] = [
     "`cargo run -p xtask -- media-policy-check`",
     "`cargo run -p xtask -- privacy-policy-check`",
     "`cargo run -p xtask -- website-check`",
-    "`cargo run -p xtask -- benchmark --input <sample> --output-dir <tmp>`",
+    "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`",
     "Benchmark sample set",
     "Benchmark regression threshold",
     "`cargo run -p xtask -- manual-qa-check`",

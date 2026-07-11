@@ -8,6 +8,7 @@ pub struct BenchmarkArgs {
     pub inputs: Vec<PathBuf>,
     pub output_dir: PathBuf,
     pub profile: Profile,
+    pub release_set: bool,
     pub output_size: OutputSize,
 }
 
@@ -20,6 +21,7 @@ impl BenchmarkArgs {
                 "--output-dir" => parser.output_dir()?,
                 "--profile" => parser.profile()?,
                 "--size" => parser.output_size()?,
+                "--release-set" => parser.release_set = true,
                 "--help" | "-h" => return Err(usage()),
                 other => return Err(format!("unknown benchmark argument: {other}\n{}", usage())),
             }
@@ -33,6 +35,7 @@ struct Parser {
     inputs: Vec<PathBuf>,
     output_dir: Option<PathBuf>,
     profile: Profile,
+    release_set: bool,
     output_size: OutputSize,
 }
 
@@ -43,6 +46,7 @@ impl Parser {
             inputs: Vec::new(),
             output_dir: None,
             profile: Profile::Auto,
+            release_set: false,
             output_size: OutputSize::Auto,
         }
     }
@@ -86,19 +90,26 @@ impl Parser {
                 usage()
             ));
         }
+        if self.release_set && self.inputs.len() < 3 {
+            return Err(format!(
+                "benchmark --release-set requires at least three --input values\n{}",
+                usage()
+            ));
+        }
         Ok(BenchmarkArgs {
             inputs: self.inputs,
             output_dir: self
                 .output_dir
                 .ok_or_else(|| format!("benchmark requires --output-dir\n{}", usage()))?,
             profile: self.profile,
+            release_set: self.release_set,
             output_size: self.output_size,
         })
     }
 }
 
 fn usage() -> String {
-    "usage: cargo run -p xtask -- benchmark --input <movie> --output-dir <dir> [--profile auto] [--size auto]".to_string()
+    "usage: cargo run -p xtask -- benchmark --input <movie> --output-dir <dir> [--profile auto] [--size auto] [--release-set]".to_string()
 }
 
 #[cfg(test)]

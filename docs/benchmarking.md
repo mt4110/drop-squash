@@ -9,9 +9,11 @@ Run benchmarks only against local sample recordings:
 nix develop --command cargo run -p xtask -- benchmark \
   --input ~/Movies/sample-a.mov \
   --input ~/Movies/sample-b.mp4 \
+  --input ~/Movies/sample-c.mov \
   --output-dir /tmp/dropsquash-bench \
   --profile auto \
   --size auto \
+  --release-set \
   > /tmp/dropsquash-bench/results.csv
 ```
 
@@ -26,6 +28,10 @@ Use at least three private local samples before a release candidate:
 - A short screen recording under 30 seconds.
 - A medium recording around 2 to 5 minutes.
 - A large recording that is painful to share without compression.
+
+Use `--release-set` for release-candidate evidence. It requires at least three
+`--input` values so the release benchmark cannot accidentally be recorded from a
+single convenient sample.
 
 Record this context with the CSV in `docs/manual-qa.md`:
 
