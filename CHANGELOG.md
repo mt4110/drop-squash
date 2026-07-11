@@ -45,3 +45,4 @@
 - Avoid writing partial license cache data when activation fails.
 - Guard conversion history writes so only successful smaller outputs can count toward trial use.
 - Add desktop source-action tests for Ask mode and explicit Trash output revalidation.
+- Add a QA evidence map separating automated coverage from packaged-app manual QA.

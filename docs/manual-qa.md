@@ -4,6 +4,10 @@ Manual QA records real packaged-app behavior that automated tests cannot prove.
 Do not mark a productization phase complete from this file until the result and
 environment are filled in.
 
+Automated coverage that supports this checklist is tracked separately in
+`docs/qa-evidence.md`. Do not copy automated pass results into this file unless
+the row explicitly asks for a command result.
+
 Run this gate after filling every result:
 
 ```sh
