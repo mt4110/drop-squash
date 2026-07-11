@@ -1,6 +1,6 @@
 pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
     let Some(groups) = groups_for(label) else {
-        return false;
+        return super::homebrew::lacks_required_evidence(label, value).unwrap_or(false);
     };
     let lower = value.to_ascii_lowercase();
     !groups
@@ -113,10 +113,6 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             &["attached"],
             &["dropsquash.dmg"],
         ]),
-        "Homebrew tap PR" => Some(&[&["cask"], &["pr"], &["zap"]]),
-        "Homebrew install result" => {
-            Some(&[&["brew install"], &["--cask"], &["mt4110/tap/dropsquash"]])
-        }
         "Known limitations" => Some(&[&["macos"], &["windows", "linux", "platform"]]),
         "Support contact" => Some(&[&["support"], &["github issues", "@"]]),
         _ => None,

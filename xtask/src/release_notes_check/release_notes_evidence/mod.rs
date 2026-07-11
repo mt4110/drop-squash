@@ -3,6 +3,7 @@ use std::path::Path;
 mod benchmark;
 mod consistency;
 mod fields;
+mod homebrew;
 mod identity;
 mod quality;
 mod url;
