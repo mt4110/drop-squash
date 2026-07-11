@@ -17,6 +17,8 @@ cargo run -p xtask -- manual-qa-check
 For manual observation rows, do not write only `Pass`, `OK`, or `Done` in the
 result. Record the concrete evidence you saw, such as the generated file name,
 trial count, Finder selection, or cache state.
+`App artifact` must point to an existing local `.app` or `.dmg` used for the
+run, and `Date` must use `YYYY-MM-DD`.
 
 Before starting packaged-app QA, preserve the current local app state instead
 of deleting it:
