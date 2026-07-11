@@ -42,6 +42,7 @@ export function App() {
   const [isBusy, setIsBusy] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isTrashingOriginal, setIsTrashingOriginal] = useState(false);
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
   const [queue, setQueue] = useState<QueueEntry[]>([]);
@@ -239,6 +240,7 @@ export function App() {
       return;
     }
 
+    setIsTrashingOriginal(true);
     try {
       const decision = await invoke<SourceActionDecision>("trash_original", {
         sourcePath,
@@ -252,6 +254,8 @@ export function App() {
       setQueue((current) => markSourceAction(current, outputPath, decision.action));
     } catch (reason) {
       setError(String(reason));
+    } finally {
+      setIsTrashingOriginal(false);
     }
   }, []);
 
@@ -306,6 +310,7 @@ export function App() {
         error={error}
         inputPath={inputPath}
         inputExtensions={state.inputExtensions}
+        isTrashingOriginal={isTrashingOriginal}
         onPick={() => void chooseRecording()}
         onCancel={() => void cancelConversion()}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
