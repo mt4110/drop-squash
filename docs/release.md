@@ -32,6 +32,7 @@ cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
 cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- release-check
+pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 ```
 
 These gates keep production files within the repository size rules, verify the
@@ -40,6 +41,8 @@ manual QA evidence, require the external media process security gate, verify
 that production CSP does not open remote network origins, keep desktop
 capabilities minimal, keep the unsigned release workflow blocked, and verify
 that the updater is not enabled before signing keys are ready.
+The unsigned Tauri build is only a packaging and QA input; public release still
+requires signing, notarization, stapling, artifact checks, and checksums.
 
 Run the media policy gate directly after touching native backends or desktop
 commands:
@@ -76,6 +79,11 @@ After packaged-app testing, require the manual QA record to be complete:
 ```sh
 cargo run -p xtask -- manual-qa-check
 ```
+
+Before a paid beta, complete the Lemon Squeezy sandbox activation row in
+`docs/manual-qa.md` and keep the matching release blocker in
+`docs/release-blockers.md` blocked until the sandbox purchase and activation
+evidence exists.
 
 Generate SHA-256 checksum lines for release artifacts with:
 
