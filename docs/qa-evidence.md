@@ -16,19 +16,19 @@ Public paid beta blockers and their evidence references are tracked in
 | Release workflow shape | Release workflow gates, CSP, updater, media, privacy, and secret-like files are checked | `cargo run -p xtask -- release-check` |
 | Manual QA completeness | Packaged-app evidence fields and results are checked | `cargo run -p xtask -- manual-qa-check` |
 | Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
-| Static site | Required pages, local links, placeholders, release-status copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
+| Static site | Required pages, local links, placeholders, release-status/privacy copy, and pre-release download/checkout links are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
 | CLI history writes | CLI conversion uses the same success-only history guard | `cargo test -p dropsquash && cargo test -p dropsquash-history` |
 | CLI license status | CLI reports local trial/license state without a raw key or network call | `cargo test -p dropsquash license && cargo run -p dropsquash -- license status --history /tmp/dropsquash-empty-history.jsonl` |
 | License cache safety | Raw key persistence, Pro identity requirements, temp-file cache writes, error redaction, trimmed activation, and failed activation partial writes are tested | `cargo test -p dropsquash-license && cargo test -p dropsquash-desktop license` |
 | Source movement safety | Postprocess gates and desktop command revalidation are tested | `cargo test -p dropsquash-postprocess && cargo test -p dropsquash-desktop source` |
-| Queue order | Sequential queue state transitions are tested | `cargo test -p dropsquash-queue` |
+| Queue order | Sequential queue state transitions are tested; trial-lock queue blocking is type-checked in the web UI | `cargo test -p dropsquash-queue && pnpm --dir apps/desktop/web lint` |
 | Cancellation token path | File stability and desktop active-conversion cancellation are tested | `cargo test -p dropsquash-fileguard && cargo test -p dropsquash-desktop state` |
 | Unsupported OS backends | Windows/Linux placeholders report unavailable and reject encode instead of falling back | `cargo test -p dropsquash-encoder unimplemented_platform_backends` |
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for emptiness and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty DMG checksums can be generated deterministically | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
-| Homebrew cask generation | Cask generation rejects placeholders, non-HTTPS URLs, non-DMG URLs, and invalid checksums | `cargo test -p xtask homebrew_cask` |
+| Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-HTTPS URLs, non-DMG URLs, and invalid checksums | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence
 
