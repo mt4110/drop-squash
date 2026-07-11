@@ -24,6 +24,8 @@ license keys, private store IDs, or certificate material.
 
 - `docs/release-blockers.md` status:
 - Manual QA record:
+- Conversion safety evidence:
+- Queue evidence:
 - Trash source policy:
 - Benchmark sample set:
 - Benchmark regression threshold:
@@ -63,6 +65,8 @@ weak public evidence before the release is published.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, and `clean` or `fresh`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md` and the tested `DropSquash.dmg` or `.app`.
+- Conversion safety evidence: mention cancellation, failed conversion, larger output, original preservation, and unchanged trial count.
+- Queue evidence: mention multi-file queue, queued cancellation, batch summary, finished count, saved bytes, and failed/cancelled/blocked counts.
 - Trash source policy: mention Moving original or moving state, disabled action state, verified smaller output, and Trash.
 - Benchmark sample set: mention short, medium, and large samples with machine and OS context.
 - Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.

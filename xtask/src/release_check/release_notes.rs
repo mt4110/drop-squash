@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 38] = [
+const REQUIRED_TEXT: [&str; 40] = [
     "Version",
     "Artifact",
     "Artifact URL",
@@ -13,6 +13,8 @@ const REQUIRED_TEXT: [&str; 38] = [
     "Gatekeeper",
     "docs/release-blockers.md",
     "Manual QA record",
+    "Conversion safety evidence",
+    "Queue evidence",
     "Trash source policy",
     "Benchmark sample set",
     "Benchmark regression threshold",

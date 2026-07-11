@@ -15,6 +15,8 @@ Apple notary log
 Gatekeeper
 docs/release-blockers.md
 Manual QA record
+Conversion safety evidence
+Queue evidence
 Trash source policy
 Benchmark sample set
 Benchmark regression threshold
