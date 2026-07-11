@@ -116,6 +116,30 @@ fn rejects_missing_or_generic_release_evidence() {
 }
 
 #[test]
+fn rejects_incomplete_benchmark_evidence() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Version: v0.1.0
+- Artifact: DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Git commit: abc1234
+- Benchmark sample set: local recordings recorded
+- Benchmark regression threshold: no meaningful regression
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("short, medium, and large")));
+    assert!(errors.iter().any(|error| error.contains("20%")));
+}
+
+#[test]
 fn rejects_non_hex_sha256() {
     let errors = check_text(
         r#"

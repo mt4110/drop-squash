@@ -1,5 +1,6 @@
 use std::path::Path;
 
+mod benchmark;
 mod consistency;
 mod identity;
 mod url;
@@ -11,7 +12,7 @@ const URL_FIELDS: [(&str, url::Kind); 5] = [
     ("GitHub Release URL", url::Kind::GitHubRelease),
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
-const EVIDENCE_FIELDS: [&str; 14] = [
+const EVIDENCE_FIELDS: [&str; 12] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -19,8 +20,6 @@ const EVIDENCE_FIELDS: [&str; 14] = [
     "Gatekeeper clean-machine open",
     "`docs/release-blockers.md` status",
     "Manual QA record",
-    "Benchmark sample set",
-    "Benchmark regression threshold",
     "Lemon Squeezy sandbox purchase",
     "Lemon Squeezy sandbox activation",
     "GitHub Release checksum",
@@ -40,6 +39,7 @@ fn check_text(text: &str) -> Vec<String> {
         .collect();
     errors.extend(identity::validate(text));
     errors.extend(consistency::validate(text));
+    errors.extend(benchmark::validate(text));
     errors.extend(validate_sha256(text));
     errors.extend(
         EVIDENCE_FIELDS
