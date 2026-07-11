@@ -18,8 +18,12 @@ fn matches_kind(kind: Kind, value: &str) -> bool {
             value.starts_with("https://github.com/mt4110/drop-squash/releases/download/")
                 && lower.ends_with(".dmg")
         }
-        Kind::Website => !lower.contains("lemonsqueezy.com") && !lower.contains("checkout"),
-        Kind::Checkout => lower.contains("lemonsqueezy.com") && lower.contains("checkout"),
+        Kind::Website => {
+            lower.contains("/release-status")
+                && !lower.contains("lemonsqueezy.com")
+                && !lower.contains("checkout")
+        }
+        Kind::Checkout => lower.contains("lemonsqueezy.com") && lower.contains("/checkout/buy/"),
         Kind::GitHubRelease => {
             value.starts_with("https://github.com/mt4110/drop-squash/releases/tag/")
         }

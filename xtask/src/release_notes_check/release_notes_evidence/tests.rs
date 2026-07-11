@@ -23,7 +23,7 @@ fn accepts_concrete_production_urls() {
 - Empty key activation: friendly validation shown and raw key absent from cache
 - Invalid license key handling: friendly error shown and raw key absent from cache
 - Local license forget: license cache removed and trial state restored
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
@@ -57,7 +57,7 @@ fn rejects_weak_distribution_evidence() {
 - Empty key activation: empty key handled
 - Invalid license key handling: invalid key handled
 - Local license forget: forgot license
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
@@ -108,6 +108,23 @@ fn rejects_placeholders_and_wrong_url_kinds() {
 }
 
 #[test]
+fn rejects_release_notes_without_specific_public_urls() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://dropsquash.app
+- Live checkout URL: https://store.lemonsqueezy.com/checkout
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Public website URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Live checkout URL")));
+}
+
+#[test]
 fn rejects_homebrew_pr_outside_expected_tap() {
     let errors = check_text(
         r#"
@@ -116,7 +133,7 @@ fn rejects_homebrew_pr_outside_expected_tap() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/someone/other-tap/pull/1
@@ -137,7 +154,7 @@ fn rejects_homebrew_pr_without_numeric_pull_request() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/not-a-number
@@ -159,7 +176,7 @@ fn rejects_missing_or_generic_release_evidence() {
 - SHA-256:
 - Git commit: release source commit
 - `codesign`: OK
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -203,7 +220,7 @@ fn rejects_incomplete_benchmark_evidence() {
 - Git commit: abc1234
 - Benchmark sample set: local recordings recorded
 - Benchmark regression threshold: no meaningful regression
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -227,7 +244,7 @@ fn rejects_benchmark_sample_set_without_machine_context() {
 - Git commit: abc1234
 - Benchmark sample set: short medium large local recordings recorded
 - Benchmark regression threshold: no sample exceeded 20% regression
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -248,7 +265,7 @@ fn rejects_non_hex_sha256() {
 - Artifact: DropSquash.dmg
 - SHA-256: 64 hex chars recorded in SHA256SUMS
 - Git commit: abc1234
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -269,7 +286,7 @@ fn rejects_mismatched_release_identity_values() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- Public website URL: https://dropsquash.app
+- Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v9.9.9
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
