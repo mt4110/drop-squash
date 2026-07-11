@@ -12,6 +12,7 @@ app testing in `docs/manual-qa.md`.
 | External media process ban | Product sources reject `ffmpeg`, `ffprobe`, and process command construction | `cargo run -p xtask -- media-policy-check` |
 | Privacy guardrails | Product sources reject default telemetry and browser analytics markers | `cargo run -p xtask -- privacy-policy-check` |
 | Release readiness | Release workflow, CSP, updater, media, privacy, and secret-like files are checked | `cargo run -p xtask -- release-check` |
+| Desktop capability policy | Main window permissions are limited to file open and Finder reveal | `cargo run -p xtask -- release-check` |
 | Static site | Required pages, local links, and placeholders are checked | `cargo run -p xtask -- website-check` |
 | Trial counting | History accepts only successful smaller conversions | `cargo test -p dropsquash-history` |
 | License cache safety | Raw key persistence, error redaction, trimmed activation, and failed activation partial writes are tested | `cargo test -p dropsquash-license && cargo test -p dropsquash-desktop license` |

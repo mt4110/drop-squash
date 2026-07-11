@@ -1,4 +1,5 @@
 use crate::{media_policy_check, privacy_policy_check};
+mod desktop_capability;
 mod secret_files;
 
 use std::path::Path;
@@ -23,6 +24,9 @@ const RELEASE_WORKFLOW_GATES: [&str; 15] = [
 ];
 pub fn run() -> Result<(), String> {
     secret_files::reject_secret_files(Path::new("."))?;
+    desktop_capability::check_default_capability(Path::new(
+        "apps/desktop/src-tauri/capabilities/default.json",
+    ))?;
     media_policy_check::check_default_roots()?;
     privacy_policy_check::check_default_roots()?;
     require_release_workflow_gates()?;
