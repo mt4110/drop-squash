@@ -30,6 +30,7 @@ Public paid beta blockers and their evidence references are tracked in
 | Benchmark harness | Local encoder benchmark argument parsing and output acceptance checks are tested | `cargo test -p xtask benchmark` |
 | Release artifact hygiene | DMG artifacts can be checked for the `.dmg` target, emptiness, UDIF trailer, and `/nix/store` references | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` |
 | Release checksum | Non-empty UDIF `.dmg` checksums can be generated deterministically and non-DMG targets are rejected | `cargo run -p xtask -- checksum path/to/DropSquash.dmg` |
+| Release notes URLs | Filled public release notes reject placeholder, checkout/website mix-up, non-release artifact, and non-PR URLs | `cargo run -p xtask -- release-notes-check path/to/release-notes.md` |
 | Homebrew cask generation | Cask generation rejects placeholders, non-semver versions, non-GitHub release URLs, mismatched release versions, non-HTTPS URLs, non-DMG URLs, non-canonical homepages, and invalid checksums | `cargo test -p xtask homebrew_cask` |
 
 ## Manual-Only Evidence
