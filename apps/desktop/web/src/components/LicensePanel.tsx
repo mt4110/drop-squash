@@ -27,10 +27,19 @@ export function LicensePanel({ isPro, isLocked, onActivate, onDeactivate }: Lice
     }
   }
 
+  async function forget() {
+    setIsSubmitting(true);
+    try {
+      await onDeactivate();
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <section className="license" aria-label="License">
       {isPro ? (
-        <button type="button" onClick={() => void onDeactivate()}>Forget license on this Mac</button>
+        <button disabled={isSubmitting} type="button" onClick={() => void forget()}>Forget license on this Mac</button>
       ) : (
         <>
           <input
