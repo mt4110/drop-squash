@@ -65,11 +65,30 @@ fn missing_result(manual: &str, check: &str) -> bool {
         .find(|line| line.starts_with('|') && line.contains(&format!("| {check} |")))
     {
         Some(line) => match line.trim_matches('|').split('|').next_back() {
-            Some(result) => result.trim().is_empty(),
+            Some(result) => unusable_result(result),
             None => true,
         },
         None => true,
     }
+}
+
+fn unusable_result(result: &str) -> bool {
+    matches!(
+        result.trim().to_ascii_lowercase().as_str(),
+        "" | "tbd"
+            | "todo"
+            | "n/a"
+            | "na"
+            | "none"
+            | "blocked"
+            | "skipped"
+            | "pass"
+            | "ok"
+            | "done"
+            | "works"
+            | "verified"
+            | "observed expected behavior"
+    )
 }
 
 #[cfg(test)]

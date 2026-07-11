@@ -20,6 +20,26 @@ fn reports_verified_manual_blocker_without_manual_result() {
 }
 
 #[test]
+fn reports_verified_manual_blocker_with_placeholder_result() {
+    let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | TBD |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn reports_verified_manual_blocker_with_vague_result() {
+    let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Sandbox purchase | Checkout completes | Pass |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
 fn reports_incomplete_packaged_macos_manual_qa() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Choose recording conversion | Small recording | Creates smaller MP4 | Concrete file output |\n";
