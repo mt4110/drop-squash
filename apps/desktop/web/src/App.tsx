@@ -23,6 +23,7 @@ import { initialState } from "./lib/initialState";
 import type { QueueEntry } from "./lib/queue";
 import {
   entriesForInputPaths,
+  clearFinished,
   isCancelReason,
   markFailed,
   markRunning,
@@ -352,6 +353,7 @@ export function App() {
       />
       <QueuePanel
         items={queue}
+        onClearFinished={() => setQueue((current) => clearFinished(current))}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
       />
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}

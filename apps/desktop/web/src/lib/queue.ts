@@ -31,6 +31,14 @@ export function nextQueued(items: QueueEntry[]) {
   return items.find((item) => item.status === "queued");
 }
 
+export function hasFinished(items: QueueEntry[]) {
+  return items.some((item) => isFinishedStatus(item.status));
+}
+
+export function clearFinished(items: QueueEntry[]) {
+  return items.filter((item) => !isFinishedStatus(item.status));
+}
+
 export function markRunning(items: QueueEntry[], id: number) {
   return items.map((item) => (
     item.id === id ? { ...item, status: "running" as const, progress: 0 } : item
@@ -87,4 +95,8 @@ export function statusLabel(status: QueueStatus) {
 
 export function isCancelReason(reason: unknown) {
   return String(reason).toLowerCase().includes("cancelled");
+}
+
+function isFinishedStatus(status: QueueStatus) {
+  return status === "succeeded" || status === "failed" || status === "cancelled";
 }

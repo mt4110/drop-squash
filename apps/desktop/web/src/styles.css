@@ -276,6 +276,13 @@ body,
   padding: 8px 16px;
 }
 
+.queue-actions {
+  border-top: 1px solid #f0f0f2;
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 16px;
+}
+
 .queue-row:first-child {
   border-top: 0;
 }
@@ -288,7 +295,8 @@ body,
 }
 
 .queue-row button,
-.queue-row strong {
+.queue-row strong,
+.queue-actions button {
   background: transparent;
   border: 0;
   color: #6e6e73;
