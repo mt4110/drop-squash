@@ -33,6 +33,20 @@ fn rejects_empty_artifacts() {
     assert!(error.contains("empty"));
 }
 
+#[test]
+fn rejects_non_dmg_artifacts() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("DropSquash.zip");
+    std::fs::File::create(&path)
+        .unwrap()
+        .write_all(b"not a dmg")
+        .unwrap();
+
+    let error = check_file(&path).unwrap_err();
+
+    assert!(error.contains("must be a DMG"));
+}
+
 fn write_artifact(bytes: &[u8]) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("DropSquash.dmg");

@@ -17,6 +17,9 @@ fn check_file(path: &Path) -> Result<(), String> {
     if !path.is_file() {
         return Err(format!("artifact target is not a file: {}", path.display()));
     }
+    if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
+        return Err(format!("artifact target must be a DMG: {}", path.display()));
+    }
     let bytes = std::fs::read(path).map_err(|error| error.to_string())?;
     if bytes.is_empty() {
         return Err(format!("artifact is empty: {}", path.display()));
