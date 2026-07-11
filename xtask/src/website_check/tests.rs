@@ -7,7 +7,7 @@ fn accepts_local_links() {
     write(
         directory.path(),
         "index.html",
-        r#"<a href="pricing.html">Pricing</a>"#,
+        r#"Release status <a href="pricing.html">Pricing</a>"#,
     );
     write(directory.path(), "pricing.html", "Checkout opens after");
 
@@ -21,7 +21,7 @@ fn rejects_missing_local_links() {
     write(
         directory.path(),
         "index.html",
-        r#"<a href="missing.html">Missing</a>"#,
+        r#"Release status <a href="missing.html">Missing</a>"#,
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -37,7 +37,7 @@ fn rejects_example_dot_com_placeholders() {
     write(
         directory.path(),
         "index.html",
-        r#"<a href="https://example.com">Buy</a>"#,
+        r#"Release status <a href="https://example.com">Buy</a>"#,
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -53,7 +53,7 @@ fn ignores_external_links_and_anchors() {
     write(
         directory.path(),
         "index.html",
-        r##"<a href="#top">Top</a><a href="https://drop.test">External</a>"##,
+        r##"Release status <a href="#top">Top</a><a href="https://drop.test">External</a>"##,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -120,6 +120,7 @@ fn write_required_pages(root: &std::path::Path) {
 
 fn required_page_text(page: &str) -> &'static str {
     match page {
+        "index.html" => "Release status",
         "download.html" => "DropSquash.dmg notarization checksum",
         "pricing.html" => "Checkout opens after",
         "support.html" => "Do not send screen recordings app version",

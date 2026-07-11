@@ -40,6 +40,7 @@ fn check_required_pages(root: &Path, errors: &mut Vec<String>) {
 }
 
 fn check_release_copy(root: &Path, errors: &mut Vec<String>) {
+    require_page_text(root, "index.html", "Release status", errors);
     require_page_text(root, "download.html", "DropSquash.dmg", errors);
     require_page_text(root, "download.html", "notarization", errors);
     require_page_text(root, "download.html", "checksum", errors);
