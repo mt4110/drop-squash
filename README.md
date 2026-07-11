@@ -8,7 +8,7 @@ DropSquash turns large screen recordings into small, shareable MP4 files on macO
 
 macOS MVP. The desktop app can convert user-selected `.mov`, `.mp4`, and `.m4v` recordings to numbered `.squashed.mp4` outputs through Apple's native AVFoundation export pipeline. The shared Rust workspace also contains deterministic safety logic, cancellation, a sequential queue model, safe source postprocessing, JSONL history, local trial counting, license activation plumbing, and backend contracts for Windows and Linux.
 
-Packaged-app manual QA remains for cancellation, multi-file queueing, Trash handling, and live license activation. Windows Media Foundation, Linux GStreamer, signing, notarization, and public release packaging are still planned work.
+Packaged-app manual QA remains for cancellation, multi-file queueing, Trash handling, and live license activation. The release pipeline can build an unsigned macOS `.app` and `.dmg`, run artifact/checksum gates, and block publication until signing is ready. Windows Media Foundation, Linux GStreamer, signing, notarization, and public release publication are still planned work.
 
 ## Principles
 
@@ -36,6 +36,8 @@ cargo fmt --all
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 pnpm --dir apps/desktop/web build
+cargo run -p xtask -- file-size-check
+cargo run -p xtask -- release-check
 ```
 
 On macOS, the CLI uses the native encoder. On Windows and Linux, the backend contracts are present but the encoders still return a clear not-implemented error:
