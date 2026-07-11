@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 21] = [
+const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 23] = [
     ("Choose recording conversion", "Choose recording conversion"),
     ("Drag-and-drop conversion", "Drag-and-drop conversion"),
     ("Privacy receipt sidecar", "Privacy receipt sidecar"),
@@ -25,6 +25,8 @@ const REQUIRED_MANUAL_EVIDENCE: [(&str, &str); 21] = [
         "Lemon Squeezy sandbox activation",
         "Valid sandbox activation",
     ),
+    ("Invalid license key handling", "Invalid key activation"),
+    ("Local license forget", "Forget license on this Mac"),
     ("Signed DMG verification", "Codesign verification"),
     (
         "Notarized/stapled DMG verification",
