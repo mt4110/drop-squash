@@ -27,7 +27,7 @@ fn accepts_concrete_production_urls() {
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
-- Homebrew tap PR: cask update reviewed in tap PR
+- Homebrew tap PR: cask update reviewed in tap PR with zap cleanup path
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
 - Homebrew install result: brew install --cask mt4110/tap/dropsquash completed
 "#,
@@ -75,6 +75,7 @@ fn rejects_weak_distribution_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Homebrew install result")));
+    assert!(errors.iter().any(|error| error.contains("Homebrew tap PR")));
     assert!(errors
         .iter()
         .any(|error| error.contains("GitHub Release checksum")));

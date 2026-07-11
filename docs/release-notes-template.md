@@ -66,5 +66,5 @@ weak public evidence before the release is published.
 - Public website URL: use the production `/release-status` URL.
 - Live checkout URL: use the Lemon Squeezy `/checkout/buy/` URL for the product.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, `DropSquash.dmg`, and that it is attached.
-- Homebrew tap PR: mention the cask and PR.
+- Homebrew tap PR: mention the cask, PR, and `zap` cleanup path.
 - Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash`.

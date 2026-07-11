@@ -29,7 +29,7 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             &["attached"],
             &["dropsquash.dmg"],
         ]),
-        "Homebrew tap PR" => Some(&[&["cask"], &["pr"]]),
+        "Homebrew tap PR" => Some(&[&["cask"], &["pr"], &["zap"]]),
         "Homebrew install result" => {
             Some(&[&["brew install"], &["--cask"], &["mt4110/tap/dropsquash"]])
         }
