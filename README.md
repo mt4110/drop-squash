@@ -6,14 +6,14 @@ DropSquash turns large screen recordings into small, shareable MP4 files on macO
 
 ## Status
 
-macOS MVP. The desktop app can convert user-selected `.mov`, `.mp4`, and `.m4v` recordings to numbered `.squashed.mp4` outputs through Apple's native AVFoundation export pipeline. The shared Rust workspace also contains the core domain types, deterministic safety logic, JSONL history, local trial counting, and backend contracts for Windows and Linux.
+macOS MVP. The desktop app can convert user-selected `.mov`, `.mp4`, and `.m4v` recordings to numbered `.squashed.mp4` outputs through Apple's native AVFoundation export pipeline. The shared Rust workspace also contains deterministic safety logic, cancellation, a sequential queue model, safe source postprocessing, JSONL history, local trial counting, license activation plumbing, and backend contracts for Windows and Linux.
 
-Windows Media Foundation, Linux GStreamer, cancellation, multi-file queueing, license activation, signing, notarization, and release packaging are still planned work.
+Packaged-app manual QA remains for cancellation, multi-file queueing, Trash handling, and live license activation. Windows Media Foundation, Linux GStreamer, signing, notarization, and public release packaging are still planned work.
 
 ## Principles
 
 - Local-first
-- Native hardware acceleration
+- Native OS media pipelines
 - No external media executables
 - No cloud upload
 - Safe original handling
@@ -44,15 +44,15 @@ On macOS, the CLI uses the native encoder. On Windows and Linux, the backend con
 cargo run -p dropsquash -- convert ./demo.mov --output-dir ./out --profile auto
 ```
 
-The production backend matrix is:
+The target backend matrix is:
 
 | Platform | Probe / pipeline | Encoder |
 |---|---|---|
-| macOS | AVFoundation | VideoToolbox |
+| macOS | AVFoundation | AVFoundation export MVP now; lower-level VideoToolbox may follow |
 | Windows | Media Foundation | Hardware MFT |
 | Linux | allowlisted GStreamer via `gstreamer-rs` | available hardware element |
 
-Runtime capability detection is authoritative. DropSquash does not silently switch to an unreviewed or unexpectedly slow codec.
+Runtime capability detection is authoritative. DropSquash does not silently switch to an unreviewed codec or external media executable.
 
 ## Reproducible Development
 

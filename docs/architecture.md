@@ -34,7 +34,7 @@ Tauri command / CLI
 
 | Platform | Backend |
 |---|---|
-| macOS | AVFoundation for asset I/O and VideoToolbox for hardware video coding |
+| macOS | AVFoundation export MVP now; lower-level Apple hardware codec path may follow |
 | Windows | Media Foundation Source Reader, Sink Writer, and hardware MFTs |
 | Linux | GStreamer through `gstreamer-rs`, using an explicit plugin allowlist and excluding `gst-libav` |
 
