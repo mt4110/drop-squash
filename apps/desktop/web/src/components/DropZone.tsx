@@ -52,6 +52,8 @@ export function DropZone({
             ? progress && progress > 0 ? `${progress}% complete` : "Preparing recording"
           : result
             ? fileName(result.outputPath)
+          : isLocked
+            ? "Enter a license key to continue"
             : `${inputExtensions.map((extension) => extension.toUpperCase()).join(" / ")} here`}
       </p>
       {result && <button className="saved-destination" title="Show output in Finder" type="button" onClick={() => onRevealOutput(result.outputPath)}>Saved {formatBytes(result.savedBytes)} to {displayPath(parentPath(result.outputPath))}</button>}
