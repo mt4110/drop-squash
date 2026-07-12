@@ -29,6 +29,7 @@ pub async fn convert(
     window: tauri::WebviewWindow,
     request: ConvertRequest,
 ) -> std::result::Result<ConversionSummary, String> {
+    ensure_trial_open().await?;
     let cancel = app_state.start_conversion()?;
     let result = convert_inner(window, request, cancel).await;
     app_state.finish_conversion();
@@ -40,7 +41,6 @@ async fn convert_inner(
     request: ConvertRequest,
     cancel: CancellationToken,
 ) -> std::result::Result<ConversionSummary, String> {
-    ensure_trial_open().await?;
     let input_path = PathBuf::from(request.input_path);
     input::ensure_supported(&input_path)?;
     wait_until_stable(&input_path, StabilityOptions::default(), cancel.clone())
@@ -75,13 +75,16 @@ async fn convert_inner(
 }
 
 async fn ensure_trial_open() -> Result<(), String> {
-    if matches!(
-        current_license_state().await.map_err(format_error)?,
-        LicenseState::Locked(_)
-    ) {
-        return Err("Trial complete. Enter a license key to continue.".to_string());
+    reject_locked_license(current_license_state().await.map_err(format_error)?)
+}
+
+fn reject_locked_license(state: LicenseState) -> Result<(), String> {
+    match state {
+        LicenseState::Locked(_) => {
+            Err("Trial complete. Enter a license key to continue.".to_string())
+        }
+        LicenseState::Trial(_) | LicenseState::Pro => Ok(()),
     }
-    Ok(())
 }
 
 fn ensure_not_cancelled(cancel: &CancellationToken) -> Result<(), String> {
