@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 63] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 65] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -40,6 +40,8 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 63] = [
     ("docs/qa-evidence.md", "same `.dmg` file evidence"),
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     ("docs/qa-evidence.md", "--restore-state"),
+    ("docs/qa-evidence.md", "Tauri DMG output is normalized"),
+    ("docs/qa-evidence.md", "cargo test -p xtask normalize_dmg"),
     ("docs/qa-evidence.md", "non-DMG targets are rejected"),
     (
         "docs/qa-evidence.md",
