@@ -209,6 +209,23 @@ fn reports_app_artifact_that_is_not_directory() {
 }
 
 #[test]
+fn reports_noncanonical_app_artifact_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("Other.app");
+    std::fs::create_dir(&artifact).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!("| App artifact | {} |\n", artifact.display()),
+    )
+    .unwrap();
+
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("DropSquash.app")));
+}
+
+#[test]
 fn reports_dmg_artifact_that_is_not_file() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");

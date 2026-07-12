@@ -22,8 +22,8 @@ Do not use placeholders such as `TBD`, `N/A`, `None`, `Blocked`, or `Skipped`
 as field values or results; leave unfinished rows empty until real evidence is
 available.
 `App artifact` must point to the existing local artifact used for the run: a
-`.app` bundle directory or a UDIF `DropSquash.dmg` file. `Date` must use a real
-`YYYY-MM-DD` calendar date in year 2000 or later.
+`DropSquash.app` bundle directory or a UDIF `DropSquash.dmg` file. `Date` must
+use a real `YYYY-MM-DD` calendar date in year 2000 or later.
 `App build` must include both the tested app version and the git commit, for
 example `DropSquash 0.1.0 git abc1234`.
 `macOS version` must look like `macOS 15.5`, `Machine` must include the CPU
@@ -44,7 +44,8 @@ This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
 run. Copy the printed `manual QA App build` value into the `App build` field.
 Copy the printed `manual QA App artifact` value into the `App artifact` field,
-or pass `--app-artifact <path>` when testing a DMG or a non-default app bundle.
+or pass `--app-artifact <path>` when testing a DMG or a non-default artifact
+location.
 Pass `--input-sample-set <text>` and copy the printed value into the `Input
 sample set` field.
 Copy the printed macOS version, Machine, Output folder, and Date values into
@@ -55,7 +56,7 @@ Copy the printed Tester value into the matching field.
 Then start from a known trial state if the run is meant to verify trial counts.
 The reset command requires the sample-set description so the run cannot begin
 without naming the short, medium, and large recordings. It also requires an
-existing `.app` or `DropSquash.dmg` artifact, either at the default
+existing `DropSquash.app` or `DropSquash.dmg` artifact, either at the default
 packaged-app path or through `--app-artifact <path>`:
 
 ```sh

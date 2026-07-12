@@ -10,11 +10,21 @@ pub(super) fn validate(value: &str, missing: &mut Vec<String>) {
     if !matches!(extension, Some("app" | "dmg")) {
         missing.push("manual QA App artifact must be a .app or .dmg".to_string());
     }
-    if extension == Some("app") && !path.is_dir() {
-        missing.push("manual QA .app artifact must be a directory".to_string());
+    if extension == Some("app") {
+        validate_app(path, missing);
     }
     if extension == Some("dmg") {
         validate_dmg(path, missing);
+    }
+}
+
+fn validate_app(path: &Path, missing: &mut Vec<String>) {
+    if !path.is_dir() {
+        missing.push("manual QA .app artifact must be a directory".to_string());
+        return;
+    }
+    if path.file_name().and_then(|value| value.to_str()) != Some("DropSquash.app") {
+        missing.push("manual QA .app artifact must be named DropSquash.app".to_string());
     }
 }
 

@@ -23,6 +23,17 @@ fn rejects_missing_app_artifact() {
 }
 
 #[test]
+fn rejects_noncanonical_app_artifact_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("Other.app");
+    std::fs::create_dir(&artifact).unwrap();
+
+    let error = qa_artifact(&options(Some(artifact))).unwrap_err();
+
+    assert!(error.contains("DropSquash.app"));
+}
+
+#[test]
 fn rejects_noncanonical_dmg_artifact_name() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("Other.dmg");
