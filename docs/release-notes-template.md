@@ -63,7 +63,7 @@ weak public evidence before the release is published.
 - `spctl`: include `spctl`, `accepted`, `public`, and `DropSquash.dmg`.
 - `stapler`: include `stapler` or `staple`, `stapled` or `validate`, `public`, and `DropSquash.dmg`.
 - Apple notary log: include `notary` or `notarytool`, `accepted`, `public`, and `DropSquash.dmg`.
-- Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, `clean` or `fresh`, `signed`, `notarized`, `stapled`, and `without warning` or `no warning`.
+- Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, `clean` or `fresh`, `public`, `DropSquash.dmg`, `signed`, `notarized`, `stapled`, and `without warning` or `no warning`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md`, the tested public `DropSquash.dmg`, and `manual-qa-check` passing.
 - Conversion safety evidence: mention cancellation, failed conversion, larger output, original preservation, and unchanged trial count.

@@ -24,7 +24,7 @@ fn accepts_concrete_production_urls() {
 - `spctl`: spctl accepted Developer ID source for public DropSquash.dmg
 - `stapler`: stapler validate showed ticket stapled successfully for public DropSquash.dmg
 - Apple notary log: notarytool accepted request abc123 for public DropSquash.dmg
-- Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app cleanly in fresh account without Gatekeeper warning
+- Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh account without Gatekeeper warning
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md tested public DropSquash.dmg and manual-qa-check passed
 - Conversion safety evidence: cancellation, failed conversion, and larger output preserved original with trial count unchanged
@@ -197,6 +197,19 @@ fn rejects_gatekeeper_evidence_without_staple_context() {
     let errors = check_text(
         r#"
 - Gatekeeper clean-machine open: Gatekeeper opened signed and notarized app cleanly in fresh account without Gatekeeper warning
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Gatekeeper clean-machine open")));
+}
+
+#[test]
+fn rejects_gatekeeper_evidence_without_public_dmg_context() {
+    let errors = check_text(
+        r#"
+- Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app cleanly in fresh account without Gatekeeper warning
 "#,
     );
 

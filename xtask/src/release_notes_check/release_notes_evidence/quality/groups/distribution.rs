@@ -25,6 +25,8 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["gatekeeper"],
             &["opened", "opens"],
             &["clean", "fresh"],
+            &["public"],
+            &["dropsquash.dmg"],
             &["signed"],
             &["notarized", "notarised"],
             &["stapled", "staple"],
