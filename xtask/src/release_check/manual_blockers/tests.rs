@@ -1,4 +1,4 @@
-use super::{missing_manual_verified_evidence, PACKAGED_MACOS_EVIDENCE};
+use super::{mapping, missing_manual_verified_evidence, PACKAGED_MACOS_EVIDENCE};
 
 #[test]
 fn accepts_verified_manual_blocker_with_manual_result() {
@@ -43,6 +43,17 @@ fn reports_verified_manual_blocker_with_vague_result() {
 fn reports_verified_manual_blocker_with_malformed_manual_row() {
     let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Sandbox purchase | Checkout completes | extra | Completed for intended product with test buyer order abc123 | unexpected |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
+fn reports_verified_manual_blocker_with_two_cell_check_row() {
+    let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual =
+        "| Sandbox purchase | Completed for intended product with test buyer order abc123 |\n";
 
     let missing = missing_manual_verified_evidence(blockers, manual);
 
@@ -231,6 +242,19 @@ fn reports_packaged_macos_manual_qa_with_weak_environment_evidence() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_malformed_metadata_row() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("App build", "DropSquash 0.1.0 git abc1234").replace(
+        "| App build | DropSquash 0.1.0 git abc1234 |",
+        "| App build | Expected | DropSquash 0.1.0 git abc1234 |",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_noncanonical_artifact() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("App artifact", "/tmp/Other.app");
@@ -410,7 +434,11 @@ fn packaged_manual_qa_with(check: &str, result: &str) -> String {
             } else {
                 packaged_result(label)
             };
-            format!("| {label} | Expected | {result} |\n")
+            if mapping::is_metadata_field(label) {
+                format!("| {label} | {result} |\n")
+            } else {
+                format!("| {label} | Expected | {result} |\n")
+            }
         })
         .collect()
 }

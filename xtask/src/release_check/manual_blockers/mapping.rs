@@ -23,6 +23,21 @@ pub(super) const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "Reveal output",
 ];
 
+const METADATA_FIELDS: &[&str] = &[
+    "App build",
+    "App artifact",
+    "macOS version",
+    "Machine",
+    "Input sample set",
+    "Output folder",
+    "Tester",
+    "Date",
+];
+
+pub(super) fn is_metadata_field(check: &str) -> bool {
+    METADATA_FIELDS.contains(&check)
+}
+
 pub(super) const MANUAL_BLOCKERS: [(&str, &[&str]); 10] = [
     ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
     ("Lemon Squeezy product setup", &["Sandbox product setup"]),

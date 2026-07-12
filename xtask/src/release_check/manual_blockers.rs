@@ -45,7 +45,7 @@ fn missing_result(manual: &str, check: &str) -> bool {
     if matches.len() != 1 {
         return true;
     }
-    match result_cell(matches[0]) {
+    match result_cell(check, matches[0]) {
         Some(result) => {
             unusable_result(result)
                 || field_quality::lacks_required_evidence(check, result)
@@ -59,9 +59,14 @@ fn matches_check(line: &str, check: &str) -> bool {
     line.starts_with('|') && line.trim_matches('|').split('|').next().map(str::trim) == Some(check)
 }
 
-fn result_cell(line: &str) -> Option<&str> {
+fn result_cell<'a>(check: &str, line: &'a str) -> Option<&'a str> {
     let cells = line.trim_matches('|').split('|').collect::<Vec<_>>();
-    matches!(cells.len(), 2..=4).then(|| cells[cells.len() - 1])
+    let valid_cells = if mapping::is_metadata_field(check) {
+        cells.len() == 2
+    } else {
+        matches!(cells.len(), 3..=4)
+    };
+    valid_cells.then(|| cells[cells.len() - 1])
 }
 
 fn unusable_result(result: &str) -> bool {
