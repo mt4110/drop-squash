@@ -295,6 +295,19 @@ fn reports_packaged_macos_manual_qa_with_invalid_calendar_date() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_placeholder_state_path() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Config path",
+        "$HOME/Library/Application Support/DropSquash/config.json",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -465,6 +478,9 @@ fn packaged_result(label: &str) -> &'static str {
         "Machine" => "Apple silicon Mac arm64",
         "Input sample set" => "short, medium, and large local recordings",
         "Output folder" => "/tmp/dropsquash-manual-qa-output",
+        "Config path" => "/Users/me/Library/Application Support/DropSquash/config.json",
+        "History path" => "/Users/me/Library/Application Support/DropSquash/history.jsonl",
+        "License cache path" => "/Users/me/Library/Application Support/DropSquash/license.json",
         "Tester" => "Manual tester",
         "Date" => "2026-07-11",
         "Choose recording conversion" => "saved clip.squashed.mp4 and original remained in place",

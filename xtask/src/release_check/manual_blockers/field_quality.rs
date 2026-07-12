@@ -13,6 +13,9 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
     match check {
         "App build" => !has_version_and_commit(result),
         "App artifact" => !has_canonical_artifact(result),
+        "Config path" => !is_absolute_state_path(result, "config.json"),
+        "History path" => !is_absolute_state_path(result, "history.jsonl"),
+        "License cache path" => !is_absolute_state_path(result, "license.json"),
         "Date" => !is_iso_date(result),
         _ => false,
     }
@@ -73,6 +76,14 @@ fn has_canonical_artifact(result: &str) -> bool {
     result.contains("DropSquash.app") || result.contains("DropSquash.dmg")
 }
 
+fn is_absolute_state_path(result: &str, file_name: &str) -> bool {
+    let result = result.trim().to_ascii_lowercase();
+    (result.starts_with('/') || result.as_bytes().get(1) == Some(&b':'))
+        && (result.contains("application support/dropsquash/")
+            || result.contains("application support\\dropsquash\\"))
+        && result.ends_with(file_name)
+}
+
 fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
     match check {
         "App build" => Some(&[&["dropsquash"], &["git"]]),
@@ -81,6 +92,9 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         "Machine" => Some(&[&["arm64", "x86_64", "apple", "intel"]]),
         "Input sample set" => Some(&[&["short"], &["medium"], &["large"]]),
         "Output folder" => Some(&[&["/"], &["output"]]),
+        "Config path" => Some(&[&["config.json"]]),
+        "History path" => Some(&[&["history.jsonl"]]),
+        "License cache path" => Some(&[&["license.json"]]),
         "Tester" => Some(&[&["masaki", "tester"]]),
         "Date" => Some(&[&["20"]]),
         _ => None,
