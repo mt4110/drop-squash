@@ -38,20 +38,25 @@ fn missing_manual_verified_evidence(blockers: &str, manual: &str) -> Vec<&'stati
 }
 
 fn missing_result(manual: &str, check: &str) -> bool {
-    match manual
+    let matches = manual
         .lines()
-        .find(|line| line.starts_with('|') && line.contains(&format!("| {check} |")))
-    {
-        Some(line) => match result_cell(line) {
-            Some(result) => {
-                unusable_result(result)
-                    || field_quality::lacks_required_evidence(check, result)
-                    || quality::lacks_required_evidence(check, result)
-            }
-            None => true,
-        },
+        .filter(|line| matches_check(line, check))
+        .collect::<Vec<_>>();
+    if matches.len() != 1 {
+        return true;
+    }
+    match result_cell(matches[0]) {
+        Some(result) => {
+            unusable_result(result)
+                || field_quality::lacks_required_evidence(check, result)
+                || quality::lacks_required_evidence(check, result)
+        }
         None => true,
     }
+}
+
+fn matches_check(line: &str, check: &str) -> bool {
+    line.starts_with('|') && line.trim_matches('|').split('|').next().map(str::trim) == Some(check)
 }
 
 fn result_cell(line: &str) -> Option<&str> {
