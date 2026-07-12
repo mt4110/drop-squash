@@ -341,7 +341,11 @@ fn rejects_weak_input_sample_set() {
 fn rejects_state_backup_inside_repository() {
     let error = Options::parse(vec![
         "--state-dir".to_string(),
-        "tmp/manual-qa-state".to_string(),
+        std::env::current_dir()
+            .unwrap()
+            .join("tmp/manual-qa-state")
+            .display()
+            .to_string(),
     ])
     .unwrap_err();
 
@@ -353,7 +357,11 @@ fn rejects_state_backup_inside_repository() {
 fn rejects_app_state_source_inside_repository() {
     let error = Options::parse(vec![
         "--app-state-dir".to_string(),
-        "tmp/app-state".to_string(),
+        std::env::current_dir()
+            .unwrap()
+            .join("tmp/app-state")
+            .display()
+            .to_string(),
     ])
     .unwrap_err();
 
@@ -365,7 +373,11 @@ fn rejects_app_state_source_inside_repository() {
 fn rejects_output_folder_inside_repository() {
     let error = Options::parse(vec![
         "--output-dir".to_string(),
-        "tmp/manual-qa-output".to_string(),
+        std::env::current_dir()
+            .unwrap()
+            .join("tmp/manual-qa-output")
+            .display()
+            .to_string(),
     ])
     .unwrap_err();
 
@@ -377,12 +389,28 @@ fn rejects_output_folder_inside_repository() {
 fn rejects_markdown_output_inside_repository() {
     let error = Options::parse(vec![
         "--markdown-output".to_string(),
-        "tmp/manual-qa-prepared.md".to_string(),
+        std::env::current_dir()
+            .unwrap()
+            .join("tmp/manual-qa-prepared.md")
+            .display()
+            .to_string(),
     ])
     .unwrap_err();
 
     assert!(error.contains("--markdown-output"));
     assert!(error.contains("outside the repository"));
+}
+
+#[test]
+fn rejects_relative_state_backup_path() {
+    let error = Options::parse(vec![
+        "--state-dir".to_string(),
+        "../manual-qa-state".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--state-dir"));
+    assert!(error.contains("absolute path"));
 }
 
 #[test]

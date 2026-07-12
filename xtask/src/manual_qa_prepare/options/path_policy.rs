@@ -1,13 +1,14 @@
 use std::path::{Component, Path, PathBuf};
 
 pub(super) fn require_outside_repo(label: &str, path: &Path) -> Result<(), String> {
+    if !path.is_absolute() {
+        return Err(format!(
+            "manual QA {label} must be an absolute path outside the repository: {}",
+            path.display()
+        ));
+    }
     let repo = std::env::current_dir().map_err(|error| error.to_string())?;
-    let absolute = if path.is_absolute() {
-        path.to_path_buf()
-    } else {
-        repo.join(path)
-    };
-    if normalize(&absolute).starts_with(normalize(&repo)) {
+    if normalize(path).starts_with(normalize(&repo)) {
         return Err(format!(
             "manual QA {label} must stay outside the repository: {}",
             path.display()

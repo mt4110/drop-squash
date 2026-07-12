@@ -63,9 +63,9 @@ Pass `--markdown-output /tmp/dropsquash-manual-qa-prepared.md` to write those
 generated field and release-candidate rows to a temporary `.md` Markdown file
 for copying. Keep that file outside the repository; it is a preparation aid,
 not a substitute for concrete manual observations.
-If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, keep those
-paths outside the repository so private app state, generated videos, and QA
-evidence cannot be committed or deleted by accident.
+If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, use
+absolute paths outside the repository so private app state, generated videos,
+and QA evidence cannot be committed or deleted by accident.
 
 Then start from a known trial state if the run is meant to verify trial counts.
 The reset command requires the sample-set description so the run cannot begin
