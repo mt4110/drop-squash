@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use dropsquash_core::{EncodeResult, Profile};
 
-use super::{receipt_path_for, PrivacyReceipt};
+use super::{io::receipt_path_for, PrivacyReceipt};
 use crate::MetadataPolicy;
 
 #[test]
