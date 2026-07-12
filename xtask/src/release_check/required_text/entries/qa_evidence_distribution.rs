@@ -11,6 +11,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "pre-release CTA copy"),
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
+    ("docs/qa-evidence.md", "`brew install --cask`"),
     (
         "docs/qa-evidence.md",
         "short, medium, and large local recordings with smaller outputs",
