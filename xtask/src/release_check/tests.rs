@@ -264,6 +264,17 @@ fn rejects_committed_release_artifacts_and_private_recordings() {
 }
 
 #[test]
+fn rejects_committed_release_archive_outputs() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "release/DropSquash.zip", "artifact");
+
+    let error = reject_secret_files(directory.path()).unwrap_err();
+
+    assert!(error.contains("local evidence file"));
+    assert!(error.contains("DropSquash.zip"));
+}
+
+#[test]
 fn rejects_committed_checksum_output() {
     let directory = tempfile::tempdir().unwrap();
     write(directory.path(), "SHA256SUMS", "checksum");

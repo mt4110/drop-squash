@@ -12,7 +12,10 @@ const SECRET_EXTENSIONS: [&str; 9] = [
     "provisionprofile",
 ];
 
-const LOCAL_EVIDENCE_EXTENSIONS: [&str; 7] = ["csv", "dmg", "jsonl", "m4v", "mov", "mp4", "webm"];
+const LOCAL_EVIDENCE_EXTENSIONS: [&str; 16] = [
+    "appimage", "csv", "dmg", "exe", "flatpak", "gz", "jsonl", "m4v", "mov", "mp4", "msi", "pkg",
+    "tar", "tgz", "webm", "zip",
+];
 
 pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
     for path in repo_files(root)? {
