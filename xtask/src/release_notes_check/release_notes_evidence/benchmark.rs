@@ -21,13 +21,14 @@ fn validate_sample_set(text: &str) -> Option<String> {
     if ["short", "medium", "large"]
         .iter()
         .all(|needle| lower.contains(needle))
+        && lower.contains("smaller")
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
         return None;
     }
     Some(
-        "Benchmark sample set must mention short, medium, large, machine, and OS context"
+        "Benchmark sample set must mention short, medium, large, smaller outputs, machine, and OS context"
             .to_string(),
     )
 }

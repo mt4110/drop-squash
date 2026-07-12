@@ -30,7 +30,7 @@ fn accepts_concrete_production_urls() {
 - Conversion safety evidence: cancellation, failed conversion, and larger output preserved original with trial count unchanged
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed finished count, saved bytes, and cancelled mixed outcome
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
-- Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
+- Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2
 - Benchmark regression threshold: no sample exceeded 20 percent regression
 - Lemon Squeezy product setup: DropSquash intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
@@ -583,7 +583,7 @@ fn rejects_benchmark_sample_set_without_machine_context() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- Benchmark sample set: short medium large local recordings recorded
+- Benchmark sample set: short medium large local recordings produced smaller outputs
 - Benchmark regression threshold: no sample exceeded 20% regression
 - Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
@@ -594,14 +594,26 @@ fn rejects_benchmark_sample_set_without_machine_context() {
 
     assert!(errors
         .iter()
-        .any(|error| error.contains("machine, and OS context")));
+        .any(|error| error.contains("smaller outputs, machine, and OS context")));
+}
+
+#[test]
+fn rejects_benchmark_sample_set_without_smaller_outputs() {
+    let errors = check_text(
+        r#"
+- Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2
+- Benchmark regression threshold: no sample exceeded 20% regression
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("smaller outputs")));
 }
 
 #[test]
 fn rejects_benchmark_evidence_with_placeholder_notes() {
     let errors = check_text(
         r#"
-- Benchmark sample set: short medium large machine macOS TODO
+- Benchmark sample set: short medium large smaller machine macOS TODO
 - Benchmark regression threshold: no sample exceeded 20% TBD
 "#,
     );
