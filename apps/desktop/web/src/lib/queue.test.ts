@@ -1,6 +1,7 @@
 import {
   LICENSE_LOCK_QUEUE_MESSAGE,
   blockQueuedForLicenseLock,
+  markSourceAction,
   queueSummary,
   type QueueEntry,
 } from "./queue.js";
@@ -39,6 +40,19 @@ function licenseLockSummaryCountsBlockedJobsAsFinished() {
   assert(summary.savedBytes === 80, "blocked jobs should not add saved bytes");
 }
 
+function sourceActionUpdatesOnlyMatchingOutput() {
+  const items = markSourceAction([
+    entry(1, "succeeded", { outputPath: "/tmp/a.mp4", sourceAction: "ask-user" }),
+    entry(2, "succeeded", { outputPath: "/tmp/b.mp4", sourceAction: "ask-user" }),
+  ], "/tmp/b.mp4", "move-original-to-trash");
+
+  assert(items[0]?.result?.sourceAction === "ask-user", "unmatched row changed");
+  assert(
+    items[1]?.result?.sourceAction === "move-original-to-trash",
+    "matched row was not updated",
+  );
+}
+
 function entry(
   id: number,
   status: QueueEntry["status"],
@@ -54,3 +68,4 @@ function entry(
 
 licenseLockBlocksOnlyQueuedJobs();
 licenseLockSummaryCountsBlockedJobsAsFinished();
+sourceActionUpdatesOnlyMatchingOutput();

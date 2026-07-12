@@ -32,17 +32,6 @@ export type QueueSummary = {
 
 export const LICENSE_LOCK_QUEUE_MESSAGE = "Trial complete. Enter a license key to continue.";
 
-export function entriesForInputPaths(inputPaths: string[], nextId: number) {
-  return {
-    entries: inputPaths.map((inputPath, index) => ({
-      id: nextId + index,
-      inputPath,
-      status: "queued" as const,
-    })),
-    nextId: nextId + inputPaths.length,
-  };
-}
-
 export function nextQueued(items: QueueEntry[]) {
   return items.find((item) => item.status === "queued");
 }
