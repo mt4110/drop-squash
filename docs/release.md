@@ -165,6 +165,9 @@ cargo run -p xtask -- release-notes-prepare path/to/DropSquash.dmg https://githu
 Pass `--markdown-output /tmp/dropsquash-release-notes-prepared.md` to write
 the prepared fields to a new absolute `.md` path outside the repository; the
 command refuses to overwrite an existing file.
+The prepared fields also include the matching `SHA256SUMS` output command for
+the checked DMG, so the checksum file can be regenerated without changing
+artifact paths by hand.
 The generated checksum line is a pre-upload aid and the generated
 `GitHub Release checksum` field is intentionally marked pending. Replace it
 with concrete public evidence only after the matching `SHA256SUMS` file is

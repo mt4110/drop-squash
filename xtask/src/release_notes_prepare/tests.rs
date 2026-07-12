@@ -128,6 +128,7 @@ fn rejects_artifact_with_nix_store_reference() {
 fn renders_prepared_release_notes_fields() {
     let notes = PreparedNotes {
         version: "0.1.0".into(),
+        artifact_path: "/tmp/DropSquash.dmg".into(),
         artifact_url:
             "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
         sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".into(),
@@ -144,6 +145,8 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("releases/tag/v0.1.0"));
     assert!(text.contains("- SHA256SUMS line:"));
     assert!(text.contains("- GitHub Release checksum:"));
+    assert!(text.contains("SHA256SUMS output command:"));
+    assert!(text.contains("checksum /tmp/DropSquash.dmg --output SHA256SUMS"));
     assert!(text.contains("pending upload"));
     assert!(!text.contains("GitHub Release checksum after upload"));
     assert!(text.contains("Homebrew cask command"));
@@ -164,6 +167,21 @@ fn renders_prepared_release_notes_fields() {
     let distribution_heading = text.find("## Distribution").expect("distribution heading");
     assert!(artifact_heading < distribution_heading);
     assert!(checksum < release_url);
+}
+
+#[test]
+fn shell_quotes_checksum_command_path() {
+    let notes = PreparedNotes {
+        version: "0.1.0".into(),
+        artifact_path: "/tmp/drop squash/DropSquash.dmg".into(),
+        artifact_url:
+            "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".into(),
+        commit: "abc1234".into(),
+    };
+    let text = notes.lines().join("\n");
+
+    assert!(text.contains("checksum '/tmp/drop squash/DropSquash.dmg' --output SHA256SUMS"));
 }
 
 fn write_dmg(prefix: &[u8]) -> (tempfile::TempDir, std::path::PathBuf) {

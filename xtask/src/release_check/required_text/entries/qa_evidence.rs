@@ -63,6 +63,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "release-notes-prepare"),
     ("docs/qa-evidence.md", "GitHub Release URL"),
     ("docs/qa-evidence.md", "SHA256SUMS line"),
+    ("docs/qa-evidence.md", "SHA256SUMS output command"),
     ("docs/qa-evidence.md", "pending checksum upload placeholder"),
     (
         "docs/qa-evidence.md",

@@ -28,6 +28,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 
 struct PreparedNotes {
     version: String,
+    artifact_path: String,
     artifact_url: String,
     sha256: String,
     commit: String,
@@ -42,6 +43,7 @@ impl PreparedNotes {
         url::validate(&input.artifact_url, &version)?;
         Ok(Self {
             version,
+            artifact_path: input.artifact.display().to_string(),
             artifact_url: input.artifact_url.clone(),
             sha256: sha256_hex(&bytes),
             commit: git_commit()?,
@@ -51,6 +53,7 @@ impl PreparedNotes {
     fn lines(&self) -> Vec<String> {
         output::lines(output::Fields {
             version: &self.version,
+            artifact_path: &self.artifact_path,
             artifact_url: &self.artifact_url,
             sha256: &self.sha256,
             commit: &self.commit,
