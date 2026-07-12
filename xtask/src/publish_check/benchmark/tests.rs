@@ -54,6 +54,18 @@ fn rejects_repo_local_matching_csv_paths() {
     assert!(error.contains("CSV path must stay outside the repository"));
 }
 
+#[test]
+fn rejects_normalized_repo_local_matching_csv_paths() {
+    let csv = normalized_repo_path("target/dropsquash-bench/results.csv");
+    let csv = csv.to_str().unwrap();
+    let notes = notes_with_csv(csv);
+    let (_directory, manual) = manual_qa_with_csv(csv);
+
+    let error = require_notes_csv_matches_manual_qa(&notes, &manual).unwrap_err();
+
+    assert!(error.contains("CSV path must stay outside the repository"));
+}
+
 fn notes_with_csv(csv: &str) -> String {
     format!(
         "- Benchmark sample set: short medium large smaller outputs on MacBook macOS with CSV saved outside repo at {csv}\n"
@@ -71,4 +83,14 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let path = directory.path().join("manual-qa.md");
     std::fs::write(&path, text).unwrap();
     (directory, path)
+}
+
+fn normalized_repo_path(child: &str) -> std::path::PathBuf {
+    let cwd = std::env::current_dir().unwrap();
+    cwd.parent()
+        .unwrap()
+        .join("outside")
+        .join("..")
+        .join(cwd.file_name().unwrap())
+        .join(child)
 }

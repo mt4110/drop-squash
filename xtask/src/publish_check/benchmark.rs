@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 pub(super) fn require_notes_csv_matches_manual_qa(
     notes: &str,
@@ -70,10 +70,24 @@ fn csv_path(value: &str) -> Option<PathBuf> {
 
 fn require_outside_repo(path: &Path, label: &str) -> Result<(), String> {
     let cwd = std::env::current_dir().map_err(|error| error.to_string())?;
-    if path.starts_with(cwd) {
+    if normalize(path).starts_with(normalize(&cwd)) {
         return Err(format!("{label} CSV path must stay outside the repository"));
     }
     Ok(())
+}
+
+fn normalize(path: &Path) -> PathBuf {
+    let mut normalized = PathBuf::new();
+    for component in path.components() {
+        match component {
+            Component::CurDir => {}
+            Component::ParentDir => {
+                normalized.pop();
+            }
+            other => normalized.push(other.as_os_str()),
+        }
+    }
+    normalized
 }
 
 #[cfg(test)]
