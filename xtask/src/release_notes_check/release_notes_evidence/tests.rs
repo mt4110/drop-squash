@@ -26,7 +26,7 @@ fn accepts_concrete_production_urls() {
 - Apple notary log: notarytool accepted request abc123 for public DropSquash.dmg
 - Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app cleanly in fresh account without Gatekeeper warning
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
-- Manual QA record: docs/manual-qa.md filled for public DropSquash.dmg and manual-qa-check passed
+- Manual QA record: docs/manual-qa.md tested public DropSquash.dmg and manual-qa-check passed
 - Conversion safety evidence: cancellation, failed conversion, and larger output preserved original with trial count unchanged
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed finished count, saved bytes, and cancelled mixed outcome
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
@@ -585,6 +585,19 @@ fn rejects_release_notes_manual_qa_record_without_public_context() {
     let errors = check_text(
         r#"
 - Manual QA record: docs/manual-qa.md filled for DropSquash.dmg and manual-qa-check passed
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Manual QA record")));
+}
+
+#[test]
+fn rejects_release_notes_manual_qa_record_without_tested_context() {
+    let errors = check_text(
+        r#"
+- Manual QA record: docs/manual-qa.md filled for public DropSquash.dmg and manual-qa-check passed
 "#,
     );
 

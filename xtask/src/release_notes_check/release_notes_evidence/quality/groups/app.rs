@@ -4,6 +4,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
     match label {
         "Manual QA record" => Some(&[
             &["docs/manual-qa.md"],
+            &["tested"],
             &["public"],
             &["dropsquash.dmg"],
             &["manual-qa-check"],
