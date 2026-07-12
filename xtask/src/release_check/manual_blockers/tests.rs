@@ -238,6 +238,16 @@ fn reports_packaged_macos_manual_qa_with_non_iso_date() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_invalid_calendar_date() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("Date", "2026-99-99");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
