@@ -16,10 +16,13 @@ fn require_dmg_artifact(path: &Path) -> Result<(), String> {
     if !path.is_file() {
         return Err("manual QA App artifact must exist before publish".to_string());
     }
-    if path.file_name().and_then(|name| name.to_str()) == Some("DropSquash.dmg") {
-        return Ok(());
+    if path.file_name().and_then(|name| name.to_str()) != Some("DropSquash.dmg") {
+        return Err(
+            "manual QA App artifact must be the public DropSquash.dmg before publish".to_string(),
+        );
     }
-    Err("manual QA App artifact must be the public DropSquash.dmg before publish".to_string())
+    crate::dmg::read(path, "publish manual QA App artifact")?;
+    Ok(())
 }
 
 pub(super) fn require_current_head(path: &Path) -> Result<(), String> {

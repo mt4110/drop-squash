@@ -4,11 +4,22 @@ use super::{require_current_head, require_public_dmg};
 fn accepts_public_dmg_artifact() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");
-    std::fs::write(&artifact, b"dmg").unwrap();
+    std::fs::write(&artifact, dmg_bytes()).unwrap();
     let (_directory, path) =
         write_manual_qa(&format!("| App artifact | {} |\n", artifact.display()));
 
     assert!(require_public_dmg(&path).is_ok());
+}
+
+#[test]
+fn rejects_non_udif_dmg_before_publish() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, b"dmg").unwrap();
+    let (_directory, path) =
+        write_manual_qa(&format!("| App artifact | {} |\n", artifact.display()));
+
+    assert!(require_public_dmg(&path).is_err());
 }
 
 #[test]
@@ -80,4 +91,12 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let path = directory.path().join("manual-qa.md");
     std::fs::write(&path, text).unwrap();
     (directory, path)
+}
+
+fn dmg_bytes() -> Vec<u8> {
+    let mut bytes = b"dropsquash".to_vec();
+    let mut trailer = vec![0; 512];
+    trailer[..4].copy_from_slice(b"koly");
+    bytes.extend(trailer);
+    bytes
 }
