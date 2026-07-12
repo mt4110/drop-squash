@@ -13,7 +13,7 @@ impl<'a> HttpsUrl<'a> {
             .split_once('/')
             .map(|(host, path)| (host, format_path(path)))
             .unwrap_or((without_scheme, "/"));
-        (!host.is_empty()).then_some(Self { host, path })
+        (!host.is_empty() && !is_placeholder_host(host)).then_some(Self { host, path })
     }
 
     pub(crate) fn host_is(&self, expected: &str) -> bool {
@@ -37,6 +37,20 @@ fn format_path(path: &str) -> &str {
     path.split(['?', '#']).next().unwrap_or(path)
 }
 
+fn is_placeholder_host(host: &str) -> bool {
+    let lower = host.to_ascii_lowercase();
+    lower == "localhost"
+        || lower.starts_with("127.")
+        || lower == "example.com"
+        || lower.ends_with(".example.com")
+        || lower == "example.org"
+        || lower.ends_with(".example.org")
+        || lower == "example.net"
+        || lower.ends_with(".example.net")
+        || lower.ends_with(".test")
+        || lower.ends_with(".invalid")
+}
+
 #[cfg(test)]
 mod tests {
     use super::HttpsUrl;
@@ -53,6 +67,15 @@ mod tests {
     fn rejects_whitespace_and_non_https() {
         assert!(HttpsUrl::parse("https://github.com/a b").is_none());
         assert!(HttpsUrl::parse("http://github.com/a").is_none());
+    }
+
+    #[test]
+    fn rejects_placeholder_or_local_hosts() {
+        assert!(HttpsUrl::parse("https://example.com/release-status").is_none());
+        assert!(HttpsUrl::parse("https://download.test/DropSquash.dmg").is_none());
+        assert!(HttpsUrl::parse("https://social.example.invalid/path").is_none());
+        assert!(HttpsUrl::parse("https://localhost/release-status").is_none());
+        assert!(HttpsUrl::parse("https://127.0.0.1/release-status").is_none());
     }
 
     #[test]

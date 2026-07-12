@@ -109,7 +109,7 @@ fn rejects_wrong_dmg_name() {
 fn rejects_non_github_release_url() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
-        "https://downloads.example.test/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        "https://downloads.dropsquash.app/releases/download/v0.1.0/DropSquash.dmg".to_string(),
         SHA256.to_string(),
         "https://github.com/mt4110/drop-squash".to_string(),
     ])
