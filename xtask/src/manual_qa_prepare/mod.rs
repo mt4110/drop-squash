@@ -51,11 +51,11 @@ fn print_paths(options: &Options) -> Result<(), String> {
     println!("manual QA state backup: {}", options.state_dir.display());
     println!("manual QA output folder: {}", options.output_dir.display());
     println!("app state source: {}", options.app_state_dir.display());
-    match BuildIdentity::current() {
+    let artifact = qa_artifact(options)?;
+    match BuildIdentity::current_for_artifact(artifact.as_deref()) {
         Ok(identity) => println!("manual QA App build: {}", identity.app_build()),
         Err(error) => println!("manual QA App build unavailable: {error}"),
     }
-    let artifact = qa_artifact(options)?;
     if let Some(path) = artifact {
         println!("manual QA App artifact: {}", path.display());
     } else {

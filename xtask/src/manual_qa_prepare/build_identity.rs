@@ -1,6 +1,8 @@
 use serde_json::Value;
 use std::{path::Path, process::Command};
 
+mod artifact_age;
+
 const TAURI_CONFIG: &str = "apps/desktop/src-tauri/tauri.conf.json";
 const PRODUCT_NAME: &str = "DropSquash";
 
@@ -13,6 +15,14 @@ pub(super) struct BuildIdentity {
 impl BuildIdentity {
     pub(super) fn current() -> Result<Self, String> {
         Self::from_parts(read_version(Path::new(TAURI_CONFIG))?, git_commit()?)
+    }
+
+    pub(super) fn current_for_artifact(artifact: Option<&Path>) -> Result<Self, String> {
+        let identity = Self::current()?;
+        if let Some(path) = artifact {
+            artifact_age::require_not_older_than_head(path)?;
+        }
+        Ok(identity)
     }
 
     pub(super) fn app_build(&self) -> String {
