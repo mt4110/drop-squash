@@ -48,24 +48,33 @@ fn is_checkout(reference: &str) -> bool {
 }
 
 fn has_release_tag(reference: &str) -> bool {
-    reference.split_whitespace().any(|part| {
-        part.strip_prefix("https://github.com/mt4110/drop-squash/releases/tag/")
-            .is_some_and(|suffix| {
-                suffix.starts_with('v')
-                    && suffix.chars().any(|value| value == '.')
-                    && suffix.chars().all(|value| {
-                        value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
-                    })
-            })
-    }) && reference.starts_with("GitHub Release ")
+    reference.starts_with("GitHub Release ")
+        && single_url(reference).is_some_and(|part| {
+            part.strip_prefix("https://github.com/mt4110/drop-squash/releases/tag/")
+                .is_some_and(|suffix| {
+                    suffix.starts_with('v')
+                        && suffix.chars().any(|value| value == '.')
+                        && suffix.chars().all(|value| {
+                            value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
+                        })
+                })
+        })
 }
 
 fn has_homebrew_pr(reference: &str) -> bool {
     reference.starts_with("Homebrew tap PR ")
-        && reference.split_whitespace().any(|part| {
+        && single_url(reference).is_some_and(|part| {
             part.strip_prefix("https://github.com/mt4110/homebrew-tap/pull/")
                 .is_some_and(|suffix| {
                     !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
                 })
         })
+}
+
+fn single_url(reference: &str) -> Option<&str> {
+    let mut urls = reference
+        .split_whitespace()
+        .filter(|part| part.starts_with("https://"));
+    let first = urls.next()?;
+    urls.next().is_none().then_some(first)
 }

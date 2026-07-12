@@ -77,6 +77,19 @@ fn rejects_distribution_references_with_placeholder_notes() {
 }
 
 #[test]
+fn rejects_distribution_references_with_multiple_urls() {
+    let text = "\
+| Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
+| Homebrew cask install | Verified | versioned DropSquash.dmg cask includes auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Published checksum"));
+    assert!(unverified.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn publish_error_mentions_traceable_evidence_reference() {
     let error = unverified_blockers_error(&["Signed DMG"]);
 
