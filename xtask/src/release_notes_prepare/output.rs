@@ -17,8 +17,9 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             "- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v{}",
             fields.version
         ),
+        format!("- SHA256SUMS line: {}  DropSquash.dmg", fields.sha256),
         format!(
-            "- GitHub Release checksum: SHA256SUMS attached to release for {} with {}",
+            "- GitHub Release checksum after upload: paste only after SHA256SUMS is attached to release for {} with {}",
             fields.artifact_url, fields.sha256
         ),
         "Homebrew cask command:".into(),

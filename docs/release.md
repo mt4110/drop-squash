@@ -159,6 +159,10 @@ Homebrew cask command inputs:
 cargo run -p xtask -- release-notes-prepare path/to/DropSquash.dmg https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 ```
 
+The generated checksum evidence text is a post-upload paste aid. Do not paste
+it into public release notes until the matching `SHA256SUMS` file is attached
+to the GitHub Release.
+
 Reject release artifacts that accidentally capture development-only Nix store
 references:
 

@@ -30,6 +30,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "release notes `Git commit` field to match",
     ),
     ("docs/release.md", "release-notes-prepare"),
+    ("docs/release.md", "post-upload paste aid"),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
     (
