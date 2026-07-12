@@ -30,6 +30,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Local license forget", "removed"),
     ("Local license forget", "trial or locked"),
     ("Benchmark release set", "Release-set benchmark CSV"),
+    ("Benchmark release set", "path"),
     ("Benchmark release set", "short, medium, and large"),
     ("Benchmark release set", "smaller outputs"),
     ("Benchmark release set", "machine/OS context"),

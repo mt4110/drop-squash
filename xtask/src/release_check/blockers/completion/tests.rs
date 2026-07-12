@@ -286,6 +286,15 @@ fn reports_benchmark_completion_without_threshold() {
     assert!(incomplete.contains(&"Benchmark release set"));
 }
 
+#[test]
+fn reports_benchmark_completion_without_csv_path() {
+    let text = "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Benchmark release set"));
+}
+
 fn described_blockers() -> String {
     [
         "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `DropSquash.app` or `DropSquash.dmg` artifact, with `manual-qa-check` passing | TBD | `docs/manual-qa.md` |\n",
@@ -302,7 +311,7 @@ fn described_blockers() -> String {
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",
-        "| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
+        "| Benchmark release set | Blocked | Release-set benchmark CSV path is recorded and covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the release | TBD | GitHub Release |\n",
         "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]
