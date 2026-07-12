@@ -57,6 +57,13 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "post-encode postprocess/history guard",
     ),
+    (
+        "docs/qa-evidence.md",
+        "Verified manual QA blockers reject weak evidence",
+    ),
+    ("docs/qa-evidence.md", "privacy receipt file-name handling"),
+    ("docs/qa-evidence.md", "no-success trial/history"),
+    ("docs/qa-evidence.md", "unchanged trial counts"),
     ("docs/qa-evidence.md", "UDIF trailer"),
     ("docs/qa-evidence.md", "wrong DMG names"),
     ("docs/qa-evidence.md", "non-canonical homepages"),
