@@ -28,6 +28,7 @@ fn checksum_evidence_ok(label: &str, result: &str) -> bool {
     result
         .split(|value: char| !value.is_ascii_hexdigit())
         .any(|part| part.len() == 64)
+        && result.to_ascii_lowercase().contains("sha256sums")
 }
 
 fn privacy_receipt_evidence_ok(label: &str, result: &str) -> bool {
