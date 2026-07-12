@@ -16,7 +16,7 @@ const CI_WORKFLOW_GATES: [&str; 8] = [
     "nix flake check --no-build --all-systems",
 ];
 
-const RELEASE_WORKFLOW_GATES: [&str; 16] = [
+const RELEASE_WORKFLOW_GATES: [&str; 17] = [
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
     "cargo clippy --workspace --all-targets -- -D warnings",
@@ -26,9 +26,10 @@ const RELEASE_WORKFLOW_GATES: [&str; 16] = [
     "cargo run -p xtask -- manual-qa-check",
     "cargo run -p xtask -- release-check",
     "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
-    "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
+    "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
+    "cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg",
     "dropsquash-unsigned-dmg",
-    "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
+    "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS",
     "actions/upload-artifact@v4",
     "dropsquash-unsigned-dmg-checksum",
     "cargo run -p xtask -- macos-signing-check",

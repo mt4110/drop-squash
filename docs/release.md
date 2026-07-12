@@ -36,6 +36,7 @@ cargo run -p xtask -- manual-qa-prepare
 cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- release-check
 pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 ```
 
 These gates keep production files within the repository size rules, verify the
@@ -54,7 +55,9 @@ recording evidence:
 cargo run -p xtask -- manual-qa-prepare --restore-state
 ```
 
-The unsigned Tauri build is only a packaging and QA input; public release still
+The unsigned Tauri build is only a packaging and QA input. Normalize the
+generated Tauri DMG to `DropSquash.dmg` before artifact checks, checksums,
+manual QA evidence, or public release notes refer to it. Public release still
 requires signing, notarization, stapling, artifact checks, checksums, and
 Gatekeeper no-warning evidence for the signed app.
 

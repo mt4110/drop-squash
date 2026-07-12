@@ -18,9 +18,10 @@ run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- manual-qa-check
 run: cargo run -p xtask -- release-check
 run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
-run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg
+run: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
+run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 name: dropsquash-unsigned-dmg
-run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS
+run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS
 uses: actions/upload-artifact@v4
 name: dropsquash-unsigned-dmg-checksum
 run: cargo run -p xtask -- macos-signing-check
@@ -46,9 +47,10 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- manual-qa-check",
             "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
-            "cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg",
+            "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
+            "cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg",
             "dropsquash-unsigned-dmg",
-            "cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS",
+            "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS",
             "actions/upload-artifact@v4",
             "dropsquash-unsigned-dmg-checksum",
             "cargo run -p xtask -- macos-signing-check",

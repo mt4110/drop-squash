@@ -11,6 +11,7 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
             "cargo run -p xtask -- manual-qa-prepare",
             "cargo run -p xtask -- manual-qa-prepare --restore-state",
             "cargo run -p xtask -- manual-qa-check",
+            "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
             "unsigned DMG as a QA artifact",
         ],
     ),

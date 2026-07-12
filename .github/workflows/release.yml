@@ -53,18 +53,21 @@ jobs:
       - name: Build unsigned macOS DMG
         if: matrix.os == 'macos-latest'
         run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+      - name: Normalize unsigned DMG name
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
       - name: Check unsigned DMG artifact
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/*.dmg
+        run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
       - name: Upload unsigned DMG artifact
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: dropsquash-unsigned-dmg
-          path: target/release/bundle/dmg/*.dmg
+          path: target/release/bundle/dmg/DropSquash.dmg
       - name: Write unsigned DMG checksum
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- checksum target/release/bundle/dmg/*.dmg > SHA256SUMS
+        run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS
       - name: Upload unsigned DMG checksum
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
