@@ -40,6 +40,11 @@ impl AppState {
         Ok(self.queue.lock().map_err(lock_error)?.enqueue(job))
     }
 
+    pub fn enqueue_jobs(&self, jobs: Vec<EncodeJob>) -> Result<Vec<QueueEvent>, String> {
+        let mut queue = self.queue.lock().map_err(lock_error)?;
+        Ok(jobs.into_iter().map(|job| queue.enqueue(job)).collect())
+    }
+
     pub fn start_next_job(&self) -> Result<Option<QueueEvent>, String> {
         Ok(self.queue.lock().map_err(lock_error)?.start_next())
     }

@@ -15,6 +15,14 @@ pub fn enqueue_queue_job(
 }
 
 #[tauri::command(rename_all = "camelCase")]
+pub fn enqueue_files(
+    app_state: tauri::State<'_, AppState>,
+    requests: Vec<ConvertRequest>,
+) -> Result<Vec<QueueEvent>, String> {
+    app_state.enqueue_jobs(requests.into_iter().map(job_from_request).collect())
+}
+
+#[tauri::command(rename_all = "camelCase")]
 pub fn start_next_queue_job(
     app_state: tauri::State<'_, AppState>,
 ) -> Result<Option<QueueEvent>, String> {

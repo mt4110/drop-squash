@@ -12,6 +12,7 @@ fn main() {
             commands::convert,
             commands::cancel_conversion,
             commands::queue::enqueue_queue_job,
+            commands::queue::enqueue_files,
             commands::queue::start_next_queue_job,
             commands::queue::finish_active_queue_job,
             commands::queue::fail_active_queue_job,

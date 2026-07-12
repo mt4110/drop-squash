@@ -12,6 +12,10 @@ export function enqueueQueueJob(request: ConvertRequest) {
   return invoke<RustQueueEvent>("enqueue_queue_job", { request });
 }
 
+export function enqueueFiles(requests: ConvertRequest[]) {
+  return invoke<RustQueueEvent[]>("enqueue_files", { requests });
+}
+
 export function startNextQueueJob() {
   return invoke<RustQueueEvent | null>("start_next_queue_job");
 }

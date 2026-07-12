@@ -50,6 +50,25 @@ fn owns_rust_queue_state_for_sequential_jobs() {
 }
 
 #[test]
+fn enqueues_multiple_jobs_in_order() {
+    let state = AppState::default();
+    let events = state
+        .enqueue_jobs(vec![job("first.mov"), job("second.mov")])
+        .unwrap();
+
+    assert!(matches!(
+        events.as_slice(),
+        [QueueEvent::Enqueued(first), QueueEvent::Enqueued(second)]
+            if first.job.input_path.ends_with("first.mov")
+                && second.job.input_path.ends_with("second.mov")
+    ));
+    assert!(matches!(
+        state.start_next_job().unwrap(),
+        Some(QueueEvent::Started(item)) if item.job.input_path.ends_with("first.mov")
+    ));
+}
+
+#[test]
 fn cancels_pending_rust_queue_job_without_starting_it() {
     let state = AppState::default();
     state.enqueue_job(job("first.mov")).unwrap();

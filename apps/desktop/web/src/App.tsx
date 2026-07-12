@@ -26,7 +26,7 @@ import {
   cancelActiveQueueJob,
   cancelQueuedJob,
   clearCompletedQueueJobs,
-  enqueueQueueJob,
+  enqueueFiles,
   failActiveQueueJob,
   finishActiveQueueJob,
   startNextQueueJob,
@@ -113,17 +113,17 @@ export function App() {
     }
 
     void (async () => {
-      const entries: QueueEntry[] = [];
-      for (const path of inputPaths) {
-        const request = requestForInput(path);
-        const event = await enqueueQueueJob(request);
+      const requests = inputPaths.map(requestForInput);
+      const events = await enqueueFiles(requests);
+      const entries = events.flatMap((event, index) => {
         if ("Enqueued" in event) {
-          entries.push({
+          return [{
             ...queueEntryFromRustItem(event.Enqueued),
-            writePrivacyReceipt: request.writePrivacyReceipt,
-          });
+            writePrivacyReceipt: requests[index]?.writePrivacyReceipt,
+          }];
         }
-      }
+        return [];
+      });
       if (entries.length > 0) {
         setError(undefined);
         setResult(undefined);
