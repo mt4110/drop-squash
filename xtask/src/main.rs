@@ -13,6 +13,7 @@ mod privacy_policy_check;
 mod publish_check;
 mod release_check;
 mod release_notes_check;
+mod release_notes_prepare;
 mod website_check;
 
 fn main() {
@@ -32,6 +33,7 @@ fn main() {
         Some("publish-check") => publish_check::run(args.collect()),
         Some("release-check") => release_check::run(),
         Some("release-notes-check") => release_notes_check::run(args.collect()),
+        Some("release-notes-prepare") => release_notes_prepare::run(args.collect()),
         Some("website-check") => website_check::run(args.collect()),
         _ => usage(),
     };
@@ -44,7 +46,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|manual-qa-check|manual-qa-prepare|macos-signing-check|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|manual-qa-check|manual-qa-prepare|macos-signing-check|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }

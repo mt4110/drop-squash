@@ -45,6 +45,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
+    ("docs/qa-evidence.md", "release-notes-prepare"),
     (
         "docs/qa-evidence.md",
         "checksum evidence without the Artifact URL",
