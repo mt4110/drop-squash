@@ -34,7 +34,7 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 66] = [
         "docs/qa-evidence.md",
         "license, refund, support contact copy",
     ),
-    ("docs/qa-evidence.md", ".codex` ignore policy"),
+    ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
     ("docs/qa-evidence.md", "concrete identity fields"),

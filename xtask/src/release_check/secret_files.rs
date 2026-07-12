@@ -28,10 +28,18 @@ pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
 pub(super) fn require_local_agent_ignore(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path)
         .map_err(|error| format!("failed to read {}: {error}", path.display()))?;
-    if text.lines().map(str::trim).any(|line| line == "/.codex/") {
-        return Ok(());
+    require_ignore_line(&text, path, "/.codex/")?;
+    require_ignore_line(&text, path, "/.direnv/")?;
+    require_ignore_line(&text, path, "/result")?;
+    require_ignore_line(&text, path, "/result-*")
+}
+
+fn require_ignore_line(text: &str, path: &Path, needle: &str) -> Result<(), String> {
+    if text.lines().map(str::trim).any(|line| line == needle) {
+        Ok(())
+    } else {
+        Err(format!("{} must ignore {needle}", path.display()))
     }
-    Err(format!("{} must ignore /.codex/", path.display()))
 }
 
 pub(super) fn is_secret_file(name: &str, extension: Option<&str>) -> bool {
@@ -70,7 +78,8 @@ fn should_skip(path: &Path) -> bool {
         .is_some_and(|name| {
             matches!(
                 name,
-                ".codex" | ".git" | ".private_docs" | "target" | "node_modules"
-            )
+                ".codex" | ".direnv" | ".git" | ".private_docs" | "target" | "node_modules"
+            ) || name == "result"
+                || name.starts_with("result-")
         })
 }

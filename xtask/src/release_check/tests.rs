@@ -230,10 +230,25 @@ fn ignores_local_agent_state_when_scanning_for_secrets() {
 }
 
 #[test]
+fn ignores_local_nix_outputs_when_scanning_for_secrets() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "docs/release.md", "safe");
+    write(directory.path(), ".direnv/AuthKey_TEST.p8", "local-only");
+    write(directory.path(), "result/AuthKey_TEST.p8", "local-only");
+    write(
+        directory.path(),
+        "result-build/AuthKey_TEST.p8",
+        "local-only",
+    );
+
+    reject_secret_files(directory.path()).unwrap();
+}
+
+#[test]
 fn requires_local_agent_state_to_be_ignored() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join(".gitignore");
-    std::fs::write(&path, "/target/\n/.codex/\n").unwrap();
+    std::fs::write(&path, "/target/\n/.codex/\n/.direnv/\n/result\n/result-*\n").unwrap();
 
     require_local_agent_ignore(&path).unwrap();
 }
@@ -247,6 +262,17 @@ fn reports_missing_local_agent_ignore_rule() {
     let error = require_local_agent_ignore(&path).unwrap_err();
 
     assert!(error.contains("/.codex/"));
+}
+
+#[test]
+fn reports_missing_nix_output_ignore_rule() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join(".gitignore");
+    std::fs::write(&path, "/target/\n/.codex/\n/.direnv/\n/result\n").unwrap();
+
+    let error = require_local_agent_ignore(&path).unwrap_err();
+
+    assert!(error.contains("/result-*"));
 }
 
 fn write(root: &std::path::Path, name: &str, text: &str) {
