@@ -40,6 +40,20 @@ fn rejects_missing_manual_qa_csv_path() {
     assert!(error.contains("manual QA Benchmark sample set"));
 }
 
+#[test]
+fn rejects_repo_local_matching_csv_paths() {
+    let csv = std::env::current_dir()
+        .unwrap()
+        .join("target/dropsquash-bench/results.csv");
+    let csv = csv.to_str().unwrap();
+    let notes = notes_with_csv(csv);
+    let (_directory, manual) = manual_qa_with_csv(csv);
+
+    let error = require_notes_csv_matches_manual_qa(&notes, &manual).unwrap_err();
+
+    assert!(error.contains("CSV path must stay outside the repository"));
+}
+
 fn notes_with_csv(csv: &str) -> String {
     format!(
         "- Benchmark sample set: short medium large smaller outputs on MacBook macOS with CSV saved outside repo at {csv}\n"

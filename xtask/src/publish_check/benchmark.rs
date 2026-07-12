@@ -21,17 +21,21 @@ pub(super) fn require_notes_csv_matches_manual_qa(
 fn release_notes_csv(text: &str) -> Result<PathBuf, String> {
     let value = field_value(text, "Benchmark sample set")
         .ok_or_else(|| "release notes Benchmark sample set must be present".to_string())?;
-    csv_path(value).ok_or_else(|| {
+    let path = csv_path(value).ok_or_else(|| {
         "release notes Benchmark sample set must include an absolute .csv path".to_string()
-    })
+    })?;
+    require_outside_repo(&path, "release notes Benchmark sample set")?;
+    Ok(path)
 }
 
 fn manual_qa_csv(text: &str) -> Result<PathBuf, String> {
     let value = table_result(text, "Benchmark sample set")
         .ok_or_else(|| "manual QA Benchmark sample set must be present".to_string())?;
-    csv_path(value).ok_or_else(|| {
+    let path = csv_path(value).ok_or_else(|| {
         "manual QA Benchmark sample set must include an absolute .csv path".to_string()
-    })
+    })?;
+    require_outside_repo(&path, "manual QA Benchmark sample set")?;
+    Ok(path)
 }
 
 fn field_value<'a>(text: &'a str, label: &str) -> Option<&'a str> {
@@ -62,6 +66,14 @@ fn csv_path(value: &str) -> Option<PathBuf> {
         })
         .find(|token| token.starts_with('/') && token.ends_with(".csv"))
         .map(PathBuf::from)
+}
+
+fn require_outside_repo(path: &Path, label: &str) -> Result<(), String> {
+    let cwd = std::env::current_dir().map_err(|error| error.to_string())?;
+    if path.starts_with(cwd) {
+        return Err(format!("{label} CSV path must stay outside the repository"));
+    }
+    Ok(())
 }
 
 #[cfg(test)]

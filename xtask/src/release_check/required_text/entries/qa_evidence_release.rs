@@ -23,6 +23,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "release notes benchmark CSV path matching manual QA",
     ),
+    ("docs/qa-evidence.md", "staying outside the repository"),
     ("docs/qa-evidence.md", "concrete Completion evidence"),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     (
