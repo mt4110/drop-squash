@@ -773,6 +773,18 @@ fn reports_cancellation_without_success_history_evidence() {
 }
 
 #[test]
+fn reports_queued_cancellation_without_success_history_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Queued job cancellation | Three recordings | Waiting row cancelled | queued row marked cancelled and never started |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Queued job cancellation")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
@@ -935,7 +947,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Multi-file queue" {
             text.push_str("| Multi-file queue | Passes | three recordings queued with one active sequential conversion |\n");
         } else if check == "Queued job cancellation" {
-            text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started |\n");
+            text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started; trial history showed no new success |\n");
         } else if check == "Batch summary" {
             text.push_str(
                 "| Batch summary | Passes | summary showed finished count, saved bytes, and 1 cancelled mixed outcome |\n",

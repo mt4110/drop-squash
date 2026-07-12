@@ -17,7 +17,13 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["no new success", "no success"],
         ],
         "Multi-file queue" => &[&["three", "3"], &["one active", "sequential"]],
-        "Queued job cancellation" => &[&["cancelled"], &["never starts", "never started"]],
+        "Queued job cancellation" => &[
+            &["cancelled"],
+            &["never starts", "never started"],
+            &["trial"],
+            &["history"],
+            &["no new success", "no success"],
+        ],
         "Batch summary" => &[
             &["finished"],
             &["saved bytes"],
