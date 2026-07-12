@@ -84,6 +84,13 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("after upload"));
     assert!(text.contains("Homebrew cask command"));
     assert!(text.contains("homebrew-cask 0.1.0"));
+    let checksum = text
+        .find("GitHub Release checksum")
+        .expect("checksum field");
+    let release_url = text
+        .find("- GitHub Release URL:")
+        .expect("release URL field");
+    assert!(checksum < release_url);
 }
 
 fn write_dmg(prefix: &[u8]) -> (tempfile::TempDir, std::path::PathBuf) {
