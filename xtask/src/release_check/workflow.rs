@@ -1,61 +1,17 @@
 use std::path::Path;
 
+mod gates;
+
 const CI_WORKFLOW: &str = ".github/workflows/ci.yml";
 const DESKTOP_WORKFLOW: &str = ".github/workflows/desktop-ci.yml";
 const RELEASE_WORKFLOW: &str = ".github/workflows/release.yml";
 const SECURITY_WORKFLOW: &str = ".github/workflows/security.yml";
 
-const CI_WORKFLOW_GATES: [&str; 8] = [
-    "cargo fmt --all -- --check",
-    "cargo run -p xtask -- file-size-check",
-    "cargo run -p xtask -- website-check",
-    "cargo run -p xtask -- release-check",
-    "cargo clippy --workspace --all-targets -- -D warnings",
-    "cargo test --workspace",
-    "cachix/install-nix-action@v31",
-    "nix flake check --no-build --all-systems",
-];
-
-const RELEASE_WORKFLOW_GATES: [&str; 17] = [
-    "components: rustfmt, clippy",
-    "cargo fmt --all -- --check",
-    "cargo clippy --workspace --all-targets -- -D warnings",
-    "cargo test --workspace",
-    "cargo run -p xtask -- file-size-check",
-    "cargo run -p xtask -- website-check",
-    "cargo run -p xtask -- manual-qa-check",
-    "cargo run -p xtask -- release-check",
-    "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
-    "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
-    "cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg",
-    "dropsquash-unsigned-dmg",
-    "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS",
-    "actions/upload-artifact@v4",
-    "dropsquash-unsigned-dmg-checksum",
-    "cargo run -p xtask -- macos-signing-check",
-    "Block unsigned Phase 0 release",
-];
-
-const DESKTOP_WORKFLOW_GATES: [&str; 5] = [
-    "pnpm --dir apps/desktop/web install --frozen-lockfile",
-    "pnpm --dir apps/desktop/web lint",
-    "pnpm --dir apps/desktop/web build",
-    "dtolnay/rust-toolchain@1.95.0",
-    "cargo test -p dropsquash-desktop",
-];
-
-const SECURITY_WORKFLOW_GATES: [&str; 4] = [
-    "cargo audit",
-    "cargo deny check",
-    "cargo run -p xtask -- media-policy-check",
-    "cargo run -p xtask -- privacy-policy-check",
-];
-
 pub(super) fn check_all() -> Result<(), String> {
-    check_workflow(CI_WORKFLOW, "CI", &CI_WORKFLOW_GATES)?;
-    check_workflow(DESKTOP_WORKFLOW, "desktop CI", &DESKTOP_WORKFLOW_GATES)?;
-    check_workflow(SECURITY_WORKFLOW, "security", &SECURITY_WORKFLOW_GATES)?;
-    check_workflow(RELEASE_WORKFLOW, "release", &RELEASE_WORKFLOW_GATES)
+    check_workflow(CI_WORKFLOW, "CI", gates::CI)?;
+    check_workflow(DESKTOP_WORKFLOW, "desktop CI", gates::DESKTOP)?;
+    check_workflow(SECURITY_WORKFLOW, "security", gates::SECURITY)?;
+    check_workflow(RELEASE_WORKFLOW, "release", gates::RELEASE)
 }
 
 fn check_workflow(path: &str, label: &str, gates: &[&'static str]) -> Result<(), String> {
@@ -80,20 +36,20 @@ fn missing_workflow_gates(text: &str, gates: &[&'static str]) -> Vec<&'static st
 
 #[cfg(test)]
 pub(super) fn missing_ci_workflow_gates(text: &str) -> Vec<&'static str> {
-    missing_workflow_gates(text, &CI_WORKFLOW_GATES)
+    missing_workflow_gates(text, gates::CI)
 }
 
 #[cfg(test)]
 pub(super) fn missing_release_workflow_gates(text: &str) -> Vec<&'static str> {
-    missing_workflow_gates(text, &RELEASE_WORKFLOW_GATES)
+    missing_workflow_gates(text, gates::RELEASE)
 }
 
 #[cfg(test)]
 pub(super) fn missing_desktop_workflow_gates(text: &str) -> Vec<&'static str> {
-    missing_workflow_gates(text, &DESKTOP_WORKFLOW_GATES)
+    missing_workflow_gates(text, gates::DESKTOP)
 }
 
 #[cfg(test)]
 pub(super) fn missing_security_workflow_gates(text: &str) -> Vec<&'static str> {
-    missing_workflow_gates(text, &SECURITY_WORKFLOW_GATES)
+    missing_workflow_gates(text, gates::SECURITY)
 }
