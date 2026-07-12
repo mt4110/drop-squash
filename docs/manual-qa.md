@@ -95,9 +95,9 @@ restore cannot be mistaken for success.
 | Machine |  |
 | Input sample set |  |
 | Output folder |  |
-| Config path | `$HOME/Library/Application Support/DropSquash/config.json` |
-| History path | `$HOME/Library/Application Support/DropSquash/history.jsonl` |
-| License cache path | `$HOME/Library/Application Support/DropSquash/license.json` |
+| Config path |  |
+| History path |  |
+| License cache path |  |
 | Tester |  |
 | Date |  |
 

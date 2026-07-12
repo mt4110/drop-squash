@@ -107,15 +107,27 @@ fn reports_wrong_state_paths() {
 }
 
 #[test]
-fn accepts_inline_code_state_paths() {
+fn accepts_absolute_state_paths() {
     let (_directory, path) = write_manual_qa(
-        "| Config path | `$HOME/Library/Application Support/DropSquash/config.json` |\n\
-| History path | `$HOME/Library/Application Support/DropSquash/history.jsonl` |\n\
-| License cache path | `$HOME/Library/Application Support/DropSquash/license.json` |\n",
+        "| Config path | /Users/me/Library/Application Support/DropSquash/config.json |\n\
+| History path | /Users/me/Library/Application Support/DropSquash/history.jsonl |\n\
+| License cache path | /Users/me/Library/Application Support/DropSquash/license.json |\n",
     );
     let missing = check_file(&path).unwrap();
 
     assert!(!missing.iter().any(|error| error.contains("DropSquash/")));
+}
+
+#[test]
+fn reports_home_placeholder_state_paths() {
+    let (_directory, path) = write_manual_qa(
+        "| Config path | `$HOME/Library/Application Support/DropSquash/config.json` |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("absolute DropSquash")));
 }
 
 #[test]
@@ -839,12 +851,14 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             "Machine" => "MacBookPro18,4 arm64".to_string(),
             "Input sample set" => "short, medium, and large local recordings".to_string(),
             "Output folder" => output.display().to_string(),
-            "Config path" => "$HOME/Library/Application Support/DropSquash/config.json".to_string(),
+            "Config path" => {
+                "/Users/me/Library/Application Support/DropSquash/config.json".to_string()
+            }
             "History path" => {
-                "$HOME/Library/Application Support/DropSquash/history.jsonl".to_string()
+                "/Users/me/Library/Application Support/DropSquash/history.jsonl".to_string()
             }
             "License cache path" => {
-                "$HOME/Library/Application Support/DropSquash/license.json".to_string()
+                "/Users/me/Library/Application Support/DropSquash/license.json".to_string()
             }
             "Tester" => "masaki".to_string(),
             "Date" => "2026-07-11".to_string(),
