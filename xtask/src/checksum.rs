@@ -20,10 +20,15 @@ fn checksum_line(path: &Path) -> Result<String, String> {
 }
 
 fn artifact_name(path: &Path) -> Result<&str, String> {
-    path.file_name()
+    let name = path
+        .file_name()
         .and_then(|value| value.to_str())
         .filter(|value| !value.is_empty())
-        .ok_or_else(|| format!("checksum target has no file name: {}", path.display()))
+        .ok_or_else(|| format!("checksum target has no file name: {}", path.display()))?;
+    if name == "DropSquash.dmg" {
+        return Ok(name);
+    }
+    Err("checksum target must be named DropSquash.dmg".to_string())
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {
