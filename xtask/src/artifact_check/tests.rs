@@ -31,6 +31,19 @@ fn rejects_artifact_with_utf16_nix_store_reference() {
 }
 
 #[test]
+fn rejects_artifact_with_utf16be_nix_store_reference() {
+    let reference = "/nix/store/abc"
+        .encode_utf16()
+        .flat_map(|value| value.to_be_bytes())
+        .collect::<Vec<_>>();
+    let (_directory, path) = write_artifact(&dmg_bytes(&reference));
+
+    let error = check_file(&path).unwrap_err();
+
+    assert!(error.contains("/nix/store"));
+}
+
+#[test]
 fn rejects_directories() {
     let directory = tempfile::tempdir().unwrap();
     let error = check_file(directory.path()).unwrap_err();

@@ -35,7 +35,9 @@ fn require_canonical_name(path: &Path) -> Result<(), String> {
 }
 
 fn has_disallowed_reference(bytes: &[u8]) -> bool {
-    contains_bytes(bytes, DISALLOWED_BYTES) || contains_bytes(bytes, &utf16le(DISALLOWED_TEXT))
+    contains_bytes(bytes, DISALLOWED_BYTES)
+        || contains_bytes(bytes, &utf16le(DISALLOWED_TEXT))
+        || contains_bytes(bytes, &utf16be(DISALLOWED_TEXT))
 }
 
 fn contains_bytes(haystack: &[u8], needle: &[u8]) -> bool {
@@ -47,6 +49,12 @@ fn contains_bytes(haystack: &[u8], needle: &[u8]) -> bool {
 fn utf16le(text: &str) -> Vec<u8> {
     text.encode_utf16()
         .flat_map(|value| value.to_le_bytes())
+        .collect()
+}
+
+fn utf16be(text: &str) -> Vec<u8> {
+    text.encode_utf16()
+        .flat_map(|value| value.to_be_bytes())
         .collect()
 }
 
