@@ -45,6 +45,9 @@ fn check_root(root: &Path) -> Result<Vec<String>, String> {
 
 fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
+    for error in crate::secret_text::violations("website", &text) {
+        errors.push(format!("{} {error}", path.display()));
+    }
     platform_claims::check(path, &text, errors);
     pre_release_copy::check(path, &text, errors);
     if href_policy::has_placeholder_url(&text) {

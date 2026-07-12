@@ -153,6 +153,23 @@ fn rejects_placeholder_external_urls() {
 }
 
 #[test]
+fn rejects_secret_like_website_values() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "pricing.html",
+        "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy product_id=123",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("secret-like value")));
+}
+
+#[test]
 fn rejects_insecure_external_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
