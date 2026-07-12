@@ -44,6 +44,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "complete manual QA evidence for the public `DropSquash.dmg`",
     ),
     ("docs/qa-evidence.md", "`App build` matching current `HEAD`"),
+    (
+        "docs/qa-evidence.md",
+        "release notes `SHA-256` matching the manual QA `App artifact`",
+    ),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
     ("docs/qa-evidence.md", "release-notes-prepare"),

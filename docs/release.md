@@ -202,6 +202,8 @@ The publish check also requires the release notes `Git commit` field to match
 the current `HEAD`, so rebuild and recheck the artifact after any final commit.
 The manual QA `App build` field must also name the current `HEAD`, so rerun
 packaged-app QA whenever the release commit changes.
+The release notes `SHA-256` field must match the `App artifact` recorded in
+manual QA, so do not reuse checksums from a different DMG.
 The publish check also requires release blocker URLs to match the release notes
 URLs for the public website, refund policy, live checkout, GitHub Release, and
 Homebrew tap PR. Public publish references must point to the same release notes
