@@ -315,6 +315,19 @@ fn rejects_prepared_homebrew_install_draft() {
 }
 
 #[test]
+fn rejects_prepared_homebrew_tap_pr_draft() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Homebrew tap PR: cask PR for versioned DropSquash.dmg uses https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path; replace this line with reviewed PR evidence
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("Homebrew tap PR")));
+}
+
+#[test]
 fn rejects_local_license_forget_without_cache_removal() {
     let errors = check_text(
         r#"
