@@ -91,6 +91,41 @@ fn reports_verified_rows_with_placeholder_url_reference() {
 }
 
 #[test]
+fn reports_verified_rows_with_local_only_url_reference() {
+    let text = "| Public website deployment | Verified | Production website serves pages | https://192.168.0.10/release-status | `https://...` |\n";
+
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Public website deployment"));
+}
+
+#[test]
+fn accepts_labeled_public_url_references() {
+    let text = "\
+| Published checksum | Verified | checksum evidence | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | cask evidence | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(!unproven.contains(&"Published checksum"));
+    assert!(!unproven.contains(&"Homebrew cask install"));
+}
+
+#[test]
+fn reports_labeled_references_without_public_url() {
+    let text = "\
+| Published checksum | Verified | checksum evidence | GitHub Release | GitHub Release |
+| Homebrew cask install | Verified | cask evidence | Homebrew tap PR | Homebrew tap PR |
+";
+
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Published checksum"));
+    assert!(unproven.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_verified_rows_with_placeholder_reference_notes() {
     let text = "| Public website deployment | Verified | Production website serves pages | https://dropsquash.app/release-status TBD | `https://...` |\n";
 
