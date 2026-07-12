@@ -84,7 +84,12 @@ fn has_required_action_detail(blocker: &str, action: &str) -> bool {
                 && action.contains("GitHub Release")
         }
         "Homebrew cask install" => {
-            action.contains("versioned") && action.contains("DropSquash.dmg")
+            action.contains("brew install")
+                && action.contains("versioned")
+                && action.contains("DropSquash.dmg")
+                && action.contains("matching SHA-256")
+                && action.contains("auto_updates false")
+                && action.contains("zap")
         }
         _ => true,
     }
