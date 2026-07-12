@@ -1,6 +1,6 @@
 use super::{
-    ensure_manual_qa_complete, ensure_website_complete, read_release_blockers, unverified_blockers,
-    unverified_blockers_error,
+    ensure_manual_qa_complete, ensure_release_notes_complete, ensure_website_complete,
+    read_release_blockers, unverified_blockers, unverified_blockers_error,
 };
 
 #[test]
@@ -210,6 +210,22 @@ fn publish_requires_valid_website() {
 
     assert!(error.contains("website must pass before publish"));
     assert!(error.contains("pricing.html"));
+}
+
+#[test]
+fn publish_requires_final_release_notes() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(
+        &path,
+        "- GitHub Release checksum: pending upload; replace this line with public release evidence\n",
+    )
+    .unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("GitHub Release checksum"));
 }
 
 fn reference(blocker: &str) -> &'static str {

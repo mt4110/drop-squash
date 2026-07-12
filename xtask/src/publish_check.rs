@@ -20,7 +20,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     ensure_website_complete(Path::new("website"))?;
     ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;
     let notes_path = PathBuf::from(notes);
-    crate::release_notes_check::check_file(&notes_path)?;
+    ensure_release_notes_complete(&notes_path)?;
     let notes_text = read_release_notes(&notes_path)?;
     source_commit::require_current(&notes_text)?;
     artifact::require_notes_sha_matches_manual_qa(&notes_text, Path::new("docs/manual-qa.md"))?;
@@ -50,6 +50,11 @@ fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {
     }
     manual_qa::require_public_dmg(path)?;
     manual_qa::require_current_head(path)
+}
+
+fn ensure_release_notes_complete(path: &Path) -> Result<(), String> {
+    crate::release_notes_check::check_file(path)
+        .map_err(|error| format!("release notes must pass before publish:\n{error}"))
 }
 
 fn read_release_blockers(path: &Path) -> Result<String, String> {
