@@ -40,6 +40,16 @@ fn reports_verified_manual_blocker_with_vague_result() {
 }
 
 #[test]
+fn reports_verified_manual_blocker_with_malformed_manual_row() {
+    let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Sandbox purchase | Checkout completes | extra | Completed for intended product with test buyer order abc123 | unexpected |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
 fn reports_verified_sandbox_purchase_without_order() {
     let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Sandbox purchase | Checkout completes | Completed for intended product with test buyer |\n";

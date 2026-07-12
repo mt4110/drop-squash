@@ -42,7 +42,7 @@ fn missing_result(manual: &str, check: &str) -> bool {
         .lines()
         .find(|line| line.starts_with('|') && line.contains(&format!("| {check} |")))
     {
-        Some(line) => match line.trim_matches('|').split('|').next_back() {
+        Some(line) => match result_cell(line) {
             Some(result) => {
                 unusable_result(result)
                     || field_quality::lacks_required_evidence(check, result)
@@ -52,6 +52,11 @@ fn missing_result(manual: &str, check: &str) -> bool {
         },
         None => true,
     }
+}
+
+fn result_cell(line: &str) -> Option<&str> {
+    let cells = line.trim_matches('|').split('|').collect::<Vec<_>>();
+    matches!(cells.len(), 2..=4).then(|| cells[cells.len() - 1])
 }
 
 fn unusable_result(result: &str) -> bool {
