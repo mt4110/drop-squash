@@ -31,6 +31,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/manual-qa.md",
         "and Gatekeeper result rows must name the",
     ),
+    ("docs/manual-qa.md", "notary, stapler, `spctl` assessment"),
+    ("docs/manual-qa.md", "notary/stapler/`spctl`"),
     ("docs/manual-qa.md", "same public `DropSquash.dmg` file"),
     (
         "docs/manual-qa.md",
