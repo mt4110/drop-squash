@@ -1,10 +1,14 @@
 use std::sync::Mutex;
+
+use dropsquash_core::EncodeJob;
+use dropsquash_queue::{QueueEvent, QueueJobId, QueueWorker};
 use tokio_util::sync::CancellationToken;
 
 #[derive(Debug, Default)]
 pub struct AppState {
     pub config_lock: Mutex<()>,
     pub active_conversion: Mutex<Option<CancellationToken>>,
+    queue: Mutex<QueueWorker>,
 }
 
 impl AppState {
@@ -30,6 +34,22 @@ impl AppState {
         if let Ok(mut active) = self.active_conversion.lock() {
             *active = None;
         }
+    }
+
+    pub fn enqueue_job(&self, job: EncodeJob) -> Result<QueueEvent, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.enqueue(job))
+    }
+
+    pub fn start_next_job(&self) -> Result<Option<QueueEvent>, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.start_next())
+    }
+
+    pub fn cancel_queued_job(&self, id: QueueJobId) -> Result<Option<QueueEvent>, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.cancel_pending(id))
+    }
+
+    pub fn block_queued_jobs(&self, error: String) -> Result<Vec<QueueEvent>, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.block_pending(error))
     }
 }
 

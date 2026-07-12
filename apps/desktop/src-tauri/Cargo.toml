@@ -15,6 +15,7 @@ dropsquash-license.workspace = true
 dropsquash-platform.workspace = true
 dropsquash-postprocess.workspace = true
 dropsquash-privacy.workspace = true
+dropsquash-queue.workspace = true
 serde.workspace = true
 tauri = { version = "2.11.5", features = [] }
 tauri-plugin-dialog = "2.7.1"

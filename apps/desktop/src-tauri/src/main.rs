@@ -11,6 +11,10 @@ fn main() {
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,
+            commands::enqueue_queue_job,
+            commands::start_next_queue_job,
+            commands::cancel_queued_job,
+            commands::block_queued_jobs,
             commands::trash_original,
             commands::activate_license,
             commands::forget_license

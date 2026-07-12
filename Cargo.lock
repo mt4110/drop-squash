@@ -951,6 +951,7 @@ dependencies = [
  "dropsquash-platform",
  "dropsquash-postprocess",
  "dropsquash-privacy",
+ "dropsquash-queue",
  "serde",
  "tauri",
  "tauri-build",
