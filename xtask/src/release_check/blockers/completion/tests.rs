@@ -62,6 +62,15 @@ fn reports_product_setup_without_license_keys() {
 }
 
 #[test]
+fn reports_product_setup_without_intended_product() {
+    let text = "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Lemon Squeezy product setup"));
+}
+
+#[test]
 fn reports_packaged_manual_qa_without_canonical_artifact_names() {
     let text = "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |\n";
 
@@ -361,7 +370,7 @@ fn reports_benchmark_completion_without_external_csv_path() {
 fn described_blockers() -> String {
     [
         "| Packaged macOS manual QA | Blocked | Tested the public `DropSquash.dmg` artifact with the filled manual QA table and `manual-qa-check` passing | TBD | `docs/manual-qa.md` |\n",
-        "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |\n",
+        "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
         "| Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",

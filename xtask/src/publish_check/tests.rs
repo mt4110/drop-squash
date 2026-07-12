@@ -250,7 +250,7 @@ fn evidence(blocker: &str) -> &'static str {
             "Release-set benchmark CSV absolute path outside repo covers short, medium, and large samples, smaller outputs, machine/OS context, and 20% regression threshold"
         }
         "Lemon Squeezy product setup" => {
-            "Sandbox product DropSquash has license keys enabled"
+            "Sandbox product is configured for intended product DropSquash with license keys enabled"
         }
         "Lemon Squeezy sandbox purchase" => {
             "Sandbox checkout completed for intended product, test buyer, and order"

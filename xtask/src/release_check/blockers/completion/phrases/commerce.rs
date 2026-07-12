@@ -3,6 +3,7 @@ use super::Entry;
 pub(super) const ENTRIES: &[Entry] = &[
     ("Lemon Squeezy product setup", "Sandbox product"),
     ("Lemon Squeezy product setup", "DropSquash"),
+    ("Lemon Squeezy product setup", "intended product"),
     ("Lemon Squeezy product setup", "license keys enabled"),
     ("Lemon Squeezy sandbox purchase", "Sandbox checkout"),
     ("Lemon Squeezy sandbox purchase", "intended product"),
