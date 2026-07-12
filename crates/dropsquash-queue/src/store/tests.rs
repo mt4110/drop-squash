@@ -42,6 +42,19 @@ fn completed_jobs_keep_terminal_status() {
 }
 
 #[test]
+fn terminal_active_jobs_release_next_pending_job() {
+    let mut queue = InMemoryQueue::default();
+    queue.enqueue(job("first.mov"));
+    let second = queue.enqueue(job("second.mov"));
+
+    queue.start_next();
+    let cancelled = queue.cancel_active().unwrap();
+
+    assert_eq!(cancelled.status, QueueJobStatus::Cancelled);
+    assert_eq!(queue.start_next().map(|item| item.id), Some(second.id));
+}
+
+#[test]
 fn empty_only_when_no_pending_or_active_job_exists() {
     let mut queue = InMemoryQueue::default();
     assert!(queue.is_empty());
