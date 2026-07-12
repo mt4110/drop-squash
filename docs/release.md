@@ -161,6 +161,8 @@ Homebrew cask command inputs, and Homebrew tap PR evidence draft:
 cargo run -p xtask -- release-notes-prepare path/to/DropSquash.dmg https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 ```
 
+Pass `--markdown-output /tmp/dropsquash-release-notes-prepared.md` to write
+the prepared fields to an absolute `.md` path outside the repository.
 The generated checksum line is a pre-upload aid and the generated
 `GitHub Release checksum` field is intentionally marked pending. Replace it
 with concrete public evidence only after the matching `SHA256SUMS` file is

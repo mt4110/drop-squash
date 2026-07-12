@@ -1,39 +1,30 @@
 use crate::artifact_check;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
+mod options;
 mod output;
 mod url;
+
+use options::Input;
 
 const TAURI_CONFIG: &str = "apps/desktop/src-tauri/tauri.conf.json";
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let input = Input::parse(args)?;
     let notes = PreparedNotes::current(&input)?;
-    for line in notes.lines() {
+    let lines = notes.lines();
+    for line in &lines {
         println!("{line}");
     }
-    Ok(())
-}
-
-#[derive(Debug)]
-struct Input {
-    artifact: PathBuf,
-    artifact_url: String,
-}
-
-impl Input {
-    fn parse(args: Vec<String>) -> Result<Self, String> {
-        if args.len() != 2 {
-            return Err("release-notes-prepare requires <DropSquash.dmg> <Artifact URL>".into());
-        }
-        Ok(Self {
-            artifact: PathBuf::from(&args[0]),
-            artifact_url: args[1].clone(),
-        })
+    if let Some(path) = &input.markdown_output {
+        std::fs::write(path, format!("{}\n", lines.join("\n")))
+            .map_err(|error| error.to_string())?;
+        println!("release notes Markdown output: {}", path.display());
     }
+    Ok(())
 }
 
 struct PreparedNotes {

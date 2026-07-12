@@ -36,6 +36,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "`App artifact` recorded"),
     ("docs/release.md", "manual QA"),
     ("docs/release.md", "release-notes-prepare"),
+    (
+        "docs/release.md",
+        "--markdown-output /tmp/dropsquash-release-notes-prepared.md",
+    ),
     ("docs/release.md", "intentionally marked pending"),
     (
         "docs/release.md",

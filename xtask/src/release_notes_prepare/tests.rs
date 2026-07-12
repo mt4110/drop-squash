@@ -10,6 +10,7 @@ fn parses_artifact_and_url() {
     .unwrap();
 
     assert_eq!(input.artifact.file_name().unwrap(), "DropSquash.dmg");
+    assert!(input.markdown_output.is_none());
 }
 
 #[test]
@@ -17,6 +18,65 @@ fn rejects_wrong_argument_count() {
     let error = Input::parse(vec!["DropSquash.dmg".into()]).unwrap_err();
 
     assert!(error.contains("release-notes-prepare"));
+}
+
+#[test]
+fn parses_markdown_output() {
+    let input = Input::parse(vec![
+        "target/release/bundle/dmg/DropSquash.dmg".into(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        "--markdown-output".into(),
+        "/tmp/dropsquash-release-notes-prepared.md".into(),
+    ])
+    .unwrap();
+
+    assert_eq!(
+        input.markdown_output.unwrap(),
+        std::path::PathBuf::from("/tmp/dropsquash-release-notes-prepared.md")
+    );
+}
+
+#[test]
+fn rejects_relative_markdown_output() {
+    let error = Input::parse(vec![
+        "target/release/bundle/dmg/DropSquash.dmg".into(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        "--markdown-output".into(),
+        "../release-notes.md".into(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("absolute"));
+}
+
+#[test]
+fn rejects_non_markdown_output() {
+    let error = Input::parse(vec![
+        "target/release/bundle/dmg/DropSquash.dmg".into(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        "--markdown-output".into(),
+        "/tmp/release-notes.txt".into(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains(".md"));
+}
+
+#[test]
+fn rejects_markdown_output_inside_repository() {
+    let error = Input::parse(vec![
+        "target/release/bundle/dmg/DropSquash.dmg".into(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        "--markdown-output".into(),
+        std::env::current_dir()
+            .unwrap()
+            .join("release-notes-prepared.md")
+            .display()
+            .to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("outside the repository"));
 }
 
 #[test]
@@ -53,6 +113,7 @@ fn rejects_artifact_with_nix_store_reference() {
         artifact,
         artifact_url:
             "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        markdown_output: None,
     };
 
     let error = match PreparedNotes::current(&input) {
