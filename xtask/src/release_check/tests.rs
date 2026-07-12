@@ -231,6 +231,31 @@ fn scans_repository_tree_for_secret_like_files() {
 }
 
 #[test]
+fn rejects_committed_local_media_and_benchmark_evidence() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "bench/results.csv",
+        "private sample results",
+    );
+
+    let error = reject_secret_files(directory.path()).unwrap_err();
+
+    assert!(error.contains("local evidence file"));
+    assert!(error.contains("results.csv"));
+}
+
+#[test]
+fn rejects_committed_release_artifacts_and_private_recordings() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "release/DropSquash.dmg", "artifact");
+
+    let error = reject_secret_files(directory.path()).unwrap_err();
+
+    assert!(error.contains("DropSquash.dmg"));
+}
+
+#[test]
 fn ignores_local_agent_state_when_scanning_for_secrets() {
     let directory = tempfile::tempdir().unwrap();
     write(directory.path(), "docs/release.md", "safe");
