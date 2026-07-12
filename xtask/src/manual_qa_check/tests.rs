@@ -703,6 +703,22 @@ fn reports_incomplete_packaged_app_results() {
 }
 
 #[test]
+fn reports_conversion_without_smaller_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Choose recording conversion | Small `.mov` | Creates output | saved clip.squashed.mp4 and original remained in place |\n\
+| Drag-and-drop conversion | Small `.mov` | Creates output | saved drag.squashed.mp4 and original remained in place |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Choose recording conversion")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Drag-and-drop conversion")));
+}
+
+#[test]
 fn reports_privacy_receipt_without_zero_upload_policy() {
     let (_directory, path) = write_manual_qa(
         "| Privacy receipt sidecar | Successful conversion | Creates receipt | clip.privacy.json recorded uploaded_bytes and metadata_policy |\n",
@@ -1001,9 +1017,9 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; license cache cleared and app returned to trial state |\n");
         } else if check == "Choose recording conversion" {
-            text.push_str("| Choose recording conversion | Passes | saved clip.squashed.mp4 and original remained in place |\n");
+            text.push_str("| Choose recording conversion | Passes | saved smaller clip.squashed.mp4 and original remained in place |\n");
         } else if check == "Drag-and-drop conversion" {
-            text.push_str("| Drag-and-drop conversion | Passes | saved drag.squashed.mp4 and original remained in place |\n");
+            text.push_str("| Drag-and-drop conversion | Passes | saved smaller drag.squashed.mp4 and original remained in place |\n");
         } else if check == "Privacy receipt sidecar" {
             text.push_str("| Privacy receipt sidecar | Passes | clip.privacy.json recorded uploaded_bytes = 0 and metadata_policy = preserve |\n");
         } else if check == "Reveal privacy receipt" {
