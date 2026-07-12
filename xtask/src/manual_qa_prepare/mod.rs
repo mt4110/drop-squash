@@ -3,6 +3,7 @@ mod build_identity;
 mod environment;
 mod markdown;
 mod options;
+mod prepared_markdown;
 mod release_candidate;
 mod state;
 
@@ -80,8 +81,11 @@ fn print_paths(options: &Options) -> Result<(), String> {
     }
     fields.extend(environment.manual_qa_fields());
     markdown::print_fields(&fields);
-    if let Some(path) = artifact {
-        release_candidate::print_rows(&path)?;
+    if let Some(path) = &artifact {
+        release_candidate::print_rows(path)?;
+    }
+    if let Some(path) = &options.markdown_output {
+        prepared_markdown::write(path, &fields, artifact.as_deref())?;
     }
     Ok(())
 }

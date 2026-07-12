@@ -59,6 +59,10 @@ The command also prints `manual QA Markdown fields:` followed by table rows
 that can be pasted into the macOS Packaged App field table.
 When the selected app artifact is `DropSquash.dmg`, it also prints
 `manual QA Release Candidate rows:` for the artifact-check and checksum rows.
+Pass `--markdown-output /tmp/dropsquash-manual-qa-prepared.md` to write those
+generated field and release-candidate rows to a temporary Markdown file for
+copying. Keep that file outside the repository; it is a preparation aid, not a
+substitute for concrete manual observations.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, keep those
 paths outside the repository so private app state, generated videos, and QA
 evidence cannot be committed or deleted by accident.

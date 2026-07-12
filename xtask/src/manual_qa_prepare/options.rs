@@ -8,6 +8,7 @@ pub(super) struct Options {
     pub(super) app_artifact: Option<PathBuf>,
     pub(super) app_state_dir: PathBuf,
     pub(super) input_sample_set: Option<String>,
+    pub(super) markdown_output: Option<PathBuf>,
     pub(super) output_dir: PathBuf,
     pub(super) reset_trial: bool,
     pub(super) restore_state: bool,
@@ -41,6 +42,7 @@ impl Options {
             "--app-artifact" => self.app_artifact = Some(PathBuf::from(value)),
             "--app-state-dir" => self.app_state_dir = PathBuf::from(value),
             "--input-sample-set" => self.input_sample_set = Some(value),
+            "--markdown-output" => self.markdown_output = Some(PathBuf::from(value)),
             "--output-dir" => self.output_dir = PathBuf::from(value),
             "--state-dir" => self.state_dir = PathBuf::from(value),
             other => return Err(format!("unknown manual QA prepare argument: {other}")),
@@ -68,6 +70,9 @@ impl Options {
             );
         }
         path_policy::require_outside_repo("--app-state-dir", &self.app_state_dir)?;
+        if let Some(path) = &self.markdown_output {
+            path_policy::require_outside_repo("--markdown-output", path)?;
+        }
         path_policy::require_outside_repo("--output-dir", &self.output_dir)?;
         path_policy::require_outside_repo("--state-dir", &self.state_dir)?;
         Ok(())
@@ -82,6 +87,7 @@ impl Options {
                 .join("Application Support")
                 .join("DropSquash"),
             input_sample_set: None,
+            markdown_output: None,
             output_dir: PathBuf::from("/tmp/dropsquash-manual-qa-output"),
             reset_trial: false,
             restore_state: false,
@@ -91,6 +97,6 @@ impl Options {
 }
 
 fn usage() -> String {
-    "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--input-sample-set <text>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
+    "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--input-sample-set <text>] [--markdown-output <path>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
         .to_string()
 }
