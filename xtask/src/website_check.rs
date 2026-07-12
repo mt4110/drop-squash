@@ -2,7 +2,9 @@ use std::path::{Path, PathBuf};
 
 mod external_policy;
 mod href_policy;
+mod html_files;
 mod html_links;
+mod local_links;
 mod platform_claims;
 mod release_copy;
 mod required_pages;
@@ -34,28 +36,10 @@ fn check_root(root: &Path) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
     required_pages::check(root, &mut errors);
     release_copy::check(root, &mut errors);
-    for path in html_files(root)? {
+    for path in html_files::collect(root)? {
         check_html(root, &path, &mut errors)?;
     }
     Ok(errors)
-}
-
-fn html_files(root: &Path) -> Result<Vec<PathBuf>, String> {
-    let mut files = Vec::new();
-    collect_html_files(root, &mut files)?;
-    Ok(files)
-}
-
-fn collect_html_files(directory: &Path, files: &mut Vec<PathBuf>) -> Result<(), String> {
-    for entry in std::fs::read_dir(directory).map_err(|error| error.to_string())? {
-        let path = entry.map_err(|error| error.to_string())?.path();
-        if path.is_dir() {
-            collect_html_files(&path, files)?;
-        } else if path.extension().and_then(|value| value.to_str()) == Some("html") {
-            files.push(path);
-        }
-    }
-    Ok(())
 }
 
 fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), String> {
@@ -70,7 +54,7 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         if href_policy::is_external_or_anchor(&href) {
             continue;
         }
-        if !local_href_exists(path, &href) {
+        if !local_links::exists(path, &href) {
             errors.push(format!("{} links to missing {href}", path.display()));
         }
     }
@@ -80,24 +64,11 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
     for action in html_links::actions(&text) {
         href_policy::check(path, &action, errors);
         external_policy::check(path, &action, errors);
-        if !href_policy::is_external_or_anchor(&action) && !local_href_exists(path, &action) {
+        if !href_policy::is_external_or_anchor(&action) && !local_links::exists(path, &action) {
             errors.push(format!("{} links to missing {action}", path.display()));
         }
     }
     Ok(())
-}
-
-fn local_href_exists(path: &Path, href: &str) -> bool {
-    let Some(parent) = path.parent() else {
-        return false;
-    };
-    let href = href_path(href);
-    let target = parent.join(href);
-    target.is_file() || target.join("index.html").is_file()
-}
-
-fn href_path(href: &str) -> &str {
-    href.split(['#', '?']).next().unwrap_or(href)
 }
 
 #[cfg(test)]
