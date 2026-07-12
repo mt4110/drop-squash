@@ -55,6 +55,20 @@ fn rejects_non_dmg_artifacts() {
     assert!(error.contains("must be a DMG"));
 }
 
+#[test]
+fn rejects_noncanonical_dmg_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("Other.dmg");
+    std::fs::File::create(&path)
+        .unwrap()
+        .write_all(&dmg_bytes(b"other artifact"))
+        .unwrap();
+
+    let error = check_file(&path).unwrap_err();
+
+    assert!(error.contains("DropSquash.dmg"));
+}
+
 fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     let mut bytes = prefix.to_vec();
     let mut trailer = vec![0; 512];

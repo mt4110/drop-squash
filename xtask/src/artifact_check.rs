@@ -16,6 +16,7 @@ pub fn run(paths: Vec<String>) -> Result<(), String> {
 
 fn check_file(path: &Path) -> Result<(), String> {
     let bytes = dmg::read(path, "artifact")?;
+    require_canonical_name(path)?;
     if contains_bytes(&bytes, DISALLOWED_BYTES) {
         return Err(format!(
             "artifact contains disallowed /nix/store reference: {}",
@@ -23,6 +24,13 @@ fn check_file(path: &Path) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+fn require_canonical_name(path: &Path) -> Result<(), String> {
+    if path.file_name().and_then(|value| value.to_str()) == Some("DropSquash.dmg") {
+        return Ok(());
+    }
+    Err("artifact must be named DropSquash.dmg".to_string())
 }
 
 fn contains_bytes(haystack: &[u8], needle: &[u8]) -> bool {
