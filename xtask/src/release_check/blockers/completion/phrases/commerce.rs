@@ -1,0 +1,23 @@
+use super::Entry;
+
+pub(super) const ENTRIES: &[Entry] = &[
+    ("Lemon Squeezy product setup", "Sandbox product"),
+    ("Lemon Squeezy product setup", "DropSquash"),
+    ("Lemon Squeezy product setup", "license keys enabled"),
+    ("Lemon Squeezy sandbox purchase", "Sandbox checkout"),
+    ("Lemon Squeezy sandbox purchase", "intended product"),
+    ("Lemon Squeezy sandbox purchase", "test buyer"),
+    ("Lemon Squeezy sandbox purchase", "order"),
+    ("Public website deployment", "Production website serves"),
+    ("Public website deployment", "release-status"),
+    ("Public website deployment", "privacy"),
+    ("Public website deployment", "pricing"),
+    ("Public website deployment", "support"),
+    ("Public website deployment", "download"),
+    ("Refund policy finalized", "Production refund policy"),
+    ("Refund policy finalized", "final"),
+    ("Refund policy finalized", "checkout goes live"),
+    ("Live checkout link", "Public pricing page opens"),
+    ("Live checkout link", "tested Lemon Squeezy checkout"),
+    ("Live checkout link", "intended product"),
+];

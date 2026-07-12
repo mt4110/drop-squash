@@ -1,0 +1,35 @@
+use super::Entry;
+
+pub(super) const ENTRIES: &[Entry] = &[
+    ("Packaged macOS manual QA", ".app` or `.dmg"),
+    ("Empty key activation", "Activate stays disabled"),
+    ("Empty key activation", "raw key is absent"),
+    ("Empty key activation", "local cache"),
+    (
+        "Valid sandbox activation",
+        "Activating state disables submit",
+    ),
+    ("Valid sandbox activation", "Pro state"),
+    ("Valid sandbox activation", "raw key is absent"),
+    ("Valid sandbox activation", "local cache"),
+    (
+        "Invalid license key handling",
+        "Activating state disables submit",
+    ),
+    ("Invalid license key handling", "friendly error"),
+    ("Invalid license key handling", "raw key is absent"),
+    ("Invalid license key handling", "local cache"),
+    ("License network failure", "Friendly network error"),
+    ("License network failure", "existing valid local cache"),
+    ("License network failure", "raw key is absent"),
+    ("License network failure", "local cache"),
+    ("Local license forget", "Forgetting state disables action"),
+    ("Local license forget", "local cache"),
+    ("Local license forget", "removed"),
+    ("Local license forget", "trial or locked"),
+    ("Benchmark release set", "Release-set benchmark CSV"),
+    ("Benchmark release set", "short, medium, and large"),
+    ("Benchmark release set", "smaller outputs"),
+    ("Benchmark release set", "machine/OS context"),
+    ("Benchmark release set", "20% regression threshold"),
+];

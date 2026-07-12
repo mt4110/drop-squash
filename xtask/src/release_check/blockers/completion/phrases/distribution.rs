@@ -1,0 +1,28 @@
+use super::Entry;
+
+pub(super) const ENTRIES: &[Entry] = &[
+    ("Signed DMG", "`codesign`"),
+    ("Signed DMG", "Developer ID"),
+    ("Signed DMG", "DropSquash.dmg"),
+    ("Notarized and stapled DMG", "`spctl`"),
+    ("Notarized and stapled DMG", "notary"),
+    ("Notarized and stapled DMG", "stapled"),
+    ("Notarized and stapled DMG", "DropSquash.dmg"),
+    ("Gatekeeper clean-machine open", "Fresh macOS account"),
+    ("Gatekeeper clean-machine open", "signed"),
+    ("Gatekeeper clean-machine open", "notarized"),
+    ("Gatekeeper clean-machine open", "stapled app"),
+    (
+        "Gatekeeper clean-machine open",
+        "without Gatekeeper warning",
+    ),
+    ("Published checksum", "SHA-256"),
+    ("Published checksum", "SHA256SUMS"),
+    ("Published checksum", "DropSquash.dmg"),
+    ("Published checksum", "attached"),
+    ("Homebrew cask install", "brew install --cask"),
+    ("Homebrew cask install", "versioned artifact"),
+    ("Homebrew cask install", "DropSquash.dmg"),
+    ("Homebrew cask install", "auto_updates false"),
+    ("Homebrew cask install", "zap"),
+];
