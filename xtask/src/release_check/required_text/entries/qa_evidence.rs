@@ -8,6 +8,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
     ("docs/qa-evidence.md", "file names"),
+    ("docs/qa-evidence.md", "benchmark CSV path evidence"),
     ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
     ("docs/qa-evidence.md", "concrete identity fields"),
     ("docs/qa-evidence.md", "same `.dmg` file evidence"),
