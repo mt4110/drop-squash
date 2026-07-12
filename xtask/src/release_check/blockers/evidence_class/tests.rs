@@ -132,6 +132,24 @@ fn reports_public_url_classification_without_matching_owner_field() {
 }
 
 #[test]
+fn reports_manual_classification_without_manual_qa_owner() {
+    let text = "| Valid sandbox activation | License sandbox | Activate the packaged app and inspect the local cache | Release notes |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn reports_signing_classification_without_release_notes_owner() {
+    let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture Developer ID verification output | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
 fn reports_benchmark_action_without_external_csv_path() {
     let text = "| Benchmark release set | Benchmark | Run the release-set benchmark and record threshold evidence | `docs/manual-qa.md` |\n";
 
@@ -173,10 +191,14 @@ fn action_for(blocker: &str) -> &'static str {
 }
 
 fn owner_for(blocker: &str) -> &'static str {
-    crate::release_url_fields::PAIRS
+    if let Some((_, field)) = crate::release_url_fields::PAIRS
         .iter()
         .find(|(candidate, _)| *candidate == blocker)
-        .map_or("Record the evidence in the named location", |(_, field)| {
-            *field
-        })
+    {
+        return field;
+    }
+    match blocker {
+        "Signed DMG" | "Notarized and stapled DMG" => "Release notes",
+        _ => "`docs/manual-qa.md`",
+    }
 }

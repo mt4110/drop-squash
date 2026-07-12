@@ -90,10 +90,26 @@ fn has_required_action_detail(blocker: &str, action: &str) -> bool {
 }
 
 fn has_required_owner_detail(blocker: &str, owner: &str) -> bool {
-    crate::release_url_fields::PAIRS
+    if let Some((_, field)) = crate::release_url_fields::PAIRS
         .iter()
         .find(|(candidate, _)| *candidate == blocker)
-        .map_or(true, |(_, field)| owner == *field)
+    {
+        return owner == *field;
+    }
+    match blocker {
+        "Packaged macOS manual QA"
+        | "Lemon Squeezy product setup"
+        | "Lemon Squeezy sandbox purchase"
+        | "Empty key activation"
+        | "Valid sandbox activation"
+        | "Invalid license key handling"
+        | "License network failure"
+        | "Local license forget"
+        | "Gatekeeper clean-machine open"
+        | "Benchmark release set" => owner == "`docs/manual-qa.md`",
+        "Signed DMG" | "Notarized and stapled DMG" => owner == "Release notes",
+        _ => false,
+    }
 }
 
 #[cfg(test)]
