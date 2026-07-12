@@ -1,4 +1,4 @@
-use super::{unclassified_blockers, ALLOWED_CLASSES};
+use super::{unclassified_blockers, unknown_classification_rows, ALLOWED_CLASSES};
 use crate::release_check::blockers::REQUIRED_BLOCKERS;
 
 #[test]
@@ -76,6 +76,33 @@ fn reports_unknown_evidence_class() {
     let unclassified = unclassified_blockers(&text);
 
     assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_unknown_evidence_classification_rows() {
+    let text = REQUIRED_BLOCKERS
+        .iter()
+        .map(|blocker| {
+            format!("| {blocker} | Distribution | Capture concrete release evidence | Release owner |\n")
+        })
+        .chain(std::iter::once(
+            "| Extra launch task | Distribution | Capture concrete release evidence | Release owner |\n"
+                .to_string(),
+        ))
+        .collect::<String>();
+
+    let unknown = unknown_classification_rows(&text);
+
+    assert_eq!(unknown, vec!["Extra launch task"]);
+}
+
+#[test]
+fn ignores_evidence_classification_header_rows() {
+    let unknown = unknown_classification_rows(
+        "| Blocker | Class | Next action | Evidence owner |\n|---|---|---|---|\n",
+    );
+
+    assert!(unknown.is_empty());
 }
 
 #[test]

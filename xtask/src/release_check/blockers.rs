@@ -30,6 +30,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let misplaced = records::misplaced_record_targets(&text);
     let mismatched_urls = url_pairs::mismatched_verified_url_pairs(&text);
     let unclassified = evidence_class::unclassified_blockers(&text);
+    let unknown_classifications = evidence_class::unknown_classification_rows(&text);
     let issues = issues::Issues {
         missing,
         invalid,
@@ -40,6 +41,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         misplaced,
         mismatched_urls,
         unclassified,
+        unknown_classifications,
     };
     if issues.is_empty() {
         return Ok(());

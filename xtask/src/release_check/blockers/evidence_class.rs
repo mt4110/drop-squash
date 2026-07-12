@@ -17,6 +17,13 @@ pub(super) fn unclassified_blockers(text: &str) -> Vec<&'static str> {
         .collect()
 }
 
+pub(super) fn unknown_classification_rows(text: &str) -> Vec<&str> {
+    text.lines()
+        .filter_map(classification_cells)
+        .filter_map(|cells| unknown_classification_name(&cells))
+        .collect()
+}
+
 fn has_complete_classification(text: &str, blocker: &str) -> bool {
     text.lines()
         .filter_map(classification_cells)
@@ -41,6 +48,12 @@ fn matches_classification(cells: &[&str], blocker: &str) -> bool {
         && is_actionable(cells[2])
         && has_required_action_detail(blocker, cells[2])
         && is_named_owner(cells[3])
+}
+
+fn unknown_classification_name<'a>(cells: &[&'a str]) -> Option<&'a str> {
+    let name = cells.first().copied()?;
+    let known = name == "Blocker" || name.starts_with("---") || REQUIRED_BLOCKERS.contains(&name);
+    (!known).then_some(name)
 }
 
 fn is_actionable(value: &str) -> bool {
