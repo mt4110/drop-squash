@@ -36,6 +36,13 @@ fn extracts_unquoted_src_values() {
 }
 
 #[test]
+fn extracts_unquoted_self_closing_src_values() {
+    let sources = srcs(r#"<img src=logo.png />"#);
+
+    assert_eq!(sources, vec!["logo.png"]);
+}
+
+#[test]
 fn extracts_form_action_values() {
     let actions = actions(r#"<form action="submit.html"></form><form ACTION='buy.html'>"#);
 
