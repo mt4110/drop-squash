@@ -1,6 +1,7 @@
 use crate::{media_policy_check, privacy_policy_check, website_check};
 mod blockers;
 mod desktop_capability;
+mod dev_environment;
 mod evidence;
 mod manual_blockers;
 mod release_doc;
@@ -13,6 +14,7 @@ mod workflow;
 use std::path::Path;
 
 pub fn run() -> Result<(), String> {
+    dev_environment::reject_parallel_version_manager(Path::new("."))?;
     secret_files::reject_secret_files(Path::new("."))?;
     secret_files::require_local_agent_ignore(Path::new(".gitignore"))?;
     desktop_capability::check_default_capability(Path::new(

@@ -1,3 +1,4 @@
+use super::dev_environment::reject_parallel_version_manager;
 use super::secret_files::{is_secret_file, reject_secret_files, require_local_agent_ignore};
 use super::workflow::{
     missing_ci_workflow_gates, missing_desktop_workflow_gates, missing_release_workflow_gates,
@@ -338,6 +339,32 @@ fn reports_missing_nix_output_ignore_rule() {
     let error = require_local_agent_ignore(&path).unwrap_err();
 
     assert!(error.contains("/result-*"));
+}
+
+#[test]
+fn rejects_parallel_version_manager_config() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "docs/release.md", "safe");
+    write(
+        directory.path(),
+        ".mise.toml",
+        "[tools]\nrust = \"1.95.0\"\n",
+    );
+
+    let error = reject_parallel_version_manager(directory.path()).unwrap_err();
+
+    assert!(error.contains("parallel version manager"));
+    assert!(error.contains(".mise.toml"));
+}
+
+#[test]
+fn ignores_private_parallel_version_manager_notes() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "docs/release.md", "safe");
+    write(directory.path(), ".private_docs/.mise.toml", "local note");
+    write(directory.path(), ".codex/.mise.toml", "local note");
+
+    reject_parallel_version_manager(directory.path()).unwrap();
 }
 
 fn write(root: &std::path::Path, name: &str, text: &str) {
