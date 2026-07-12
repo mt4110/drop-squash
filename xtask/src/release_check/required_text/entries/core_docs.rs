@@ -84,6 +84,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release-notes-template.md",
+        "exact lowercase SHA-256 digest",
+    ),
+    (
+        "docs/release-notes-template.md",
         "same-machine comparison",
     ),
     (
