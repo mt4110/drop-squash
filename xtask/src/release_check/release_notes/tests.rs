@@ -35,6 +35,7 @@ Public website URL
 Refund policy URL
 Live checkout URL
 GitHub Release checksum
+the Artifact URL above
 GitHub Release URL
 Homebrew tap PR
 Homebrew tap PR URL

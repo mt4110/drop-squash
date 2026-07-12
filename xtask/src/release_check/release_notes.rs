@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 44] = [
+const REQUIRED_TEXT: [&str; 45] = [
     "Version",
     "Artifact",
     "Artifact: DropSquash.dmg",
@@ -33,6 +33,7 @@ const REQUIRED_TEXT: [&str; 44] = [
     "Refund policy URL",
     "Live checkout URL",
     "GitHub Release checksum",
+    "the Artifact URL above",
     "GitHub Release URL",
     "Homebrew tap PR",
     "Homebrew tap PR URL",

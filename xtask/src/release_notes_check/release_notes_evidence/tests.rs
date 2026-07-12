@@ -42,7 +42,7 @@ fn accepts_concrete_production_urls() {
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
-- GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg with 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- GitHub Release checksum: SHA256SUMS attached to release for https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - Homebrew tap PR: cask update reviewed in tap PR for DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with auto_updates false and zap cleanup path
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
@@ -659,6 +659,21 @@ fn rejects_release_checksum_evidence_without_matching_digest() {
     assert!(errors
         .iter()
         .any(|error| error.contains("GitHub Release checksum must include")));
+}
+
+#[test]
+fn rejects_release_checksum_evidence_without_artifact_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg with 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum must include the Artifact URL")));
 }
 
 #[test]
