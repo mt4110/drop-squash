@@ -1,6 +1,6 @@
 use super::{row, REQUIRED_BLOCKERS};
 
-const REQUIRED_PHRASES: [(&str, &str); 60] = [
+const REQUIRED_PHRASES: [(&str, &str); 62] = [
     ("Packaged macOS manual QA", ".app` or `.dmg"),
     ("Lemon Squeezy product setup", "Sandbox product"),
     ("Lemon Squeezy product setup", "DropSquash"),
@@ -44,6 +44,8 @@ const REQUIRED_PHRASES: [(&str, &str); 60] = [
     ("Refund policy finalized", "final"),
     ("Refund policy finalized", "checkout goes live"),
     ("Live checkout link", "Public pricing page opens"),
+    ("Live checkout link", "tested Lemon Squeezy checkout"),
+    ("Live checkout link", "intended product"),
     ("Signed DMG", "`codesign`"),
     ("Signed DMG", "Developer ID"),
     ("Signed DMG", "DropSquash.dmg"),

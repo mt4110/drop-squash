@@ -80,6 +80,15 @@ fn reports_public_website_completion_without_required_pages() {
 }
 
 #[test]
+fn reports_live_checkout_completion_without_product_context() {
+    let text = "| Live checkout link | Blocked | Public pricing page opens checkout | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_valid_activation_completion_without_cache() {
     let text = "| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
