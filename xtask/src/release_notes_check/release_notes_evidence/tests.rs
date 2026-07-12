@@ -354,6 +354,29 @@ fn rejects_placeholders_and_wrong_url_kinds() {
 }
 
 #[test]
+fn rejects_release_urls_with_imposter_hosts() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com.evil/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Live checkout URL: https://lemonsqueezy.com.evil/checkout/buy/abc123
+- GitHub Release URL: https://github.com.evil/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com.evil/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("Artifact URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Live checkout URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew tap PR URL")));
+}
+
+#[test]
 fn rejects_nested_artifact_download_url() {
     let errors = check_text(
         r#"

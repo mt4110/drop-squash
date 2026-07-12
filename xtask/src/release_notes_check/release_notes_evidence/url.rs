@@ -9,45 +9,47 @@ pub(super) enum Kind {
 }
 
 pub(super) fn is_valid(kind: Kind, value: &str) -> bool {
-    value.starts_with("https://") && has_no_whitespace(value) && matches_kind(kind, value)
+    crate::public_url::HttpsUrl::parse(value).is_some_and(|url| matches_kind(kind, &url))
 }
 
-fn matches_kind(kind: Kind, value: &str) -> bool {
-    let lower = value.to_ascii_lowercase();
+fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
+    let path = url.path().to_ascii_lowercase();
     match kind {
         Kind::Artifact => {
-            has_github_release_asset(
-                value,
-                "https://github.com/mt4110/drop-squash/releases/download/",
-            ) && lower.ends_with(".dmg")
+            url.host_is("github.com")
+                && has_github_release_asset(url.path(), "mt4110/drop-squash/releases/download/")
+                && path.ends_with(".dmg")
         }
         Kind::Website => {
-            has_release_status_path(&lower)
-                && !lower.contains("lemonsqueezy.com")
-                && !lower.contains("checkout")
+            has_release_status_path(&path)
+                && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+                && !path.contains("checkout")
         }
-        Kind::Refund => has_refund_path(&lower) && !has_store_or_checkout(&lower),
-        Kind::Checkout => lower.contains("lemonsqueezy.com") && has_checkout_buy_id(&lower),
+        Kind::Refund => has_refund_path(&path) && !has_store_or_checkout(url, &path),
+        Kind::Checkout => {
+            url.host_is_or_subdomain_of("lemonsqueezy.com") && has_checkout_buy_id(&path)
+        }
         Kind::GitHubRelease => {
-            has_release_tag_suffix(value, "https://github.com/mt4110/drop-squash/releases/tag/")
+            url.host_is("github.com")
+                && has_release_tag_suffix(url.path(), "mt4110/drop-squash/releases/tag/")
         }
         Kind::HomebrewPullRequest => {
-            has_numeric_suffix(value, "https://github.com/mt4110/homebrew-tap/pull/")
+            url.host_is("github.com") && has_numeric_suffix(url.path(), "mt4110/homebrew-tap/pull/")
         }
     }
 }
 
 fn has_refund_path(lower: &str) -> bool {
-    lower.ends_with("/refund") || lower.ends_with("/refund/")
+    lower == "refund" || lower.ends_with("/refund") || lower.ends_with("/refund/")
 }
 
-fn has_store_or_checkout(lower: &str) -> bool {
-    lower.contains("lemonsqueezy.com") || lower.contains("checkout")
+fn has_store_or_checkout(url: &crate::public_url::HttpsUrl<'_>, lower_path: &str) -> bool {
+    url.host_is_or_subdomain_of("lemonsqueezy.com") || lower_path.contains("checkout")
 }
 
 fn has_checkout_buy_id(lower: &str) -> bool {
     lower
-        .split("/checkout/buy/")
+        .split("checkout/buy/")
         .nth(1)
         .is_some_and(has_single_path_segment)
 }
@@ -58,7 +60,9 @@ fn has_single_path_segment(value: &str) -> bool {
 }
 
 fn has_release_status_path(lower: &str) -> bool {
-    lower.ends_with("/release-status") || lower.ends_with("/release-status/")
+    lower == "release-status"
+        || lower.ends_with("/release-status")
+        || lower.ends_with("/release-status/")
 }
 
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
@@ -87,8 +91,4 @@ fn has_github_release_asset(value: &str, prefix: &str) -> bool {
         let parts = suffix.split('/').collect::<Vec<_>>();
         parts.len() == 2 && parts.iter().all(|part| !part.is_empty())
     })
-}
-
-fn has_no_whitespace(value: &str) -> bool {
-    !value.chars().any(char::is_whitespace)
 }

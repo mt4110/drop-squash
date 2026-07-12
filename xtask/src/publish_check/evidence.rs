@@ -23,30 +23,43 @@ fn has_placeholder_token(reference: &str) -> bool {
 }
 
 fn is_public_site(reference: &str) -> bool {
-    let lower = reference.to_ascii_lowercase();
-    reference.starts_with("https://")
-        && (lower.ends_with("/release-status") || lower.ends_with("/release-status/"))
-        && !lower.contains("lemonsqueezy.com")
-        && !lower.contains("checkout")
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        let path = url.path().to_ascii_lowercase();
+        is_release_status_path(&path)
+            && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && !path.contains("checkout")
+    })
 }
 
 fn is_refund(reference: &str) -> bool {
-    let lower = reference.to_ascii_lowercase();
-    reference.starts_with("https://")
-        && (lower.ends_with("/refund") || lower.ends_with("/refund/"))
-        && !lower.contains("lemonsqueezy.com")
-        && !lower.contains("checkout")
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        let path = url.path().to_ascii_lowercase();
+        is_refund_path(&path)
+            && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && !path.contains("checkout")
+    })
 }
 
 fn is_checkout(reference: &str) -> bool {
-    let lower = reference.to_ascii_lowercase();
-    reference.starts_with("https://")
-        && !reference.chars().any(char::is_whitespace)
-        && lower.contains("lemonsqueezy.com")
-        && lower
-            .split("/checkout/buy/")
-            .nth(1)
-            .is_some_and(has_single_path_segment)
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && url
+                .path()
+                .to_ascii_lowercase()
+                .split("checkout/buy/")
+                .nth(1)
+                .is_some_and(has_single_path_segment)
+    })
+}
+
+fn is_release_status_path(path: &str) -> bool {
+    path == "release-status"
+        || path.ends_with("/release-status")
+        || path.ends_with("/release-status/")
+}
+
+fn is_refund_path(path: &str) -> bool {
+    path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/")
 }
 
 fn has_single_path_segment(value: &str) -> bool {
@@ -57,8 +70,13 @@ fn has_single_path_segment(value: &str) -> bool {
 fn has_release_tag(reference: &str) -> bool {
     reference.starts_with("GitHub Release ")
         && urls::single_https(reference).is_some_and(|part| {
-            part.strip_prefix("https://github.com/mt4110/drop-squash/releases/tag/")
-                .is_some_and(is_v_semver)
+            crate::public_url::HttpsUrl::parse(part).is_some_and(|url| {
+                url.host_is("github.com")
+                    && url
+                        .path()
+                        .strip_prefix("mt4110/drop-squash/releases/tag/")
+                        .is_some_and(is_v_semver)
+            })
         })
 }
 
@@ -76,9 +94,14 @@ fn is_v_semver(value: &str) -> bool {
 fn has_homebrew_pr(reference: &str) -> bool {
     reference.starts_with("Homebrew tap PR ")
         && urls::single_https(reference).is_some_and(|part| {
-            part.strip_prefix("https://github.com/mt4110/homebrew-tap/pull/")
-                .is_some_and(|suffix| {
-                    !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
-                })
+            crate::public_url::HttpsUrl::parse(part).is_some_and(|url| {
+                url.host_is("github.com")
+                    && url
+                        .path()
+                        .strip_prefix("mt4110/homebrew-tap/pull/")
+                        .is_some_and(|suffix| {
+                            !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
+                        })
+            })
         })
 }

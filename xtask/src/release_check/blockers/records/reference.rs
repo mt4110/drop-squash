@@ -16,38 +16,40 @@ pub(super) fn matches_record_target(blocker: &str, reference: &str) -> bool {
         "GitHub Release" => has_expected_url(
             reference,
             "GitHub Release",
-            "https://github.com/mt4110/drop-squash/releases/tag/",
+            "mt4110/drop-squash/releases/tag/",
         ),
-        "Homebrew tap PR" => has_expected_url(
-            reference,
-            "Homebrew tap PR",
-            "https://github.com/mt4110/homebrew-tap/pull/",
-        ),
+        "Homebrew tap PR" => {
+            has_expected_url(reference, "Homebrew tap PR", "mt4110/homebrew-tap/pull/")
+        }
         other => reference == other,
     }
 }
 
 fn is_public_website(reference: &str) -> bool {
-    let lower = reference.to_ascii_lowercase();
-    reference.starts_with("https://")
-        && has_release_status_path(&lower)
-        && !lower.contains("lemonsqueezy.com")
-        && !lower.contains("checkout")
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        let path = url.path().to_ascii_lowercase();
+        has_release_status_path(&path)
+            && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && !path.contains("checkout")
+    })
 }
 
 fn has_release_status_path(lower: &str) -> bool {
-    lower.ends_with("/release-status") || lower.ends_with("/release-status/")
+    lower == "release-status"
+        || lower.ends_with("/release-status")
+        || lower.ends_with("/release-status/")
 }
 
 fn is_live_checkout(reference: &str) -> bool {
-    let lower = reference.to_ascii_lowercase();
-    reference.starts_with("https://")
-        && !reference.chars().any(char::is_whitespace)
-        && lower.contains("lemonsqueezy.com")
-        && lower
-            .split("/checkout/buy/")
-            .nth(1)
-            .is_some_and(has_single_path_segment)
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && url
+                .path()
+                .to_ascii_lowercase()
+                .split("checkout/buy/")
+                .nth(1)
+                .is_some_and(has_single_path_segment)
+    })
 }
 
 fn has_single_path_segment(value: &str) -> bool {
@@ -56,33 +58,32 @@ fn has_single_path_segment(value: &str) -> bool {
 }
 
 fn is_refund_policy(reference: &str) -> bool {
-    let lower = reference.to_ascii_lowercase();
-    reference.starts_with("https://")
-        && (lower.ends_with("/refund") || lower.ends_with("/refund/"))
-        && !lower.contains("lemonsqueezy.com")
-        && !lower.contains("checkout")
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        let path = url.path().to_ascii_lowercase();
+        (path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/"))
+            && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && !path.contains("checkout")
+    })
 }
 
 fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
     if !reference.starts_with(label) || super::super::placeholders::has_token(reference) {
         return false;
     }
-    let matches = if label == "Homebrew tap PR" {
-        has_numeric_suffix
+    let suffix_matches = if label == "Homebrew tap PR" {
+        is_numeric
     } else {
-        has_release_tag_suffix
+        is_v_semver
     };
-    super::super::reference_urls::single(reference).is_some_and(|url| matches(url, prefix))
-}
-
-fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
-    value.strip_prefix(prefix).is_some_and(|suffix| {
-        !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
+    super::super::reference_urls::single(reference).is_some_and(|value| {
+        crate::public_url::HttpsUrl::parse(value).is_some_and(|url| {
+            url.host_is("github.com") && url.path().strip_prefix(prefix).is_some_and(suffix_matches)
+        })
     })
 }
 
-fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
-    value.strip_prefix(prefix).is_some_and(is_v_semver)
+fn is_numeric(value: &str) -> bool {
+    !value.is_empty() && value.chars().all(|value| value.is_ascii_digit())
 }
 
 fn is_v_semver(value: &str) -> bool {

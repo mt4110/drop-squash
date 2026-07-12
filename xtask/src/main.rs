@@ -12,6 +12,7 @@ mod manual_qa_prepare;
 mod media_policy_check;
 mod normalize_dmg;
 mod privacy_policy_check;
+mod public_url;
 mod publish_check;
 mod release_check;
 mod release_notes_check;

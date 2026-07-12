@@ -121,6 +121,21 @@ fn rejects_distribution_references_with_multiple_urls() {
 }
 
 #[test]
+fn rejects_verified_references_with_imposter_hosts() {
+    let text = "\
+| Live checkout link | Verified | checkout opens | https://lemonsqueezy.com.evil/checkout/buy/abc123 | `https://...` |
+| Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com.evil/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | versioned DropSquash.dmg cask includes auto_updates false and zap | Homebrew tap PR https://github.com.evil/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Live checkout link"));
+    assert!(unverified.contains(&"Published checksum"));
+    assert!(unverified.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn publish_error_mentions_completion_evidence_and_reference() {
     let error = unverified_blockers_error(&["Signed DMG"]);
 
