@@ -7,6 +7,10 @@ pub(super) struct Fields<'a> {
 }
 
 pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
+    let release_url = format!(
+        "https://github.com/mt4110/drop-squash/releases/tag/v{}",
+        fields.version
+    );
     vec![
         "release notes prepared fields:".into(),
         "## Artifact".into(),
@@ -23,13 +27,10 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             shell_arg(fields.artifact_path)
         ),
         format!(
-            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS for {} with {}, replace this line with public release evidence",
+            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS to {release_url} for {} with {}, replace this line with public release evidence",
             fields.artifact_url, fields.sha256
         ),
-        format!(
-            "- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v{}",
-            fields.version
-        ),
+        format!("- GitHub Release URL: {release_url}"),
         "Homebrew cask command:".into(),
         format!(
             "cargo run -p xtask -- homebrew-cask {} {} {} https://github.com/mt4110/drop-squash",

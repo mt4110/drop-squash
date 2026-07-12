@@ -1,4 +1,4 @@
-use super::value;
+use super::{checksum, value};
 
 pub(super) fn validate(text: &str) -> Vec<String> {
     let mut errors = Vec::new();
@@ -7,8 +7,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_version_in_url("GitHub Release URL", version, text, &mut errors);
     require_artifact_name(text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
-    require_checksum_evidence_digest(text, &mut errors);
-    require_checksum_artifact_url(text, &mut errors);
+    checksum::validate(text, &mut errors);
     require_homebrew_artifact_url(text, &mut errors);
     require_homebrew_sha256(text, &mut errors);
     errors
@@ -61,32 +60,6 @@ fn require_same_origin(
     errors.push(format!(
         "{second_label} must use the same origin as {first_label}"
     ));
-}
-
-fn require_checksum_evidence_digest(text: &str, errors: &mut Vec<String>) {
-    let (Some(digest), Some(evidence)) = (
-        value::field("SHA-256", text),
-        value::field("GitHub Release checksum", text),
-    ) else {
-        return;
-    };
-    if evidence.contains(digest) {
-        return;
-    }
-    errors.push("GitHub Release checksum must include the SHA-256 digest".to_string());
-}
-
-fn require_checksum_artifact_url(text: &str, errors: &mut Vec<String>) {
-    let (Some(url), Some(evidence)) = (
-        value::field("Artifact URL", text),
-        value::field("GitHub Release checksum", text),
-    ) else {
-        return;
-    };
-    if evidence.contains(url) {
-        return;
-    }
-    errors.push("GitHub Release checksum must include the Artifact URL".to_string());
 }
 
 fn require_homebrew_artifact_url(text: &str, errors: &mut Vec<String>) {

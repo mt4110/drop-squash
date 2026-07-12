@@ -1,6 +1,7 @@
 use std::path::Path;
 
 mod benchmark;
+mod checksum;
 mod consistency;
 mod duplicates;
 mod fields;
