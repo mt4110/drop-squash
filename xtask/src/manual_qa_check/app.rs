@@ -34,7 +34,9 @@ fn privacy_receipt_evidence_ok(label: &str, result: &str) -> bool {
         return true;
     }
     let compact = result.to_ascii_lowercase().replace(' ', "");
-    compact.contains("uploaded_bytes=0") && compact.contains("metadata_policy=preserve")
+    compact.contains("uploaded_bytes=0")
+        && compact.contains("metadata_policy=preserve")
+        && compact.contains("insteadofabsolutepaths")
 }
 
 fn batch_summary_evidence_ok(label: &str, result: &str) -> bool {

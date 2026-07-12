@@ -7,6 +7,8 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &[".privacy.json"],
             &["uploaded_bytes"],
             &["metadata_policy"],
+            &["file names"],
+            &["absolute paths"],
         ],
         "Reveal privacy receipt" => &[&["finder"], &[".privacy.json"], &["selected"]],
         "Duplicate output naming" => &[&["squashed-2"], &[".mp4"]],

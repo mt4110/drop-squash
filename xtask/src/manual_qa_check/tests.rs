@@ -731,6 +731,18 @@ fn reports_privacy_receipt_without_zero_upload_policy() {
 }
 
 #[test]
+fn reports_privacy_receipt_without_file_name_policy() {
+    let (_directory, path) = write_manual_qa(
+        "| Privacy receipt sidecar | Successful conversion | Creates receipt | clip.privacy.json recorded uploaded_bytes = 0 and metadata_policy = preserve |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Privacy receipt sidecar")));
+}
+
+#[test]
 fn reports_reveal_results_without_selection_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Reveal privacy receipt | Successful conversion | Finder opens | Finder opened clip.privacy.json |\n\
@@ -1021,7 +1033,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Drag-and-drop conversion" {
             text.push_str("| Drag-and-drop conversion | Passes | saved smaller drag.squashed.mp4 and original remained in place |\n");
         } else if check == "Privacy receipt sidecar" {
-            text.push_str("| Privacy receipt sidecar | Passes | clip.privacy.json recorded uploaded_bytes = 0 and metadata_policy = preserve |\n");
+            text.push_str("| Privacy receipt sidecar | Passes | clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, and file names instead of absolute paths |\n");
         } else if check == "Reveal privacy receipt" {
             text.push_str("| Reveal privacy receipt | Passes | Finder opened with clip.privacy.json selected |\n");
         } else if check == "Duplicate output naming" {
