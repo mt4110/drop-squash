@@ -1,3 +1,5 @@
+use super::urls;
+
 pub(super) fn matches(blocker: &str, reference: &str) -> bool {
     let reference = reference.trim().trim_matches('`');
     if reference.is_empty() || has_placeholder_token(reference) {
@@ -49,7 +51,7 @@ fn is_checkout(reference: &str) -> bool {
 
 fn has_release_tag(reference: &str) -> bool {
     reference.starts_with("GitHub Release ")
-        && single_url(reference).is_some_and(|part| {
+        && urls::single_https(reference).is_some_and(|part| {
             part.strip_prefix("https://github.com/mt4110/drop-squash/releases/tag/")
                 .is_some_and(is_v_semver)
         })
@@ -68,18 +70,10 @@ fn is_v_semver(value: &str) -> bool {
 
 fn has_homebrew_pr(reference: &str) -> bool {
     reference.starts_with("Homebrew tap PR ")
-        && single_url(reference).is_some_and(|part| {
+        && urls::single_https(reference).is_some_and(|part| {
             part.strip_prefix("https://github.com/mt4110/homebrew-tap/pull/")
                 .is_some_and(|suffix| {
                     !suffix.is_empty() && suffix.chars().all(|value| value.is_ascii_digit())
                 })
         })
-}
-
-fn single_url(reference: &str) -> Option<&str> {
-    let mut urls = reference
-        .split_whitespace()
-        .filter(|part| part.starts_with("https://"));
-    let first = urls.next()?;
-    urls.next().is_none().then_some(first)
 }

@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 mod blockers;
 mod evidence;
 mod references;
+mod urls;
 
 #[cfg(test)]
 use blockers::{unverified_blockers, unverified_blockers_error};

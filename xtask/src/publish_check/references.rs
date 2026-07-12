@@ -1,3 +1,5 @@
+use super::urls;
+
 const PAIRS: [(&str, &str); 5] = [
     ("Public website deployment", "Public website URL"),
     ("Refund policy finalized", "Refund policy URL"),
@@ -21,15 +23,7 @@ fn mismatch(
 ) -> Option<&'static str> {
     let reference = verified_reference(blockers, blocker)?;
     let expected = field_value(notes, field)?;
-    (reference_url(reference) != Some(expected)).then_some(blocker)
-}
-
-fn reference_url(value: &str) -> Option<&str> {
-    let mut urls = value
-        .split_whitespace()
-        .filter(|part| part.starts_with("https://github.com/") || part.starts_with("https://"));
-    let first = urls.next()?;
-    urls.next().is_none().then_some(first)
+    (urls::single_https(reference) != Some(expected)).then_some(blocker)
 }
 
 fn verified_reference<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {
