@@ -467,8 +467,8 @@ fn reports_signing_results_for_different_dmg_artifact() {
         &path,
         format!(
             "| App artifact | {} |\n\
-| Codesign verification | Passes | codesign verified Developer ID Application signature for DropSquash.dmg |\n\
-| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n",
+| Codesign verification | Passes | codesign verified Developer ID Application signature for public DropSquash.dmg |\n\
+| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for public DropSquash.dmg |\n",
             artifact.display()
         ),
     )
@@ -978,6 +978,22 @@ fn reports_incomplete_release_candidate_results() {
 }
 
 #[test]
+fn reports_release_candidate_results_without_public_context() {
+    let (_directory, path) = write_manual_qa(
+        "| Codesign verification | Developer ID signature | codesign verified Developer ID Application signature for DropSquash.dmg |\n\
+| Notarization staple verification | Notary assessment | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Codesign verification")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization staple verification")));
+}
+
+#[test]
 fn reports_gatekeeper_result_without_warning_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account |\n",
@@ -1167,9 +1183,9 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
                 "| Reveal output | Passes | Finder opened with clip.squashed.mp4 selected |\n",
             );
         } else if check == "Codesign verification" {
-            text.push_str("| Codesign verification | Passes | codesign verified Developer ID Application signature for DropSquash.dmg |\n");
+            text.push_str("| Codesign verification | Passes | codesign verified Developer ID Application signature for public DropSquash.dmg |\n");
         } else if check == "Notarization staple verification" {
-            text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n");
+            text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for public DropSquash.dmg |\n");
         } else if check == "Gatekeeper open test" {
             text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account without Gatekeeper warning |\n");
         } else {

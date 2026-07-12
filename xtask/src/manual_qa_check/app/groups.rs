@@ -99,8 +99,10 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "`cargo run -p xtask -- macos-signing-check`" => {
             &[&["macos-signing-check"], &["passed", "passes"], &["release environment"]]
         }
-        "Codesign verification" => &[&["codesign"], &["developer id"]],
-        "Notarization staple verification" => &[&["notary", "notarization"], &["staple", "spctl"]],
+        "Codesign verification" => &[&["codesign"], &["developer id"], &["public"]],
+        "Notarization staple verification" => {
+            &[&["notary", "notarization"], &["staple", "spctl"], &["public"]]
+        }
         "Gatekeeper open test" => &[
             &["gatekeeper"],
             &["opened", "opens"],
