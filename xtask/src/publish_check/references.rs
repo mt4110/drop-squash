@@ -1,15 +1,7 @@
 use super::urls;
 
-const PAIRS: [(&str, &str); 5] = [
-    ("Public website deployment", "Public website URL"),
-    ("Refund policy finalized", "Refund policy URL"),
-    ("Live checkout link", "Live checkout URL"),
-    ("Published checksum", "GitHub Release URL"),
-    ("Homebrew cask install", "Homebrew tap PR URL"),
-];
-
 pub(super) fn mismatched(blockers: &str, notes: &str) -> Vec<&'static str> {
-    PAIRS
+    crate::release_url_fields::PAIRS
         .iter()
         .filter_map(|(blocker, field)| mismatch(blockers, notes, blocker, field))
         .collect()

@@ -132,12 +132,10 @@ fn action_for(blocker: &str) -> &'static str {
 }
 
 fn owner_for(blocker: &str) -> &'static str {
-    match blocker {
-        "Public website deployment" => "Public website URL",
-        "Refund policy finalized" => "Refund policy URL",
-        "Live checkout link" => "Live checkout URL",
-        "Published checksum" => "GitHub Release URL",
-        "Homebrew cask install" => "Homebrew tap PR URL",
-        _ => "Record the evidence in the named location",
-    }
+    crate::release_url_fields::PAIRS
+        .iter()
+        .find(|(candidate, _)| *candidate == blocker)
+        .map_or("Record the evidence in the named location", |(_, field)| {
+            *field
+        })
 }

@@ -81,14 +81,10 @@ fn has_required_action_detail(blocker: &str, action: &str) -> bool {
 }
 
 fn has_required_owner_detail(blocker: &str, owner: &str) -> bool {
-    match blocker {
-        "Public website deployment" => owner == "Public website URL",
-        "Refund policy finalized" => owner == "Refund policy URL",
-        "Live checkout link" => owner == "Live checkout URL",
-        "Published checksum" => owner == "GitHub Release URL",
-        "Homebrew cask install" => owner == "Homebrew tap PR URL",
-        _ => true,
-    }
+    crate::release_url_fields::PAIRS
+        .iter()
+        .find(|(candidate, _)| *candidate == blocker)
+        .map_or(true, |(_, field)| owner == *field)
 }
 
 #[cfg(test)]
