@@ -14,12 +14,25 @@ fn redaction_candidates(license_key: &str) -> Vec<String> {
     let mut candidates = vec![license_key.to_string()];
     let single_spaced = license_key.split_whitespace().collect::<Vec<_>>().join(" ");
     let compact = license_key.split_whitespace().collect::<String>();
-    for candidate in [single_spaced, compact] {
+    let form_encoded = form_encode(license_key);
+    for candidate in [single_spaced, compact, form_encoded] {
         if !candidate.is_empty() && !candidates.contains(&candidate) {
             candidates.push(candidate);
         }
     }
     candidates
+}
+
+fn form_encode(value: &str) -> String {
+    value
+        .bytes()
+        .map(|byte| match byte {
+            b' ' => "+".to_string(),
+            b'-' | b'.' | b'_' | b'~' => (byte as char).to_string(),
+            b'0'..=b'9' | b'A'..=b'Z' | b'a'..=b'z' => (byte as char).to_string(),
+            _ => format!("%{byte:02X}"),
+        })
+        .collect()
 }
 
 fn replace_ascii_case_insensitive(message: &str, candidate: &str) -> String {
