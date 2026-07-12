@@ -63,3 +63,16 @@ pub(super) fn require_labels(
         }
     }
 }
+
+pub(super) fn reject_duplicate_labels(labels: &[String], missing: &mut Vec<String>) {
+    for label in REQUIRED_FIELDS.iter().chain(REQUIRED_CHECKS.iter()) {
+        if labels
+            .iter()
+            .filter(|value| value.as_str() == *label)
+            .count()
+            > 1
+        {
+            missing.push(format!("manual QA label is duplicated: {label}"));
+        }
+    }
+}

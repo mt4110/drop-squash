@@ -45,6 +45,7 @@ pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
         &labels,
         &mut missing,
     );
+    requirements::reject_duplicate_labels(&labels, &mut missing);
     Ok(missing)
 }
 

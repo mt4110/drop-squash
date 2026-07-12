@@ -165,6 +165,28 @@ fn reports_missing_required_checks() {
 }
 
 #[test]
+fn reports_duplicate_required_field_labels() {
+    let (_directory, path) = write_manual_qa(
+        "| App build | DropSquash 0.1.0 git abc1234 |\n\
+| App build | DropSquash 0.1.0 git abc1234 |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA label is duplicated: App build".to_string()));
+}
+
+#[test]
+fn reports_duplicate_required_check_labels() {
+    let (_directory, path) = write_manual_qa(
+        "| Reveal output | Completed output link | Finder opens | Finder opened clip.squashed.mp4 selected |\n\
+| Reveal output | Completed output link | Finder opens | Finder opened clip.squashed.mp4 selected |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA label is duplicated: Reveal output".to_string()));
+}
+
+#[test]
 fn reports_missing_app_artifact_path() {
     let (_directory, path) = write_manual_qa("| App artifact | /missing/DropSquash.app |\n");
     let missing = check_file(&path).unwrap();
