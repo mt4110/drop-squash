@@ -18,6 +18,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("Published checksum", "SHA-256"),
     ("Published checksum", "SHA256SUMS"),
+    ("Published checksum", "public"),
     ("Published checksum", "DropSquash.dmg"),
     ("Published checksum", "attached"),
     ("Homebrew cask install", "brew install --cask"),

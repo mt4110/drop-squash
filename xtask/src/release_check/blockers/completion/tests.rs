@@ -251,6 +251,15 @@ fn reports_checksum_completion_without_sha256sums() {
 }
 
 #[test]
+fn reports_checksum_completion_without_public_artifact_context() {
+    let text = "| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for DropSquash.dmg is attached to the release | TBD | GitHub Release |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Published checksum"));
+}
+
+#[test]
 fn reports_homebrew_completion_without_versioned_artifact() {
     let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` works and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n";
 
