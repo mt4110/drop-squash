@@ -82,8 +82,9 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("- GitHub Release URL:"));
     assert!(text.contains("releases/tag/v0.1.0"));
     assert!(text.contains("- SHA256SUMS line:"));
-    assert!(text.contains("GitHub Release checksum"));
-    assert!(text.contains("after upload"));
+    assert!(text.contains("- GitHub Release checksum:"));
+    assert!(text.contains("pending upload"));
+    assert!(!text.contains("GitHub Release checksum after upload"));
     assert!(text.contains("Homebrew cask command"));
     assert!(text.contains("homebrew-cask 0.1.0"));
     let checksum = text

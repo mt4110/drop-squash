@@ -17,7 +17,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         "## Distribution".into(),
         format!("- SHA256SUMS line: {}  DropSquash.dmg", fields.sha256),
         format!(
-            "- GitHub Release checksum after upload: paste only after SHA256SUMS is attached to release for {} with {}",
+            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS for {} with {}, replace this line with public release evidence",
             fields.artifact_url, fields.sha256
         ),
         format!(

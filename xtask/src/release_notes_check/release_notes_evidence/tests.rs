@@ -690,6 +690,21 @@ fn rejects_release_checksum_evidence_without_artifact_url() {
 }
 
 #[test]
+fn rejects_prepared_pending_release_checksum() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- GitHub Release checksum: pending upload; after attaching SHA256SUMS for https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, replace this line with public release evidence
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum")));
+}
+
+#[test]
 fn rejects_mismatched_release_identity_values() {
     let errors = check_text(
         r#"
