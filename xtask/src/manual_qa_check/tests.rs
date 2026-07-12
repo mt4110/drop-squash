@@ -650,7 +650,7 @@ fn template_labels(text: &str) -> Vec<String> {
     text.lines()
         .filter(|line| line.starts_with('|') && !line.contains("---"))
         .filter_map(|line| {
-            super::cells(line)
+            super::rows::cells(line)
                 .first()
                 .map(|label| label.trim().to_string())
         })
