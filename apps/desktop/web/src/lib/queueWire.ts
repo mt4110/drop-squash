@@ -1,4 +1,4 @@
-import type { ConvertRequest, Profile } from "./commands.js";
+import type { ConversionSummary, ConvertRequest, Profile } from "./commands.js";
 import type { QueueEntry, QueueStatus } from "./queue.js";
 
 export type RustQueueStatus =
@@ -61,6 +61,25 @@ export function requestFromRustItem(
     sourcePolicy: item.job.source_policy,
     writePrivacyReceipt,
   };
+}
+
+export function encodeResultFromSummary(
+  summary: ConversionSummary,
+  profile: Profile,
+): RustEncodeResult {
+  return {
+    input_path: summary.sourcePath,
+    output_path: summary.outputPath,
+    profile,
+    original_bytes: summary.originalBytes,
+    output_bytes: summary.outputBytes,
+    success: true,
+    error_message: null,
+  };
+}
+
+export function isFinishedQueueEvent(event: RustQueueEvent | null, id: number) {
+  return Boolean(event && "Finished" in event && event.Finished.id === id);
 }
 
 export function queueStatusFromRust(status: RustQueueStatus): QueueStatus {

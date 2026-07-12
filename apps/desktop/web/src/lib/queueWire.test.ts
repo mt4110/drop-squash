@@ -1,4 +1,6 @@
 import {
+  encodeResultFromSummary,
+  isFinishedQueueEvent,
   queueEntryFromRustItem,
   queueStatusFromRust,
   requestFromRustItem,
@@ -38,6 +40,41 @@ function mapsRustQueueItemToConversionRequest() {
   assert(!request.writePrivacyReceipt, "privacy receipt flag should be preserved");
 }
 
+function mapsConversionSummaryToRustEncodeResult() {
+  const result = encodeResultFromSummary({
+    outputPath: "/tmp/out.mp4",
+    originalBytes: 100,
+    outputBytes: 40,
+    savedBytes: 60,
+    reductionPercent: 60,
+    sourceAction: "keep-original",
+    sourcePath: "/tmp/input.mov",
+  }, "docs");
+
+  assert(result.input_path === "/tmp/input.mov", "source path should be mapped");
+  assert(result.output_path === "/tmp/out.mp4", "output path should be mapped");
+  assert(result.profile === "docs", "profile should be mapped");
+  assert(result.original_bytes === 100, "original bytes should be mapped");
+  assert(result.output_bytes === 40, "output bytes should be mapped");
+  assert(result.success, "successful summary should finish active queue job");
+}
+
+function recognizesFinishedQueueEventForJob() {
+  const result = encodeResultFromSummary({
+    outputPath: "/tmp/out.mp4",
+    originalBytes: 100,
+    outputBytes: 40,
+    savedBytes: 60,
+    reductionPercent: 60,
+    sourceAction: "keep-original",
+    sourcePath: "/tmp/input.mov",
+  }, "auto");
+
+  assert(isFinishedQueueEvent({ Finished: { id: 7, result } }, 7), "matching finished event");
+  assert(!isFinishedQueueEvent({ Finished: { id: 8, result } }, 7), "wrong job id");
+  assert(!isFinishedQueueEvent(null, 7), "missing event");
+}
+
 function item(status: RustQueueItem["status"], error?: string): RustQueueItem {
   return {
     id: 7,
@@ -56,3 +93,5 @@ function item(status: RustQueueItem["status"], error?: string): RustQueueItem {
 mapsRustQueueItemToUiEntry();
 mapsRustStatusesToUiStatuses();
 mapsRustQueueItemToConversionRequest();
+mapsConversionSummaryToRustEncodeResult();
+recognizesFinishedQueueEventForJob();

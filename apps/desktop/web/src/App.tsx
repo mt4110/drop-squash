@@ -44,7 +44,12 @@ import {
   markSucceeded,
   nextQueued,
 } from "./lib/queue";
-import { queueEntryFromRustItem, requestFromRustItem, type RustEncodeResult } from "./lib/queueWire";
+import {
+  encodeResultFromSummary,
+  isFinishedQueueEvent,
+  queueEntryFromRustItem,
+  requestFromRustItem,
+} from "./lib/queueWire";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
 
 export function App() {
@@ -152,7 +157,10 @@ export function App() {
         request,
       });
       setResult(summary);
-      await finishActiveQueueJob(encodeResultFromSummary(summary, request.profile));
+      const finished = await finishActiveQueueJob(encodeResultFromSummary(summary, request.profile));
+      if (!isFinishedQueueEvent(finished, entry.id)) {
+        throw new Error("Queue state did not finish the active conversion.");
+      }
       setQueue((current) => markSucceeded(current, entry.id, summary));
       await refreshState();
     } catch (reason) {
@@ -392,19 +400,4 @@ export function App() {
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>
   );
-}
-
-function encodeResultFromSummary(
-  summary: ConversionSummary,
-  profile: ConvertRequest["profile"],
-): RustEncodeResult {
-  return {
-    input_path: summary.sourcePath,
-    output_path: summary.outputPath,
-    profile,
-    original_bytes: summary.originalBytes,
-    output_bytes: summary.outputBytes,
-    success: true,
-    error_message: null,
-  };
 }
