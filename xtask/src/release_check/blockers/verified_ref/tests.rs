@@ -194,6 +194,15 @@ fn reports_github_release_reference_without_version_tag() {
 }
 
 #[test]
+fn reports_github_release_reference_without_semver_tag() {
+    let text = "| Published checksum | Verified | SHA-256 attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1 | GitHub Release |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Published checksum"));
+}
+
+#[test]
 fn ignores_blocked_rows() {
     let text = "| Signed DMG | Blocked | codesign output | TBD | Release notes |\n";
 

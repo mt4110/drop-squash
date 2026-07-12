@@ -77,11 +77,16 @@ fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
 }
 
 fn has_release_tag_suffix(value: &str, prefix: &str) -> bool {
-    value.strip_prefix(prefix).is_some_and(|suffix| {
-        suffix.starts_with('v')
-            && suffix.chars().any(|value| value == '.')
-            && suffix
-                .chars()
-                .all(|value| value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_'))
-    })
+    value.strip_prefix(prefix).is_some_and(is_v_semver)
+}
+
+fn is_v_semver(value: &str) -> bool {
+    let Some(version) = value.strip_prefix('v') else {
+        return false;
+    };
+    let parts = version.split('.').collect::<Vec<_>>();
+    parts.len() == 3
+        && parts
+            .iter()
+            .all(|part| !part.is_empty() && part.chars().all(|value| value.is_ascii_digit()))
 }

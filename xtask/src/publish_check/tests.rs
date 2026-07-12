@@ -64,6 +64,17 @@ fn accepts_public_release_evidence_references() {
 }
 
 #[test]
+fn rejects_github_release_reference_without_semver_tag() {
+    let text = "\
+| Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1 | GitHub Release |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Published checksum"));
+}
+
+#[test]
 fn rejects_distribution_references_with_placeholder_notes() {
     let text = "\
 | Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 TBD | GitHub Release |

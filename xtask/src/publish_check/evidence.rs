@@ -51,14 +51,19 @@ fn has_release_tag(reference: &str) -> bool {
     reference.starts_with("GitHub Release ")
         && single_url(reference).is_some_and(|part| {
             part.strip_prefix("https://github.com/mt4110/drop-squash/releases/tag/")
-                .is_some_and(|suffix| {
-                    suffix.starts_with('v')
-                        && suffix.chars().any(|value| value == '.')
-                        && suffix.chars().all(|value| {
-                            value.is_ascii_alphanumeric() || matches!(value, '.' | '-' | '_')
-                        })
-                })
+                .is_some_and(is_v_semver)
         })
+}
+
+fn is_v_semver(value: &str) -> bool {
+    let Some(version) = value.strip_prefix('v') else {
+        return false;
+    };
+    let parts = version.split('.').collect::<Vec<_>>();
+    parts.len() == 3
+        && parts
+            .iter()
+            .all(|part| !part.is_empty() && part.chars().all(|value| value.is_ascii_digit()))
 }
 
 fn has_homebrew_pr(reference: &str) -> bool {
