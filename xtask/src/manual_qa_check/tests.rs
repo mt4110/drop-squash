@@ -659,6 +659,18 @@ fn reports_benchmark_command_with_repo_local_csv_path() {
 }
 
 #[test]
+fn reports_benchmark_command_with_normalized_repo_local_csv_path() {
+    let repo_csv = normalized_repo_path("target/dropsquash-bench.csv");
+    let (_directory, path) = write_manual_qa(&format!(
+        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n",
+        repo_csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("benchmark")));
+}
+
+#[test]
 fn reports_benchmark_sample_set_without_smaller_outputs() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | short medium large samples on MacBookPro18,4 macOS 26.5 |\n",
@@ -1434,4 +1446,14 @@ fn current_head() -> String {
         .unwrap();
     assert!(output.status.success());
     String::from_utf8(output.stdout).unwrap().trim().to_string()
+}
+
+fn normalized_repo_path(child: &str) -> std::path::PathBuf {
+    let cwd = std::env::current_dir().unwrap();
+    cwd.parent()
+        .unwrap()
+        .join("outside")
+        .join("..")
+        .join(cwd.file_name().unwrap())
+        .join(child)
 }

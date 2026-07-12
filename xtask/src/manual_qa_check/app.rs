@@ -90,7 +90,21 @@ fn is_absolute_csv_outside_repo(value: &str) -> bool {
     let Ok(repo) = std::env::current_dir() else {
         return false;
     };
-    !path.starts_with(repo)
+    !normalize(path).starts_with(normalize(&repo))
+}
+
+fn normalize(path: &std::path::Path) -> std::path::PathBuf {
+    let mut normalized = std::path::PathBuf::new();
+    for component in path.components() {
+        match component {
+            std::path::Component::CurDir => {}
+            std::path::Component::ParentDir => {
+                normalized.pop();
+            }
+            other => normalized.push(other.as_os_str()),
+        }
+    }
+    normalized
 }
 
 fn contains_number(result: &str, expected: &str) -> bool {
