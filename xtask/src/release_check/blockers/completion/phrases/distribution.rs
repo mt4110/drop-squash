@@ -23,7 +23,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Homebrew cask install", "brew install --cask"),
     ("Homebrew cask install", "versioned artifact"),
     ("Homebrew cask install", "DropSquash.dmg"),
-    ("Homebrew cask install", "SHA-256"),
+    ("Homebrew cask install", "matching SHA-256"),
     ("Homebrew cask install", "auto_updates false"),
     ("Homebrew cask install", "zap"),
 ];

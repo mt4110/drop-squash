@@ -270,7 +270,7 @@ fn reports_homebrew_completion_without_dmg_name() {
 
 #[test]
 fn reports_homebrew_completion_without_auto_update_policy() {
-    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with SHA-256 and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n";
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with matching SHA-256 and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -278,8 +278,8 @@ fn reports_homebrew_completion_without_auto_update_policy() {
 }
 
 #[test]
-fn reports_homebrew_completion_without_sha256() {
-    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n";
+fn reports_homebrew_completion_without_matching_sha256() {
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n";
 
     let incomplete = incomplete_requirements(text);
 
