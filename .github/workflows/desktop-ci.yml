@@ -6,6 +6,9 @@ on:
       - "apps/desktop/**"
       - ".github/workflows/desktop-ci.yml"
 
+permissions:
+  contents: read
+
 jobs:
   desktop-web:
     runs-on: ubuntu-latest

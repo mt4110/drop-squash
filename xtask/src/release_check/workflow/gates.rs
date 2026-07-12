@@ -1,4 +1,6 @@
 pub(super) const CI: &[&str] = &[
+    "permissions:",
+    "contents: read",
     "cargo fmt --all -- --check",
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
@@ -12,6 +14,8 @@ pub(super) const CI: &[&str] = &[
 pub(super) const RELEASE: &[&str] = &[
     "tags:",
     "\"v*.*.*\"",
+    "permissions:",
+    "contents: read",
     "environment: production",
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
@@ -37,6 +41,8 @@ pub(super) const RELEASE: &[&str] = &[
 ];
 
 pub(super) const DESKTOP: &[&str] = &[
+    "permissions:",
+    "contents: read",
     "pnpm --dir apps/desktop/web install --frozen-lockfile",
     "pnpm --dir apps/desktop/web lint",
     "pnpm --dir apps/desktop/web build",
@@ -45,6 +51,8 @@ pub(super) const DESKTOP: &[&str] = &[
 ];
 
 pub(super) const SECURITY: &[&str] = &[
+    "permissions:",
+    "contents: read",
     "cargo audit",
     "cargo deny check",
     "cargo run -p xtask -- media-policy-check",

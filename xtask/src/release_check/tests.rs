@@ -11,6 +11,8 @@ fn accepts_release_workflow_with_required_gates() {
         r#"
 tags:
   - "v*.*.*"
+permissions:
+  contents: read
 environment: production
 with:
   components: rustfmt, clippy
@@ -49,6 +51,8 @@ fn reports_missing_release_workflow_gates() {
         vec![
             "tags:",
             "\"v*.*.*\"",
+            "permissions:",
+            "contents: read",
             "environment: production",
             "components: rustfmt, clippy",
             "cargo fmt --all -- --check",
@@ -86,6 +90,8 @@ fn accepts_ci_workflow_with_required_gates() {
     let missing = missing_ci_workflow_gates(
         r#"
 run: cargo fmt --all -- --check
+permissions:
+  contents: read
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- release-check
@@ -113,6 +119,8 @@ fn reports_missing_ci_workflow_gates() {
     assert_eq!(
         missing,
         vec![
+            "permissions:",
+            "contents: read",
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- release-check",
@@ -129,6 +137,8 @@ fn accepts_desktop_workflow_with_required_gates() {
     let missing = missing_desktop_workflow_gates(
         r#"
 run: pnpm --dir apps/desktop/web install --frozen-lockfile
+permissions:
+  contents: read
 run: pnpm --dir apps/desktop/web lint
 run: pnpm --dir apps/desktop/web build
 uses: dtolnay/rust-toolchain@1.95.0
@@ -146,6 +156,8 @@ fn reports_missing_desktop_workflow_gates() {
     assert_eq!(
         missing,
         vec![
+            "permissions:",
+            "contents: read",
             "pnpm --dir apps/desktop/web install --frozen-lockfile",
             "pnpm --dir apps/desktop/web build",
             "dtolnay/rust-toolchain@1.95.0",
@@ -166,6 +178,8 @@ fn accepts_security_workflow_with_required_gates() {
     let missing = missing_security_workflow_gates(
         r#"
 run: cargo audit
+permissions:
+  contents: read
 run: cargo deny check
 run: cargo run -p xtask -- media-policy-check
 run: cargo run -p xtask -- privacy-policy-check
@@ -189,6 +203,8 @@ fn reports_missing_security_workflow_gates() {
     assert_eq!(
         missing,
         vec![
+            "permissions:",
+            "contents: read",
             "cargo deny check",
             "cargo run -p xtask -- media-policy-check",
             "cargo run -p xtask -- privacy-policy-check"
