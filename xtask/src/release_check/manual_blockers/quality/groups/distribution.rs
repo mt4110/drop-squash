@@ -23,6 +23,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["short"],
             &["medium"],
             &["large"],
+            &["smaller"],
             &["machine", "macbook", "mac "],
             &["macos", "os "],
         ]),
