@@ -143,7 +143,7 @@ fn accepts_desktop_workflow_with_required_gates() {
 run: pnpm --dir apps/desktop/web install --frozen-lockfile
 permissions:
   contents: read
-run: pnpm --dir apps/desktop/web lint
+run: pnpm --dir apps/desktop/web test
 run: pnpm --dir apps/desktop/web build
 uses: dtolnay/rust-toolchain@1.95.0
 run: cargo test -p dropsquash-desktop
@@ -155,7 +155,7 @@ run: cargo test -p dropsquash-desktop
 
 #[test]
 fn reports_missing_desktop_workflow_gates() {
-    let missing = missing_desktop_workflow_gates("run: pnpm --dir apps/desktop/web lint");
+    let missing = missing_desktop_workflow_gates("run: pnpm --dir apps/desktop/web test");
 
     assert_eq!(
         missing,

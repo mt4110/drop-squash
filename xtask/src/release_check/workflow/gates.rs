@@ -46,7 +46,7 @@ pub(super) const DESKTOP: &[&str] = &[
     "permissions:",
     "contents: read",
     "pnpm --dir apps/desktop/web install --frozen-lockfile",
-    "pnpm --dir apps/desktop/web lint",
+    "pnpm --dir apps/desktop/web test",
     "pnpm --dir apps/desktop/web build",
     "dtolnay/rust-toolchain@1.95.0",
     "cargo test -p dropsquash-desktop",

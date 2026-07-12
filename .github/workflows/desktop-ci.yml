@@ -24,8 +24,8 @@ jobs:
           cache-dependency-path: apps/desktop/web/pnpm-lock.yaml
       - name: install
         run: pnpm --dir apps/desktop/web install --frozen-lockfile
-      - name: lint
-        run: pnpm --dir apps/desktop/web lint
+      - name: test
+        run: pnpm --dir apps/desktop/web test
       - name: build
         run: pnpm --dir apps/desktop/web build
 
