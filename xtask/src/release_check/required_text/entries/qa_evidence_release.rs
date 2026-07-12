@@ -25,6 +25,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "concrete Completion evidence"),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
+    (
+        "docs/qa-evidence.md",
+        "public URL release blocker references",
+    ),
     ("docs/qa-evidence.md", "release-notes-check"),
     ("docs/qa-evidence.md", "release-notes-prepare"),
     ("docs/qa-evidence.md", "GitHub Release URL"),
