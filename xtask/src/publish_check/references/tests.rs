@@ -6,8 +6,8 @@ fn accepts_matching_release_note_references() {
 | Public website deployment | Verified | done | https://dropsquash.app/release-status | `https://...` |
 | Refund policy finalized | Verified | done | https://dropsquash.app/refund | `https://...` |
 | Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |
-| Published checksum | Verified | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | DropSquash.dmg cask has auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Published checksum | Verified | SHA256SUMS with the SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install --cask installs versioned DropSquash.dmg with matching SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
     let notes = release_notes("v0.1.0", "1");
 
@@ -17,8 +17,8 @@ fn accepts_matching_release_note_references() {
 #[test]
 fn reports_distribution_references_that_do_not_match_release_notes() {
     let blockers = "\
-| Published checksum | Verified | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
-| Homebrew cask install | Verified | DropSquash.dmg cask has auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
+| Published checksum | Verified | SHA256SUMS with the SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install --cask installs versioned DropSquash.dmg with matching SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
 ";
     let notes = release_notes("v0.1.0", "1");
     let mismatched = mismatched(blockers, &notes);
@@ -30,7 +30,7 @@ fn reports_distribution_references_that_do_not_match_release_notes() {
 #[test]
 fn reports_reference_with_extra_url_before_expected_url() {
     let blockers = "\
-| Published checksum | Verified | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Published checksum | Verified | SHA256SUMS with the SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
 ";
     let notes = release_notes("v0.1.0", "1");
     let mismatched = mismatched(blockers, &notes);
@@ -41,7 +41,7 @@ fn reports_reference_with_extra_url_before_expected_url() {
 #[test]
 fn reports_reference_with_extra_url_after_expected_url() {
     let blockers = "\
-| Homebrew cask install | Verified | DropSquash.dmg cask has auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
+| Homebrew cask install | Verified | brew install --cask installs versioned DropSquash.dmg with matching SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
 ";
     let notes = release_notes("v0.1.0", "1");
     let mismatched = mismatched(blockers, &notes);
@@ -52,7 +52,7 @@ fn reports_reference_with_extra_url_after_expected_url() {
 #[test]
 fn ignores_blocked_references() {
     let blockers = "\
-| Published checksum | Blocked | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
+| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
 ";
     let notes = release_notes("v0.1.0", "1");
 
