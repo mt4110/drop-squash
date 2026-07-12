@@ -5,6 +5,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 mod output;
+mod url;
 
 const TAURI_CONFIG: &str = "apps/desktop/src-tauri/tauri.conf.json";
 
@@ -44,11 +45,12 @@ struct PreparedNotes {
 
 impl PreparedNotes {
     fn current(input: &Input) -> Result<Self, String> {
-        validate_artifact_url(&input.artifact_url)?;
         let bytes = dmg::read(&input.artifact, "release notes artifact")?;
         require_dmg_name(&input.artifact)?;
+        let version = read_version(Path::new(TAURI_CONFIG))?;
+        url::validate(&input.artifact_url, &version)?;
         Ok(Self {
-            version: read_version(Path::new(TAURI_CONFIG))?,
+            version,
             artifact_url: input.artifact_url.clone(),
             sha256: sha256_hex(&bytes),
             commit: git_commit()?,
@@ -70,19 +72,6 @@ fn require_dmg_name(path: &Path) -> Result<(), String> {
         return Ok(());
     }
     Err("release notes artifact must be named DropSquash.dmg".into())
-}
-
-fn validate_artifact_url(value: &str) -> Result<(), String> {
-    let prefix = "https://github.com/mt4110/drop-squash/releases/download/";
-    if value.strip_prefix(prefix).is_some_and(valid_asset_path) {
-        return Ok(());
-    }
-    Err("Artifact URL must be the public GitHub Release DropSquash.dmg URL".into())
-}
-
-fn valid_asset_path(value: &str) -> bool {
-    let parts = value.split('/').collect::<Vec<_>>();
-    parts.len() == 2 && !parts[0].is_empty() && parts[1] == "DropSquash.dmg"
 }
 
 fn read_version(path: &Path) -> Result<String, String> {

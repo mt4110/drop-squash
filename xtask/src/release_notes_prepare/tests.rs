@@ -1,4 +1,4 @@
-use super::{require_dmg_name, validate_artifact_url, Input, PreparedNotes};
+use super::{require_dmg_name, url, Input, PreparedNotes};
 
 #[test]
 fn parses_artifact_and_url() {
@@ -27,16 +27,18 @@ fn rejects_wrong_artifact_name() {
 
 #[test]
 fn accepts_public_artifact_url() {
-    validate_artifact_url(
+    url::validate(
         "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg",
+        "0.1.0",
     )
     .unwrap();
 }
 
 #[test]
 fn rejects_nested_artifact_url() {
-    let error = validate_artifact_url(
+    let error = url::validate(
         "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/nested/DropSquash.dmg",
+        "0.1.0",
     )
     .unwrap_err();
 
