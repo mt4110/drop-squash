@@ -22,6 +22,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "Gatekeeper no-warning evidence"),
     (
         "docs/productization.md",
+        "read-only workflow permissions",
+    ),
+    (
+        "docs/productization.md",
+        "unsigned release failure gate",
+    ),
+    (
+        "docs/productization.md",
         "release-notes URL reference matching",
     ),
     ("docs/release.md", "tested public `DropSquash.dmg`"),
