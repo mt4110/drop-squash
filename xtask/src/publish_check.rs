@@ -1,7 +1,11 @@
 use std::path::{Path, PathBuf};
 
+mod blockers;
 mod evidence;
 mod references;
+
+#[cfg(test)]
+use blockers::{unverified_blockers, unverified_blockers_error};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes = args
@@ -14,7 +18,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     crate::release_notes_check::check_file(&notes_path)?;
     let notes_text = read_release_notes(&notes_path)?;
     let blockers = read_release_blockers(Path::new("docs/release-blockers.md"))?;
-    let unverified = unverified_blockers(&blockers);
+    let unverified = blockers::unverified_blockers(&blockers);
     let mismatched = references::mismatched(&blockers, &notes_text);
     if unverified.is_empty() && mismatched.is_empty() {
         println!("publish checks passed");
@@ -53,38 +57,10 @@ fn read_release_notes(path: &Path) -> Result<String, String> {
         .map_err(|error| format!("failed to read release notes {}: {error}", path.display()))
 }
 
-fn unverified_blockers(text: &str) -> Vec<&'static str> {
-    crate::release_check::required_blockers()
-        .iter()
-        .copied()
-        .filter(|blocker| !is_verified(text, blocker))
-        .collect()
-}
-
-fn is_verified(text: &str, blocker: &str) -> bool {
-    text.lines().any(|line| {
-        let Some(cells) = cells(line) else {
-            return false;
-        };
-        cells.first() == Some(&blocker)
-            && cells.get(1) == Some(&"Verified")
-            && cells
-                .get(3)
-                .is_some_and(|reference| evidence::matches(blocker, reference))
-    })
-}
-
-fn unverified_blockers_error(blockers: &[&str]) -> String {
-    format!(
-        "release blockers must be Verified with traceable Evidence reference before publish: {}",
-        blockers.join(", ")
-    )
-}
-
 fn publish_blockers_error(unverified: &[&str], mismatched: &[&str]) -> String {
     let mut errors = Vec::new();
     if !unverified.is_empty() {
-        errors.push(unverified_blockers_error(unverified));
+        errors.push(blockers::unverified_blockers_error(unverified));
     }
     if !mismatched.is_empty() {
         errors.push(format!(
@@ -93,18 +69,6 @@ fn publish_blockers_error(unverified: &[&str], mismatched: &[&str]) -> String {
         ));
     }
     errors.join("\n")
-}
-
-fn cells(line: &str) -> Option<Vec<&str>> {
-    if !line.starts_with('|') {
-        return None;
-    }
-    let cells = line
-        .trim_matches('|')
-        .split('|')
-        .map(str::trim)
-        .collect::<Vec<_>>();
-    (cells.len() == 5).then_some(cells)
 }
 
 #[cfg(test)]
