@@ -181,6 +181,10 @@ with concrete public evidence only after the matching `SHA256SUMS` file is
 attached to the GitHub Release. `release-notes-prepare` rejects artifacts older
 than `HEAD`; rebuild the DMG after any final release commit before generating
 public release notes.
+Prepared draft placeholders, including pending upload notes and Homebrew
+evidence drafts, are not public release evidence. Replace every prepared draft
+line with observed public evidence before running `publish-check`;
+`release-notes-check` and `publish-check` reject those draft placeholders.
 
 Reject release artifacts that accidentally capture development-only Nix store
 references:
