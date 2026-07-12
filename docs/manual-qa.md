@@ -159,7 +159,7 @@ whether only the fingerprint/instance fields were present.
 
 | Check | Expected | Result |
 |---|---|---|
-| Sandbox product setup | DropSquash sandbox product exists with license keys enabled |  |
+| Sandbox product setup | Intended product is DropSquash and sandbox license keys are enabled |  |
 | Sandbox purchase | Checkout completes for the intended product and test buyer order |  |
 | Empty key activation | Empty key leaves Activate disabled; no raw key persisted |  |
 | Invalid key activation | Activating state disables submit; friendly license error; no raw key persisted |  |
