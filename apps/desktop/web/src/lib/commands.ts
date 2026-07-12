@@ -60,3 +60,7 @@ export type SavedConfig = {
   sourcePolicy: SourcePolicy;
   writePrivacyReceipt: boolean;
 };
+
+export type ConvertRequest = SavedConfig & {
+  inputPath: string;
+};
