@@ -145,7 +145,7 @@ trial count.
 
 Record concrete results. The checker requires:
 
-- Sandbox product setup: mention DropSquash, the intended product, and license keys enabled.
+- Sandbox product setup: mention the sandbox product, DropSquash, the intended product, and license keys enabled.
 - Sandbox purchase: mention the intended product, test buyer, and order.
 - Empty key activation: mention the disabled Activate state and that `license.json` or the license cache has no raw key.
 - Invalid key activation: mention the Activating/disabled state, a friendly error, and that `license.json` or the license cache has no raw key.

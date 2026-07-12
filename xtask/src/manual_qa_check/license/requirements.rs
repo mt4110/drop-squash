@@ -1,5 +1,9 @@
-pub(super) const PRODUCT_SETUP: &[&str] =
-    &["dropsquash", "intended product", "license keys enabled"];
+pub(super) const PRODUCT_SETUP: &[&str] = &[
+    "sandbox",
+    "dropsquash",
+    "intended product",
+    "license keys enabled",
+];
 pub(super) const PURCHASE: &[&str] = &["intended product", "test buyer", "order"];
 
 pub(super) const EMPTY_KEY_CACHE: &[&str] = &["raw key"];

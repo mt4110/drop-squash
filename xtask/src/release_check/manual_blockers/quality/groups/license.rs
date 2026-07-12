@@ -3,6 +3,7 @@ use super::Groups;
 pub(super) fn for_check(check: &str) -> Option<Groups> {
     match check {
         "Sandbox product setup" => Some(&[
+            &["sandbox"],
             &["dropsquash"],
             &["intended product"],
             &["license keys enabled"],

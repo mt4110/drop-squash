@@ -3,6 +3,7 @@ use super::Groups;
 pub(super) fn for_label(label: &str) -> Option<Groups> {
     match label {
         "Lemon Squeezy product setup" => Some(&[
+            &["sandbox"],
             &["dropsquash"],
             &["intended product"],
             &["license keys enabled"],
