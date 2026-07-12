@@ -45,6 +45,8 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
         "homebrew",
         &[
             "cargo run -p xtask -- homebrew-cask 0.1.0",
+            "Benchmark sample set",
+            "20% regression threshold",
             "auto_updates false",
             "zap",
         ],

@@ -174,6 +174,7 @@ fill `docs/release-notes-template.md` with codesign, spctl, stapler, notary,
 checksum, Gatekeeper, and Homebrew evidence. The public release notes must name
 `DropSquash.dmg` in the signing, notarization, checksum, and Homebrew evidence;
 Gatekeeper evidence must mention signed, notarized, stapled, and no warning;
+benchmark evidence must name the Benchmark sample set and 20% regression threshold result;
 Homebrew evidence must mention
 `auto_updates false` and `zap` cleanup:
 

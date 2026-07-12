@@ -24,6 +24,8 @@ docs/release-blockers.md
 Lemon Squeezy sandbox purchase
 Valid sandbox activation
 cargo run -p xtask -- homebrew-cask 0.1.0
+Benchmark sample set
+20% regression threshold
 auto_updates false
 zap
 "#;
