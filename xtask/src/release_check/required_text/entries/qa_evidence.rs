@@ -51,6 +51,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "existing markdown-output no-clobber rejection",
     ),
+    (
+        "docs/qa-evidence.md",
+        "prepared Markdown label synchronization",
+    ),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "Tauri DMG output is normalized"),
     ("docs/qa-evidence.md", "cargo test -p xtask normalize_dmg"),
