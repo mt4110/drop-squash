@@ -38,9 +38,9 @@ Use at least three private local samples before a release candidate:
 Use `--release-set` for release-candidate evidence. It requires at least three
 `--input` values so the release benchmark cannot accidentally be recorded from a
 single convenient sample. It also requires an absolute `--output-dir` outside
-the repository and an absolute `--csv-output` outside the repository so private
-recordings, generated videos, and CSV evidence do not accidentally become source
-files.
+the repository and an absolute `.csv` `--csv-output` outside the repository so
+private recordings, generated videos, and CSV evidence do not accidentally
+become source files.
 
 Record this context with the CSV in `docs/manual-qa.md`:
 
