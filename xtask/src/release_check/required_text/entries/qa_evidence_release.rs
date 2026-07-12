@@ -72,6 +72,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "signing/notary evidence without public `DropSquash.dmg`",
+    ),
+    (
+        "docs/qa-evidence.md",
+        "public signing/notary evidence for `DropSquash.dmg`",
+    ),
+    (
+        "docs/qa-evidence.md",
         "Gatekeeper completion without the public `DropSquash.dmg`",
     ),
 ];
