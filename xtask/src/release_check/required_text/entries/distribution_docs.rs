@@ -28,6 +28,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/manual-qa.md",
         "app from public `DropSquash.dmg` opens cleanly",
     ),
+    ("docs/manual-qa.md", "license cache has no raw key"),
+    (
+        "docs/manual-qa.md",
+        "existing valid cache remains intact and has no raw key",
+    ),
     ("docs/release.md", "10-character `APPLE_API_KEY`"),
     ("docs/release.md", "APPLE_API_ISSUER"),
     ("docs/release.md", "all-zero value"),

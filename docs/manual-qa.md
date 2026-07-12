@@ -161,10 +161,10 @@ whether only the fingerprint/instance fields were present.
 |---|---|---|
 | Sandbox product setup | Intended product is DropSquash and sandbox license keys are enabled |  |
 | Sandbox purchase | Checkout completes for the intended product and test buyer order |  |
-| Empty key activation | Empty key leaves Activate disabled; no raw key persisted |  |
-| Invalid key activation | Activating state disables submit; friendly license error; no raw key persisted |  |
-| Valid sandbox activation | Activating state disables submit; Pro state; raw key absent from cache |  |
-| License network failure | Friendly network error; existing valid cache remains intact |  |
+| Empty key activation | Empty key leaves Activate disabled; license cache has no raw key |  |
+| Invalid key activation | Activating state disables submit; friendly license error; license cache has no raw key |  |
+| Valid sandbox activation | Activating state disables submit; Pro state; license cache has no raw key |  |
+| License network failure | Friendly network error; existing valid cache remains intact and has no raw key |  |
 | Forget license on this Mac | Forgetting state disables action; local cache clears; app returns to trial or locked state |  |
 
 ## Release Candidate
