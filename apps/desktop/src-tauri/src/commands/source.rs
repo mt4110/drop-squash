@@ -1,7 +1,6 @@
 use std::path::PathBuf;
 
 use dropsquash_core::{EncodeResult, SourcePolicy};
-use dropsquash_encoder::verify_output;
 use dropsquash_platform::TrashService;
 use dropsquash_postprocess::{
     decide_source_action, SourceAction, SourceActionDecision, SourceSafety,
@@ -10,6 +9,7 @@ use dropsquash_postprocess::{
 use super::format_error;
 
 mod output_name;
+mod verification;
 
 pub fn handle_source_action(
     result: &EncodeResult,
@@ -26,7 +26,7 @@ pub fn handle_source_action(
         },
     );
     if decision.action == SourceAction::MoveOriginalToTrash {
-        decision = verified_trash_decision(result)?;
+        decision = verification::verified_trash_decision(&result.input_path, &result.output_path)?;
     }
     if decision.action == SourceAction::MoveOriginalToTrash {
         TrashService
@@ -36,62 +36,13 @@ pub fn handle_source_action(
     Ok(decision)
 }
 
-fn verified_trash_decision(result: &EncodeResult) -> Result<SourceActionDecision, String> {
-    if !output_name::belongs_to_source(&result.input_path, &result.output_path) {
-        return Ok(decide_source_action(
-            result.input_path.clone(),
-            SourcePolicy::Keep,
-            SourceSafety {
-                conversion_succeeded: false,
-                output_exists: result.output_path.exists(),
-                original_bytes: result.original_bytes,
-                output_bytes: result.output_bytes,
-            },
-        ));
-    }
-    let verification =
-        verify_output(&result.input_path, &result.output_path).map_err(format_error)?;
-    Ok(decide_source_action(
-        result.input_path.clone(),
-        SourcePolicy::Trash,
-        SourceSafety {
-            conversion_succeeded: verification.is_valid_output,
-            output_exists: verification.output_exists,
-            original_bytes: verification.original_bytes,
-            output_bytes: verification.output_bytes,
-        },
-    ))
-}
-
 pub fn trash_original(
     source_path: String,
     output_path: String,
 ) -> Result<SourceActionDecision, String> {
     let source_path = PathBuf::from(source_path);
     let output_path = PathBuf::from(output_path);
-    if !output_name::belongs_to_source(&source_path, &output_path) {
-        return Ok(decide_source_action(
-            source_path,
-            SourcePolicy::Keep,
-            SourceSafety {
-                conversion_succeeded: false,
-                output_exists: output_path.exists(),
-                original_bytes: 0,
-                output_bytes: 0,
-            },
-        ));
-    }
-    let verification = verify_output(&source_path, &output_path).map_err(format_error)?;
-    let decision = decide_source_action(
-        source_path,
-        SourcePolicy::Trash,
-        SourceSafety {
-            conversion_succeeded: verification.is_valid_output,
-            output_exists: verification.output_exists,
-            original_bytes: verification.original_bytes,
-            output_bytes: verification.output_bytes,
-        },
-    );
+    let decision = verification::verified_trash_decision(&source_path, &output_path)?;
     if decision.action != SourceAction::MoveOriginalToTrash {
         return Ok(decision);
     }
