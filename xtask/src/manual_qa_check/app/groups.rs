@@ -55,8 +55,13 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["disabled"],
             &["verified", "smaller"],
         ],
-        "Failed conversion" => &[&["original"], &["trial count unchanged", "trial unchanged"]],
+        "Failed conversion" => &[
+            &["friendly", "error"],
+            &["original"],
+            &["trial count unchanged", "trial unchanged"],
+        ],
         "Larger output" => &[
+            &["larger"],
             &["failure", "failed"],
             &["original"],
             &["trial count unchanged", "trial unchanged"],

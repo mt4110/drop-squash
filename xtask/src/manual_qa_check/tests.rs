@@ -793,9 +793,31 @@ fn reports_trash_source_without_original_move_evidence() {
 }
 
 #[test]
+fn reports_failed_conversion_without_friendly_error() {
+    let (_directory, path) = write_manual_qa(
+        "| Failed conversion | Unsupported input | Original remains | original remained and trial count unchanged after failure |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Failed conversion")));
+}
+
+#[test]
 fn reports_larger_output_without_original_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Larger output | Input that cannot be made smaller | Treated as failure | failed and trial count unchanged |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Larger output")));
+}
+
+#[test]
+fn reports_larger_output_without_larger_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Larger output | Input that cannot be made smaller | Treated as failure | result failed, original remained, and trial count unchanged |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1055,7 +1077,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Trash source policy" {
             text.push_str("| Trash source policy | Passes | button showed Moving original and was disabled; original moved to Trash only after verified smaller output |\n");
         } else if check == "Failed conversion" {
-            text.push_str("| Failed conversion | Passes | original remained and trial count unchanged after failure |\n");
+            text.push_str("| Failed conversion | Passes | friendly error shown; original remained and trial count unchanged after failure |\n");
         } else if check == "Larger output" {
             text.push_str(
                 "| Larger output | Passes | larger result failed, original remained, and trial count unchanged |\n",
