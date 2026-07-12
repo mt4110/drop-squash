@@ -74,6 +74,8 @@ fn renders_prepared_release_notes_fields() {
     };
     let text = notes.lines().join("\n");
 
+    assert!(text.contains("## Artifact"));
+    assert!(text.contains("## Distribution"));
     assert!(text.contains("- Version: v0.1.0"));
     assert!(text.contains("- Artifact: DropSquash.dmg"));
     assert!(text.contains("- Git commit: abc1234"));
@@ -90,6 +92,9 @@ fn renders_prepared_release_notes_fields() {
     let release_url = text
         .find("- GitHub Release URL:")
         .expect("release URL field");
+    let artifact_heading = text.find("## Artifact").expect("artifact heading");
+    let distribution_heading = text.find("## Distribution").expect("distribution heading");
+    assert!(artifact_heading < distribution_heading);
     assert!(checksum < release_url);
 }
 

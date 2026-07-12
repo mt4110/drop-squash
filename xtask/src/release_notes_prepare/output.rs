@@ -8,11 +8,13 @@ pub(super) struct Fields<'a> {
 pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
     vec![
         "release notes prepared fields:".into(),
+        "## Artifact".into(),
         format!("- Version: v{}", fields.version),
         "- Artifact: DropSquash.dmg".into(),
         format!("- Artifact URL: {}", fields.artifact_url),
         format!("- SHA-256: {}", fields.sha256),
         format!("- Git commit: {}", fields.commit),
+        "## Distribution".into(),
         format!("- SHA256SUMS line: {}  DropSquash.dmg", fields.sha256),
         format!(
             "- GitHub Release checksum after upload: paste only after SHA256SUMS is attached to release for {} with {}",
