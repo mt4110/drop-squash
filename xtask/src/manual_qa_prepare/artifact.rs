@@ -7,18 +7,16 @@ const DEFAULT_APP: &str = "target/release/bundle/macos/DropSquash.app";
 
 pub(super) fn qa_artifact(options: &Options) -> Result<Option<PathBuf>, String> {
     if let Some(path) = &options.app_artifact {
-        validate(path)?;
-        return Ok(Some(path.clone()));
+        return validate(path).map(Some);
     }
     let default = PathBuf::from(DEFAULT_APP);
     if default.exists() {
-        validate(&default)?;
-        return Ok(Some(default));
+        return validate(&default).map(Some);
     }
     Ok(None)
 }
 
-fn validate(path: &Path) -> Result<(), String> {
+fn validate(path: &Path) -> Result<PathBuf, String> {
     let extension = path.extension().and_then(|value| value.to_str());
     match extension {
         Some("app") if path.is_dir() => validate_app(path),
@@ -29,18 +27,24 @@ fn validate(path: &Path) -> Result<(), String> {
     }
 }
 
-fn validate_app(path: &Path) -> Result<(), String> {
+fn validate_app(path: &Path) -> Result<PathBuf, String> {
     if path.file_name().and_then(|value| value.to_str()) == Some("DropSquash.app") {
-        return Ok(());
+        return canonicalize(path);
     }
     Err("manual QA .app artifact must be named DropSquash.app".to_string())
 }
 
-fn validate_dmg(path: &Path) -> Result<(), String> {
+fn validate_dmg(path: &Path) -> Result<PathBuf, String> {
     if path.file_name().and_then(|value| value.to_str()) != Some("DropSquash.dmg") {
         return Err("manual QA .dmg artifact must be named DropSquash.dmg".to_string());
     }
-    dmg::read(path, "manual QA artifact").map(|_| ())
+    dmg::read(path, "manual QA artifact")?;
+    canonicalize(path)
+}
+
+fn canonicalize(path: &Path) -> Result<PathBuf, String> {
+    path.canonicalize()
+        .map_err(|error| format!("manual QA App artifact path cannot be resolved: {error}"))
 }
 
 #[cfg(test)]

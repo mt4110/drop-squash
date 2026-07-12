@@ -9,7 +9,19 @@ fn accepts_existing_app_artifact() {
 
     let resolved = qa_artifact(&options(Some(artifact.clone()))).unwrap();
 
-    assert_eq!(resolved, Some(artifact));
+    assert_eq!(resolved, Some(artifact.canonicalize().unwrap()));
+}
+
+#[test]
+fn resolves_app_artifact_to_canonical_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.app");
+    std::fs::create_dir(&artifact).unwrap();
+    let dotted_artifact = directory.path().join(".").join("DropSquash.app");
+
+    let resolved = qa_artifact(&options(Some(dotted_artifact))).unwrap();
+
+    assert_eq!(resolved, Some(artifact.canonicalize().unwrap()));
 }
 
 #[test]
