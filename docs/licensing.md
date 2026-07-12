@@ -39,8 +39,8 @@ handoff.
 The CLI exposes `dropsquash license status` as a local read-only diagnostic and
 `dropsquash license forget` as the matching local cache reset. Status reports
 trial usage, Pro/Trial/Locked state, and the license cache path without
-contacting Lemon Squeezy or asking for a raw license key. Forget clears only the
-local cache; server-side activation remains unchanged.
+contacting Lemon Squeezy or asking for a raw license key. Forget removes the
+local cache file only; server-side activation remains unchanged.
 
 Lemon Squeezy sandbox purchase and valid sandbox activation still need manual
 verification before paid beta.
