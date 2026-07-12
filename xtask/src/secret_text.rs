@@ -23,3 +23,27 @@ pub(crate) fn violations(scope: &str, text: &str) -> Vec<String> {
         .map(|marker| format!("{scope} must not contain secret-like value {marker}"))
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::violations;
+
+    #[test]
+    fn rejects_secret_like_assignments() {
+        let text = "APPLE_PASSWORD=x LEMON_SQUEEZY_STORE_ID=123 license_key=raw";
+
+        let errors = violations("evidence", text);
+
+        assert!(errors.iter().any(|error| error.contains("apple_password")));
+        assert!(errors.iter().any(|error| error.contains("store_id")));
+        assert!(errors.iter().any(|error| error.contains("license_key")));
+    }
+
+    #[test]
+    fn allows_safe_evidence_terms() {
+        let text =
+            "license-key fingerprint exists, private store IDs absent, raw key absent from cache";
+
+        assert!(violations("evidence", text).is_empty());
+    }
+}
