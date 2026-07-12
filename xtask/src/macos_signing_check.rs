@@ -2,6 +2,7 @@ use std::collections::BTreeMap;
 
 mod api_key;
 mod env;
+mod secret_value;
 use env::{all_present, present, require_pair, value};
 
 pub fn run() -> Result<(), String> {
@@ -15,6 +16,7 @@ fn check(env: &BTreeMap<String, String>) -> Result<(), String> {
     check_signing(env)?;
     check_certificate(env)?;
     check_notarization(env)?;
+    secret_value::check(env)?;
     api_key::check_identity(env)?;
     api_key::check_path(env)?;
     Ok(())

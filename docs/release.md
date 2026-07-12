@@ -111,6 +111,9 @@ a placeholder such as `base64`. The App Store Connect key id must be a
 not placeholder text.
 `APPLE_API_KEY_PATH` must point to a non-empty `.p8` file containing App Store
 Connect private key data, not an empty placeholder file.
+Signing and notarization secret values such as `APPLE_CERTIFICATE_PASSWORD` and
+`APPLE_PASSWORD` must be real secrets. A placeholder secret such as `password`
+or `app-password` is rejected.
 
 After packaged-app testing, require the manual QA record to be complete:
 

@@ -24,7 +24,7 @@ fn accepts_certificate_and_api_key_notarization() {
     let key_path = write_api_key(directory.path(), TEST_API_KEY);
     let env = env([
         ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
-        ("APPLE_CERTIFICATE_PASSWORD", "password"),
+        ("APPLE_CERTIFICATE_PASSWORD", "cert-passphrase-123"),
         ("APPLE_API_KEY", "ABCDEF1234"),
         ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
         ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
@@ -38,9 +38,9 @@ fn accepts_certificate_signing_in_ci() {
     let env = env([
         ("GITHUB_ACTIONS", "true"),
         ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
-        ("APPLE_CERTIFICATE_PASSWORD", "password"),
+        ("APPLE_CERTIFICATE_PASSWORD", "cert-passphrase-123"),
         ("APPLE_ID", "dev@example.com"),
-        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
         ("APPLE_TEAM_ID", "ABCDE12345"),
     ]);
 
@@ -56,7 +56,7 @@ fn rejects_identity_only_signing_in_ci() {
             "Developer ID Application: Example",
         ),
         ("APPLE_ID", "dev@example.com"),
-        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
         ("APPLE_TEAM_ID", "ABCDE12345"),
     ]);
     let error = check(&env).unwrap_err();
@@ -68,9 +68,9 @@ fn rejects_identity_only_signing_in_ci() {
 fn rejects_placeholder_certificate() {
     let env = env([
         ("APPLE_CERTIFICATE", "base64"),
-        ("APPLE_CERTIFICATE_PASSWORD", "password"),
+        ("APPLE_CERTIFICATE_PASSWORD", "cert-passphrase-123"),
         ("APPLE_ID", "dev@example.com"),
-        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
         ("APPLE_TEAM_ID", "ABCDE12345"),
     ]);
     let error = check(&env).unwrap_err();
@@ -79,11 +79,38 @@ fn rejects_placeholder_certificate() {
 }
 
 #[test]
+fn rejects_placeholder_secret_values() {
+    let env = env([
+        ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
+        ("APPLE_CERTIFICATE_PASSWORD", "password"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_CERTIFICATE_PASSWORD"));
+}
+
+#[test]
+fn rejects_placeholder_apple_password() {
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_PASSWORD"));
+}
+
+#[test]
 fn rejects_non_developer_id_identity() {
     let env = env([
         ("APPLE_SIGNING_IDENTITY", "Mac Developer: Example"),
         ("APPLE_ID", "dev@example.com"),
-        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
         ("APPLE_TEAM_ID", "ABCDE12345"),
     ]);
     let error = check(&env).unwrap_err();
@@ -104,7 +131,7 @@ fn rejects_malformed_team_id() {
     let env = env([
         ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
         ("APPLE_ID", "dev@example.com"),
-        ("APPLE_PASSWORD", "app-password"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
         ("APPLE_TEAM_ID", "not-a-team"),
     ]);
     let error = check(&env).unwrap_err();

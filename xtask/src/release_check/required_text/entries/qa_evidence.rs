@@ -119,4 +119,5 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "missing/empty/placeholder `.p8` files",
     ),
+    ("docs/qa-evidence.md", "placeholder secret values"),
 ];
