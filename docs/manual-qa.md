@@ -61,8 +61,9 @@ When the selected app artifact is `DropSquash.dmg`, it also prints
 `manual QA Release Candidate rows:` for the artifact-check and checksum rows.
 Pass `--markdown-output /tmp/dropsquash-manual-qa-prepared.md` to write those
 generated field and release-candidate rows to a temporary `.md` Markdown file
-for copying. Keep that file outside the repository; it is a preparation aid,
-not a substitute for concrete manual observations.
+for copying. The path must be a new file outside the repository so previous QA
+evidence cannot be overwritten. It is a preparation aid, not a substitute for
+concrete manual observations.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, use
 absolute paths outside the repository so private app state, generated videos,
 and QA evidence cannot be committed or deleted by accident.

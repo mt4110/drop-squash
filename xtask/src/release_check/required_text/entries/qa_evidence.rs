@@ -18,6 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "repository-local and relative app-state/state/output/markdown-output path rejection",
     ),
     ("docs/qa-evidence.md", "`.md` markdown-output rejection"),
+    (
+        "docs/qa-evidence.md",
+        "existing markdown-output no-clobber rejection",
+    ),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "Tauri DMG output is normalized"),
     ("docs/qa-evidence.md", "cargo test -p xtask normalize_dmg"),
