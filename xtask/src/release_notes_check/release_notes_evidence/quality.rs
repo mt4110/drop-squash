@@ -68,7 +68,7 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
         "Lemon Squeezy sandbox purchase" => {
             Some(&[&["intended product"], &["test buyer"], &["order"]])
         }
-        "Lemon Squeezy sandbox activation" => Some(&[
+        "Valid sandbox activation" => Some(&[
             &["activating"],
             &["disabled"],
             &["pro"],

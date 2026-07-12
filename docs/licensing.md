@@ -41,5 +41,5 @@ trial usage, Pro/Trial/Locked state, and the license cache path without
 contacting Lemon Squeezy or asking for a raw license key. Forget clears only the
 local cache; server-side activation remains unchanged.
 
-Lemon Squeezy sandbox purchase and Lemon Squeezy sandbox activation still need
-manual verification before paid beta.
+Lemon Squeezy sandbox purchase and valid sandbox activation still need manual
+verification before paid beta.

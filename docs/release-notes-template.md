@@ -31,7 +31,7 @@ license keys, private store IDs, or certificate material.
 - Benchmark regression threshold:
 - Lemon Squeezy product setup:
 - Lemon Squeezy sandbox purchase:
-- Lemon Squeezy sandbox activation:
+- Valid sandbox activation:
 - Empty key activation:
 - Invalid license key handling:
 - License network failure:
@@ -71,7 +71,7 @@ weak public evidence before the release is published.
 - Benchmark sample set: mention short, medium, and large samples with machine and OS context.
 - Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.
 - Lemon Squeezy sandbox purchase: mention the intended product, `test buyer`, and `order`.
-- License activation and key checks: mention disabled action state, Pro/friendly state, `raw key`, and cache evidence.
+- Valid sandbox activation: mention the Lemon Squeezy sandbox request, disabled action state, Pro state, `raw key`, and cache evidence.
 - License network failure: mention a friendly network error, preserved existing valid cache, and `raw key` absence.
 - Local license forget: mention disabled action state, cache removal, and trial or locked state.
 - Public website URL: use the production `/release-status` URL.

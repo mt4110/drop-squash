@@ -22,7 +22,7 @@ pub(super) const EVIDENCE: [&str; 22] = [
     "Trash source policy",
     "Lemon Squeezy product setup",
     "Lemon Squeezy sandbox purchase",
-    "Lemon Squeezy sandbox activation",
+    "Valid sandbox activation",
     "Empty key activation",
     "Invalid license key handling",
     "License network failure",

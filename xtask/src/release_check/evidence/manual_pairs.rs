@@ -20,10 +20,7 @@ pub(super) const ALL: &[(&str, &str)] = &[
     ("Batch summary", "Batch summary"),
     ("Lemon Squeezy product setup", "Sandbox product setup"),
     ("Lemon Squeezy sandbox purchase", "Sandbox purchase"),
-    (
-        "Lemon Squeezy sandbox activation",
-        "Valid sandbox activation",
-    ),
+    ("Valid sandbox activation", "Valid sandbox activation"),
     ("Empty key activation", "Empty key activation"),
     ("Invalid license key handling", "Invalid key activation"),
     ("License network failure", "License network failure"),

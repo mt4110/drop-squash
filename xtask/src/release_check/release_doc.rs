@@ -38,7 +38,7 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
         &[
             "docs/release-blockers.md",
             "Lemon Squeezy sandbox purchase",
-            "Lemon Squeezy sandbox activation",
+            "Valid sandbox activation",
         ],
     ),
     (

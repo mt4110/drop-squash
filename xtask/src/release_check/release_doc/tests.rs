@@ -22,7 +22,7 @@ first public beta target
 cargo run -p xtask -- macos-signing-check
 docs/release-blockers.md
 Lemon Squeezy sandbox purchase
-Lemon Squeezy sandbox activation
+Valid sandbox activation
 cargo run -p xtask -- homebrew-cask 0.1.0
 auto_updates false
 zap

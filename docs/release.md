@@ -110,7 +110,7 @@ and local-forget evidence must show the action is disabled while Forgetting.
 
 - Lemon Squeezy product setup
 - Lemon Squeezy sandbox purchase
-- Lemon Squeezy sandbox activation
+- Valid sandbox activation
 - Empty key activation
 - Invalid key activation
 - License network failure

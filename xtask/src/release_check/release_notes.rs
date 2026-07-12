@@ -21,7 +21,7 @@ const REQUIRED_TEXT: [&str; 41] = [
     "Benchmark regression threshold",
     "Lemon Squeezy product setup",
     "Lemon Squeezy sandbox purchase",
-    "Lemon Squeezy sandbox activation",
+    "Valid sandbox activation",
     "Empty key activation",
     "Invalid license key handling",
     "License network failure",
