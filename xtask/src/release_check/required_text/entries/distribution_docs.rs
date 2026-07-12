@@ -13,6 +13,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "disabled while Forgetting"),
     ("docs/release.md", "private store IDs"),
     ("docs/release.md", "License network failure"),
+    (
+        "docs/release.md",
+        "Lemon Squeezy\nsandbox activation request",
+    ),
+    (
+        "docs/manual-qa.md",
+        "Lemon Squeezy sandbox activation request",
+    ),
     ("docs/release.md", "release blocker URLs to match"),
     (
         "docs/release.md",

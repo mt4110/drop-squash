@@ -201,6 +201,16 @@ fn reports_verified_license_blocker_with_persisted_raw_key() {
 }
 
 #[test]
+fn reports_verified_license_blocker_without_sandbox_context() {
+    let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Activating state disabled submit; Pro reached; license.json cache checked; raw key absent |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Valid sandbox activation"));
+}
+
+#[test]
 fn accepts_verified_license_blocker_with_cache_evidence() {
     let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Invalid key activation | Friendly license error; no raw key persisted | Activating state disabled submit; friendly error shown; license.json cache checked; raw key absent |\n";

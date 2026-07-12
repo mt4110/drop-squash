@@ -149,7 +149,7 @@ Record concrete results. The checker requires:
 - Sandbox purchase: mention the intended product, test buyer, and order.
 - Empty key activation: mention the disabled Activate state and that `license.json` or the license cache has no raw key.
 - Invalid key activation: mention the Activating/disabled state, a friendly error, and that `license.json` or the license cache has no raw key.
-- Valid sandbox activation: mention the Activating/disabled state, Pro state, and that `license.json` or the license cache has no raw key.
+- Valid sandbox activation: mention the Lemon Squeezy sandbox activation request, Activating/disabled state, Pro state, and that `license.json` or the license cache has no raw key.
 - License network failure: mention a friendly network error, preserved existing valid cache, and no raw key in `license.json` or the license cache.
 - Forget license on this Mac: mention the Forgetting/disabled state, cache removal, and the resulting app state.
 
@@ -163,7 +163,7 @@ whether only the fingerprint/instance fields were present.
 | Sandbox purchase | Checkout completes for the intended product and test buyer order |  |
 | Empty key activation | Empty key leaves Activate disabled; license cache has no raw key |  |
 | Invalid key activation | Activating state disables submit; friendly license error; license cache has no raw key |  |
-| Valid sandbox activation | Activating state disables submit; Pro state; license cache has no raw key |  |
+| Valid sandbox activation | Lemon Squeezy sandbox activation request disables submit while Activating; Pro state; license cache has no raw key |  |
 | License network failure | Friendly network error; existing valid cache remains intact and has no raw key |  |
 | Forget license on this Mac | Forgetting state disables action; license cache removed; app returns to trial or locked state |  |
 

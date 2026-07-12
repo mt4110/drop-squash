@@ -702,6 +702,18 @@ fn reports_incomplete_license_sandbox_results() {
 }
 
 #[test]
+fn reports_valid_activation_without_sandbox_context() {
+    let (_directory, path) = write_manual_qa(
+        "| Valid sandbox activation | Pro state | Activating state disabled submit; Pro state reached and license.json cache has no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
 fn reports_forget_license_without_cache_removal() {
     let (_directory, path) = write_manual_qa(
         "| Forget license on this Mac | Local cache clears | license cache checked and app returned to trial state |\n",
@@ -1225,7 +1237,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Invalid key activation" {
             text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and license.json cache has no raw key |\n");
         } else if check == "Valid sandbox activation" {
-            text.push_str("| Valid sandbox activation | Passes | Activating state disabled submit; Pro state reached and raw key absent from license.json cache |\n");
+            text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and raw key absent from license.json cache |\n");
         } else if check == "License network failure" {
             text.push_str("| License network failure | Passes | friendly network error shown and existing valid license.json cache preserved with no raw key |\n");
         } else if check == "Forget license on this Mac" {

@@ -123,8 +123,9 @@ cargo run -p xtask -- manual-qa-check
 
 Before a paid beta, complete the license sandbox rows in `docs/manual-qa.md`.
 They cover both cache safety and UI action state. Empty-key evidence must show
-Activate is disabled, activation evidence must show submit is disabled while Activating,
-and local-forget evidence must show the action is disabled while Forgetting.
+Activate is disabled, valid activation evidence must name the Lemon Squeezy
+sandbox activation request and show submit is disabled while Activating, and
+local-forget evidence must show the action is disabled while Forgetting.
 Do not record sandbox keys or private store IDs in the manual QA table.
 
 - Lemon Squeezy product setup
