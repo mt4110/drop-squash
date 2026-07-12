@@ -141,11 +141,29 @@ fn reports_public_url_classification_without_matching_owner_field() {
 
 #[test]
 fn reports_manual_classification_without_manual_qa_owner() {
-    let text = "| Valid sandbox activation | License sandbox | Activate the packaged app and inspect the local cache | Release notes |\n";
+    let text = "| Valid sandbox activation | License sandbox | Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect the local license cache | Release notes |\n";
 
     let unclassified = unclassified_blockers(text);
 
     assert!(unclassified.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn reports_license_action_without_sandbox_activation_request() {
+    let text = "| Valid sandbox activation | License sandbox | Activate the packaged app, confirm submit is disabled while Activating, and inspect the local license cache | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn reports_license_action_without_cache_detail() {
+    let text = "| License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"License network failure"));
 }
 
 #[test]
@@ -196,6 +214,25 @@ fn reports_homebrew_action_without_install_policy_details() {
 fn action_for(blocker: &str) -> &'static str {
     match blocker {
         "Packaged macOS manual QA" => "Run public DropSquash.dmg artifact through manual QA",
+        "Lemon Squeezy product setup" => {
+            "Confirm sandbox product is the intended product, DropSquash, with license keys"
+        }
+        "Lemon Squeezy sandbox purchase" => {
+            "Complete sandbox checkout for the intended product, test buyer, and order"
+        }
+        "Empty key activation" => "Confirm Activate is disabled and inspect local license cache",
+        "Valid sandbox activation" => {
+            "Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect the local license cache"
+        }
+        "Invalid license key handling" => {
+            "Enter invalid key, confirm submit is disabled while activating, and inspect local license cache"
+        }
+        "License network failure" => {
+            "Simulate failed activation request and inspect friendly error plus preserved local cache"
+        }
+        "Local license forget" => {
+            "Use local forget action, confirm disabled while forgetting, and inspect returned app state"
+        }
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"
         }

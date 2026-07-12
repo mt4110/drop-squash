@@ -1,5 +1,6 @@
 use super::REQUIRED_BLOCKERS;
 
+mod action_detail;
 mod classes;
 
 pub(super) fn unclassified_blockers(text: &str) -> Vec<&'static str> {
@@ -65,27 +66,7 @@ fn has_placeholder(value: &str) -> bool {
 }
 
 fn has_required_action_detail(blocker: &str, action: &str) -> bool {
-    match blocker {
-        "Packaged macOS manual QA" => {
-            action.contains("public") && action.contains("DropSquash.dmg")
-        }
-        "Benchmark release set" => action.contains("absolute CSV path outside repo"),
-        "Published checksum" => {
-            action.contains("public")
-                && action.contains("DropSquash.dmg")
-                && action.contains("SHA-256")
-                && action.contains("GitHub Release")
-        }
-        "Homebrew cask install" => {
-            action.contains("brew install")
-                && action.contains("versioned")
-                && action.contains("DropSquash.dmg")
-                && action.contains("matching SHA-256")
-                && action.contains("auto_updates false")
-                && action.contains("zap")
-        }
-        _ => true,
-    }
+    action_detail::has_required_detail(blocker, action)
 }
 
 fn has_required_owner_detail(blocker: &str, owner: &str) -> bool {

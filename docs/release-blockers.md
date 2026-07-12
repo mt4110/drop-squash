@@ -44,7 +44,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Lemon Squeezy product setup | License sandbox | Confirm the sandbox product is the intended product, DropSquash, and license keys are enabled | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | License sandbox | Complete sandbox checkout for the intended product, test buyer, and order | `docs/manual-qa.md` |
 | Empty key activation | License sandbox | Leave the key empty, confirm Activate is disabled, and inspect the local license cache | `docs/manual-qa.md` |
-| Valid sandbox activation | License sandbox | Activate the packaged app, confirm submit is disabled while activating, and inspect the local license cache | `docs/manual-qa.md` |
+| Valid sandbox activation | License sandbox | Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect the local license cache | `docs/manual-qa.md` |
 | Invalid license key handling | License sandbox | Enter an invalid key, confirm submit is disabled while activating, and inspect the local license cache | `docs/manual-qa.md` |
 | License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
