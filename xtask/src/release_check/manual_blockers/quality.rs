@@ -14,6 +14,8 @@ pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
 fn lacks_special_evidence(check: &str, result: &str) -> bool {
     match check {
         "Privacy receipt sidecar" => lacks_privacy_receipt_values(result),
+        "Batch summary" => count_numbers(result) < 5,
+        "Multi-file queue" => !contains_number(result, "3") || !contains_number(result, "1"),
         _ => false,
     }
 }
@@ -21,4 +23,17 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
 fn lacks_privacy_receipt_values(result: &str) -> bool {
     let compact = result.to_ascii_lowercase().replace(' ', "");
     !compact.contains("uploaded_bytes=0") || !compact.contains("metadata_policy=preserve")
+}
+
+fn count_numbers(result: &str) -> usize {
+    result
+        .split(|value: char| !value.is_ascii_digit())
+        .filter(|part| !part.is_empty())
+        .count()
+}
+
+fn contains_number(result: &str, expected: &str) -> bool {
+    result
+        .split(|value: char| !value.is_ascii_digit())
+        .any(|part| part == expected)
 }

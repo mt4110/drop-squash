@@ -390,6 +390,32 @@ fn reports_packaged_macos_manual_qa_with_weak_batch_summary() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_word_only_queue_counts() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Multi-file queue",
+        "three recordings queued with one active sequential conversion; completed job finished and unrelated failures did not block it",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_packaged_macos_manual_qa_with_word_only_batch_counts() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Batch summary",
+        "summary showed finished count, saved bytes, failed count, cancelled count, and blocked count",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_failed_conversion() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -596,13 +622,13 @@ fn packaged_result(label: &str) -> String {
         "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix".into(),
         "Cancellation" => "app returned ready and trial history showed no new success".into(),
         "Multi-file queue" => {
-            "three recordings queued with one active sequential conversion; completed job finished and unrelated failures did not block it".into()
+            "3 recordings queued with 1 active sequential conversion; completed job finished and unrelated failures did not block it".into()
         }
         "Queued job cancellation" => {
             "queued row marked cancelled and never started; trial history showed no new success".into()
         }
         "Batch summary" => {
-            "summary showed finished count, saved bytes, failed count, cancelled count, and blocked count".into()
+            "summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0".into()
         }
         "Ask source policy" => "Ask prompt let tester choose Trash or Keep; original remained unchanged".into(),
         "Trash source policy" => {
