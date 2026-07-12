@@ -151,6 +151,38 @@ async fn invalid_activation_does_not_write_cache() {
 }
 
 #[tokio::test]
+async fn invalid_activation_preserves_existing_cache() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    let existing = LicenseCache {
+        instance_name: Some("device-1".to_string()),
+        instance_id: Some("remote-device-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-OLD-KEY")),
+        validated_at_unix: Some(90),
+        offline_grace_until_unix: Some(1000),
+        valid: true,
+        ..LicenseCache::default()
+    };
+    existing.save_to_path(&path).unwrap();
+
+    let result = write_activation_cache(
+        "LS-INVALID-KEY",
+        &path,
+        &FakeProvider {
+            fail: false,
+            expected_key: Some("LS-INVALID-KEY"),
+            expected_instance_name: Some("device-1"),
+            valid: false,
+        },
+        100,
+    )
+    .await;
+
+    assert!(result.unwrap_err().to_string().contains("valid license"));
+    assert_eq!(LicenseCache::load_or_default(&path).unwrap(), existing);
+}
+
+#[tokio::test]
 async fn activation_trims_license_key_before_provider_call() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("license.json");
