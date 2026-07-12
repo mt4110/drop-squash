@@ -296,6 +296,23 @@ fn rejects_missing_pricing_draft_copy() {
 }
 
 #[test]
+fn rejects_pre_release_cta_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta DropSquash.dmg notarization checksum release-status/ Download now",
+    );
+    write(directory.path(), "pricing.html", "Checkout opens after signed beta release Lemon Squeezy sandbox validation release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Buy now");
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("download now")));
+    assert!(errors.iter().any(|error| error.contains("buy now")));
+}
+
+#[test]
 fn rejects_pre_release_download_or_checkout_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
