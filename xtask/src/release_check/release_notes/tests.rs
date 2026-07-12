@@ -22,6 +22,8 @@ Queue evidence
 Trash source policy
 Benchmark sample set
 Benchmark regression threshold
+Benchmark regression threshold: mention
+20% regression threshold
 Lemon Squeezy product setup
 Lemon Squeezy sandbox purchase
 Valid sandbox activation

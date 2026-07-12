@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 45] = [
+const REQUIRED_TEXT: &[&str] = &[
     "Version",
     "Artifact",
     "Artifact: DropSquash.dmg",
@@ -20,6 +20,8 @@ const REQUIRED_TEXT: [&str; 45] = [
     "Trash source policy",
     "Benchmark sample set",
     "Benchmark regression threshold",
+    "Benchmark regression threshold: mention",
+    "20% regression threshold",
     "Lemon Squeezy product setup",
     "Lemon Squeezy sandbox purchase",
     "Valid sandbox activation",
