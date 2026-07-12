@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 61] = [
+pub(super) const REQUIRED_TEXT: [(&str, &str); 63] = [
     ("docs/release.md", "docs/release-blockers.md"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
@@ -41,6 +41,11 @@ pub(super) const REQUIRED_TEXT: [(&str, &str); 61] = [
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "non-DMG targets are rejected"),
+    (
+        "docs/qa-evidence.md",
+        "canonical `DropSquash.dmg` file name",
+    ),
+    ("docs/qa-evidence.md", "wrong-name targets are rejected"),
     (
         "docs/qa-evidence.md",
         "artifact file name instead of local parent directories",
