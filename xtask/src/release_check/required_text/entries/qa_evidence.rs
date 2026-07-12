@@ -34,6 +34,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "public publish references that point to the release notes URLs",
     ),
+    (
+        "docs/qa-evidence.md",
+        "complete manual QA evidence for the public `DropSquash.dmg`",
+    ),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
     (

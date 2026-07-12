@@ -167,9 +167,10 @@ Homebrew evidence must mention
 ```sh
 cargo run -p xtask -- release-notes-check path/to/release-notes.md
 ```
-Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after every
-row in `docs/release-blockers.md` is `Verified` with a traceable Evidence
-reference. The publish check also requires release blocker URLs to match the
-release notes URLs for the public website, refund policy, live checkout, GitHub
-Release, and Homebrew tap PR. Public publish references must point to the same
-release notes URLs, not to a different release or tap PR.
+Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after
+`docs/manual-qa.md` records the tested public `DropSquash.dmg` and every row in
+`docs/release-blockers.md` is `Verified` with a traceable Evidence reference.
+The publish check also requires release blocker URLs to match the release notes
+URLs for the public website, refund policy, live checkout, GitHub Release, and
+Homebrew tap PR. Public publish references must point to the same release notes
+URLs, not to a different release or tap PR.

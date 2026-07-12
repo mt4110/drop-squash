@@ -23,6 +23,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "release-notes URL reference matching",
     ),
+    ("docs/release.md", "tested public `DropSquash.dmg`"),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
     (
