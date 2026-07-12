@@ -222,7 +222,7 @@ fn evidence(blocker: &str) -> &'static str {
         "Signed DMG" => "`codesign` verified Developer ID for public DropSquash.dmg",
         "Notarized and stapled DMG" => "`spctl`, notary, stapled public DropSquash.dmg",
         "Gatekeeper clean-machine open" => {
-            "Fresh macOS account opened signed, notarized, stapled app without Gatekeeper warning"
+            "Fresh macOS account opened signed, notarized, stapled app from public DropSquash.dmg without Gatekeeper warning"
         }
         "Published checksum" => "SHA256SUMS with SHA-256 for public DropSquash.dmg attached",
         "Homebrew cask install" => {

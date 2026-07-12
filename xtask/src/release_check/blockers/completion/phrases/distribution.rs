@@ -11,6 +11,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Notarized and stapled DMG", "public"),
     ("Notarized and stapled DMG", "DropSquash.dmg"),
     ("Gatekeeper clean-machine open", "Fresh macOS account"),
+    ("Gatekeeper clean-machine open", "public"),
+    ("Gatekeeper clean-machine open", "DropSquash.dmg"),
     ("Gatekeeper clean-machine open", "signed"),
     ("Gatekeeper clean-machine open", "notarized"),
     ("Gatekeeper clean-machine open", "stapled app"),
