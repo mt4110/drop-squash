@@ -1028,6 +1028,22 @@ fn reports_release_candidate_results_without_public_context() {
 }
 
 #[test]
+fn reports_release_candidate_results_without_dmg_context() {
+    let (_directory, path) = write_manual_qa(
+        "| Codesign verification | Developer ID signature | codesign verified Developer ID Application signature for public artifact |\n\
+| Notarization staple verification | Notary assessment | notary accepted and staple/spctl assessment passed for public artifact |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Codesign verification")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization staple verification")));
+}
+
+#[test]
 fn reports_gatekeeper_result_without_warning_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account |\n",
