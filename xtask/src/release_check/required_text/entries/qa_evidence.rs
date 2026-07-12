@@ -102,6 +102,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "short, medium, and large local recordings with smaller outputs",
     ),
+    ("docs/qa-evidence.md", "CSV evidence outside the repository"),
     ("docs/qa-evidence.md", "versioned `DropSquash.dmg` artifact"),
     ("docs/qa-evidence.md", "matching SHA-256"),
     ("docs/qa-evidence.md", "`auto_updates false`"),

@@ -66,6 +66,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/benchmarking.md", "absolute `--output-dir`"),
     ("docs/benchmarking.md", "20%"),
     (
+        "docs/release-notes-template.md",
+        "CSV path outside the repository",
+    ),
+    (
         "docs/reproducible-builds.md",
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
