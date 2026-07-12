@@ -64,6 +64,28 @@ mod tests {
         assert!(error.contains("/nix/store"));
     }
 
+    #[test]
+    fn generated_rows_satisfy_manual_qa_artifact_checks() {
+        let directory = tempfile::tempdir().unwrap();
+        let artifact = directory.path().join("DropSquash.dmg");
+        std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+        let path = directory.path().join("manual-qa.md");
+        std::fs::write(
+            &path,
+            format!(
+                "| App artifact | {} |\n{}\n",
+                artifact.display(),
+                rows(&artifact).unwrap().join("\n")
+            ),
+        )
+        .unwrap();
+
+        let missing = crate::manual_qa_check::check_file(&path).unwrap();
+
+        assert!(!missing.iter().any(|error| error.contains("artifact-check")));
+        assert!(!missing.iter().any(|error| error.contains("checksum")));
+    }
+
     fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
         let mut bytes = prefix.to_vec();
         let mut trailer = vec![0; 512];
