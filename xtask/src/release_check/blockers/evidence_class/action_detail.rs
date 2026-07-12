@@ -14,7 +14,10 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "test buyer",
             "order",
         ],
-        "Empty key activation" => &["Activate is disabled", "local license cache"],
+        "Empty key activation" => &[
+            "Activate is disabled",
+            "raw-key, fingerprint, and instance absence",
+        ],
         "Valid sandbox activation" => &[
             "Lemon Squeezy sandbox activation request",
             "disabled while Activating",
@@ -24,7 +27,8 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
         "Invalid license key handling" => &[
             "invalid key",
             "disabled while activating",
-            "local license cache",
+            "friendly error",
+            "raw-key, fingerprint, and instance absence",
         ],
         "License network failure" => &[
             "failed activation request",

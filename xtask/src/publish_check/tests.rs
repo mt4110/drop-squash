@@ -259,13 +259,13 @@ fn evidence(blocker: &str) -> &'static str {
             "Tested the public DropSquash.dmg artifact with manual-qa-check evidence recorded"
         }
         "Empty key activation" => {
-            "Activate stays disabled and raw key is absent from local cache"
+            "Activate stays disabled and raw key, fingerprint, and instance are absent from local cache"
         }
         "Valid sandbox activation" => {
             "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, fingerprint/instance fields are present, and raw key is absent from local cache"
         }
         "Invalid license key handling" => {
-            "Activating state disables submit, friendly error, raw key is absent from local cache"
+            "Activating state disables submit, friendly error, raw key, fingerprint, and instance are absent from local cache"
         }
         "License network failure" => {
             "Friendly network error, existing valid local cache with fingerprint/instance fields remains intact, and raw key is absent from local cache"

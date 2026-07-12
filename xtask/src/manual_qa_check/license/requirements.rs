@@ -6,10 +6,11 @@ pub(super) const PRODUCT_SETUP: &[&str] = &[
 ];
 pub(super) const PURCHASE: &[&str] = &["sandbox", "intended product", "test buyer", "order"];
 
-pub(super) const EMPTY_KEY_CACHE: &[&str] = &["raw key"];
+pub(super) const EMPTY_KEY_CACHE: &[&str] = &["raw key", "no fingerprint", "no instance"];
 pub(super) const EMPTY_KEY_ACTION: &[&str] = &["activate", "disabled"];
 
-pub(super) const INVALID_KEY_CACHE: &[&str] = &["friendly", "raw key"];
+pub(super) const INVALID_KEY_CACHE: &[&str] =
+    &["friendly", "raw key", "no fingerprint", "no instance"];
 pub(super) const VALID_KEY_CACHE: &[&str] = &[
     "lemon squeezy",
     "sandbox",

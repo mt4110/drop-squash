@@ -31,6 +31,12 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["disabled"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
+            &[
+                "no fingerprint",
+                "fingerprint absent",
+                "without fingerprint",
+            ],
+            &["no instance", "instance absent", "without instance"],
             &["cache"],
         ]),
         "Invalid license key handling" => Some(&[
@@ -39,6 +45,12 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["friendly"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
+            &[
+                "no fingerprint",
+                "fingerprint absent",
+                "without fingerprint",
+            ],
+            &["no instance", "instance absent", "without instance"],
             &["cache"],
         ]),
         "License network failure" => Some(&[

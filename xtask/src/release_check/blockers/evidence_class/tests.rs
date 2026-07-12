@@ -274,12 +274,14 @@ fn action_for(blocker: &str) -> &'static str {
         "Lemon Squeezy sandbox purchase" => {
             "Complete sandbox checkout for the intended product, test buyer, and order"
         }
-        "Empty key activation" => "Confirm Activate is disabled and inspect local license cache",
+        "Empty key activation" => {
+            "Leave key empty, confirm Activate is disabled, and inspect local license cache raw-key, fingerprint, and instance absence"
+        }
         "Valid sandbox activation" => {
             "Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache fingerprint/instance fields plus raw-key absence"
         }
         "Invalid license key handling" => {
-            "Enter invalid key, confirm submit is disabled while activating, and inspect local license cache"
+            "Enter invalid key, confirm submit is disabled while activating, friendly error appears, and inspect local license cache raw-key, fingerprint, and instance absence"
         }
         "License network failure" => {
             "Simulate failed activation request and inspect friendly error plus preserved local cache fingerprint/instance fields and raw-key absence"

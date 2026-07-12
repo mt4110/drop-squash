@@ -6,7 +6,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Packaged macOS manual QA", "DropSquash.dmg"),
     ("Packaged macOS manual QA", "manual-qa-check"),
     ("Empty key activation", "Activate stays disabled"),
-    ("Empty key activation", "raw key is absent"),
+    (
+        "Empty key activation",
+        "raw key, fingerprint, and instance are absent",
+    ),
     ("Empty key activation", "local cache"),
     (
         "Valid sandbox activation",
@@ -23,7 +26,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Activating state disables submit",
     ),
     ("Invalid license key handling", "friendly error"),
-    ("Invalid license key handling", "raw key is absent"),
+    (
+        "Invalid license key handling",
+        "raw key, fingerprint, and instance are absent",
+    ),
     ("Invalid license key handling", "local cache"),
     ("License network failure", "Friendly network error"),
     ("License network failure", "existing valid local cache"),

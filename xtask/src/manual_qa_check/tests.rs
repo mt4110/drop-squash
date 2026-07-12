@@ -1322,9 +1322,9 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Sandbox purchase" {
             text.push_str("| Sandbox purchase | Passes | sandbox checkout completed for intended product by test buyer order abc123 |\n");
         } else if check == "Empty key activation" {
-            text.push_str("| Empty key activation | Passes | Activate disabled for empty input and license.json cache has no raw key |\n");
+            text.push_str("| Empty key activation | Passes | Activate disabled for empty input and license.json cache has no raw key, no fingerprint, and no instance |\n");
         } else if check == "Invalid key activation" {
-            text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and license.json cache has no raw key |\n");
+            text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and license.json cache has no raw key, no fingerprint, and no instance |\n");
         } else if check == "Valid sandbox activation" {
             text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint and instance fields with raw key absent |\n");
         } else if check == "License network failure" {

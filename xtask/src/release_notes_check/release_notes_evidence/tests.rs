@@ -35,8 +35,8 @@ fn accepts_concrete_production_urls() {
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
 - Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and cache kept fingerprint and instance fields with raw key absent
-- Empty key activation: Activate disabled for empty input and raw key absent from cache
-- Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache
+- Empty key activation: Activate disabled for empty input and raw key absent from cache with no fingerprint and no instance
+- Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache with no fingerprint and no instance
 - License network failure: friendly network error shown, existing valid cache preserved fingerprint and instance fields with raw key absent
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
 - Public website URL: https://dropsquash.app/release-status

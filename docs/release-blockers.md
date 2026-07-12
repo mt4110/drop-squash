@@ -16,9 +16,9 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Packaged macOS manual QA | Blocked | Tested the public `DropSquash.dmg` artifact with the filled manual QA table and `manual-qa-check` passing | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |
-| Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| Empty key activation | Blocked | Activate stays disabled for empty input, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |
 | Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, fingerprint/instance fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
-| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |
 | License network failure | Blocked | Friendly network error appears, existing valid local cache with fingerprint/instance fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
@@ -43,9 +43,9 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Packaged macOS manual QA | Manual packaged-app | Run the public `DropSquash.dmg` artifact through the manual QA table and record `manual-qa-check` passing | `docs/manual-qa.md` |
 | Lemon Squeezy product setup | License sandbox | Confirm the sandbox product is the intended product, DropSquash, and license keys are enabled | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | License sandbox | Complete sandbox checkout for the intended product, test buyer, and order | `docs/manual-qa.md` |
-| Empty key activation | License sandbox | Leave the key empty, confirm Activate is disabled, and inspect the local license cache | `docs/manual-qa.md` |
+| Empty key activation | License sandbox | Leave the key empty, confirm Activate is disabled, and inspect local license cache raw-key, fingerprint, and instance absence | `docs/manual-qa.md` |
 | Valid sandbox activation | License sandbox | Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache fingerprint/instance fields plus raw-key absence | `docs/manual-qa.md` |
-| Invalid license key handling | License sandbox | Enter an invalid key, confirm submit is disabled while activating, and inspect the local license cache | `docs/manual-qa.md` |
+| Invalid license key handling | License sandbox | Enter an invalid key, confirm submit is disabled while activating, friendly error appears, and inspect local license cache raw-key, fingerprint, and instance absence | `docs/manual-qa.md` |
 | License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache fingerprint/instance fields and raw-key absence | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify release-status, privacy, pricing, support, and download pages | Public website URL |
