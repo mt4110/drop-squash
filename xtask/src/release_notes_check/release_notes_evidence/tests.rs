@@ -365,6 +365,19 @@ fn rejects_checkout_url_without_buy_id() {
 }
 
 #[test]
+fn rejects_checkout_url_with_extra_path_after_buy_id() {
+    let errors = check_text(
+        r#"
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123/extra
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Live checkout URL")));
+}
+
+#[test]
 fn rejects_url_fields_with_inline_notes() {
     let errors = check_text(
         r#"

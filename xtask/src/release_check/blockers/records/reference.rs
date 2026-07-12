@@ -47,7 +47,12 @@ fn is_live_checkout(reference: &str) -> bool {
         && lower
             .split("/checkout/buy/")
             .nth(1)
-            .is_some_and(|value| !value.is_empty())
+            .is_some_and(has_single_path_segment)
+}
+
+fn has_single_path_segment(value: &str) -> bool {
+    let id = value.split('?').next().unwrap_or(value);
+    !id.is_empty() && !id.contains('/')
 }
 
 fn is_refund_policy(reference: &str) -> bool {
