@@ -9,6 +9,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "benchmark CSV path evidence"),
+    (
+        "docs/qa-evidence.md",
+        "approved external links with host/path boundaries",
+    ),
     ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
     ("docs/qa-evidence.md", "concrete identity fields"),
     ("docs/qa-evidence.md", "same `.dmg` file evidence"),
@@ -76,6 +80,16 @@ pub(super) const ENTRIES: &[Entry] = &[
         "new absolute `.md` path outside the repository",
     ),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
+    (
+        "docs/qa-evidence.md",
+        "version-matched public Artifact URL with host/path boundaries",
+    ),
+    ("docs/qa-evidence.md", "imposter public URL hosts"),
+    (
+        "docs/qa-evidence.md",
+        "host-boundary checked public publish references",
+    ),
+    ("docs/qa-evidence.md", "imposter GitHub release hosts"),
     (
         "docs/qa-evidence.md",
         "checksum evidence without the Artifact URL",
