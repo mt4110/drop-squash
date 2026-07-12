@@ -1,4 +1,4 @@
-import type { DropZoneState } from "./commands";
+import type { DropZoneState } from "./commands.js";
 
 export const initialState: DropZoneState = {
   productName: "DropSquash",

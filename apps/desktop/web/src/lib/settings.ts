@@ -1,4 +1,4 @@
-import type { DropZoneState, SavedConfig } from "./commands";
+import type { DropZoneState, SavedConfig } from "./commands.js";
 
 export function savedConfigFromState(state: DropZoneState): SavedConfig {
   return {

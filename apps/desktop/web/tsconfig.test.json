@@ -8,5 +8,12 @@
     "outDir": "../../../target/web-queue-test",
     "rootDir": "src"
   },
-  "include": ["src/lib/queue.ts", "src/lib/queue.test.ts"]
+  "include": [
+    "src/lib/commands.ts",
+    "src/lib/initialState.ts",
+    "src/lib/queue.ts",
+    "src/lib/queue.test.ts",
+    "src/lib/settings.ts",
+    "src/lib/settings.test.ts"
+  ]
 }
