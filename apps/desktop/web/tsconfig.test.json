@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2020"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": false,
+    "outDir": "../../../target/web-queue-test",
+    "rootDir": "src"
+  },
+  "include": ["src/lib/queue.ts", "src/lib/queue.test.ts"]
+}

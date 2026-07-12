@@ -22,7 +22,7 @@ import type {
 import { initialState } from "./lib/initialState";
 import type { QueueEntry } from "./lib/queue";
 import {
-  blockQueued,
+  blockQueuedForLicenseLock,
   cancelQueued,
   clearFinished,
   entriesForInputPaths,
@@ -149,9 +149,7 @@ export function App() {
 
   useEffect(() => {
     if (state.isLocked) {
-      setQueue((current) => (
-        blockQueued(current, "Trial complete. Enter a license key to continue.")
-      ));
+      setQueue(blockQueuedForLicenseLock);
     }
   }, [state.isLocked]);
 

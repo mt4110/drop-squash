@@ -1,4 +1,4 @@
-import type { ConversionSummary } from "./commands";
+import type { ConversionSummary } from "./commands.js";
 
 export type QueueStatus =
   | "queued"
@@ -28,6 +28,8 @@ export type QueueSummary = {
   blocked: number;
   savedBytes: number;
 };
+
+export const LICENSE_LOCK_QUEUE_MESSAGE = "Trial complete. Enter a license key to continue.";
 
 export function entriesForInputPaths(inputPaths: string[], nextId: number) {
   return {
@@ -76,6 +78,10 @@ export function blockQueued(items: QueueEntry[], error: string) {
   return items.map((item) => (
     item.status === "queued" ? { ...item, status: "blocked" as const, error } : item
   ));
+}
+
+export function blockQueuedForLicenseLock(items: QueueEntry[]) {
+  return blockQueued(items, LICENSE_LOCK_QUEUE_MESSAGE);
 }
 
 export function markRunning(items: QueueEntry[], id: number) {
