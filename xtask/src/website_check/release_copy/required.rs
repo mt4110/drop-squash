@@ -36,6 +36,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("support.html", "What is a privacy receipt?"),
     ("support.html", "metadata_policy = preserve"),
     ("support.html", "Does DropSquash upload my videos?"),
+    ("support.html", "does not upload media"),
     ("support.html", "Does it use ffmpeg?"),
     ("support.html", "app version"),
     ("support.html", "GitHub Issues"),
