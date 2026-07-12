@@ -40,7 +40,11 @@ pub fn print(rows: &[BenchmarkRow]) {
 }
 
 pub fn write(path: &std::path::Path, rows: &[BenchmarkRow]) -> Result<(), String> {
-    std::fs::write(path, csv(rows))
+    std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(path)
+        .and_then(|mut file| std::io::Write::write_all(&mut file, csv(rows).as_bytes()))
         .map_err(|error| format!("failed to write benchmark CSV {}: {error}", path.display()))
 }
 

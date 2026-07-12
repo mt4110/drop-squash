@@ -29,6 +29,17 @@ fn writes_csv_to_path() {
     assert!(text.contains("a.mov,out.mp4,1048576,524288"));
 }
 
+#[test]
+fn refuses_to_overwrite_csv_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("results.csv");
+    std::fs::write(&path, "existing").unwrap();
+
+    let error = write(&path, &[row()]).unwrap_err();
+
+    assert!(error.contains("failed to write benchmark CSV"));
+}
+
 fn row() -> BenchmarkRow {
     BenchmarkRow {
         input: "a.mov".to_string(),

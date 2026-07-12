@@ -25,6 +25,10 @@ exact evidence file is part of the command:
 input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,throughput_mib_s
 ```
 
+`--csv-output` refuses to overwrite an existing file. Use a fresh path for each
+release-candidate run so the recorded evidence cannot silently replace an older
+CSV.
+
 Use at least three private local samples before a release candidate:
 
 - A short screen recording under 30 seconds.
