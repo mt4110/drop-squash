@@ -3,6 +3,7 @@ use std::path::Path;
 mod completion;
 mod evidence_class;
 mod evidence_ref;
+mod issues;
 mod placeholders;
 mod records;
 mod reference_urls;
@@ -28,31 +29,21 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let misplaced = records::misplaced_record_targets(&text);
     let mismatched_urls = url_pairs::mismatched_verified_url_pairs(&text);
     let unclassified = evidence_class::unclassified_blockers(&text);
-    if missing.is_empty()
-        && invalid.is_empty()
-        && unproven.is_empty()
-        && stale.is_empty()
-        && misplaced_ref.is_empty()
-        && incomplete.is_empty()
-        && misplaced.is_empty()
-        && mismatched_urls.is_empty()
-        && unclassified.is_empty()
-    {
+    let issues = issues::Issues {
+        missing,
+        invalid,
+        unproven,
+        stale,
+        misplaced_ref,
+        incomplete,
+        misplaced,
+        mismatched_urls,
+        unclassified,
+    };
+    if issues.is_empty() {
         return Ok(());
     }
-    Err(format!(
-        "{} has release blocker issues: {}{}{}{}{}{}{}{}{}",
-        path.display(),
-        join_prefix("missing ", missing),
-        join_prefix(" invalid status ", invalid),
-        join_prefix(" unproven verified ", unproven),
-        join_prefix(" stale blocked ", stale),
-        join_prefix(" misplaced verified reference ", misplaced_ref),
-        join_prefix(" incomplete requirement ", incomplete),
-        join_prefix(" misplaced record target ", misplaced),
-        join_prefix(" mismatched URL pair ", mismatched_urls),
-        join_prefix(" unclassified ", unclassified)
-    ))
+    Err(issues.format(path))
 }
 
 fn missing_release_blockers(text: &str) -> Vec<&'static str> {
@@ -109,13 +100,6 @@ fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
 
 fn has_stale_blocked_reference(line: &str) -> bool {
     row::evidence_reference(line) != Some("TBD")
-}
-
-fn join_prefix(prefix: &str, values: Vec<&str>) -> String {
-    if values.is_empty() {
-        return String::new();
-    }
-    format!("{prefix}{}", values.join(", "))
 }
 
 #[cfg(test)]
