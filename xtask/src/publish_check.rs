@@ -44,7 +44,8 @@ fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {
             missing.join("\n")
         ));
     }
-    manual_qa::require_public_dmg(path)
+    manual_qa::require_public_dmg(path)?;
+    manual_qa::require_current_head(path)
 }
 
 fn read_release_blockers(path: &Path) -> Result<String, String> {

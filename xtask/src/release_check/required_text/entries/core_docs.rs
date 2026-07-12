@@ -29,6 +29,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "release notes `Git commit` field to match",
     ),
+    ("docs/release.md", "manual QA `App build` field"),
+    ("docs/release.md", "current `HEAD`"),
     ("docs/release.md", "release-notes-prepare"),
     ("docs/release.md", "intentionally marked pending"),
     (
