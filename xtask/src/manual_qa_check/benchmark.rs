@@ -11,13 +11,14 @@ fn require_sample_set(result: &str, missing: &mut Vec<String>) {
     if ["short", "medium", "large"]
         .iter()
         .all(|needle| lower.contains(needle))
+        && lower.contains("smaller")
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
         return;
     }
     missing.push(
-        "manual QA benchmark sample set must mention short, medium, large, machine, and OS"
+        "manual QA benchmark sample set must mention short, medium, large, smaller outputs, machine, and OS"
             .to_string(),
     );
 }

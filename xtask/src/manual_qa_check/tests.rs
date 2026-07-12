@@ -456,9 +456,21 @@ fn reports_incomplete_benchmark_results() {
 
     assert!(missing
         .iter()
-        .any(|error| error.contains("machine, and OS")));
+        .any(|error| error.contains("smaller outputs, machine, and OS")));
     assert!(missing.iter().any(|error| error.contains("20%")));
     assert!(missing.iter().any(|error| error.contains("benchmark")));
+}
+
+#[test]
+fn reports_benchmark_sample_set_without_smaller_outputs() {
+    let (_directory, path) = write_manual_qa(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples on MacBookPro18,4 macOS 26.5 |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("smaller outputs")));
 }
 
 #[test]
@@ -744,7 +756,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         if check.starts_with('`') {
             text.push_str(&command_result(check));
         } else if check == "Benchmark sample set" {
-            text.push_str("| Benchmark sample set | Passes | short, medium, and large samples recorded on MacBookPro18,4 macOS 26.5.2 |\n");
+            text.push_str("| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs on MacBookPro18,4 macOS 26.5.2 |\n");
         } else if check == "Benchmark regression threshold" {
             text.push_str(
                 "| Benchmark regression threshold | Passes | no sample exceeded 20% regression |\n",
