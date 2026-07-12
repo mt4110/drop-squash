@@ -2,53 +2,12 @@ use super::blockers::row;
 use std::path::Path;
 
 mod field_quality;
+mod mapping;
 mod quality;
 mod stale;
 
-const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
-    "App build",
-    "App artifact",
-    "macOS version",
-    "Machine",
-    "Input sample set",
-    "Output folder",
-    "Tester",
-    "Date",
-    "Choose recording conversion",
-    "Drag-and-drop conversion",
-    "Privacy receipt sidecar",
-    "Reveal privacy receipt",
-    "Duplicate output naming",
-    "Cancellation",
-    "Multi-file queue",
-    "Queued job cancellation",
-    "Batch summary",
-    "Ask source policy",
-    "Trash source policy",
-    "Failed conversion",
-    "Larger output",
-    "Reveal output",
-];
-
-const MANUAL_BLOCKERS: [(&str, &[&str]); 10] = [
-    ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
-    ("Lemon Squeezy product setup", &["Sandbox product setup"]),
-    ("Lemon Squeezy sandbox purchase", &["Sandbox purchase"]),
-    ("Empty key activation", &["Empty key activation"]),
-    ("Valid sandbox activation", &["Valid sandbox activation"]),
-    ("Invalid license key handling", &["Invalid key activation"]),
-    ("License network failure", &["License network failure"]),
-    ("Local license forget", &["Forget license on this Mac"]),
-    ("Gatekeeper clean-machine open", &["Gatekeeper open test"]),
-    (
-        "Benchmark release set",
-        &[
-            "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`",
-            "Benchmark sample set",
-            "Benchmark regression threshold",
-        ],
-    ),
-];
+#[cfg(test)]
+use mapping::PACKAGED_MACOS_EVIDENCE;
 
 pub(super) fn check(blockers_path: &Path, manual_path: &Path) -> Result<(), String> {
     let blockers = std::fs::read_to_string(blockers_path).map_err(|error| error.to_string())?;
@@ -66,7 +25,7 @@ pub(super) fn check(blockers_path: &Path, manual_path: &Path) -> Result<(), Stri
 }
 
 fn missing_manual_verified_evidence(blockers: &str, manual: &str) -> Vec<&'static str> {
-    MANUAL_BLOCKERS
+    mapping::MANUAL_BLOCKERS
         .iter()
         .copied()
         .filter(|(blocker, checks)| {

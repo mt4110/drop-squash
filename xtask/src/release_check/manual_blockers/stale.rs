@@ -1,7 +1,7 @@
-use super::{missing_result, row, MANUAL_BLOCKERS};
+use super::{mapping, missing_result, row};
 
 pub(super) fn manual_evidence_left_blocked(blockers: &str, manual: &str) -> Vec<&'static str> {
-    MANUAL_BLOCKERS
+    mapping::MANUAL_BLOCKERS
         .iter()
         .copied()
         .filter(|(blocker, checks)| {
