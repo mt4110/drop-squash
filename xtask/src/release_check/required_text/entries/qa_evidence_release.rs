@@ -56,4 +56,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "checksum evidence without the Artifact URL",
     ),
+    (
+        "docs/qa-evidence.md",
+        "Homebrew install evidence without the SHA-256 digest",
+    ),
 ];

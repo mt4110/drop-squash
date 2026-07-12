@@ -82,6 +82,6 @@ weak public evidence before the release is published.
 - Live checkout URL: use the Lemon Squeezy `/checkout/buy/` URL for the product.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, `DropSquash.dmg`, that it is attached, the GitHub Release URL above, the Artifact URL above, and the exact lowercase SHA-256 digest above.
 - Homebrew tap PR: mention the cask, PR, versioned `DropSquash.dmg`, the Artifact URL above, the exact lowercase SHA-256 digest above, `auto_updates false`, and `zap` cleanup path.
-- Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash` and the versioned `DropSquash.dmg` artifact.
+- Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash`, the versioned `DropSquash.dmg` artifact, and the exact lowercase SHA-256 digest above.
 - Known limitations: mention the macOS MVP and unreleased Windows/Linux platform builds.
 - Support contact: mention support through GitHub Issues or a support email address.

@@ -10,6 +10,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     checksum::validate(text, &mut errors);
     require_homebrew_artifact_url(text, &mut errors);
     require_homebrew_sha256(text, &mut errors);
+    require_homebrew_install_sha256(text, &mut errors);
     errors
 }
 
@@ -86,6 +87,19 @@ fn require_homebrew_sha256(text: &str, errors: &mut Vec<String>) {
         return;
     }
     errors.push("Homebrew tap PR must include the SHA-256 digest".to_string());
+}
+
+fn require_homebrew_install_sha256(text: &str, errors: &mut Vec<String>) {
+    let (Some(digest), Some(evidence)) = (
+        value::field("SHA-256", text),
+        value::field("Homebrew install result", text),
+    ) else {
+        return;
+    };
+    if evidence.contains(digest) {
+        return;
+    }
+    errors.push("Homebrew install result must include the SHA-256 digest".to_string());
 }
 
 fn origin(url: &str) -> Option<&str> {

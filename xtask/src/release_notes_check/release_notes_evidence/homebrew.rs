@@ -14,6 +14,7 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> Option<bool> 
             &["mt4110/tap/dropsquash"],
             &["versioned"],
             &["dropsquash.dmg"],
+            &["sha-256", "sha256"],
         ][..],
         _ => return None,
     };
