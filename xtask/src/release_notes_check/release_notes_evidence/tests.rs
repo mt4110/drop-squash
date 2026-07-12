@@ -598,6 +598,23 @@ fn rejects_benchmark_sample_set_without_machine_context() {
 }
 
 #[test]
+fn rejects_benchmark_evidence_with_placeholder_notes() {
+    let errors = check_text(
+        r#"
+- Benchmark sample set: short medium large machine macOS TODO
+- Benchmark regression threshold: no sample exceeded 20% TBD
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Benchmark sample set")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Benchmark regression threshold")));
+}
+
+#[test]
 fn rejects_non_hex_sha256() {
     let errors = check_text(
         r#"

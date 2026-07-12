@@ -14,6 +14,9 @@ fn validate_sample_set(text: &str) -> Option<String> {
     let Some(value) = value::field("Benchmark sample set", text) else {
         return Some("Benchmark sample set must be present".to_string());
     };
+    if value::is_placeholder(value) {
+        return Some("Benchmark sample set must contain concrete evidence".to_string());
+    }
     let lower = value.to_ascii_lowercase();
     if ["short", "medium", "large"]
         .iter()
@@ -33,6 +36,9 @@ fn validate_regression_threshold(text: &str) -> Option<String> {
     let Some(value) = value::field("Benchmark regression threshold", text) else {
         return Some("Benchmark regression threshold must be present".to_string());
     };
+    if value::is_placeholder(value) {
+        return Some("Benchmark regression threshold must contain concrete evidence".to_string());
+    }
     let lower = value.to_ascii_lowercase();
     if lower.contains("20%") || lower.contains("20 percent") {
         return None;
