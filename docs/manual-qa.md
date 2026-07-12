@@ -102,13 +102,17 @@ restore cannot be mistaken for success.
 | Date |  |
 
 Packaged-app results must include the concrete thing observed, not only that
-the row passed. Use output file names such as `.squashed.mp4`, Finder selection
-targets, queue counts, trial/history observations, or Trash/source state as
-appropriate for the row.
+the row passed. Use output file names such as `.squashed.mp4`, smaller-output
+observations, Finder selection targets, queue counts, trial/history observations,
+or Trash/source state as appropriate for the row.
 For receipt and reveal rows, record the exact privacy values and Finder
-selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, and
-`selected`. For duplicate output naming, record the numbered file name such as
-`.squashed-2.mp4`.
+selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, file names
+instead of absolute paths, and `selected`. For duplicate output naming, record
+that the second output used a numbered file name such as `.squashed-2.mp4`.
+For queue rows, record concrete counts such as `3 recordings`, `1 active`,
+finished count, saved bytes, and failed/cancelled/blocked counts. For failed
+conversion rows, record the friendly error plus the unchanged original and
+trial count.
 
 | Check | Input | Expected | Result |
 |---|---|---|---|
@@ -118,14 +122,14 @@ selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, and
 | Reveal privacy receipt | Successful conversion with receipts enabled | Finder opens with generated `.privacy.json` selected |  |
 | Duplicate output naming | Same recording twice | Second output uses `.squashed-2.mp4` style numbered suffix |  |
 | Cancellation | Large recording | App returns to ready; no success history; no trial count |  |
-| Multi-file queue | Three recordings | One active job at a time; unrelated failures do not block queue |  |
-| Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled and it never starts |  |
-| Batch summary | Three recordings with at least one mixed outcome | Queue summary shows finished count, total saved bytes, and any failed/cancelled/blocked counts |  |
-| Ask source policy | Successful conversion | User can choose whether to Trash original |  |
+| Multi-file queue | Three recordings | 3 recordings queue with 1 active sequential conversion; unrelated failures do not block finished jobs |  |
+| Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled, it never starts, and trial/history shows no new success |  |
+| Batch summary | Three recordings with at least one mixed outcome | Queue summary shows numeric finished count, saved bytes, failed count, cancelled count, and blocked count |  |
+| Ask source policy | Successful conversion | User can choose Trash or Keep while original remains unchanged |  |
 | Trash source policy | Successful conversion | Trash button shows moving/disabled state; original moves to Trash only after verified smaller output |  |
-| Failed conversion | Unsupported or intentionally bad input | Original remains; trial count unchanged |  |
-| Larger output | Input that cannot be made smaller | Treated as failure; original remains; trial count unchanged |  |
-| Reveal output | Completed output link | Finder opens with generated MP4 selected |  |
+| Failed conversion | Unsupported or intentionally bad input | Friendly error appears; original remains; trial count unchanged |  |
+| Larger output | Input that cannot be made smaller | Larger result is treated as failure; original remains; trial count unchanged |  |
+| Reveal output | Completed output link | Finder opens with generated `.squashed.mp4` selected |  |
 
 ## License Sandbox
 
