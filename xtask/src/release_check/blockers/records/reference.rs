@@ -8,7 +8,7 @@ pub(super) fn matches_record_target(blocker: &str, reference: &str) -> bool {
         return false;
     };
     match *target {
-        "`docs/manual-qa.md`" => reference.starts_with("`docs/manual-qa.md"),
+        "`docs/manual-qa.md`" => reference == "`docs/manual-qa.md`",
         "`https://...`" if blocker == "Public website deployment" => is_public_website(reference),
         "`https://...`" if blocker == "Refund policy finalized" => is_refund_policy(reference),
         "`https://...`" if blocker == "Live checkout link" => is_live_checkout(reference),

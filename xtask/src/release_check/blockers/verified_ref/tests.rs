@@ -176,6 +176,15 @@ fn reports_distribution_references_with_wrong_repositories() {
 }
 
 #[test]
+fn reports_manual_qa_reference_with_inline_note() {
+    let text = "| Packaged macOS manual QA | Verified | table filled | `docs/manual-qa.md` row 1 | `docs/manual-qa.md` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_github_release_reference_without_version_tag() {
     let text = "| Published checksum | Verified | SHA-256 attached | GitHub Release https://github.com/mt4110/drop-squash/releases/latest | GitHub Release |\n";
 
