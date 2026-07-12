@@ -28,6 +28,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "Failed conversion" => &[&["original"], &["trial count unchanged", "trial unchanged"]],
         "Larger output" => &[
             &["failure", "failed"],
+            &["original"],
             &["trial count unchanged", "trial unchanged"],
         ],
         "Reveal output" => &[&["finder"], &[".mp4"], &["selected"]],

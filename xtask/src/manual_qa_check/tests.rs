@@ -753,6 +753,16 @@ fn reports_trash_source_without_progress_evidence() {
 }
 
 #[test]
+fn reports_larger_output_without_original_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Larger output | Input that cannot be made smaller | Treated as failure | failed and trial count unchanged |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Larger output")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
@@ -930,7 +940,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Failed conversion | Passes | original remained and trial count unchanged after failure |\n");
         } else if check == "Larger output" {
             text.push_str(
-                "| Larger output | Passes | larger result failed and trial count unchanged |\n",
+                "| Larger output | Passes | larger result failed, original remained, and trial count unchanged |\n",
             );
         } else if check == "Reveal output" {
             text.push_str(
