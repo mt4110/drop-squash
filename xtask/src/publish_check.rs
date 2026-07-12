@@ -4,6 +4,7 @@ mod blockers;
 mod evidence;
 mod manual_qa;
 mod references;
+mod source_commit;
 mod urls;
 
 #[cfg(test)]
@@ -19,6 +20,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes_path = PathBuf::from(notes);
     crate::release_notes_check::check_file(&notes_path)?;
     let notes_text = read_release_notes(&notes_path)?;
+    source_commit::require_current(&notes_text)?;
     let blockers = read_release_blockers(Path::new("docs/release-blockers.md"))?;
     let unverified = blockers::unverified_blockers(&blockers);
     let mismatched = references::mismatched(&blockers, &notes_text);

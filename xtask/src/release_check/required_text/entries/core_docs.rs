@@ -25,6 +25,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/release.md", "tested public `DropSquash.dmg`"),
     ("docs/release.md", "outside the repository"),
+    (
+        "docs/release.md",
+        "release notes `Git commit` field to match",
+    ),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
     (
