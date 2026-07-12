@@ -12,6 +12,7 @@ import { useConversionProgress } from "./hooks/useConversionProgress";
 import { useRecordingDropEvents } from "./hooks/useRecordingDropEvents";
 import type {
   ConversionSummary,
+  ConvertRequest,
   DropZoneState,
   OutputSize,
   Profile,
@@ -20,12 +21,22 @@ import type {
   SourcePolicy,
 } from "./lib/commands";
 import { initialState } from "./lib/initialState";
+import {
+  blockQueuedJobs,
+  cancelActiveQueueJob,
+  cancelQueuedJob,
+  clearCompletedQueueJobs,
+  enqueueQueueJob,
+  failActiveQueueJob,
+  finishActiveQueueJob,
+  startNextQueueJob,
+} from "./lib/queueCommands";
 import type { QueueEntry } from "./lib/queue";
 import {
+  LICENSE_LOCK_QUEUE_MESSAGE,
   blockQueuedForLicenseLock,
   cancelQueued,
   clearFinished,
-  entriesForInputPaths,
   isCancelReason,
   markFailed,
   markRunning,
@@ -33,6 +44,7 @@ import {
   markSucceeded,
   nextQueued,
 } from "./lib/queue";
+import { queueEntryFromRustItem, type RustEncodeResult } from "./lib/queueWire";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
 
 export function App() {
@@ -48,7 +60,6 @@ export function App() {
   const [queue, setQueue] = useState<QueueEntry[]>([]);
   const stateRef = useRef<DropZoneState>(initialState);
   const activeQueueId = useRef<number>();
-  const nextQueueId = useRef(1);
 
   useEffect(() => {
     stateRef.current = state;
@@ -82,20 +93,35 @@ export function App() {
     void persistSettings(savedConfigFromState(nextState));
   }, [persistSettings]);
 
+  const requestForInput = useCallback((path: string): ConvertRequest => ({
+    inputPath: path,
+    outputDir: stateRef.current.outputDir,
+    profile: stateRef.current.profile,
+    outputSize: stateRef.current.outputSize,
+    sourcePolicy: stateRef.current.sourcePolicy,
+    writePrivacyReceipt: stateRef.current.writePrivacyReceipt,
+  }), []);
+
   const enqueueInputs = useCallback((inputPaths: string[]) => {
     if (!isTauri() || state.isLocked) {
       return;
     }
 
-    const queued = entriesForInputPaths(inputPaths, nextQueueId.current);
-    nextQueueId.current = queued.nextId;
-    const { entries } = queued;
-    if (entries.length > 0) {
-      setError(undefined);
-      setResult(undefined);
-      setQueue((current) => [...current, ...entries]);
-    }
-  }, [state.isLocked]);
+    void (async () => {
+      const entries: QueueEntry[] = [];
+      for (const path of inputPaths) {
+        const event = await enqueueQueueJob(requestForInput(path));
+        if ("Enqueued" in event) {
+          entries.push(queueEntryFromRustItem(event.Enqueued));
+        }
+      }
+      if (entries.length > 0) {
+        setError(undefined);
+        setResult(undefined);
+        setQueue((current) => [...current, ...entries]);
+      }
+    })().catch((reason) => setError(String(reason)));
+  }, [requestForInput, state.isLocked]);
 
   const runQueued = useCallback(async (entry: QueueEntry) => {
     if (!isTauri() || isBusy || state.isLocked || activeQueueId.current) {
@@ -110,22 +136,25 @@ export function App() {
     setResult(undefined);
     setQueue((current) => markRunning(current, entry.id));
     try {
+      const started = await startNextQueueJob();
+      if (!started || !("Started" in started) || started.Started.id !== entry.id) {
+        throw new Error("Queue state changed before conversion could start.");
+      }
       const summary = await invoke<ConversionSummary>("convert", {
-        request: {
-          inputPath: entry.inputPath,
-          outputDir: state.outputDir,
-          profile: state.profile,
-          outputSize: state.outputSize,
-          sourcePolicy: state.sourcePolicy,
-          writePrivacyReceipt: state.writePrivacyReceipt,
-        },
+        request: requestForInput(entry.inputPath),
       });
       setResult(summary);
+      await finishActiveQueueJob(encodeResultFromSummary(summary, state.profile));
       setQueue((current) => markSucceeded(current, entry.id, summary));
       await refreshState();
     } catch (reason) {
       const status = isCancelReason(reason) ? "cancelled" : "failed";
       const message = String(reason);
+      if (status === "cancelled") {
+        await cancelActiveQueueJob();
+      } else {
+        await failActiveQueueJob(message);
+      }
       setQueue((current) => markFailed(current, entry.id, status, message));
       if (status === "failed") {
         setError(message);
@@ -135,7 +164,7 @@ export function App() {
       setIsBusy(false);
       setProgress(undefined);
     }
-  }, [isBusy, refreshState, state.isLocked, state.outputDir, state.outputSize, state.profile, state.sourcePolicy, state.writePrivacyReceipt]);
+  }, [isBusy, refreshState, requestForInput, state.isLocked, state.profile]);
   useEffect(() => {
     if (isBusy || state.isLocked) {
       return;
@@ -149,6 +178,9 @@ export function App() {
 
   useEffect(() => {
     if (state.isLocked) {
+      void blockQueuedJobs(LICENSE_LOCK_QUEUE_MESSAGE).catch((reason) => {
+        setError(String(reason));
+      });
       setQueue(blockQueuedForLicenseLock);
     }
   }, [state.isLocked]);
@@ -332,12 +364,35 @@ export function App() {
       />
       <QueuePanel
         items={queue}
-        onCancelQueued={(id) => setQueue((current) => cancelQueued(current, id))}
-        onClearFinished={() => setQueue((current) => clearFinished(current))}
+        onCancelQueued={(id) => {
+          void cancelQueuedJob(id)
+            .then(() => setQueue((current) => cancelQueued(current, id)))
+            .catch((reason) => setError(String(reason)));
+        }}
+        onClearFinished={() => {
+          void clearCompletedQueueJobs()
+            .then(() => setQueue((current) => clearFinished(current)))
+            .catch((reason) => setError(String(reason)));
+        }}
         onRevealOutput={(outputPath) => void revealOutput(outputPath)}
         onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
       />
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>
   );
+}
+
+function encodeResultFromSummary(
+  summary: ConversionSummary,
+  profile: ConvertRequest["profile"],
+): RustEncodeResult {
+  return {
+    input_path: summary.sourcePath,
+    output_path: summary.outputPath,
+    profile,
+    original_bytes: summary.originalBytes,
+    output_bytes: summary.outputBytes,
+    success: true,
+    error_message: null,
+  };
 }
