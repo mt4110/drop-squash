@@ -247,6 +247,23 @@ fn rejects_external_loaded_resources() {
 }
 
 #[test]
+fn rejects_unquoted_external_loaded_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <script src=https://cdn.example.invalid/app.js></script>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("loads external resource")));
+}
+
+#[test]
 fn rejects_missing_local_loaded_resources() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -403,6 +420,21 @@ fn rejects_pre_release_checkout_form_actions() {
         directory.path(),
         "pricing.html",
         r#"<form action="https://store.lemonsqueezy.com/checkout/buy/abc123"></form>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("lemonsqueezy")));
+}
+
+#[test]
+fn rejects_unquoted_pre_release_checkout_form_actions() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "pricing.html",
+        r#"<form action=https://store.lemonsqueezy.com/checkout/buy/abc123></form>"#,
     );
 
     let errors = check_root(directory.path()).unwrap();

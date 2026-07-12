@@ -29,8 +29,22 @@ fn extracts_src_values() {
 }
 
 #[test]
+fn extracts_unquoted_src_values() {
+    let sources = srcs(r#"<script src=app.js></script>"#);
+
+    assert_eq!(sources, vec!["app.js"]);
+}
+
+#[test]
 fn extracts_form_action_values() {
     let actions = actions(r#"<form action="submit.html"></form><form ACTION='buy.html'>"#);
 
     assert_eq!(actions, vec!["submit.html", "buy.html"]);
+}
+
+#[test]
+fn extracts_unquoted_form_action_values() {
+    let actions = actions(r#"<form action=buy.html></form>"#);
+
+    assert_eq!(actions, vec!["buy.html"]);
 }
