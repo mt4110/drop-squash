@@ -1,5 +1,7 @@
+mod groups;
+
 pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
-    let Some(groups) = groups_for(check) else {
+    let Some(groups) = groups::for_check(check) else {
         return false;
     };
     let lower = result.to_ascii_lowercase();
@@ -19,110 +21,4 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
 fn lacks_privacy_receipt_values(result: &str) -> bool {
     let compact = result.to_ascii_lowercase().replace(' ', "");
     !compact.contains("uploaded_bytes=0") || !compact.contains("metadata_policy=preserve")
-}
-
-fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
-    match check {
-        "Choose recording conversion" | "Drag-and-drop conversion" => {
-            Some(&[&[".squashed.mp4"], &["original"]])
-        }
-        "Privacy receipt sidecar" => Some(&[
-            &[".privacy.json"],
-            &["uploaded_bytes"],
-            &["metadata_policy"],
-        ]),
-        "Reveal privacy receipt" => Some(&[&["finder"], &[".privacy.json"], &["selected"]]),
-        "Duplicate output naming" => Some(&[&["squashed-2"], &[".mp4"]]),
-        "Cancellation" => Some(&[&["ready"], &["trial", "history"]]),
-        "Multi-file queue" => Some(&[&["three", "3"], &["one active", "sequential"]]),
-        "Queued job cancellation" => Some(&[&["cancelled"], &["never starts", "never started"]]),
-        "Batch summary" => Some(&[
-            &["finished"],
-            &["saved bytes"],
-            &["failed", "cancelled", "blocked"],
-        ]),
-        "Ask source policy" => Some(&[&["ask", "choose"], &["trash", "keep"]]),
-        "Trash source policy" => Some(&[
-            &["trash"],
-            &["moving original", "moving"],
-            &["disabled"],
-            &["verified", "smaller"],
-        ]),
-        "Failed conversion" => {
-            Some(&[&["original"], &["trial count unchanged", "trial unchanged"]])
-        }
-        "Larger output" => Some(&[
-            &["failure", "failed"],
-            &["trial count unchanged", "trial unchanged"],
-        ]),
-        "Reveal output" => Some(&[&["finder"], &[".mp4"], &["selected"]]),
-        "Sandbox product setup" => Some(&[
-            &["dropsquash"],
-            &["intended product"],
-            &["license keys enabled"],
-        ]),
-        "Sandbox purchase" => Some(&[&["intended product"], &["test buyer"], &["order"]]),
-        "Valid sandbox activation" => Some(&[
-            &["activating"],
-            &["disabled"],
-            &["cache", "license.json"],
-            &["pro"],
-            &["raw key"],
-            &["absent", "no raw key", "without raw key"],
-        ]),
-        "Empty key activation" => Some(&[
-            &["activate"],
-            &["disabled"],
-            &["cache", "license.json"],
-            &["raw key"],
-            &["absent", "no raw key", "without raw key"],
-        ]),
-        "Invalid key activation" => Some(&[
-            &["activating"],
-            &["disabled"],
-            &["cache", "license.json"],
-            &["friendly"],
-            &["raw key"],
-            &["absent", "no raw key", "without raw key"],
-        ]),
-        "License network failure" => Some(&[
-            &["cache", "license.json"],
-            &["friendly"],
-            &["network"],
-            &["existing"],
-            &["valid"],
-            &["preserved", "intact"],
-            &["raw key"],
-            &["absent", "no raw key", "without raw key"],
-        ]),
-        "Forget license on this Mac" => Some(&[
-            &["forgetting"],
-            &["disabled"],
-            &["cache", "license.json"],
-            &["removed", "cleared", "deleted", "clears"],
-            &["trial", "locked"],
-        ]),
-        "Gatekeeper open test" => Some(&[
-            &["gatekeeper"], &["opened", "opens"], &["clean", "fresh"],
-            &["signed"], &["notarized", "notarised"], &["stapled", "staple"],
-            &["without warning", "no warning", "without gatekeeper warning"],
-        ]),
-        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
-            Some(&[
-                &["csv"],
-                &["three", "3"],
-                &["smaller"],
-                &["outside repo", "outside repository"],
-            ])
-        }
-        "Benchmark sample set" => Some(&[
-            &["short"],
-            &["medium"],
-            &["large"],
-            &["machine", "macbook", "mac "],
-            &["macos", "os "],
-        ]),
-        "Benchmark regression threshold" => Some(&[&["20%", "20 percent"]]),
-        _ => None,
-    }
 }
