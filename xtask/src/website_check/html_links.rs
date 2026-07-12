@@ -14,7 +14,11 @@ fn attr_values(text: &str, name: &str) -> Vec<String> {
     let mut values = Vec::new();
     let mut rest = text;
     while let Some(index) = rest.to_ascii_lowercase().find(name) {
+        let before = rest[..index].chars().next_back();
         rest = &rest[index + name.len()..];
+        if before.is_some_and(is_attr_name_char) {
+            continue;
+        }
         let Some((href, next)) = take_href(rest) else {
             continue;
         };
@@ -22,6 +26,10 @@ fn attr_values(text: &str, name: &str) -> Vec<String> {
         rest = next;
     }
     values
+}
+
+fn is_attr_name_char(value: char) -> bool {
+    value.is_ascii_alphanumeric() || value == '-' || value == '_'
 }
 
 fn take_href(text: &str) -> Option<(&str, &str)> {

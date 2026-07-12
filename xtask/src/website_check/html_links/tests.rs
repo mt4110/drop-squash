@@ -15,6 +15,13 @@ fn extracts_unquoted_href_values() {
 }
 
 #[test]
+fn ignores_attribute_names_that_only_end_with_href() {
+    let links = hrefs(r#"<div data-href="checkout.html"></div><a href="pricing.html"></a>"#);
+
+    assert_eq!(links, vec!["pricing.html"]);
+}
+
+#[test]
 fn extracts_src_values() {
     let sources = srcs(r#"<script src="app.js"></script><img SRC='logo.png'>"#);
 
