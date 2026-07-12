@@ -1,13 +1,12 @@
-use super::{unclassified_blockers, unknown_classification_rows, ALLOWED_CLASSES};
+use super::{classes, unclassified_blockers, unknown_classification_rows};
 use crate::release_check::blockers::REQUIRED_BLOCKERS;
 
 #[test]
 fn accepts_complete_evidence_classes() {
     let text = REQUIRED_BLOCKERS
         .iter()
-        .enumerate()
-        .map(|(index, blocker)| {
-            let class = ALLOWED_CLASSES[index % ALLOWED_CLASSES.len()];
+        .map(|blocker| {
+            let class = classes::expected(blocker).unwrap();
             let action = action_for(blocker);
             let owner = owner_for(blocker);
             format!("| {blocker} | {class} | {action} | {owner} |\n")
@@ -75,6 +74,15 @@ fn reports_unknown_evidence_class() {
     let unclassified = unclassified_blockers(&text);
 
     assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_mismatched_evidence_class() {
+    let text = "| Valid sandbox activation | Distribution | Activate the packaged app and inspect the local cache | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Valid sandbox activation"));
 }
 
 #[test]

@@ -1,13 +1,6 @@
 use super::REQUIRED_BLOCKERS;
 
-const ALLOWED_CLASSES: [&str; 6] = [
-    "Manual packaged-app",
-    "License sandbox",
-    "Public web",
-    "Signing/notarization",
-    "Benchmark",
-    "Distribution",
-];
+mod classes;
 
 pub(super) fn unclassified_blockers(text: &str) -> Vec<&'static str> {
     REQUIRED_BLOCKERS
@@ -44,7 +37,7 @@ fn classification_cells(line: &str) -> Option<Vec<&str>> {
 
 fn matches_classification(cells: &[&str], blocker: &str) -> bool {
     cells.first() == Some(&blocker)
-        && ALLOWED_CLASSES.contains(&cells[1])
+        && classes::matches(blocker, cells[1])
         && is_actionable(cells[2])
         && has_required_action_detail(blocker, cells[2])
         && is_named_owner(cells[3])
