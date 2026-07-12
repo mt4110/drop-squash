@@ -158,8 +158,26 @@ fn reports_license_action_without_sandbox_activation_request() {
 }
 
 #[test]
+fn reports_license_action_without_cache_identity_detail() {
+    let text = "| Valid sandbox activation | License sandbox | Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect the local license cache | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Valid sandbox activation"));
+}
+
+#[test]
 fn reports_license_action_without_cache_detail() {
     let text = "| License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"License network failure"));
+}
+
+#[test]
+fn reports_network_failure_action_without_cache_identity_detail() {
+    let text = "| License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache | `docs/manual-qa.md` |\n";
 
     let unclassified = unclassified_blockers(text);
 
@@ -258,13 +276,13 @@ fn action_for(blocker: &str) -> &'static str {
         }
         "Empty key activation" => "Confirm Activate is disabled and inspect local license cache",
         "Valid sandbox activation" => {
-            "Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect the local license cache"
+            "Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache fingerprint/instance fields plus raw-key absence"
         }
         "Invalid license key handling" => {
             "Enter invalid key, confirm submit is disabled while activating, and inspect local license cache"
         }
         "License network failure" => {
-            "Simulate failed activation request and inspect friendly error plus preserved local cache"
+            "Simulate failed activation request and inspect friendly error plus preserved local cache fingerprint/instance fields and raw-key absence"
         }
         "Local license forget" => {
             "Use local forget action, confirm disabled while forgetting, and inspect returned app state"

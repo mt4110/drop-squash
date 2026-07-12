@@ -262,13 +262,13 @@ fn evidence(blocker: &str) -> &'static str {
             "Activate stays disabled and raw key is absent from local cache"
         }
         "Valid sandbox activation" => {
-            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, and raw key is absent from local cache"
+            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, fingerprint/instance fields are present, and raw key is absent from local cache"
         }
         "Invalid license key handling" => {
             "Activating state disables submit, friendly error, raw key is absent from local cache"
         }
         "License network failure" => {
-            "Friendly network error, existing valid local cache, raw key is absent from local cache"
+            "Friendly network error, existing valid local cache with fingerprint/instance fields remains intact, and raw key is absent from local cache"
         }
         "Local license forget" => {
             "Forgetting state disables action, local cache removed, trial or locked state"

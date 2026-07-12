@@ -143,6 +143,15 @@ fn reports_valid_activation_completion_without_sandbox_context() {
 }
 
 #[test]
+fn reports_valid_activation_completion_without_fingerprint_instance() {
+    let text = "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Valid sandbox activation"));
+}
+
+#[test]
 fn reports_empty_key_completion_without_cache() {
     let text = "| Empty key activation | Blocked | Activate stays disabled and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
@@ -163,6 +172,15 @@ fn reports_invalid_key_completion_without_friendly_error() {
 #[test]
 fn reports_network_failure_completion_without_cache_preservation() {
     let text = "| License network failure | Blocked | Friendly network error appears and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"License network failure"));
+}
+
+#[test]
+fn reports_network_failure_completion_without_fingerprint_instance() {
+    let text = "| License network failure | Blocked | Friendly network error appears, existing valid local cache remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -382,9 +400,9 @@ fn described_blockers() -> String {
         "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
         "| Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
-        "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, fingerprint/instance fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
-        "| License network failure | Blocked | Friendly network error appears, existing valid local cache remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| License network failure | Blocked | Friendly network error appears, existing valid local cache with fingerprint/instance fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
