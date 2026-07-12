@@ -7,6 +7,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_version_in_url("GitHub Release URL", version, text, &mut errors);
     require_artifact_name(text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
+    require_checksum_evidence_digest(text, &mut errors);
     errors
 }
 
@@ -57,6 +58,19 @@ fn require_same_origin(
     errors.push(format!(
         "{second_label} must use the same origin as {first_label}"
     ));
+}
+
+fn require_checksum_evidence_digest(text: &str, errors: &mut Vec<String>) {
+    let (Some(digest), Some(evidence)) = (
+        value::field("SHA-256", text),
+        value::field("GitHub Release checksum", text),
+    ) else {
+        return;
+    };
+    if evidence.contains(digest) {
+        return;
+    }
+    errors.push("GitHub Release checksum must include the SHA-256 digest".to_string());
 }
 
 fn origin(url: &str) -> Option<&str> {
