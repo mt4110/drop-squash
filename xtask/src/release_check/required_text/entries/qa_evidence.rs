@@ -84,5 +84,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "plain and encoded error redaction"),
     ("docs/qa-evidence.md", "non-lowercase checksums"),
     ("docs/qa-evidence.md", "no-success trial/history"),
+    ("docs/qa-evidence.md", "numeric queue counts"),
+    ("docs/qa-evidence.md", "verified smaller Trash output"),
+    (
+        "docs/qa-evidence.md",
+        "Lemon Squeezy sandbox activation context",
+    ),
     ("docs/qa-evidence.md", "unchanged trial counts"),
 ];
