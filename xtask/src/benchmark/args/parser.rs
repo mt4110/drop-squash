@@ -3,7 +3,9 @@ use std::str::FromStr;
 
 use dropsquash_core::{OutputSize, Profile};
 
-use super::{output_dir_policy, usage, BenchmarkArgs};
+use super::{usage, BenchmarkArgs};
+
+mod finalize;
 
 pub(super) fn parse(args: Vec<String>) -> Result<BenchmarkArgs, String> {
     let mut parser = Parser::new(args);
@@ -80,28 +82,12 @@ impl Parser {
     }
 
     fn finish(self) -> Result<BenchmarkArgs, String> {
-        if self.inputs.is_empty() {
-            return Err(format!(
-                "benchmark requires at least one --input\n{}",
-                usage::text()
-            ));
-        }
-        if self.release_set && self.inputs.len() < 3 {
-            return Err(format!(
-                "benchmark --release-set requires at least three --input values\n{}",
-                usage::text()
-            ));
-        }
-        let output_dir = self
-            .output_dir
-            .ok_or_else(|| format!("benchmark requires --output-dir\n{}", usage::text()))?;
-        output_dir_policy::validate(self.release_set, &output_dir)?;
-        Ok(BenchmarkArgs {
-            inputs: self.inputs,
-            output_dir,
-            profile: self.profile,
-            release_set: self.release_set,
-            output_size: self.output_size,
-        })
+        finalize::finish(
+            self.inputs,
+            self.output_dir,
+            self.profile,
+            self.release_set,
+            self.output_size,
+        )
     }
 }
