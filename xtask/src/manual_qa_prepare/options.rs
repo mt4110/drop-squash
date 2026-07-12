@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+mod path_policy;
 mod sample_set;
 
 #[derive(Debug)]
@@ -66,6 +67,8 @@ impl Options {
                 "--input-sample-set must mention short, medium, and large recordings".to_string(),
             );
         }
+        path_policy::require_outside_repo("--state-dir", &self.state_dir)?;
+        path_policy::require_outside_repo("--output-dir", &self.output_dir)?;
         Ok(())
     }
 

@@ -24,6 +24,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "release-notes URL reference matching",
     ),
     ("docs/release.md", "tested public `DropSquash.dmg`"),
+    ("docs/release.md", "outside the repository"),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
     (

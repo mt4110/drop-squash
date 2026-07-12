@@ -284,3 +284,27 @@ fn rejects_weak_input_sample_set() {
 
     assert!(error.contains("short, medium, and large"));
 }
+
+#[test]
+fn rejects_state_backup_inside_repository() {
+    let error = Options::parse(vec![
+        "--state-dir".to_string(),
+        "tmp/manual-qa-state".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--state-dir"));
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
+fn rejects_output_folder_inside_repository() {
+    let error = Options::parse(vec![
+        "--output-dir".to_string(),
+        "tmp/manual-qa-output".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--output-dir"));
+    assert!(error.contains("outside the repository"));
+}

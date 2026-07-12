@@ -12,6 +12,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "concrete identity fields"),
     ("docs/qa-evidence.md", "same `.dmg` file evidence"),
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
+    (
+        "docs/qa-evidence.md",
+        "repository-local state/output folder rejection",
+    ),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "Tauri DMG output is normalized"),
     ("docs/qa-evidence.md", "cargo test -p xtask normalize_dmg"),

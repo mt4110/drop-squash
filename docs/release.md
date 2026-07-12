@@ -48,6 +48,8 @@ release workflow blocked, and verify that the updater is not enabled before
 signing keys are ready.
 The `manual-qa-prepare` step preserves local DropSquash app state and creates a
 dedicated output folder before packaged-app QA evidence is recorded.
+Any custom `--state-dir` or `--output-dir` must be outside the repository so
+private app state and generated QA media cannot be committed by accident.
 If the QA run used a reset trial state, restore the backed up local state after
 recording evidence:
 

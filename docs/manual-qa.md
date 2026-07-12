@@ -54,6 +54,9 @@ Copy the printed macOS version, Machine, Output folder, and Date values into
 the matching fields before starting observations. Copy the printed Config path,
 History path, and License cache path values into the matching state path fields.
 Copy the printed Tester value into the matching field.
+If you override `--state-dir` or `--output-dir`, keep both paths outside the
+repository so private app state, generated videos, and QA evidence cannot be
+committed by accident.
 
 Then start from a known trial state if the run is meant to verify trial counts.
 The reset command requires the sample-set description so the run cannot begin
