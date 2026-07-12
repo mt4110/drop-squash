@@ -21,7 +21,15 @@ fn mismatch(
 ) -> Option<&'static str> {
     let reference = verified_reference(blockers, blocker)?;
     let expected = field_value(notes, field)?;
-    (!reference.contains(expected)).then_some(blocker)
+    (reference_url(reference) != Some(expected)).then_some(blocker)
+}
+
+fn reference_url(value: &str) -> Option<&str> {
+    value.split_whitespace().find(|part| {
+        part.starts_with("https://github.com/")
+            || part.starts_with("https://")
+            || part.starts_with("http://")
+    })
 }
 
 fn verified_reference<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {

@@ -28,6 +28,17 @@ fn reports_distribution_references_that_do_not_match_release_notes() {
 }
 
 #[test]
+fn reports_reference_with_extra_url_before_expected_url() {
+    let blockers = "\
+| Published checksum | Verified | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+";
+    let notes = release_notes("v0.1.0", "1");
+    let mismatched = mismatched(blockers, &notes);
+
+    assert!(mismatched.contains(&"Published checksum"));
+}
+
+#[test]
 fn ignores_blocked_references() {
     let blockers = "\
 | Published checksum | Blocked | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
