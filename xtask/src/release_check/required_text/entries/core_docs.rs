@@ -75,6 +75,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/manual-qa.md", "manual QA Markdown fields"),
     ("docs/manual-qa.md", "manual QA Release Candidate rows"),
+    ("docs/manual-qa.md", "CSV path outside repo"),
     (
         "docs/manual-qa.md",
         "pasted into the macOS Packaged App field table",
