@@ -26,6 +26,13 @@ enabled.
 
 Run the local readiness gate before preparing any release artifact:
 
+Use the Nix development shell for local release builds when the host Node or
+pnpm version differs from `apps/desktop/package.json`; for example:
+
+```sh
+nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+```
+
 ```sh
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
