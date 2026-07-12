@@ -347,6 +347,34 @@ fn reports_checksum_result_for_different_dmg_digest() {
 }
 
 #[test]
+fn reports_release_command_results_without_artifact_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let bytes = dmg_bytes(b"dropsquash");
+    std::fs::write(&artifact, &bytes).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for DropSquash.dmg |\n\
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 {} DropSquash.dmg |\n",
+            artifact.display(),
+            sha256_hex(&bytes)
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("artifact-check") && error.contains("path")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("checksum") && error.contains("path")));
+}
+
+#[test]
 fn accepts_checksum_result_matching_dmg_digest() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");
@@ -368,6 +396,33 @@ fn accepts_checksum_result_matching_dmg_digest() {
     assert!(!missing
         .iter()
         .any(|error| error.contains("checksum") && error.contains("digest")));
+}
+
+#[test]
+fn accepts_release_command_results_with_artifact_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let bytes = dmg_bytes(b"dropsquash");
+    std::fs::write(&artifact, &bytes).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for {} |\n\
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 {} {} |\n",
+            artifact.display(),
+            artifact.display(),
+            sha256_hex(&bytes),
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(!missing
+        .iter()
+        .any(|error| error.contains("App artifact path")));
 }
 
 #[test]

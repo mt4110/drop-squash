@@ -160,7 +160,8 @@ the `DropSquash.dmg` path/name, SHA-256 line, Developer ID codesign result,
 notary/staple assessment, and Gatekeeper clean/fresh-machine observation where
 the row asks for them. When `App artifact` is a `.dmg`, artifact-check,
 checksum, codesign, and notary/staple result rows must name the same `.dmg`
-file.
+file. Artifact-check and checksum rows must include the `App artifact` absolute
+path.
 
 | Check | Expected | Result |
 |---|---|---|

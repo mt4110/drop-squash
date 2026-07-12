@@ -19,6 +19,11 @@ pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
             require_same_artifact(label, result, &name, missing);
         }
     }
+    for label in [ARTIFACT_CHECK, CHECKSUM] {
+        if let Some(result) = value_for(rows, label) {
+            require_same_artifact_path(label, result, rows, missing);
+        }
+    }
     require_checksum_digest(rows, missing);
 }
 
@@ -42,6 +47,24 @@ fn require_same_artifact(label: &str, result: &str, name: &str, missing: &mut Ve
     }
     missing.push(format!(
         "manual QA {label} must reference App artifact {name}"
+    ));
+}
+
+fn require_same_artifact_path(
+    label: &str,
+    result: &str,
+    rows: &[(String, String)],
+    missing: &mut Vec<String>,
+) {
+    let Some(path) = app_artifact_path(rows) else {
+        return;
+    };
+    let expected = path.display().to_string();
+    if result.contains(&expected) {
+        return;
+    }
+    missing.push(format!(
+        "manual QA {label} must reference App artifact path {expected}"
     ));
 }
 
