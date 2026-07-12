@@ -12,6 +12,15 @@ pub(super) fn has_placeholder_url(text: &str) -> bool {
         || lower.contains("localhost")
         || lower.contains(".test/")
         || lower.contains(".test")
+        || invalid_public_https_url(text)
+}
+
+fn invalid_public_https_url(text: &str) -> bool {
+    text.split(|character: char| {
+        character.is_whitespace() || matches!(character, '"' | '\'' | '<' | '>')
+    })
+    .filter(|part| part.starts_with("https://"))
+    .any(|part| crate::public_url::HttpsUrl::parse(part).is_none())
 }
 
 pub(super) fn is_external_or_anchor(href: &str) -> bool {

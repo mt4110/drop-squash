@@ -183,6 +183,21 @@ fn rejects_placeholder_external_urls() {
 }
 
 #[test]
+fn rejects_local_only_external_urls() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="https://192.168.0.10/release-status">Local</a><a href="https://dropsquash.local/refund">Local</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("placeholder URL")));
+}
+
+#[test]
 fn rejects_secret_like_website_values() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
