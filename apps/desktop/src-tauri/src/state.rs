@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use dropsquash_core::EncodeJob;
+use dropsquash_core::{EncodeJob, EncodeResult};
 use dropsquash_queue::{QueueEvent, QueueItem, QueueJobId, QueueWorker};
 use tokio_util::sync::CancellationToken;
 
@@ -42,6 +42,21 @@ impl AppState {
 
     pub fn start_next_job(&self) -> Result<Option<QueueEvent>, String> {
         Ok(self.queue.lock().map_err(lock_error)?.start_next())
+    }
+
+    pub fn finish_active_queue_job(
+        &self,
+        result: EncodeResult,
+    ) -> Result<Option<QueueEvent>, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.finish_active(result))
+    }
+
+    pub fn fail_active_queue_job(&self, error: String) -> Result<Option<QueueEvent>, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.fail_active(error))
+    }
+
+    pub fn cancel_active_queue_job(&self) -> Result<Option<QueueEvent>, String> {
+        Ok(self.queue.lock().map_err(lock_error)?.cancel_active())
     }
 
     pub fn cancel_queued_job(&self, id: QueueJobId) -> Result<Option<QueueEvent>, String> {

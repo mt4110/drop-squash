@@ -3,6 +3,7 @@ import type { ConvertRequest } from "./commands.js";
 import type { QueueEntry } from "./queue.js";
 import {
   queueEntryFromRustItem,
+  type RustEncodeResult,
   type RustQueueEvent,
   type RustQueueItem,
 } from "./queueWire.js";
@@ -13,6 +14,18 @@ export function enqueueQueueJob(request: ConvertRequest) {
 
 export function startNextQueueJob() {
   return invoke<RustQueueEvent | null>("start_next_queue_job");
+}
+
+export function finishActiveQueueJob(result: RustEncodeResult) {
+  return invoke<RustQueueEvent | null>("finish_active_queue_job", { result });
+}
+
+export function failActiveQueueJob(error: string) {
+  return invoke<RustQueueEvent | null>("fail_active_queue_job", { error });
+}
+
+export function cancelActiveQueueJob() {
+  return invoke<RustQueueEvent | null>("cancel_active_queue_job");
 }
 
 export function cancelQueuedJob(id: number) {

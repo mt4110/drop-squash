@@ -1,4 +1,4 @@
-import type { ConvertRequest } from "./commands.js";
+import type { ConvertRequest, Profile } from "./commands.js";
 import type { QueueEntry, QueueStatus } from "./queue.js";
 
 export type RustQueueStatus =
@@ -22,9 +22,20 @@ export type RustQueueItem = {
   error?: string | null;
 };
 
+export type RustEncodeResult = {
+  input_path: string;
+  output_path: string;
+  profile: Profile;
+  original_bytes: number;
+  output_bytes: number;
+  success: boolean;
+  error_message?: string | null;
+};
+
 export type RustQueueEvent =
   | { Enqueued: RustQueueItem }
   | { Started: RustQueueItem }
+  | { Finished: { id: number; result: RustEncodeResult } }
   | { Cancelled: number }
   | { Blocked: { id: number; error: string } }
   | { Failed: { id: number; error: string } };

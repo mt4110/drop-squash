@@ -3,7 +3,7 @@ mod conversion;
 mod dto;
 mod license;
 mod progress;
-mod queue;
+pub mod queue;
 mod source;
 
 use dropsquash_core::SourcePolicy;
@@ -53,44 +53,6 @@ pub fn cancel_conversion(
     app_state: tauri::State<'_, crate::state::AppState>,
 ) -> std::result::Result<bool, String> {
     app_state.cancel_conversion()
-}
-
-#[tauri::command(rename_all = "camelCase")]
-pub fn enqueue_queue_job(
-    app_state: tauri::State<'_, crate::state::AppState>,
-    request: dto::ConvertRequest,
-) -> std::result::Result<dropsquash_queue::QueueEvent, String> {
-    queue::enqueue(app_state, request)
-}
-
-#[tauri::command(rename_all = "camelCase")]
-pub fn start_next_queue_job(
-    app_state: tauri::State<'_, crate::state::AppState>,
-) -> std::result::Result<Option<dropsquash_queue::QueueEvent>, String> {
-    queue::start_next(app_state)
-}
-
-#[tauri::command(rename_all = "camelCase")]
-pub fn cancel_queued_job(
-    app_state: tauri::State<'_, crate::state::AppState>,
-    id: u64,
-) -> std::result::Result<Option<dropsquash_queue::QueueEvent>, String> {
-    queue::cancel_pending(app_state, id)
-}
-
-#[tauri::command(rename_all = "camelCase")]
-pub fn block_queued_jobs(
-    app_state: tauri::State<'_, crate::state::AppState>,
-    error: String,
-) -> std::result::Result<Vec<dropsquash_queue::QueueEvent>, String> {
-    queue::block_pending(app_state, error)
-}
-
-#[tauri::command(rename_all = "camelCase")]
-pub fn clear_completed_queue_jobs(
-    app_state: tauri::State<'_, crate::state::AppState>,
-) -> std::result::Result<Vec<dropsquash_queue::QueueItem>, String> {
-    queue::clear_completed(app_state)
 }
 
 #[tauri::command(rename_all = "camelCase")]

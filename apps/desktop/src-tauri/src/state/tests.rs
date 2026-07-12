@@ -1,5 +1,5 @@
 use super::AppState;
-use dropsquash_core::{EncodeJob, OutputSize, Profile, SourcePolicy};
+use dropsquash_core::{EncodeJob, EncodeResult, OutputSize, Profile, SourcePolicy};
 use dropsquash_queue::{QueueEvent, QueueJobStatus};
 
 #[test]
@@ -85,6 +85,48 @@ fn clears_completed_queue_jobs_without_touching_active_job() {
     assert!(state.start_next_job().unwrap().is_none());
 }
 
+#[test]
+fn finishes_active_queue_job_and_releases_next_job() {
+    let state = AppState::default();
+    state.enqueue_job(job("first.mov")).unwrap();
+    state.enqueue_job(job("second.mov")).unwrap();
+    state.start_next_job().unwrap();
+
+    let finished = state.finish_active_queue_job(result("first.mov")).unwrap();
+
+    assert!(matches!(
+        finished,
+        Some(QueueEvent::Finished { result, .. }) if result.success
+    ));
+    assert!(matches!(
+        state.start_next_job().unwrap(),
+        Some(QueueEvent::Started(item)) if item.job.input_path.ends_with("second.mov")
+    ));
+}
+
+#[test]
+fn fails_or_cancels_active_queue_job_without_touching_pending() {
+    let state = AppState::default();
+    state.enqueue_job(job("first.mov")).unwrap();
+    state.enqueue_job(job("second.mov")).unwrap();
+    state.start_next_job().unwrap();
+
+    let failed = state.fail_active_queue_job("decode failed".into()).unwrap();
+
+    assert!(matches!(
+        failed,
+        Some(QueueEvent::Failed { error, .. }) if error == "decode failed"
+    ));
+    assert!(matches!(
+        state.start_next_job().unwrap(),
+        Some(QueueEvent::Started(_))
+    ));
+    assert!(matches!(
+        state.cancel_active_queue_job().unwrap(),
+        Some(QueueEvent::Cancelled(_))
+    ));
+}
+
 fn job(path: &str) -> EncodeJob {
     EncodeJob {
         input_path: path.into(),
@@ -92,5 +134,17 @@ fn job(path: &str) -> EncodeJob {
         profile: Profile::Auto,
         output_size: OutputSize::Auto,
         source_policy: SourcePolicy::Ask,
+    }
+}
+
+fn result(path: &str) -> EncodeResult {
+    EncodeResult {
+        input_path: path.into(),
+        output_path: "/tmp/out/out.mp4".into(),
+        profile: Profile::Auto,
+        original_bytes: 100,
+        output_bytes: 50,
+        success: true,
+        error_message: None,
     }
 }
