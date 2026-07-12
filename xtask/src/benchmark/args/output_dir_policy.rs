@@ -26,6 +26,9 @@ pub(super) fn validate_csv(release_set: bool, csv_output: Option<&Path>) -> Resu
     if csv_output.starts_with(cwd) {
         return Err(csv_message());
     }
+    if !has_csv_extension(csv_output) {
+        return Err(csv_message());
+    }
     Ok(())
 }
 
@@ -34,5 +37,12 @@ fn message() -> String {
 }
 
 fn csv_message() -> String {
-    "benchmark --release-set requires an absolute --csv-output outside the repository".to_string()
+    "benchmark --release-set requires an absolute .csv --csv-output outside the repository"
+        .to_string()
+}
+
+fn has_csv_extension(path: &Path) -> bool {
+    path.extension()
+        .and_then(|extension| extension.to_str())
+        .is_some_and(|extension| extension.eq_ignore_ascii_case("csv"))
 }

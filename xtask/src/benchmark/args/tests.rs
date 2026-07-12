@@ -140,6 +140,29 @@ fn release_set_requires_csv_output_outside_repository() {
 }
 
 #[test]
+fn release_set_requires_csv_output_extension() {
+    let output_dir = tempfile::tempdir().unwrap();
+    let csv_dir = tempfile::tempdir().unwrap();
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--input".to_string(),
+        "b.mov".to_string(),
+        "--input".to_string(),
+        "c.mov".to_string(),
+        "--output-dir".to_string(),
+        output_dir.path().display().to_string(),
+        "--csv-output".to_string(),
+        csv_dir.path().join("results.txt").display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains(".csv"));
+    assert!(error.contains("--csv-output"));
+}
+
+#[test]
 fn rejects_missing_required_values() {
     assert!(BenchmarkArgs::parse(vec![]).is_err());
     assert!(BenchmarkArgs::parse(vec!["--input".to_string(), "a.mov".to_string(),]).is_err());
