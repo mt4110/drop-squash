@@ -1,6 +1,7 @@
 use std::path::Path;
 
 mod manual_pairs;
+mod table;
 
 pub(super) fn check_manual_only_coverage(
     qa_evidence: &Path,
@@ -26,10 +27,10 @@ fn missing_manual_only_coverage(evidence: &str, manual: &str) -> Vec<String> {
 }
 
 fn missing_pair(evidence: &str, manual: &str, area: &str, check: &str) -> Option<String> {
-    if !evidence.contains(&format!("| {area} |")) {
+    if !table::has_row_label(evidence, area, 2) {
         return Some(format!("qa-evidence missing {area}"));
     }
-    if !manual.contains(&format!("| {check} |")) {
+    if !table::has_row_label(manual, check, 3) {
         return Some(format!("manual-qa missing {check}"));
     }
     None
@@ -73,5 +74,53 @@ mod tests {
         assert!(missing
             .iter()
             .any(|error| error.contains("manual-qa missing")));
+    }
+
+    #[test]
+    fn rejects_partial_manual_qa_label_match() {
+        let evidence = manual_pairs::ALL
+            .iter()
+            .map(|(area, _)| format!("| {area} | Requires manual proof |\n"))
+            .collect::<String>();
+        let manual = manual_pairs::ALL
+            .iter()
+            .map(|(_, check)| format!("| Prefix {check} | Input | Expected | Evidence |\n"))
+            .collect::<String>();
+
+        assert!(missing_manual_only_coverage(&evidence, &manual)
+            .iter()
+            .any(|error| error.contains("manual-qa missing")));
+    }
+
+    #[test]
+    fn rejects_malformed_manual_qa_rows() {
+        let evidence = manual_pairs::ALL
+            .iter()
+            .map(|(area, _)| format!("| {area} | Requires manual proof |\n"))
+            .collect::<String>();
+        let manual = manual_pairs::ALL
+            .iter()
+            .map(|(_, check)| format!("| {check} | Incomplete |\n"))
+            .collect::<String>();
+
+        assert!(missing_manual_only_coverage(&evidence, &manual)
+            .iter()
+            .any(|error| error.contains("manual-qa missing")));
+    }
+
+    #[test]
+    fn rejects_partial_evidence_area_match() {
+        let evidence = manual_pairs::ALL
+            .iter()
+            .map(|(area, _)| format!("| Prefix {area} | Requires manual proof |\n"))
+            .collect::<String>();
+        let manual = manual_pairs::ALL
+            .iter()
+            .map(|(_, check)| format!("| {check} | Input | Expected | Evidence |\n"))
+            .collect::<String>();
+
+        assert!(missing_manual_only_coverage(&evidence, &manual)
+            .iter()
+            .any(|error| error.contains("qa-evidence missing")));
     }
 }
