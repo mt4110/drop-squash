@@ -58,3 +58,35 @@ fn shell_arg(value: &str) -> String {
     }
     format!("'{}'", value.replace('\'', "'\\''"))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{lines, Fields};
+
+    #[test]
+    fn generated_field_labels_exist_in_release_notes_template() {
+        let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+        let generated = lines(Fields {
+            version: "0.1.0",
+            artifact_path: "/tmp/DropSquash.dmg",
+            artifact_url:
+                "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg",
+            sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            commit: "abc1234",
+        });
+        let untracked = generated
+            .iter()
+            .filter_map(|line| field_label(line.as_str()))
+            .filter(|label| *label != "SHA256SUMS line")
+            .filter(|label| !template.contains(&format!("- {label}:")))
+            .collect::<Vec<_>>();
+
+        assert!(untracked.is_empty(), "{untracked:?}");
+    }
+
+    fn field_label(line: &str) -> Option<&str> {
+        line.strip_prefix("- ")?
+            .split_once(':')
+            .map(|(label, _)| label)
+    }
+}
