@@ -38,6 +38,8 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("support.html", "Does DropSquash upload my videos?"),
     ("support.html", "does not upload media"),
     ("support.html", "Does it use ffmpeg?"),
+    ("support.html", "does not shell out"),
+    ("support.html", "ffprobe"),
     ("support.html", "app version"),
     ("support.html", "GitHub Issues"),
     ("support.html", "paid beta support address"),

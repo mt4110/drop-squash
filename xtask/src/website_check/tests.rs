@@ -380,7 +380,7 @@ fn required_page_text(page: &str) -> &'static str {
             "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 metadata_policy = preserve file names instead of absolute paths License activation contacts Lemon Squeezy"
         }
         "support.html" => {
-            "FAQ What is a privacy receipt? metadata_policy = preserve Does DropSquash upload my videos? does not upload media Does it use ffmpeg? Do not send screen recordings app version GitHub Issues paid beta support address"
+            "FAQ What is a privacy receipt? metadata_policy = preserve Does DropSquash upload my videos? does not upload media Does it use ffmpeg? does not shell out ffprobe Do not send screen recordings app version GitHub Issues paid beta support address"
         }
         "license.html" => {
             "license-key fingerprint does not persist the raw license key local license cache Offline grace Server-side deactivation not automatic"
