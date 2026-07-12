@@ -12,6 +12,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         && privacy_receipt_evidence_ok(label, result)
         && batch_summary_evidence_ok(label, result)
         && multi_file_queue_evidence_ok(label, result)
+        && trash_evidence_ok(label, result)
         && benchmark_csv_evidence_ok(label, result)
     {
         return;
@@ -57,6 +58,14 @@ fn multi_file_queue_evidence_ok(label: &str, result: &str) -> bool {
         return true;
     }
     contains_number(result, "3") && contains_number(result, "1")
+}
+
+fn trash_evidence_ok(label: &str, result: &str) -> bool {
+    if label != "Trash source policy" {
+        return true;
+    }
+    let lower = result.to_ascii_lowercase();
+    lower.contains("verified") && lower.contains("smaller")
 }
 
 fn benchmark_csv_evidence_ok(label: &str, result: &str) -> bool {
