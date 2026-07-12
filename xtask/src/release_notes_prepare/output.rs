@@ -14,6 +14,10 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         format!("- SHA-256: {}", fields.sha256),
         format!("- Git commit: {}", fields.commit),
         format!(
+            "- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v{}",
+            fields.version
+        ),
+        format!(
             "- GitHub Release checksum: SHA256SUMS attached to release for {} with {}",
             fields.artifact_url, fields.sha256
         ),

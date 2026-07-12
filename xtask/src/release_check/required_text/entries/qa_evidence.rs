@@ -46,6 +46,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
     ("docs/qa-evidence.md", "release-notes-prepare"),
+    ("docs/qa-evidence.md", "GitHub Release URL"),
     ("docs/qa-evidence.md", "matching Homebrew cask command"),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
     (
