@@ -15,6 +15,15 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "conversion/queue/Trash/license action-state release notes evidence",
     ),
+    ("docs/productization.md", "numeric queue counts"),
+    (
+        "docs/productization.md",
+        "verified smaller Trash output",
+    ),
+    (
+        "docs/productization.md",
+        "Lemon Squeezy sandbox activation context",
+    ),
     (
         "docs/productization.md",
         "same-DMG manual QA signing evidence",
