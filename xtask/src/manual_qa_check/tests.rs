@@ -582,7 +582,19 @@ fn reports_incomplete_release_candidate_results() {
 #[test]
 fn reports_gatekeeper_result_without_warning_evidence() {
     let (_directory, path) = write_manual_qa(
-        "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed and notarized app cleanly in fresh macOS account |\n",
+        "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Gatekeeper open test")));
+}
+
+#[test]
+fn reports_gatekeeper_result_without_staple_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed and notarized app cleanly in fresh macOS account without Gatekeeper warning |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -736,7 +748,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Notarization staple verification" {
             text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n");
         } else if check == "Gatekeeper open test" {
-            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed and notarized app cleanly in fresh macOS account without Gatekeeper warning |\n");
+            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account without Gatekeeper warning |\n");
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"

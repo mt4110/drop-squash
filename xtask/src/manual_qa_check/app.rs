@@ -105,6 +105,7 @@ fn requirement_for(label: &str) -> Option<Requirement> {
             &["clean", "fresh"],
             &["signed"],
             &["notarized", "notarised"],
+            &["stapled", "staple"],
             &["without warning", "no warning", "without gatekeeper warning"],
         ],
         _ => return None,
