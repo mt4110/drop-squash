@@ -264,6 +264,17 @@ fn rejects_committed_release_artifacts_and_private_recordings() {
 }
 
 #[test]
+fn rejects_committed_checksum_output() {
+    let directory = tempfile::tempdir().unwrap();
+    write(directory.path(), "SHA256SUMS", "checksum");
+
+    let error = reject_secret_files(directory.path()).unwrap_err();
+
+    assert!(error.contains("local evidence file"));
+    assert!(error.contains("SHA256SUMS"));
+}
+
+#[test]
 fn ignores_local_agent_state_when_scanning_for_secrets() {
     let directory = tempfile::tempdir().unwrap();
     write(directory.path(), "docs/release.md", "safe");

@@ -27,7 +27,7 @@ pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
                 path.display()
             ));
         }
-        if is_local_evidence_file(extension) {
+        if is_local_evidence_file(name, extension) {
             return Err(format!(
                 "release local evidence file must stay outside the repository: {}",
                 path.display()
@@ -64,11 +64,12 @@ pub(super) fn is_secret_file(name: &str, extension: Option<&str>) -> bool {
         })
 }
 
-fn is_local_evidence_file(extension: Option<&str>) -> bool {
-    extension.is_some_and(|value| {
-        let lower = value.to_ascii_lowercase();
-        LOCAL_EVIDENCE_EXTENSIONS.contains(&lower.as_str())
-    })
+fn is_local_evidence_file(name: &str, extension: Option<&str>) -> bool {
+    name == "SHA256SUMS"
+        || extension.is_some_and(|value| {
+            let lower = value.to_ascii_lowercase();
+            LOCAL_EVIDENCE_EXTENSIONS.contains(&lower.as_str())
+        })
 }
 
 fn repo_files(root: &Path) -> Result<Vec<PathBuf>, String> {
