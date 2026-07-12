@@ -121,6 +121,19 @@ fn ignores_external_links_and_anchors() {
 }
 
 #[test]
+fn accepts_github_issues_link() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="https://github.com/mt4110/drop-squash/issues">Issues</a>"#,
+    );
+
+    assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
 fn rejects_unapproved_external_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -128,6 +141,23 @@ fn rejects_unapproved_external_links() {
         directory.path(),
         "index.html",
         r#"Release status <a href="https://social.example.invalid/dropsquash">Social</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unapproved external URL")));
+}
+
+#[test]
+fn rejects_github_issue_like_external_path() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="https://github.com/mt4110/drop-squash/issues-archive">Issues</a>"#,
     );
 
     let errors = check_root(directory.path()).unwrap();
