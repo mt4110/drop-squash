@@ -1,5 +1,6 @@
 mod core_docs;
 mod distribution_docs;
+mod productization_docs;
 mod qa_evidence;
 mod qa_evidence_distribution;
 mod qa_evidence_release;
@@ -8,6 +9,7 @@ type Entry = (&'static str, &'static str);
 
 const GROUPS: &[&[Entry]] = &[
     core_docs::ENTRIES,
+    productization_docs::ENTRIES,
     qa_evidence::ENTRIES,
     qa_evidence_release::ENTRIES,
     qa_evidence_distribution::ENTRIES,
