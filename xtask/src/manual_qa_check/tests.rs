@@ -572,7 +572,7 @@ fn reports_incomplete_benchmark_results() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | local samples recorded |\n\
 | Benchmark regression threshold | Throughput does not regress by more than 20% | no regression |\n\
-| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded | Pass |\n",
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | Pass |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -586,7 +586,7 @@ fn reports_incomplete_benchmark_results() {
 #[test]
 fn reports_benchmark_command_without_csv_path() {
     let (_directory, path) = write_manual_qa(
-        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo |\n",
+        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -600,7 +600,7 @@ fn reports_benchmark_command_with_repo_local_csv_path() {
         .join("target")
         .join("dropsquash-bench.csv");
     let (_directory, path) = write_manual_qa(&format!(
-        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n",
+        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n",
         repo_csv.display()
     ));
     let missing = check_file(&path).unwrap();
@@ -1187,7 +1187,7 @@ fn command_result(check: &str) -> String {
         "`cargo run -p xtask -- privacy-policy-check`" => "privacy-policy-check passed",
         "`cargo run -p xtask -- website-check`" => "website-check passed",
         "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed",
-        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
+        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`" => {
             "CSV recorded for three samples, outputs were smaller, saved outside repo at /tmp/dropsquash-bench/results.csv"
         }
         _ => "Pass",

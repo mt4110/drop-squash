@@ -50,6 +50,10 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
         validate::result(&result)?;
         rows.push(BenchmarkRow::from_result(result, started.elapsed()));
     }
-    report::print(&rows);
+    if let Some(path) = args.csv_output {
+        report::write(&path, &rows)?;
+    } else {
+        report::print(&rows);
+    }
     Ok(())
 }

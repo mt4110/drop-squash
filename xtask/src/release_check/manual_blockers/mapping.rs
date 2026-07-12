@@ -58,7 +58,7 @@ pub(super) const MANUAL_BLOCKERS: [(&str, &[&str]); 10] = [
     (
         "Benchmark release set",
         &[
-            "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`",
+            "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`",
             "Benchmark sample set",
             "Benchmark regression threshold",
         ],

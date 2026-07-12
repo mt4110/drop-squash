@@ -39,6 +39,11 @@ pub fn print(rows: &[BenchmarkRow]) {
     print!("{}", csv(rows));
 }
 
+pub fn write(path: &std::path::Path, rows: &[BenchmarkRow]) -> Result<(), String> {
+    std::fs::write(path, csv(rows))
+        .map_err(|error| format!("failed to write benchmark CSV {}: {error}", path.display()))
+}
+
 fn csv(rows: &[BenchmarkRow]) -> String {
     let mut output = String::from(
         "input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,throughput_mib_s\n",

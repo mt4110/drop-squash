@@ -13,6 +13,7 @@ pub(super) fn parse(args: Vec<String>) -> Result<BenchmarkArgs, String> {
         match arg.as_str() {
             "--input" => parser.input()?,
             "--output-dir" => parser.output_dir()?,
+            "--csv-output" => parser.csv_output()?,
             "--profile" => parser.profile()?,
             "--size" => parser.output_size()?,
             "--release-set" => parser.release_set = true,
@@ -32,6 +33,7 @@ struct Parser {
     args: std::vec::IntoIter<String>,
     inputs: Vec<PathBuf>,
     output_dir: Option<PathBuf>,
+    csv_output: Option<PathBuf>,
     profile: Profile,
     release_set: bool,
     output_size: OutputSize,
@@ -43,6 +45,7 @@ impl Parser {
             args: args.into_iter(),
             inputs: Vec::new(),
             output_dir: None,
+            csv_output: None,
             profile: Profile::Auto,
             release_set: false,
             output_size: OutputSize::Auto,
@@ -71,6 +74,11 @@ impl Parser {
         Ok(())
     }
 
+    fn csv_output(&mut self) -> Result<(), String> {
+        self.csv_output = Some(PathBuf::from(self.value("--csv-output")?));
+        Ok(())
+    }
+
     fn profile(&mut self) -> Result<(), String> {
         self.profile = Profile::from_str(&self.value("--profile")?)?;
         Ok(())
@@ -85,6 +93,7 @@ impl Parser {
         finalize::finish(
             self.inputs,
             self.output_dir,
+            self.csv_output,
             self.profile,
             self.release_set,
             self.output_size,

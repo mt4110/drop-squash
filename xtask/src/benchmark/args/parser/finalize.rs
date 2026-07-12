@@ -7,6 +7,7 @@ use crate::benchmark::args::{output_dir_policy, usage, BenchmarkArgs};
 pub(super) fn finish(
     inputs: Vec<PathBuf>,
     output_dir: Option<PathBuf>,
+    csv_output: Option<PathBuf>,
     profile: Profile,
     release_set: bool,
     output_size: OutputSize,
@@ -15,9 +16,11 @@ pub(super) fn finish(
     let output_dir =
         output_dir.ok_or_else(|| format!("benchmark requires --output-dir\n{}", usage::text()))?;
     output_dir_policy::validate(release_set, &output_dir)?;
+    output_dir_policy::validate_csv(release_set, csv_output.as_deref())?;
     Ok(BenchmarkArgs {
         inputs,
         output_dir,
+        csv_output,
         profile,
         release_set,
         output_size,

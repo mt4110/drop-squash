@@ -11,7 +11,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["stapled", "staple"],
             &["without warning", "no warning", "without gatekeeper warning"],
         ]),
-        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
+        "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`" => {
             Some(&[
                 &["csv"],
                 &[".csv"],

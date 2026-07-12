@@ -61,7 +61,7 @@ fn multi_file_queue_evidence_ok(label: &str, result: &str) -> bool {
 
 fn benchmark_csv_evidence_ok(label: &str, result: &str) -> bool {
     if label
-        != "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`"
+        != "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`"
     {
         return true;
     }

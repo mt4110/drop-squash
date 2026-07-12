@@ -11,13 +11,15 @@ nix develop --command cargo run -p xtask -- benchmark \
   --input ~/Movies/sample-b.mp4 \
   --input ~/Movies/sample-c.mov \
   --output-dir /tmp/dropsquash-bench \
+  --csv-output /tmp/dropsquash-bench/results.csv \
   --profile auto \
   --size auto \
-  --release-set \
-  > /tmp/dropsquash-bench/results.csv
+  --release-set
 ```
 
-The command prints CSV to stdout:
+Without `--csv-output`, the command prints CSV to stdout. For release-set
+evidence, use `--csv-output` with an absolute path outside the repository so the
+exact evidence file is part of the command:
 
 ```text
 input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,throughput_mib_s
@@ -32,8 +34,9 @@ Use at least three private local samples before a release candidate:
 Use `--release-set` for release-candidate evidence. It requires at least three
 `--input` values so the release benchmark cannot accidentally be recorded from a
 single convenient sample. It also requires an absolute `--output-dir` outside
-the repository so private recordings, generated videos, and CSV evidence do not
-accidentally become source files.
+the repository and an absolute `--csv-output` outside the repository so private
+recordings, generated videos, and CSV evidence do not accidentally become source
+files.
 
 Record this context with the CSV in `docs/manual-qa.md`:
 

@@ -10,6 +10,7 @@ mod usage;
 pub struct BenchmarkArgs {
     pub inputs: Vec<PathBuf>,
     pub output_dir: PathBuf,
+    pub csv_output: Option<PathBuf>,
     pub profile: Profile,
     pub release_set: bool,
     pub output_size: OutputSize,

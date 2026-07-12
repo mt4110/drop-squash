@@ -16,6 +16,7 @@ fn parses_required_inputs_and_defaults() {
 
     assert_eq!(args.inputs.len(), 2);
     assert_eq!(args.output_dir, std::path::PathBuf::from("bench-out"));
+    assert_eq!(args.csv_output, None);
     assert_eq!(args.profile, Profile::Auto);
     assert!(!args.release_set);
     assert_eq!(args.output_size, OutputSize::Auto);
@@ -40,7 +41,26 @@ fn parses_profile_and_size() {
 }
 
 #[test]
+fn parses_csv_output() {
+    let args = BenchmarkArgs::parse(vec![
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--output-dir".to_string(),
+        "bench-out".to_string(),
+        "--csv-output".to_string(),
+        "bench-out/results.csv".to_string(),
+    ])
+    .unwrap();
+
+    assert_eq!(
+        args.csv_output,
+        Some(std::path::PathBuf::from("bench-out/results.csv"))
+    );
+}
+
+#[test]
 fn release_set_requires_three_inputs() {
+    let csv = tempfile::tempdir().unwrap().path().join("results.csv");
     let error = BenchmarkArgs::parse(vec![
         "--release-set".to_string(),
         "--input".to_string(),
@@ -49,11 +69,15 @@ fn release_set_requires_three_inputs() {
         "b.mov".to_string(),
         "--output-dir".to_string(),
         "bench-out".to_string(),
+        "--csv-output".to_string(),
+        csv.display().to_string(),
     ])
     .unwrap_err();
 
     assert!(error.contains("at least three"));
 
+    let output_dir = tempfile::tempdir().unwrap();
+    let csv_dir = tempfile::tempdir().unwrap();
     let args = BenchmarkArgs::parse(vec![
         "--release-set".to_string(),
         "--input".to_string(),
@@ -63,7 +87,9 @@ fn release_set_requires_three_inputs() {
         "--input".to_string(),
         "c.mov".to_string(),
         "--output-dir".to_string(),
-        tempfile::tempdir().unwrap().path().display().to_string(),
+        output_dir.path().display().to_string(),
+        "--csv-output".to_string(),
+        csv_dir.path().join("results.csv").display().to_string(),
     ])
     .unwrap();
 
@@ -72,6 +98,7 @@ fn release_set_requires_three_inputs() {
 
 #[test]
 fn release_set_requires_output_outside_repository() {
+    let csv = tempfile::tempdir().unwrap().path().join("results.csv");
     let error = BenchmarkArgs::parse(vec![
         "--release-set".to_string(),
         "--input".to_string(),
@@ -82,9 +109,33 @@ fn release_set_requires_output_outside_repository() {
         "c.mov".to_string(),
         "--output-dir".to_string(),
         "bench-out".to_string(),
+        "--csv-output".to_string(),
+        csv.display().to_string(),
     ])
     .unwrap_err();
 
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
+fn release_set_requires_csv_output_outside_repository() {
+    let output_dir = tempfile::tempdir().unwrap();
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--input".to_string(),
+        "b.mov".to_string(),
+        "--input".to_string(),
+        "c.mov".to_string(),
+        "--output-dir".to_string(),
+        output_dir.path().display().to_string(),
+        "--csv-output".to_string(),
+        "results.csv".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--csv-output"));
     assert!(error.contains("outside the repository"));
 }
 
