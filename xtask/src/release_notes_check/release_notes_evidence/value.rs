@@ -14,6 +14,7 @@ pub(super) fn is_placeholder(value: &str) -> bool {
         || lower == "pass"
         || lower == "ok"
         || lower == "done"
+        || lower.contains("replace this line")
         || lower.contains("example.")
         || lower.contains("localhost")
         || lower.contains(".test/")

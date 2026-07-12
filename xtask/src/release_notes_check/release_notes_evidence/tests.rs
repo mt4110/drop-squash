@@ -301,6 +301,20 @@ fn rejects_homebrew_install_without_sha256_digest() {
 }
 
 #[test]
+fn rejects_prepared_homebrew_install_draft() {
+    let errors = check_text(
+        r#"
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, replace this line with observed install evidence
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew install result")));
+}
+
+#[test]
 fn rejects_local_license_forget_without_cache_removal() {
     let errors = check_text(
         r#"

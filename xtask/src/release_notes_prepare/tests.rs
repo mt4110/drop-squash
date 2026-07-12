@@ -157,6 +157,9 @@ fn renders_prepared_release_notes_fields() {
         .contains("with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"));
     assert!(text.contains("auto_updates false"));
     assert!(text.contains("zap cleanup path"));
+    assert!(text.contains("Homebrew install result evidence draft"));
+    assert!(text.contains("brew install --cask mt4110/tap/dropsquash"));
+    assert!(text.contains("replace this line with observed install evidence"));
     let checksum = text
         .find("GitHub Release checksum")
         .expect("checksum field");
