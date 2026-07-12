@@ -4,6 +4,10 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("release-status/index.html", "signed and notarized"),
     ("release-status/index.html", "docs/release-blockers.md"),
     ("release-status/index.html", "Evidence reference"),
+    (
+        "release-status/index.html",
+        "Lemon Squeezy sandbox validation",
+    ),
     ("download.html", "macOS beta"),
     ("download.html", "DropSquash.dmg"),
     ("download.html", "notarization"),
@@ -11,6 +15,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("download.html", "release-status/"),
     ("pricing.html", "Checkout opens after"),
     ("pricing.html", "signed beta release"),
+    ("pricing.html", "Lemon Squeezy sandbox validation"),
     ("pricing.html", "release-status/"),
     ("pricing.html", "10 successful conversions are free"),
     (
