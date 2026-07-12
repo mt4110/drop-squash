@@ -8,6 +8,7 @@ mod fields;
 mod homebrew;
 mod identity;
 mod quality;
+mod secrets;
 mod url;
 mod value;
 
@@ -25,6 +26,7 @@ fn check_text(text: &str) -> Vec<String> {
             .filter_map(|(label, kind)| validate_url_field(label, *kind, text)),
     );
     errors.extend(identity::validate(text));
+    errors.extend(secrets::validate(text));
     errors.extend(consistency::validate(text));
     errors.extend(benchmark::validate(text));
     errors.extend(validate_sha256(text));

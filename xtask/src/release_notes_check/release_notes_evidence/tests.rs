@@ -759,6 +759,20 @@ fn rejects_non_hex_sha256() {
 }
 
 #[test]
+fn rejects_secret_like_release_note_values() {
+    let errors = check_text(
+        r#"
+- Apple notary log: accepted with APPLE_PASSWORD=not-for-release
+- Lemon Squeezy product setup: DropSquash intended product has license keys enabled; license key: raw-test-key
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("secret-like value")));
+}
+
+#[test]
 fn rejects_release_checksum_evidence_without_matching_digest() {
     let errors = check_text(
         r#"
