@@ -118,6 +118,28 @@ fn release_set_requires_output_outside_repository() {
 }
 
 #[test]
+fn release_set_rejects_normalized_output_inside_repository() {
+    let csv = tempfile::tempdir().unwrap().path().join("results.csv");
+    let inside_repo = normalized_repo_path("benchmark-output");
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--input".to_string(),
+        "b.mov".to_string(),
+        "--input".to_string(),
+        "c.mov".to_string(),
+        "--output-dir".to_string(),
+        inside_repo.display().to_string(),
+        "--csv-output".to_string(),
+        csv.display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
 fn release_set_requires_csv_output() {
     let output_dir = tempfile::tempdir().unwrap();
     let error = BenchmarkArgs::parse(vec![
@@ -130,6 +152,29 @@ fn release_set_requires_csv_output() {
         "c.mov".to_string(),
         "--output-dir".to_string(),
         output_dir.path().display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--csv-output"));
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
+fn release_set_rejects_normalized_csv_inside_repository() {
+    let output_dir = tempfile::tempdir().unwrap();
+    let csv = normalized_repo_path("results.csv");
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--input".to_string(),
+        "b.mov".to_string(),
+        "--input".to_string(),
+        "c.mov".to_string(),
+        "--output-dir".to_string(),
+        output_dir.path().display().to_string(),
+        "--csv-output".to_string(),
+        csv.display().to_string(),
     ])
     .unwrap_err();
 
@@ -186,4 +231,14 @@ fn release_set_requires_csv_output_extension() {
 fn rejects_missing_required_values() {
     assert!(BenchmarkArgs::parse(vec![]).is_err());
     assert!(BenchmarkArgs::parse(vec!["--input".to_string(), "a.mov".to_string(),]).is_err());
+}
+
+fn normalized_repo_path(child: &str) -> std::path::PathBuf {
+    let cwd = std::env::current_dir().unwrap();
+    cwd.parent()
+        .unwrap()
+        .join("outside")
+        .join("..")
+        .join(cwd.file_name().unwrap())
+        .join(child)
 }
