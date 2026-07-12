@@ -49,12 +49,14 @@ pub(super) fn require_homepage(url: &str) -> Result<(), String> {
 pub(super) fn require_sha256(value: &str) -> Result<(), String> {
     require_clean("sha256", value)?;
     if value.len() == 64
-        && value.chars().all(|char| char.is_ascii_hexdigit())
+        && value
+            .chars()
+            .all(|char| char.is_ascii_hexdigit() && !char.is_ascii_uppercase())
         && !all_same_char(value)
     {
         return Ok(());
     }
-    Err("sha256 must be a real 64-character hex checksum".to_string())
+    Err("sha256 must be a real lowercase 64-character hex checksum".to_string())
 }
 
 fn require_clean(label: &str, value: &str) -> Result<(), String> {

@@ -207,6 +207,20 @@ fn rejects_placeholder_sha256() {
 }
 
 #[test]
+fn rejects_uppercase_sha256() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        SHA256.to_ascii_uppercase(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("lowercase"));
+}
+
+#[test]
 fn rejects_non_canonical_homepage() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
