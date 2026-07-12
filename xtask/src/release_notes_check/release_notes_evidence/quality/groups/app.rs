@@ -23,7 +23,9 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["batch summary"],
             &["finished"],
             &["saved bytes"],
-            &["failed", "cancelled", "blocked"],
+            &["failed"],
+            &["cancelled"],
+            &["blocked"],
         ]),
         "Trash source policy" => Some(&[
             &["moving original", "moving"],

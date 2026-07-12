@@ -8,4 +8,19 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
     !groups
         .iter()
         .all(|group| group.iter().any(|needle| lower.contains(needle)))
+        || lacks_special_evidence(label, value)
+}
+
+fn lacks_special_evidence(label: &str, value: &str) -> bool {
+    match label {
+        "Queue evidence" => count_numbers(value) < 5,
+        _ => false,
+    }
+}
+
+fn count_numbers(value: &str) -> usize {
+    value
+        .split(|character: char| !character.is_ascii_digit())
+        .filter(|part| !part.is_empty())
+        .count()
 }
