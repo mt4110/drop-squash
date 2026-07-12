@@ -13,7 +13,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 
 | Blocker | Status | Completion evidence | Evidence reference | Record in |
 |---|---|---|---|---|
-| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `.app` or `.dmg` artifact | TBD | `docs/manual-qa.md` |
+| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `DropSquash.app` or `DropSquash.dmg` artifact | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |
 | Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |

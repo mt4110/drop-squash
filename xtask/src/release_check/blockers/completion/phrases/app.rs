@@ -1,7 +1,8 @@
 use super::Entry;
 
 pub(super) const ENTRIES: &[Entry] = &[
-    ("Packaged macOS manual QA", ".app` or `.dmg"),
+    ("Packaged macOS manual QA", "DropSquash.app"),
+    ("Packaged macOS manual QA", "DropSquash.dmg"),
     ("Empty key activation", "Activate stays disabled"),
     ("Empty key activation", "raw key is absent"),
     ("Empty key activation", "local cache"),
