@@ -1,4 +1,4 @@
-use super::response::LicenseInstance;
+use super::response::{LicenseApiResponse, LicenseInstance};
 use super::transport::LicenseApiClient;
 use super::*;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
@@ -6,7 +6,7 @@ use tokio::net::TcpListener;
 
 #[test]
 fn activation_uses_instance_id_and_fingerprint_only() {
-    let activation = activation_from_response(
+    let activation = activation::from_response(
         "LS-SECRET-RAW-KEY",
         LicenseApiResponse {
             activated: Some(true),
@@ -27,7 +27,7 @@ fn activation_uses_instance_id_and_fingerprint_only() {
 
 #[test]
 fn activation_error_is_friendly() {
-    let error = activation_from_response(
+    let error = activation::from_response(
         "LS-SECRET-RAW-KEY",
         LicenseApiResponse {
             activated: Some(false),
@@ -47,7 +47,7 @@ fn activation_error_is_friendly() {
 
 #[test]
 fn activation_error_redacts_echoed_license_key() {
-    let error = activation_from_response(
+    let error = activation::from_response(
         "LS-SECRET-RAW-KEY",
         LicenseApiResponse {
             activated: Some(false),
@@ -65,7 +65,7 @@ fn activation_error_redacts_echoed_license_key() {
 
 #[test]
 fn activation_error_redacts_normalized_license_key() {
-    let error = activation_from_response(
+    let error = activation::from_response(
         "LS-SECRET\nRAW-KEY",
         LicenseApiResponse {
             activated: Some(false),
@@ -83,7 +83,7 @@ fn activation_error_redacts_normalized_license_key() {
 
 #[test]
 fn activation_rejects_empty_instance_id() {
-    let error = activation_from_response(
+    let error = activation::from_response(
         "LS-SECRET-RAW-KEY",
         LicenseApiResponse {
             activated: Some(true),
@@ -102,7 +102,7 @@ fn activation_rejects_empty_instance_id() {
 
 #[test]
 fn deactivation_accepts_confirmed_response() {
-    deactivation_from_response(
+    activation::deactivate_from_response(
         "LS-SECRET-RAW-KEY",
         LicenseApiResponse {
             activated: None,
@@ -117,7 +117,7 @@ fn deactivation_accepts_confirmed_response() {
 
 #[test]
 fn deactivation_error_redacts_echoed_license_key() {
-    let error = deactivation_from_response(
+    let error = activation::deactivate_from_response(
         "LS-SECRET-RAW-KEY",
         LicenseApiResponse {
             activated: None,
