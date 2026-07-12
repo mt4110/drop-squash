@@ -3,10 +3,12 @@ use super::Entry;
 pub(super) const ENTRIES: &[Entry] = &[
     ("Signed DMG", "`codesign`"),
     ("Signed DMG", "Developer ID"),
+    ("Signed DMG", "public"),
     ("Signed DMG", "DropSquash.dmg"),
     ("Notarized and stapled DMG", "`spctl`"),
     ("Notarized and stapled DMG", "notary"),
     ("Notarized and stapled DMG", "stapled"),
+    ("Notarized and stapled DMG", "public"),
     ("Notarized and stapled DMG", "DropSquash.dmg"),
     ("Gatekeeper clean-machine open", "Fresh macOS account"),
     ("Gatekeeper clean-machine open", "signed"),

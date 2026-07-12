@@ -60,7 +60,7 @@ fn reports_verified_blocker_without_evidence_reference() {
 #[test]
 fn accepts_public_release_evidence_references() {
     let text = "\
-| Signed DMG | Verified | `codesign` verified Developer ID for DropSquash.dmg | Release notes | Release notes |
+| Signed DMG | Verified | `codesign` verified Developer ID for public DropSquash.dmg | Release notes | Release notes |
 | Published checksum | Verified | SHA256SUMS with SHA-256 for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
 | Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg with matching SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
@@ -204,8 +204,8 @@ fn reference(blocker: &str) -> &'static str {
 
 fn evidence(blocker: &str) -> &'static str {
     match blocker {
-        "Signed DMG" => "`codesign` verified Developer ID for DropSquash.dmg",
-        "Notarized and stapled DMG" => "`spctl`, notary, stapled DropSquash.dmg",
+        "Signed DMG" => "`codesign` verified Developer ID for public DropSquash.dmg",
+        "Notarized and stapled DMG" => "`spctl`, notary, stapled public DropSquash.dmg",
         "Gatekeeper clean-machine open" => {
             "Fresh macOS account opened signed, notarized, stapled app without Gatekeeper warning"
         }

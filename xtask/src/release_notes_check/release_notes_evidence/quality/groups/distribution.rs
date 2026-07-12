@@ -2,16 +2,23 @@ use super::Groups;
 
 pub(super) fn for_label(label: &str) -> Option<Groups> {
     match label {
-        "`codesign`" => Some(&[&["codesign"], &["developer id"], &["dropsquash.dmg"]]),
-        "`spctl`" => Some(&[&["spctl"], &["accepted"], &["dropsquash.dmg"]]),
+        "`codesign`" => Some(&[
+            &["codesign"],
+            &["developer id"],
+            &["public"],
+            &["dropsquash.dmg"],
+        ]),
+        "`spctl`" => Some(&[&["spctl"], &["accepted"], &["public"], &["dropsquash.dmg"]]),
         "`stapler`" => Some(&[
             &["stapler", "staple"],
             &["stapled", "validate"],
+            &["public"],
             &["dropsquash.dmg"],
         ]),
         "Apple notary log" => Some(&[
             &["notary", "notarytool"],
             &["accepted"],
+            &["public"],
             &["dropsquash.dmg"],
         ]),
         "Gatekeeper clean-machine open" => Some(&[

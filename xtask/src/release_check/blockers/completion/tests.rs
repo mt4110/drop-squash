@@ -179,6 +179,15 @@ fn reports_signed_completion_without_public_artifact_name() {
 }
 
 #[test]
+fn reports_signed_completion_without_public_context() {
+    let text = "| Signed DMG | Blocked | `codesign` verification shows Developer ID for DropSquash.dmg artifact | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Signed DMG"));
+}
+
+#[test]
 fn reports_notarization_completion_without_staple() {
     let text = "| Notarized and stapled DMG | Blocked | `spctl` and notary evidence for the public DropSquash.dmg artifact | TBD | Release notes |\n";
 
@@ -190,6 +199,15 @@ fn reports_notarization_completion_without_staple() {
 #[test]
 fn reports_notarization_completion_without_public_artifact_name() {
     let text = "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public DMG artifact | TBD | Release notes |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Notarized and stapled DMG"));
+}
+
+#[test]
+fn reports_notarization_completion_without_public_context() {
+    let text = "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for DropSquash.dmg artifact | TBD | Release notes |\n";
 
     let incomplete = incomplete_requirements(text);
 
