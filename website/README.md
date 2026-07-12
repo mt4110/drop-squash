@@ -7,9 +7,11 @@ The public website deployment and live checkout link stay blocked in
 `docs/release-blockers.md` until production URLs are verified.
 
 Run the static site gate before changing copy or links. It verifies required
-sales pages, local links, placeholder URLs, release-status page, privacy, license,
-refund, and support contact copy, and that download or checkout URLs are not
-live before release:
+sales pages, local links and resources, quoted and unquoted HTML links,
+form actions, approved external-link host/path boundaries, placeholder URLs,
+unsupported platform availability claims, release-status page, privacy,
+license, refund, support contact copy, and pre-release CTA copy. It also keeps
+download or checkout links and form actions non-live before release:
 
 ```bash
 cargo run -p xtask -- website-check

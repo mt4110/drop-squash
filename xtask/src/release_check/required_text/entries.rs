@@ -5,6 +5,7 @@ mod qa_evidence;
 mod qa_evidence_distribution;
 mod qa_evidence_release;
 mod release_docs;
+mod website_docs;
 
 type Entry = (&'static str, &'static str);
 
@@ -16,6 +17,7 @@ const GROUPS: &[&[Entry]] = &[
     qa_evidence_distribution::ENTRIES,
     distribution_docs::ENTRIES,
     release_docs::ENTRIES,
+    website_docs::ENTRIES,
 ];
 
 pub(super) fn required_text() -> impl Iterator<Item = Entry> {
