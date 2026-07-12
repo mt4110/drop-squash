@@ -1,18 +1,18 @@
 use std::io::Write;
 
-use super::check_file;
+use super::read_checked;
 
 #[test]
 fn accepts_artifact_without_nix_store_reference() {
     let (_directory, path) = write_artifact(&dmg_bytes(b"DropSquash artifact"));
 
-    assert!(check_file(&path).is_ok());
+    assert!(read_checked(&path, "artifact").is_ok());
 }
 
 #[test]
 fn rejects_artifact_with_nix_store_reference() {
     let (_directory, path) = write_artifact(&dmg_bytes(b"linked to /nix/store/abc"));
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("/nix/store"));
 }
@@ -25,7 +25,7 @@ fn rejects_artifact_with_utf16_nix_store_reference() {
         .collect::<Vec<_>>();
     let (_directory, path) = write_artifact(&dmg_bytes(&reference));
 
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("/nix/store"));
 }
@@ -38,7 +38,7 @@ fn rejects_artifact_with_utf16be_nix_store_reference() {
         .collect::<Vec<_>>();
     let (_directory, path) = write_artifact(&dmg_bytes(&reference));
 
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("/nix/store"));
 }
@@ -46,7 +46,7 @@ fn rejects_artifact_with_utf16be_nix_store_reference() {
 #[test]
 fn rejects_directories() {
     let directory = tempfile::tempdir().unwrap();
-    let error = check_file(directory.path()).unwrap_err();
+    let error = read_checked(directory.path(), "artifact").unwrap_err();
 
     assert!(error.contains("not a file"));
 }
@@ -54,7 +54,7 @@ fn rejects_directories() {
 #[test]
 fn rejects_empty_artifacts() {
     let (_directory, path) = write_artifact(b"");
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("empty"));
 }
@@ -62,7 +62,7 @@ fn rejects_empty_artifacts() {
 #[test]
 fn rejects_non_udif_dmg_artifacts() {
     let (_directory, path) = write_artifact(b"not really a dmg");
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("UDIF DMG"));
 }
@@ -76,7 +76,7 @@ fn rejects_non_dmg_artifacts() {
         .write_all(b"not a dmg")
         .unwrap();
 
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("must be a DMG"));
 }
@@ -90,7 +90,7 @@ fn rejects_noncanonical_dmg_name() {
         .write_all(&dmg_bytes(b"other artifact"))
         .unwrap();
 
-    let error = check_file(&path).unwrap_err();
+    let error = read_checked(&path, "artifact").unwrap_err();
 
     assert!(error.contains("DropSquash.dmg"));
 }

@@ -9,14 +9,14 @@ pub fn run(paths: Vec<String>) -> Result<(), String> {
         return Err("artifact-check requires at least one file path".to_string());
     }
     for path in paths {
-        check_file(&PathBuf::from(path))?;
+        read_checked(&PathBuf::from(path), "artifact")?;
     }
     println!("artifact checks passed");
     Ok(())
 }
 
-fn check_file(path: &Path) -> Result<(), String> {
-    let bytes = dmg::read(path, "artifact")?;
+pub(crate) fn read_checked(path: &Path, label: &str) -> Result<Vec<u8>, String> {
+    let bytes = dmg::read(path, label)?;
     require_canonical_name(path)?;
     if has_disallowed_reference(&bytes) {
         return Err(format!(
@@ -24,7 +24,7 @@ fn check_file(path: &Path) -> Result<(), String> {
             path.display()
         ));
     }
-    Ok(())
+    Ok(bytes)
 }
 
 fn require_canonical_name(path: &Path) -> Result<(), String> {

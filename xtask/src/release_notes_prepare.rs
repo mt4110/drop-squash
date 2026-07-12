@@ -1,4 +1,4 @@
-use crate::dmg;
+use crate::artifact_check;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
@@ -45,7 +45,7 @@ struct PreparedNotes {
 
 impl PreparedNotes {
     fn current(input: &Input) -> Result<Self, String> {
-        let bytes = dmg::read(&input.artifact, "release notes artifact")?;
+        let bytes = artifact_check::read_checked(&input.artifact, "release notes artifact")?;
         require_dmg_name(&input.artifact)?;
         let version = read_version(Path::new(TAURI_CONFIG))?;
         url::validate(&input.artifact_url, &version)?;
