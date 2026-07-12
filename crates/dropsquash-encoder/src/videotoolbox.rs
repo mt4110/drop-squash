@@ -16,6 +16,8 @@ mod paths;
 mod presets;
 #[cfg(target_os = "macos")]
 mod session;
+#[cfg(not(target_os = "macos"))]
+mod unavailable;
 
 #[cfg(target_os = "macos")]
 use objc2::rc::autoreleasepool;
@@ -42,9 +44,7 @@ impl EncoderBackend for AppleNativeEncoder {
         }
 
         #[cfg(not(target_os = "macos"))]
-        Err(dropsquash_core::AppError::Encoder(
-            "Apple native backend is only implemented on macOS in Phase 0".to_string(),
-        ))
+        unavailable::encode(job).await
     }
 
     async fn encode_with_progress(
@@ -60,14 +60,7 @@ impl EncoderBackend for AppleNativeEncoder {
         }
 
         #[cfg(not(target_os = "macos"))]
-        {
-            reporter.report(0.0);
-            let result = self.encode(job).await;
-            if result.is_ok() {
-                reporter.report(1.0);
-            }
-            result
-        }
+        unavailable::encode_with_progress(job, reporter).await
     }
 
     async fn encode_with_progress_and_cancel(
@@ -84,17 +77,7 @@ impl EncoderBackend for AppleNativeEncoder {
         }
 
         #[cfg(not(target_os = "macos"))]
-        {
-            if cancel.is_cancelled() {
-                return Err(dropsquash_core::AppError::Cancelled);
-            }
-            reporter.report(0.0);
-            let result = self.encode(job).await;
-            if result.is_ok() {
-                reporter.report(1.0);
-            }
-            result
-        }
+        unavailable::encode_with_progress_and_cancel(job, reporter, cancel).await
     }
 }
 
