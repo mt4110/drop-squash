@@ -186,11 +186,29 @@ fn reports_live_checkout_action_without_product_context() {
 
 #[test]
 fn reports_signing_classification_without_release_notes_owner() {
-    let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture Developer ID verification output | `docs/manual-qa.md` |\n";
+    let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output | `docs/manual-qa.md` |\n";
 
     let unclassified = unclassified_blockers(text);
 
     assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_signing_action_without_codesign_detail() {
+    let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture Developer ID verification output | Release notes |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_notarization_action_without_spctl_or_stapler_detail() {
+    let text = "| Notarized and stapled DMG | Signing/notarization | Notarize and assess the public DropSquash.dmg with captured verification output | Release notes |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Notarized and stapled DMG"));
 }
 
 #[test]
@@ -259,6 +277,12 @@ fn action_for(blocker: &str) -> &'static str {
         }
         "Live checkout link" => {
             "Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product"
+        }
+        "Signed DMG" => {
+            "Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output"
+        }
+        "Notarized and stapled DMG" => {
+            "Notarize, staple, and assess the public DropSquash.dmg with captured `spctl`, notary, and stapler verification output"
         }
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"

@@ -51,8 +51,8 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Public website deployment | Public web | Deploy the production site and verify release-status, privacy, pricing, support, and download pages | Public website URL |
 | Refund policy finalized | Public web | Publish the final refund policy URL before checkout goes live | Refund policy URL |
 | Live checkout link | Public web | Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
-| Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture Developer ID verification output | Release notes |
-| Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured verification output | Release notes |
+| Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture `codesign` Developer ID verification output | Release notes |
+| Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured `spctl`, notary, and stapler verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from public `DropSquash.dmg` in a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings, record the absolute CSV path outside repo, and record threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` SHA-256 line to the GitHub Release | GitHub Release URL |

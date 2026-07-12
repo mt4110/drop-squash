@@ -45,6 +45,10 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "tested Lemon Squeezy checkout",
             "intended product",
         ],
+        "Signed DMG" => &["public", "DropSquash.dmg", "`codesign`", "Developer ID"],
+        "Notarized and stapled DMG" => {
+            &["public", "DropSquash.dmg", "`spctl`", "notary", "stapler"]
+        }
         "Benchmark release set" => &["absolute CSV path outside repo"],
         "Published checksum" => &["public", "DropSquash.dmg", "SHA-256", "GitHub Release"],
         "Homebrew cask install" => &[
