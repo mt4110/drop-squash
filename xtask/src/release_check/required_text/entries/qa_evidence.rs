@@ -55,6 +55,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Live checkout link"),
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
+    (
+        "docs/qa-evidence.md",
+        "short, medium, and large local recordings with smaller outputs",
+    ),
     ("docs/qa-evidence.md", "versioned `DropSquash.dmg` artifact"),
     ("docs/qa-evidence.md", "`auto_updates false`"),
     ("docs/qa-evidence.md", "declares no in-app auto-update"),

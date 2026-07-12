@@ -58,7 +58,7 @@ These checks still require a packaged macOS app or external service state:
 | Larger output | Packaged-app larger-output handling must show failure without trial count |
 | Large-recording cancellation | User-visible timing, progress, and cleanup need real media and packaged app behavior |
 | Benchmark sample results | Compression ratio and throughput depend on private local media and target Mac hardware |
-| Benchmark sample set | Release coverage needs private short, medium, and large local recordings |
+| Benchmark sample set | Release coverage needs private short, medium, and large local recordings with smaller outputs |
 | Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
 | Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
 | Queued job cancellation | User-visible queue cancellation needs packaged app observation with repeated drops |
