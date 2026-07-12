@@ -55,6 +55,19 @@ fn terminal_active_jobs_release_next_pending_job() {
 }
 
 #[test]
+fn failed_active_job_releases_next_pending_job() {
+    let mut queue = InMemoryQueue::default();
+    queue.enqueue(job("first.mov"));
+    let second = queue.enqueue(job("second.mov"));
+
+    queue.start_next();
+    let failed = queue.fail_active("decode failed".to_string()).unwrap();
+
+    assert_eq!(failed.status, QueueJobStatus::Failed);
+    assert_eq!(queue.start_next().map(|item| item.id), Some(second.id));
+}
+
+#[test]
 fn empty_only_when_no_pending_or_active_job_exists() {
     let mut queue = InMemoryQueue::default();
     assert!(queue.is_empty());
