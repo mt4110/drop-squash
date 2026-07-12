@@ -69,7 +69,7 @@ weak public evidence before the release is published.
 - Queue evidence: mention multi-file queue, queued cancellation, batch summary, finished count, saved bytes, and failed/cancelled/blocked counts.
 - Trash source policy: mention Moving original or moving state, disabled action state, verified smaller output, and Trash.
 - Benchmark sample set: mention short, medium, and large samples, smaller outputs, CSV path outside the repository, machine, and OS context.
-- Benchmark regression threshold: mention the 20% regression threshold and whether any sample exceeded it.
+- Benchmark regression threshold: mention the 20% regression threshold, whether any sample exceeded it, the same-machine comparison, and the release candidate baseline.
 - Lemon Squeezy product setup: mention DropSquash, the intended product, and license keys enabled without private store IDs.
 - Lemon Squeezy sandbox purchase: mention the intended product, `test buyer`, and `order`.
 - Valid sandbox activation: mention the Lemon Squeezy sandbox request, disabled action state, Pro state, `raw key`, and cache evidence.

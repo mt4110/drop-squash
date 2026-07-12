@@ -31,7 +31,7 @@ fn accepts_concrete_production_urls() {
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed finished count, saved bytes, and cancelled mixed outcome
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
 - Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
-- Benchmark regression threshold: no sample exceeded 20 percent regression
+- Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
 - Lemon Squeezy product setup: DropSquash intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
 - Valid sandbox activation: Activating state disabled submit; Pro state reached and raw key absent from cache
@@ -691,7 +691,7 @@ fn rejects_incomplete_benchmark_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("CSV path outside repo")));
-    assert!(errors.iter().any(|error| error.contains("20%")));
+    assert!(errors.iter().any(|error| error.contains("baseline")));
 }
 
 #[test]
@@ -704,7 +704,7 @@ fn rejects_benchmark_sample_set_without_machine_context() {
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
 - Benchmark sample set: short medium large local recordings produced smaller outputs with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
-- Benchmark regression threshold: no sample exceeded 20% regression
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
 - Public website URL: https://dropsquash.app/release-status
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
@@ -722,7 +722,7 @@ fn rejects_benchmark_sample_set_without_smaller_outputs() {
     let errors = check_text(
         r#"
 - Benchmark sample set: short medium large local recordings recorded on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
-- Benchmark regression threshold: no sample exceeded 20% regression
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
 "#,
     );
 
@@ -751,13 +751,25 @@ fn rejects_benchmark_sample_set_without_csv_path_context() {
     let errors = check_text(
         r#"
 - Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2
-- Benchmark regression threshold: no sample exceeded 20% regression
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
 "#,
     );
 
     assert!(errors
         .iter()
         .any(|error| error.contains("CSV path outside repo")));
+}
+
+#[test]
+fn rejects_benchmark_threshold_without_baseline_context() {
+    let errors = check_text(
+        r#"
+- Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
+- Benchmark regression threshold: no sample exceeded 20% regression
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("baseline")));
 }
 
 #[test]

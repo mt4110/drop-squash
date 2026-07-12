@@ -78,6 +78,14 @@ pub(super) const ENTRIES: &[Entry] = &[
         "CSV path outside the repository",
     ),
     (
+        "docs/release-notes-template.md",
+        "same-machine comparison",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "release candidate baseline",
+    ),
+    (
         "docs/reproducible-builds.md",
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
