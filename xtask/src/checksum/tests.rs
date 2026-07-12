@@ -1,6 +1,6 @@
 use std::io::Write;
 
-use super::checksum_line;
+use super::{checksum_line, run};
 
 #[test]
 fn checksum_line_uses_sha256sum_format() {
@@ -95,6 +95,61 @@ fn noncanonical_dmg_names_are_rejected() {
     let error = checksum_line(&path).unwrap_err();
 
     assert!(error.contains("DropSquash.dmg"));
+}
+
+#[test]
+fn writes_checksum_output_once() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("SHA256SUMS");
+    std::fs::File::create(&artifact)
+        .unwrap()
+        .write_all(&dmg_bytes(b"dropsquash"))
+        .unwrap();
+
+    run(vec![
+        artifact.display().to_string(),
+        "--output".into(),
+        output.display().to_string(),
+    ])
+    .unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+
+    assert!(text.ends_with("  DropSquash.dmg\n"));
+}
+
+#[test]
+fn rejects_existing_checksum_output() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("SHA256SUMS");
+    std::fs::File::create(&artifact)
+        .unwrap()
+        .write_all(&dmg_bytes(b"dropsquash"))
+        .unwrap();
+    std::fs::write(&output, "existing").unwrap();
+
+    let error = run(vec![
+        artifact.display().to_string(),
+        "--output".into(),
+        output.display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("failed to create checksum output"));
+}
+
+#[test]
+fn rejects_output_with_multiple_artifacts() {
+    let error = run(vec![
+        "first.dmg".into(),
+        "second.dmg".into(),
+        "--output".into(),
+        "SHA256SUMS".into(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("usage: checksum"));
 }
 
 fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {

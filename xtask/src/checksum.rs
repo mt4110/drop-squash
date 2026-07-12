@@ -1,4 +1,6 @@
 use crate::dmg;
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use sha2::{Digest, Sha256};
@@ -7,11 +9,37 @@ pub fn run(paths: Vec<String>) -> Result<(), String> {
     if paths.is_empty() {
         return Err("checksum requires at least one file path".to_string());
     }
+    if let Some((artifact, output)) = output_request(&paths)? {
+        write_output(&artifact, &output)?;
+        return Ok(());
+    }
     for path in paths {
-        let path = PathBuf::from(path);
-        println!("{}", checksum_line(&path)?);
+        if path == "--output" {
+            return Err("checksum --output requires exactly one artifact path".to_string());
+        }
+        println!("{}", checksum_line(&PathBuf::from(path))?);
     }
     Ok(())
+}
+
+fn output_request(paths: &[String]) -> Result<Option<(PathBuf, PathBuf)>, String> {
+    if !paths.iter().any(|value| value == "--output") {
+        return Ok(None);
+    }
+    if paths.len() != 3 || paths[1] != "--output" {
+        return Err("usage: checksum <DropSquash.dmg> --output <SHA256SUMS>".to_string());
+    }
+    Ok(Some((PathBuf::from(&paths[0]), PathBuf::from(&paths[2]))))
+}
+
+fn write_output(artifact: &Path, output: &Path) -> Result<(), String> {
+    let line = checksum_line(artifact)?;
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(output)
+        .map_err(|error| format!("failed to create checksum output: {error}"))?;
+    writeln!(file, "{line}").map_err(|error| format!("failed to write checksum output: {error}"))
 }
 
 pub(crate) fn checksum_line(path: &Path) -> Result<String, String> {

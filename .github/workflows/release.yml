@@ -67,7 +67,7 @@ jobs:
           path: target/release/bundle/dmg/DropSquash.dmg
       - name: Write unsigned DMG checksum
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS
+        run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
       - name: Upload unsigned DMG checksum
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4

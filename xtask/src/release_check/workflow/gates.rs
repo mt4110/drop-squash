@@ -29,7 +29,7 @@ pub(super) const RELEASE: &[&str] = &[
     "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
     "cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg",
     "dropsquash-unsigned-dmg",
-    "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg > SHA256SUMS",
+    "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS",
     "actions/upload-artifact@v4",
     "dropsquash-unsigned-dmg-checksum",
     "cargo run -p xtask -- macos-signing-check",

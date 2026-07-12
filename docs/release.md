@@ -148,11 +148,12 @@ local-forget evidence exist.
 Generate SHA-256 checksum lines for release artifacts with:
 
 ```sh
-cargo run -p xtask -- checksum path/to/DropSquash.dmg > SHA256SUMS
+cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS
 ```
 
 The generated `SHA256SUMS` line uses the artifact file name, not the local
-build directory path, so it can be attached directly to the public release.
+build directory path, and `--output` refuses to overwrite an existing file.
+It can be attached directly to the public release.
 Generate the release notes artifact fields from the same DMG and public
 artifact URL to avoid hand-copying the version, checksum, git commit,
 Homebrew cask command inputs, and Homebrew tap PR evidence draft:
