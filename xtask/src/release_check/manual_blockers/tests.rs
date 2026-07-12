@@ -308,6 +308,16 @@ fn reports_packaged_macos_manual_qa_with_placeholder_state_path() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_manual_check_result() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("`cargo run -p xtask -- manual-qa-check`", "not run yet");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -503,6 +513,7 @@ fn packaged_result(label: &str) -> &'static str {
         "Failed conversion" => "original remained and trial count unchanged after failure",
         "Larger output" => "larger result failed and trial count unchanged",
         "Reveal output" => "Finder opened with clip.squashed.mp4 selected",
+        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed",
         _ => "concrete evidence",
     }
 }

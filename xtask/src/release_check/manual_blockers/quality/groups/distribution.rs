@@ -28,6 +28,9 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["macos", "os "],
         ]),
         "Benchmark regression threshold" => Some(&[&["20%", "20 percent"]]),
+        "`cargo run -p xtask -- manual-qa-check`" => {
+            Some(&[&["manual-qa-check"], &["passed", "passes"]])
+        }
         _ => None,
     }
 }
