@@ -2,11 +2,13 @@ use std::path::Path;
 use std::process::Command;
 use std::time::UNIX_EPOCH;
 
-pub(super) fn require_not_older_than_head(path: &Path) -> Result<(), String> {
+pub(crate) fn require_not_older_than_head(path: &Path, purpose: &str) -> Result<(), String> {
     let artifact_epoch = modified_epoch(path)?;
     let head_epoch = head_commit_epoch()?;
     if is_older_than_head(artifact_epoch, head_epoch) {
-        return Err("artifact is older than HEAD; rebuild the app before manual QA".to_string());
+        return Err(format!(
+            "artifact is older than HEAD; rebuild the app before {purpose}"
+        ));
     }
     Ok(())
 }

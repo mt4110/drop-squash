@@ -1,3 +1,4 @@
+mod artifact_age;
 mod artifact_check;
 mod benchmark;
 mod checksum;

@@ -47,6 +47,7 @@ impl PreparedNotes {
     fn current(input: &Input) -> Result<Self, String> {
         let bytes = artifact_check::read_checked(&input.artifact, "release notes artifact")?;
         require_dmg_name(&input.artifact)?;
+        crate::artifact_age::require_not_older_than_head(&input.artifact, "release notes")?;
         let version = read_version(Path::new(TAURI_CONFIG))?;
         url::validate(&input.artifact_url, &version)?;
         Ok(Self {

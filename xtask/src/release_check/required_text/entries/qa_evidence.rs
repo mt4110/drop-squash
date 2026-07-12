@@ -48,7 +48,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "release-notes-prepare"),
     ("docs/qa-evidence.md", "GitHub Release URL"),
     ("docs/qa-evidence.md", "SHA256SUMS line"),
-    ("docs/qa-evidence.md", "post-upload checksum evidence text"),
+    ("docs/qa-evidence.md", "pending checksum upload placeholder"),
+    (
+        "docs/qa-evidence.md",
+        "stale artifacts older than `HEAD` are rejected",
+    ),
     ("docs/qa-evidence.md", "matching Homebrew cask command"),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
     (
