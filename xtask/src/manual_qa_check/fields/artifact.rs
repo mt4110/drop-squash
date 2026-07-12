@@ -23,6 +23,9 @@ fn validate_dmg(path: &Path, missing: &mut Vec<String>) {
         missing.push("manual QA .dmg artifact must be a file".to_string());
         return;
     }
+    if path.file_name().and_then(|value| value.to_str()) != Some("DropSquash.dmg") {
+        missing.push("manual QA .dmg artifact must be named DropSquash.dmg".to_string());
+    }
     if let Err(error) = dmg::read(path, "manual QA artifact") {
         missing.push(error);
     }

@@ -22,7 +22,7 @@ Do not use placeholders such as `TBD`, `N/A`, `None`, `Blocked`, or `Skipped`
 as field values or results; leave unfinished rows empty until real evidence is
 available.
 `App artifact` must point to the existing local artifact used for the run: a
-`.app` bundle directory or a UDIF `.dmg` file. `Date` must use a real
+`.app` bundle directory or a UDIF `DropSquash.dmg` file. `Date` must use a real
 `YYYY-MM-DD` calendar date in year 2000 or later.
 `App build` must include both the tested app version and the git commit, for
 example `DropSquash 0.1.0 git abc1234`.
@@ -55,8 +55,8 @@ Copy the printed Tester value into the matching field.
 Then start from a known trial state if the run is meant to verify trial counts.
 The reset command requires the sample-set description so the run cannot begin
 without naming the short, medium, and large recordings. It also requires an
-existing `.app` or `.dmg` artifact, either at the default packaged-app path or
-through `--app-artifact <path>`:
+existing `.app` or `DropSquash.dmg` artifact, either at the default
+packaged-app path or through `--app-artifact <path>`:
 
 ```sh
 cargo run -p xtask -- manual-qa-prepare --reset-trial --input-sample-set "short, medium, and large local recordings"

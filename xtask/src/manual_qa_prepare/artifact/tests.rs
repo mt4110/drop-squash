@@ -23,6 +23,17 @@ fn rejects_missing_app_artifact() {
 }
 
 #[test]
+fn rejects_noncanonical_dmg_artifact_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("Other.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+
+    let error = qa_artifact(&options(Some(artifact))).unwrap_err();
+
+    assert!(error.contains("DropSquash.dmg"));
+}
+
+#[test]
 fn ignores_missing_default_artifact() {
     let resolved = qa_artifact(&options(None)).unwrap();
 
@@ -39,4 +50,12 @@ fn options(app_artifact: Option<std::path::PathBuf>) -> Options {
         restore_state: false,
         state_dir: "/tmp/state".into(),
     }
+}
+
+fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
+    let mut bytes = prefix.to_vec();
+    let mut trailer = vec![0; 512];
+    trailer[..4].copy_from_slice(b"koly");
+    bytes.extend(trailer);
+    bytes
 }

@@ -23,10 +23,17 @@ fn validate(path: &Path) -> Result<(), String> {
     match extension {
         Some("app") if path.is_dir() => Ok(()),
         Some("app") => Err("manual QA .app artifact must be a directory".to_string()),
-        Some("dmg") if path.is_file() => dmg::read(path, "manual QA artifact").map(|_| ()),
+        Some("dmg") if path.is_file() => validate_dmg(path),
         Some("dmg") => Err("manual QA .dmg artifact must be a file".to_string()),
         _ => Err("manual QA App artifact must be a .app or .dmg".to_string()),
     }
+}
+
+fn validate_dmg(path: &Path) -> Result<(), String> {
+    if path.file_name().and_then(|value| value.to_str()) != Some("DropSquash.dmg") {
+        return Err("manual QA .dmg artifact must be named DropSquash.dmg".to_string());
+    }
+    dmg::read(path, "manual QA artifact").map(|_| ())
 }
 
 #[cfg(test)]

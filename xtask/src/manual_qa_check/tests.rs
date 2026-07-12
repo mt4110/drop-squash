@@ -243,6 +243,23 @@ fn reports_dmg_artifact_without_udif_trailer() {
 }
 
 #[test]
+fn reports_noncanonical_dmg_artifact_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("Other.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!("| App artifact | {} |\n", artifact.display()),
+    )
+    .unwrap();
+
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("DropSquash.dmg")));
+}
+
+#[test]
 fn reports_release_command_results_for_different_dmg_artifact() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("Other.dmg");
