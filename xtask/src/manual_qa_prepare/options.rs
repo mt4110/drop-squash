@@ -1,5 +1,7 @@
 use std::path::PathBuf;
 
+mod sample_set;
+
 #[derive(Debug)]
 pub(super) struct Options {
     pub(super) app_artifact: Option<PathBuf>,
@@ -58,7 +60,7 @@ impl Options {
         if self
             .input_sample_set
             .as_deref()
-            .is_some_and(|value| !is_sample_set(value))
+            .is_some_and(|value| !sample_set::is_valid(value))
         {
             return Err(
                 "--input-sample-set must mention short, medium, and large recordings".to_string(),
@@ -87,12 +89,4 @@ impl Options {
 fn usage() -> String {
     "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--input-sample-set <text>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
         .to_string()
-}
-
-fn is_sample_set(value: &str) -> bool {
-    let lower = value.to_ascii_lowercase();
-    ["short", "medium", "large"]
-        .iter()
-        .all(|needle| lower.contains(needle))
-        && (lower.contains("recording") || lower.contains("sample"))
 }
