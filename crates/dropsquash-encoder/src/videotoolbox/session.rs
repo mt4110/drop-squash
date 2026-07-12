@@ -4,15 +4,15 @@ use std::time::Duration;
 
 use block2::RcBlock;
 use objc2::rc::Retained;
-use objc2_av_foundation::{
-    AVAssetExportSession, AVAssetExportSessionStatus, AVFileTypeMPEG4, AVURLAsset,
-};
+use objc2_av_foundation::{AVAssetExportSession, AVFileTypeMPEG4, AVURLAsset};
 use objc2_foundation::NSURL;
 use tokio_util::sync::CancellationToken;
 
 use crate::EncodeProgressReporter;
 
 use super::presets::preset_for;
+
+mod status;
 
 pub(super) fn export_session_for(
     job: &EncodeJob,
@@ -92,16 +92,5 @@ fn wait_for_export(
             }
         }
     }
-    ensure_completed(export_session)
-}
-
-fn ensure_completed(export_session: &AVAssetExportSession) -> Result<()> {
-    let status = unsafe { export_session.status() };
-    if status == AVAssetExportSessionStatus::Completed {
-        return Ok(());
-    }
-    let message = unsafe { export_session.error() }
-        .map(|error| error.localizedDescription().to_string())
-        .unwrap_or_else(|| format!("Apple export ended with status {}", status.0));
-    Err(AppError::Encoder(message))
+    status::ensure_completed(export_session)
 }
