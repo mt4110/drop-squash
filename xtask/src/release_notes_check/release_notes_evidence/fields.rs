@@ -36,7 +36,20 @@ pub(super) const EVIDENCE: [&str; 22] = [
 
 #[cfg(test)]
 mod tests {
-    use super::URL;
+    use super::{EVIDENCE, URL};
+
+    #[test]
+    fn release_notes_template_contains_checked_fields() {
+        let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+        let missing = URL
+            .iter()
+            .map(|(label, _)| *label)
+            .chain(EVIDENCE)
+            .filter(|label| !template.contains(&format!("- {label}:")))
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty());
+    }
 
     #[test]
     fn release_url_pairs_point_to_required_release_note_url_fields() {
