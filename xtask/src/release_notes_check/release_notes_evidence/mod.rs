@@ -7,6 +7,7 @@ mod homebrew;
 mod identity;
 mod quality;
 mod url;
+mod value;
 
 pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
     let text = std::fs::read_to_string(path)
@@ -63,17 +64,17 @@ fn field_count(label: &str, text: &str) -> usize {
 }
 
 fn validate_url_field(label: &'static str, kind: url::Kind, text: &str) -> Option<String> {
-    let Some(value) = field_value(label, text) else {
+    let Some(value) = value::field(label, text) else {
         return Some(format!("{label} must be present"));
     };
-    if url::is_valid(kind, value) && !is_placeholder(value) {
+    if url::is_valid(kind, value) && !value::is_placeholder(value) {
         return None;
     }
     Some(format!("{label} must contain a concrete production URL"))
 }
 
 fn validate_sha256(text: &str) -> Option<String> {
-    let Some(value) = field_value("SHA-256", text) else {
+    let Some(value) = value::field("SHA-256", text) else {
         return Some("SHA-256 must be present".to_string());
     };
     if value.len() == 64 && value.chars().all(|value| value.is_ascii_hexdigit()) {
@@ -83,45 +84,13 @@ fn validate_sha256(text: &str) -> Option<String> {
 }
 
 fn validate_evidence_field(label: &'static str, text: &str) -> Option<String> {
-    let Some(value) = field_value(label, text) else {
+    let Some(value) = value::field(label, text) else {
         return Some(format!("{label} must be present"));
     };
-    if is_concrete_evidence(value) && !quality::lacks_required_evidence(label, value) {
+    if value::is_concrete_evidence(value) && !quality::lacks_required_evidence(label, value) {
         return None;
     }
     Some(format!("{label} must contain concrete release evidence"))
-}
-
-fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
-    let prefix = format!("- {label}:");
-    text.lines()
-        .find_map(|line| line.trim().strip_prefix(&prefix).map(str::trim))
-}
-
-fn is_placeholder(value: &str) -> bool {
-    let lower = value.to_ascii_lowercase();
-    value.is_empty()
-        || has_placeholder_token(value)
-        || lower == "tbd"
-        || lower == "n/a"
-        || lower == "none"
-        || lower == "pass"
-        || lower == "ok"
-        || lower == "done"
-        || lower.contains("example.")
-        || lower.contains("localhost")
-        || lower.contains(".test/")
-        || lower.ends_with(".test")
-}
-
-fn has_placeholder_token(value: &str) -> bool {
-    value
-        .split(|character: char| !character.is_ascii_alphanumeric())
-        .any(|token| matches!(token.to_ascii_lowercase().as_str(), "tbd" | "todo"))
-}
-
-fn is_concrete_evidence(value: &str) -> bool {
-    !is_placeholder(value) && value.split_whitespace().count() >= 2
 }
 
 #[cfg(test)]
