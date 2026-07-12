@@ -121,9 +121,10 @@ fn rejects_distribution_references_with_multiple_urls() {
 }
 
 #[test]
-fn publish_error_mentions_traceable_evidence_reference() {
+fn publish_error_mentions_completion_evidence_and_reference() {
     let error = unverified_blockers_error(&["Signed DMG"]);
 
+    assert!(error.contains("concrete Completion evidence"));
     assert!(error.contains("traceable Evidence reference"));
     assert!(error.contains("Signed DMG"));
 }

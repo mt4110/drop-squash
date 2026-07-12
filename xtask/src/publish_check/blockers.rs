@@ -10,7 +10,7 @@ pub(super) fn unverified_blockers(text: &str) -> Vec<&'static str> {
 
 pub(super) fn unverified_blockers_error(blockers: &[&str]) -> String {
     format!(
-        "release blockers must be Verified with traceable Evidence reference before publish: {}",
+        "release blockers must be Verified with concrete Completion evidence and traceable Evidence reference before publish: {}",
         blockers.join(", ")
     )
 }
