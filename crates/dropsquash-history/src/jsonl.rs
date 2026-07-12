@@ -24,7 +24,7 @@ impl ConversionRecord {
     }
 }
 
-pub async fn append_record(path: &Path, record: &ConversionRecord) -> Result<()> {
+async fn append_record(path: &Path, record: &ConversionRecord) -> Result<()> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).await?;
     }
