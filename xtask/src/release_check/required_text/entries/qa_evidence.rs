@@ -46,6 +46,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "release-notes-check"),
     (
         "docs/qa-evidence.md",
+        "checksum evidence without the Artifact URL",
+    ),
+    (
+        "docs/qa-evidence.md",
         "conversion/queue/Trash/license action-state evidence",
     ),
     (
