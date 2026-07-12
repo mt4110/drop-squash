@@ -12,6 +12,7 @@ pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
 fn lacks_special_evidence(check: &str, result: &str) -> bool {
     match check {
         "App build" => !has_version_and_commit(result),
+        "App artifact" => !has_canonical_artifact(result),
         "Date" => !is_iso_date(result),
         _ => false,
     }
@@ -43,6 +44,10 @@ fn is_iso_date(value: &str) -> bool {
             .iter()
             .enumerate()
             .all(|(index, value)| matches!(index, 4 | 7) || value.is_ascii_digit())
+}
+
+fn has_canonical_artifact(result: &str) -> bool {
+    result.contains("DropSquash.app") || result.contains("DropSquash.dmg")
 }
 
 fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
