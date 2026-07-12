@@ -153,9 +153,9 @@ Record concrete results. The checker requires:
 - License network failure: mention a friendly network error, preserved existing valid cache, and no raw key in `license.json` or the license cache.
 - Forget license on this Mac: mention the Forgetting/disabled state, cache removal, and the resulting app state.
 
-Inspect the license cache without recording the sandbox key itself. A good
-result says the cache path was checked, that the raw key was absent, and whether
-only the fingerprint/instance fields were present.
+Inspect the license cache without recording the sandbox key itself or private store IDs.
+A good result says the cache path was checked, that the raw key was absent, and
+whether only the fingerprint/instance fields were present.
 
 | Check | Expected | Result |
 |---|---|---|
