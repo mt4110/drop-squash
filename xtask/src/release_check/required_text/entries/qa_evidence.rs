@@ -10,6 +10,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "parallel version manager config rejection",
     ),
+    (
+        "docs/qa-evidence.md",
+        "read-only `GITHUB_TOKEN` permissions",
+    ),
+    ("docs/qa-evidence.md", "unsigned release failure gate"),
     ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "benchmark CSV path evidence"),
