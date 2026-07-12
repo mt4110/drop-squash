@@ -130,3 +130,19 @@ fn pro_rejects_blank_activation_identity() {
 
     assert!(!cache.permits_pro(100));
 }
+
+#[test]
+fn pro_rejects_malformed_fingerprint() {
+    let mut cache = LicenseCache {
+        instance_id: Some("instance-1".to_string()),
+        license_key_fingerprint: Some("short".to_string()),
+        valid: true,
+        offline_grace_until_unix: Some(200),
+        ..LicenseCache::default()
+    };
+
+    assert!(!cache.permits_pro(100));
+
+    cache.license_key_fingerprint = Some("z".repeat(64));
+    assert!(!cache.permits_pro(100));
+}
