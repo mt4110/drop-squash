@@ -753,6 +753,18 @@ fn reports_trash_source_without_progress_evidence() {
 }
 
 #[test]
+fn reports_trash_source_without_original_move_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Trash source policy | Successful conversion | Original moves | button showed Moving and was disabled after verified smaller output |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Trash source policy")));
+}
+
+#[test]
 fn reports_larger_output_without_original_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Larger output | Input that cannot be made smaller | Treated as failure | failed and trial count unchanged |\n",

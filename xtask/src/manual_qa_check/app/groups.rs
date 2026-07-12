@@ -47,6 +47,8 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         ],
         "Trash source policy" => &[
             &["trash"],
+            &["original"],
+            &["moved to trash", "moves to trash"],
             &["moving original", "moving"],
             &["disabled"],
             &["verified", "smaller"],
