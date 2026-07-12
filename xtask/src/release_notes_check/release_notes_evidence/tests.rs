@@ -483,6 +483,19 @@ fn rejects_missing_or_generic_release_evidence() {
 }
 
 #[test]
+fn rejects_release_notes_manual_qa_record_without_public_dmg() {
+    let errors = check_text(
+        r#"
+- Manual QA record: docs/manual-qa.md filled for DropSquash.app
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Manual QA record")));
+}
+
+#[test]
 fn rejects_release_evidence_with_embedded_placeholders() {
     let errors = check_text(
         r#"
