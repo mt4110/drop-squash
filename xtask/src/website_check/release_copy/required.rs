@@ -17,6 +17,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("pricing.html", "signed beta release"),
     ("pricing.html", "Lemon Squeezy sandbox validation"),
     ("pricing.html", "release-status/"),
+    ("pricing.html", "Beta price is draft"),
     ("pricing.html", "10 successful conversions are free"),
     (
         "pricing.html",

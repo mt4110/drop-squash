@@ -2,7 +2,7 @@
 
 Static sales-site draft for the signed macOS beta.
 
-Open `index.html` in a browser to review the landing page. Public download and checkout links stay intentionally non-live until signing, notarization, and Lemon Squeezy sandbox validation are complete.
+Open `index.html` in a browser to review the landing page. Public download and checkout links stay intentionally non-live until signing, notarization, Lemon Squeezy sandbox validation, and final price confirmation are complete.
 The public website deployment and live checkout link stay blocked in
 `docs/release-blockers.md` until production URLs are verified.
 
