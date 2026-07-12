@@ -44,10 +44,13 @@ pub(super) fn require_homepage(url: &str) -> Result<(), String> {
 
 pub(super) fn require_sha256(value: &str) -> Result<(), String> {
     require_clean("sha256", value)?;
-    if value.len() == 64 && value.chars().all(|char| char.is_ascii_hexdigit()) {
+    if value.len() == 64
+        && value.chars().all(|char| char.is_ascii_hexdigit())
+        && !all_same_char(value)
+    {
         return Ok(());
     }
-    Err("sha256 must be 64 hex characters".to_string())
+    Err("sha256 must be a real 64-character hex checksum".to_string())
 }
 
 fn require_clean(label: &str, value: &str) -> Result<(), String> {
@@ -78,4 +81,11 @@ fn has_github_release_asset(url: &str, prefix: &str) -> bool {
 
 fn is_numeric_part(value: &str) -> bool {
     !value.is_empty() && value.chars().all(|char| char.is_ascii_digit())
+}
+
+fn all_same_char(value: &str) -> bool {
+    value
+        .chars()
+        .next()
+        .is_some_and(|first| value.chars().all(|char| char == first))
 }

@@ -159,7 +159,21 @@ fn rejects_invalid_sha256() {
     .err()
     .unwrap();
 
-    assert!(error.contains("64 hex"));
+    assert!(error.contains("64-character hex"));
+}
+
+#[test]
+fn rejects_placeholder_sha256() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".to_string(),
+        "0".repeat(64),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("real"));
 }
 
 #[test]
