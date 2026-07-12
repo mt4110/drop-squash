@@ -23,10 +23,14 @@ pub(super) fn check_path(env: &BTreeMap<String, String>) -> Result<(), String> {
         return Ok(());
     };
     let path = Path::new(path);
-    if path.is_file() && path.extension().is_some_and(|value| value == "p8") {
+    if !path.is_file() || !path.extension().is_some_and(|value| value == "p8") {
+        return Err("APPLE_API_KEY_PATH must point to a .p8 file".to_string());
+    }
+    let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
+    if text.contains("PRIVATE KEY") && !text.to_ascii_lowercase().contains("placeholder") {
         return Ok(());
     }
-    Err("APPLE_API_KEY_PATH must point to a .p8 file".to_string())
+    Err("APPLE_API_KEY_PATH must contain App Store Connect private key data".to_string())
 }
 
 fn is_uuid_like(value: &str) -> bool {

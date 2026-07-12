@@ -96,4 +96,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "declares no in-app auto-update"),
     ("docs/qa-evidence.md", "malformed App Store Connect key ids"),
     ("docs/qa-evidence.md", "malformed issuer UUIDs"),
+    (
+        "docs/qa-evidence.md",
+        "missing/empty/placeholder `.p8` files",
+    ),
 ];

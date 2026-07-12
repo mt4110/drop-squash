@@ -41,6 +41,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "`release-notes-prepare` rejects artifacts older",
     ),
     ("docs/release.md", "than `HEAD`"),
+    ("docs/release.md", "non-empty `.p8` file"),
+    ("docs/release.md", "private key data"),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
     (

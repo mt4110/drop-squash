@@ -109,6 +109,8 @@ fresh runner. The certificate value must be base64-encoded certificate data, not
 a placeholder such as `base64`. The App Store Connect key id must be a
 10-character `APPLE_API_KEY`, and `APPLE_API_ISSUER` must be the issuer UUID,
 not placeholder text.
+`APPLE_API_KEY_PATH` must point to a non-empty `.p8` file containing App Store
+Connect private key data, not an empty placeholder file.
 
 After packaged-app testing, require the manual QA record to be complete:
 
