@@ -10,6 +10,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         .all(|group| group.iter().any(|needle| lower.contains(needle)))
         && checksum_evidence_ok(label, result)
         && privacy_receipt_evidence_ok(label, result)
+        && batch_summary_evidence_ok(label, result)
     {
         return;
     }
@@ -33,4 +34,15 @@ fn privacy_receipt_evidence_ok(label: &str, result: &str) -> bool {
     }
     let compact = result.to_ascii_lowercase().replace(' ', "");
     compact.contains("uploaded_bytes=0") && compact.contains("metadata_policy=preserve")
+}
+
+fn batch_summary_evidence_ok(label: &str, result: &str) -> bool {
+    if label != "Batch summary" {
+        return true;
+    }
+    result
+        .split(|value: char| !value.is_ascii_digit())
+        .filter(|part| !part.is_empty())
+        .count()
+        >= 5
 }

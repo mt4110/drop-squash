@@ -27,7 +27,9 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "Batch summary" => &[
             &["finished"],
             &["saved bytes"],
-            &["failed", "cancelled", "blocked"],
+            &["failed"],
+            &["cancelled"],
+            &["blocked"],
         ],
         "Ask source policy" => &[&["ask", "choose"], &["trash", "keep"]],
         "Trash source policy" => &[

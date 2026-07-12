@@ -785,6 +785,26 @@ fn reports_queued_cancellation_without_success_history_evidence() {
 }
 
 #[test]
+fn reports_batch_summary_without_numeric_counts() {
+    let (_directory, path) = write_manual_qa(
+        "| Batch summary | Three recordings | Queue summary | summary showed finished count, saved bytes, and cancelled mixed outcome |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Batch summary")));
+}
+
+#[test]
+fn reports_batch_summary_without_all_mixed_counts() {
+    let (_directory, path) = write_manual_qa(
+        "| Batch summary | Three recordings | Queue summary | summary showed finished count 2, saved bytes 123456, and cancelled 1 |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Batch summary")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
@@ -950,7 +970,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started; trial history showed no new success |\n");
         } else if check == "Batch summary" {
             text.push_str(
-                "| Batch summary | Passes | summary showed finished count, saved bytes, and 1 cancelled mixed outcome |\n",
+                "| Batch summary | Passes | summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, blocked 0 |\n",
             );
         } else if check == "Ask source policy" {
             text.push_str(
