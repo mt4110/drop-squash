@@ -114,6 +114,15 @@ fn reports_packaged_manual_action_without_canonical_artifacts() {
 }
 
 #[test]
+fn reports_packaged_manual_action_without_public_dmg() {
+    let text = "| Packaged macOS manual QA | Manual packaged-app | Run the packaged DropSquash.dmg artifact through manual QA | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_public_url_classification_without_matching_owner_field() {
     let text = "| Published checksum | Distribution | Attach SHA256SUMS containing the public DropSquash.dmg line | Release owner |\n";
 
@@ -133,9 +142,7 @@ fn reports_benchmark_action_without_external_csv_path() {
 
 fn action_for(blocker: &str) -> &'static str {
     match blocker {
-        "Packaged macOS manual QA" => {
-            "Run packaged DropSquash.app or DropSquash.dmg through manual QA"
-        }
+        "Packaged macOS manual QA" => "Run public DropSquash.dmg artifact through manual QA",
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"
         }

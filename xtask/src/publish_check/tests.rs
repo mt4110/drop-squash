@@ -214,7 +214,7 @@ fn evidence(blocker: &str) -> &'static str {
             "brew install --cask installed versioned artifact DropSquash.dmg with matching SHA-256, auto_updates false, and zap"
         }
         "Packaged macOS manual QA" => {
-            "DropSquash.app and DropSquash.dmg manual-qa-check evidence recorded"
+            "Tested the public DropSquash.dmg artifact with manual-qa-check evidence recorded"
         }
         "Empty key activation" => {
             "Activate stays disabled and raw key is absent from local cache"

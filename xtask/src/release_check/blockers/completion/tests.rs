@@ -80,6 +80,15 @@ fn reports_packaged_manual_qa_without_manual_check() {
 }
 
 #[test]
+fn reports_packaged_manual_qa_without_public_tested_dmg() {
+    let text = "| Packaged macOS manual QA | Blocked | Filled manual QA table for DropSquash.dmg, with `manual-qa-check` passing | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_refund_policy_without_final_policy() {
     let text = "| Refund policy finalized | Blocked | Refund page exists | TBD | `https://...` |\n";
 
@@ -342,7 +351,7 @@ fn reports_benchmark_completion_without_external_csv_path() {
 
 fn described_blockers() -> String {
     [
-        "| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `DropSquash.app` or `DropSquash.dmg` artifact, with `manual-qa-check` passing | TBD | `docs/manual-qa.md` |\n",
+        "| Packaged macOS manual QA | Blocked | Tested the public `DropSquash.dmg` artifact with the filled manual QA table and `manual-qa-check` passing | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
         "| Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",

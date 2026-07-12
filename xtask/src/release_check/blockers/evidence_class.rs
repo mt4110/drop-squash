@@ -74,7 +74,7 @@ fn has_placeholder(value: &str) -> bool {
 fn has_required_action_detail(blocker: &str, action: &str) -> bool {
     match blocker {
         "Packaged macOS manual QA" => {
-            action.contains("DropSquash.app") && action.contains("DropSquash.dmg")
+            action.contains("public") && action.contains("DropSquash.dmg")
         }
         "Benchmark release set" => action.contains("absolute CSV path outside repo"),
         _ => true,
