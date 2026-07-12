@@ -15,6 +15,7 @@ export type QueueEntry = {
   progress?: number;
   result?: ConversionSummary;
   error?: string;
+  writePrivacyReceipt?: boolean;
 };
 
 export type QueueSummary = {

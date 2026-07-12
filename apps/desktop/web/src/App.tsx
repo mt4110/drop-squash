@@ -44,7 +44,7 @@ import {
   markSucceeded,
   nextQueued,
 } from "./lib/queue";
-import { queueEntryFromRustItem, type RustEncodeResult } from "./lib/queueWire";
+import { queueEntryFromRustItem, type RustEncodeResult, type RustQueueItem } from "./lib/queueWire";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
 
 export function App() {
@@ -110,9 +110,13 @@ export function App() {
     void (async () => {
       const entries: QueueEntry[] = [];
       for (const path of inputPaths) {
-        const event = await enqueueQueueJob(requestForInput(path));
+        const request = requestForInput(path);
+        const event = await enqueueQueueJob(request);
         if ("Enqueued" in event) {
-          entries.push(queueEntryFromRustItem(event.Enqueued));
+          entries.push({
+            ...queueEntryFromRustItem(event.Enqueued),
+            writePrivacyReceipt: request.writePrivacyReceipt,
+          });
         }
       }
       if (entries.length > 0) {
@@ -140,11 +144,15 @@ export function App() {
       if (!started || !("Started" in started) || started.Started.id !== entry.id) {
         throw new Error("Queue state changed before conversion could start.");
       }
+      const request = requestFromRustItem(
+        started.Started,
+        entry.writePrivacyReceipt ?? stateRef.current.writePrivacyReceipt,
+      );
       const summary = await invoke<ConversionSummary>("convert", {
-        request: requestForInput(entry.inputPath),
+        request,
       });
       setResult(summary);
-      await finishActiveQueueJob(encodeResultFromSummary(summary, state.profile));
+      await finishActiveQueueJob(encodeResultFromSummary(summary, request.profile));
       setQueue((current) => markSucceeded(current, entry.id, summary));
       await refreshState();
     } catch (reason) {
@@ -164,7 +172,7 @@ export function App() {
       setIsBusy(false);
       setProgress(undefined);
     }
-  }, [isBusy, refreshState, requestForInput, state.isLocked, state.profile]);
+  }, [isBusy, refreshState, state.isLocked]);
   useEffect(() => {
     if (isBusy || state.isLocked) {
       return;
@@ -394,5 +402,19 @@ function encodeResultFromSummary(
     output_bytes: summary.outputBytes,
     success: true,
     error_message: null,
+  };
+}
+
+function requestFromRustItem(
+  item: RustQueueItem,
+  writePrivacyReceipt: boolean,
+): ConvertRequest {
+  return {
+    inputPath: item.job.input_path,
+    outputDir: item.job.output_dir,
+    profile: item.job.profile,
+    outputSize: item.job.output_size,
+    sourcePolicy: item.job.source_policy,
+    writePrivacyReceipt,
   };
 }
