@@ -8,7 +8,12 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["intended product"],
             &["license keys enabled"],
         ]),
-        "Sandbox purchase" => Some(&[&["intended product"], &["test buyer"], &["order"]]),
+        "Sandbox purchase" => Some(&[
+            &["sandbox"],
+            &["intended product"],
+            &["test buyer"],
+            &["order"],
+        ]),
         "Valid sandbox activation" => Some(&[
             &["lemon squeezy"],
             &["sandbox"],

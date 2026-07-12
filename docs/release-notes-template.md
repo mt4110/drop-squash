@@ -72,7 +72,7 @@ weak public evidence before the release is published.
 - Benchmark sample set: mention short, medium, and large samples, smaller outputs, CSV path outside the repository, machine, and OS context.
 - Benchmark regression threshold: mention the 20% regression threshold, whether any sample exceeded it, the same-machine comparison, and the release candidate baseline.
 - Lemon Squeezy product setup: mention DropSquash, the sandbox product, the intended product, and license keys enabled without private store IDs.
-- Lemon Squeezy sandbox purchase: mention the intended product, `test buyer`, and `order`.
+- Lemon Squeezy sandbox purchase: mention the sandbox checkout, intended product, `test buyer`, and `order`.
 - Valid sandbox activation: mention the Lemon Squeezy sandbox request, disabled action state, Pro state, `raw key`, and cache evidence.
 - Empty key activation: mention Activate disabled for empty input, `raw key`, and cache evidence.
 - Invalid license key handling: mention disabled action state, friendly error, `raw key`, and cache evidence.

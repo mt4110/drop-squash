@@ -146,7 +146,7 @@ trial count.
 Record concrete results. The checker requires:
 
 - Sandbox product setup: mention the sandbox product, DropSquash, the intended product, and license keys enabled.
-- Sandbox purchase: mention the intended product, test buyer, and order.
+- Sandbox purchase: mention the sandbox checkout, intended product, test buyer, and order.
 - Empty key activation: mention the disabled Activate state and that `license.json` or the license cache has no raw key.
 - Invalid key activation: mention the Activating/disabled state, a friendly error, and that `license.json` or the license cache has no raw key.
 - Valid sandbox activation: mention the Lemon Squeezy sandbox activation request, Activating/disabled state, Pro state, and that `license.json` or the license cache has no raw key.
@@ -160,7 +160,7 @@ whether only the fingerprint/instance fields were present.
 | Check | Expected | Result |
 |---|---|---|
 | Sandbox product setup | Intended product is DropSquash and sandbox license keys are enabled |  |
-| Sandbox purchase | Checkout completes for the intended product and test buyer order |  |
+| Sandbox purchase | Sandbox checkout completes for the intended product and test buyer order |  |
 | Empty key activation | Empty key leaves Activate disabled; license cache has no raw key |  |
 | Invalid key activation | Activating state disables submit; friendly license error; license cache has no raw key |  |
 | Valid sandbox activation | Lemon Squeezy sandbox activation request disables submit while Activating; Pro state; license cache has no raw key |  |

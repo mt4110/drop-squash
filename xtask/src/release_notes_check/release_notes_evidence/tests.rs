@@ -33,7 +33,7 @@ fn accepts_concrete_production_urls() {
 - Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled
-- Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
+- Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
 - Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and raw key absent from cache
 - Empty key activation: Activate disabled for empty input and raw key absent from cache
 - Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache
@@ -768,6 +768,19 @@ fn rejects_sandbox_purchase_without_intended_product() {
     let errors = check_text(
         r#"
 - Lemon Squeezy sandbox purchase: test buyer order abc123 completed
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
+}
+
+#[test]
+fn rejects_sandbox_purchase_without_sandbox_context() {
+    let errors = check_text(
+        r#"
+- Lemon Squeezy sandbox purchase: intended product checkout completed for test buyer order abc123
 "#,
     );
 

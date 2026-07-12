@@ -743,6 +743,18 @@ fn reports_product_setup_without_sandbox_context() {
 }
 
 #[test]
+fn reports_purchase_without_sandbox_context() {
+    let (_directory, path) = write_manual_qa(
+        "| Sandbox purchase | Checkout completes | intended product checkout completed by test buyer order abc123 |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Sandbox purchase")));
+}
+
+#[test]
 fn reports_forget_license_without_cache_removal() {
     let (_directory, path) = write_manual_qa(
         "| Forget license on this Mac | Local cache clears | license cache checked and app returned to trial state |\n",
@@ -1284,7 +1296,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Sandbox product setup" {
             text.push_str("| Sandbox product setup | Passes | DropSquash sandbox intended product confirmed and license keys enabled |\n");
         } else if check == "Sandbox purchase" {
-            text.push_str("| Sandbox purchase | Passes | intended product checkout completed by test buyer order abc123 |\n");
+            text.push_str("| Sandbox purchase | Passes | sandbox checkout completed for intended product by test buyer order abc123 |\n");
         } else if check == "Empty key activation" {
             text.push_str("| Empty key activation | Passes | Activate disabled for empty input and license.json cache has no raw key |\n");
         } else if check == "Invalid key activation" {
