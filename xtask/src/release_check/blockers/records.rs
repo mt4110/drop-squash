@@ -100,9 +100,7 @@ fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
     } else {
         has_release_tag_suffix
     };
-    reference
-        .split_whitespace()
-        .any(|part| matches(part, prefix))
+    super::reference_urls::single(reference).is_some_and(|url| matches(url, prefix))
 }
 
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
