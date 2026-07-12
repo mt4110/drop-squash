@@ -29,6 +29,8 @@ config, history, or license cache, and license error messages redact echoed raw
 keys before they reach the UI.
 The desktop activation form is available during Trial and Locked states, trims
 the submitted key, and clears the input before the activation request resolves.
+Empty or invalid activation attempts must not create a raw key, license
+fingerprint, or Lemon Squeezy instance id in the local cache.
 
 The Lemon Squeezy provider supports validation and deactivation requests when a
 raw key is supplied. The desktop app deliberately does not retain that key, so

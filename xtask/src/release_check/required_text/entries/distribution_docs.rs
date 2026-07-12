@@ -9,13 +9,19 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/release.md", "Empty key activation"),
     ("docs/release.md", "Activate is disabled"),
+    (
+        "docs/release.md",
+        "no raw key, fingerprint, or instance was written",
+    ),
+    ("docs/release.md", "Invalid-key evidence"),
+    ("docs/release.md", "friendly"),
     ("docs/release.md", "disabled while Activating"),
     ("docs/release.md", "disabled while Forgetting"),
     ("docs/release.md", "private store IDs"),
     ("docs/release.md", "License network failure"),
     (
         "docs/release.md",
-        "Lemon Squeezy\nsandbox activation request",
+        "Lemon Squeezy sandbox activation request",
     ),
     (
         "docs/manual-qa.md",

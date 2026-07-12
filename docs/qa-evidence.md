@@ -68,8 +68,8 @@ These checks still require a packaged macOS app or external service state:
 | Lemon Squeezy product setup | Requires intended product, DropSquash, sandbox product and license-key configuration evidence outside the repository |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, test buyer, and order evidence outside the repository |
 | Valid sandbox activation | Requires Lemon Squeezy sandbox product, keys, and server response outside the repository |
-| Empty key activation | Requires packaged-app disabled Activate state and local cache inspection after an empty key |
-| Invalid license key handling | Requires packaged-app activating/disabled submit state and local cache inspection after an invalid key |
+| Empty key activation | Requires packaged-app disabled Activate state and local cache inspection showing no raw key, fingerprint, or instance after an empty key |
+| Invalid license key handling | Requires packaged-app disabled Activating state, friendly error, and local cache inspection showing no raw key, fingerprint, or instance after an invalid key |
 | License network failure | Requires packaged-app UI and local cache inspection after a failed activation request |
 | Local license forget | Requires packaged-app forgetting/disabled action state and local cache inspection after forgetting the license |
 | Public website deployment | Requires the production website URL and public release pages |
