@@ -191,6 +191,7 @@ fn accepts_public_release_files() {
 #[test]
 fn rejects_environment_files() {
     assert!(is_secret_file(".env", None));
+    assert!(is_secret_file(".envrc", Some("envrc")));
     assert!(is_secret_file(".env.local", Some("local")));
     assert!(is_secret_file(".env.production", Some("production")));
 }
@@ -199,6 +200,9 @@ fn rejects_environment_files() {
 fn rejects_signing_secret_extensions() {
     assert!(is_secret_file("Distribution.p12", Some("p12")));
     assert!(is_secret_file("AuthKey_TEST.p8", Some("p8")));
+    assert!(is_secret_file("DeveloperID.cer", Some("cer")));
+    assert!(is_secret_file("DeveloperID.cert", Some("cert")));
+    assert!(is_secret_file("DeveloperID.crt", Some("crt")));
     assert!(is_secret_file(
         "profile.mobileprovision",
         Some("mobileprovision")

@@ -1,6 +1,9 @@
 use std::path::{Path, PathBuf};
 
-const SECRET_EXTENSIONS: [&str; 6] = [
+const SECRET_EXTENSIONS: [&str; 9] = [
+    "cer",
+    "cert",
+    "crt",
     "key",
     "mobileprovision",
     "p12",
@@ -44,6 +47,7 @@ fn require_ignore_line(text: &str, path: &Path, needle: &str) -> Result<(), Stri
 
 pub(super) fn is_secret_file(name: &str, extension: Option<&str>) -> bool {
     name == ".env"
+        || name == ".envrc"
         || name.starts_with(".env.")
         || extension.is_some_and(|value| {
             let lower = value.to_ascii_lowercase();
