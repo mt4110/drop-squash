@@ -268,6 +268,23 @@ fn reset_trial_requires_existing_artifact() {
 }
 
 #[test]
+fn reset_trial_accepts_existing_dmg_artifact() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let options = Options::parse(vec![
+        "--reset-trial".to_string(),
+        "--input-sample-set".to_string(),
+        "short, medium, and large local recordings".to_string(),
+        "--app-artifact".to_string(),
+        artifact.display().to_string(),
+    ])
+    .unwrap();
+
+    require_reset_artifact(&options).unwrap();
+}
+
+#[test]
 fn rejects_unknown_arguments() {
     let error = Options::parse(vec!["--mystery".to_string(), "value".to_string()]).unwrap_err();
 
@@ -319,4 +336,12 @@ fn rejects_output_folder_inside_repository() {
 
     assert!(error.contains("--output-dir"));
     assert!(error.contains("outside the repository"));
+}
+
+fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
+    let mut bytes = prefix.to_vec();
+    let mut trailer = vec![0; 512];
+    trailer[..4].copy_from_slice(b"koly");
+    bytes.extend(trailer);
+    bytes
 }

@@ -66,7 +66,7 @@ existing `DropSquash.app` or `DropSquash.dmg` artifact, either at the default
 packaged-app path or through `--app-artifact <path>`:
 
 ```sh
-cargo run -p xtask -- manual-qa-prepare --reset-trial --input-sample-set "short, medium, and large local recordings"
+cargo run -p xtask -- manual-qa-prepare --reset-trial --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set "short, medium, and large local recordings"
 ```
 
 `--reset-trial` removes only `history.jsonl` and `license.json`, and only after
