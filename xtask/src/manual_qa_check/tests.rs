@@ -178,13 +178,22 @@ fn reports_missing_required_checks() {
 
 #[test]
 fn reports_duplicate_required_field_labels() {
-    let (_directory, path) = write_manual_qa(
-        "| App build | DropSquash 0.1.0 git abc1234 |\n\
-| App build | DropSquash 0.1.0 git abc1234 |\n",
-    );
+    let head = current_head();
+    let (_directory, path) = write_manual_qa(&format!(
+        "| App build | DropSquash 0.1.0 git {head} |\n\
+| App build | DropSquash 0.1.0 git {head} |\n"
+    ));
     let missing = check_file(&path).unwrap();
 
     assert!(missing.contains(&"manual QA label is duplicated: App build".to_string()));
+}
+
+#[test]
+fn reports_app_build_for_old_head() {
+    let (_directory, path) = write_manual_qa("| App build | DropSquash 0.1.0 git 0000000 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("current HEAD")));
 }
 
 #[test]
@@ -1053,7 +1062,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
     for field in REQUIRED_FIELDS {
         let value = match field {
             "App artifact" => artifact.display().to_string(),
-            "App build" => "DropSquash 0.1.0 git abc1234".to_string(),
+            "App build" => format!("DropSquash 0.1.0 git {}", current_head()),
             "macOS version" => "macOS 26.5.2".to_string(),
             "Machine" => "MacBookPro18,4 arm64".to_string(),
             "Input sample set" => "short, medium, and large local recordings".to_string(),
@@ -1191,4 +1200,13 @@ fn sha256_hex(bytes: &[u8]) -> String {
         .iter()
         .map(|byte| format!("{byte:02x}"))
         .collect()
+}
+
+fn current_head() -> String {
+    let output = std::process::Command::new("git")
+        .args(["rev-parse", "--short=7", "HEAD"])
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    String::from_utf8(output.stdout).unwrap().trim().to_string()
 }

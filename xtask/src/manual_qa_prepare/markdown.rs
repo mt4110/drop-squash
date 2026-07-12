@@ -33,7 +33,10 @@ mod tests {
         std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
         std::fs::create_dir(&output).unwrap();
         let fields = vec![
-            ("App build", "DropSquash 0.1.0 git abc1234".into()),
+            (
+                "App build",
+                format!("DropSquash 0.1.0 git {}", current_head()),
+            ),
             ("App artifact", artifact.display().to_string()),
             (
                 "Input sample set",
@@ -77,5 +80,14 @@ mod tests {
         trailer[..4].copy_from_slice(b"koly");
         bytes.extend(trailer);
         bytes
+    }
+
+    fn current_head() -> String {
+        let output = std::process::Command::new("git")
+            .args(["rev-parse", "--short=7", "HEAD"])
+            .output()
+            .unwrap();
+        assert!(output.status.success());
+        String::from_utf8(output.stdout).unwrap().trim().to_string()
     }
 }

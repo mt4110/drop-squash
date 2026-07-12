@@ -25,7 +25,8 @@ available.
 `DropSquash.app` bundle directory or a UDIF `DropSquash.dmg` file. `Date` must
 use a real `YYYY-MM-DD` calendar date in year 2000 or later.
 `App build` must include both the tested app version and the git commit, for
-example `DropSquash 0.1.0 git abc1234`.
+example `DropSquash 0.1.0 git abc1234`, and the commit must match the current
+short `HEAD` when `manual-qa-check` is run.
 `macOS version` must look like `macOS 15.5`, `Machine` must include the CPU
 architecture, and `Output folder` must point to an existing absolute directory.
 `Input sample set` must mention the short, medium, and large local recordings

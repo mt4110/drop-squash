@@ -435,7 +435,10 @@ fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
 
 fn manual_qa_fields(artifact: &std::path::Path, output: &std::path::Path) -> Vec<markdown::Field> {
     vec![
-        ("App build", "DropSquash 0.1.0 git abc1234".into()),
+        (
+            "App build",
+            format!("DropSquash 0.1.0 git {}", current_head()),
+        ),
         ("App artifact", artifact.display().to_string()),
         ("macOS version", "macOS 26.5.2".into()),
         ("Machine", "MacBookPro18,4 arm64".into()),
@@ -454,4 +457,13 @@ fn manual_qa_fields(artifact: &std::path::Path, output: &std::path::Path) -> Vec
 
 fn state_path(file_name: &str) -> String {
     format!("/Users/me/Library/Application Support/DropSquash/{file_name}")
+}
+
+fn current_head() -> String {
+    let output = std::process::Command::new("git")
+        .args(["rev-parse", "--short=7", "HEAD"])
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    String::from_utf8(output.stdout).unwrap().trim().to_string()
 }
