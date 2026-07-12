@@ -161,7 +161,9 @@ fn evidence(blocker: &str) -> &'static str {
     match blocker {
         "Signed DMG" => "codesign verified Developer ID for DropSquash.dmg",
         "Notarized and stapled DMG" => "spctl, notary, and stapled DropSquash.dmg",
-        "Gatekeeper clean-machine open" => "opened without Gatekeeper warning",
+        "Gatekeeper clean-machine open" => {
+            "opened signed, notarized, stapled app without Gatekeeper warning"
+        }
         "Published checksum" => "SHA256SUMS attached for DropSquash.dmg",
         "Homebrew cask install" => "DropSquash.dmg cask has auto_updates false and zap",
         _ => "concrete evidence recorded",

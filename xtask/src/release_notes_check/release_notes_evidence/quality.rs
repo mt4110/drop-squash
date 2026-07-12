@@ -28,6 +28,7 @@ fn groups_for(label: &str) -> Option<&'static [&'static [&'static str]]> {
             &["clean", "fresh"],
             &["signed"],
             &["notarized", "notarised"],
+            &["stapled", "staple"],
             &[
                 "without warning",
                 "no warning",

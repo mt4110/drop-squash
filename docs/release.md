@@ -160,7 +160,8 @@ After notarization succeeds, publish the checksum with the GitHub Release and
 fill `docs/release-notes-template.md` with codesign, spctl, stapler, notary,
 checksum, Gatekeeper, and Homebrew evidence. The public release notes must name
 `DropSquash.dmg` in the signing, notarization, checksum, and Homebrew evidence;
-Gatekeeper evidence must mention no warning; Homebrew evidence must mention
+Gatekeeper evidence must mention signed, notarized, stapled, and no warning;
+Homebrew evidence must mention
 `auto_updates false` and `zap` cleanup:
 
 ```sh
