@@ -31,6 +31,9 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
 
 fn validate_output_folder(value: &str, missing: &mut Vec<String>) {
     let path = Path::new(value);
+    if !path.is_absolute() {
+        missing.push("manual QA Output folder must be an absolute path".to_string());
+    }
     if path.is_dir() {
         return;
     }
@@ -44,3 +47,6 @@ fn validate_tester(value: &str, missing: &mut Vec<String>) {
     }
     missing.push("manual QA Tester must name the tester".to_string());
 }
+
+#[cfg(test)]
+mod tests;
