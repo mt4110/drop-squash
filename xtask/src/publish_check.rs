@@ -2,6 +2,7 @@ use std::path::{Path, PathBuf};
 
 mod blockers;
 mod evidence;
+mod manual_qa;
 mod references;
 mod urls;
 
@@ -35,13 +36,13 @@ fn ensure_website_complete(path: &Path) -> Result<(), String> {
 
 fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {
     let missing = crate::manual_qa_check::check_file(path)?;
-    if missing.is_empty() {
-        return Ok(());
+    if !missing.is_empty() {
+        return Err(format!(
+            "manual QA must pass before publish:\n{}",
+            missing.join("\n")
+        ));
     }
-    Err(format!(
-        "manual QA must pass before publish:\n{}",
-        missing.join("\n")
-    ))
+    manual_qa::require_public_dmg(path)
 }
 
 fn read_release_blockers(path: &Path) -> Result<String, String> {
