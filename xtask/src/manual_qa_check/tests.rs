@@ -785,6 +785,30 @@ fn reports_queued_cancellation_without_success_history_evidence() {
 }
 
 #[test]
+fn reports_multi_file_queue_without_numeric_queue_counts() {
+    let (_directory, path) = write_manual_qa(
+        "| Multi-file queue | Three recordings | Queue runs sequentially | three recordings queued with one active sequential conversion; unrelated failure did not block finished jobs |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Multi-file queue")));
+}
+
+#[test]
+fn reports_multi_file_queue_without_failure_unblock_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Multi-file queue | Three recordings | Queue runs sequentially | 3 recordings queued with 1 active sequential conversion and 3 jobs finished |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Multi-file queue")));
+}
+
+#[test]
 fn reports_batch_summary_without_numeric_counts() {
     let (_directory, path) = write_manual_qa(
         "| Batch summary | Three recordings | Queue summary | summary showed finished count, saved bytes, and cancelled mixed outcome |\n",
@@ -965,7 +989,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Cancellation" {
             text.push_str("| Cancellation | Passes | app returned ready and trial history showed no new success |\n");
         } else if check == "Multi-file queue" {
-            text.push_str("| Multi-file queue | Passes | three recordings queued with one active sequential conversion |\n");
+            text.push_str("| Multi-file queue | Passes | 3 recordings queued with 1 active sequential conversion; 3 jobs finished and unrelated failure did not block the queue |\n");
         } else if check == "Queued job cancellation" {
             text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started; trial history showed no new success |\n");
         } else if check == "Batch summary" {

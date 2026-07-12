@@ -11,6 +11,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         && checksum_evidence_ok(label, result)
         && privacy_receipt_evidence_ok(label, result)
         && batch_summary_evidence_ok(label, result)
+        && multi_file_queue_evidence_ok(label, result)
     {
         return;
     }
@@ -45,4 +46,17 @@ fn batch_summary_evidence_ok(label: &str, result: &str) -> bool {
         .filter(|part| !part.is_empty())
         .count()
         >= 5
+}
+
+fn multi_file_queue_evidence_ok(label: &str, result: &str) -> bool {
+    if label != "Multi-file queue" {
+        return true;
+    }
+    contains_number(result, "3") && contains_number(result, "1")
+}
+
+fn contains_number(result: &str, expected: &str) -> bool {
+    result
+        .split(|value: char| !value.is_ascii_digit())
+        .any(|part| part == expected)
 }
