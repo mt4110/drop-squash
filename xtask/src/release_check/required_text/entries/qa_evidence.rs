@@ -6,6 +6,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "license, refund, support contact copy",
     ),
+    (
+        "docs/qa-evidence.md",
+        "parallel version manager config rejection",
+    ),
     ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "benchmark CSV path evidence"),
