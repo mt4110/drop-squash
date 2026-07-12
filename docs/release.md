@@ -199,7 +199,8 @@ cargo run -p xtask -- release-notes-check path/to/release-notes.md
 ```
 Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after
 `docs/manual-qa.md` records the tested public `DropSquash.dmg` and every row in
-`docs/release-blockers.md` is `Verified` with a traceable Evidence reference.
+`docs/release-blockers.md` is `Verified` with concrete Completion evidence and
+a traceable Evidence reference.
 The publish check also requires the release notes `Git commit` field to match
 the current `HEAD`, so rebuild and recheck the artifact after any final commit.
 The manual QA `App build` field must also name the current `HEAD`, so rerun

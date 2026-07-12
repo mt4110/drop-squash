@@ -2,6 +2,7 @@ use super::Entry;
 
 pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "docs/release-blockers.md"),
+    ("docs/release.md", "concrete Completion evidence"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
     ("docs/productization.md", "docs/release-blockers.md"),

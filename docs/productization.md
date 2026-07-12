@@ -67,7 +67,7 @@ failed conversion does not count trial
 larger output is treated as failure
 original is never moved without verified success
 app is signed, notarized, and opens without Gatekeeper warning
-`docs/release-blockers.md` rows are Verified with traceable evidence
+`docs/release-blockers.md` rows are Verified with concrete Completion evidence and traceable Evidence reference
 privacy claims match implementation
 license secrets are not in the repository
 ```

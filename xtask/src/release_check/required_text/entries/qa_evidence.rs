@@ -48,6 +48,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "release notes `SHA-256` matching the manual QA `App artifact`",
     ),
+    ("docs/qa-evidence.md", "concrete Completion evidence"),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
     ("docs/qa-evidence.md", "release-notes-check"),
     ("docs/qa-evidence.md", "release-notes-prepare"),
