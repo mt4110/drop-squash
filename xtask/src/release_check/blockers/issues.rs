@@ -11,6 +11,8 @@ pub(super) struct Issues<'a> {
     pub mismatched_urls: Vec<&'a str>,
     pub unclassified: Vec<&'a str>,
     pub unknown_classifications: Vec<&'a str>,
+    pub duplicate_rows: Vec<&'a str>,
+    pub duplicate_classifications: Vec<&'a str>,
 }
 
 impl Issues<'_> {
@@ -25,11 +27,13 @@ impl Issues<'_> {
             && self.mismatched_urls.is_empty()
             && self.unclassified.is_empty()
             && self.unknown_classifications.is_empty()
+            && self.duplicate_rows.is_empty()
+            && self.duplicate_classifications.is_empty()
     }
 
     pub(super) fn format(self, path: &Path) -> String {
         format!(
-            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}",
+            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}",
             path.display(),
             join_prefix("missing ", self.missing),
             join_prefix(" invalid status ", self.invalid),
@@ -40,7 +44,12 @@ impl Issues<'_> {
             join_prefix(" misplaced record target ", self.misplaced),
             join_prefix(" mismatched URL pair ", self.mismatched_urls),
             join_prefix(" unclassified ", self.unclassified),
-            join_prefix(" unknown classification ", self.unknown_classifications)
+            join_prefix(" unknown classification ", self.unknown_classifications),
+            join_prefix(" duplicate release blocker row ", self.duplicate_rows),
+            join_prefix(
+                " duplicate evidence classification row ",
+                self.duplicate_classifications,
+            )
         )
     }
 }

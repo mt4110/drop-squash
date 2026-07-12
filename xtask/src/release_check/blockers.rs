@@ -1,6 +1,7 @@
 use std::path::Path;
 
 mod completion;
+mod duplicates;
 mod evidence_class;
 mod evidence_ref;
 mod issues;
@@ -31,6 +32,8 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let mismatched_urls = url_pairs::mismatched_verified_url_pairs(&text);
     let unclassified = evidence_class::unclassified_blockers(&text);
     let unknown_classifications = evidence_class::unknown_classification_rows(&text);
+    let duplicate_rows = duplicates::release_blocker_rows(&text);
+    let duplicate_classifications = duplicates::classification_rows(&text);
     let issues = issues::Issues {
         missing,
         invalid,
@@ -42,6 +45,8 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         mismatched_urls,
         unclassified,
         unknown_classifications,
+        duplicate_rows,
+        duplicate_classifications,
     };
     if issues.is_empty() {
         return Ok(());
