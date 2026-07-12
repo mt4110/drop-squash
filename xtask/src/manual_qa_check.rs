@@ -7,6 +7,7 @@ mod fields;
 mod license;
 mod requirements;
 mod rows;
+mod secrets;
 mod validation;
 use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};
 
@@ -26,7 +27,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 
 pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
-    let mut missing = Vec::new();
+    let mut missing = secrets::validate(&text);
     let mut labels = Vec::new();
     let mut rows = Vec::new();
     for line in text.lines() {

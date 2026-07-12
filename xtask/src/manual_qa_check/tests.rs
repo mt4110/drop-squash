@@ -1001,6 +1001,19 @@ fn reports_checksum_result_without_digest() {
 }
 
 #[test]
+fn reports_secret_like_manual_qa_values() {
+    let (_directory, path) = write_manual_qa(
+        "| Apple notary log | Accepted | accepted with APPLE_PASSWORD=not-for-release |\n\
+| Valid sandbox activation | Pro state | raw license key: test-key was entered |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("secret-like value")));
+}
+
+#[test]
 fn reports_checksum_result_without_sha256sums_output() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
