@@ -33,3 +33,28 @@ pub(super) const EVIDENCE: [&str; 22] = [
     "Known limitations",
     "Support contact",
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::URL;
+
+    #[test]
+    fn release_url_pairs_point_to_required_release_note_url_fields() {
+        let missing = crate::release_url_fields::PAIRS
+            .iter()
+            .filter(|(_, field)| !URL.iter().any(|(label, _)| label == field))
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty());
+    }
+
+    #[test]
+    fn release_url_pairs_point_to_required_blockers() {
+        let missing = crate::release_url_fields::PAIRS
+            .iter()
+            .filter(|(blocker, _)| !crate::release_check::required_blockers().contains(blocker))
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty());
+    }
+}
