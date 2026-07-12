@@ -20,6 +20,10 @@ run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- manual-qa-check
 run: cargo run -p xtask -- release-check
+uses: pnpm/action-setup@v4
+  version: 10.34.0
+uses: actions/setup-node@v4
+  node-version: 24.16.0
 run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 run: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
@@ -52,6 +56,10 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- manual-qa-check",
+            "pnpm/action-setup@v4",
+            "version: 10.34.0",
+            "actions/setup-node@v4",
+            "node-version: 24.16.0",
             "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
             "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
             "cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg",
