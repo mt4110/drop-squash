@@ -7,6 +7,7 @@ const CHECKSUM: &str =
     "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`";
 const CODESIGN: &str = "Codesign verification";
 const NOTARIZATION: &str = "Notarization staple verification";
+const GATEKEEPER: &str = "Gatekeeper open test";
 
 pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
     let Some(name) = app_artifact_name(rows) else {
@@ -15,7 +16,7 @@ pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
     if !name.to_ascii_lowercase().ends_with(".dmg") {
         return;
     }
-    for label in [ARTIFACT_CHECK, CHECKSUM, CODESIGN, NOTARIZATION] {
+    for label in [ARTIFACT_CHECK, CHECKSUM, CODESIGN, NOTARIZATION, GATEKEEPER] {
         if let Some(result) = value_for(rows, label) {
             require_same_artifact(label, result, &name, missing);
         }

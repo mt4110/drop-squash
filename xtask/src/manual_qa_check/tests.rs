@@ -357,6 +357,28 @@ fn reports_release_command_results_for_different_dmg_artifact() {
 }
 
 #[test]
+fn reports_gatekeeper_result_without_dmg_artifact_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account without Gatekeeper warning |\n",
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Gatekeeper open test") && error.contains("DropSquash.dmg")));
+}
+
+#[test]
 fn reports_checksum_result_for_different_dmg_digest() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");
@@ -1197,7 +1219,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Notarization staple verification" {
             text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for public DropSquash.dmg |\n");
         } else if check == "Gatekeeper open test" {
-            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account without Gatekeeper warning |\n");
+            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh macOS account without Gatekeeper warning |\n");
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"

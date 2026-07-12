@@ -19,7 +19,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
     ("docs/qa-evidence.md", "concrete identity fields"),
-    ("docs/qa-evidence.md", "same `.dmg` file evidence"),
+    (
+        "docs/qa-evidence.md",
+        "same `.dmg` file evidence for artifact/checksum/signing/Gatekeeper rows",
+    ),
     ("docs/qa-evidence.md", "public signing/notary evidence"),
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     (
