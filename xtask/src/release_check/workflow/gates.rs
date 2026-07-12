@@ -38,6 +38,8 @@ pub(super) const RELEASE: &[&str] = &[
     "dropsquash-unsigned-dmg-checksum",
     "cargo run -p xtask -- macos-signing-check",
     "Block unsigned Phase 0 release",
+    "Signed release packaging is not implemented.",
+    "exit 1",
 ];
 
 pub(super) const DESKTOP: &[&str] = &[

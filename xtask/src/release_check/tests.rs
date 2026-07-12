@@ -36,6 +36,8 @@ uses: actions/upload-artifact@v4
 name: dropsquash-unsigned-dmg-checksum
 run: cargo run -p xtask -- macos-signing-check
 name: Block unsigned Phase 0 release
+echo "Signed release packaging is not implemented."
+exit 1
 "#,
     );
 
@@ -73,7 +75,9 @@ fn reports_missing_release_workflow_gates() {
             "actions/upload-artifact@v4",
             "dropsquash-unsigned-dmg-checksum",
             "cargo run -p xtask -- macos-signing-check",
-            "Block unsigned Phase 0 release"
+            "Block unsigned Phase 0 release",
+            "Signed release packaging is not implemented.",
+            "exit 1"
         ]
     );
 }
