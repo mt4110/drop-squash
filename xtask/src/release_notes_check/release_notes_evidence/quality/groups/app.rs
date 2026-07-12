@@ -2,7 +2,12 @@ use super::Groups;
 
 pub(super) fn for_label(label: &str) -> Option<Groups> {
     match label {
-        "Manual QA record" => Some(&[&["docs/manual-qa.md"], &["dropsquash.dmg"]]),
+        "Manual QA record" => Some(&[
+            &["docs/manual-qa.md"],
+            &["dropsquash.dmg"],
+            &["manual-qa-check"],
+            &["passed", "passes"],
+        ]),
         "Conversion safety evidence" => Some(&[
             &["cancellation", "cancelled"],
             &["failed conversion", "failure"],
