@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { canSubmitLicenseKey, normalizedLicenseKey } from "../lib/license";
 
 type LicensePanelProps = {
   isPro: boolean;
@@ -13,8 +14,8 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const key = licenseKey.trim();
-    if (key.length === 0) {
+    const key = normalizedLicenseKey(licenseKey);
+    if (!canSubmitLicenseKey(key)) {
       return;
     }
     setIsSubmitting(true);
@@ -61,7 +62,7 @@ export function LicensePanel({ isPro, onActivate, onForget }: LicensePanelProps)
             value={licenseKey}
             onChange={(event) => setLicenseKey(event.target.value)}
           />
-          <button disabled={isSubmitting || licenseKey.trim().length === 0} type="submit">
+          <button disabled={isSubmitting || !canSubmitLicenseKey(licenseKey)} type="submit">
             {isSubmitting ? "Activating..." : "Activate"}
           </button>
         </form>
