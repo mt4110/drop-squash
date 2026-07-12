@@ -32,7 +32,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "same `.dmg` file evidence for artifact/checksum/signing/Gatekeeper rows",
     ),
-    ("docs/qa-evidence.md", "public signing/notary evidence"),
+    (
+        "docs/qa-evidence.md",
+        "public signing/notary/stapler/`spctl` evidence",
+    ),
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     (
         "docs/qa-evidence.md",

@@ -1056,7 +1056,7 @@ fn reports_incomplete_release_candidate_results() {
 fn reports_release_candidate_results_without_public_context() {
     let (_directory, path) = write_manual_qa(
         "| Codesign verification | Developer ID signature | codesign verified Developer ID Application signature for DropSquash.dmg |\n\
-| Notarization staple verification | Notary assessment | notary accepted and staple/spctl assessment passed for DropSquash.dmg |\n",
+| Notarization staple verification | Notary assessment | notary accepted, stapler validate passed, and spctl accepted for DropSquash.dmg |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1072,13 +1072,37 @@ fn reports_release_candidate_results_without_public_context() {
 fn reports_release_candidate_results_without_dmg_context() {
     let (_directory, path) = write_manual_qa(
         "| Codesign verification | Developer ID signature | codesign verified Developer ID Application signature for public artifact |\n\
-| Notarization staple verification | Notary assessment | notary accepted and staple/spctl assessment passed for public artifact |\n",
+| Notarization staple verification | Notary assessment | notary accepted, stapler validate passed, and spctl accepted for public artifact |\n",
     );
     let missing = check_file(&path).unwrap();
 
     assert!(missing
         .iter()
         .any(|error| error.contains("Codesign verification")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization staple verification")));
+}
+
+#[test]
+fn reports_notarization_result_without_spctl_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Notarization staple verification | Notary assessment | notary accepted and stapler validate passed for public DropSquash.dmg |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization staple verification")));
+}
+
+#[test]
+fn reports_notarization_result_without_stapler_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Notarization staple verification | Notary assessment | notary accepted and spctl accepted for public DropSquash.dmg |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
     assert!(missing
         .iter()
         .any(|error| error.contains("Notarization staple verification")));
@@ -1298,7 +1322,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Codesign verification" {
             text.push_str("| Codesign verification | Passes | codesign verified Developer ID Application signature for public DropSquash.dmg |\n");
         } else if check == "Notarization staple verification" {
-            text.push_str("| Notarization staple verification | Passes | notary accepted and staple/spctl assessment passed for public DropSquash.dmg |\n");
+            text.push_str("| Notarization staple verification | Passes | notary accepted, stapler validate passed, and spctl accepted for public DropSquash.dmg |\n");
         } else if check == "Gatekeeper open test" {
             text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh macOS account without Gatekeeper warning |\n");
         } else {

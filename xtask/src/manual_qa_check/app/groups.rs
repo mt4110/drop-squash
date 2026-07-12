@@ -100,7 +100,13 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &[&["macos-signing-check"], &["passed", "passes"], &["release environment"]]
         }
         "Codesign verification" => &[&["codesign"], &["developer id"], &["public"], &["dropsquash.dmg"]],
-        "Notarization staple verification" => &[&["notary", "notarization"], &["staple", "spctl"], &["public"], &["dropsquash.dmg"]],
+        "Notarization staple verification" => &[
+            &["notary", "notarization"],
+            &["stapler", "staple"],
+            &["spctl"],
+            &["public"],
+            &["dropsquash.dmg"],
+        ],
         "Gatekeeper open test" => &[
             &["gatekeeper"],
             &["opened", "opens"],

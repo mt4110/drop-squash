@@ -81,11 +81,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "signing/notary evidence without public `DropSquash.dmg`",
+        "signing/notary/stapler/`spctl` evidence without public `DropSquash.dmg`",
     ),
     (
         "docs/qa-evidence.md",
-        "public signing/notary evidence for `DropSquash.dmg`",
+        "public signing/notary/stapler/`spctl` evidence for `DropSquash.dmg`",
     ),
     (
         "docs/qa-evidence.md",

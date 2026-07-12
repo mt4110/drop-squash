@@ -171,9 +171,9 @@ whether only the fingerprint/instance fields were present.
 
 Release candidate results must name the artifact or command evidence. Record
 the `DropSquash.dmg` path/name, SHA-256 line, Developer ID codesign result,
-notary/staple assessment, and Gatekeeper clean/fresh-machine observation where
-the row asks for them. When `App artifact` is a `.dmg`, artifact-check,
-checksum, codesign, notary/staple, and Gatekeeper result rows must name the
+notary, stapler, `spctl` assessment, and Gatekeeper clean/fresh-machine
+observation where the row asks for them. When `App artifact` is a `.dmg`,
+artifact-check, checksum, codesign, notary/stapler/`spctl`, and Gatekeeper result rows must name the
 same public `DropSquash.dmg` file. Artifact-check and checksum rows must
 include the `App artifact` absolute path.
 
@@ -192,5 +192,5 @@ include the `App artifact` absolute path.
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character SHA-256 digest and `DropSquash.dmg` recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
-| Notarization staple verification | Public DMG/app artifact passes notary/staple assessment |  |
+| Notarization staple verification | Public DMG/app artifact passes notary, stapler, and `spctl` assessment |  |
 | Gatekeeper open test | Signed, notarized, stapled app from public `DropSquash.dmg` opens cleanly without Gatekeeper warning |  |
