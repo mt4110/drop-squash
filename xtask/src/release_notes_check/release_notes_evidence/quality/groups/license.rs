@@ -11,6 +11,8 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             Some(&[&["intended product"], &["test buyer"], &["order"]])
         }
         "Valid sandbox activation" => Some(&[
+            &["lemon squeezy"],
+            &["sandbox"],
             &["activating"],
             &["disabled"],
             &["pro"],
