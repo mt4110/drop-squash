@@ -1,42 +1,46 @@
-use super::row;
+use super::{row, REQUIRED_BLOCKERS};
 
 mod reference;
 
-const EXPECTED_RECORD_TARGETS: [(&str, &str); 17] = [
-    ("Packaged macOS manual QA", "`docs/manual-qa.md`"),
-    ("Lemon Squeezy product setup", "`docs/manual-qa.md`"),
-    ("Lemon Squeezy sandbox purchase", "`docs/manual-qa.md`"),
-    ("Empty key activation", "`docs/manual-qa.md`"),
-    ("Valid sandbox activation", "`docs/manual-qa.md`"),
-    ("Invalid license key handling", "`docs/manual-qa.md`"),
-    ("License network failure", "`docs/manual-qa.md`"),
-    ("Local license forget", "`docs/manual-qa.md`"),
-    ("Public website deployment", "`https://...`"),
-    ("Refund policy finalized", "`https://...`"),
-    ("Live checkout link", "`https://...`"),
-    ("Signed DMG", "Release notes"),
-    ("Notarized and stapled DMG", "Release notes"),
-    ("Gatekeeper clean-machine open", "`docs/manual-qa.md`"),
-    ("Benchmark release set", "`docs/manual-qa.md`"),
-    ("Published checksum", "GitHub Release"),
-    ("Homebrew cask install", "Homebrew tap PR"),
-];
-
 pub(super) fn misplaced_record_targets(text: &str) -> Vec<&'static str> {
-    EXPECTED_RECORD_TARGETS
+    REQUIRED_BLOCKERS
         .iter()
         .copied()
-        .filter(|(blocker, expected)| {
+        .filter(|blocker| {
+            let Some(expected) = expected_target(blocker) else {
+                return true;
+            };
             row::find(text, blocker)
                 .and_then(row::record_in)
-                .is_some_and(|actual| actual != *expected)
+                .is_some_and(|actual| actual != expected)
         })
-        .map(|(blocker, _)| blocker)
         .collect()
 }
 
 pub(super) fn reference_matches_record_target(blocker: &str, reference: &str) -> bool {
     reference::matches_record_target(blocker, reference)
+}
+
+pub(super) fn expected_target(blocker: &str) -> Option<&'static str> {
+    match blocker {
+        "Packaged macOS manual QA"
+        | "Lemon Squeezy product setup"
+        | "Lemon Squeezy sandbox purchase"
+        | "Empty key activation"
+        | "Valid sandbox activation"
+        | "Invalid license key handling"
+        | "License network failure"
+        | "Local license forget"
+        | "Gatekeeper clean-machine open"
+        | "Benchmark release set" => Some("`docs/manual-qa.md`"),
+        "Public website deployment" | "Refund policy finalized" | "Live checkout link" => {
+            Some("`https://...`")
+        }
+        "Signed DMG" | "Notarized and stapled DMG" => Some("Release notes"),
+        "Published checksum" => Some("GitHub Release"),
+        "Homebrew cask install" => Some("Homebrew tap PR"),
+        _ => None,
+    }
 }
 
 #[cfg(test)]

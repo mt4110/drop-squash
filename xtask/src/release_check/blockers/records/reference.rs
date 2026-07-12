@@ -1,27 +1,24 @@
-use super::EXPECTED_RECORD_TARGETS;
-
 pub(super) fn matches_record_target(blocker: &str, reference: &str) -> bool {
-    let Some((_, target)) = EXPECTED_RECORD_TARGETS
-        .iter()
-        .find(|(candidate, _)| *candidate == blocker)
-    else {
-        return false;
-    };
-    match *target {
-        "`docs/manual-qa.md`" => reference == "`docs/manual-qa.md`",
-        "`https://...`" if blocker == "Public website deployment" => is_public_website(reference),
-        "`https://...`" if blocker == "Refund policy finalized" => is_refund_policy(reference),
-        "`https://...`" if blocker == "Live checkout link" => is_live_checkout(reference),
-        "`https://...`" => reference.starts_with("https://"),
-        "GitHub Release" => has_expected_url(
+    match super::expected_target(blocker) {
+        None => false,
+        Some("`docs/manual-qa.md`") => reference == "`docs/manual-qa.md`",
+        Some("`https://...`") if blocker == "Public website deployment" => {
+            is_public_website(reference)
+        }
+        Some("`https://...`") if blocker == "Refund policy finalized" => {
+            is_refund_policy(reference)
+        }
+        Some("`https://...`") if blocker == "Live checkout link" => is_live_checkout(reference),
+        Some("`https://...`") => reference.starts_with("https://"),
+        Some("GitHub Release") => has_expected_url(
             reference,
             "GitHub Release",
             "mt4110/drop-squash/releases/tag/",
         ),
-        "Homebrew tap PR" => {
+        Some("Homebrew tap PR") => {
             has_expected_url(reference, "Homebrew tap PR", "mt4110/homebrew-tap/pull/")
         }
-        other => reference == other,
+        Some(other) => reference == other,
     }
 }
 
