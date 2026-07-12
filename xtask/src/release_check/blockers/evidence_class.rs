@@ -39,6 +39,7 @@ fn matches_classification(cells: &[&str], blocker: &str) -> bool {
     cells.first() == Some(&blocker)
         && ALLOWED_CLASSES.contains(&cells[1])
         && is_actionable(cells[2])
+        && has_required_action_detail(blocker, cells[2])
         && is_named_owner(cells[3])
 }
 
@@ -54,6 +55,15 @@ fn is_named_owner(value: &str) -> bool {
 
 fn has_placeholder(value: &str) -> bool {
     value.contains("...") || super::placeholders::has_token(value)
+}
+
+fn has_required_action_detail(blocker: &str, action: &str) -> bool {
+    match blocker {
+        "Packaged macOS manual QA" => {
+            action.contains("DropSquash.app") && action.contains("DropSquash.dmg")
+        }
+        _ => true,
+    }
 }
 
 #[cfg(test)]

@@ -8,8 +8,9 @@ fn accepts_complete_evidence_classes() {
         .enumerate()
         .map(|(index, blocker)| {
             let class = ALLOWED_CLASSES[index % ALLOWED_CLASSES.len()];
+            let action = action_for(blocker);
             format!(
-                "| {blocker} | {class} | Capture concrete release evidence | Record the evidence in the named location |\n"
+                "| {blocker} | {class} | {action} | Record the evidence in the named location |\n"
             )
         })
         .collect::<String>();
@@ -75,4 +76,22 @@ fn reports_unknown_evidence_class() {
     let unclassified = unclassified_blockers(&text);
 
     assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_packaged_manual_action_without_canonical_artifacts() {
+    let text = "| Packaged macOS manual QA | Manual packaged-app | Run the packaged artifact through manual QA | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Packaged macOS manual QA"));
+}
+
+fn action_for(blocker: &str) -> &'static str {
+    match blocker {
+        "Packaged macOS manual QA" => {
+            "Run packaged DropSquash.app or DropSquash.dmg through manual QA"
+        }
+        _ => "Capture concrete release evidence",
+    }
 }
