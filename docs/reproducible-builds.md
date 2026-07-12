@@ -13,6 +13,12 @@ nix develop --command node -v
 nix develop --command pnpm -v
 ```
 
+Build the unsigned local QA DMG from the pinned development shell with:
+
+```bash
+nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+```
+
 Do not add mise or another version manager while Nix can express the required
 developer tools. Nix is not a runtime dependency.
 

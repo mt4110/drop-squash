@@ -41,6 +41,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/benchmarking.md", "--release-set"),
     ("docs/benchmarking.md", "absolute `--output-dir`"),
     ("docs/benchmarking.md", "20%"),
+    (
+        "docs/reproducible-builds.md",
+        "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
+    ),
     ("website/README.md", "docs/release-blockers.md"),
     ("apps/desktop/src-tauri/tauri.conf.json", "!\"updater\""),
 ];
