@@ -76,6 +76,37 @@ fn save_replaces_existing_cache() {
 }
 
 #[test]
+fn forget_path_removes_cache_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+    LicenseCache {
+        valid: true,
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        ..LicenseCache::default()
+    }
+    .save_to_path(&path)
+    .unwrap();
+
+    LicenseCache::forget_path(&path).unwrap();
+
+    assert!(!path.exists());
+    assert_eq!(
+        LicenseCache::load_or_default(&path).unwrap(),
+        LicenseCache::default()
+    );
+}
+
+#[test]
+fn forget_path_accepts_missing_cache_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("license.json");
+
+    LicenseCache::forget_path(&path).unwrap();
+
+    assert!(!path.exists());
+}
+
+#[test]
 fn pro_requires_valid_cache_inside_grace_window() {
     let cache = LicenseCache {
         instance_id: Some("instance-1".to_string()),

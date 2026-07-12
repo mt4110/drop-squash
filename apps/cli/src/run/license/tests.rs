@@ -54,6 +54,7 @@ fn forget_clears_only_local_license_cache() {
 
     forget_at_path(&path).unwrap();
 
+    assert!(!path.exists());
     assert_eq!(
         LicenseCache::load_or_default(&path).unwrap(),
         LicenseCache::default()

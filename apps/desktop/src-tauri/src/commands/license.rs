@@ -63,7 +63,7 @@ pub async fn forget_license() -> dropsquash_core::Result<LicenseState> {
 }
 
 fn forget_license_at_path(path: &Path) -> dropsquash_core::Result<()> {
-    LicenseCache::default().save_to_path(path)
+    LicenseCache::forget_path(path)
 }
 
 pub async fn current_license_state() -> dropsquash_core::Result<LicenseState> {

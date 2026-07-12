@@ -33,7 +33,7 @@ pub fn forget() -> dropsquash_core::Result<()> {
 }
 
 fn forget_at_path(path: &Path) -> dropsquash_core::Result<()> {
-    LicenseCache::default().save_to_path(path)
+    LicenseCache::forget_path(path)
 }
 
 fn forget_lines() -> Vec<String> {

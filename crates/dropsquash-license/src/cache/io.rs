@@ -33,6 +33,14 @@ impl LicenseCache {
             }
         }
     }
+
+    pub fn forget_path(path: &Path) -> dropsquash_core::Result<()> {
+        match std::fs::remove_file(path) {
+            Ok(()) => Ok(()),
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+            Err(error) => Err(error.into()),
+        }
+    }
 }
 
 fn temporary_path_for(path: &Path) -> PathBuf {
