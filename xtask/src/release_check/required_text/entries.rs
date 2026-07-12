@@ -1,110 +1,15 @@
-pub(super) const REQUIRED_TEXT: [(&str, &str); 66] = [
-    ("docs/release.md", "docs/release-blockers.md"),
-    ("docs/release.md", "traceable Evidence"),
-    ("docs/release-blockers.md", "must include the public URL"),
-    ("docs/productization.md", "docs/release-blockers.md"),
-    ("docs/productization.md", "final publish gate"),
-    (
-        "docs/productization.md",
-        "refund/support contact copy gates",
-    ),
-    (
-        "docs/productization.md",
-        "conversion/queue/Trash/license action-state release notes evidence",
-    ),
-    (
-        "docs/productization.md",
-        "same-DMG manual QA signing evidence",
-    ),
-    ("docs/productization.md", "Gatekeeper no-warning evidence"),
-    (
-        "docs/productization.md",
-        "release-notes URL reference matching",
-    ),
-    ("README.md", "macOS today"),
-    ("README.md", "Windows and Linux support is planned"),
-    (
-        "Cargo.toml",
-        "repository = \"https://github.com/mt4110/drop-squash\"",
-    ),
-    ("docs/product.md", "macOS today"),
-    ("docs/product.md", "Windows and Linux support is planned"),
-    ("docs/qa-evidence.md", "docs/release-blockers.md"),
-    (
-        "docs/qa-evidence.md",
-        "license, refund, support contact copy",
-    ),
-    ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
-    ("docs/qa-evidence.md", "file names"),
-    ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
-    ("docs/qa-evidence.md", "concrete identity fields"),
-    ("docs/qa-evidence.md", "same `.dmg` file evidence"),
-    ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
-    ("docs/qa-evidence.md", "--restore-state"),
-    ("docs/qa-evidence.md", "Tauri DMG output is normalized"),
-    ("docs/qa-evidence.md", "cargo test -p xtask normalize_dmg"),
-    ("docs/qa-evidence.md", "non-DMG targets are rejected"),
-    (
-        "docs/qa-evidence.md",
-        "canonical `DropSquash.dmg` file name",
-    ),
-    ("docs/qa-evidence.md", "wrong-name targets are rejected"),
-    (
-        "docs/qa-evidence.md",
-        "artifact file name instead of local parent directories",
-    ),
-    ("docs/qa-evidence.md", "publish-check"),
-    (
-        "docs/qa-evidence.md",
-        "release blocker URLs matching the release notes URLs",
-    ),
-    (
-        "docs/qa-evidence.md",
-        "public publish references that point to the release notes URLs",
-    ),
-    ("docs/qa-evidence.md", "traceable Evidence reference"),
-    ("docs/qa-evidence.md", "release-notes-check"),
-    (
-        "docs/qa-evidence.md",
-        "conversion/queue/Trash/license action-state evidence",
-    ),
-    (
-        "docs/qa-evidence.md",
-        "post-encode postprocess/history guard",
-    ),
-    ("docs/privacy.md", "dropsquash receipt <output.mp4>"),
-    ("docs/qa-evidence.md", "UDIF trailer"),
-    ("docs/qa-evidence.md", "wrong DMG names"),
-    ("docs/qa-evidence.md", "non-canonical homepages"),
-    ("docs/qa-evidence.md", "Public website deployment"),
-    ("docs/qa-evidence.md", "Live checkout link"),
-    ("docs/qa-evidence.md", "Published checksum"),
-    ("docs/qa-evidence.md", "Homebrew cask install"),
-    ("docs/qa-evidence.md", "versioned `DropSquash.dmg` artifact"),
-    ("docs/qa-evidence.md", "`auto_updates false`"),
-    ("docs/qa-evidence.md", "declares no in-app auto-update"),
-    ("docs/qa-evidence.md", "malformed App Store Connect key ids"),
-    ("docs/qa-evidence.md", "malformed issuer UUIDs"),
-    ("docs/licensing.md", "Lemon Squeezy sandbox purchase"),
-    (
-        "docs/licensing.md",
-        "available during Trial and Locked states",
-    ),
-    ("docs/release.md", "Empty key activation"),
-    ("docs/release.md", "Activate is disabled"),
-    ("docs/release.md", "disabled while Activating"),
-    ("docs/release.md", "disabled while Forgetting"),
-    ("docs/release.md", "License network failure"),
-    ("docs/release.md", "release blocker URLs to match"),
-    ("docs/release.md", "10-character `APPLE_API_KEY`"),
-    ("docs/release.md", "APPLE_API_ISSUER"),
-    (
-        "docs/benchmarking.md",
-        "at least three private local samples",
-    ),
-    ("docs/benchmarking.md", "--release-set"),
-    ("docs/benchmarking.md", "absolute `--output-dir`"),
-    ("docs/benchmarking.md", "20%"),
-    ("website/README.md", "docs/release-blockers.md"),
-    ("apps/desktop/src-tauri/tauri.conf.json", "!\"updater\""),
+mod core_docs;
+mod distribution_docs;
+mod qa_evidence;
+
+type Entry = (&'static str, &'static str);
+
+const GROUPS: &[&[Entry]] = &[
+    core_docs::ENTRIES,
+    qa_evidence::ENTRIES,
+    distribution_docs::ENTRIES,
 ];
+
+pub(super) fn required_text() -> impl Iterator<Item = Entry> {
+    GROUPS.iter().flat_map(|group| group.iter().copied())
+}

@@ -3,7 +3,7 @@ use std::fs;
 mod entries;
 
 pub(super) fn check() -> Result<(), String> {
-    for (path, needle) in entries::REQUIRED_TEXT {
+    for (path, needle) in entries::required_text() {
         if let Some(rejected) = needle.strip_prefix('!') {
             reject_text(path, rejected)?;
         } else {
