@@ -10,7 +10,12 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         ],
         "Reveal privacy receipt" => &[&["finder"], &[".privacy.json"], &["selected"]],
         "Duplicate output naming" => &[&["squashed-2"], &[".mp4"]],
-        "Cancellation" => &[&["ready"], &["trial", "history"]],
+        "Cancellation" => &[
+            &["ready"],
+            &["trial"],
+            &["history"],
+            &["no new success", "no success"],
+        ],
         "Multi-file queue" => &[&["three", "3"], &["one active", "sequential"]],
         "Queued job cancellation" => &[&["cancelled"], &["never starts", "never started"]],
         "Batch summary" => &[

@@ -763,6 +763,16 @@ fn reports_larger_output_without_original_evidence() {
 }
 
 #[test]
+fn reports_cancellation_without_success_history_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Cancellation | Large recording | App returns ready | app returned ready and trial history was checked |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Cancellation")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
