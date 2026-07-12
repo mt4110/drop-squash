@@ -25,11 +25,11 @@ fn mismatch(
 }
 
 fn reference_url(value: &str) -> Option<&str> {
-    value.split_whitespace().find(|part| {
-        part.starts_with("https://github.com/")
-            || part.starts_with("https://")
-            || part.starts_with("http://")
-    })
+    let mut urls = value
+        .split_whitespace()
+        .filter(|part| part.starts_with("https://github.com/") || part.starts_with("https://"));
+    let first = urls.next()?;
+    urls.next().is_none().then_some(first)
 }
 
 fn verified_reference<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {

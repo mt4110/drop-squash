@@ -39,6 +39,17 @@ fn reports_reference_with_extra_url_before_expected_url() {
 }
 
 #[test]
+fn reports_reference_with_extra_url_after_expected_url() {
+    let blockers = "\
+| Homebrew cask install | Verified | DropSquash.dmg cask has auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 https://github.com/mt4110/homebrew-tap/pull/2 | Homebrew tap PR |
+";
+    let notes = release_notes("v0.1.0", "1");
+    let mismatched = mismatched(blockers, &notes);
+
+    assert!(mismatched.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn ignores_blocked_references() {
     let blockers = "\
 | Published checksum | Blocked | SHA256SUMS attached for DropSquash.dmg | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
