@@ -33,6 +33,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/manual-qa.md",
         "existing valid cache remains intact and has no raw key",
     ),
+    (
+        "docs/manual-qa.md",
+        "Forgetting state disables action; license cache removed",
+    ),
     ("docs/release.md", "10-character `APPLE_API_KEY`"),
     ("docs/release.md", "APPLE_API_ISSUER"),
     ("docs/release.md", "all-zero value"),

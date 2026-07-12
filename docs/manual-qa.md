@@ -165,7 +165,7 @@ whether only the fingerprint/instance fields were present.
 | Invalid key activation | Activating state disables submit; friendly license error; license cache has no raw key |  |
 | Valid sandbox activation | Activating state disables submit; Pro state; license cache has no raw key |  |
 | License network failure | Friendly network error; existing valid cache remains intact and has no raw key |  |
-| Forget license on this Mac | Forgetting state disables action; local cache clears; app returns to trial or locked state |  |
+| Forget license on this Mac | Forgetting state disables action; license cache removed; app returns to trial or locked state |  |
 
 ## Release Candidate
 
