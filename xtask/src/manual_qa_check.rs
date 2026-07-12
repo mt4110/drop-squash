@@ -5,7 +5,7 @@ mod artifact_consistency;
 mod benchmark;
 mod fields;
 mod license;
-mod requirements;
+pub(crate) mod requirements;
 mod rows;
 mod secrets;
 mod validation;

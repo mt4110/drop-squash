@@ -64,3 +64,6 @@ pub(super) const MANUAL_BLOCKERS: [(&str, &[&str]); 10] = [
         ],
     ),
 ];
+
+#[cfg(test)]
+mod tests;

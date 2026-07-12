@@ -1,4 +1,4 @@
-pub(super) const REQUIRED_FIELDS: [&str; 11] = [
+pub(crate) const REQUIRED_FIELDS: [&str; 11] = [
     "App build",
     "App artifact",
     "macOS version",
@@ -12,7 +12,7 @@ pub(super) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(super) const REQUIRED_CHECKS: [&str; 36] = [
+pub(crate) const REQUIRED_CHECKS: [&str; 36] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",
