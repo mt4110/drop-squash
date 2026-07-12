@@ -124,7 +124,7 @@ fn reports_packaged_manual_action_without_public_dmg() {
 
 #[test]
 fn reports_public_url_classification_without_matching_owner_field() {
-    let text = "| Published checksum | Distribution | Attach SHA256SUMS containing the public DropSquash.dmg line | Release owner |\n";
+    let text = "| Published checksum | Distribution | Attach SHA256SUMS containing the public DropSquash.dmg SHA-256 line to the GitHub Release | Release owner |\n";
 
     let unclassified = unclassified_blockers(text);
 
@@ -182,7 +182,9 @@ fn action_for(blocker: &str) -> &'static str {
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"
         }
-        "Published checksum" => "Attach SHA256SUMS containing public DropSquash.dmg SHA-256 line",
+        "Published checksum" => {
+            "Attach SHA256SUMS containing public DropSquash.dmg SHA-256 line to the GitHub Release"
+        }
         "Homebrew cask install" => {
             "Open tap PR and verify versioned DropSquash.dmg install evidence"
         }
