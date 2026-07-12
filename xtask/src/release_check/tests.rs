@@ -8,6 +8,9 @@ use super::workflow::{
 fn accepts_release_workflow_with_required_gates() {
     let missing = missing_release_workflow_gates(
         r#"
+tags:
+  - "v*.*.*"
+environment: production
 with:
   components: rustfmt, clippy
 run: cargo fmt --all -- --check
@@ -39,6 +42,9 @@ fn reports_missing_release_workflow_gates() {
     assert_eq!(
         missing,
         vec![
+            "tags:",
+            "\"v*.*.*\"",
+            "environment: production",
             "components: rustfmt, clippy",
             "cargo fmt --all -- --check",
             "cargo clippy --workspace --all-targets -- -D warnings",

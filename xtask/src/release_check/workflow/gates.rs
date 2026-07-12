@@ -10,6 +10,9 @@ pub(super) const CI: &[&str] = &[
 ];
 
 pub(super) const RELEASE: &[&str] = &[
+    "tags:",
+    "\"v*.*.*\"",
+    "environment: production",
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
     "cargo clippy --workspace --all-targets -- -D warnings",
