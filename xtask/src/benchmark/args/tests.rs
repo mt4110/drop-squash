@@ -118,6 +118,26 @@ fn release_set_requires_output_outside_repository() {
 }
 
 #[test]
+fn release_set_requires_csv_output() {
+    let output_dir = tempfile::tempdir().unwrap();
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "a.mov".to_string(),
+        "--input".to_string(),
+        "b.mov".to_string(),
+        "--input".to_string(),
+        "c.mov".to_string(),
+        "--output-dir".to_string(),
+        output_dir.path().display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--csv-output"));
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
 fn release_set_requires_csv_output_outside_repository() {
     let output_dir = tempfile::tempdir().unwrap();
     let error = BenchmarkArgs::parse(vec![
