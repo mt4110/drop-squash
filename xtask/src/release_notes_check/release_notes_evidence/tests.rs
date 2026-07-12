@@ -229,6 +229,19 @@ fn rejects_homebrew_tap_pr_without_sha256_digest() {
 }
 
 #[test]
+fn rejects_homebrew_install_without_versioned_artifact_context() {
+    let errors = check_text(
+        r#"
+- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for DropSquash.dmg artifact
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew install result")));
+}
+
+#[test]
 fn rejects_local_license_forget_without_cache_removal() {
     let errors = check_text(
         r#"

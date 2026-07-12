@@ -11,6 +11,7 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> Option<bool> 
             &["brew install"][..],
             &["--cask"],
             &["mt4110/tap/dropsquash"],
+            &["versioned"],
             &["dropsquash.dmg"],
         ][..],
         _ => return None,
