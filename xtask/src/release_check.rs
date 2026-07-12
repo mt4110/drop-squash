@@ -14,6 +14,7 @@ use std::path::Path;
 
 pub fn run() -> Result<(), String> {
     secret_files::reject_secret_files(Path::new("."))?;
+    secret_files::require_local_agent_ignore(Path::new(".gitignore"))?;
     desktop_capability::check_default_capability(Path::new(
         "apps/desktop/src-tauri/capabilities/default.json",
     ))?;

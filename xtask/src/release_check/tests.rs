@@ -1,4 +1,4 @@
-use super::secret_files::{is_secret_file, reject_secret_files};
+use super::secret_files::{is_secret_file, reject_secret_files, require_local_agent_ignore};
 use super::workflow::{
     missing_ci_workflow_gates, missing_desktop_workflow_gates, missing_release_workflow_gates,
     missing_security_workflow_gates,
@@ -227,6 +227,26 @@ fn ignores_local_agent_state_when_scanning_for_secrets() {
     write(directory.path(), ".codex/.env", "local-only");
 
     reject_secret_files(directory.path()).unwrap();
+}
+
+#[test]
+fn requires_local_agent_state_to_be_ignored() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join(".gitignore");
+    std::fs::write(&path, "/target/\n/.codex/\n").unwrap();
+
+    require_local_agent_ignore(&path).unwrap();
+}
+
+#[test]
+fn reports_missing_local_agent_ignore_rule() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join(".gitignore");
+    std::fs::write(&path, "/target/\n").unwrap();
+
+    let error = require_local_agent_ignore(&path).unwrap_err();
+
+    assert!(error.contains("/.codex/"));
 }
 
 fn write(root: &std::path::Path, name: &str, text: &str) {

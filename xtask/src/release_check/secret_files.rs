@@ -25,6 +25,15 @@ pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn require_local_agent_ignore(path: &Path) -> Result<(), String> {
+    let text = std::fs::read_to_string(path)
+        .map_err(|error| format!("failed to read {}: {error}", path.display()))?;
+    if text.lines().map(str::trim).any(|line| line == "/.codex/") {
+        return Ok(());
+    }
+    Err(format!("{} must ignore /.codex/", path.display()))
+}
+
 pub(super) fn is_secret_file(name: &str, extension: Option<&str>) -> bool {
     name == ".env"
         || name.starts_with(".env.")
