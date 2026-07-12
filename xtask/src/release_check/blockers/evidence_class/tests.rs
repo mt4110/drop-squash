@@ -141,6 +141,15 @@ fn reports_benchmark_action_without_external_csv_path() {
 }
 
 #[test]
+fn reports_checksum_action_without_public_sha256_artifact() {
+    let text = "| Published checksum | Distribution | Attach checksum file to the GitHub Release | GitHub Release URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Published checksum"));
+}
+
+#[test]
 fn reports_homebrew_action_without_versioned_artifact() {
     let text = "| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, DropSquash.dmg URL, matching SHA-256, auto_updates false, and zap cleanup path | Homebrew tap PR URL |\n";
 
@@ -155,6 +164,7 @@ fn action_for(blocker: &str) -> &'static str {
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"
         }
+        "Published checksum" => "Attach SHA256SUMS containing public DropSquash.dmg SHA-256 line",
         "Homebrew cask install" => {
             "Open tap PR and verify versioned DropSquash.dmg install evidence"
         }

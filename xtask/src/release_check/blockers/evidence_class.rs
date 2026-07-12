@@ -77,6 +77,11 @@ fn has_required_action_detail(blocker: &str, action: &str) -> bool {
             action.contains("public") && action.contains("DropSquash.dmg")
         }
         "Benchmark release set" => action.contains("absolute CSV path outside repo"),
+        "Published checksum" => {
+            action.contains("public")
+                && action.contains("DropSquash.dmg")
+                && action.contains("SHA-256")
+        }
         "Homebrew cask install" => {
             action.contains("versioned") && action.contains("DropSquash.dmg")
         }
