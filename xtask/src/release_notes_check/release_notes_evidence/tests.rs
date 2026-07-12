@@ -685,6 +685,21 @@ fn rejects_release_evidence_with_embedded_placeholders() {
 }
 
 #[test]
+fn rejects_release_evidence_with_local_only_urls() {
+    let errors = check_text(
+        r#"
+- Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased; status is tracked at https://192.168.0.10/release-status
+- Support contact: support through GitHub Issues and https://dropsquash.local/support
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+    assert!(errors.iter().any(|error| error.contains("Support contact")));
+}
+
+#[test]
 fn rejects_sandbox_purchase_without_intended_product() {
     let errors = check_text(
         r#"
