@@ -38,7 +38,13 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["cancelled"],
             &["blocked"],
         ],
-        "Ask source policy" => &[&["ask", "choose"], &["trash", "keep"]],
+        "Ask source policy" => &[
+            &["ask", "choose"],
+            &["trash"],
+            &["keep"],
+            &["original"],
+            &["remained", "unchanged"],
+        ],
         "Trash source policy" => &[
             &["trash"],
             &["moving original", "moving"],

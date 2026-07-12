@@ -829,6 +829,18 @@ fn reports_batch_summary_without_all_mixed_counts() {
 }
 
 #[test]
+fn reports_ask_source_without_original_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Ask source policy | Successful conversion | User can choose | Ask prompt let tester choose Trash or Keep |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Ask source policy")));
+}
+
+#[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
@@ -998,7 +1010,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             );
         } else if check == "Ask source policy" {
             text.push_str(
-                "| Ask source policy | Passes | Ask prompt let tester choose Trash or Keep |\n",
+                "| Ask source policy | Passes | Ask prompt let tester choose Trash or Keep while original remained unchanged |\n",
             );
         } else if check == "Trash source policy" {
             text.push_str("| Trash source policy | Passes | button showed Moving original and was disabled; original moved to Trash only after verified smaller output |\n");
