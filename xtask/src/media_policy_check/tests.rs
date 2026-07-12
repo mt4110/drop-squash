@@ -33,6 +33,21 @@ fn rejects_process_command_construction() {
 }
 
 #[test]
+fn rejects_path_lookup_helpers() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/media/src/path.rs",
+        r#"std::env::var("PATH"); which::which("ffmpeg");"#,
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("std::env::var(\"path\")"));
+    assert!(error.contains("which::which"));
+}
+
+#[test]
 fn rejects_javascript_media_process_packages() {
     let directory = tempfile::tempdir().unwrap();
     write(

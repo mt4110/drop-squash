@@ -9,6 +9,9 @@ pub(super) const DISALLOWED: &[&str] = &[
     "\"mediainfo\"",
     "'mediainfo'",
     "mediainfo.js",
+    "std::env::var(\"path\")",
     "std::process::command",
     "tokio::process",
+    "which::which",
+    "which(\"",
 ];
