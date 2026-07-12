@@ -22,6 +22,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "approved external links with host/path boundaries",
     ),
+    (
+        "docs/qa-evidence.md",
+        "quoted and unquoted HTML links/resources/form actions",
+    ),
     ("docs/qa-evidence.md", "UDIF `.dmg` artifacts"),
     ("docs/qa-evidence.md", "concrete identity fields"),
     (
