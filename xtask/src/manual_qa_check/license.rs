@@ -1,45 +1,30 @@
+mod requirements;
+
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
-        "Sandbox product setup" => require_all(
-            label,
-            result,
-            &["dropsquash", "intended product", "license keys enabled"],
-            missing,
-        ),
-        "Sandbox purchase" => require_all(
-            label,
-            result,
-            &["intended product", "test buyer", "order"],
-            missing,
-        ),
+        "Sandbox product setup" => require_all(label, result, requirements::PRODUCT_SETUP, missing),
+        "Sandbox purchase" => require_all(label, result, requirements::PURCHASE, missing),
         "Empty key activation" => {
-            require_license_cache_evidence(label, result, &["raw key"], missing);
-            require_action_state(label, result, &["activate", "disabled"], missing);
+            require_license_cache_evidence(label, result, requirements::EMPTY_KEY_CACHE, missing);
+            require_action_state(label, result, requirements::EMPTY_KEY_ACTION, missing);
         }
         "Invalid key activation" => {
-            require_license_cache_evidence(label, result, &["friendly", "raw key"], missing);
-            require_action_state(label, result, &["activating", "disabled"], missing);
+            require_license_cache_evidence(label, result, requirements::INVALID_KEY_CACHE, missing);
+            require_action_state(label, result, requirements::ACTIVATING_ACTION, missing);
         }
         "Valid sandbox activation" => {
-            require_license_cache_evidence(label, result, &["pro", "raw key"], missing);
-            require_action_state(label, result, &["activating", "disabled"], missing);
+            require_license_cache_evidence(label, result, requirements::VALID_KEY_CACHE, missing);
+            require_action_state(label, result, requirements::ACTIVATING_ACTION, missing);
         }
         "License network failure" => require_license_cache_evidence(
             label,
             result,
-            &[
-                "friendly",
-                "network",
-                "existing",
-                "valid",
-                "preserved",
-                "raw key",
-            ],
+            requirements::NETWORK_FAILURE_CACHE,
             missing,
         ),
         "Forget license on this Mac" => {
             require_any_state(result, missing);
-            require_action_state(label, result, &["forgetting", "disabled"], missing);
+            require_action_state(label, result, requirements::FORGET_ACTION, missing);
         }
         _ => {}
     }
