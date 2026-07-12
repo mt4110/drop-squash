@@ -48,6 +48,7 @@ fn matches_classification(cells: &[&str], blocker: &str) -> bool {
         && is_actionable(cells[2])
         && has_required_action_detail(blocker, cells[2])
         && is_named_owner(cells[3])
+        && has_required_owner_detail(blocker, cells[3])
 }
 
 fn unknown_classification_name<'a>(cells: &[&'a str]) -> Option<&'a str> {
@@ -75,6 +76,17 @@ fn has_required_action_detail(blocker: &str, action: &str) -> bool {
         "Packaged macOS manual QA" => {
             action.contains("DropSquash.app") && action.contains("DropSquash.dmg")
         }
+        _ => true,
+    }
+}
+
+fn has_required_owner_detail(blocker: &str, owner: &str) -> bool {
+    match blocker {
+        "Public website deployment" => owner == "Public website URL",
+        "Refund policy finalized" => owner == "Refund policy URL",
+        "Live checkout link" => owner == "Live checkout URL",
+        "Published checksum" => owner == "GitHub Release URL",
+        "Homebrew cask install" => owner == "Homebrew tap PR URL",
         _ => true,
     }
 }

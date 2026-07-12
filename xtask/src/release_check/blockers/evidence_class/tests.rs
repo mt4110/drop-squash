@@ -9,9 +9,8 @@ fn accepts_complete_evidence_classes() {
         .map(|(index, blocker)| {
             let class = ALLOWED_CLASSES[index % ALLOWED_CLASSES.len()];
             let action = action_for(blocker);
-            format!(
-                "| {blocker} | {class} | {action} | Record the evidence in the named location |\n"
-            )
+            let owner = owner_for(blocker);
+            format!("| {blocker} | {class} | {action} | {owner} |\n")
         })
         .collect::<String>();
 
@@ -114,11 +113,31 @@ fn reports_packaged_manual_action_without_canonical_artifacts() {
     assert!(unclassified.contains(&"Packaged macOS manual QA"));
 }
 
+#[test]
+fn reports_public_url_classification_without_matching_owner_field() {
+    let text = "| Published checksum | Distribution | Attach SHA256SUMS containing the public DropSquash.dmg line | Release owner |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Published checksum"));
+}
+
 fn action_for(blocker: &str) -> &'static str {
     match blocker {
         "Packaged macOS manual QA" => {
             "Run packaged DropSquash.app or DropSquash.dmg through manual QA"
         }
         _ => "Capture concrete release evidence",
+    }
+}
+
+fn owner_for(blocker: &str) -> &'static str {
+    match blocker {
+        "Public website deployment" => "Public website URL",
+        "Refund policy finalized" => "Refund policy URL",
+        "Live checkout link" => "Live checkout URL",
+        "Published checksum" => "GitHub Release URL",
+        "Homebrew cask install" => "Homebrew tap PR URL",
+        _ => "Record the evidence in the named location",
     }
 }
