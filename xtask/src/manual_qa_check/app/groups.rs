@@ -81,7 +81,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
             &[&["artifact-check"], &["passed", "passes"], &["dropsquash.dmg", ".dmg"]]
         }
-        "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
+        "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" => {
             &[&["sha-256", "sha256"], &["dropsquash.dmg", ".dmg"]]
         }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {

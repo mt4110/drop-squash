@@ -22,7 +22,7 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
 }
 
 fn checksum_evidence_ok(label: &str, result: &str) -> bool {
-    if label != "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" {
+    if label != "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" {
         return true;
     }
     result

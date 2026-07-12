@@ -44,7 +44,7 @@ pub(super) const REQUIRED_CHECKS: [&str; 36] = [
     "Benchmark regression threshold",
     "`cargo run -p xtask -- manual-qa-check`",
     "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`",
-    "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`",
+    "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`",
     "`cargo run -p xtask -- macos-signing-check`",
     "Codesign verification",
     "Notarization staple verification",

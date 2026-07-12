@@ -321,7 +321,7 @@ fn reports_release_command_results_for_different_dmg_artifact() {
         format!(
             "| App artifact | {} |\n\
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for DropSquash.dmg |\n\
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
             artifact.display()
         ),
     )
@@ -346,7 +346,7 @@ fn reports_checksum_result_for_different_dmg_digest() {
         &path,
         format!(
             "| App artifact | {} |\n\
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
             artifact.display()
         ),
     )
@@ -370,7 +370,7 @@ fn reports_release_command_results_without_artifact_path() {
         format!(
             "| App artifact | {} |\n\
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for DropSquash.dmg |\n\
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 {} DropSquash.dmg |\n",
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 {} DropSquash.dmg |\n",
             artifact.display(),
             sha256_hex(&bytes)
         ),
@@ -397,7 +397,7 @@ fn accepts_checksum_result_matching_dmg_digest() {
         &path,
         format!(
             "| App artifact | {} |\n\
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 {} DropSquash.dmg |\n",
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 {} DropSquash.dmg |\n",
             artifact.display(),
             sha256_hex(&bytes)
         ),
@@ -422,7 +422,7 @@ fn accepts_release_command_results_with_artifact_path() {
         format!(
             "| App artifact | {} |\n\
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for {} |\n\
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 {} {} |\n",
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 {} {} |\n",
             artifact.display(),
             artifact.display(),
             sha256_hex(&bytes),
@@ -942,7 +942,7 @@ fn reports_ask_source_without_original_evidence() {
 #[test]
 fn reports_incomplete_release_candidate_results() {
     let (_directory, path) = write_manual_qa(
-        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | checksum created |\n\
+        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | checksum created |\n\
 | Codesign verification | Developer ID signature | signature ok |\n\
 | Gatekeeper open test | Signed app opens cleanly | opened |\n",
     );
@@ -984,7 +984,7 @@ fn reports_gatekeeper_result_without_staple_evidence() {
 #[test]
 fn reports_checksum_result_without_digest() {
     let (_directory, path) = write_manual_qa(
-        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 line recorded for DropSquash.dmg |\n",
+        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA-256 line recorded for DropSquash.dmg |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1143,7 +1143,7 @@ fn command_result(check: &str) -> String {
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
             "artifact-check passed for DropSquash.dmg"
         }
-        "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`" => {
+        "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" => {
             "SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg"
         }
         "`cargo run -p xtask -- macos-signing-check`" => {

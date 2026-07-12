@@ -3,7 +3,8 @@ use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
 
 const ARTIFACT_CHECK: &str = "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`";
-const CHECKSUM: &str = "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`";
+const CHECKSUM: &str =
+    "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`";
 const CODESIGN: &str = "Codesign verification";
 const NOTARIZATION: &str = "Notarization staple verification";
 

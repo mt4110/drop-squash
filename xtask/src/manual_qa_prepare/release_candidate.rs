@@ -1,7 +1,8 @@
 use std::path::Path;
 
 const ARTIFACT_CHECK: &str = "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`";
-const CHECKSUM: &str = "`cargo run -p xtask -- checksum path/to/DropSquash.dmg`";
+const CHECKSUM: &str =
+    "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`";
 
 pub(super) fn print_rows(path: &Path) -> Result<(), String> {
     let rows = rows(path)?;
