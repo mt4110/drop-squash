@@ -1,7 +1,7 @@
 use dropsquash_core::{EncodeResult, Profile, SourcePolicy};
 use dropsquash_postprocess::SourceAction;
 
-use super::{handle_source_action, output_belongs_to_source, trash_original};
+use super::{handle_source_action, output_name, trash_original};
 
 #[test]
 fn ask_policy_does_not_move_original_without_confirmation() {
@@ -76,15 +76,15 @@ fn explicit_trash_rejects_non_numeric_output_suffix() {
 fn output_name_matches_exact_or_numbered_squashed_suffix_only() {
     let source = std::path::Path::new("recording.mov");
 
-    assert!(output_belongs_to_source(
+    assert!(output_name::belongs_to_source(
         source,
         std::path::Path::new("recording.squashed.mp4")
     ));
-    assert!(output_belongs_to_source(
+    assert!(output_name::belongs_to_source(
         source,
         std::path::Path::new("recording.squashed-2.mp4")
     ));
-    assert!(!output_belongs_to_source(
+    assert!(!output_name::belongs_to_source(
         source,
         std::path::Path::new("recording.squashed-copy.mp4")
     ));

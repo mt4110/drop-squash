@@ -9,6 +9,8 @@ use dropsquash_postprocess::{
 
 use super::format_error;
 
+mod output_name;
+
 pub fn handle_source_action(
     result: &EncodeResult,
     source_policy: SourcePolicy,
@@ -35,7 +37,7 @@ pub fn handle_source_action(
 }
 
 fn verified_trash_decision(result: &EncodeResult) -> Result<SourceActionDecision, String> {
-    if !output_belongs_to_source(&result.input_path, &result.output_path) {
+    if !output_name::belongs_to_source(&result.input_path, &result.output_path) {
         return Ok(decide_source_action(
             result.input_path.clone(),
             SourcePolicy::Keep,
@@ -67,7 +69,7 @@ pub fn trash_original(
 ) -> Result<SourceActionDecision, String> {
     let source_path = PathBuf::from(source_path);
     let output_path = PathBuf::from(output_path);
-    if !output_belongs_to_source(&source_path, &output_path) {
+    if !output_name::belongs_to_source(&source_path, &output_path) {
         return Ok(decide_source_action(
             source_path,
             SourcePolicy::Keep,
@@ -97,27 +99,6 @@ pub fn trash_original(
         .move_to_trash(&decision.source_path)
         .map_err(format_error)?;
     Ok(decision)
-}
-
-fn output_belongs_to_source(source_path: &std::path::Path, output_path: &std::path::Path) -> bool {
-    let Some(source_stem) = source_path.file_stem().and_then(|value| value.to_str()) else {
-        return false;
-    };
-    let Some(output_name) = output_path.file_name().and_then(|value| value.to_str()) else {
-        return false;
-    };
-    output_name == format!("{source_stem}.squashed.mp4")
-        || numbered_output_belongs_to_source(source_stem, output_name)
-}
-
-fn numbered_output_belongs_to_source(source_stem: &str, output_name: &str) -> bool {
-    let Some(number) = output_name
-        .strip_prefix(&format!("{source_stem}.squashed-"))
-        .and_then(|value| value.strip_suffix(".mp4"))
-    else {
-        return false;
-    };
-    !number.is_empty() && number.chars().all(|value| value.is_ascii_digit())
 }
 
 #[cfg(test)]
