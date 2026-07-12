@@ -26,7 +26,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |
-| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |
+| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |
 | Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the release | TBD | GitHub Release |
 | Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
@@ -53,7 +53,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Live checkout link | Public web | Verify the pricing page opens the live checkout for the product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured verification output | Release notes |
-| Gatekeeper clean-machine open | Manual packaged-app | Open the stapled app from a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
+| Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings and record threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` SHA-256 line to the GitHub Release | GitHub Release URL |
 | Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, `DropSquash.dmg` URL, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
