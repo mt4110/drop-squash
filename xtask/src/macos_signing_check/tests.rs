@@ -226,6 +226,21 @@ fn rejects_placeholder_api_key_id() {
 }
 
 #[test]
+fn rejects_repeated_api_key_id() {
+    let directory = tempfile::tempdir().unwrap();
+    let key_path = write_api_key(directory.path(), TEST_API_KEY);
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_API_KEY", "0000000000"),
+        ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
+        ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_API_KEY"));
+}
+
+#[test]
 fn rejects_placeholder_api_issuer() {
     let directory = tempfile::tempdir().unwrap();
     let key_path = write_api_key(directory.path(), TEST_API_KEY);
@@ -233,6 +248,21 @@ fn rejects_placeholder_api_issuer() {
         ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
         ("APPLE_API_KEY", "ABCDEF1234"),
         ("APPLE_API_ISSUER", "issuer"),
+        ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_API_ISSUER"));
+}
+
+#[test]
+fn rejects_zero_api_issuer() {
+    let directory = tempfile::tempdir().unwrap();
+    let key_path = write_api_key(directory.path(), TEST_API_KEY);
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_API_KEY", "ABCDEF1234"),
+        ("APPLE_API_ISSUER", "00000000-0000-0000-0000-000000000000"),
         ("APPLE_API_KEY_PATH", key_path.to_str().unwrap()),
     ]);
     let error = check(&env).unwrap_err();

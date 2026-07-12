@@ -114,8 +114,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "matching SHA-256"),
     ("docs/qa-evidence.md", "`auto_updates false`"),
     ("docs/qa-evidence.md", "declares no in-app auto-update"),
-    ("docs/qa-evidence.md", "malformed App Store Connect key ids"),
-    ("docs/qa-evidence.md", "malformed issuer UUIDs"),
+    (
+        "docs/qa-evidence.md",
+        "malformed or repeated App Store Connect key ids",
+    ),
+    ("docs/qa-evidence.md", "malformed or all-zero issuer UUIDs"),
     (
         "docs/qa-evidence.md",
         "missing/empty/placeholder `.p8` files",

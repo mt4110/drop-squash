@@ -15,5 +15,6 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "release blocker URLs to match"),
     ("docs/release.md", "10-character `APPLE_API_KEY`"),
     ("docs/release.md", "APPLE_API_ISSUER"),
+    ("docs/release.md", "all-zero value"),
     ("docs/release.md", "placeholder secret"),
 ];

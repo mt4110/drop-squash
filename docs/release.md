@@ -108,7 +108,7 @@ values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
 fresh runner. The certificate value must be base64-encoded certificate data, not
 a placeholder such as `base64`. The App Store Connect key id must be a
 10-character `APPLE_API_KEY`, and `APPLE_API_ISSUER` must be the issuer UUID,
-not placeholder text.
+not placeholder text or an all-zero value.
 `APPLE_API_KEY_PATH` must point to a non-empty `.p8` file containing App Store
 Connect private key data, not an empty placeholder file.
 Signing and notarization secret values such as `APPLE_CERTIFICATE_PASSWORD` and

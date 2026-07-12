@@ -11,11 +11,25 @@ pub(super) fn check_identity(env: &BTreeMap<String, String>) -> Result<(), Strin
     if key.len() != 10 || !key.chars().all(|value| value.is_ascii_alphanumeric()) {
         return Err("APPLE_API_KEY must be a 10-character App Store Connect key id".to_string());
     }
+    if all_same_char(key) {
+        return Err("APPLE_API_KEY must be a 10-character App Store Connect key id".to_string());
+    }
     let issuer = value(env, "APPLE_API_ISSUER").unwrap_or_default();
-    if is_uuid_like(issuer) {
+    if is_uuid_like(issuer) && !is_zero_uuid(issuer) {
         return Ok(());
     }
     Err("APPLE_API_ISSUER must be an App Store Connect issuer UUID".to_string())
+}
+
+fn all_same_char(value: &str) -> bool {
+    value
+        .chars()
+        .next()
+        .is_some_and(|first| value.chars().all(|char| char == first))
+}
+
+fn is_zero_uuid(value: &str) -> bool {
+    value.chars().all(|char| char == '-' || char == '0')
 }
 
 pub(super) fn check_path(env: &BTreeMap<String, String>) -> Result<(), String> {
