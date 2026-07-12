@@ -56,4 +56,4 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings, record the absolute CSV path outside repo, and record threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` SHA-256 line to the GitHub Release | GitHub Release URL |
-| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, `DropSquash.dmg` URL, matching SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
+| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, versioned `DropSquash.dmg` URL, matching SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |

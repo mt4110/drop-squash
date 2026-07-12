@@ -140,11 +140,23 @@ fn reports_benchmark_action_without_external_csv_path() {
     assert!(unclassified.contains(&"Benchmark release set"));
 }
 
+#[test]
+fn reports_homebrew_action_without_versioned_artifact() {
+    let text = "| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, DropSquash.dmg URL, matching SHA-256, auto_updates false, and zap cleanup path | Homebrew tap PR URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Homebrew cask install"));
+}
+
 fn action_for(blocker: &str) -> &'static str {
     match blocker {
         "Packaged macOS manual QA" => "Run public DropSquash.dmg artifact through manual QA",
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"
+        }
+        "Homebrew cask install" => {
+            "Open tap PR and verify versioned DropSquash.dmg install evidence"
         }
         _ => "Capture concrete release evidence",
     }
