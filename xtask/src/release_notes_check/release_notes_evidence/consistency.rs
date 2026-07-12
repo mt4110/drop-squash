@@ -8,6 +8,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_artifact_name(text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     require_checksum_evidence_digest(text, &mut errors);
+    require_homebrew_artifact_url(text, &mut errors);
     errors
 }
 
@@ -71,6 +72,19 @@ fn require_checksum_evidence_digest(text: &str, errors: &mut Vec<String>) {
         return;
     }
     errors.push("GitHub Release checksum must include the SHA-256 digest".to_string());
+}
+
+fn require_homebrew_artifact_url(text: &str, errors: &mut Vec<String>) {
+    let (Some(url), Some(evidence)) = (
+        value::field("Artifact URL", text),
+        value::field("Homebrew tap PR", text),
+    ) else {
+        return;
+    };
+    if evidence.contains(url) {
+        return;
+    }
+    errors.push("Homebrew tap PR must include the Artifact URL".to_string());
 }
 
 fn origin(url: &str) -> Option<&str> {

@@ -44,7 +44,7 @@ fn accepts_concrete_production_urls() {
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached to release for DropSquash.dmg with 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
-- Homebrew tap PR: cask update reviewed in tap PR for DropSquash.dmg with auto_updates false and zap cleanup path
+- Homebrew tap PR: cask update reviewed in tap PR for DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with auto_updates false and zap cleanup path
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
 - Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for versioned DropSquash.dmg artifact
 - Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased
@@ -199,6 +199,20 @@ fn rejects_homebrew_evidence_without_cask_policy_context() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Homebrew install result")));
+}
+
+#[test]
+fn rejects_homebrew_tap_pr_without_artifact_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Homebrew tap PR: cask update reviewed in tap PR for DropSquash.dmg with auto_updates false and zap cleanup path
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew tap PR must include")));
 }
 
 #[test]
