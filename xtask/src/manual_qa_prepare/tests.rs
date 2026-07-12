@@ -264,7 +264,7 @@ fn reset_trial_requires_existing_artifact() {
 
     let error = require_reset_artifact(&options).unwrap_err();
 
-    assert!(error.contains(".app artifact"));
+    assert!(error.contains("DropSquash.app"));
 }
 
 #[test]

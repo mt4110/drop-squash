@@ -19,7 +19,7 @@ fn rejects_missing_app_artifact() {
 
     let error = qa_artifact(&options(Some(artifact))).unwrap_err();
 
-    assert!(error.contains(".app artifact"));
+    assert!(error.contains("DropSquash.app"));
 }
 
 #[test]

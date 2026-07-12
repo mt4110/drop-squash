@@ -41,7 +41,10 @@ fn require_reset_artifact(options: &Options) -> Result<(), String> {
     if qa_artifact(options)?.is_some() {
         return Ok(());
     }
-    Err("manual QA --reset-trial requires an existing .app or .dmg artifact".to_string())
+    Err(
+        "manual QA --reset-trial requires an existing DropSquash.app or DropSquash.dmg artifact"
+            .to_string(),
+    )
 }
 
 fn print_paths(options: &Options) -> Result<(), String> {
@@ -59,10 +62,9 @@ fn print_paths(options: &Options) -> Result<(), String> {
         println!("manual QA App artifact unavailable: pass --app-artifact <path>");
     }
     println!("{}", sample_set_line(options));
-    if let Ok(environment) = Environment::current(options) {
-        for line in environment.manual_qa_lines() {
-            println!("{line}");
-        }
+    let environment = Environment::current(options)?;
+    for line in environment.manual_qa_lines() {
+        println!("{line}");
     }
     Ok(())
 }

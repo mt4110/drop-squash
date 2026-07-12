@@ -22,10 +22,10 @@ fn validate(path: &Path) -> Result<(), String> {
     let extension = path.extension().and_then(|value| value.to_str());
     match extension {
         Some("app") if path.is_dir() => validate_app(path),
-        Some("app") => Err("manual QA .app artifact must be a directory".to_string()),
+        Some("app") => Err("manual QA DropSquash.app artifact must be a directory".to_string()),
         Some("dmg") if path.is_file() => validate_dmg(path),
-        Some("dmg") => Err("manual QA .dmg artifact must be a file".to_string()),
-        _ => Err("manual QA App artifact must be a .app or .dmg".to_string()),
+        Some("dmg") => Err("manual QA DropSquash.dmg artifact must be a file".to_string()),
+        _ => Err("manual QA App artifact must be DropSquash.app or DropSquash.dmg".to_string()),
     }
 }
 

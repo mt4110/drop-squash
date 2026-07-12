@@ -42,7 +42,9 @@ cargo run -p xtask -- manual-qa-prepare
 
 This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
-run. Copy the printed `manual QA App build` value into the `App build` field.
+run. It fails if required environment fields cannot be detected, so missing
+manual QA metadata cannot be mistaken for a prepared run. Copy the printed
+`manual QA App build` value into the `App build` field.
 Copy the printed `manual QA App artifact` value into the `App artifact` field,
 or pass `--app-artifact <path>` when testing a DMG or a non-default artifact
 location.
