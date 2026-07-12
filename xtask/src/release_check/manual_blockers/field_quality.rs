@@ -11,7 +11,7 @@ pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
 
 fn lacks_special_evidence(check: &str, result: &str) -> bool {
     match check {
-        "App build" => !has_version_and_commit(result),
+        "App build" => !has_version_and_current_commit(result),
         "App artifact" => !has_canonical_artifact(result),
         "Config path" => !is_absolute_state_path(result, "config.json"),
         "History path" => !is_absolute_state_path(result, "history.jsonl"),
@@ -21,12 +21,13 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
     }
 }
 
-fn has_version_and_commit(result: &str) -> bool {
+fn has_version_and_current_commit(result: &str) -> bool {
     let parts = result.split_whitespace().collect::<Vec<_>>();
     parts.iter().any(|part| is_semver(part))
         && parts.iter().any(|part| {
             (7..=40).contains(&part.len()) && part.chars().all(|value| value.is_ascii_hexdigit())
         })
+        && current_head().is_ok_and(|head| result.contains(&format!("git {head}")))
 }
 
 fn is_semver(value: &str) -> bool {
@@ -99,4 +100,17 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         "Date" => Some(&[&["20"]]),
         _ => None,
     }
+}
+
+fn current_head() -> Result<String, String> {
+    let output = std::process::Command::new("git")
+        .args(["rev-parse", "--short=7", "HEAD"])
+        .output()
+        .map_err(|error| error.to_string())?;
+    if !output.status.success() {
+        return Err("git rev-parse failed".to_string());
+    }
+    String::from_utf8(output.stdout)
+        .map_err(|error| error.to_string())
+        .map(|value| value.trim().to_string())
 }

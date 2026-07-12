@@ -275,6 +275,16 @@ fn reports_packaged_macos_manual_qa_with_vague_build_identity() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_old_build_head() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("App build", "DropSquash 0.1.0 git 0000000");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_non_iso_date() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("Date", "July 11 2026");
@@ -520,7 +530,7 @@ fn packaged_manual_qa_with(check: &str, result: &str) -> String {
         .iter()
         .map(|label| {
             let result = if *label == check {
-                result
+                result.to_string()
             } else {
                 packaged_result(label)
             };
@@ -533,50 +543,63 @@ fn packaged_manual_qa_with(check: &str, result: &str) -> String {
         .collect()
 }
 
-fn packaged_result(label: &str) -> &'static str {
+fn packaged_result(label: &str) -> String {
     match label {
-        "App build" => "DropSquash 0.1.0 git abc1234",
-        "App artifact" => "/tmp/DropSquash.app",
-        "macOS version" => "macOS 15.5",
-        "Machine" => "Apple silicon Mac arm64",
-        "Input sample set" => "short, medium, and large local recordings",
-        "Output folder" => "/tmp/dropsquash-manual-qa-output",
-        "Config path" => "/Users/me/Library/Application Support/DropSquash/config.json",
-        "History path" => "/Users/me/Library/Application Support/DropSquash/history.jsonl",
-        "License cache path" => "/Users/me/Library/Application Support/DropSquash/license.json",
-        "Tester" => "Manual tester",
-        "Date" => "2026-07-11",
+        "App build" => format!("DropSquash 0.1.0 git {}", current_head()),
+        "App artifact" => "/tmp/DropSquash.app".into(),
+        "macOS version" => "macOS 15.5".into(),
+        "Machine" => "Apple silicon Mac arm64".into(),
+        "Input sample set" => "short, medium, and large local recordings".into(),
+        "Output folder" => "/tmp/dropsquash-manual-qa-output".into(),
+        "Config path" => "/Users/me/Library/Application Support/DropSquash/config.json".into(),
+        "History path" => {
+            "/Users/me/Library/Application Support/DropSquash/history.jsonl".into()
+        }
+        "License cache path" => {
+            "/Users/me/Library/Application Support/DropSquash/license.json".into()
+        }
+        "Tester" => "Manual tester".into(),
+        "Date" => "2026-07-11".into(),
         "Choose recording conversion" => {
-            "saved smaller clip.squashed.mp4 and original remained in place"
+            "saved smaller clip.squashed.mp4 and original remained in place".into()
         }
         "Drag-and-drop conversion" => {
-            "saved smaller drag.squashed.mp4 and original remained in place"
+            "saved smaller drag.squashed.mp4 and original remained in place".into()
         }
         "Privacy receipt sidecar" => {
-            "clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, file names instead of absolute paths"
+            "clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, file names instead of absolute paths".into()
         }
-        "Reveal privacy receipt" => "Finder opened with clip.privacy.json selected",
-        "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix",
-        "Cancellation" => "app returned ready and trial history showed no new success",
+        "Reveal privacy receipt" => "Finder opened with clip.privacy.json selected".into(),
+        "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix".into(),
+        "Cancellation" => "app returned ready and trial history showed no new success".into(),
         "Multi-file queue" => {
-            "three recordings queued with one active sequential conversion; completed job finished and unrelated failures did not block it"
+            "three recordings queued with one active sequential conversion; completed job finished and unrelated failures did not block it".into()
         }
         "Queued job cancellation" => {
-            "queued row marked cancelled and never started; trial history showed no new success"
+            "queued row marked cancelled and never started; trial history showed no new success".into()
         }
         "Batch summary" => {
-            "summary showed finished count, saved bytes, failed count, cancelled count, and blocked count"
+            "summary showed finished count, saved bytes, failed count, cancelled count, and blocked count".into()
         }
-        "Ask source policy" => "Ask prompt let tester choose Trash or Keep; original remained unchanged",
+        "Ask source policy" => "Ask prompt let tester choose Trash or Keep; original remained unchanged".into(),
         "Trash source policy" => {
-            "button showed Moving original and was disabled; original moved to Trash only after verified smaller output"
+            "button showed Moving original and was disabled; original moved to Trash only after verified smaller output".into()
         }
         "Failed conversion" => {
-            "friendly error appeared; original remained and trial count unchanged after failure"
+            "friendly error appeared; original remained and trial count unchanged after failure".into()
         }
-        "Larger output" => "larger result failed; original remained and trial count unchanged",
-        "Reveal output" => "Finder opened with clip.squashed.mp4 selected",
-        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed",
-        _ => "concrete evidence",
+        "Larger output" => "larger result failed; original remained and trial count unchanged".into(),
+        "Reveal output" => "Finder opened with clip.squashed.mp4 selected".into(),
+        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed".into(),
+        _ => "concrete evidence".into(),
     }
+}
+
+fn current_head() -> String {
+    let output = std::process::Command::new("git")
+        .args(["rev-parse", "--short=7", "HEAD"])
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    String::from_utf8(output.stdout).unwrap().trim().to_string()
 }
