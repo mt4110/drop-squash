@@ -14,7 +14,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     (
         "docs/qa-evidence.md",
-        "repository-local state/output folder rejection",
+        "repository-local app-state/state/output folder rejection",
     ),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "Tauri DMG output is normalized"),

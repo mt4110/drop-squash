@@ -298,6 +298,18 @@ fn rejects_state_backup_inside_repository() {
 }
 
 #[test]
+fn rejects_app_state_source_inside_repository() {
+    let error = Options::parse(vec![
+        "--app-state-dir".to_string(),
+        "tmp/app-state".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--app-state-dir"));
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
 fn rejects_output_folder_inside_repository() {
     let error = Options::parse(vec![
         "--output-dir".to_string(),
