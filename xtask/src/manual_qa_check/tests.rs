@@ -769,6 +769,28 @@ fn reports_duplicate_output_without_numbered_file_name() {
 }
 
 #[test]
+fn reports_duplicate_output_without_second_output_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Duplicate output naming | Same recording twice | Numbered suffix | numbered clip.squashed-2.mp4 suffix appeared |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Duplicate output naming")));
+}
+
+#[test]
+fn reports_reveal_output_without_squashed_file_name() {
+    let (_directory, path) = write_manual_qa(
+        "| Reveal output | Completed output link | Finder opens | Finder opened with clip.mp4 selected |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Reveal output")));
+}
+
+#[test]
 fn reports_trash_source_without_progress_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Trash source policy | Successful conversion | Original moves | original moved to Trash after verified smaller output |\n",

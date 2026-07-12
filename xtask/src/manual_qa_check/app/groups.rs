@@ -11,7 +11,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["absolute paths"],
         ],
         "Reveal privacy receipt" => &[&["finder"], &[".privacy.json"], &["selected"]],
-        "Duplicate output naming" => &[&["squashed-2"], &[".mp4"]],
+        "Duplicate output naming" => &[&["second output"], &["squashed-2"], &[".mp4"]],
         "Cancellation" => &[
             &["ready"],
             &["trial"],
@@ -66,7 +66,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["original"],
             &["trial count unchanged", "trial unchanged"],
         ],
-        "Reveal output" => &[&["finder"], &[".mp4"], &["selected"]],
+        "Reveal output" => &[&["finder"], &[".squashed.mp4"], &["selected"]],
         "`cargo run -p xtask -- release-check`" => &[&["release-check"], &["passed", "passes"]],
         "`cargo run -p xtask -- file-size-check`" => {
             &[&["file-size-check"], &["passed", "passes"]]
