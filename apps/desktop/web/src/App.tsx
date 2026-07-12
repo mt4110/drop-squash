@@ -374,7 +374,11 @@ export function App() {
         items={queue}
         onCancelQueued={(id) => {
           void cancelQueuedJob(id)
-            .then(() => setQueue((current) => cancelQueued(current, id)))
+            .then((event) => {
+              if (event && "Cancelled" in event) {
+                setQueue((current) => cancelQueued(current, id));
+              }
+            })
             .catch((reason) => setError(String(reason)));
         }}
         onClearFinished={() => {
