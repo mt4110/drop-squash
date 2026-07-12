@@ -59,6 +59,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "stale artifacts older than `HEAD` are rejected",
     ),
     ("docs/qa-evidence.md", "matching Homebrew cask command"),
+    ("docs/qa-evidence.md", "Homebrew tap PR evidence draft"),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
     (
         "docs/qa-evidence.md",
