@@ -71,6 +71,15 @@ fn reports_refund_policy_without_final_policy() {
 }
 
 #[test]
+fn reports_public_website_completion_without_required_pages() {
+    let text = "| Public website deployment | Blocked | Production website serves public pages | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Public website deployment"));
+}
+
+#[test]
 fn reports_valid_activation_completion_without_cache() {
     let text = "| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
