@@ -167,6 +167,24 @@ fn reports_license_action_without_cache_detail() {
 }
 
 #[test]
+fn reports_public_website_action_without_required_pages() {
+    let text = "| Public website deployment | Public web | Deploy the production site and verify public pages | Public website URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Public website deployment"));
+}
+
+#[test]
+fn reports_live_checkout_action_without_product_context() {
+    let text = "| Live checkout link | Public web | Verify the pricing page opens checkout | Live checkout URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_signing_classification_without_release_notes_owner() {
     let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture Developer ID verification output | `docs/manual-qa.md` |\n";
 
@@ -232,6 +250,15 @@ fn action_for(blocker: &str) -> &'static str {
         }
         "Local license forget" => {
             "Use local forget action, confirm disabled while forgetting, and inspect returned app state"
+        }
+        "Public website deployment" => {
+            "Deploy the production site and verify release-status, privacy, pricing, support, and download pages"
+        }
+        "Refund policy finalized" => {
+            "Publish the final refund policy URL before checkout goes live"
+        }
+        "Live checkout link" => {
+            "Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product"
         }
         "Benchmark release set" => {
             "Run release-set benchmark and record absolute CSV path outside repo"

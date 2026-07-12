@@ -48,9 +48,9 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Invalid license key handling | License sandbox | Enter an invalid key, confirm submit is disabled while activating, and inspect the local license cache | `docs/manual-qa.md` |
 | License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
-| Public website deployment | Public web | Deploy the production site and verify every public release page | Public website URL |
-| Refund policy finalized | Public web | Publish the final refund policy before checkout goes live | Refund policy URL |
-| Live checkout link | Public web | Verify the pricing page opens the live checkout for the product | Live checkout URL |
+| Public website deployment | Public web | Deploy the production site and verify release-status, privacy, pricing, support, and download pages | Public website URL |
+| Refund policy finalized | Public web | Publish the final refund policy URL before checkout goes live | Refund policy URL |
+| Live checkout link | Public web | Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from public `DropSquash.dmg` in a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |

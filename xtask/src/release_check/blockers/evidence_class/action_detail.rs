@@ -31,6 +31,20 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "preserved local cache",
         ],
         "Local license forget" => &["disabled while forgetting", "returned app state"],
+        "Public website deployment" => &[
+            "production site",
+            "release-status",
+            "privacy",
+            "pricing",
+            "support",
+            "download",
+        ],
+        "Refund policy finalized" => &["final refund policy URL", "checkout goes live"],
+        "Live checkout link" => &[
+            "public pricing page",
+            "tested Lemon Squeezy checkout",
+            "intended product",
+        ],
         "Benchmark release set" => &["absolute CSV path outside repo"],
         "Published checksum" => &["public", "DropSquash.dmg", "SHA-256", "GitHub Release"],
         "Homebrew cask install" => &[
