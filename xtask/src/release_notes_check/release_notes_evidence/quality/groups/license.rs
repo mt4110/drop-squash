@@ -1,0 +1,55 @@
+use super::Groups;
+
+pub(super) fn for_label(label: &str) -> Option<Groups> {
+    match label {
+        "Lemon Squeezy product setup" => Some(&[
+            &["dropsquash"],
+            &["intended product"],
+            &["license keys enabled"],
+        ]),
+        "Lemon Squeezy sandbox purchase" => {
+            Some(&[&["intended product"], &["test buyer"], &["order"]])
+        }
+        "Valid sandbox activation" => Some(&[
+            &["activating"],
+            &["disabled"],
+            &["pro"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+            &["cache"],
+        ]),
+        "Empty key activation" => Some(&[
+            &["activate"],
+            &["disabled"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+            &["cache"],
+        ]),
+        "Invalid license key handling" => Some(&[
+            &["activating"],
+            &["disabled"],
+            &["friendly"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+            &["cache"],
+        ]),
+        "License network failure" => Some(&[
+            &["friendly"],
+            &["network"],
+            &["existing"],
+            &["valid"],
+            &["preserved", "intact"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+            &["cache"],
+        ]),
+        "Local license forget" => Some(&[
+            &["forgetting"],
+            &["disabled"],
+            &["cache"],
+            &["removed", "cleared", "deleted", "clears"],
+            &["trial", "locked"],
+        ]),
+        _ => None,
+    }
+}
