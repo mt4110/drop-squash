@@ -35,6 +35,23 @@ fn manual_qa_template_contains_required_labels() {
 }
 
 #[test]
+fn manual_qa_template_has_no_untracked_labels() {
+    let text = std::fs::read_to_string("../docs/manual-qa.md").unwrap();
+    let labels = template_labels(&text);
+    let allowed = REQUIRED_FIELDS
+        .iter()
+        .chain(REQUIRED_CHECKS.iter())
+        .copied()
+        .collect::<std::collections::BTreeSet<_>>();
+    let untracked = labels
+        .iter()
+        .filter(|label| !allowed.contains(label.as_str()))
+        .collect::<Vec<_>>();
+
+    assert!(untracked.is_empty(), "{untracked:?}");
+}
+
+#[test]
 fn reports_empty_environment_fields() {
     let (_directory, path) = write_manual_qa("| App build |  |\n");
     let missing = check_file(&path).unwrap();
