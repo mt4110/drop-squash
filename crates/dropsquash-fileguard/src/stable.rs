@@ -1,27 +1,14 @@
 use std::path::{Path, PathBuf};
-use std::time::{Duration, SystemTime};
+use std::time::SystemTime;
 
 use dropsquash_core::{AppError, Result};
 use tokio::fs;
 use tokio::time::{Instant, MissedTickBehavior};
 use tokio_util::sync::CancellationToken;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct StabilityOptions {
-    pub timeout: Duration,
-    pub interval: Duration,
-    pub stable_samples: usize,
-}
+mod options;
 
-impl Default for StabilityOptions {
-    fn default() -> Self {
-        Self {
-            timeout: Duration::from_secs(30),
-            interval: Duration::from_millis(250),
-            stable_samples: 3,
-        }
-    }
-}
+pub use options::StabilityOptions;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StabilityResult {
@@ -43,7 +30,7 @@ pub async fn wait_until_stable(
     options: StabilityOptions,
     cancel: CancellationToken,
 ) -> Result<StabilityResult> {
-    validate_options(&options)?;
+    options::validate(&options)?;
 
     let deadline = Instant::now() + options.timeout;
     let mut ticker = tokio::time::interval(options.interval);
@@ -85,28 +72,6 @@ pub async fn wait_until_stable(
             });
         }
     }
-}
-
-fn validate_options(options: &StabilityOptions) -> Result<()> {
-    if options.timeout.is_zero() {
-        return Err(AppError::InvalidConfig(
-            "file stability timeout must be greater than zero".to_string(),
-        ));
-    }
-
-    if options.interval.is_zero() {
-        return Err(AppError::InvalidConfig(
-            "file stability interval must be greater than zero".to_string(),
-        ));
-    }
-
-    if options.stable_samples == 0 {
-        return Err(AppError::InvalidConfig(
-            "stable_samples must be greater than zero".to_string(),
-        ));
-    }
-
-    Ok(())
 }
 
 async fn sample(path: &Path) -> Result<Sample> {
