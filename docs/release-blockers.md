@@ -13,7 +13,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 
 | Blocker | Status | Completion evidence | Evidence reference | Record in |
 |---|---|---|---|---|
-| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `DropSquash.app` or `DropSquash.dmg` artifact | TBD | `docs/manual-qa.md` |
+| Packaged macOS manual QA | Blocked | Filled manual QA table for the exact `DropSquash.app` or `DropSquash.dmg` artifact, with `manual-qa-check` passing | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy product setup | Blocked | Sandbox product is configured for DropSquash with license keys enabled | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |
 | Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
@@ -40,7 +40,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 
 | Blocker | Class | Next action | Evidence owner |
 |---|---|---|---|
-| Packaged macOS manual QA | Manual packaged-app | Run the packaged `DropSquash.app` or `DropSquash.dmg` artifact through the manual QA table | `docs/manual-qa.md` |
+| Packaged macOS manual QA | Manual packaged-app | Run the packaged `DropSquash.app` or `DropSquash.dmg` artifact through the manual QA table and record `manual-qa-check` passing | `docs/manual-qa.md` |
 | Lemon Squeezy product setup | License sandbox | Confirm the sandbox product is DropSquash and license keys are enabled | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | License sandbox | Complete sandbox checkout for the intended product, test buyer, and order | `docs/manual-qa.md` |
 | Empty key activation | License sandbox | Leave the key empty, confirm Activate is disabled, and inspect the local license cache | `docs/manual-qa.md` |
