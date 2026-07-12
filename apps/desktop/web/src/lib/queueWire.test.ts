@@ -1,4 +1,9 @@
-import { queueEntryFromRustItem, queueStatusFromRust, type RustQueueItem } from "./queueWire.js";
+import {
+  queueEntryFromRustItem,
+  queueStatusFromRust,
+  requestFromRustItem,
+  type RustQueueItem,
+} from "./queueWire.js";
 
 function assert(condition: boolean, message: string) {
   if (!condition) throw new Error(message);
@@ -22,6 +27,17 @@ function mapsRustStatusesToUiStatuses() {
   assert(queueStatusFromRust("Blocked") === "blocked", "blocked status");
 }
 
+function mapsRustQueueItemToConversionRequest() {
+  const request = requestFromRustItem(item("Queued"), false);
+
+  assert(request.inputPath === "/tmp/input.mov", "input path should be mapped");
+  assert(request.outputDir === "/tmp/out", "output dir should be mapped");
+  assert(request.profile === "auto", "profile should be mapped");
+  assert(request.outputSize === "auto", "output size should be mapped");
+  assert(request.sourcePolicy === "ask", "source policy should be mapped");
+  assert(!request.writePrivacyReceipt, "privacy receipt flag should be preserved");
+}
+
 function item(status: RustQueueItem["status"], error?: string): RustQueueItem {
   return {
     id: 7,
@@ -39,3 +55,4 @@ function item(status: RustQueueItem["status"], error?: string): RustQueueItem {
 
 mapsRustQueueItemToUiEntry();
 mapsRustStatusesToUiStatuses();
+mapsRustQueueItemToConversionRequest();

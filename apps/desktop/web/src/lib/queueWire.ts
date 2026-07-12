@@ -49,6 +49,20 @@ export function queueEntryFromRustItem(item: RustQueueItem): QueueEntry {
   };
 }
 
+export function requestFromRustItem(
+  item: RustQueueItem,
+  writePrivacyReceipt: boolean,
+): ConvertRequest {
+  return {
+    inputPath: item.job.input_path,
+    outputDir: item.job.output_dir,
+    profile: item.job.profile,
+    outputSize: item.job.output_size,
+    sourcePolicy: item.job.source_policy,
+    writePrivacyReceipt,
+  };
+}
+
 export function queueStatusFromRust(status: RustQueueStatus): QueueStatus {
   switch (status) {
     case "Queued":

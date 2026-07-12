@@ -44,7 +44,7 @@ import {
   markSucceeded,
   nextQueued,
 } from "./lib/queue";
-import { queueEntryFromRustItem, type RustEncodeResult, type RustQueueItem } from "./lib/queueWire";
+import { queueEntryFromRustItem, requestFromRustItem, type RustEncodeResult } from "./lib/queueWire";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
 
 export function App() {
@@ -402,19 +402,5 @@ function encodeResultFromSummary(
     output_bytes: summary.outputBytes,
     success: true,
     error_message: null,
-  };
-}
-
-function requestFromRustItem(
-  item: RustQueueItem,
-  writePrivacyReceipt: boolean,
-): ConvertRequest {
-  return {
-    inputPath: item.job.input_path,
-    outputDir: item.job.output_dir,
-    profile: item.job.profile,
-    outputSize: item.job.output_size,
-    sourcePolicy: item.job.source_policy,
-    writePrivacyReceipt,
   };
 }
