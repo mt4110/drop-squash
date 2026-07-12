@@ -92,6 +92,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "short, medium, and large local recordings with smaller outputs",
     ),
     ("docs/qa-evidence.md", "versioned `DropSquash.dmg` artifact"),
+    ("docs/qa-evidence.md", "matching SHA-256"),
     ("docs/qa-evidence.md", "`auto_updates false`"),
     ("docs/qa-evidence.md", "declares no in-app auto-update"),
     ("docs/qa-evidence.md", "malformed App Store Connect key ids"),
