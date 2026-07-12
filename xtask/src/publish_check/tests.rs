@@ -46,6 +46,15 @@ fn rejects_live_checkout_reference_with_extra_path_after_buy_id() {
 }
 
 #[test]
+fn rejects_live_checkout_reference_with_prefixed_checkout_path() {
+    let text = "| Live checkout link | Verified | done | https://store.lemonsqueezy.com/store/checkout/buy/abc123 | `https://...` |\n";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_verified_blocker_without_evidence_reference() {
     let text = crate::release_check::required_blockers()
         .iter()

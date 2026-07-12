@@ -49,8 +49,7 @@ fn has_store_or_checkout(url: &crate::public_url::HttpsUrl<'_>, lower_path: &str
 
 fn has_checkout_buy_id(lower: &str) -> bool {
     lower
-        .split("checkout/buy/")
-        .nth(1)
+        .strip_prefix("checkout/buy/")
         .is_some_and(has_single_path_segment)
 }
 
