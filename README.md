@@ -35,6 +35,13 @@ node -v
 pnpm -v
 ```
 
+To avoid host Node version drift during checks, run web commands through the
+pinned shell:
+
+```bash
+nix develop --command pnpm --dir apps/desktop/web test
+```
+
 ```bash
 cargo fmt --all
 cargo clippy --workspace --all-targets -- -D warnings

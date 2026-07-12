@@ -13,6 +13,17 @@ nix develop --command node -v
 nix develop --command pnpm -v
 ```
 
+Run web checks through the shell when the host Node differs from the pinned
+version:
+
+```bash
+nix develop --command pnpm --dir apps/desktop/web test
+```
+
+Do not commit `.envrc`; release checks intentionally reject local environment
+files so secrets and machine-specific shell hooks cannot slip into release
+artifacts.
+
 Build the unsigned local QA DMG from the pinned development shell with:
 
 ```bash
