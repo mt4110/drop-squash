@@ -331,9 +331,48 @@ fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_smaller_output_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Choose recording conversion",
+        "saved clip.squashed.mp4 and original remained in place",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_reveal_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("Reveal output", "Finder opened with clip.squashed.mp4");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_packaged_macos_manual_qa_with_weak_batch_summary() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Batch summary",
+        "summary showed finished count, saved bytes, and mixed outcomes",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_packaged_macos_manual_qa_with_weak_failed_conversion() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Failed conversion",
+        "original remained and trial count unchanged after failure",
+    );
 
     let missing = missing_manual_verified_evidence(blockers, &manual);
 
@@ -358,7 +397,7 @@ fn accepts_packaged_macos_manual_qa_with_specific_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
         "Choose recording conversion",
-        "saved clip.squashed.mp4 and original remained in place",
+        "saved smaller clip.squashed.mp4 and original remained in place",
     );
 
     assert!(missing_manual_verified_evidence(blockers, &manual).is_empty());
@@ -507,25 +546,35 @@ fn packaged_result(label: &str) -> &'static str {
         "License cache path" => "/Users/me/Library/Application Support/DropSquash/license.json",
         "Tester" => "Manual tester",
         "Date" => "2026-07-11",
-        "Choose recording conversion" => "saved clip.squashed.mp4 and original remained in place",
-        "Drag-and-drop conversion" => "saved drag.squashed.mp4 and original remained in place",
+        "Choose recording conversion" => {
+            "saved smaller clip.squashed.mp4 and original remained in place"
+        }
+        "Drag-and-drop conversion" => {
+            "saved smaller drag.squashed.mp4 and original remained in place"
+        }
         "Privacy receipt sidecar" => {
-            "clip.privacy.json recorded uploaded_bytes = 0 and metadata_policy = preserve"
+            "clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, file names instead of absolute paths"
         }
         "Reveal privacy receipt" => "Finder opened with clip.privacy.json selected",
         "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix",
         "Cancellation" => "app returned ready and trial history showed no new success",
-        "Multi-file queue" => "three recordings queued with one active sequential conversion",
-        "Queued job cancellation" => "queued row marked cancelled and never started",
-        "Batch summary" => {
-            "summary showed finished count, saved bytes, and 1 cancelled mixed outcome"
+        "Multi-file queue" => {
+            "three recordings queued with one active sequential conversion; completed job finished and unrelated failures did not block it"
         }
-        "Ask source policy" => "Ask prompt let tester choose Trash or Keep",
+        "Queued job cancellation" => {
+            "queued row marked cancelled and never started; trial history showed no new success"
+        }
+        "Batch summary" => {
+            "summary showed finished count, saved bytes, failed count, cancelled count, and blocked count"
+        }
+        "Ask source policy" => "Ask prompt let tester choose Trash or Keep; original remained unchanged",
         "Trash source policy" => {
             "button showed Moving original and was disabled; original moved to Trash only after verified smaller output"
         }
-        "Failed conversion" => "original remained and trial count unchanged after failure",
-        "Larger output" => "larger result failed and trial count unchanged",
+        "Failed conversion" => {
+            "friendly error appeared; original remained and trial count unchanged after failure"
+        }
+        "Larger output" => "larger result failed; original remained and trial count unchanged",
         "Reveal output" => "Finder opened with clip.squashed.mp4 selected",
         "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed",
         _ => "concrete evidence",
