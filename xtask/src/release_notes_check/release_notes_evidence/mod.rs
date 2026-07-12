@@ -52,10 +52,20 @@ fn validate_sha256(text: &str) -> Option<String> {
     let Some(value) = value::field("SHA-256", text) else {
         return Some("SHA-256 must be present".to_string());
     };
-    if value.len() == 64 && value.chars().all(|value| value.is_ascii_hexdigit()) {
+    if value.len() == 64
+        && value.chars().all(|value| value.is_ascii_hexdigit())
+        && !all_same_char(value)
+    {
         return None;
     }
-    Some("SHA-256 must contain a 64-character hex checksum".to_string())
+    Some("SHA-256 must contain a real 64-character hex checksum".to_string())
+}
+
+fn all_same_char(value: &str) -> bool {
+    value
+        .chars()
+        .next()
+        .is_some_and(|first| value.chars().all(|char| char == first))
 }
 
 fn validate_evidence_field(label: &'static str, text: &str) -> Option<String> {
