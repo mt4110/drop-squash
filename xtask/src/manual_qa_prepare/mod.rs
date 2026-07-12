@@ -1,12 +1,14 @@
 mod artifact;
 mod build_identity;
 mod environment;
+mod markdown;
 mod options;
 mod state;
 
 use artifact::qa_artifact;
 use build_identity::BuildIdentity;
 use environment::Environment;
+use markdown::Field;
 use options::Options;
 use state::{backup_state, restore_state, RESET_FILES};
 
@@ -52,20 +54,31 @@ fn print_paths(options: &Options) -> Result<(), String> {
     println!("manual QA output folder: {}", options.output_dir.display());
     println!("app state source: {}", options.app_state_dir.display());
     let artifact = qa_artifact(options)?;
+    let mut fields: Vec<Field> = Vec::new();
     match BuildIdentity::current_for_artifact(artifact.as_deref()) {
-        Ok(identity) => println!("manual QA App build: {}", identity.app_build()),
+        Ok(identity) => {
+            let app_build = identity.app_build();
+            println!("manual QA App build: {app_build}");
+            fields.push(("App build", app_build));
+        }
         Err(error) => println!("manual QA App build unavailable: {error}"),
     }
     if let Some(path) = artifact {
         println!("manual QA App artifact: {}", path.display());
+        fields.push(("App artifact", path.display().to_string()));
     } else {
         println!("manual QA App artifact unavailable: pass --app-artifact <path>");
     }
     println!("{}", sample_set_line(options));
+    if let Some(sample_set) = &options.input_sample_set {
+        fields.push(("Input sample set", sample_set.clone()));
+    }
     let environment = Environment::current(options)?;
     for line in environment.manual_qa_lines() {
         println!("{line}");
     }
+    fields.extend(environment.manual_qa_fields());
+    markdown::print_fields(&fields);
     Ok(())
 }
 

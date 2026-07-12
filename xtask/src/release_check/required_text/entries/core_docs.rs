@@ -45,6 +45,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/reproducible-builds.md",
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
+    ("docs/manual-qa.md", "manual QA Markdown fields"),
+    (
+        "docs/manual-qa.md",
+        "pasted into the macOS Packaged App field table",
+    ),
     ("website/README.md", "docs/release-blockers.md"),
     ("apps/desktop/src-tauri/tauri.conf.json", "!\"updater\""),
 ];

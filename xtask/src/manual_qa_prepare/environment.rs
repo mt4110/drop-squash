@@ -25,21 +25,28 @@ impl Environment {
     }
 
     pub(super) fn manual_qa_lines(&self) -> Vec<String> {
+        self.manual_qa_fields()
+            .into_iter()
+            .map(|(label, value)| format!("manual QA {label}: {value}"))
+            .collect()
+    }
+
+    pub(super) fn manual_qa_fields(&self) -> Vec<(&'static str, String)> {
         vec![
-            format!("manual QA macOS version: macOS {}", self.macos_version),
-            format!("manual QA Machine: {}", self.machine),
-            format!("manual QA Output folder: {}", self.output_folder),
-            format!("manual QA Config path: {}/config.json", self.app_state_dir),
-            format!(
-                "manual QA History path: {}/history.jsonl",
-                self.app_state_dir
+            ("macOS version", format!("macOS {}", self.macos_version)),
+            ("Machine", self.machine.clone()),
+            ("Output folder", self.output_folder.clone()),
+            ("Config path", format!("{}/config.json", self.app_state_dir)),
+            (
+                "History path",
+                format!("{}/history.jsonl", self.app_state_dir),
             ),
-            format!(
-                "manual QA License cache path: {}/license.json",
-                self.app_state_dir
+            (
+                "License cache path",
+                format!("{}/license.json", self.app_state_dir),
             ),
-            format!("manual QA Tester: {}", self.tester),
-            format!("manual QA Date: {}", self.date),
+            ("Tester", self.tester.clone()),
+            ("Date", self.date.clone()),
         ]
     }
 
