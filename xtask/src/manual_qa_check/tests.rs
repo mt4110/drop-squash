@@ -590,7 +590,7 @@ fn reports_incomplete_benchmark_results() {
     assert!(missing
         .iter()
         .any(|error| error.contains("smaller outputs, machine, and OS")));
-    assert!(missing.iter().any(|error| error.contains("20%")));
+    assert!(missing.iter().any(|error| error.contains("baseline")));
     assert!(missing.iter().any(|error| error.contains("benchmark")));
 }
 
@@ -1114,7 +1114,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs on MacBookPro18,4 macOS 26.5.2 |\n");
         } else if check == "Benchmark regression threshold" {
             text.push_str(
-                "| Benchmark regression threshold | Passes | no sample exceeded 20% regression |\n",
+                "| Benchmark regression threshold | Passes | no sample exceeded 20% regression against the same-machine release candidate baseline |\n",
             );
         } else if check == "Sandbox product setup" {
             text.push_str("| Sandbox product setup | Passes | DropSquash intended product confirmed and license keys enabled |\n");

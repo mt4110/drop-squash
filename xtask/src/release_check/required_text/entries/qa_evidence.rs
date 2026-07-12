@@ -19,6 +19,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     (
         "docs/qa-evidence.md",
+        "same-machine release candidate benchmark baseline evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
         "repository-local and relative app-state/state/output/markdown-output path rejection",
     ),
     ("docs/qa-evidence.md", "`.md` markdown-output rejection"),
