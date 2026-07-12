@@ -120,6 +120,36 @@ fn rejects_non_github_release_url() {
 }
 
 #[test]
+fn rejects_imposter_github_release_host() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com.evil/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg"
+            .to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("GitHub Release"));
+}
+
+#[test]
+fn rejects_url_with_inline_note() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg TBD"
+            .to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("whitespace"));
+}
+
+#[test]
 fn rejects_url_for_different_version() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),

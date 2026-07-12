@@ -8,34 +8,38 @@ pub(super) fn require_version(version: &str) -> Result<(), String> {
 }
 
 pub(super) fn require_dmg_url(url: &str) -> Result<(), String> {
-    require_https_url(url)?;
-    require_github_release_url(url)?;
-    if url.ends_with("/DropSquash.dmg") {
+    let parsed = require_https_url(url)?;
+    require_github_release_url(&parsed)?;
+    if parsed.path().ends_with("/DropSquash.dmg") {
         return Ok(());
     }
     Err("url must point to DropSquash.dmg".to_string())
 }
 
 pub(super) fn require_versioned_url(version: &str, url: &str) -> Result<(), String> {
-    if url.contains(&format!("/v{version}/")) {
+    let Some(parsed) = crate::public_url::HttpsUrl::parse(url) else {
+        return Err("url must point to the matching v<version> release".to_string());
+    };
+    if parsed.path().contains(&format!("/v{version}/")) {
         return Ok(());
     }
     Err("url must point to the matching v<version> release".to_string())
 }
 
-pub(super) fn require_https_url(url: &str) -> Result<(), String> {
+pub(super) fn require_https_url(url: &str) -> Result<crate::public_url::HttpsUrl<'_>, String> {
     require_clean("url", url)?;
     if url.contains("example.com") {
         return Err("url must not contain example.com".to_string());
     }
-    if url.starts_with("https://") {
-        return Ok(());
-    }
-    Err("url must start with https://".to_string())
+    crate::public_url::HttpsUrl::parse(url)
+        .ok_or_else(|| "url must start with https://".to_string())
 }
 
 pub(super) fn require_homepage(url: &str) -> Result<(), String> {
-    require_https_url(url)?;
+    let parsed = require_https_url(url)?;
+    if !parsed.host_is("github.com") {
+        return Err("homepage must be the canonical DropSquash repository".to_string());
+    }
     if url == "https://github.com/mt4110/drop-squash" {
         return Ok(());
     }
@@ -62,11 +66,10 @@ fn require_clean(label: &str, value: &str) -> Result<(), String> {
     Ok(())
 }
 
-fn require_github_release_url(url: &str) -> Result<(), String> {
-    if has_github_release_asset(
-        url,
-        "https://github.com/mt4110/drop-squash/releases/download/",
-    ) {
+fn require_github_release_url(url: &crate::public_url::HttpsUrl<'_>) -> Result<(), String> {
+    if url.host_is("github.com")
+        && has_github_release_asset(url.path(), "mt4110/drop-squash/releases/download/")
+    {
         return Ok(());
     }
     Err("url must point to the DropSquash GitHub Release download".to_string())
