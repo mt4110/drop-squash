@@ -37,10 +37,15 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "manual QA `App build` field"),
     ("docs/release.md", "current `HEAD`"),
     ("docs/release.md", "release notes `SHA-256` field"),
+    ("docs/release.md", "lowercase SHA-256 hex"),
     ("docs/release.md", "`App artifact` recorded"),
     (
         "docs/release.md",
         "Benchmark sample set CSV path must also match",
+    ),
+    (
+        "docs/release.md",
+        "same-machine release candidate baseline",
     ),
     ("docs/release.md", "manual QA"),
     ("docs/release.md", "release-notes-prepare"),
