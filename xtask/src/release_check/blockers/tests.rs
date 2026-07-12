@@ -125,7 +125,7 @@ fn reports_blocked_rows_with_vague_reference() {
 
 #[test]
 fn reports_secret_like_release_blocker_values() {
-    let text = "| Lemon Squeezy product setup | Blocked | product uses LEMON_SQUEEZY_API_KEY=private | TBD | `docs/manual-qa.md` |\n";
+    let text = "| Lemon Squeezy product setup | Blocked | product uses LEMON_SQUEEZY_API_KEY=private and store_id=123 | TBD | `docs/manual-qa.md` |\n";
 
     let values = secrets::values(text);
 

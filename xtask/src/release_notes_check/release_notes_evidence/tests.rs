@@ -763,7 +763,7 @@ fn rejects_secret_like_release_note_values() {
     let errors = check_text(
         r#"
 - Apple notary log: accepted with APPLE_PASSWORD=not-for-release
-- Lemon Squeezy product setup: DropSquash intended product has license keys enabled; license key: raw-test-key
+- Lemon Squeezy product setup: DropSquash intended product has license keys enabled; product_id=123 and license key: raw-test-key
 "#,
     );
 

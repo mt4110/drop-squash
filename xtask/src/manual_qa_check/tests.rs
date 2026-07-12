@@ -1004,7 +1004,7 @@ fn reports_checksum_result_without_digest() {
 fn reports_secret_like_manual_qa_values() {
     let (_directory, path) = write_manual_qa(
         "| Apple notary log | Accepted | accepted with APPLE_PASSWORD=not-for-release |\n\
-| Valid sandbox activation | Pro state | raw license key: test-key was entered |\n",
+| Valid sandbox activation | Pro state | raw license key: test-key was entered and variant_id=123 |\n",
     );
     let missing = check_file(&path).unwrap();
 
