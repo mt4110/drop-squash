@@ -1,3 +1,5 @@
+use super::value;
+
 pub(super) fn validate(text: &str) -> Vec<String> {
     [
         validate_version(text),
@@ -10,7 +12,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
 }
 
 fn validate_version(text: &str) -> Option<String> {
-    let Some(value) = field_value("Version", text) else {
+    let Some(value) = value::field("Version", text) else {
         return Some("Version must be present".to_string());
     };
     if is_semver(value.strip_prefix('v').unwrap_or(value)) {
@@ -20,7 +22,7 @@ fn validate_version(text: &str) -> Option<String> {
 }
 
 fn validate_artifact(text: &str) -> Option<String> {
-    let Some(value) = field_value("Artifact", text) else {
+    let Some(value) = value::field("Artifact", text) else {
         return Some("Artifact must be present".to_string());
     };
     if value == "DropSquash.dmg" {
@@ -30,19 +32,13 @@ fn validate_artifact(text: &str) -> Option<String> {
 }
 
 fn validate_git_commit(text: &str) -> Option<String> {
-    let Some(value) = field_value("Git commit", text) else {
+    let Some(value) = value::field("Git commit", text) else {
         return Some("Git commit must be present".to_string());
     };
     if (7..=40).contains(&value.len()) && value.chars().all(|value| value.is_ascii_hexdigit()) {
         return None;
     }
     Some("Git commit must be a concrete commit hash".to_string())
-}
-
-fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
-    let prefix = format!("- {label}:");
-    text.lines()
-        .find_map(|line| line.trim().strip_prefix(&prefix).map(str::trim))
 }
 
 fn is_semver(value: &str) -> bool {

@@ -1,3 +1,5 @@
+use super::value;
+
 pub(super) fn validate(text: &str) -> Vec<String> {
     [
         validate_sample_set(text),
@@ -9,7 +11,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
 }
 
 fn validate_sample_set(text: &str) -> Option<String> {
-    let Some(value) = field_value("Benchmark sample set", text) else {
+    let Some(value) = value::field("Benchmark sample set", text) else {
         return Some("Benchmark sample set must be present".to_string());
     };
     let lower = value.to_ascii_lowercase();
@@ -28,7 +30,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
 }
 
 fn validate_regression_threshold(text: &str) -> Option<String> {
-    let Some(value) = field_value("Benchmark regression threshold", text) else {
+    let Some(value) = value::field("Benchmark regression threshold", text) else {
         return Some("Benchmark regression threshold must be present".to_string());
     };
     let lower = value.to_ascii_lowercase();
@@ -36,12 +38,6 @@ fn validate_regression_threshold(text: &str) -> Option<String> {
         return None;
     }
     Some("Benchmark regression threshold must mention 20%".to_string())
-}
-
-fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
-    let prefix = format!("- {label}:");
-    text.lines()
-        .find_map(|line| line.trim().strip_prefix(&prefix).map(str::trim))
 }
 
 fn has_machine_context(value: &str) -> bool {

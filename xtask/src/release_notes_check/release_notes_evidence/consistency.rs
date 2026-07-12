@@ -1,6 +1,8 @@
+use super::value;
+
 pub(super) fn validate(text: &str) -> Vec<String> {
     let mut errors = Vec::new();
-    let version = field_value("Version", text);
+    let version = value::field("Version", text);
     require_version_in_url("Artifact URL", version, text, &mut errors);
     require_version_in_url("GitHub Release URL", version, text, &mut errors);
     require_artifact_name(text, &mut errors);
@@ -14,7 +16,7 @@ fn require_version_in_url(
     text: &str,
     errors: &mut Vec<String>,
 ) {
-    let (Some(version), Some(url)) = (version, field_value(label, text)) else {
+    let (Some(version), Some(url)) = (version, value::field(label, text)) else {
         return;
     };
     let version = version.strip_prefix('v').unwrap_or(version);
@@ -26,8 +28,8 @@ fn require_version_in_url(
 
 fn require_artifact_name(text: &str, errors: &mut Vec<String>) {
     let (Some(artifact), Some(url)) = (
-        field_value("Artifact", text),
-        field_value("Artifact URL", text),
+        value::field("Artifact", text),
+        value::field("Artifact URL", text),
     ) else {
         return;
     };
@@ -44,8 +46,8 @@ fn require_same_origin(
     errors: &mut Vec<String>,
 ) {
     let (Some(first), Some(second)) = (
-        field_value(first_label, text),
-        field_value(second_label, text),
+        value::field(first_label, text),
+        value::field(second_label, text),
     ) else {
         return;
     };
@@ -60,10 +62,4 @@ fn require_same_origin(
 fn origin(url: &str) -> Option<&str> {
     let without_scheme = url.strip_prefix("https://")?;
     Some(without_scheme.split('/').next().unwrap_or(without_scheme))
-}
-
-fn field_value<'a>(label: &str, text: &'a str) -> Option<&'a str> {
-    let prefix = format!("- {label}:");
-    text.lines()
-        .find_map(|line| line.trim().strip_prefix(&prefix).map(str::trim))
 }
