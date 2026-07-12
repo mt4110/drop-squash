@@ -19,12 +19,21 @@ const DISALLOWED: [&str; 17] = [
 ];
 
 pub(crate) fn violations(scope: &str, text: &str) -> Vec<String> {
-    let lower = text.to_ascii_lowercase();
+    let lower = normalized(text);
     DISALLOWED
         .iter()
         .filter(|marker| lower.contains(**marker))
         .map(|marker| format!("{scope} must not contain secret-like value {marker}"))
         .collect()
+}
+
+fn normalized(text: &str) -> String {
+    let lower = text.to_ascii_lowercase();
+    lower
+        .replace(" :", ":")
+        .replace(": ", ":")
+        .replace(" =", "=")
+        .replace("= ", "=")
 }
 
 #[cfg(test)]
@@ -51,6 +60,17 @@ mod tests {
 
         assert!(errors.iter().any(|error| error.contains("store id:")));
         assert!(errors.iter().any(|error| error.contains("variant id:")));
+    }
+
+    #[test]
+    fn rejects_secret_like_values_with_spaced_separators() {
+        let text = "product_id = 123; store id : 456; license key : raw";
+
+        let errors = violations("evidence", text);
+
+        assert!(errors.iter().any(|error| error.contains("product_id")));
+        assert!(errors.iter().any(|error| error.contains("store id:")));
+        assert!(errors.iter().any(|error| error.contains("license key:")));
     }
 
     #[test]
