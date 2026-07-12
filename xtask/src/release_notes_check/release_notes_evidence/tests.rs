@@ -34,10 +34,10 @@ fn accepts_concrete_production_urls() {
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
-- Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and raw key absent from cache
+- Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and cache kept fingerprint and instance fields with raw key absent
 - Empty key activation: Activate disabled for empty input and raw key absent from cache
 - Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache
-- License network failure: friendly network error shown, existing valid cache preserved, raw key absent from cache
+- License network failure: friendly network error shown, existing valid cache preserved fingerprint and instance fields with raw key absent
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
@@ -365,6 +365,19 @@ fn rejects_network_failure_without_existing_valid_cache() {
 }
 
 #[test]
+fn rejects_network_failure_without_fingerprint_instance_evidence() {
+    let errors = check_text(
+        r#"
+- License network failure: friendly network error shown, existing valid cache preserved, raw key absent from cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("License network failure")));
+}
+
+#[test]
 fn rejects_activation_with_persisted_raw_key() {
     let errors = check_text(
         r#"
@@ -382,6 +395,19 @@ fn rejects_valid_activation_without_sandbox_request_context() {
     let errors = check_text(
         r#"
 - Valid sandbox activation: Activating state disabled submit; Pro state reached and raw key absent from cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
+fn rejects_valid_activation_without_fingerprint_instance_evidence() {
+    let errors = check_text(
+        r#"
+- Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and raw key absent from cache
 "#,
     );
 

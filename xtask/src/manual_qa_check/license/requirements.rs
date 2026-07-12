@@ -10,7 +10,14 @@ pub(super) const EMPTY_KEY_CACHE: &[&str] = &["raw key"];
 pub(super) const EMPTY_KEY_ACTION: &[&str] = &["activate", "disabled"];
 
 pub(super) const INVALID_KEY_CACHE: &[&str] = &["friendly", "raw key"];
-pub(super) const VALID_KEY_CACHE: &[&str] = &["lemon squeezy", "sandbox", "pro", "raw key"];
+pub(super) const VALID_KEY_CACHE: &[&str] = &[
+    "lemon squeezy",
+    "sandbox",
+    "pro",
+    "fingerprint",
+    "instance",
+    "raw key",
+];
 pub(super) const ACTIVATING_ACTION: &[&str] = &["activating", "disabled"];
 
 pub(super) const NETWORK_FAILURE_CACHE: &[&str] = &[
@@ -19,6 +26,8 @@ pub(super) const NETWORK_FAILURE_CACHE: &[&str] = &[
     "existing",
     "valid",
     "preserved",
+    "fingerprint",
+    "instance",
     "raw key",
 ];
 
