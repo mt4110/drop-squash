@@ -58,4 +58,6 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("- Artifact: DropSquash.dmg"));
     assert!(text.contains("- Git commit: abc1234"));
     assert!(text.contains("GitHub Release checksum"));
+    assert!(text.contains("Homebrew cask command"));
+    assert!(text.contains("homebrew-cask 0.1.0"));
 }

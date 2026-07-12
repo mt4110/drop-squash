@@ -4,6 +4,8 @@ use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+mod output;
+
 const TAURI_CONFIG: &str = "apps/desktop/src-tauri/tauri.conf.json";
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
@@ -54,18 +56,12 @@ impl PreparedNotes {
     }
 
     fn lines(&self) -> Vec<String> {
-        vec![
-            "release notes prepared fields:".into(),
-            format!("- Version: v{}", self.version),
-            "- Artifact: DropSquash.dmg".into(),
-            format!("- Artifact URL: {}", self.artifact_url),
-            format!("- SHA-256: {}", self.sha256),
-            format!("- Git commit: {}", self.commit),
-            format!(
-                "- GitHub Release checksum: SHA256SUMS attached to release for {} with {}",
-                self.artifact_url, self.sha256
-            ),
-        ]
+        output::lines(output::Fields {
+            version: &self.version,
+            artifact_url: &self.artifact_url,
+            sha256: &self.sha256,
+            commit: &self.commit,
+        })
     }
 }
 

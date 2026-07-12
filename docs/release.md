@@ -152,7 +152,8 @@ cargo run -p xtask -- checksum path/to/DropSquash.dmg > SHA256SUMS
 The generated `SHA256SUMS` line uses the artifact file name, not the local
 build directory path, so it can be attached directly to the public release.
 Generate the release notes artifact fields from the same DMG and public
-artifact URL to avoid hand-copying the version, checksum, and git commit:
+artifact URL to avoid hand-copying the version, checksum, git commit, and
+Homebrew cask command inputs:
 
 ```sh
 cargo run -p xtask -- release-notes-prepare path/to/DropSquash.dmg https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
