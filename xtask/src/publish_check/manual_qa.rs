@@ -30,10 +30,20 @@ pub(super) fn require_current_head(path: &Path) -> Result<(), String> {
         return Err("manual QA App build must be present before publish".to_string());
     };
     let head = git_head()?;
-    if build.contains(&format!("git {head}")) {
+    if has_git_commit(build, &head) {
         return Ok(());
     }
     Err("manual QA App build must match current HEAD before publish".to_string())
+}
+
+fn has_git_commit(build: &str, head: &str) -> bool {
+    let mut tokens = build.split_whitespace();
+    while let Some(token) = tokens.next() {
+        if token == "git" && tokens.next() == Some(head) {
+            return true;
+        }
+    }
+    false
 }
 
 fn app_artifact(text: &str) -> Option<&str> {

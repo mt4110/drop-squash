@@ -63,6 +63,18 @@ fn rejects_manual_qa_for_old_head() {
         .contains("current HEAD"));
 }
 
+#[test]
+fn rejects_manual_qa_for_commit_with_matching_prefix() {
+    let head = super::git_head().unwrap();
+    let (_directory, path) = write_manual_qa(&format!(
+        "| App build | DropSquash 0.1.0 git {head}ffff |\n"
+    ));
+
+    assert!(require_current_head(&path)
+        .unwrap_err()
+        .contains("current HEAD"));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
