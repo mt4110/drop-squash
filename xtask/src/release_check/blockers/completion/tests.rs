@@ -270,7 +270,16 @@ fn reports_homebrew_completion_without_dmg_name() {
 
 #[test]
 fn reports_homebrew_completion_without_auto_update_policy() {
-    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n";
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with SHA-256 and cask includes `zap` cleanup | TBD | Homebrew tap PR |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Homebrew cask install"));
+}
+
+#[test]
+fn reports_homebrew_completion_without_sha256() {
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -322,7 +331,7 @@ fn described_blockers() -> String {
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",
         "| Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the release | TBD | GitHub Release |\n",
-        "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n",
+        "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` with matching SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]
     .join("")
 }

@@ -29,7 +29,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |
 | Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the release | TBD | GitHub Release |
-| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
+| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` with matching SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
 
 ## Evidence Classes
 
@@ -56,4 +56,4 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings, record the absolute CSV path outside repo, and record threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` SHA-256 line to the GitHub Release | GitHub Release URL |
-| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, `DropSquash.dmg` URL, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
+| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, `DropSquash.dmg` URL, matching SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
