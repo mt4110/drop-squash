@@ -29,6 +29,22 @@ fn saves_and_loads_config() {
 }
 
 #[test]
+fn save_does_not_leave_temp_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("config.json");
+
+    AppConfig::default().save_to_path(&path).unwrap();
+
+    assert!(std::fs::read_dir(directory.path())
+        .unwrap()
+        .all(|entry| !entry
+            .unwrap()
+            .file_name()
+            .to_string_lossy()
+            .ends_with(".tmp")));
+}
+
+#[test]
 fn missing_fields_fall_back_to_defaults() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("config.json");

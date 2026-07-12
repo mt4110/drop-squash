@@ -1,9 +1,10 @@
-use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
+mod io;
+
+use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{default_output_dir, OutputSize, Profile, Result, SourcePolicy};
+use crate::{default_output_dir, OutputSize, Profile, SourcePolicy};
 
 pub const TRIAL_CONVERSION_LIMIT: u32 = 10;
 
@@ -28,51 +29,6 @@ impl Default for AppConfig {
             write_privacy_receipt: true,
             trial_conversion_limit: TRIAL_CONVERSION_LIMIT,
         }
-    }
-}
-
-impl AppConfig {
-    pub fn load_or_default(path: &Path) -> Result<Self> {
-        match std::fs::read(path) {
-            Ok(bytes) => Ok(serde_json::from_slice(&bytes)?),
-            Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(Self::default()),
-            Err(error) => Err(error.into()),
-        }
-    }
-
-    pub fn save_to_path(&self, path: &Path) -> Result<()> {
-        if let Some(parent) = path.parent() {
-            std::fs::create_dir_all(parent)?;
-        }
-
-        let file_name = path
-            .file_name()
-            .and_then(|name| name.to_str())
-            .unwrap_or("config.json");
-        let unique_suffix = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .map(|duration| duration.as_nanos())
-            .unwrap_or_default();
-        let temporary_path = path.with_file_name(format!(
-            ".{file_name}.{}.{}.tmp",
-            std::process::id(),
-            unique_suffix
-        ));
-        std::fs::write(&temporary_path, serde_json::to_vec_pretty(self)?)?;
-
-        #[cfg(target_os = "windows")]
-        if path.exists() {
-            std::fs::remove_file(path)?;
-        }
-
-        match std::fs::rename(&temporary_path, path) {
-            Ok(()) => {}
-            Err(error) => {
-                let _ = std::fs::remove_file(&temporary_path);
-                return Err(error.into());
-            }
-        }
-        Ok(())
     }
 }
 
