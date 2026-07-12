@@ -2,6 +2,7 @@ use crate::dmg;
 use std::path::{Path, PathBuf};
 
 const DISALLOWED_BYTES: &[u8] = b"/nix/store";
+const DISALLOWED_TEXT: &str = "/nix/store";
 
 pub fn run(paths: Vec<String>) -> Result<(), String> {
     if paths.is_empty() {
@@ -17,7 +18,7 @@ pub fn run(paths: Vec<String>) -> Result<(), String> {
 fn check_file(path: &Path) -> Result<(), String> {
     let bytes = dmg::read(path, "artifact")?;
     require_canonical_name(path)?;
-    if contains_bytes(&bytes, DISALLOWED_BYTES) {
+    if has_disallowed_reference(&bytes) {
         return Err(format!(
             "artifact contains disallowed /nix/store reference: {}",
             path.display()
@@ -33,10 +34,20 @@ fn require_canonical_name(path: &Path) -> Result<(), String> {
     Err("artifact must be named DropSquash.dmg".to_string())
 }
 
+fn has_disallowed_reference(bytes: &[u8]) -> bool {
+    contains_bytes(bytes, DISALLOWED_BYTES) || contains_bytes(bytes, &utf16le(DISALLOWED_TEXT))
+}
+
 fn contains_bytes(haystack: &[u8], needle: &[u8]) -> bool {
     haystack
         .windows(needle.len())
         .any(|window| window == needle)
+}
+
+fn utf16le(text: &str) -> Vec<u8> {
+    text.encode_utf16()
+        .flat_map(|value| value.to_le_bytes())
+        .collect()
 }
 
 #[cfg(test)]
