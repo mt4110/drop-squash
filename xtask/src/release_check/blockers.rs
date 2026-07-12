@@ -9,6 +9,7 @@ mod records;
 mod reference_urls;
 mod required_blockers;
 pub(super) mod row;
+mod row_status;
 mod url_pairs;
 mod verified_ref;
 
@@ -20,10 +21,10 @@ pub(super) fn required() -> &'static [&'static str] {
 
 pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
-    let missing = missing_release_blockers(&text);
-    let invalid = invalid_status_rows(&text);
-    let unproven = unproven_verified_rows(&text);
-    let stale = stale_blocked_rows(&text);
+    let missing = row_status::missing_release_blockers(&text);
+    let invalid = row_status::invalid_status_rows(&text);
+    let unproven = row_status::unproven_verified_rows(&text);
+    let stale = row_status::stale_blocked_rows(&text);
     let misplaced_ref = verified_ref::misplaced_verified_references(&text);
     let incomplete = completion::incomplete_requirements(&text);
     let misplaced = records::misplaced_record_targets(&text);
@@ -44,62 +45,6 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         return Ok(());
     }
     Err(issues.format(path))
-}
-
-fn missing_release_blockers(text: &str) -> Vec<&'static str> {
-    REQUIRED_BLOCKERS
-        .iter()
-        .copied()
-        .filter(|blocker| row::find(text, blocker).is_none())
-        .collect()
-}
-
-fn invalid_status_rows(text: &str) -> Vec<&'static str> {
-    REQUIRED_BLOCKERS
-        .iter()
-        .copied()
-        .filter(|blocker| {
-            !row::find(text, blocker).is_some_and(|line| {
-                row::has_status(line, blocker, "Blocked")
-                    || row::has_status(line, blocker, "Verified")
-            })
-        })
-        .collect()
-}
-
-fn unproven_verified_rows(text: &str) -> Vec<&'static str> {
-    REQUIRED_BLOCKERS
-        .iter()
-        .copied()
-        .filter(|blocker| {
-            row::find(text, blocker)
-                .filter(|line| row::has_status(line, blocker, "Verified"))
-                .is_some_and(missing_evidence_reference)
-        })
-        .collect()
-}
-
-fn missing_evidence_reference(line: &str) -> bool {
-    match row::evidence_reference(line) {
-        Some(value) => !evidence_ref::is_evidence_reference(value),
-        None => true,
-    }
-}
-
-fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
-    REQUIRED_BLOCKERS
-        .iter()
-        .copied()
-        .filter(|blocker| {
-            row::find(text, blocker)
-                .filter(|line| row::has_status(line, blocker, "Blocked"))
-                .is_some_and(has_stale_blocked_reference)
-        })
-        .collect()
-}
-
-fn has_stale_blocked_reference(line: &str) -> bool {
-    row::evidence_reference(line) != Some("TBD")
 }
 
 #[cfg(test)]
