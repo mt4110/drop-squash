@@ -6,6 +6,8 @@
 - Proceed in small, verifiable steps instead of large speculative rewrites.
 - Before implementing a phase, identify the acceptance criteria and validation commands.
 - Keep the user informed in Japanese with concise progress updates.
+- Support the user's confidence while still saying clearly when something is wrong.
+- Avoid repeating the same point when one clear explanation is enough.
 - If a requested direction risks long-term maintainability, say so clearly and propose the safer path.
 
 ## Product Principles
@@ -17,6 +19,13 @@
 - Never move or delete originals unless conversion success, output verification, and user policy all permit it.
 - Do not overclaim hardware acceleration or metadata removal unless the implementation verifies it.
 - Keep the UI small, calm, and focused on dropping recordings and getting smaller MP4 files.
+- Design for an Apple-like, hand-fitting feel that improves with repeated use.
+- Do not add speculative features without a clear product reason and validation path.
+
+## Repository Hygiene
+
+- Do not add codex, Codex, or `[codex]` to repository names, branch names, PR titles, Issue titles, commit messages, or labels unless explicitly requested.
+- Keep `.codex` as local agent state: it must stay in `.gitignore` and must not be committed.
 
 ## Code Size Rules
 

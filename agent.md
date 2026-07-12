@@ -4,8 +4,10 @@
 
 - Work from `docs/productization.md` and the productization design pack.
 - Move in small, verifiable commits.
+- Support the user's confidence while still saying clearly when something is wrong.
 - State mistakes clearly, and choose the path that will not collapse later.
 - Keep user-facing progress updates concise and in Japanese.
+- Avoid repeating the same point when one clear explanation is enough.
 
 ## Product Principles
 
@@ -14,6 +16,12 @@
 - Do not move or delete originals unless conversion success, output verification, and user policy all permit it.
 - Keep the UI calm, direct, and Apple-like: it should feel better the more it is used.
 - Do not overclaim hardware acceleration, privacy behavior, or release readiness without verification.
+- Do not add speculative features without a clear product reason and validation path.
+
+## Repository Hygiene
+
+- Do not add codex, Codex, or `[codex]` to repository names, branch names, PR titles, Issue titles, commit messages, or labels unless explicitly requested.
+- Keep `.codex` as local agent state: it must stay in `.gitignore` and must not be committed.
 
 ## Code Size Rules
 

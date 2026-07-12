@@ -1,3 +1,4 @@
+mod agent_docs;
 mod core_docs;
 mod distribution_docs;
 mod productization_docs;
@@ -10,6 +11,7 @@ mod website_docs;
 type Entry = (&'static str, &'static str);
 
 const GROUPS: &[&[Entry]] = &[
+    agent_docs::ENTRIES,
     core_docs::ENTRIES,
     productization_docs::ENTRIES,
     qa_evidence::ENTRIES,
