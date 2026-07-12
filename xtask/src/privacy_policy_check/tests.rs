@@ -55,6 +55,22 @@ fn rejects_network_clients_outside_license_provider() {
 }
 
 #[test]
+fn rejects_alternate_rust_network_clients_outside_license_provider() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/dropsquash-core/src/upload.rs",
+        "ureq::get(\"https://example.com\"); hyper::Client::new(); tokio_tungstenite::connect_async(url);",
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("network marker ureq::"));
+    assert!(error.contains("network marker hyper::"));
+    assert!(error.contains("network marker tokio_tungstenite"));
+}
+
+#[test]
 fn allows_license_provider_network_client() {
     let directory = tempfile::tempdir().unwrap();
     write(
