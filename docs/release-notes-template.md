@@ -58,6 +58,7 @@ license keys, private store IDs, or certificate material.
 Use concrete wording in each filled field so `release-notes-check` can reject
 weak public evidence before the release is published.
 
+- Git commit: use the current lowercase 7-character or full 40-character commit hash.
 - `codesign`: include `codesign`, `Developer ID`, `public`, and `DropSquash.dmg`.
 - `spctl`: include `spctl`, `accepted`, `public`, and `DropSquash.dmg`.
 - `stapler`: include `stapler` or `staple`, `stapled` or `validate`, `public`, and `DropSquash.dmg`.

@@ -35,10 +35,14 @@ fn validate_git_commit(text: &str) -> Option<String> {
     let Some(value) = value::field("Git commit", text) else {
         return Some("Git commit must be present".to_string());
     };
-    if (7..=40).contains(&value.len()) && value.chars().all(|value| value.is_ascii_hexdigit()) {
+    if (7..=40).contains(&value.len())
+        && value
+            .chars()
+            .all(|value| value.is_ascii_hexdigit() && !value.is_ascii_uppercase())
+    {
         return None;
     }
-    Some("Git commit must be a concrete commit hash".to_string())
+    Some("Git commit must be a concrete lowercase commit hash".to_string())
 }
 
 fn is_semver(value: &str) -> bool {

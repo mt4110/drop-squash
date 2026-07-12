@@ -60,4 +60,5 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "Homebrew install evidence without the SHA-256 digest",
     ),
+    ("docs/qa-evidence.md", "non-lowercase Git commits"),
 ];

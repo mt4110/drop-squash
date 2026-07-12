@@ -808,6 +808,19 @@ fn rejects_non_hex_sha256() {
 }
 
 #[test]
+fn rejects_uppercase_git_commit() {
+    let errors = check_text(
+        r#"
+- Git commit: ABC1234
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lowercase commit hash")));
+}
+
+#[test]
 fn rejects_uppercase_sha256() {
     let errors = check_text(
         r#"
