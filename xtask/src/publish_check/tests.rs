@@ -246,7 +246,7 @@ fn evidence(blocker: &str) -> &'static str {
             "Activate stays disabled and raw key is absent from local cache"
         }
         "Valid sandbox activation" => {
-            "Activating state disables submit, Pro state, raw key is absent from local cache"
+            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, and raw key is absent from local cache"
         }
         "Invalid license key handling" => {
             "Activating state disables submit, friendly error, raw key is absent from local cache"

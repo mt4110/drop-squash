@@ -12,6 +12,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Valid sandbox activation",
         "Activating state disables submit",
     ),
+    ("Valid sandbox activation", "Lemon Squeezy"),
+    ("Valid sandbox activation", "sandbox"),
     ("Valid sandbox activation", "Pro state"),
     ("Valid sandbox activation", "raw key is absent"),
     ("Valid sandbox activation", "local cache"),

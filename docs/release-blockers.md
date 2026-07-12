@@ -17,7 +17,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |
 | Empty key activation | Blocked | Activate stays disabled for empty input and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
-| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | License network failure | Blocked | Friendly network error appears, existing valid local cache remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
