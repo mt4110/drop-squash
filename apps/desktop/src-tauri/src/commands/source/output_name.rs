@@ -18,5 +18,5 @@ fn numbered_belongs_to_source(source_stem: &str, output_name: &str) -> bool {
     else {
         return false;
     };
-    !number.is_empty() && number.chars().all(|value| value.is_ascii_digit())
+    number.parse::<u32>().is_ok_and(|value| value >= 2)
 }

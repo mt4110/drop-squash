@@ -86,6 +86,14 @@ fn output_name_matches_exact_or_numbered_squashed_suffix_only() {
     ));
     assert!(!output_name::belongs_to_source(
         source,
+        std::path::Path::new("recording.squashed-0.mp4")
+    ));
+    assert!(!output_name::belongs_to_source(
+        source,
+        std::path::Path::new("recording.squashed-1.mp4")
+    ));
+    assert!(!output_name::belongs_to_source(
+        source,
         std::path::Path::new("recording.squashed-copy.mp4")
     ));
 }
