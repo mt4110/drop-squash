@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 mod artifact;
+mod benchmark;
 mod blockers;
 mod evidence;
 mod manual_qa;
@@ -23,6 +24,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     let notes_text = read_release_notes(&notes_path)?;
     source_commit::require_current(&notes_text)?;
     artifact::require_notes_sha_matches_manual_qa(&notes_text, Path::new("docs/manual-qa.md"))?;
+    benchmark::require_notes_csv_matches_manual_qa(&notes_text, Path::new("docs/manual-qa.md"))?;
     let blockers = read_release_blockers(Path::new("docs/release-blockers.md"))?;
     let unverified = blockers::unverified_blockers(&blockers);
     let mismatched = references::mismatched(&blockers, &notes_text);
