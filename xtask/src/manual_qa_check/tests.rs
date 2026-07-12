@@ -1040,6 +1040,18 @@ fn reports_gatekeeper_result_without_staple_evidence() {
 }
 
 #[test]
+fn reports_gatekeeper_result_without_public_dmg_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Gatekeeper open test | Signed app opens cleanly | Gatekeeper opened signed, notarized, stapled app cleanly in fresh macOS account without Gatekeeper warning |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Gatekeeper open test")));
+}
+
+#[test]
 fn reports_checksum_result_without_digest() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with SHA-256 line recorded for DropSquash.dmg |\n",

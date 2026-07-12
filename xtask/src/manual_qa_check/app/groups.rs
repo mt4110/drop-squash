@@ -107,6 +107,8 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["gatekeeper"],
             &["opened", "opens"],
             &["clean", "fresh"],
+            &["public"],
+            &["dropsquash.dmg"],
             &["signed"],
             &["notarized", "notarised"],
             &["stapled", "staple"],
