@@ -12,13 +12,14 @@ fn require_sample_set(result: &str, missing: &mut Vec<String>) {
         .iter()
         .all(|needle| lower.contains(needle))
         && lower.contains("smaller")
+        && has_csv_path_context(&lower)
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
         return;
     }
     missing.push(
-        "manual QA benchmark sample set must mention short, medium, large, smaller outputs, machine, and OS"
+        "manual QA benchmark sample set must mention short, medium, large, smaller outputs, CSV path outside repo, machine, and OS"
             .to_string(),
     );
 }
@@ -44,4 +45,10 @@ fn has_machine_context(value: &str) -> bool {
 
 fn has_os_context(value: &str) -> bool {
     value.contains("macos") || value.contains("os ")
+}
+
+fn has_csv_path_context(value: &str) -> bool {
+    (value.contains("outside repo") || value.contains("outside repository"))
+        && value.contains(".csv")
+        && value.contains('/')
 }
