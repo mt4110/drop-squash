@@ -14,6 +14,20 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "private store IDs"),
     ("docs/release.md", "License network failure"),
     ("docs/release.md", "release blocker URLs to match"),
+    (
+        "docs/release.md",
+        "Gatekeeper evidence must mention signed, notarized, stapled",
+    ),
+    ("docs/release.md", "public `DropSquash.dmg`, and no warning"),
+    (
+        "docs/manual-qa.md",
+        "and Gatekeeper result rows must name the",
+    ),
+    ("docs/manual-qa.md", "same public `DropSquash.dmg` file"),
+    (
+        "docs/manual-qa.md",
+        "app from public `DropSquash.dmg` opens cleanly",
+    ),
     ("docs/release.md", "10-character `APPLE_API_KEY`"),
     ("docs/release.md", "APPLE_API_ISSUER"),
     ("docs/release.md", "all-zero value"),
