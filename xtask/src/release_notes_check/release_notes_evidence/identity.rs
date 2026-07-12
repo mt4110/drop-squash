@@ -23,7 +23,7 @@ fn validate_artifact(text: &str) -> Option<String> {
     let Some(value) = field_value("Artifact", text) else {
         return Some("Artifact must be present".to_string());
     };
-    if value.contains("DropSquash") && value.ends_with(".dmg") {
+    if value == "DropSquash.dmg" {
         return None;
     }
     Some("Artifact must name the DropSquash DMG".to_string())

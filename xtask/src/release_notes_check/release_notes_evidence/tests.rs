@@ -577,3 +577,22 @@ fn rejects_mismatched_release_identity_values() {
         .iter()
         .any(|error| error.contains("Artifact must match Artifact URL")));
 }
+
+#[test]
+fn rejects_noncanonical_artifact_name() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash-beta.dmg
+- Version: v0.1.0
+- Artifact: DropSquash-beta.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Git commit: abc1234
+- Public website URL: https://dropsquash.app/release-status
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("Artifact")));
+}
