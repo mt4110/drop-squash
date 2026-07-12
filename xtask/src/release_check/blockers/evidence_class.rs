@@ -76,6 +76,7 @@ fn has_required_action_detail(blocker: &str, action: &str) -> bool {
         "Packaged macOS manual QA" => {
             action.contains("DropSquash.app") && action.contains("DropSquash.dmg")
         }
+        "Benchmark release set" => action.contains("absolute CSV path outside repo"),
         _ => true,
     }
 }

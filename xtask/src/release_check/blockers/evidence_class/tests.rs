@@ -122,10 +122,22 @@ fn reports_public_url_classification_without_matching_owner_field() {
     assert!(unclassified.contains(&"Published checksum"));
 }
 
+#[test]
+fn reports_benchmark_action_without_external_csv_path() {
+    let text = "| Benchmark release set | Benchmark | Run the release-set benchmark and record threshold evidence | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Benchmark release set"));
+}
+
 fn action_for(blocker: &str) -> &'static str {
     match blocker {
         "Packaged macOS manual QA" => {
             "Run packaged DropSquash.app or DropSquash.dmg through manual QA"
+        }
+        "Benchmark release set" => {
+            "Run release-set benchmark and record absolute CSV path outside repo"
         }
         _ => "Capture concrete release evidence",
     }
