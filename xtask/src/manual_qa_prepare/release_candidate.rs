@@ -88,6 +88,16 @@ mod tests {
         assert!(!missing.iter().any(|error| error.contains("checksum")));
     }
 
+    #[test]
+    fn generated_row_labels_are_required_manual_qa_checks() {
+        let untracked = [super::ARTIFACT_CHECK, super::CHECKSUM]
+            .into_iter()
+            .filter(|label| !crate::manual_qa_check::requirements::REQUIRED_CHECKS.contains(label))
+            .collect::<Vec<_>>();
+
+        assert!(untracked.is_empty(), "{untracked:?}");
+    }
+
     fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
         let mut bytes = prefix.to_vec();
         let mut trailer = vec![0; 512];

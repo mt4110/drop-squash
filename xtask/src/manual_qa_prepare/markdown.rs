@@ -74,6 +74,30 @@ mod tests {
             .any(|error| error.contains("manual QA state path")));
     }
 
+    #[test]
+    fn generated_field_labels_are_required_manual_qa_fields() {
+        let fields = vec![
+            ("App build", String::new()),
+            ("App artifact", String::new()),
+            ("Input sample set", String::new()),
+            ("macOS version", String::new()),
+            ("Machine", String::new()),
+            ("Output folder", String::new()),
+            ("Config path", String::new()),
+            ("History path", String::new()),
+            ("License cache path", String::new()),
+            ("Tester", String::new()),
+            ("Date", String::new()),
+        ];
+        let untracked = fields
+            .iter()
+            .map(|(label, _)| *label)
+            .filter(|label| !crate::manual_qa_check::requirements::REQUIRED_FIELDS.contains(label))
+            .collect::<Vec<_>>();
+
+        assert!(untracked.is_empty(), "{untracked:?}");
+    }
+
     fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
         let mut bytes = prefix.to_vec();
         let mut trailer = vec![0; 512];
