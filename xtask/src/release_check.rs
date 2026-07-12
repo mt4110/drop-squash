@@ -43,5 +43,9 @@ pub(crate) fn required_blockers() -> &'static [&'static str] {
     blockers::required()
 }
 
+pub(crate) fn blocker_completion_is_complete(blocker: &str, value: &str) -> bool {
+    blockers::completion_is_complete(blocker, value)
+}
+
 #[cfg(test)]
 mod tests;

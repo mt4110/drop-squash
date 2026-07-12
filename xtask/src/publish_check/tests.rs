@@ -60,9 +60,9 @@ fn reports_verified_blocker_without_evidence_reference() {
 #[test]
 fn accepts_public_release_evidence_references() {
     let text = "\
-| Signed DMG | Verified | done | Release notes | Release notes |
-| Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | versioned DropSquash.dmg cask includes auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Signed DMG | Verified | `codesign` verified Developer ID for DropSquash.dmg | Release notes | Release notes |
+| Published checksum | Verified | SHA256SUMS with SHA-256 for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg with SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
 
     let unverified = unverified_blockers(text);
@@ -70,6 +70,17 @@ fn accepts_public_release_evidence_references() {
     assert!(!unverified.contains(&"Signed DMG"));
     assert!(!unverified.contains(&"Published checksum"));
     assert!(!unverified.contains(&"Homebrew cask install"));
+}
+
+#[test]
+fn rejects_verified_blocker_with_weak_completion_evidence() {
+    let text = "\
+| Signed DMG | Verified | done | Release notes | Release notes |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Signed DMG"));
 }
 
 #[test]
@@ -192,13 +203,51 @@ fn reference(blocker: &str) -> &'static str {
 
 fn evidence(blocker: &str) -> &'static str {
     match blocker {
-        "Signed DMG" => "codesign verified Developer ID for DropSquash.dmg",
-        "Notarized and stapled DMG" => "spctl, notary, and stapled DropSquash.dmg",
+        "Signed DMG" => "`codesign` verified Developer ID for DropSquash.dmg",
+        "Notarized and stapled DMG" => "`spctl`, notary, stapled DropSquash.dmg",
         "Gatekeeper clean-machine open" => {
-            "opened signed, notarized, stapled app without Gatekeeper warning"
+            "Fresh macOS account opened signed, notarized, stapled app without Gatekeeper warning"
         }
-        "Published checksum" => "SHA256SUMS attached for DropSquash.dmg",
-        "Homebrew cask install" => "DropSquash.dmg cask has auto_updates false and zap",
+        "Published checksum" => "SHA256SUMS with SHA-256 for DropSquash.dmg attached",
+        "Homebrew cask install" => {
+            "brew install --cask installed versioned artifact DropSquash.dmg with SHA-256, auto_updates false, and zap"
+        }
+        "Packaged macOS manual QA" => {
+            "DropSquash.app and DropSquash.dmg manual-qa-check evidence recorded"
+        }
+        "Empty key activation" => {
+            "Activate stays disabled and raw key is absent from local cache"
+        }
+        "Valid sandbox activation" => {
+            "Activating state disables submit, Pro state, raw key is absent from local cache"
+        }
+        "Invalid license key handling" => {
+            "Activating state disables submit, friendly error, raw key is absent from local cache"
+        }
+        "License network failure" => {
+            "Friendly network error, existing valid local cache, raw key is absent from local cache"
+        }
+        "Local license forget" => {
+            "Forgetting state disables action, local cache removed, trial or locked state"
+        }
+        "Benchmark release set" => {
+            "Release-set benchmark CSV absolute path outside repo covers short, medium, and large samples, smaller outputs, machine/OS context, and 20% regression threshold"
+        }
+        "Lemon Squeezy product setup" => {
+            "Sandbox product DropSquash has license keys enabled"
+        }
+        "Lemon Squeezy sandbox purchase" => {
+            "Sandbox checkout completed for intended product, test buyer, and order"
+        }
+        "Public website deployment" => {
+            "Production website serves release-status, privacy, pricing, support, and download"
+        }
+        "Refund policy finalized" => {
+            "Production refund policy final before checkout goes live"
+        }
+        "Live checkout link" => {
+            "Public pricing page opens tested Lemon Squeezy checkout for intended product"
+        }
         _ => "concrete evidence recorded",
     }
 }

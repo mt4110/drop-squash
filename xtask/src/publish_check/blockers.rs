@@ -22,6 +22,9 @@ fn is_verified(text: &str, blocker: &str) -> bool {
         };
         cells.first() == Some(&blocker)
             && cells.get(1) == Some(&"Verified")
+            && cells.get(2).is_some_and(|value| {
+                crate::release_check::blocker_completion_is_complete(blocker, value)
+            })
             && cells
                 .get(3)
                 .is_some_and(|reference| evidence::matches(blocker, reference))

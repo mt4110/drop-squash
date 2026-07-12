@@ -15,12 +15,16 @@ pub(super) fn incomplete_requirements(text: &str) -> Vec<&'static str> {
 }
 
 fn is_missing_requirement(blocker: &str, value: &str) -> bool {
+    !is_complete(blocker, value)
+}
+
+pub(super) fn is_complete(blocker: &str, value: &str) -> bool {
     let value = value.trim();
-    value.is_empty()
+    !(value.is_empty()
         || super::placeholders::has_token(value)
         || required_phrases(blocker)
             .iter()
-            .any(|phrase| !value.contains(phrase))
+            .any(|phrase| !value.contains(phrase)))
 }
 
 fn required_phrases(blocker: &str) -> Vec<&'static str> {

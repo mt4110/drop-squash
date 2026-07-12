@@ -20,6 +20,10 @@ pub(super) fn required() -> &'static [&'static str] {
     REQUIRED_BLOCKERS
 }
 
+pub(super) fn completion_is_complete(blocker: &str, value: &str) -> bool {
+    completion::is_complete(blocker, value)
+}
+
 pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let missing = row_status::missing_release_blockers(&text);
