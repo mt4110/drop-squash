@@ -27,7 +27,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app without Gatekeeper warning | TBD | `docs/manual-qa.md` |
-| Benchmark release set | Blocked | Release-set benchmark CSV covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |
+| Benchmark release set | Blocked | Release-set benchmark CSV path is recorded and covers short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the release | TBD | GitHub Release |
 | Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
 

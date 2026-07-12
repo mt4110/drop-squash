@@ -49,7 +49,13 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &[&["sha-256", "sha256"], &["dropsquash.dmg", ".dmg"]]
         }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
-            &[&["csv"], &["three", "3"], &["smaller"], &["outside repo", "outside repository"]]
+            &[
+                &["csv"],
+                &[".csv"],
+                &["three", "3"],
+                &["smaller"],
+                &["outside repo", "outside repository"],
+            ]
         }
         "`cargo run -p xtask -- manual-qa-check`" => {
             &[&["manual-qa-check"], &["passed", "passes"]]

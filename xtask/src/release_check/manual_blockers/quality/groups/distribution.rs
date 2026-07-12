@@ -14,6 +14,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>`" => {
             Some(&[
                 &["csv"],
+                &[".csv"],
                 &["three", "3"],
                 &["smaller"],
                 &["outside repo", "outside repository"],

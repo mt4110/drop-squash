@@ -170,7 +170,7 @@ path.
 | `cargo run -p xtask -- media-policy-check` | Passes |  |
 | `cargo run -p xtask -- privacy-policy-check` | Passes |  |
 | `cargo run -p xtask -- website-check` | Passes |  |
-| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | CSV recorded outside repo for three local samples; outputs are smaller |  |
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp>` | `.csv` path recorded outside repo for three local samples; outputs are smaller |  |
 | Benchmark sample set | Short, medium, and large private local recordings produce smaller outputs and are recorded with machine and OS context |  |
 | Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples without a documented reason |  |
 | `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
