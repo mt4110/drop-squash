@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
+const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
     (
         "build",
         &[
@@ -45,10 +45,17 @@ const REQUIRED_SECTIONS: [(&str, &[&str]); 5] = [
         "homebrew",
         &[
             "cargo run -p xtask -- homebrew-cask 0.1.0",
-            "Benchmark sample set",
-            "20% regression threshold",
             "auto_updates false",
             "zap",
+        ],
+    ),
+    (
+        "release notes",
+        &[
+            "cargo run -p xtask -- release-notes-check",
+            "Benchmark sample set",
+            "20% regression threshold",
+            "Homebrew evidence",
         ],
     ),
 ];

@@ -24,10 +24,12 @@ docs/release-blockers.md
 Lemon Squeezy sandbox purchase
 Valid sandbox activation
 cargo run -p xtask -- homebrew-cask 0.1.0
-Benchmark sample set
-20% regression threshold
 auto_updates false
 zap
+cargo run -p xtask -- release-notes-check
+Benchmark sample set
+20% regression threshold
+Homebrew evidence
 "#;
 
     assert!(missing_requirements(text).is_empty());
@@ -51,4 +53,5 @@ fn reports_missing_release_doc_checklist_coverage() {
     assert!(missing.iter().any(|item| item.contains("macos:")));
     assert!(missing.iter().any(|item| item.contains("store:")));
     assert!(missing.iter().any(|item| item.contains("homebrew:")));
+    assert!(missing.iter().any(|item| item.contains("release notes:")));
 }
