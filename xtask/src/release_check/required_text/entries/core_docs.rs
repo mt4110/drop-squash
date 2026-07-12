@@ -40,6 +40,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "--markdown-output /tmp/dropsquash-release-notes-prepared.md",
     ),
+    ("docs/release.md", "refuses to overwrite"),
     ("docs/release.md", "intentionally marked pending"),
     (
         "docs/release.md",

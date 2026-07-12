@@ -64,7 +64,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Homebrew tap PR evidence draft"),
     (
         "docs/qa-evidence.md",
-        "absolute `.md` path outside the repository",
+        "new absolute `.md` path outside the repository",
     ),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
     (

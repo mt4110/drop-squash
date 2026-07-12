@@ -6,6 +6,7 @@ use std::process::Command;
 
 mod options;
 mod output;
+mod prepared_markdown;
 mod url;
 
 use options::Input;
@@ -20,9 +21,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         println!("{line}");
     }
     if let Some(path) = &input.markdown_output {
-        std::fs::write(path, format!("{}\n", lines.join("\n")))
-            .map_err(|error| error.to_string())?;
-        println!("release notes Markdown output: {}", path.display());
+        prepared_markdown::write(path, &lines)?;
     }
     Ok(())
 }
