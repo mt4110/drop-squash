@@ -242,6 +242,19 @@ fn reports_packaged_macos_manual_qa_with_weak_environment_evidence() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_commit_matching_prefix() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "App build",
+        &format!("DropSquash 0.1.0 git {}ffff", current_head()),
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_malformed_metadata_row() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("App build", "DropSquash 0.1.0 git abc1234").replace(

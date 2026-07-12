@@ -27,7 +27,7 @@ fn has_version_and_current_commit(result: &str) -> bool {
         && parts.iter().any(|part| {
             (7..=40).contains(&part.len()) && part.chars().all(|value| value.is_ascii_hexdigit())
         })
-        && current_head().is_ok_and(|head| result.contains(&format!("git {head}")))
+        && crate::git_head_match::contains_current_short_head_after_git(result).unwrap_or(false)
 }
 
 fn is_semver(value: &str) -> bool {
@@ -100,17 +100,4 @@ fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
         "Date" => Some(&[&["20"]]),
         _ => None,
     }
-}
-
-fn current_head() -> Result<String, String> {
-    let output = std::process::Command::new("git")
-        .args(["rev-parse", "--short=7", "HEAD"])
-        .output()
-        .map_err(|error| error.to_string())?;
-    if !output.status.success() {
-        return Err("git rev-parse failed".to_string());
-    }
-    String::from_utf8(output.stdout)
-        .map_err(|error| error.to_string())
-        .map(|value| value.trim().to_string())
 }

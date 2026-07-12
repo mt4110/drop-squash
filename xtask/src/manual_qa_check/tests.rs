@@ -79,6 +79,17 @@ fn reports_weak_environment_field_values() {
 }
 
 #[test]
+fn reports_app_build_commit_with_matching_prefix() {
+    let head = current_head();
+    let (_directory, path) = write_manual_qa(&format!(
+        "| App build | DropSquash 0.1.0 git {head}ffff |\n"
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("current HEAD")));
+}
+
+#[test]
 fn reports_weak_input_sample_set() {
     let (_directory, path) = write_manual_qa("| Input sample set | local files |\n");
     let missing = check_file(&path).unwrap();

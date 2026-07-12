@@ -1,5 +1,4 @@
 use std::path::Path;
-use std::process::Command;
 
 pub(super) fn require_public_dmg(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path)
@@ -29,21 +28,10 @@ pub(super) fn require_current_head(path: &Path) -> Result<(), String> {
     let Some(build) = field_value(&text, "App build") else {
         return Err("manual QA App build must be present before publish".to_string());
     };
-    let head = git_head()?;
-    if has_git_commit(build, &head) {
+    if crate::git_head_match::contains_current_short_head_after_git(build)? {
         return Ok(());
     }
     Err("manual QA App build must match current HEAD before publish".to_string())
-}
-
-fn has_git_commit(build: &str, head: &str) -> bool {
-    let mut tokens = build.split_whitespace();
-    while let Some(token) = tokens.next() {
-        if token == "git" && tokens.next() == Some(head) {
-            return true;
-        }
-    }
-    false
 }
 
 fn app_artifact(text: &str) -> Option<&str> {
@@ -62,8 +50,9 @@ fn field_value<'a>(text: &'a str, label: &str) -> Option<&'a str> {
     })
 }
 
+#[cfg(test)]
 fn git_head() -> Result<String, String> {
-    let output = Command::new("git")
+    let output = std::process::Command::new("git")
         .args(["rev-parse", "--short=7", "HEAD"])
         .output()
         .map_err(|error| error.to_string())?;

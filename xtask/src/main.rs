@@ -4,6 +4,7 @@ mod benchmark;
 mod checksum;
 mod dmg;
 mod file_size_check;
+mod git_head_match;
 mod homebrew_cask;
 mod macos_signing_check;
 mod manual_qa_check;
