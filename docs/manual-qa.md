@@ -57,6 +57,8 @@ History path, and License cache path values into the matching state path fields.
 Copy the printed Tester value into the matching field.
 The command also prints `manual QA Markdown fields:` followed by table rows
 that can be pasted into the macOS Packaged App field table.
+When the selected app artifact is `DropSquash.dmg`, it also prints
+`manual QA Release Candidate rows:` for the artifact-check and checksum rows.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, keep those
 paths outside the repository so private app state, generated videos, and QA
 evidence cannot be committed or deleted by accident.

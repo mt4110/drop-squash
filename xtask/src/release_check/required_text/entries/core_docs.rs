@@ -52,6 +52,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
     ("docs/manual-qa.md", "manual QA Markdown fields"),
+    ("docs/manual-qa.md", "manual QA Release Candidate rows"),
     (
         "docs/manual-qa.md",
         "pasted into the macOS Packaged App field table",

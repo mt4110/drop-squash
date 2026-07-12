@@ -3,6 +3,7 @@ mod build_identity;
 mod environment;
 mod markdown;
 mod options;
+mod release_candidate;
 mod state;
 
 use artifact::qa_artifact;
@@ -63,7 +64,7 @@ fn print_paths(options: &Options) -> Result<(), String> {
         }
         Err(error) => println!("manual QA App build unavailable: {error}"),
     }
-    if let Some(path) = artifact {
+    if let Some(path) = &artifact {
         println!("manual QA App artifact: {}", path.display());
         fields.push(("App artifact", path.display().to_string()));
     } else {
@@ -79,6 +80,9 @@ fn print_paths(options: &Options) -> Result<(), String> {
     }
     fields.extend(environment.manual_qa_fields());
     markdown::print_fields(&fields);
+    if let Some(path) = artifact {
+        release_candidate::print_rows(&path)?;
+    }
     Ok(())
 }
 

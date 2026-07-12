@@ -14,7 +14,7 @@ pub fn run(paths: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
-fn checksum_line(path: &Path) -> Result<String, String> {
+pub(crate) fn checksum_line(path: &Path) -> Result<String, String> {
     let bytes = dmg::read(path, "checksum")?;
     Ok(format!("{}  {}", sha256_hex(&bytes), artifact_name(path)?))
 }
