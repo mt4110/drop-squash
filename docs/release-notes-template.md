@@ -7,7 +7,7 @@ license keys, private store IDs, or certificate material.
 ## Artifact
 
 - Version:
-- Artifact:
+- Artifact: DropSquash.dmg
 - Artifact URL:
 - SHA-256:
 - Git commit:

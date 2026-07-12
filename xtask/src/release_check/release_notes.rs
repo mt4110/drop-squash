@@ -1,8 +1,9 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 40] = [
+const REQUIRED_TEXT: [&str; 41] = [
     "Version",
     "Artifact",
+    "Artifact: DropSquash.dmg",
     "Artifact URL",
     "SHA-256",
     "Git commit",

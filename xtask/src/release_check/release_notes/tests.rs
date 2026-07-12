@@ -5,6 +5,7 @@ fn accepts_required_release_note_evidence_fields() {
     let text = r#"
 Version
 Artifact
+Artifact: DropSquash.dmg
 Artifact URL
 SHA-256
 Git commit
