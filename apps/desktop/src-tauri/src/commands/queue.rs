@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use dropsquash_core::EncodeJob;
-use dropsquash_queue::{QueueEvent, QueueJobId};
+use dropsquash_queue::{QueueEvent, QueueItem, QueueJobId};
 
 use super::dto::ConvertRequest;
 use crate::state::AppState;
@@ -29,6 +29,10 @@ pub fn block_pending(
     error: String,
 ) -> Result<Vec<QueueEvent>, String> {
     app_state.block_queued_jobs(error)
+}
+
+pub fn clear_completed(app_state: tauri::State<'_, AppState>) -> Result<Vec<QueueItem>, String> {
+    app_state.clear_completed_jobs()
 }
 
 fn job_from_request(request: ConvertRequest) -> EncodeJob {

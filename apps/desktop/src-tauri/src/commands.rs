@@ -87,6 +87,13 @@ pub fn block_queued_jobs(
 }
 
 #[tauri::command(rename_all = "camelCase")]
+pub fn clear_completed_queue_jobs(
+    app_state: tauri::State<'_, crate::state::AppState>,
+) -> std::result::Result<Vec<dropsquash_queue::QueueItem>, String> {
+    queue::clear_completed(app_state)
+}
+
+#[tauri::command(rename_all = "camelCase")]
 pub fn trash_original(
     source_path: String,
     output_path: String,

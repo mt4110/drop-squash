@@ -15,6 +15,7 @@ fn main() {
             commands::start_next_queue_job,
             commands::cancel_queued_job,
             commands::block_queued_jobs,
+            commands::clear_completed_queue_jobs,
             commands::trash_original,
             commands::activate_license,
             commands::forget_license

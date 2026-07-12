@@ -66,6 +66,25 @@ fn cancels_pending_rust_queue_job_without_starting_it() {
     );
 }
 
+#[test]
+fn clears_completed_queue_jobs_without_touching_active_job() {
+    let state = AppState::default();
+    state.enqueue_job(job("first.mov")).unwrap();
+    let queued_id = match state.enqueue_job(job("second.mov")).unwrap() {
+        QueueEvent::Enqueued(item) => item.id,
+        other => panic!("unexpected event: {other:?}"),
+    };
+
+    state.start_next_job().unwrap();
+    state.cancel_queued_job(queued_id).unwrap();
+
+    let cleared = state.clear_completed_jobs().unwrap();
+
+    assert_eq!(cleared.len(), 1);
+    assert_eq!(cleared[0].id, queued_id);
+    assert!(state.start_next_job().unwrap().is_none());
+}
+
 fn job(path: &str) -> EncodeJob {
     EncodeJob {
         input_path: path.into(),

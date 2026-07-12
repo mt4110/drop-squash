@@ -135,3 +135,23 @@ fn cancel_pending_ignores_active_or_unknown_ids() {
     assert!(queue.cancel_pending(active.id).is_none());
     assert!(queue.cancel_pending(QueueJobId(999)).is_none());
 }
+
+#[test]
+fn clear_completed_removes_only_terminal_jobs() {
+    let mut queue = InMemoryQueue::default();
+    queue.enqueue(job("first.mov"));
+    let second = queue.enqueue(job("second.mov"));
+    let third = queue.enqueue(job("third.mov"));
+
+    let active = queue.start_next().unwrap();
+    let cancelled = queue.cancel_pending(second.id).unwrap();
+
+    let cleared = queue.clear_completed();
+
+    assert_eq!(queue.active().map(|item| item.id), Some(active.id));
+    assert_eq!(cleared, vec![cancelled]);
+    assert!(queue.completed().is_empty());
+
+    queue.finish_active();
+    assert_eq!(queue.start_next().map(|item| item.id), Some(third.id));
+}

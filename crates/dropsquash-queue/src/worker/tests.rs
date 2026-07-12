@@ -77,3 +77,22 @@ fn emits_blocked_events_for_pending_jobs() {
         [QueueEvent::Blocked { error, .. }] if error == "trial locked"
     ));
 }
+
+#[test]
+fn clears_completed_items_without_touching_active_job() {
+    let mut worker = QueueWorker::default();
+    worker.enqueue(job("first.mov"));
+    let queued = match worker.enqueue(job("second.mov")) {
+        QueueEvent::Enqueued(item) => item.id,
+        other => panic!("unexpected event: {other:?}"),
+    };
+
+    worker.start_next();
+    worker.cancel_pending(queued);
+
+    let cleared = worker.clear_completed();
+
+    assert_eq!(cleared.len(), 1);
+    assert_eq!(cleared[0].id, queued);
+    assert!(worker.active().is_some());
+}

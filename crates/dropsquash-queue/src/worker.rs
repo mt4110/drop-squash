@@ -52,6 +52,10 @@ impl QueueWorker {
             .collect()
     }
 
+    pub fn clear_completed(&mut self) -> Vec<QueueItem> {
+        self.queue.clear_completed()
+    }
+
     pub fn active(&self) -> Option<&QueueItem> {
         self.queue.active()
     }

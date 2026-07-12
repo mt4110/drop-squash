@@ -58,6 +58,10 @@ impl InMemoryQueue {
         blocked
     }
 
+    pub fn clear_completed(&mut self) -> Vec<QueueItem> {
+        self.completed.drain(..).collect()
+    }
+
     pub fn active(&self) -> Option<&QueueItem> {
         self.active.as_ref()
     }
