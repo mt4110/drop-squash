@@ -25,7 +25,9 @@ Benchmark regression threshold
 Lemon Squeezy product setup
 Lemon Squeezy sandbox purchase
 Valid sandbox activation
+Empty key activation: mention
 Empty key activation
+Invalid license key handling: mention
 Invalid license key handling
 License network failure
 Local license forget

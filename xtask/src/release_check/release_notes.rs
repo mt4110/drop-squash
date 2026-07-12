@@ -1,6 +1,6 @@
 use std::path::Path;
 
-const REQUIRED_TEXT: [&str; 42] = [
+const REQUIRED_TEXT: [&str; 44] = [
     "Version",
     "Artifact",
     "Artifact: DropSquash.dmg",
@@ -23,7 +23,9 @@ const REQUIRED_TEXT: [&str; 42] = [
     "Lemon Squeezy product setup",
     "Lemon Squeezy sandbox purchase",
     "Valid sandbox activation",
+    "Empty key activation: mention",
     "Empty key activation",
+    "Invalid license key handling: mention",
     "Invalid license key handling",
     "License network failure",
     "Local license forget",
