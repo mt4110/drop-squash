@@ -11,6 +11,7 @@ mod reference_urls;
 mod required_blockers;
 pub(super) mod row;
 mod row_status;
+mod secrets;
 mod url_pairs;
 mod verified_ref;
 
@@ -38,6 +39,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let unknown_classifications = evidence_class::unknown_classification_rows(&text);
     let duplicate_rows = duplicates::release_blocker_rows(&text);
     let duplicate_classifications = duplicates::classification_rows(&text);
+    let secret_values = secrets::values(&text);
     let issues = issues::Issues {
         missing,
         invalid,
@@ -51,6 +53,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         unknown_classifications,
         duplicate_rows,
         duplicate_classifications,
+        secret_values,
     };
     if issues.is_empty() {
         return Ok(());

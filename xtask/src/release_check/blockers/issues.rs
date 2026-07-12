@@ -13,6 +13,7 @@ pub(super) struct Issues<'a> {
     pub unknown_classifications: Vec<&'a str>,
     pub duplicate_rows: Vec<&'a str>,
     pub duplicate_classifications: Vec<&'a str>,
+    pub secret_values: Vec<String>,
 }
 
 impl Issues<'_> {
@@ -29,11 +30,12 @@ impl Issues<'_> {
             && self.unknown_classifications.is_empty()
             && self.duplicate_rows.is_empty()
             && self.duplicate_classifications.is_empty()
+            && self.secret_values.is_empty()
     }
 
     pub(super) fn format(self, path: &Path) -> String {
         format!(
-            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}",
+            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}{}",
             path.display(),
             join_prefix("missing ", self.missing),
             join_prefix(" invalid status ", self.invalid),
@@ -49,12 +51,20 @@ impl Issues<'_> {
             join_prefix(
                 " duplicate evidence classification row ",
                 self.duplicate_classifications,
-            )
+            ),
+            join_string_prefix(" secret-like value ", self.secret_values)
         )
     }
 }
 
 fn join_prefix(prefix: &str, values: Vec<&str>) -> String {
+    if values.is_empty() {
+        return String::new();
+    }
+    format!("{prefix}{}", values.join(", "))
+}
+
+fn join_string_prefix(prefix: &str, values: Vec<String>) -> String {
     if values.is_empty() {
         return String::new();
     }

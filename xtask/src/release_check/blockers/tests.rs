@@ -1,4 +1,4 @@
-use super::{row_status, REQUIRED_BLOCKERS};
+use super::{row_status, secrets, REQUIRED_BLOCKERS};
 
 #[test]
 fn accepts_all_required_release_blockers() {
@@ -121,4 +121,15 @@ fn reports_blocked_rows_with_vague_reference() {
     let stale = row_status::stale_blocked_rows(&text);
 
     assert!(stale.contains(&"Signed DMG"));
+}
+
+#[test]
+fn reports_secret_like_release_blocker_values() {
+    let text = "| Lemon Squeezy product setup | Blocked | product uses LEMON_SQUEEZY_API_KEY=private | TBD | `docs/manual-qa.md` |\n";
+
+    let values = secrets::values(text);
+
+    assert!(values
+        .iter()
+        .any(|error| error.contains("secret-like value")));
 }
