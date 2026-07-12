@@ -3,6 +3,9 @@ use std::path::Path;
 
 pub(super) fn validate(value: &str, missing: &mut Vec<String>) {
     let path = Path::new(value);
+    if !path.is_absolute() {
+        missing.push("manual QA App artifact must be an absolute path".to_string());
+    }
     if !path.exists() {
         missing.push(format!("manual QA artifact does not exist: {value}"));
     }
@@ -40,3 +43,6 @@ fn validate_dmg(path: &Path, missing: &mut Vec<String>) {
         missing.push(error);
     }
 }
+
+#[cfg(test)]
+mod tests;

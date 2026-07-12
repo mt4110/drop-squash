@@ -48,6 +48,7 @@ manual QA metadata cannot be mistaken for a prepared run. Copy the printed
 Copy the printed `manual QA App artifact` value into the `App artifact` field,
 or pass `--app-artifact <path>` when testing a DMG or a non-default artifact
 location.
+The `App artifact` value must be the printed absolute path.
 Pass `--input-sample-set <text>` and copy the printed value into the `Input
 sample set` field.
 Copy the printed macOS version, Machine, Output folder, and Date values into
