@@ -53,12 +53,14 @@ fn validate_sha256(text: &str) -> Option<String> {
         return Some("SHA-256 must be present".to_string());
     };
     if value.len() == 64
-        && value.chars().all(|value| value.is_ascii_hexdigit())
+        && value
+            .chars()
+            .all(|value| value.is_ascii_hexdigit() && !value.is_ascii_uppercase())
         && !all_same_char(value)
     {
         return None;
     }
-    Some("SHA-256 must contain a real 64-character hex checksum".to_string())
+    Some("SHA-256 must contain a real lowercase 64-character hex checksum".to_string())
 }
 
 fn all_same_char(value: &str) -> bool {

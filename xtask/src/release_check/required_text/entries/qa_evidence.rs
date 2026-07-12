@@ -116,6 +116,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "64-character hex fingerprint requirements",
     ),
     ("docs/qa-evidence.md", "plain and encoded error redaction"),
+    ("docs/qa-evidence.md", "non-lowercase checksums"),
     ("docs/qa-evidence.md", "no-success trial/history"),
     ("docs/qa-evidence.md", "unchanged trial counts"),
 ];
