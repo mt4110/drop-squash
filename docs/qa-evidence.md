@@ -46,23 +46,23 @@ These checks still require a packaged macOS app or external service state:
 
 | Area | Why automated tests are insufficient |
 |---|---|
-| Choose recording conversion | Native file picker and packaged app entitlements must be exercised on macOS |
-| Drag-and-drop conversion | Packaged WebView drag/drop behavior can differ from dev mode |
-| Privacy receipt sidecar | Packaged app file permissions must create the receipt next to the generated output and reveal it in Finder |
-| Privacy receipt Finder reveal | Finder selection behavior for generated receipt sidecars is macOS integration, not core logic |
-| Duplicate output naming | Repeated packaged-app conversions must show the user-facing numbered suffix |
-| Finder reveal | Finder selection behavior is macOS integration, not core logic |
-| Ask source policy | The post-conversion prompt and user choice need packaged UI observation |
-| Trash source policy | NSFileManager Trash behavior must be verified on the target macOS version |
-| Failed conversion | Packaged-app failure state must preserve the original and trial count |
-| Larger output | Packaged-app larger-output handling must show failure without trial count |
-| Large-recording cancellation | User-visible timing, progress, and cleanup need real media and packaged app behavior |
+| Choose recording conversion | Native file picker and packaged app entitlements must produce a smaller `.squashed.mp4` while preserving the original on macOS |
+| Drag-and-drop conversion | Packaged WebView drag/drop behavior must produce a smaller `.squashed.mp4` while preserving the original |
+| Privacy receipt sidecar | Packaged app file permissions must create the receipt next to the generated output with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve` |
+| Privacy receipt Finder reveal | Finder selection behavior for generated receipt sidecars must show the `.privacy.json` selected |
+| Duplicate output naming | Repeated packaged-app conversions must show the second output with the user-facing `.squashed-2.mp4` numbered suffix |
+| Finder reveal | Finder selection behavior must show the generated `.squashed.mp4` selected |
+| Ask source policy | The post-conversion prompt must offer Trash and Keep while the original remains unchanged |
+| Trash source policy | NSFileManager Trash behavior must move the original to Trash only after verified smaller output, with moving/disabled action state |
+| Failed conversion | Packaged-app failure state must show a friendly error while preserving the original and trial count |
+| Larger output | Packaged-app larger-output handling must show larger-output failure while preserving the original and trial count |
+| Large-recording cancellation | User-visible timing, progress, cleanup, ready state, and no-success trial/history evidence need real media and packaged app behavior |
 | Benchmark sample results | Compression ratio and throughput depend on private local media and target Mac hardware |
 | Benchmark sample set | Release coverage needs private short, medium, and large local recordings with smaller outputs |
 | Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
-| Multi-file queue | UI ergonomics and repeated drops need packaged app observation |
-| Queued job cancellation | User-visible queue cancellation needs packaged app observation with repeated drops |
-| Batch summary | User-visible queue totals need packaged app observation after mixed queue outcomes |
+| Multi-file queue | UI ergonomics and repeated drops need packaged observation of 3 queued recordings, 1 active job, sequential completion, and unrelated failure not blocking finished jobs |
+| Queued job cancellation | User-visible queue cancellation needs packaged observation that the waiting row is cancelled, never starts, and trial/history has no new success |
+| Batch summary | User-visible queue totals need packaged observation of numeric finished count, saved bytes, failed count, cancelled count, and blocked count after mixed queue outcomes |
 | Lemon Squeezy product setup | Requires sandbox product and license-key configuration evidence outside the repository |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, test buyer, and order evidence outside the repository |
 | Valid sandbox activation | Requires Lemon Squeezy sandbox product, keys, and server response outside the repository |
