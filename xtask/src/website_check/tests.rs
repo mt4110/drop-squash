@@ -426,6 +426,21 @@ fn rejects_pre_release_links_with_single_quotes_or_uppercase_href() {
 }
 
 #[test]
+fn rejects_pre_release_unquoted_checkout_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "pricing.html",
+        r#"<a href=https://store.lemonsqueezy.com/checkout/buy/abc123>Buy</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("lemonsqueezy")));
+}
+
+#[test]
 fn rejects_unsupported_platform_availability_claims() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());

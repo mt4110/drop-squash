@@ -8,10 +8,10 @@ fn extracts_double_single_and_uppercase_hrefs() {
 }
 
 #[test]
-fn ignores_unquoted_href_values() {
+fn extracts_unquoted_href_values() {
     let links = hrefs(r#"<a href=a.html></a>"#);
 
-    assert!(links.is_empty());
+    assert_eq!(links, vec!["a.html"]);
 }
 
 #[test]
