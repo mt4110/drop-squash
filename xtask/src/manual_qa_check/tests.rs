@@ -325,6 +325,52 @@ fn reports_release_command_results_for_different_dmg_artifact() {
 }
 
 #[test]
+fn reports_checksum_result_for_different_dmg_digest() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("checksum") && error.contains("digest")));
+}
+
+#[test]
+fn accepts_checksum_result_matching_dmg_digest() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let bytes = dmg_bytes(b"dropsquash");
+    std::fs::write(&artifact, &bytes).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg` | SHA-256 line recorded | SHA-256 {} DropSquash.dmg |\n",
+            artifact.display(),
+            sha256_hex(&bytes)
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(!missing
+        .iter()
+        .any(|error| error.contains("checksum") && error.contains("digest")));
+}
+
+#[test]
 fn reports_signing_results_for_different_dmg_artifact() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("Other.dmg");
@@ -857,4 +903,16 @@ fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     trailer[..4].copy_from_slice(b"koly");
     bytes.extend_from_slice(&trailer);
     bytes
+}
+
+fn sha256_hex(bytes: &[u8]) -> String {
+    use sha2::{Digest, Sha256};
+
+    let mut hasher = Sha256::new();
+    hasher.update(bytes);
+    hasher
+        .finalize()
+        .iter()
+        .map(|byte| format!("{byte:02x}"))
+        .collect()
 }
