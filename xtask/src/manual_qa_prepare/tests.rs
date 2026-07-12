@@ -385,6 +385,18 @@ fn rejects_markdown_output_inside_repository() {
     assert!(error.contains("outside the repository"));
 }
 
+#[test]
+fn rejects_markdown_output_without_markdown_extension() {
+    let error = Options::parse(vec![
+        "--markdown-output".to_string(),
+        "/tmp/manual-qa-prepared.txt".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--markdown-output"));
+    assert!(error.contains(".md"));
+}
+
 fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     let mut bytes = prefix.to_vec();
     let mut trailer = vec![0; 512];

@@ -72,6 +72,7 @@ impl Options {
         path_policy::require_outside_repo("--app-state-dir", &self.app_state_dir)?;
         if let Some(path) = &self.markdown_output {
             path_policy::require_outside_repo("--markdown-output", path)?;
+            require_markdown_file(path)?;
         }
         path_policy::require_outside_repo("--output-dir", &self.output_dir)?;
         path_policy::require_outside_repo("--state-dir", &self.state_dir)?;
@@ -99,4 +100,11 @@ impl Options {
 fn usage() -> String {
     "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--input-sample-set <text>] [--markdown-output <path>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
         .to_string()
+}
+
+fn require_markdown_file(path: &std::path::Path) -> Result<(), String> {
+    if path.extension().and_then(|value| value.to_str()) == Some("md") {
+        return Ok(());
+    }
+    Err("--markdown-output must point to a .md file".to_string())
 }
