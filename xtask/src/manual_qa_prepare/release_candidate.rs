@@ -15,7 +15,7 @@ pub(super) fn print_rows(path: &Path) -> Result<(), String> {
     Ok(())
 }
 
-fn rows(path: &Path) -> Result<Vec<String>, String> {
+pub(super) fn rows(path: &Path) -> Result<Vec<String>, String> {
     if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
         return Ok(Vec::new());
     }

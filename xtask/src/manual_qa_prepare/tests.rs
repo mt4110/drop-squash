@@ -5,6 +5,7 @@ use super::require_reset_artifact;
 use super::reset_trial_lines;
 use super::sample_set_line;
 use super::state::{backup_state, restore_state};
+use super::{markdown, release_candidate};
 
 #[test]
 fn creates_output_and_backs_up_existing_state_files() {
@@ -285,6 +286,28 @@ fn reset_trial_accepts_existing_dmg_artifact() {
 }
 
 #[test]
+fn generated_manual_qa_rows_work_together() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("output");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    std::fs::create_dir(&output).unwrap();
+    let mut rows = markdown::rows(&manual_qa_fields(&artifact, &output));
+    rows.extend(release_candidate::rows(&artifact).unwrap());
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(&path, rows.join("\n")).unwrap();
+
+    let missing = crate::manual_qa_check::check_file(&path).unwrap();
+
+    assert!(!missing.iter().any(|error| error.contains("manual QA App")));
+    assert!(!missing
+        .iter()
+        .any(|error| error.contains("manual QA field")));
+    assert!(!missing.iter().any(|error| error.contains("artifact-check")));
+    assert!(!missing.iter().any(|error| error.contains("checksum")));
+}
+
+#[test]
 fn rejects_unknown_arguments() {
     let error = Options::parse(vec!["--mystery".to_string(), "value".to_string()]).unwrap_err();
 
@@ -344,4 +367,27 @@ fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     trailer[..4].copy_from_slice(b"koly");
     bytes.extend(trailer);
     bytes
+}
+
+fn manual_qa_fields(artifact: &std::path::Path, output: &std::path::Path) -> Vec<markdown::Field> {
+    vec![
+        ("App build", "DropSquash 0.1.0 git abc1234".into()),
+        ("App artifact", artifact.display().to_string()),
+        ("macOS version", "macOS 26.5.2".into()),
+        ("Machine", "MacBookPro18,4 arm64".into()),
+        (
+            "Input sample set",
+            "short, medium, and large local recordings".into(),
+        ),
+        ("Output folder", output.display().to_string()),
+        ("Config path", state_path("config.json")),
+        ("History path", state_path("history.jsonl")),
+        ("License cache path", state_path("license.json")),
+        ("Tester", "masaki".into()),
+        ("Date", "2026-07-12".into()),
+    ]
+}
+
+fn state_path(file_name: &str) -> String {
+    format!("/Users/me/Library/Application Support/DropSquash/{file_name}")
 }
