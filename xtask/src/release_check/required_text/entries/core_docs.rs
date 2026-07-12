@@ -28,7 +28,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "outside the repository"),
     (
         "docs/release.md",
-        "release notes `Git commit` field to match",
+        "release notes `Git commit` field to exactly",
+    ),
+    (
+        "docs/release.md",
+        "match the current short or full `HEAD`",
     ),
     ("docs/release.md", "manual QA `App build` field"),
     ("docs/release.md", "current `HEAD`"),
