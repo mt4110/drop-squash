@@ -27,7 +27,7 @@ fn checksum_evidence_ok(label: &str, result: &str) -> bool {
     }
     result
         .split(|value: char| !value.is_ascii_hexdigit())
-        .any(|part| part.len() == 64)
+        .any(|part| part.len() == 64 && part.chars().all(|value| !value.is_ascii_uppercase()))
         && result.to_ascii_lowercase().contains("sha256sums")
 }
 

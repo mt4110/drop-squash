@@ -1028,6 +1028,16 @@ fn reports_checksum_result_without_digest() {
 }
 
 #[test]
+fn reports_checksum_result_with_uppercase_digest() {
+    let (_directory, path) = write_manual_qa(
+        "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with SHA-256 ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789 DropSquash.dmg |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("checksum")));
+}
+
+#[test]
 fn reports_secret_like_manual_qa_values() {
     let (_directory, path) = write_manual_qa(
         "| Apple notary log | Accepted | accepted with APPLE_PASSWORD=not-for-release |\n\
