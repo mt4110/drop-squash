@@ -9,6 +9,8 @@ Do not leave a row `Blocked` after adding an `Evidence reference`; update the
 status and keep the reference traceable.
 For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 `https://...` URL, `Release notes`, `GitHub Release`, or `Homebrew tap PR`.
+Public website and refund references must use the production `dropsquash.app`
+host.
 `GitHub Release` and `Homebrew tap PR` references must include the public URL.
 Use the exact forms `GitHub Release https://...` and
 `Homebrew tap PR https://...` without extra words in the Evidence reference.
@@ -24,8 +26,8 @@ Use the exact forms `GitHub Release https://...` and
 | License network failure | Blocked | Friendly network error appears, existing valid local cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Expired license refresh | Blocked | Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
-| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
-| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |
+| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages on `dropsquash.app` | TBD | `https://...` |
+| Refund policy finalized | Blocked | Production refund policy is final on `dropsquash.app` and linked before checkout goes live | TBD | `https://...` |
 | Live checkout link | Blocked | Public pricing page opens the live checkout URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |
@@ -52,8 +54,8 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache 64-character lowercase hex fingerprint, `instance_id`, and raw-key absence | `docs/manual-qa.md` |
 | Expired license refresh | License sandbox | Seed the expired offline grace cache, confirm the reconnect prompt, confirm conversion is blocked before starting, and inspect local license cache raw-key absence | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
-| Public website deployment | Public web | Deploy the production site and verify the production URL serves release-status, privacy, pricing, support, and download pages | Public website URL |
-| Refund policy finalized | Public web | Publish the final refund policy URL and confirm it is linked before checkout goes live | Refund policy URL |
+| Public website deployment | Public web | Deploy the production site and verify the production `dropsquash.app` URL serves release-status, privacy, pricing, support, and download pages | Public website URL |
+| Refund policy finalized | Public web | Publish the final refund policy URL on `dropsquash.app` and confirm it is linked before checkout goes live | Refund policy URL |
 | Live checkout link | Public web | Verify the public pricing page opens the live checkout URL for the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture `codesign` Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured `spctl`, notary, and stapler verification output | Release notes |
@@ -72,5 +74,5 @@ evidence is recorded in the blocker table.
 |---:|---|---|---|---|
 | 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Public `DropSquash.dmg`, filled manual QA rows, release-set CSV outside the repo, and `manual-qa-check` passing | `docs/manual-qa.md` |
 | 2 | License sandbox proof | Lemon Squeezy product setup, Lemon Squeezy sandbox purchase, Empty key activation, Valid sandbox activation, Invalid license key handling, License network failure, Expired license refresh, Local license forget | Sandbox purchase/activation behavior, friendly failures, raw-key absence, fingerprint/instance checks, and forget behavior | `docs/manual-qa.md` |
-| 3 | Public web proof | Public website deployment, Refund policy finalized, Live checkout link | Production URLs serve the required pages and checkout/refund links before the public beta | Production website URLs |
+| 3 | Public web proof | Public website deployment, Refund policy finalized, Live checkout link | Production `dropsquash.app` URLs serve the required pages and checkout/refund links before the public beta | Production website URLs |
 | 4 | Signing and distribution proof | Signed DMG, Notarized and stapled DMG, Gatekeeper clean-machine open, Published checksum, Homebrew cask install | Release notes, GitHub Release, Homebrew tap PR, and `docs/manual-qa.md` prove the same public `DropSquash.dmg` is signed, notarized, checksummed, installable, and opens without warning | Release notes and public distribution URLs |
