@@ -15,6 +15,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "signing/notarization Next action signing preflight",
+    ),
+    (
+        "docs/qa-evidence.md",
         "complete public web and distribution Execution Order exit evidence",
     ),
     (

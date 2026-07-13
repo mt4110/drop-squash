@@ -103,6 +103,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
+        "signing/notarization Next action signing preflight",
+    ),
+    (
+        "docs/productization.md",
         "clean worktree preflights for manual QA and release notes preparation",
     ),
     ("docs/productization.md", "pre-release CTA copy guard"),
