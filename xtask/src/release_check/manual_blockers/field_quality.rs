@@ -14,7 +14,7 @@ pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
 fn lacks_special_evidence(check: &str, result: &str) -> bool {
     match check {
         "App build" => !has_version_and_current_commit(result),
-        "App artifact" => !has_canonical_artifact(result),
+        "App artifact" => !has_existing_canonical_artifact(result),
         "Config path" => !is_absolute_state_path(result, "config.json"),
         "History path" => !is_absolute_state_path(result, "history.jsonl"),
         "License cache path" => !is_absolute_state_path(result, "license.json"),
@@ -76,8 +76,14 @@ fn is_leap_year(year: u16) -> bool {
     year % 4 == 0 && year % 100 != 0 || year % 400 == 0
 }
 
-fn has_canonical_artifact(result: &str) -> bool {
-    result.contains("DropSquash.app") || result.contains("DropSquash.dmg")
+fn has_existing_canonical_artifact(result: &str) -> bool {
+    let path = Path::new(result.trim());
+    path.is_absolute()
+        && path.exists()
+        && matches!(
+            path.file_name().and_then(|value| value.to_str()),
+            Some("DropSquash.app" | "DropSquash.dmg")
+        )
 }
 
 fn is_absolute_state_path(result: &str, file_name: &str) -> bool {

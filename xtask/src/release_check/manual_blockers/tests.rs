@@ -437,6 +437,18 @@ fn reports_packaged_macos_manual_qa_with_noncanonical_artifact() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_missing_artifact() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.app");
+    let manual = packaged_manual_qa_with("App artifact", &artifact.display().to_string());
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_vague_build_identity() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("App build", "DropSquash git build");
@@ -897,7 +909,10 @@ fn csv_file(directory: &std::path::Path, name: &str) -> std::path::PathBuf {
 fn packaged_result(label: &str) -> String {
     match label {
         "App build" => format!("DropSquash 0.1.0 git {}", current_head()),
-        "App artifact" => "/tmp/DropSquash.app".into(),
+        "App artifact" => {
+            std::fs::create_dir_all("/tmp/DropSquash.app").unwrap();
+            "/tmp/DropSquash.app".into()
+        }
         "macOS version" => "macOS 15.5".into(),
         "Machine" => "Apple silicon Mac arm64".into(),
         "Input sample set" => "short, medium, and large local recordings".into(),
