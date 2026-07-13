@@ -69,6 +69,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "Pricing URL and Refund policy URL origins that differ from the Public website URL origin",
+    ),
+    (
+        "docs/qa-evidence.md",
         "missing existing benchmark CSV path outside repo",
     ),
     (
