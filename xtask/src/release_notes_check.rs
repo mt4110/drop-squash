@@ -3,9 +3,9 @@ use std::path::{Path, PathBuf};
 mod release_notes_evidence;
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
-    let path = args
-        .first()
-        .ok_or_else(|| "release-notes-check requires <release-notes.md>".to_string())?;
+    let [path] = args.as_slice() else {
+        return Err("release-notes-check requires exactly <release-notes.md>".to_string());
+    };
     check_file(&PathBuf::from(path))
 }
 
@@ -21,4 +21,23 @@ pub(crate) fn check_file_silent(path: &Path) -> Result<(), String> {
         return Ok(());
     }
     Err(errors.join("\n"))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::run;
+
+    #[test]
+    fn rejects_missing_release_notes_argument() {
+        let error = run(Vec::new()).unwrap_err();
+
+        assert!(error.contains("exactly <release-notes.md>"));
+    }
+
+    #[test]
+    fn rejects_extra_release_notes_arguments() {
+        let error = run(vec!["notes.md".into(), "extra.md".into()]).unwrap_err();
+
+        assert!(error.contains("exactly <release-notes.md>"));
+    }
 }

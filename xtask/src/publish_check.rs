@@ -13,9 +13,9 @@ mod urls;
 use blockers::{unverified_blockers, unverified_blockers_error};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
-    let notes = args
-        .first()
-        .ok_or_else(|| "publish-check requires <release-notes.md>".to_string())?;
+    let [notes] = args.as_slice() else {
+        return Err("publish-check requires exactly <release-notes.md>".to_string());
+    };
     crate::release_check::run()?;
     ensure_website_complete(Path::new("website"))?;
     ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;

@@ -1,7 +1,21 @@
 use super::{
     ensure_manual_qa_complete, ensure_release_notes_complete, ensure_website_complete,
-    read_release_blockers, unverified_blockers, unverified_blockers_error,
+    read_release_blockers, run, unverified_blockers, unverified_blockers_error,
 };
+
+#[test]
+fn rejects_missing_publish_notes_argument() {
+    let error = run(Vec::new()).unwrap_err();
+
+    assert!(error.contains("exactly <release-notes.md>"));
+}
+
+#[test]
+fn rejects_extra_publish_notes_arguments() {
+    let error = run(vec!["release-notes.md".into(), "extra.md".into()]).unwrap_err();
+
+    assert!(error.contains("exactly <release-notes.md>"));
+}
 
 #[test]
 fn accepts_all_verified_blockers() {
