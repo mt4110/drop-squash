@@ -212,6 +212,15 @@ fn reports_local_forget_action_without_cache_removal() {
 }
 
 #[test]
+fn reports_local_forget_action_without_observed_trial_or_locked_state() {
+    let text = "| Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and confirm cache removal | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Local license forget"));
+}
+
+#[test]
 fn reports_public_website_action_without_required_pages() {
     let text = "| Public website deployment | Public web | Deploy the production site and verify public pages | Public website URL |\n";
 
@@ -353,7 +362,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Attempt conversion with the expired offline grace cache, confirm the reconnect prompt, confirm conversion is blocked before starting, and inspect local license cache raw-key absence"
         }
         "Local license forget" => {
-            "Use local forget action, confirm disabled while forgetting, confirm cache removal, and inspect returned app state"
+            "Use local forget action, confirm disabled while forgetting, confirm cache removal, and observe the trial or locked state"
         }
         "Public website deployment" => {
             "Deploy the production site on dropsquash.app and verify release-status, privacy, pricing, support, and download pages"

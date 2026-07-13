@@ -50,8 +50,8 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
         ],
         "Local license forget" => &[
             "disabled while forgetting",
-            "cache removal",
-            "returned app state",
+            "confirm cache removal",
+            "observe the trial or locked state",
         ],
         "Public website deployment" => &[
             "production site",
