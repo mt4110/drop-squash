@@ -92,4 +92,12 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "APPLE_API_ISSUER"),
     ("docs/release.md", "all-zero value"),
     ("docs/release.md", "placeholder secret"),
+    (
+        "docs/release.md",
+        "The command rejects development-only `/nix/store` references",
+    ),
+    (
+        "docs/reproducible-builds.md",
+        "Both commands reject development-only `/nix/store` references",
+    ),
 ];

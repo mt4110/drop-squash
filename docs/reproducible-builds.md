@@ -38,10 +38,16 @@ Release verification has two stages:
 1. Build and compare the unsigned payload from pinned source and dependencies.
 2. Sign, notarize, timestamp, and package the verified payload in a protected release environment.
 
-Signing output is not expected to be byte-identical because external timestamp services and signatures add nondeterministic data. Installers must not contain `/nix/store` references, and DropSquash never installs Nix on a user's system:
+Signing output is not expected to be byte-identical because external timestamp
+services and signatures add nondeterministic data. Installers must not contain
+`/nix/store` references, and DropSquash never installs Nix on a user's system:
 
 ```bash
 cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
+cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS
 ```
+
+Both commands reject development-only `/nix/store` references before an artifact
+can become release evidence.
 
 Reference: [Nix reproducible builds](https://reproducible.nixos.org/).
