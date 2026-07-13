@@ -161,6 +161,23 @@ fn reports_verified_rows_with_placeholder_reference_notes() {
 }
 
 #[test]
+fn reports_verified_rows_with_tracked_url_reference() {
+    let text = "\
+| Public website deployment | Verified | Production website serves pages | https://dropsquash.app/release-status?utm=release | `https://...` |
+| Refund policy finalized | Verified | Refund page final | https://dropsquash.app/refund#terms | `https://...` |
+| Published checksum | Verified | checksum evidence | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0?plain=1 | GitHub Release |
+| Homebrew cask install | Verified | cask evidence | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1#discussion | Homebrew tap PR |
+";
+
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Public website deployment"));
+    assert!(unproven.contains(&"Refund policy finalized"));
+    assert!(unproven.contains(&"Published checksum"));
+    assert!(unproven.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_blocked_rows_with_evidence_reference() {
     let text = REQUIRED_BLOCKERS
         .iter()

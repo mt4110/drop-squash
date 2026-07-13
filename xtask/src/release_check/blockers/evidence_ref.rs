@@ -20,7 +20,7 @@ fn docs_ref(value: &str) -> bool {
 }
 
 fn public_https(value: &str) -> bool {
-    crate::public_url::HttpsUrl::parse(value).is_some()
+    crate::public_url::HttpsUrl::parse(value).is_some_and(|url| !url.has_query_or_fragment())
 }
 
 fn labeled_public_ref(value: &str, label: &str) -> bool {
