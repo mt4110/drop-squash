@@ -33,6 +33,22 @@ fn written_draft_is_rejected_by_manual_qa_check() {
 }
 
 #[test]
+fn release_candidate_draft_is_rejected_by_manual_qa_check() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("prepared.md");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let fields: Vec<markdown::Field> = vec![("App artifact", artifact.display().to_string())];
+
+    write(&output, &fields, Some(&artifact)).unwrap();
+    let missing = crate::manual_qa_check::check_file(&output).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("prepared draft markers")));
+}
+
+#[test]
 fn rejects_existing_output_file() {
     let directory = tempfile::tempdir().unwrap();
     let output = directory.path().join("prepared.md");
