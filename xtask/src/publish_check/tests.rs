@@ -87,6 +87,7 @@ fn rejects_live_checkout_reference_with_placeholder_buy_id() {
 fn rejects_public_references_with_query_or_fragment() {
     let text = "\
 | Public website deployment | Verified | done | https://dropsquash.app/release-status?source=publish | `https://...` |
+| Pricing finalized | Verified | done | https://dropsquash.app/pricing?source=publish | `https://...` |
 | Refund policy finalized | Verified | done | https://dropsquash.app/refund#terms | `https://...` |
 | Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123?utm=publish | `https://...` |
 | Published checksum | Verified | SHA256SUMS for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0#assets | GitHub Release |
@@ -96,6 +97,7 @@ fn rejects_public_references_with_query_or_fragment() {
     let unverified = unverified_blockers(text);
 
     assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Pricing finalized"));
     assert!(unverified.contains(&"Refund policy finalized"));
     assert!(unverified.contains(&"Live checkout link"));
     assert!(unverified.contains(&"Published checksum"));
@@ -106,12 +108,14 @@ fn rejects_public_references_with_query_or_fragment() {
 fn rejects_public_web_references_outside_canonical_host() {
     let text = "\
 | Public website deployment | Verified | Production website production URL serves release-status, privacy, pricing, support, and download | https://other.example/release-status | `https://...` |
+| Pricing finalized | Verified | Production pricing page is final on dropsquash.app with no draft price copy before checkout goes live | https://other.example/pricing | `https://...` |
 | Refund policy finalized | Verified | Production refund policy is final and linked before checkout goes live | https://other.example/refund | `https://...` |
 ";
 
     let unverified = unverified_blockers(text);
 
     assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Pricing finalized"));
     assert!(unverified.contains(&"Refund policy finalized"));
 }
 
@@ -119,12 +123,14 @@ fn rejects_public_web_references_outside_canonical_host() {
 fn rejects_nested_public_web_references() {
     let text = "\
 | Public website deployment | Verified | Production website production URL serves release-status, privacy, pricing, support, and download | https://dropsquash.app/beta/release-status | `https://...` |
+| Pricing finalized | Verified | Production pricing page is final on dropsquash.app with no draft price copy before checkout goes live | https://dropsquash.app/beta/pricing | `https://...` |
 | Refund policy finalized | Verified | Production refund policy is final on dropsquash.app and linked before checkout goes live | https://dropsquash.app/beta/refund | `https://...` |
 ";
 
     let unverified = unverified_blockers(text);
 
     assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Pricing finalized"));
     assert!(unverified.contains(&"Refund policy finalized"));
 }
 
