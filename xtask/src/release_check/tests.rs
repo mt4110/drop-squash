@@ -1,8 +1,8 @@
 use super::dev_environment::reject_parallel_version_manager;
 use super::secret_files::{is_secret_file, reject_secret_files, require_local_agent_ignore};
 use super::workflow::{
-    missing_ci_workflow_gates, missing_desktop_workflow_gates, missing_release_workflow_gates,
-    missing_security_workflow_gates,
+    forbidden_release_workflow_values, missing_ci_workflow_gates, missing_desktop_workflow_gates,
+    missing_release_workflow_gates, missing_security_workflow_gates,
 };
 
 #[test]
@@ -91,6 +91,25 @@ fn release_workflow_file_has_required_gates() {
     let text = std::fs::read_to_string("../.github/workflows/release.yml").unwrap();
 
     assert!(missing_release_workflow_gates(&text).is_empty());
+}
+
+#[test]
+fn rejects_release_workflow_local_signing_identity_secret() {
+    let found = forbidden_release_workflow_values(
+        "APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}",
+    );
+
+    assert_eq!(
+        found,
+        vec!["APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}"]
+    );
+}
+
+#[test]
+fn release_workflow_file_uses_ci_certificate_signing() {
+    let text = std::fs::read_to_string("../.github/workflows/release.yml").unwrap();
+
+    assert!(forbidden_release_workflow_values(&text).is_empty());
 }
 
 #[test]

@@ -44,6 +44,9 @@ pub(super) const RELEASE: &[&str] = &[
     "exit 1",
 ];
 
+pub(super) const RELEASE_FORBIDDEN: &[&str] =
+    &["APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}"];
+
 pub(super) const DESKTOP: &[&str] = &[
     "permissions:",
     "contents: read",
