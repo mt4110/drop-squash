@@ -184,9 +184,19 @@ fn reports_verified_network_failure_without_existing_valid_cache() {
 #[test]
 fn accepts_verified_network_failure_with_preserved_cache() {
     let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint and instance fields with no raw key |\n";
+    let manual = "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance fields with no raw key |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
+fn reports_verified_network_failure_without_hex_fingerprint_evidence() {
+    let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint and instance fields with no raw key |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"License network failure"));
 }
 
 #[test]
@@ -254,6 +264,16 @@ fn reports_verified_license_blocker_without_sandbox_context() {
 fn reports_verified_license_blocker_without_fingerprint_instance_evidence() {
     let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, Pro reached; license.json cache checked; raw key absent |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Valid sandbox activation"));
+}
+
+#[test]
+fn reports_verified_license_blocker_without_hex_fingerprint_evidence() {
+    let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, Pro reached; license.json cache checked fingerprint and instance fields; raw key absent |\n";
 
     let missing = missing_manual_verified_evidence(blockers, manual);
 

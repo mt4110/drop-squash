@@ -813,6 +813,30 @@ fn reports_network_failure_without_fingerprint_instance_evidence() {
 }
 
 #[test]
+fn reports_valid_activation_without_hex_fingerprint_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Valid sandbox activation | Pro state | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache preserved fingerprint and instance fields with raw key absent |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
+fn reports_network_failure_without_hex_fingerprint_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint and instance fields with no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("License network failure")));
+}
+
+#[test]
 fn reports_activation_with_persisted_raw_key() {
     let (_directory, path) = write_manual_qa(
         "| Empty key activation | Friendly validation error | friendly validation shown and license.json cache checked with raw key persisted |\n",
@@ -1338,9 +1362,9 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Invalid key activation" {
             text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and license.json cache has no raw key, no fingerprint, and no instance |\n");
         } else if check == "Valid sandbox activation" {
-            text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint and instance fields with raw key absent |\n");
+            text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance fields with raw key absent |\n");
         } else if check == "License network failure" {
-            text.push_str("| License network failure | Passes | friendly network error shown and existing valid license.json cache preserved fingerprint and instance fields with no raw key |\n");
+            text.push_str("| License network failure | Passes | friendly network error shown and existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance fields with no raw key |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; license cache cleared and app returned to trial state |\n");
         } else if check == "Choose recording conversion" {

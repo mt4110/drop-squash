@@ -49,6 +49,7 @@ fn require_license_cache_evidence(
     if mentions_cache
         && needles.iter().all(|needle| lower.contains(needle))
         && raw_key_absent(&lower)
+        && fingerprint_evidence_ok(label, result)
     {
         return;
     }
@@ -62,6 +63,23 @@ fn raw_key_absent(value: &str) -> bool {
         || value.contains("raw key is absent")
         || value.contains("no raw key")
         || value.contains("without raw key")
+}
+
+fn fingerprint_evidence_ok(label: &str, result: &str) -> bool {
+    if !matches!(
+        label,
+        "Valid sandbox activation" | "License network failure"
+    ) {
+        return true;
+    }
+    result
+        .split(|character: char| !character.is_ascii_hexdigit())
+        .any(|part| {
+            part.len() == 64
+                && part.chars().all(|character| {
+                    character.is_ascii_hexdigit() && !character.is_ascii_uppercase()
+                })
+        })
 }
 
 fn require_action_state(label: &str, result: &str, needles: &[&str], missing: &mut Vec<String>) {
