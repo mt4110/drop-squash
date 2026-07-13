@@ -24,6 +24,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "Benchmark sample set CSV path must also match",
     ),
+    ("docs/release.md", "Homebrew tap PR URL"),
     (
         "docs/release.md",
         "same-machine release candidate baseline",

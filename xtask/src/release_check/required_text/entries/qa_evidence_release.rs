@@ -55,6 +55,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "matching Homebrew cask command"),
     ("docs/qa-evidence.md", "Homebrew tap PR evidence draft"),
     (
+        "docs/release-notes-template.md",
+        "Homebrew tap PR URL above",
+    ),
+    (
         "docs/qa-evidence.md",
         "new absolute `.md` path outside the repository",
     ),
