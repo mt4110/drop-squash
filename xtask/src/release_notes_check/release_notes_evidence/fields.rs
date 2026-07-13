@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod blockers;
+
 use super::url;
 
 pub(super) const URL: [(&str, url::Kind); 6] = [
@@ -37,7 +40,7 @@ pub(super) const EVIDENCE: [&str; 23] = [
 
 #[cfg(test)]
 mod tests {
-    use super::{EVIDENCE, URL};
+    use super::{blockers, EVIDENCE, URL};
 
     #[test]
     fn release_notes_template_contains_checked_fields() {
@@ -70,5 +73,35 @@ mod tests {
             .collect::<Vec<_>>();
 
         assert!(missing.is_empty());
+    }
+
+    #[test]
+    fn release_blockers_have_release_note_evidence_fields() {
+        let missing = crate::release_check::required_blockers()
+            .iter()
+            .filter(|blocker| !blockers::has_mapping(blocker))
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty());
+    }
+
+    #[test]
+    fn mapped_release_note_fields_are_checked() {
+        let missing = blockers::MAPPING
+            .iter()
+            .flat_map(|(_, fields)| fields.iter())
+            .filter(|field| !checked_field(field))
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty());
+    }
+
+    fn checked_field(field: &str) -> bool {
+        URL.iter().any(|(label, _)| *label == field)
+            || EVIDENCE.contains(&field)
+            || matches!(
+                field,
+                "Benchmark sample set" | "Benchmark regression threshold"
+            )
     }
 }
