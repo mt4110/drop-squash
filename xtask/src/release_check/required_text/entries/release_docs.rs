@@ -1,10 +1,42 @@
 use super::Entry;
 
 pub(super) const ENTRIES: &[Entry] = &[
+    ("docs/release.md", "release-notes-prepare"),
+    (
+        "docs/release.md",
+        "--markdown-output /tmp/dropsquash-release-notes-prepared.md",
+    ),
+    ("docs/release.md", "intentionally marked pending"),
+    (
+        "docs/release.md",
+        "`release-notes-prepare` rejects artifacts older",
+    ),
+    ("docs/release.md", "than `HEAD`"),
+    ("docs/release.md", "dirty git worktree"),
     ("docs/release.md", "Prepared draft placeholders"),
     ("docs/release.md", "not public release evidence"),
     (
         "docs/release.md",
         "`release-notes-check` and `publish-check` reject those draft placeholders",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "existing CSV path outside the repository",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "exact lowercase SHA-256 digest",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "same-machine comparison",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "release candidate baseline",
+    ),
+    (
+        "docs/reproducible-builds.md",
+        "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
 ];
