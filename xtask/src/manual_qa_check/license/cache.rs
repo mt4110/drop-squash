@@ -5,6 +5,13 @@ pub(super) fn absence_inspection_ok(label: &str, value: &str) -> bool {
     value.contains("checked") || value.contains("inspected")
 }
 
+pub(super) fn cache_observation_ok(label: &str, value: &str) -> bool {
+    if !matches!(label, "Valid sandbox activation") {
+        return true;
+    }
+    value.contains("checked") || value.contains("inspected") || value.contains("confirmed")
+}
+
 pub(super) fn raw_key_absent(value: &str) -> bool {
     value.contains("raw key absent")
         || value.contains("raw key is absent")

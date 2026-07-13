@@ -1020,6 +1020,18 @@ fn reports_valid_activation_without_fingerprint_instance_evidence() {
 }
 
 #[test]
+fn reports_valid_activation_without_cache_observation() {
+    let (_directory, path) = write_manual_qa(
+        "| Valid sandbox activation | Pro state | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
 fn reports_network_failure_without_fingerprint_instance_evidence() {
     let (_directory, path) = write_manual_qa(
         "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved with no raw key |\n",
@@ -1772,7 +1784,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Invalid key activation" {
             text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and inspected license.json cache has no raw key, no fingerprint, and no instance |\n");
         } else if check == "Valid sandbox activation" {
-            text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent |\n");
+            text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and checked license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent |\n");
         } else if check == "License network failure" {
             text.push_str("| License network failure | Passes | friendly network error shown and checked existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n");
         } else if check == "Expired license refresh" {

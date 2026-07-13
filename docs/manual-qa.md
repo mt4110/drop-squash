@@ -149,7 +149,7 @@ Record concrete results. The checker requires:
 - Sandbox purchase: mention the sandbox checkout, intended product, test buyer, and order.
 - Empty key activation: mention the disabled Activate state and that `license.json` or the license cache was checked and has no raw key, no fingerprint, and no instance.
 - Invalid key activation: mention the Activating/disabled state, a friendly error, and that `license.json` or the license cache was inspected and has no raw key, no fingerprint, and no instance.
-- Valid sandbox activation: mention the Lemon Squeezy sandbox activation request, Activating/disabled state, Pro state, the 64-character lowercase hex fingerprint, the `instance_id` field, and that `license.json` or the license cache has no raw key.
+- Valid sandbox activation: mention the Lemon Squeezy sandbox activation request, Activating/disabled state, Pro state, that `license.json` or the license cache was checked, the 64-character lowercase hex fingerprint, the `instance_id` field, and that it has no raw key.
 - License network failure: mention a friendly network error, checked or inspected preserved existing valid cache, the 64-character lowercase hex fingerprint, the `instance_id` field, and no raw key in `license.json` or the license cache.
 - Expired license refresh: mention an attempted conversion with an expired offline grace cache, the reconnect prompt, conversion blocked before starting, and no raw key in `license.json` or the license cache.
 - Forget license on this Mac: mention the Forgetting/disabled state, confirmed cache removal, and the observed resulting app state.
@@ -164,7 +164,7 @@ whether only the fingerprint and `instance_id` fields were present.
 | Sandbox purchase | Sandbox checkout completes for the intended product and test buyer order |  |
 | Empty key activation | Empty key leaves Activate disabled; checked license cache has no raw key, no fingerprint, and no instance |  |
 | Invalid key activation | Activating state disables submit; friendly license error; inspected license cache has no raw key, no fingerprint, and no instance |  |
-| Valid sandbox activation | Lemon Squeezy sandbox activation request disables submit while Activating; Pro state; license cache has 64-character lowercase hex fingerprint and `instance_id` fields with no raw key |  |
+| Valid sandbox activation | Lemon Squeezy sandbox activation request disables submit while Activating; Pro state; checked license cache has 64-character lowercase hex fingerprint and `instance_id` fields with no raw key |  |
 | License network failure | Friendly network error; checked existing valid cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact and has no raw key |  |
 | Expired license refresh | Attempted conversion with expired offline grace cache shows reconnect prompt; conversion is blocked before starting; license cache has no raw key |  |
 | Forget license on this Mac | Forgetting state disables action; confirmed license cache removed; observed app returns to trial or locked state |  |
