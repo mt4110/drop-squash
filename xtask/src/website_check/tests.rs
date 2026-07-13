@@ -314,6 +314,23 @@ fn rejects_external_loaded_resources() {
 }
 
 #[test]
+fn rejects_external_css_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "styles.css",
+        r#"body { background-image: url("https://cdn.example.invalid/bg.png"); }"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("loads external resource")));
+}
+
+#[test]
 fn rejects_uppercase_external_loaded_resources() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -650,6 +667,24 @@ fn rejects_pre_release_artifact_poster_resources() {
         directory.path(),
         "download.html",
         r#"<video poster="DropSquash.dmg?download=1"></video>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("pre-release artifact resource")));
+}
+
+#[test]
+fn rejects_pre_release_artifact_css_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "DropSquash.dmg", "");
+    write(
+        directory.path(),
+        "styles.css",
+        "body { background-image: url(DropSquash.dmg?download=1); }",
     );
 
     let errors = check_root(directory.path()).unwrap();
