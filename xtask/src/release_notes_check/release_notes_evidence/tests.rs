@@ -1222,14 +1222,32 @@ fn rejects_refund_policy_url_on_different_origin() {
 }
 
 #[test]
+fn rejects_pricing_url_on_different_origin() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://dropsquash.app/release-status
+- Pricing URL: https://buy.dropsquash.app/pricing
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Pricing URL must use the same origin")));
+}
+
+#[test]
 fn accepts_refund_policy_url_on_same_origin_with_host_case_difference() {
     let errors = check_text(
         r#"
 - Public website URL: https://DropSquash.app/release-status
+- Pricing URL: https://dropsquash.app/pricing
 - Refund policy URL: https://dropsquash.app/refund
 "#,
     );
 
+    assert!(!errors
+        .iter()
+        .any(|error| error.contains("Pricing URL must use the same origin")));
     assert!(!errors
         .iter()
         .any(|error| error.contains("Refund policy URL must use the same origin")));

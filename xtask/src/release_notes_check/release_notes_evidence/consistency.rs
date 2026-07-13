@@ -11,6 +11,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_version_in_url("GitHub Release URL", version, text, &mut errors);
     require_release_url_versions_match(text, &mut errors);
     require_artifact_name(text, &mut errors);
+    require_same_origin("Public website URL", "Pricing URL", text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     checksum::validate(text, &mut errors);
     homebrew::validate(text, &mut errors);
