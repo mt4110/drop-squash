@@ -18,6 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "pending checksum upload placeholder"),
     (
         "docs/qa-evidence.md",
+        "macOS verification command/evidence drafts",
+    ),
+    (
+        "docs/qa-evidence.md",
         "stale artifacts older than `HEAD` are rejected",
     ),
     ("docs/qa-evidence.md", "dirty git worktrees are rejected"),
