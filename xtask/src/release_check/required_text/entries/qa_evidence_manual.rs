@@ -46,6 +46,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "release-candidate generated rows include the App artifact path and checksum digest",
+    ),
+    (
+        "docs/qa-evidence.md",
         "prepared manual QA draft markers",
     ),
     (
