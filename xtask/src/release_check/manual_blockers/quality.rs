@@ -1,8 +1,6 @@
 mod groups;
 mod license;
 
-use std::path::{Component, Path, PathBuf};
-
 pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
     let Some(groups) = groups::for_check(check) else {
         return false;
@@ -30,7 +28,7 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
             license::has_raw_key_contradiction(result)
         }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`"
-        | "Benchmark sample set" => !has_ready_csv_outside_repo(result),
+        | "Benchmark sample set" => crate::csv_evidence::existing_outside_repo_path(result).is_none(),
         _ => false,
     }
 }
@@ -72,48 +70,4 @@ fn has_hex_fingerprint(result: &str) -> bool {
 fn has_instance_id(result: &str) -> bool {
     let lower = result.to_ascii_lowercase();
     lower.contains("instance id") || lower.contains("instance_id")
-}
-
-fn has_ready_csv_outside_repo(result: &str) -> bool {
-    result
-        .split_whitespace()
-        .map(csv_token)
-        .filter_map(|token| {
-            let path = PathBuf::from(token);
-            (path.is_absolute() && path.extension().and_then(|value| value.to_str()) == Some("csv"))
-                .then_some(path)
-        })
-        .any(|path| path.is_file() && outside_repo(&path))
-}
-
-fn csv_token(token: &str) -> &str {
-    let token = token
-        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
-    token
-        .strip_prefix("csv=")
-        .or_else(|| token.strip_prefix("CSV="))
-        .or_else(|| token.strip_prefix("csv:"))
-        .or_else(|| token.strip_prefix("CSV:"))
-        .unwrap_or(token)
-}
-
-fn outside_repo(path: &Path) -> bool {
-    let Ok(repo) = std::env::current_dir() else {
-        return false;
-    };
-    !normalize(path).starts_with(normalize(&repo))
-}
-
-fn normalize(path: &Path) -> PathBuf {
-    let mut normalized = PathBuf::new();
-    for component in path.components() {
-        match component {
-            Component::CurDir => {}
-            Component::ParentDir => {
-                normalized.pop();
-            }
-            other => normalized.push(other.as_os_str()),
-        }
-    }
-    normalized
 }

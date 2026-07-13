@@ -1,5 +1,3 @@
-pub(super) mod csv_path;
-
 const BENCHMARK_COMMAND: &str =
     "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`";
 const SAMPLE_SET: &str = "Benchmark sample set";
@@ -38,7 +36,7 @@ fn require_sample_set(result: &str, missing: &mut Vec<String>) {
         && lower.contains("saved")
         && lower.contains("duration")
         && lower.contains("speed ratio")
-        && csv_path::has_existing_outside_repo_path(result)
+        && crate::csv_evidence::existing_outside_repo_path(result).is_some()
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
@@ -83,5 +81,5 @@ fn has_three_sample_context(value: &str) -> bool {
 fn csv_for(rows: &[(String, String)], label: &str) -> Option<std::path::PathBuf> {
     rows.iter()
         .find(|(row_label, _)| row_label == label)
-        .and_then(|(_, value)| csv_path::existing_outside_repo_path(value))
+        .and_then(|(_, value)| crate::csv_evidence::existing_outside_repo_path(value))
 }

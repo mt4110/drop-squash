@@ -2,6 +2,7 @@ mod artifact_age;
 mod artifact_check;
 mod benchmark;
 mod checksum;
+mod csv_evidence;
 mod dmg;
 mod file_size_check;
 mod git_head_match;

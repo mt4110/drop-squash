@@ -1,15 +1,20 @@
 use std::path::{Path, PathBuf};
 
-pub(super) fn has_existing_outside_repo_path(value: &str) -> bool {
-    existing_outside_repo_path(value).is_some()
-}
-
-pub(super) fn existing_outside_repo_path(value: &str) -> Option<PathBuf> {
+pub(crate) fn existing_outside_repo_path(value: &str) -> Option<PathBuf> {
     value
         .split_whitespace()
         .map(csv_token)
         .filter_map(absolute_csv)
         .find(|path| path.is_file() && outside_repo(path))
+}
+
+pub(crate) fn canonical_existing_path(value: &str) -> Option<PathBuf> {
+    value
+        .split_whitespace()
+        .map(csv_token)
+        .filter_map(absolute_csv)
+        .find(|path| path.is_file())
+        .and_then(|path| path.canonicalize().ok())
 }
 
 fn absolute_csv(token: &str) -> Option<PathBuf> {
