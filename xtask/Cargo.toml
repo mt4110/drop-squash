@@ -15,4 +15,5 @@ sha2.workspace = true
 tokio.workspace = true
 
 [dev-dependencies]
+filetime.workspace = true
 tempfile.workspace = true

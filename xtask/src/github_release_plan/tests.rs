@@ -109,6 +109,18 @@ fn rejects_missing_notes_file() {
 }
 
 #[test]
+fn rejects_dmg_older_than_head() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.3");
+    let old = filetime::FileTime::from_unix_time(1, 0);
+    filetime::set_file_mtime(&request.dmg, old).unwrap();
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("older than HEAD"));
+}
+
+#[test]
 fn rejects_incomplete_release_notes() {
     let directory = tempfile::tempdir().unwrap();
     let request = request(directory.path(), "v1.2.3");

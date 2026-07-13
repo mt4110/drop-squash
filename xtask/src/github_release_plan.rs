@@ -13,6 +13,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 fn command(request: &Request) -> Result<String, String> {
     validation::tag(&request.tag)?;
     artifact_check::read_checked(&request.dmg, "GitHub Release DMG")?;
+    crate::artifact_age::require_not_older_than_head(&request.dmg, "GitHub Release")?;
     let digest = validation::checksum(&request.checksum)?;
     validation::notes(&request.notes, &request.tag, &digest)?;
     Ok(shell_command(&[
