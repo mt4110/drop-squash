@@ -7,6 +7,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     let version = value::field("Version", text);
     require_version_in_url("Artifact URL", version, text, &mut errors);
     require_version_in_url("GitHub Release URL", version, text, &mut errors);
+    require_release_url_versions_match(text, &mut errors);
     require_artifact_name(text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     checksum::validate(text, &mut errors);
@@ -41,6 +42,33 @@ fn require_artifact_name(text: &str, errors: &mut Vec<String>) {
         return;
     }
     errors.push("Artifact must match Artifact URL file name".to_string());
+}
+
+fn require_release_url_versions_match(text: &str, errors: &mut Vec<String>) {
+    let (Some(artifact), Some(release)) = (
+        value::field("Artifact URL", text).and_then(artifact_version),
+        value::field("GitHub Release URL", text).and_then(tag_version),
+    ) else {
+        return;
+    };
+    if artifact == release {
+        return;
+    }
+    errors.push("Artifact URL must match GitHub Release URL version".to_string());
+}
+
+fn artifact_version(value: &str) -> Option<&str> {
+    release_path_version(value, "mt4110/drop-squash/releases/download/")
+        .and_then(|suffix| suffix.split('/').next())
+}
+
+fn tag_version(value: &str) -> Option<&str> {
+    release_path_version(value, "mt4110/drop-squash/releases/tag/")
+}
+
+fn release_path_version<'a>(value: &'a str, prefix: &str) -> Option<&'a str> {
+    let url = crate::public_url::HttpsUrl::parse(value)?;
+    url.path().strip_prefix(prefix)
 }
 
 fn require_same_origin(

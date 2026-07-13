@@ -1292,6 +1292,20 @@ fn rejects_mismatched_release_identity_values() {
 }
 
 #[test]
+fn rejects_artifact_and_github_release_url_version_mismatch() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.2.0
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Artifact URL must match GitHub Release URL version")));
+}
+
+#[test]
 fn rejects_noncanonical_artifact_name() {
     let errors = check_text(
         r#"

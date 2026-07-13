@@ -34,7 +34,7 @@ impl<'a> HttpsUrl<'a> {
                 .ends_with(&format!(".{expected}"))
     }
 
-    pub(crate) fn path(&self) -> &str {
+    pub(crate) fn path(&self) -> &'a str {
         self.path
     }
 }
