@@ -48,10 +48,27 @@ fn validate_checksum(path: &Path) -> Result<(), String> {
     }
     let text = std::fs::read_to_string(path)
         .map_err(|error| format!("failed to read SHA256SUMS: {error}"))?;
-    if text.contains("  DropSquash.dmg") && !text.contains("/nix/store") {
+    if text.contains("/nix/store") {
+        return Err("SHA256SUMS must not contain /nix/store".to_string());
+    }
+    let line = text
+        .lines()
+        .find(|line| line.ends_with("  DropSquash.dmg"))
+        .ok_or_else(|| "SHA256SUMS must contain the DropSquash.dmg checksum line".to_string())?;
+    let Some((digest, _)) = line.split_once("  ") else {
+        return Err("SHA256SUMS must contain the DropSquash.dmg checksum line".to_string());
+    };
+    if is_sha256(digest) {
         return Ok(());
     }
-    Err("SHA256SUMS must contain the DropSquash.dmg checksum line".to_string())
+    Err("SHA256SUMS DropSquash.dmg digest must be lowercase SHA-256".to_string())
+}
+
+fn is_sha256(value: &str) -> bool {
+    value.len() == 64
+        && value
+            .chars()
+            .all(|ch| ch.is_ascii_hexdigit() && !ch.is_ascii_uppercase())
 }
 
 fn validate_notes(path: &Path) -> Result<(), String> {

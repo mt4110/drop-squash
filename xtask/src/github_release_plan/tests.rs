@@ -2,6 +2,8 @@ use std::io::Write;
 
 use super::{command, Request};
 
+const SHA256: &str = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+
 #[test]
 fn prints_gh_release_create_command() {
     let directory = tempfile::tempdir().unwrap();
@@ -56,6 +58,45 @@ fn rejects_checksum_without_dmg_line() {
 }
 
 #[test]
+fn rejects_uppercase_checksum_digest() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.3");
+    write_file(
+        &request.checksum,
+        "ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789  DropSquash.dmg",
+    );
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("lowercase SHA-256"));
+}
+
+#[test]
+fn rejects_short_checksum_digest() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.3");
+    write_file(&request.checksum, "abc  DropSquash.dmg");
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("lowercase SHA-256"));
+}
+
+#[test]
+fn rejects_checksum_with_nix_store_reference() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.3");
+    write_file(
+        &request.checksum,
+        "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef  DropSquash.dmg\n/nix/store/abc",
+    );
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("/nix/store"));
+}
+
+#[test]
 fn rejects_missing_notes_file() {
     let directory = tempfile::tempdir().unwrap();
     let mut request = request(directory.path(), "v1.2.3");
@@ -71,7 +112,7 @@ fn request(directory: &std::path::Path, tag: &str) -> Request {
     let checksum = directory.join("SHA256SUMS");
     let notes = directory.join("release-notes.md");
     write_dmg(&dmg);
-    write_file(&checksum, "0123456789abcdef  DropSquash.dmg");
+    write_file(&checksum, &format!("{SHA256}  DropSquash.dmg"));
     write_file(&notes, "# Release\n");
     Request {
         tag: tag.to_string(),
