@@ -449,6 +449,19 @@ fn reports_packaged_macos_manual_qa_with_missing_artifact() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_app_file_artifact() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.app");
+    std::fs::write(&artifact, "not an app bundle").unwrap();
+    let manual = packaged_manual_qa_with("App artifact", &artifact.display().to_string());
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_vague_build_identity() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("App build", "DropSquash git build");

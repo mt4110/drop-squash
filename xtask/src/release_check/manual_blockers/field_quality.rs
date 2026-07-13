@@ -78,12 +78,11 @@ fn is_leap_year(year: u16) -> bool {
 
 fn has_existing_canonical_artifact(result: &str) -> bool {
     let path = Path::new(result.trim());
-    path.is_absolute()
-        && path.exists()
-        && matches!(
-            path.file_name().and_then(|value| value.to_str()),
-            Some("DropSquash.app" | "DropSquash.dmg")
-        )
+    match path.file_name().and_then(|value| value.to_str()) {
+        Some("DropSquash.app") => path.is_absolute() && path.is_dir(),
+        Some("DropSquash.dmg") => path.is_absolute() && path.is_file(),
+        _ => false,
+    }
 }
 
 fn is_absolute_state_path(result: &str, file_name: &str) -> bool {
