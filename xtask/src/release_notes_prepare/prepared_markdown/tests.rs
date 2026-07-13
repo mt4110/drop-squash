@@ -8,6 +8,7 @@ fn writes_markdown_once() {
     write(&path, &["## Artifact".into(), "- Version: v0.1.0".into()]).unwrap();
     let text = std::fs::read_to_string(path).unwrap();
 
+    assert!(text.starts_with("Prepared draft only."));
     assert!(text.contains("## Artifact"));
     assert!(text.ends_with('\n'));
 }
