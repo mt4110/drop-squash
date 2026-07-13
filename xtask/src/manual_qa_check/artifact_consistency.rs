@@ -26,6 +26,9 @@ pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
             require_same_artifact_path(label, result, rows, missing);
         }
     }
+    if let Some(result) = value_for(rows, ARTIFACT_CHECK) {
+        require_artifact_check_context(result, missing);
+    }
     require_checksum_digest(rows, missing);
 }
 
@@ -68,6 +71,14 @@ fn require_same_artifact_path(
     missing.push(format!(
         "manual QA {label} must reference App artifact path {expected}"
     ));
+}
+
+fn require_artifact_check_context(result: &str, missing: &mut Vec<String>) {
+    let lower = result.to_ascii_lowercase();
+    if lower.contains("public") && lower.contains("udif") {
+        return;
+    }
+    missing.push("manual QA artifact-check must mention public UDIF DropSquash.dmg".to_string());
 }
 
 fn require_checksum_digest(rows: &[(String, String)], missing: &mut Vec<String>) {

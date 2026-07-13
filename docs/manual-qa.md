@@ -190,7 +190,7 @@ include the `App artifact` absolute path.
 | Benchmark sample set | Short, medium, and large private local recordings produce smaller outputs and are recorded with backend, saved percent, duration, speed ratio, absolute CSV path outside repo, machine, and OS context |  |
 | Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples without a documented reason |  |
 | `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
-| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes |  |
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Public UDIF `DropSquash.dmg` artifact check passes |  |
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character lowercase SHA-256 digest and `DropSquash.dmg` recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |

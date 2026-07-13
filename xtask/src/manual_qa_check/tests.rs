@@ -370,7 +370,7 @@ fn reports_release_command_results_for_different_dmg_artifact() {
         &path,
         format!(
             "| App artifact | {} |\n\
-| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for DropSquash.dmg |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for public UDIF DropSquash.dmg |\n\
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg |\n",
             artifact.display()
         ),
@@ -441,7 +441,7 @@ fn reports_release_command_results_without_artifact_path() {
         &path,
         format!(
             "| App artifact | {} |\n\
-| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for DropSquash.dmg |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for public UDIF DropSquash.dmg |\n\
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with SHA-256 {} DropSquash.dmg |\n",
             artifact.display(),
             sha256_hex(&bytes)
@@ -493,7 +493,7 @@ fn accepts_release_command_results_with_artifact_path() {
         &path,
         format!(
             "| App artifact | {} |\n\
-| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for {} |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for public UDIF {} |\n\
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with SHA-256 {} {} |\n",
             artifact.display(),
             artifact.display(),
@@ -507,6 +507,29 @@ fn accepts_release_command_results_with_artifact_path() {
     assert!(!missing
         .iter()
         .any(|error| error.contains("App artifact path")));
+}
+
+#[test]
+fn reports_artifact_check_without_public_udif_context() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for {} |\n",
+            artifact.display(),
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("public UDIF DropSquash.dmg")));
 }
 
 #[test]
@@ -1561,7 +1584,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
 fn command_result(check: &str) -> String {
     let result = match check {
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
-            "artifact-check passed for DropSquash.dmg"
+            "artifact-check passed for public UDIF DropSquash.dmg"
         }
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" => {
             "SHA256SUMS created with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg"

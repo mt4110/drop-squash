@@ -11,6 +11,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "public signing/notary/stapler/`spctl` evidence",
     ),
+    (
+        "docs/qa-evidence.md",
+        "public UDIF artifact-check evidence",
+    ),
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     (
         "docs/qa-evidence.md",
