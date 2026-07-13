@@ -24,6 +24,19 @@ fn release_blockers_template_classifies_required_rows() {
 }
 
 #[test]
+fn execution_order_tracks_match_evidence_classes() {
+    let text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+    let mismatched = execution_order_pairs(&text)
+        .into_iter()
+        .filter(|(track, blocker)| {
+            classes::expected(blocker).is_some_and(|class| !track_accepts_class(track, class))
+        })
+        .collect::<Vec<_>>();
+
+    assert!(mismatched.is_empty(), "{mismatched:?}");
+}
+
+#[test]
 fn reports_missing_evidence_classification() {
     let unclassified = unclassified_blockers("");
 
@@ -416,6 +429,45 @@ fn reports_homebrew_action_without_clean_uninstall_result() {
     let unclassified = unclassified_blockers(text);
 
     assert!(unclassified.contains(&"Homebrew cask install"));
+}
+
+fn execution_order_pairs(markdown: &str) -> Vec<(&str, &str)> {
+    markdown
+        .lines()
+        .filter_map(|line| {
+            let cells = line
+                .trim_matches('|')
+                .split('|')
+                .map(str::trim)
+                .collect::<Vec<_>>();
+            (cells.len() == 5
+                && !cells[0].is_empty()
+                && cells[0].chars().all(|value| value.is_ascii_digit()))
+            .then(|| (cells[1], cells[2]))
+        })
+        .flat_map(|(track, blockers)| {
+            blockers
+                .split(',')
+                .map(str::trim)
+                .filter(|blocker| !blocker.is_empty())
+                .map(move |blocker| (track, blocker))
+        })
+        .collect()
+}
+
+fn track_accepts_class(track: &str, class: &str) -> bool {
+    match track {
+        "Local packaged-app proof" => matches!(class, "Manual packaged-app" | "Benchmark"),
+        "License sandbox proof" => class == "License sandbox",
+        "Public web proof" => class == "Public web",
+        "Signing and distribution proof" => {
+            matches!(
+                class,
+                "Signing/notarization" | "Manual packaged-app" | "Distribution"
+            )
+        }
+        _ => false,
+    }
 }
 
 fn action_for(blocker: &str) -> &'static str {
