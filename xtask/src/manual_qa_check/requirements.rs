@@ -12,7 +12,7 @@ pub(crate) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(crate) const REQUIRED_CHECKS: [&str; 37] = [
+pub(crate) const REQUIRED_CHECKS: [&str; 38] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",
@@ -46,6 +46,7 @@ pub(crate) const REQUIRED_CHECKS: [&str; 37] = [
     "`cargo run -p xtask -- manual-qa-check`",
     "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`",
     "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`",
+    "`cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md`",
     "`cargo run -p xtask -- macos-signing-check`",
     "Codesign verification",
     "Notarization staple verification",

@@ -17,6 +17,14 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" => {
             &[&["sha-256", "sha256"], &["dropsquash.dmg", ".dmg"]]
         }
+        "`cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md`" => {
+            &[
+                &["homebrew-cask-check"],
+                &["passed", "passes"],
+                &["dropsquash.rb"],
+                &["release-notes.md"],
+            ]
+        }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`" => {
             &[
                 &["csv"],

@@ -1849,6 +1849,18 @@ fn reports_release_artifact_commands_without_pass_evidence() {
         .any(|error| error.contains("macos-signing-check")));
 }
 
+#[test]
+fn reports_homebrew_cask_check_without_paths() {
+    let (_directory, path) = write_manual_qa(
+        "| `cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md` | Passes | homebrew-cask-check passed |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("homebrew-cask-check")));
+}
+
 fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -2004,6 +2016,9 @@ fn command_result(check: &str, artifact: &std::path::Path) -> String {
         }
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" => {
             format!("SHA256SUMS created with SHA-256 {digest} {}", artifact.display())
+        }
+        "`cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md`" => {
+            "homebrew-cask-check passed for packaging/homebrew/Casks/dropsquash.rb and /tmp/dropsquash-release-notes.md".to_string()
         }
         "`cargo run -p xtask -- macos-signing-check`" => {
             "macos-signing-check passed in release environment".to_string()
