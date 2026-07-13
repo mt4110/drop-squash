@@ -9,6 +9,19 @@ fn accepts_matching_benchmark_csv_paths() {
 }
 
 #[test]
+fn accepts_matching_benchmark_csv_paths_with_labels() {
+    let csv = "/tmp/dropsquash-bench/results.csv";
+    let notes = format!(
+        "- Benchmark sample set: short medium large smaller outputs on MacBook macOS csv={csv}\n"
+    );
+    let (_directory, manual) = write_manual_qa(&format!(
+        "| Benchmark sample set | Passes | short medium large smaller outputs on MacBook macOS csv:{csv} |\n"
+    ));
+
+    assert!(require_notes_csv_matches_manual_qa(&notes, &manual).is_ok());
+}
+
+#[test]
 fn rejects_mismatched_benchmark_csv_paths() {
     let notes = notes_with_csv("/tmp/dropsquash-bench/results.csv");
     let (_directory, manual) = manual_qa_with_csv("/tmp/other-bench/results.csv");

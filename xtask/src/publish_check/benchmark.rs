@@ -59,13 +59,20 @@ fn table_result<'a>(text: &'a str, label: &str) -> Option<&'a str> {
 fn csv_path(value: &str) -> Option<PathBuf> {
     value
         .split_whitespace()
-        .map(|token| {
-            token.trim_matches(|character: char| {
-                matches!(character, ',' | '.' | ';' | ')' | '(' | '`')
-            })
-        })
+        .map(csv_token)
         .find(|token| token.starts_with('/') && token.ends_with(".csv"))
         .map(PathBuf::from)
+}
+
+fn csv_token(token: &str) -> &str {
+    let token = token
+        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
+    token
+        .strip_prefix("csv=")
+        .or_else(|| token.strip_prefix("CSV="))
+        .or_else(|| token.strip_prefix("csv:"))
+        .or_else(|| token.strip_prefix("CSV:"))
+        .unwrap_or(token)
 }
 
 fn require_outside_repo(path: &Path, label: &str) -> Result<(), String> {
