@@ -6,7 +6,8 @@ mod productization_docs;
 mod qa_evidence;
 mod qa_evidence_distribution;
 mod qa_evidence_manual;
-mod qa_evidence_release;
+mod qa_evidence_publish;
+mod qa_evidence_release_notes;
 mod release_docs;
 mod website_docs;
 
@@ -19,7 +20,8 @@ const GROUPS: &[&[Entry]] = &[
     productization_docs::ENTRIES,
     qa_evidence::ENTRIES,
     qa_evidence_manual::ENTRIES,
-    qa_evidence_release::ENTRIES,
+    qa_evidence_release_notes::ENTRIES,
+    qa_evidence_publish::ENTRIES,
     qa_evidence_distribution::ENTRIES,
     distribution_docs::ENTRIES,
     release_docs::ENTRIES,
