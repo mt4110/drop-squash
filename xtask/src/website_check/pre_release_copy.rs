@@ -2,8 +2,11 @@ use std::path::Path;
 
 const DISALLOWED_PHRASES: &[&str] = &[
     "download now",
+    "download dropsquash",
+    "download for macos",
     "download the beta",
     "buy now",
+    "buy dropsquash",
     "purchase now",
     "start checkout",
     "checkout now",

@@ -492,6 +492,28 @@ fn rejects_pre_release_beta_and_checkout_cta_copy() {
 }
 
 #[test]
+fn rejects_pre_release_product_and_platform_cta_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta DropSquash.dmg notarization checksum release-status/ Download DropSquash. Download for macOS.",
+    );
+    write(directory.path(), "pricing.html", "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Buy DropSquash");
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("download dropsquash")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("download for macos")));
+    assert!(errors.iter().any(|error| error.contains("buy dropsquash")));
+}
+
+#[test]
 fn rejects_pre_release_download_or_checkout_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
