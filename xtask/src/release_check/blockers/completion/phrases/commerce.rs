@@ -5,6 +5,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Lemon Squeezy product setup", "DropSquash"),
     ("Lemon Squeezy product setup", "intended product"),
     ("Lemon Squeezy product setup", "license keys enabled"),
+    (
+        "Lemon Squeezy product setup",
+        "private store IDs not recorded",
+    ),
     ("Lemon Squeezy sandbox purchase", "Sandbox checkout"),
     ("Lemon Squeezy sandbox purchase", "intended product"),
     ("Lemon Squeezy sandbox purchase", "test buyer"),

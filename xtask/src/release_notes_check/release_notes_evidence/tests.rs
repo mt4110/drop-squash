@@ -32,7 +32,7 @@ fn accepts_concrete_production_urls() {
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
 - Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
-- Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled
+- Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled and private store IDs not recorded
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
 - Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 - Empty key activation: Activate disabled for empty input and raw key absent from cache with no fingerprint and no instance
@@ -176,6 +176,19 @@ fn rejects_sandbox_purchase_without_checkout_context() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
+}
+
+#[test]
+fn rejects_product_setup_without_private_store_id_absence() {
+    let errors = check_text(
+        r#"
+- Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy product setup")));
 }
 
 #[test]

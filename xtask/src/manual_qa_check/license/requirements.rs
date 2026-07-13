@@ -4,6 +4,11 @@ pub(super) const PRODUCT_SETUP: &[&str] = &[
     "intended product",
     "license keys enabled",
 ];
+pub(super) const PRIVATE_STORE_ABSENCE: &[&str] = &[
+    "private store ids absent",
+    "private store ids not recorded",
+    "without private store ids",
+];
 pub(super) const PURCHASE: &[&str] = &[
     "sandbox",
     "checkout",

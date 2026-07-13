@@ -7,6 +7,11 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["dropsquash"],
             &["intended product"],
             &["license keys enabled"],
+            &[
+                "private store ids absent",
+                "private store ids not recorded",
+                "without private store ids",
+            ],
         ]),
         "Lemon Squeezy sandbox purchase" => Some(&[
             &["sandbox"],

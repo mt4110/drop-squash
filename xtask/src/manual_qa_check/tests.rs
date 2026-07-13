@@ -876,6 +876,18 @@ fn reports_product_setup_without_sandbox_context() {
 }
 
 #[test]
+fn reports_product_setup_without_private_store_id_absence() {
+    let (_directory, path) = write_manual_qa(
+        "| Sandbox product setup | Product exists | DropSquash sandbox intended product confirmed and license keys enabled |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Sandbox product setup")));
+}
+
+#[test]
 fn reports_purchase_without_sandbox_context() {
     let (_directory, path) = write_manual_qa(
         "| Sandbox purchase | Checkout completes | intended product checkout completed by test buyer order abc123 |\n",
@@ -1691,7 +1703,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
                 "| Benchmark regression threshold | Passes | no sample exceeded 20% regression against the same-machine release candidate baseline |\n",
             );
         } else if check == "Sandbox product setup" {
-            text.push_str("| Sandbox product setup | Passes | DropSquash sandbox intended product confirmed and license keys enabled |\n");
+            text.push_str("| Sandbox product setup | Passes | DropSquash sandbox intended product confirmed, license keys enabled, and private store IDs not recorded |\n");
         } else if check == "Sandbox purchase" {
             text.push_str("| Sandbox purchase | Passes | sandbox checkout completed for intended product by test buyer order abc123 |\n");
         } else if check == "Empty key activation" {

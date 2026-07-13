@@ -6,7 +6,16 @@ use identity::{fingerprint_evidence_ok, instance_id_evidence_ok};
 
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
-        "Sandbox product setup" => require_all(label, result, requirements::PRODUCT_SETUP, missing),
+        "Sandbox product setup" => {
+            require_all(label, result, requirements::PRODUCT_SETUP, missing);
+            require_any(
+                label,
+                result,
+                requirements::PRIVATE_STORE_ABSENCE,
+                missing,
+                "manual QA Sandbox product setup must say private store IDs were not recorded",
+            );
+        }
         "Sandbox purchase" => require_all(label, result, requirements::PURCHASE, missing),
         "Empty key activation" => {
             require_license_cache_evidence(label, result, requirements::EMPTY_KEY_CACHE, missing);
@@ -43,6 +52,20 @@ fn require_all(label: &str, result: &str, needles: &[&str], missing: &mut Vec<St
         return;
     }
     missing.push(format!("manual QA {label} needs concrete license evidence"));
+}
+
+fn require_any(
+    label: &str,
+    result: &str,
+    needles: &[&str],
+    missing: &mut Vec<String>,
+    message: &str,
+) {
+    let lower = result.to_ascii_lowercase();
+    if needles.iter().any(|needle| lower.contains(needle)) {
+        return;
+    }
+    missing.push(format!("{message}: {label}"));
 }
 
 fn require_license_cache_evidence(

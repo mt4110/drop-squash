@@ -16,7 +16,7 @@ Use the exact forms `GitHub Release https://...` and
 | Blocker | Status | Completion evidence | Evidence reference | Record in |
 |---|---|---|---|---|
 | Packaged macOS manual QA | Blocked | Tested the public `DropSquash.dmg` artifact with the filled manual QA table and `manual-qa-check` passing | TBD | `docs/manual-qa.md` |
-| Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled | TBD | `docs/manual-qa.md` |
+| Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled and private store IDs not recorded | TBD | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |
 | Empty key activation | Blocked | Activate stays disabled for empty input, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |
 | Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
@@ -44,7 +44,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Blocker | Class | Next action | Evidence owner |
 |---|---|---|---|
 | Packaged macOS manual QA | Manual packaged-app | Run the public `DropSquash.dmg` artifact through the manual QA table and record `manual-qa-check` passing | `docs/manual-qa.md` |
-| Lemon Squeezy product setup | License sandbox | Confirm the sandbox product is the intended product, DropSquash, and license keys are enabled | `docs/manual-qa.md` |
+| Lemon Squeezy product setup | License sandbox | Confirm the sandbox product is the intended product, DropSquash, license keys are enabled, and private store IDs are not recorded | `docs/manual-qa.md` |
 | Lemon Squeezy sandbox purchase | License sandbox | Complete sandbox checkout for the intended product, test buyer, and order | `docs/manual-qa.md` |
 | Empty key activation | License sandbox | Leave the key empty, confirm Activate is disabled, and inspect local license cache raw-key, fingerprint, and instance absence | `docs/manual-qa.md` |
 | Valid sandbox activation | License sandbox | Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache 64-character lowercase hex fingerprint, `instance_id`, plus raw-key absence | `docs/manual-qa.md` |
