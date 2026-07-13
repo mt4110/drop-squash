@@ -61,3 +61,16 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings, record backend, saved percent, duration, speed ratio, the absolute CSV path outside repo, and threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` lowercase SHA-256 line to the GitHub Release | GitHub Release URL |
 | Homebrew cask install | Distribution | Open the Homebrew tap PR and verify `brew install --cask`, versioned `DropSquash.dmg` URL, matching lowercase SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
+
+## Execution Order
+
+Use this order to finish the blockers without treating external evidence as a
+local code task. Keep each blocker `Blocked` until the matching concrete
+evidence is recorded in the blocker table.
+
+| Order | Track | Blockers | Exit condition | Record target |
+|---:|---|---|---|---|
+| 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Public `DropSquash.dmg`, filled manual QA rows, release-set CSV outside the repo, and `manual-qa-check` passing | `docs/manual-qa.md` |
+| 2 | License sandbox proof | Lemon Squeezy product setup, Lemon Squeezy sandbox purchase, Empty key activation, Valid sandbox activation, Invalid license key handling, License network failure, Expired license refresh, Local license forget | Sandbox purchase/activation behavior, friendly failures, raw-key absence, fingerprint/instance checks, and forget behavior | `docs/manual-qa.md` |
+| 3 | Public web proof | Public website deployment, Refund policy finalized, Live checkout link | Production URLs serve the required pages and checkout/refund links before the public beta | Production website URLs |
+| 4 | Signing and distribution proof | Signed DMG, Notarized and stapled DMG, Gatekeeper clean-machine open, Published checksum, Homebrew cask install | Release notes, GitHub Release, Homebrew tap PR, and `docs/manual-qa.md` prove the same public `DropSquash.dmg` is signed, notarized, checksummed, installable, and opens without warning | Release notes and public distribution URLs |
