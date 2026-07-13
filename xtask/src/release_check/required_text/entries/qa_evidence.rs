@@ -16,6 +16,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "productization Release Gate text coverage",
+    ),
+    (
+        "docs/qa-evidence.md",
         "read-only `GITHUB_TOKEN` permissions",
     ),
     ("docs/qa-evidence.md", "unsigned release failure gate"),
