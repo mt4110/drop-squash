@@ -1,4 +1,4 @@
-const DISALLOWED: [&str; 44] = [
+const DISALLOWED: [&str; 48] = [
     "-----begin ",
     "private key-----",
     "apple api issuer:",
@@ -36,6 +36,10 @@ const DISALLOWED: [&str; 44] = [
     "product_id:",
     "raw key=",
     "raw key:",
+    "raw license key=",
+    "raw license key:",
+    "raw_license_key=",
+    "raw_license_key:",
     "raw_key:",
     "store id:",
     "store_id=",

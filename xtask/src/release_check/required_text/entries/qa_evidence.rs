@@ -28,6 +28,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "raw-key field-name rejection"),
     (
         "docs/qa-evidence.md",
+        "raw-license-key field-name rejection",
+    ),
+    (
+        "docs/qa-evidence.md",
         "expired refresh priority over trial completion",
     ),
     ("docs/qa-evidence.md", "benchmark CSV path evidence"),

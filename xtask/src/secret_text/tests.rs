@@ -97,6 +97,20 @@ fn rejects_license_key_with_spaced_equals() {
 }
 
 #[test]
+fn rejects_raw_license_key_forms() {
+    let text = "raw license key: test-key raw_license_key = test-key";
+
+    let errors = violations("evidence", text);
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("raw license key:")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("raw_license_key=")));
+}
+
+#[test]
 fn allows_safe_evidence_terms() {
     let text =
         "license-key fingerprint exists, private store IDs absent, raw key absent from cache";
