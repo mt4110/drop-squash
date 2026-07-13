@@ -5,6 +5,12 @@ pub(super) fn mismatched_verified_url_pairs(text: &str) -> Vec<&'static str> {
     require_same_origin(
         text,
         "Public website deployment",
+        "Pricing finalized",
+        &mut mismatched,
+    );
+    require_same_origin(
+        text,
+        "Public website deployment",
         "Refund policy finalized",
         &mut mismatched,
     );
