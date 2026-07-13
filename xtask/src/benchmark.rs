@@ -1,4 +1,5 @@
 mod args;
+mod release_set;
 mod report;
 mod validate;
 
@@ -58,6 +59,9 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
             started.elapsed(),
             input_duration,
         ));
+    }
+    if args.release_set {
+        release_set::require_timing_evidence(&rows)?;
     }
     if let Some(path) = args.csv_output {
         report::write(&path, &rows)?;
