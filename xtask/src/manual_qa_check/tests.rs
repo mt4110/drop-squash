@@ -868,6 +868,16 @@ fn reports_forget_license_without_cache_removal() {
 }
 
 #[test]
+fn reports_forget_license_without_observed_cache_and_state() {
+    let (_directory, path) = write_manual_qa(
+        "| Forget license on this Mac | Local cache clears | Forgetting state disabled action; license cache cleared and app returned to trial state |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("cache removal")));
+}
+
+#[test]
 fn reports_network_failure_without_existing_valid_cache() {
     let (_directory, path) = write_manual_qa(
         "| License network failure | Friendly network error | friendly network error shown and license.json cache preserved with no raw key |\n",
@@ -1577,7 +1587,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Expired license refresh" {
             text.push_str("| Expired license refresh | Passes | attempted conversion with expired offline grace license.json cache; reconnect prompt appeared, blocked conversion before starting, and had no raw key |\n");
         } else if check == "Forget license on this Mac" {
-            text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; license cache cleared and app returned to trial state |\n");
+            text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; confirmed license cache cleared and observed app returned to trial state |\n");
         } else if check == "Choose recording conversion" {
             text.push_str("| Choose recording conversion | Passes | saved smaller clip.squashed.mp4 and original remained in place |\n");
         } else if check == "Drag-and-drop conversion" {

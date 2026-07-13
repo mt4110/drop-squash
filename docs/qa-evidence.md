@@ -72,7 +72,7 @@ These checks still require a packaged macOS app or external service state:
 | Invalid license key handling | Requires packaged-app disabled Activating state, friendly error, and inspected local cache showing no raw key, fingerprint, or instance after an invalid key |
 | License network failure | Requires packaged-app UI and checked local cache inspection after a failed activation request |
 | Expired license refresh | Requires packaged-app UI, attempted conversion, and local cache inspection for an expired offline grace cache before conversion starts |
-| Local license forget | Requires packaged-app forgetting/disabled action state and local cache inspection after forgetting the license |
+| Local license forget | Requires packaged-app forgetting/disabled action state, confirmed cache removal, and observed trial or locked app state after forgetting the license |
 | Public website deployment | Requires the production website URL and public release pages |
 | Refund policy finalized | Requires the production refund policy URL before checkout goes live |
 | Live checkout link | Requires the live Lemon Squeezy checkout URL for the intended product |

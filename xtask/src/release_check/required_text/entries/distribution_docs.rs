@@ -72,7 +72,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/manual-qa.md",
-        "Forgetting state disables action; license cache removed",
+        "Forgetting state disables action; confirmed license cache removed",
     ),
     ("docs/release.md", "10-character `APPLE_API_KEY`"),
     ("docs/release.md", "APPLE_API_ISSUER"),

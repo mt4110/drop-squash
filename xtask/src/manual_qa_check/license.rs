@@ -83,7 +83,8 @@ fn require_any_state(result: &str, missing: &mut Vec<String>) {
     let mentions_cache = lower.contains("cache") || lower.contains("license.json");
     let mentions_removal = mentions_cache_removal(&lower);
     let mentions_state = lower.contains("trial") || lower.contains("locked");
-    if mentions_cache && mentions_removal && mentions_state {
+    if mentions_cache && mentions_removal && mentions_state && cache::forget_observation_ok(&lower)
+    {
         return;
     }
     missing.push(

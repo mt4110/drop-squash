@@ -21,3 +21,11 @@ pub(super) fn observation_ok(label: &str, value: &str) -> bool {
         _ => true,
     }
 }
+
+pub(super) fn forget_observation_ok(value: &str) -> bool {
+    let observed_cache =
+        value.contains("checked") || value.contains("confirmed") || value.contains("inspected");
+    let observed_state =
+        value.contains("observed") || value.contains("confirmed") || value.contains("returned");
+    observed_cache && observed_state
+}
