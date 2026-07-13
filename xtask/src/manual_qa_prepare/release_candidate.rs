@@ -98,6 +98,17 @@ mod tests {
         assert!(untracked.is_empty(), "{untracked:?}");
     }
 
+    #[test]
+    fn generated_row_labels_exist_in_manual_qa_template() {
+        let template = std::fs::read_to_string("../docs/manual-qa.md").unwrap();
+        let missing = [super::ARTIFACT_CHECK, super::CHECKSUM]
+            .into_iter()
+            .filter(|label| !template.contains(&format!("| {label} |")))
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty(), "{missing:?}");
+    }
+
     fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
         let mut bytes = prefix.to_vec();
         let mut trailer = vec![0; 512];
