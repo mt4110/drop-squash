@@ -9,11 +9,19 @@ pub(super) fn require_version(version: &str) -> Result<(), String> {
 
 pub(super) fn require_dmg_url(url: &str) -> Result<(), String> {
     let parsed = require_https_url(url)?;
+    require_stable_download_url(url)?;
     require_github_release_url(&parsed)?;
     if parsed.path().ends_with("/DropSquash.dmg") {
         return Ok(());
     }
     Err("url must point to DropSquash.dmg".to_string())
+}
+
+fn require_stable_download_url(url: &str) -> Result<(), String> {
+    if url.contains('?') || url.contains('#') {
+        return Err("url must not contain query or fragment".to_string());
+    }
+    Ok(())
 }
 
 pub(super) fn require_versioned_url(version: &str, url: &str) -> Result<(), String> {

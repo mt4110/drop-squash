@@ -164,6 +164,25 @@ fn rejects_url_with_inline_note() {
 }
 
 #[test]
+fn rejects_url_with_query_or_fragment() {
+    for url in [
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg?download=1",
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg#asset",
+    ] {
+        let error = Input::parse(vec![
+            "0.1.0".to_string(),
+            url.to_string(),
+            SHA256.to_string(),
+            "https://github.com/mt4110/drop-squash".to_string(),
+        ])
+        .err()
+        .unwrap();
+
+        assert!(error.contains("query or fragment"));
+    }
+}
+
+#[test]
 fn rejects_url_for_different_version() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
