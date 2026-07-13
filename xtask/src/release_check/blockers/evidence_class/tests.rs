@@ -278,13 +278,13 @@ fn action_for(blocker: &str) -> &'static str {
             "Leave key empty, confirm Activate is disabled, and inspect local license cache raw-key, fingerprint, and instance absence"
         }
         "Valid sandbox activation" => {
-            "Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache fingerprint/instance fields plus raw-key absence"
+            "Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache 64-character hex fingerprint, `instance_id`, plus raw-key absence"
         }
         "Invalid license key handling" => {
             "Enter invalid key, confirm submit is disabled while activating, friendly error appears, and inspect local license cache raw-key, fingerprint, and instance absence"
         }
         "License network failure" => {
-            "Simulate failed activation request and inspect friendly error plus preserved local cache fingerprint/instance fields and raw-key absence"
+            "Simulate failed activation request and inspect friendly error plus preserved local cache 64-character hex fingerprint, `instance_id`, and raw-key absence"
         }
         "Local license forget" => {
             "Use local forget action, confirm disabled while forgetting, and inspect returned app state"

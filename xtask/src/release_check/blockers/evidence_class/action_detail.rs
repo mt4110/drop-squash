@@ -21,7 +21,8 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
         "Valid sandbox activation" => &[
             "Lemon Squeezy sandbox activation request",
             "disabled while Activating",
-            "fingerprint/instance fields",
+            "64-character hex fingerprint",
+            "`instance_id`",
             "raw-key absence",
         ],
         "Invalid license key handling" => &[
@@ -34,7 +35,8 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "failed activation request",
             "friendly error",
             "preserved local cache",
-            "fingerprint/instance fields",
+            "64-character hex fingerprint",
+            "`instance_id`",
             "raw-key absence",
         ],
         "Local license forget" => &["disabled while forgetting", "returned app state"],
