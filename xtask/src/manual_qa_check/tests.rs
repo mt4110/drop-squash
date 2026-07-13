@@ -791,7 +791,7 @@ fn reports_benchmark_command_with_missing_csv_file() {
 #[test]
 fn reports_benchmark_sample_set_without_smaller_outputs() {
     let (_directory, path) = write_manual_qa(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples on MacBookPro18,4 macOS 26.5 |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples on MacBookPro18,4 macOS 26.5 |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -803,7 +803,7 @@ fn reports_benchmark_sample_set_without_smaller_outputs() {
 #[test]
 fn reports_benchmark_sample_set_without_csv_path() {
     let (_directory, path) = write_manual_qa(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -813,9 +813,22 @@ fn reports_benchmark_sample_set_without_csv_path() {
 }
 
 #[test]
+fn reports_benchmark_sample_set_without_three_sample_context() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let (_manual_directory, path) = write_manual_qa(&format!(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("three samples")));
+}
+
+#[test]
 fn reports_benchmark_sample_set_with_relative_csv_path() {
     let (_directory, path) = write_manual_qa(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at results.csv |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at results.csv |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -831,7 +844,7 @@ fn reports_benchmark_sample_set_with_repo_local_csv_path() {
         .join("target")
         .join("dropsquash-bench.csv");
     let (_directory, path) = write_manual_qa(&format!(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at {} |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at {} |\n",
         repo_csv.display()
     ));
     let missing = check_file(&path).unwrap();
@@ -846,7 +859,7 @@ fn accepts_benchmark_sample_set_with_labeled_csv_path() {
     let directory = tempfile::tempdir().unwrap();
     let csv = csv_file(directory.path(), "results.csv");
     let (_manual_directory, path) = write_manual_qa(&format!(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
         csv.display()
     ));
     let missing = check_file(&path).unwrap();
@@ -861,7 +874,7 @@ fn reports_benchmark_sample_set_with_missing_csv_file() {
     let directory = tempfile::tempdir().unwrap();
     let csv = directory.path().join("missing.csv");
     let (_manual_directory, path) = write_manual_qa(&format!(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
         csv.display()
     ));
     let missing = check_file(&path).unwrap();
@@ -874,7 +887,7 @@ fn reports_benchmark_sample_set_with_missing_csv_file() {
 #[test]
 fn reports_benchmark_sample_set_without_backend() {
     let (_directory, path) = write_manual_qa(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |\n",
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1870,7 +1883,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check.starts_with('`') {
             text.push_str(&command_result(check, artifact));
         } else if check == "Benchmark sample set" {
-            text.push_str(&format!("| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {} |\n", benchmark_csv.display()));
+            text.push_str(&format!("| Benchmark sample set | Passes | three short, medium, and large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {} |\n", benchmark_csv.display()));
         } else if check == "Benchmark regression threshold" {
             text.push_str(
                 "| Benchmark regression threshold | Passes | no sample exceeded 20% regression against the same-machine release candidate baseline |\n",

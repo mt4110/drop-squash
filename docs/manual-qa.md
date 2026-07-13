@@ -195,7 +195,7 @@ rows to the exact Artifact URL for the same public `DropSquash.dmg`.
 | `cargo run -p xtask -- privacy-policy-check` | Passes |  |
 | `cargo run -p xtask -- website-check` | Passes |  |
 | `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | Existing absolute `.csv` path recorded outside repo for three local samples; outputs are smaller |  |
-| Benchmark sample set | Short, medium, and large private local recordings produce smaller outputs and are recorded with backend, saved percent, duration, speed ratio, existing absolute CSV path outside repo, machine, and OS context |  |
+| Benchmark sample set | Three short, medium, and large private local recordings produce smaller outputs and are recorded with backend, saved percent, duration, speed ratio, existing absolute CSV path outside repo, machine, and OS context |  |
 | Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples against the same-machine release candidate baseline without a documented reason |  |
 | `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Public UDIF `DropSquash.dmg` artifact check passes |  |
