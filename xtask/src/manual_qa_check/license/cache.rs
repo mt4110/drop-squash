@@ -40,7 +40,12 @@ pub(super) fn observation_ok(label: &str, value: &str) -> bool {
         "License network failure" => {
             value.contains("checked") || value.contains("inspected") || value.contains("confirmed")
         }
-        "Expired license refresh" => value.contains("attempted") || value.contains("attempt"),
+        "Expired license refresh" => {
+            (value.contains("attempted") || value.contains("attempt"))
+                && (value.contains("checked")
+                    || value.contains("inspected")
+                    || value.contains("confirmed"))
+        }
         _ => true,
     }
 }

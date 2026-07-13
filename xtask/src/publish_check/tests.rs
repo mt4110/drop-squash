@@ -132,7 +132,7 @@ fn accepts_public_release_evidence_references() {
     let text = "\
 | Signed DMG | Verified | `codesign` verified Developer ID for public DropSquash.dmg matching the release notes Artifact URL | Release notes | Release notes |
 | Published checksum | Verified | SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg matching the release notes Artifact URL attached to the GitHub Release | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, brew uninstall --cask removed it cleanly, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, brew uninstall --cask removes it cleanly, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
 
     let unverified = unverified_blockers(text);
@@ -376,7 +376,7 @@ fn evidence(blocker: &str) -> &'static str {
             "SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg matching the release notes Artifact URL attached to the GitHub Release"
         }
         "Homebrew cask install" => {
-            "brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, brew uninstall --cask removed it cleanly, auto_updates false, and zap"
+            "brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, brew uninstall --cask removes it cleanly, auto_updates false, and zap"
         }
         "Packaged macOS manual QA" => {
             "Tested the public DropSquash.dmg artifact matching the release notes Artifact URL with manual-qa-check evidence recorded"
@@ -394,7 +394,7 @@ fn evidence(blocker: &str) -> &'static str {
             "Friendly network error, existing valid local cache was checked with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
         }
         "Expired license refresh" => {
-            "expired offline grace cache shows reconnect prompt, attempted conversion is blocked before starting, and raw key is absent from local cache"
+            "expired offline grace cache shows reconnect prompt, attempted conversion is blocked before starting, local cache was checked, and raw key is absent from local cache"
         }
         "Local license forget" => {
             "Forgetting state disables action, local cache removed, trial or locked state"
@@ -409,10 +409,10 @@ fn evidence(blocker: &str) -> &'static str {
             "Sandbox checkout completed for intended product, test buyer, and order"
         }
         "Public website deployment" => {
-            "Production website production URL serves release-status, privacy, pricing, support, and download"
+            "Production website production URL on dropsquash.app serves release-status, privacy, pricing, support, and download"
         }
         "Refund policy finalized" => {
-            "Production refund policy is final and linked before checkout goes live"
+            "Production refund policy is final on dropsquash.app and linked before checkout goes live"
         }
         "Live checkout link" => {
             "Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for tested Lemon Squeezy checkout and intended product"

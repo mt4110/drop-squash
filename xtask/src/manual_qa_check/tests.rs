@@ -1182,6 +1182,18 @@ fn reports_expired_refresh_without_conversion_attempt() {
 }
 
 #[test]
+fn reports_expired_refresh_without_cache_observation() {
+    let (_directory, path) = write_manual_qa(
+        "| Expired license refresh | Reconnect prompt | attempted conversion with expired offline grace license.json cache showed reconnect prompt, blocked conversion before starting, and had no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Expired license refresh")));
+}
+
+#[test]
 fn reports_activation_with_persisted_raw_key() {
     let (_directory, path) = write_manual_qa(
         "| Empty key activation | Friendly validation error | friendly validation shown and license.json cache checked with raw key persisted |\n",
@@ -1876,7 +1888,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "License network failure" {
             text.push_str("| License network failure | Passes | friendly network error shown and checked existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n");
         } else if check == "Expired license refresh" {
-            text.push_str("| Expired license refresh | Passes | attempted conversion with expired offline grace license.json cache; reconnect prompt appeared, blocked conversion before starting, and had no raw key |\n");
+            text.push_str("| Expired license refresh | Passes | attempted conversion with expired offline grace license.json cache; reconnect prompt appeared, blocked conversion before starting, and checked cache had no raw key |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; confirmed license cache cleared and observed app returned to trial state |\n");
         } else if check == "Choose recording conversion" {
