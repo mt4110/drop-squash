@@ -71,6 +71,21 @@ fn reports_verified_reference_without_matching_release_note_field() {
 }
 
 #[test]
+fn reports_pricing_reference_without_release_note_field() {
+    let blockers = "\
+| Pricing finalized | Verified | done | https://dropsquash.app/pricing | `https://...` |
+";
+    let notes = "\
+- Public website URL: https://dropsquash.app/release-status
+- Refund policy URL: https://dropsquash.app/refund
+";
+
+    let mismatched = mismatched(blockers, notes);
+
+    assert!(mismatched.contains(&"Pricing finalized"));
+}
+
+#[test]
 fn reports_verified_homebrew_reference_without_release_note_field() {
     let blockers = "\
 | Homebrew cask install | Verified | brew install --cask installs versioned DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
