@@ -15,6 +15,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "complete public web and distribution Execution Order exit evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
         "Homebrew uninstall/removes-cleanly Next action evidence",
     ),
     (
@@ -23,6 +27,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "publish Artifact URL completion evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
         "notarized stapled-status Next action evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
+        "Public web proof completion evidence for release-status, privacy, pricing, support, download, checkout, and refund",
     ),
 ];
