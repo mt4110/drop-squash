@@ -323,6 +323,24 @@ fn publish_requires_complete_manual_qa() {
 }
 
 #[test]
+fn publish_requires_homebrew_cask_check_manual_qa_evidence() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("manual-qa.md");
+    let missing_label = "`cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md`";
+    let text = crate::manual_qa_check::requirements::REQUIRED_CHECKS
+        .iter()
+        .filter(|label| **label != missing_label)
+        .map(|label| format!("| {label} | Result | concrete packaged-app evidence recorded |\n"))
+        .collect::<String>();
+    std::fs::write(&path, text).unwrap();
+
+    let error = ensure_manual_qa_complete(&path).unwrap_err();
+
+    assert!(error.contains("manual QA must pass before publish"));
+    assert!(error.contains(&format!("manual QA check is missing: {missing_label}")));
+}
+
+#[test]
 fn publish_rejects_prepared_manual_qa_draft_marker() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("manual-qa.md");
@@ -559,7 +577,7 @@ fn evidence(blocker: &str) -> &'static str {
             "`codesign` verified Developer ID for public DropSquash.dmg matching the release notes Artifact URL"
         }
         "Notarized and stapled DMG" => {
-            "`spctl`, notary, stapled public DropSquash.dmg matching the release notes Artifact URL"
+            "`spctl`, notary, stapler, and stapled public DropSquash.dmg matching the release notes Artifact URL"
         }
         "Gatekeeper clean-machine open" => {
             "Fresh macOS account opened signed, notarized, stapled app from public DropSquash.dmg matching the release notes Artifact URL without Gatekeeper warning"
