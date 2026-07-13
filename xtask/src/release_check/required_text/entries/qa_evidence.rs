@@ -79,6 +79,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "approved external links with host/path boundaries and no query/fragment tracking",
     ),
     ("docs/qa-evidence.md", "updater enablement"),
+    ("docs/qa-evidence.md", "Tauri updater config absence"),
     (
         "docs/qa-evidence.md",
         "missing update manifests while updater is disabled",

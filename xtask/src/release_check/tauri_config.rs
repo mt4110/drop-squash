@@ -25,6 +25,7 @@ pub(super) fn check(path: &Path) -> Result<(), String> {
         &mut errors,
     );
     require_targets(&config, &mut errors);
+    reject_updater_config(&config, &mut errors);
     if errors.is_empty() {
         return Ok(());
     }
@@ -55,6 +56,23 @@ fn require_targets(config: &Value, errors: &mut Vec<String>) {
         {
             errors.push(format!("bundle.targets must include {required}"));
         }
+    }
+}
+
+fn reject_updater_config(value: &Value, errors: &mut Vec<String>) {
+    if contains_updater(value) {
+        errors.push("updater config must stay absent until signed updates are ready".to_string());
+    }
+}
+
+fn contains_updater(value: &Value) -> bool {
+    match value {
+        Value::Object(object) => object.iter().any(|(key, value)| {
+            key.to_ascii_lowercase().contains("updater") || contains_updater(value)
+        }),
+        Value::Array(values) => values.iter().any(contains_updater),
+        Value::String(value) => value.to_ascii_lowercase().contains("updater"),
+        _ => false,
     }
 }
 
