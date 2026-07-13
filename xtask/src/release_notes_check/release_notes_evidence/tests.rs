@@ -49,7 +49,7 @@ fn accepts_concrete_production_urls() {
 - GitHub Release checksum: SHA256SUMS attached to public https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 for https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Homebrew tap PR: cask update reviewed in public PR at https://github.com/mt4110/homebrew-tap/pull/1 for versioned DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
-- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for versioned DropSquash.dmg artifact from https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef and brew uninstall --cask mt4110/tap/dropsquash removed it cleanly
+- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed from https://github.com/mt4110/homebrew-tap/pull/1 for versioned DropSquash.dmg artifact from https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef and brew uninstall --cask mt4110/tap/dropsquash removed it cleanly
 - Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased
 - Support contact: support handled through GitHub Issues until paid support opens
 "#,
@@ -553,6 +553,22 @@ fn rejects_homebrew_install_without_artifact_url() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Homebrew install result must include the Artifact URL")));
+}
+
+#[test]
+fn rejects_homebrew_install_without_pr_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for versioned DropSquash.dmg artifact from https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef and brew uninstall --cask mt4110/tap/dropsquash removed it cleanly
+"#,
+    );
+
+    assert!(errors.iter().any(|error| {
+        error.contains("Homebrew install result must include the Homebrew tap PR URL")
+    }));
 }
 
 #[test]

@@ -90,7 +90,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "Homebrew install evidence without the Artifact URL, lowercase SHA-256 digest, or clean uninstall result",
+        "Homebrew install evidence without the Artifact URL, Homebrew tap PR URL, lowercase SHA-256 digest, or clean uninstall result",
     ),
     ("docs/qa-evidence.md", "non-lowercase Git commits"),
     (

@@ -5,6 +5,7 @@ pub(super) fn validate(text: &str, errors: &mut Vec<String>) {
     require_pr_url(text, errors);
     require_sha256(text, errors);
     require_install_artifact_url(text, errors);
+    require_install_pr_url(text, errors);
     require_install_sha256(text, errors);
 }
 
@@ -54,6 +55,16 @@ fn require_install_artifact_url(text: &str, errors: &mut Vec<String>) {
         "Artifact URL",
         "Homebrew install result",
         "Homebrew install result must include the Artifact URL",
+        errors,
+    );
+}
+
+fn require_install_pr_url(text: &str, errors: &mut Vec<String>) {
+    require_contains(
+        text,
+        "Homebrew tap PR URL",
+        "Homebrew install result",
+        "Homebrew install result must include the Homebrew tap PR URL",
         errors,
     );
 }
