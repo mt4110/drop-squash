@@ -23,6 +23,8 @@ pub(super) fn lines(artifact_path: &str, artifact_url: &str) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
+    use super::lines;
+
     #[test]
     fn generated_macos_commands_exist_in_release_notes_template() {
         let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
@@ -33,5 +35,29 @@ mod tests {
         ] {
             assert!(template.contains(command), "{command}");
         }
+    }
+
+    #[test]
+    fn generated_macos_labels_cover_signed_release_blockers() {
+        let blockers = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+        let generated = lines(
+            "/tmp/DropSquash.dmg",
+            "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg",
+        )
+        .join("\n");
+
+        for label in [
+            "`codesign`",
+            "`spctl`",
+            "`stapler`",
+            "Apple notary log",
+            "Gatekeeper clean-machine open",
+        ] {
+            assert!(generated.contains(&format!("- {label}:")), "{label}");
+        }
+        assert!(blockers.contains("Signed DMG"));
+        assert!(blockers.contains("Notarized and stapled DMG"));
+        assert!(blockers.contains("Gatekeeper clean-machine open"));
+        assert!(blockers.contains("stapler evidence"));
     }
 }
