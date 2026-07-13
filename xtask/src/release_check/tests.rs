@@ -64,6 +64,10 @@ xcrun stapler validate "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 name: Assess macOS Gatekeeper
 spctl --assess --type open --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+name: Check signed DMG artifact
+run: cargo run -p xtask -- signed-dmg-check "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" target/release/bundle/dmg/DropSquash.dmg
+name: Write signed DMG checksum
+run: cargo run -p xtask -- checksum "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --output "$RUNNER_TEMP/dropsquash-signed/SHA256SUMS"
 run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
 name: Cleanup macOS signing keychain
 always() && matrix.os == 'macos-latest'
@@ -136,6 +140,10 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "Assess macOS Gatekeeper",
             "spctl --assess --type open --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
+            "Check signed DMG artifact",
+            "cargo run -p xtask -- signed-dmg-check \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" target/release/bundle/dmg/DropSquash.dmg",
+            "Write signed DMG checksum",
+            "cargo run -p xtask -- checksum \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --output \"$RUNNER_TEMP/dropsquash-signed/SHA256SUMS\"",
             "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",
             "Cleanup macOS signing keychain",
             "always() && matrix.os == 'macos-latest'",

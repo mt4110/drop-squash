@@ -29,6 +29,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "CI notarization execution runner"),
     ("docs/productization.md", "CI stapler execution runner"),
     ("docs/productization.md", "CI Gatekeeper assessment runner"),
+    ("docs/productization.md", "CI signed DMG artifact check"),
+    ("docs/productization.md", "CI signed checksum generation"),
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG copy isolation"),
     ("docs/productization.md", "signed DMG artifact guard"),

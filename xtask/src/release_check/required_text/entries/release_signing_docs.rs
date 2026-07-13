@@ -16,6 +16,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "Notarize macOS DMG"),
     ("docs/release.md", "Staple macOS DMG"),
     ("docs/release.md", "Assess macOS Gatekeeper"),
+    ("docs/release.md", "Check signed DMG artifact"),
+    ("docs/release.md", "Write signed DMG checksum"),
     ("docs/release.md", "Cleanup macOS signing keychain"),
     (
         "docs/release.md",
