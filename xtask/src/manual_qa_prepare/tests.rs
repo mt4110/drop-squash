@@ -145,6 +145,13 @@ fn parses_restore_state() {
 }
 
 #[test]
+fn prints_usage_for_help() {
+    let error = Options::parse(vec!["--help".to_string()]).unwrap_err();
+
+    assert!(error.contains("usage: cargo run -p xtask -- manual-qa-prepare"));
+}
+
+#[test]
 fn resets_trial_state_after_backup_when_requested() {
     let directory = tempfile::tempdir().unwrap();
     let app_state_dir = directory.path().join("app-state");

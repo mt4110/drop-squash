@@ -20,6 +20,9 @@ impl Options {
         let mut options = Self::default()?;
         let mut args = args.into_iter();
         while let Some(arg) = args.next() {
+            if matches!(arg.as_str(), "--help" | "-h") {
+                return Err(usage());
+            }
             if arg == "--reset-trial" {
                 options.reset_trial = true;
                 continue;
