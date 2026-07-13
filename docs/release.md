@@ -67,9 +67,8 @@ disabled.
 
 The `manual-qa-prepare` step preserves local DropSquash app state and creates a
 dedicated output folder before packaged-app QA evidence is recorded.
-It also refuses to print an `App build` value when the selected app artifact is
-older than `HEAD`; rebuild the `.app` or `.dmg` before recording manual QA in
-that case.
+It fails when the selected app artifact is older than `HEAD`; rebuild the
+`.app` or `.dmg` before recording manual QA in that case.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.

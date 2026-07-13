@@ -9,14 +9,10 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     println!("app state source: {}", options.app_state_dir.display());
     let artifact = qa_artifact(options)?;
     let mut fields: Vec<Field> = Vec::new();
-    match BuildIdentity::current_for_artifact(artifact.as_deref()) {
-        Ok(identity) => {
-            let app_build = identity.app_build();
-            println!("manual QA App build: {app_build}");
-            fields.push(("App build", app_build));
-        }
-        Err(error) => println!("manual QA App build unavailable: {error}"),
-    }
+    let identity = BuildIdentity::current_for_artifact(artifact.as_deref())?;
+    let app_build = identity.app_build();
+    println!("manual QA App build: {app_build}");
+    fields.push(("App build", app_build));
     print_artifact(&artifact, &mut fields);
     print_sample_set(options, &mut fields);
     let environment = Environment::current(options)?;
