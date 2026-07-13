@@ -56,6 +56,7 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
         "homebrew",
         &[
             "cargo run -p xtask -- homebrew-cask 0.1.0",
+            "cargo run -p xtask -- homebrew-cask-check",
             "auto_updates false",
             "zap",
         ],

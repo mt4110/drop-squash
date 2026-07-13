@@ -35,6 +35,7 @@ License network failure
 Expired license refresh
 Local license forget
 cargo run -p xtask -- homebrew-cask 0.1.0
+cargo run -p xtask -- homebrew-cask-check
 auto_updates false
 zap
 cargo run -p xtask -- release-notes-check
