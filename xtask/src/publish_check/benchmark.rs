@@ -24,8 +24,7 @@ fn release_notes_csv(text: &str) -> Result<PathBuf, String> {
     let path = csv_path(value).ok_or_else(|| {
         "release notes Benchmark sample set must include an absolute .csv path".to_string()
     })?;
-    require_ready_csv(&path, "release notes Benchmark sample set")?;
-    Ok(path)
+    ready_csv_path(&path, "release notes Benchmark sample set")
 }
 
 fn manual_qa_csv(text: &str) -> Result<PathBuf, String> {
@@ -34,8 +33,7 @@ fn manual_qa_csv(text: &str) -> Result<PathBuf, String> {
     let path = csv_path(value).ok_or_else(|| {
         "manual QA Benchmark sample set must include an absolute .csv path".to_string()
     })?;
-    require_ready_csv(&path, "manual QA Benchmark sample set")?;
-    Ok(path)
+    ready_csv_path(&path, "manual QA Benchmark sample set")
 }
 
 fn field_value<'a>(text: &'a str, label: &str) -> Option<&'a str> {
@@ -83,12 +81,14 @@ fn require_outside_repo(path: &Path, label: &str) -> Result<(), String> {
     Ok(())
 }
 
-fn require_ready_csv(path: &Path, label: &str) -> Result<(), String> {
+fn ready_csv_path(path: &Path, label: &str) -> Result<PathBuf, String> {
     require_outside_repo(path, label)?;
     if !path.is_file() {
         return Err(format!("{label} CSV path must exist before publish"));
     }
-    Ok(())
+    let path = path.canonicalize().map_err(|error| error.to_string())?;
+    require_outside_repo(&path, label)?;
+    Ok(path)
 }
 
 fn normalize(path: &Path) -> PathBuf {

@@ -26,6 +26,19 @@ fn accepts_matching_benchmark_csv_paths_with_labels() {
 }
 
 #[test]
+fn accepts_matching_canonical_benchmark_csv_paths() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let notes_path = csv.to_str().unwrap();
+    let manual_path = directory.path().join(".").join("results.csv");
+    let manual_path = manual_path.to_str().unwrap();
+    let notes = notes_with_csv(notes_path);
+    let (_manual_directory, manual) = manual_qa_with_csv(manual_path);
+
+    assert!(require_notes_csv_matches_manual_qa(&notes, &manual).is_ok());
+}
+
+#[test]
 fn rejects_mismatched_benchmark_csv_paths() {
     let directory = tempfile::tempdir().unwrap();
     let notes_csv = csv_file(directory.path(), "results.csv");
