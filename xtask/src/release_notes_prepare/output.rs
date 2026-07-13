@@ -44,7 +44,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         ),
         "Homebrew install result evidence draft:".into(),
         format!(
-            "- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact from the Artifact URL above {} with lowercase SHA-256 {} and `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, replace this line with observed install and uninstall evidence",
+            "- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` from the Homebrew tap PR URL above installs the versioned DropSquash.dmg artifact from the Artifact URL above {} with lowercase SHA-256 {} and `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, replace this line with observed install and uninstall evidence",
             fields.artifact_url, fields.sha256
         ),
     ]
