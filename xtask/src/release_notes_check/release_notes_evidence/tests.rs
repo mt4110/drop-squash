@@ -623,6 +623,19 @@ fn rejects_activation_with_persisted_raw_key() {
 }
 
 #[test]
+fn rejects_activation_with_contradictory_raw_key_evidence() {
+    let errors = check_text(
+        r#"
+- Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and checked cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent but raw key persisted
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
 fn rejects_valid_activation_without_sandbox_request_context() {
     let errors = check_text(
         r#"

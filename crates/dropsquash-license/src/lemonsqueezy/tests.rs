@@ -191,8 +191,8 @@ async fn activate_posts_license_key_and_instance_name() {
 #[tokio::test]
 async fn activation_rejects_non_success_http_status() {
     let response = r#"{"activated":true,"instance":{"id":"remote-instance-1"}}"#;
-    let (base_url, request) = capture_one_request_with_status("500 Internal Server Error", response)
-        .await;
+    let (base_url, request) =
+        capture_one_request_with_status("500 Internal Server Error", response).await;
     let provider = LemonSqueezyProvider {
         client: LicenseApiClient::test(base_url),
     };
@@ -202,8 +202,13 @@ async fn activation_rejects_non_success_http_status() {
         .await
         .unwrap_err();
 
-    assert!(request.await.unwrap().starts_with("POST /activate HTTP/1.1"));
-    assert!(error.to_string().contains("License request was not accepted."));
+    assert!(request
+        .await
+        .unwrap()
+        .starts_with("POST /activate HTTP/1.1"));
+    assert!(error
+        .to_string()
+        .contains("License request was not accepted."));
     assert!(!error.to_string().contains("LS-SECRET-RAW-KEY"));
 }
 

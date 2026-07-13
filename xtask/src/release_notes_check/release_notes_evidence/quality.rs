@@ -15,7 +15,12 @@ fn lacks_special_evidence(label: &str, value: &str) -> bool {
     match label {
         "Queue evidence" => count_numbers(value) < 5,
         "Valid sandbox activation" | "License network failure" => {
-            !has_hex_fingerprint(value) || !has_instance_id(value)
+            !has_hex_fingerprint(value)
+                || !has_instance_id(value)
+                || has_raw_key_contradiction(value)
+        }
+        "Empty key activation" | "Invalid license key handling" | "Expired license refresh" => {
+            has_raw_key_contradiction(value)
         }
         _ => false,
     }
@@ -42,4 +47,20 @@ fn has_hex_fingerprint(value: &str) -> bool {
 fn has_instance_id(value: &str) -> bool {
     let lower = value.to_ascii_lowercase();
     lower.contains("instance id") || lower.contains("instance_id")
+}
+
+fn has_raw_key_contradiction(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    [
+        "raw key persisted",
+        "raw key present",
+        "raw key stored",
+        "raw key written",
+        "raw key saved",
+        "persisted raw key",
+        "stored raw key",
+        "saved raw key",
+    ]
+    .iter()
+    .any(|needle| lower.contains(needle))
 }
