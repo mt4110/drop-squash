@@ -22,11 +22,11 @@ fn accepts_concrete_production_urls() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- `codesign`: codesign verified Developer ID Application signature for public DropSquash.dmg
-- `spctl`: spctl accepted Developer ID source for public DropSquash.dmg
-- `stapler`: stapler validate showed ticket stapled successfully for public DropSquash.dmg
-- Apple notary log: notarytool accepted request abc123 for public DropSquash.dmg
-- Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh account without Gatekeeper warning
+- `codesign`: codesign verified Developer ID Application signature for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- `spctl`: spctl accepted Developer ID source for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- `stapler`: stapler validate showed ticket stapled successfully for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Apple notary log: notarytool accepted request abc123 for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app from public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg cleanly in fresh account without Gatekeeper warning
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md tested public DropSquash.dmg and manual-qa-check passed
 - Conversion safety evidence: cancellation, failed conversion, and larger output not smaller failure preserved original with trial count unchanged
@@ -230,6 +230,36 @@ fn rejects_signing_evidence_without_public_context() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Apple notary log")));
+}
+
+#[test]
+fn rejects_signing_evidence_without_artifact_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- `codesign`: codesign verified Developer ID Application signature for public DropSquash.dmg
+- `spctl`: spctl accepted Developer ID source for public DropSquash.dmg
+- `stapler`: stapler validate showed ticket stapled successfully for public DropSquash.dmg
+- Apple notary log: notarytool accepted request abc123 for public DropSquash.dmg
+- Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh account without Gatekeeper warning
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("`codesign` must include the Artifact URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("`spctl` must include the Artifact URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("`stapler` must include the Artifact URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Apple notary log must include the Artifact URL")));
+    assert!(errors.iter().any(|error| {
+        error.contains("Gatekeeper clean-machine open must include the Artifact URL")
+    }));
 }
 
 #[test]
