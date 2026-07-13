@@ -31,3 +31,18 @@ pub(super) fn require_clean_worktree() -> Result<(), String> {
 pub(super) fn clean_status(status: &str) -> bool {
     status.trim().is_empty()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::clean_status;
+
+    #[test]
+    fn accepts_empty_git_status() {
+        assert!(clean_status(""));
+    }
+
+    #[test]
+    fn rejects_dirty_git_status() {
+        assert!(!clean_status(" D dropsquash_rust_repo_blueprint.md\n"));
+    }
+}
