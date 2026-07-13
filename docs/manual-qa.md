@@ -205,7 +205,7 @@ Live checkout URL, GitHub Release URL, and Homebrew tap PR URL before publish.
 | `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Public UDIF `DropSquash.dmg` artifact check passes |  |
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character lowercase SHA-256 digest and `DropSquash.dmg` recorded |  |
-| `cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md` | Generated cask matches release notes version, Artifact URL, SHA-256, `auto_updates false`, and `zap` |  |
+| `cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md` | Generated `dropsquash.rb` cask matches `.md` release notes version, Artifact URL, SHA-256, `auto_updates false`, and `zap` |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
 | Notarization staple verification | Public DMG/app artifact passes notary, stapler validate or stapled status, and `spctl` assessment |  |
