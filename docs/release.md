@@ -128,6 +128,14 @@ against the signed candidate and the unsigned input. This artifact guard rejects
 non-canonical or `/nix/store`-tainted signed candidates, rejects the unsigned
 input path, and rejects byte-identical output. It does not replace `codesign`, notary, stapler, or Gatekeeper evidence.
 
+Keep `Block unsigned Phase 0 release` in the release workflow until the signing
+runner executes the reviewed keychain, codesign, codesign verification,
+notarytool, stapler, `spctl`, signed artifact check, checksum, and keychain
+cleanup steps in CI. The runner must run temporary keychain cleanup even when a
+signing, notarization, or verification step fails. It must upload or publish
+only the checked signed `DropSquash.dmg`; the unsigned QA artifact must remain
+clearly named unsigned and must not be used as the release Artifact URL.
+
 Run the media policy gate directly after touching native backends or desktop
 commands:
 

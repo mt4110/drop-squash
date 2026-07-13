@@ -57,4 +57,22 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "It does not replace `codesign`, notary, stapler, or Gatekeeper evidence",
     ),
+    ("docs/release.md", "Block unsigned Phase 0 release"),
+    (
+        "docs/release.md",
+        "runner executes the reviewed keychain, codesign, codesign verification",
+    ),
+    (
+        "docs/release.md",
+        "The runner must run temporary keychain cleanup even when",
+    ),
+    (
+        "docs/release.md",
+        "signing, notarization, or verification step fails",
+    ),
+    (
+        "docs/release.md",
+        "only the checked signed `DropSquash.dmg`",
+    ),
+    ("docs/release.md", "clearly named unsigned"),
 ];

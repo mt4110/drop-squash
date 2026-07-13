@@ -70,6 +70,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "macOS notarytool argv plan"),
     ("docs/qa-evidence.md", "macOS stapler argv plan"),
     ("docs/qa-evidence.md", "macOS spctl argv plan"),
+    ("docs/qa-evidence.md", "signing runner acceptance criteria"),
     ("docs/qa-evidence.md", "signed DMG target preparation"),
     ("docs/qa-evidence.md", "signed DMG copy isolation"),
     ("docs/qa-evidence.md", "signed DMG artifact guard"),
