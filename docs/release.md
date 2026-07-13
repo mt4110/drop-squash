@@ -269,6 +269,9 @@ The publish check also requires release blocker URLs to match the release notes
 URLs for the public website, pricing page, refund policy, live checkout, GitHub
 Release, and Homebrew tap PR. Public publish references must point to the same
 release notes URLs, not to a different release or tap PR.
+The release notes must include the required URL fields before publish:
+Artifact URL, Public website URL, Pricing URL, Refund policy URL,
+Live checkout URL, GitHub Release URL, and Homebrew tap PR URL.
 The Public web proof must show the production `dropsquash.app` release-status
 pricing, and refund URLs serving release-status, privacy, pricing, support,
 download, checkout, and refund links before the public beta.

@@ -23,6 +23,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "`Pricing finalized`"),
     ("docs/release.md", "draft pricing"),
     ("docs/release.md", "Pricing URL"),
+    (
+        "docs/release.md",
+        "Artifact URL, Public website URL, Pricing URL, Refund policy URL",
+    ),
+    (
+        "docs/release.md",
+        "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
+    ),
     ("docs/release.md", "checkout, and refund links"),
     (
         "docs/release.md",
