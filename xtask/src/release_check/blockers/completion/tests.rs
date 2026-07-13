@@ -386,6 +386,15 @@ fn reports_benchmark_completion_without_threshold() {
 }
 
 #[test]
+fn reports_benchmark_completion_without_release_candidate_baseline() {
+    let text = "| Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Benchmark release set"));
+}
+
+#[test]
 fn reports_benchmark_completion_without_csv_path() {
     let text = "| Benchmark release set | Blocked | Release-set benchmark CSV covers backend, saved percent, short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n";
 
@@ -438,7 +447,7 @@ fn described_blockers() -> String {
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",
-        "| Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |\n",
+        "| Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, 20% regression threshold, and release candidate baseline | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA256SUMS with the lowercase SHA-256 line for public `DropSquash.dmg` is attached to the GitHub Release | TBD | GitHub Release |\n",
         "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` with matching lowercase SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]

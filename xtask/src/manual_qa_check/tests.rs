@@ -688,6 +688,18 @@ fn reports_incomplete_benchmark_results() {
 }
 
 #[test]
+fn reports_benchmark_threshold_without_release_candidate_baseline() {
+    let (_directory, path) = write_manual_qa(
+        "| Benchmark regression threshold | Throughput does not regress by more than 20% | no sample exceeded 20% regression against the same-machine baseline |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("release candidate baseline")));
+}
+
+#[test]
 fn reports_benchmark_command_without_csv_path() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo |\n",

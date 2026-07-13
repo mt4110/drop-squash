@@ -34,9 +34,10 @@ fn require_threshold(result: &str, missing: &mut Vec<String>) {
     let lower = result.to_ascii_lowercase();
     let has_threshold = lower.contains("20%") || lower.contains("20 percent");
     let has_sample = lower.contains("sample");
+    let has_release_candidate = lower.contains("release candidate");
     let has_baseline = lower.contains("baseline");
     let has_same_machine = lower.contains("same-machine") || lower.contains("same machine");
-    if has_threshold && has_sample && has_baseline && has_same_machine {
+    if has_threshold && has_sample && has_release_candidate && has_baseline && has_same_machine {
         return;
     }
     missing.push(

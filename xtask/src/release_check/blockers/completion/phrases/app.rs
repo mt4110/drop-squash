@@ -67,4 +67,5 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Benchmark release set", "smaller outputs"),
     ("Benchmark release set", "machine/OS context"),
     ("Benchmark release set", "20% regression threshold"),
+    ("Benchmark release set", "release candidate baseline"),
 ];
