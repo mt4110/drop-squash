@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use super::options::Options;
+use super::output::sample_set_line;
 use super::require_reset_artifact;
 use super::reset_trial_lines;
-use super::sample_set_line;
 use super::state::{backup_state, restore_state};
 use super::{markdown, release_candidate};
 
