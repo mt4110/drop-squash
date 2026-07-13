@@ -518,6 +518,19 @@ fn reports_packaged_macos_manual_qa_without_smaller_output_evidence() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_original_remained_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Choose recording conversion",
+        "saved smaller clip.squashed.mp4 and original checked",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_reveal_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with("Reveal output", "Finder opened with clip.squashed.mp4");

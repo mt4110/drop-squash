@@ -2,9 +2,16 @@ use super::Groups;
 
 pub(super) fn for_check(check: &str) -> Option<Groups> {
     match check {
-        "Choose recording conversion" | "Drag-and-drop conversion" => {
-            Some(&[&[".squashed.mp4"], &["smaller"], &["original"]])
-        }
+        "Choose recording conversion" | "Drag-and-drop conversion" => Some(&[
+            &[".squashed.mp4"],
+            &["smaller"],
+            &[
+                "original remained",
+                "original remains",
+                "original unchanged",
+                "preserved original",
+            ],
+        ]),
         "Privacy receipt sidecar" => Some(&[
             &[".privacy.json"],
             &["uploaded_bytes"],

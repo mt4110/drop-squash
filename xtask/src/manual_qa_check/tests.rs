@@ -1144,6 +1144,22 @@ fn reports_conversion_without_smaller_evidence() {
 }
 
 #[test]
+fn reports_conversion_without_original_remained_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Choose recording conversion | Small `.mov` | Creates output | saved smaller clip.squashed.mp4 and original checked |\n\
+| Drag-and-drop conversion | Small `.mov` | Creates output | saved smaller drag.squashed.mp4 and original checked |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Choose recording conversion")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Drag-and-drop conversion")));
+}
+
+#[test]
 fn reports_privacy_receipt_without_zero_upload_policy() {
     let (_directory, path) = write_manual_qa(
         "| Privacy receipt sidecar | Successful conversion | Creates receipt | clip.privacy.json recorded uploaded_bytes and metadata_policy |\n",
