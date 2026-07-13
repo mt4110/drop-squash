@@ -149,7 +149,7 @@ disabled while Activating, and include checked local-cache fingerprint,
 `instance_id`, and raw-key absence evidence. Local-forget evidence must show the
 action is disabled while Forgetting. Expired license refresh evidence must show
 the expired offline grace cache, reconnect prompt, conversion blocked before
-starting, and raw-key absence in the local cache.
+starting, checked local cache, and raw-key absence in the local cache.
 Do not record sandbox keys or private store IDs in the manual QA table.
 
 - Lemon Squeezy product setup

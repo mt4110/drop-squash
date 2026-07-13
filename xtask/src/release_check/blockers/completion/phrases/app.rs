@@ -55,6 +55,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Expired license refresh", "conversion is blocked"),
     ("Expired license refresh", "before starting"),
     ("Expired license refresh", "raw key is absent"),
+    ("Expired license refresh", "local cache was checked"),
     ("Expired license refresh", "local cache"),
     ("Local license forget", "Forgetting state disables action"),
     ("Local license forget", "local cache"),
