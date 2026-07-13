@@ -41,6 +41,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "release-set duration and speed-ratio evidence rejection",
+    ),
+    (
+        "docs/qa-evidence.md",
         "refresh-lock queued message preservation",
     ),
     (

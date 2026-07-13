@@ -26,8 +26,10 @@ backend,input,output,original_bytes,output_bytes,duration_s,elapsed_s,compressio
 ```
 
 `duration_s` and `speed_ratio` are filled when the input MP4/MOV metadata
-contains a readable `mvhd` duration. If duration is unavailable, those cells are
-left blank instead of inventing a speed number.
+contains a readable `mvhd` duration. Without `--release-set`, if duration is
+unavailable, those cells are left blank instead of inventing a speed number.
+With `--release-set`, every row must include duration and speed-ratio evidence;
+otherwise the release benchmark fails and needs a different local sample.
 
 `--csv-output` refuses to overwrite an existing file. Use a fresh path for each
 release-candidate run so the recorded evidence cannot silently replace an older
@@ -44,7 +46,8 @@ Use `--release-set` for release-candidate evidence. It requires at least three
 single convenient sample. It also requires an absolute `--output-dir` outside
 the repository and an absolute `.csv` `--csv-output` outside the repository so
 private recordings, generated videos, and CSV evidence do not accidentally
-become source files.
+become source files. It also rejects rows without duration and speed-ratio
+evidence because release blockers require those fields.
 
 Record this context with the CSV in `docs/manual-qa.md`:
 
