@@ -53,6 +53,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Benchmark release set", "absolute"),
     ("Benchmark release set", "path"),
     ("Benchmark release set", "outside repo"),
+    ("Benchmark release set", "backend"),
+    ("Benchmark release set", "saved percent"),
     ("Benchmark release set", "short, medium, and large"),
     ("Benchmark release set", "smaller outputs"),
     ("Benchmark release set", "machine/OS context"),

@@ -308,7 +308,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Notarize, staple, and assess the public DropSquash.dmg with captured `spctl`, notary, and stapler verification output"
         }
         "Benchmark release set" => {
-            "Run release-set benchmark and record absolute CSV path outside repo"
+            "Run release-set benchmark and record backend, saved percent, and absolute CSV path outside repo"
         }
         "Published checksum" => {
             "Attach SHA256SUMS containing public DropSquash.dmg SHA-256 line to the GitHub Release"
