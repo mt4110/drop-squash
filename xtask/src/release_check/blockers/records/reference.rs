@@ -43,8 +43,7 @@ fn is_live_checkout(reference: &str) -> bool {
             && url
                 .path()
                 .to_ascii_lowercase()
-                .split("checkout/buy/")
-                .nth(1)
+                .strip_prefix("checkout/buy/")
                 .is_some_and(has_single_path_segment)
     })
 }

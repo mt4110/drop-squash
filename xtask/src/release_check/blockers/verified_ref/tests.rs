@@ -113,6 +113,15 @@ fn reports_live_checkout_with_extra_path_after_buy_id() {
 }
 
 #[test]
+fn reports_live_checkout_with_prefixed_checkout_path() {
+    let text = "| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/store/checkout/buy/example | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_live_checkout_reference_with_inline_note() {
     let text = "| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout/buy/example TBD | `https://...` |\n";
 
