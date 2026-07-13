@@ -228,6 +228,22 @@ fn publish_requires_complete_manual_qa() {
 }
 
 #[test]
+fn publish_rejects_prepared_manual_qa_draft_marker() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        "Prepared manual QA draft only. Replace this file with concrete observations.\n",
+    )
+    .unwrap();
+
+    let error = ensure_manual_qa_complete(&path).unwrap_err();
+
+    assert!(error.contains("manual QA must pass before publish"));
+    assert!(error.contains("prepared draft markers"));
+}
+
+#[test]
 fn publish_requires_valid_website() {
     let directory = tempfile::tempdir().unwrap();
     std::fs::write(directory.path().join("index.html"), "<p>DropSquash</p>").unwrap();
