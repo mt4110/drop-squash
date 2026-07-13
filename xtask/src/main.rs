@@ -20,6 +20,7 @@ mod release_notes_check;
 mod release_notes_prepare;
 mod release_url_fields;
 mod secret_text;
+mod signed_dmg_check;
 mod signed_dmg_prepare;
 mod url_origin;
 mod url_scheme;
@@ -43,6 +44,7 @@ fn main() {
         Some("release-check") => release_check::run(),
         Some("release-notes-check") => release_notes_check::run(args.collect()),
         Some("release-notes-prepare") => release_notes_prepare::run(args.collect()),
+        Some("signed-dmg-check") => signed_dmg_check::run(args.collect()),
         Some("signed-dmg-prepare") => signed_dmg_prepare::run(args.collect()),
         Some("website-check") => website_check::run(args.collect()),
         _ => usage(),
@@ -56,7 +58,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|manual-qa-check|manual-qa-prepare|macos-signing-check|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|manual-qa-check|manual-qa-prepare|macos-signing-check|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }

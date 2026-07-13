@@ -11,4 +11,5 @@ pub(super) const ENTRIES: &[Entry] = &[
         "signed, notarized, stapled, checksummed, installable, and opens without warning",
     ),
     ("docs/productization.md", "signed DMG target preparation"),
+    ("docs/productization.md", "signed DMG artifact guard"),
 ];

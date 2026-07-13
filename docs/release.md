@@ -54,6 +54,7 @@ cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
 cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
+cargo run -p xtask -- signed-dmg-check /tmp/dropsquash-signed/DropSquash.dmg target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-check
 ```
@@ -98,6 +99,10 @@ Before the signing implementation writes a public artifact, run
 output directory. The command rejects non-canonical or `/nix/store`-tainted
 inputs, refuses to overwrite an existing signed target, and refuses to use the
 unsigned artifact directory as the signed output directory.
+After the signing implementation writes the candidate, run `signed-dmg-check`
+against the signed candidate and the unsigned input. This artifact guard rejects
+non-canonical or `/nix/store`-tainted signed candidates, rejects the unsigned
+input path, and rejects byte-identical output. It does not replace `codesign`, notary, stapler, or Gatekeeper evidence.
 
 Run the media policy gate directly after touching native backends or desktop
 commands:

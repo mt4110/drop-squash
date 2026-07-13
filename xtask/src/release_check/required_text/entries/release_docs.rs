@@ -44,6 +44,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "refuses to overwrite an existing signed target",
     ),
+    ("docs/release.md", "signed-dmg-check"),
+    (
+        "docs/release.md",
+        "It does not replace `codesign`, notary, stapler, or Gatekeeper evidence",
+    ),
     (
         "docs/release.md",
         "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
