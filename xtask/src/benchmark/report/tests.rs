@@ -4,7 +4,7 @@ use super::{csv, write, BenchmarkRow};
 
 #[test]
 fn escapes_csv_path_cells() {
-    let text = csv(&[BenchmarkRow {
+    let text = csv::from_rows(&[BenchmarkRow {
         backend: "apple-native".to_string(),
         input: "My, Recording.mov".to_string(),
         output: "out \"quoted\".mp4".to_string(),
@@ -33,7 +33,7 @@ fn writes_csv_to_path() {
 
 #[test]
 fn leaves_duration_and_speed_blank_when_probe_has_no_duration() {
-    let text = csv(&[BenchmarkRow {
+    let text = csv::from_rows(&[BenchmarkRow {
         duration: None,
         ..row()
     }]);
