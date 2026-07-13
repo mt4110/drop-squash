@@ -36,6 +36,30 @@ fn reports_missing_manual_qa_check() {
         .any(|error| error.contains("manual-qa missing")));
 }
 
+const EXTERNAL_ONLY_AREAS: &[&str] = &[
+    "Benchmark sample results",
+    "Public website deployment",
+    "Pricing finalized",
+    "Refund policy finalized",
+    "Live checkout link",
+    "Published checksum",
+    "Homebrew cask install",
+];
+
+#[test]
+fn manual_only_qa_rows_are_mapped_or_classified() {
+    let evidence = std::fs::read_to_string("../docs/qa-evidence.md").unwrap();
+    let missing = manual_only_areas(&evidence)
+        .into_iter()
+        .filter(|area| {
+            !manual_pairs::ALL.iter().any(|(mapped, _)| mapped == area)
+                && !EXTERNAL_ONLY_AREAS.contains(&area.as_str())
+        })
+        .collect::<Vec<_>>();
+
+    assert!(missing.is_empty(), "{missing:?}");
+}
+
 #[test]
 fn rejects_partial_manual_qa_label_match() {
     let evidence = manual_pairs::ALL
@@ -82,4 +106,34 @@ fn rejects_partial_evidence_area_match() {
     assert!(missing_manual_only_coverage(&evidence, &manual)
         .iter()
         .any(|error| error.contains("qa-evidence missing")));
+}
+
+fn manual_only_areas(markdown: &str) -> Vec<String> {
+    let mut in_section = false;
+    let mut in_table = false;
+    let mut areas = Vec::new();
+
+    for line in markdown.lines() {
+        if line.trim() == "## Manual-Only Evidence" {
+            in_section = true;
+            continue;
+        }
+        if in_section && line.starts_with("## ") {
+            break;
+        }
+        if !in_section || !line.starts_with('|') {
+            continue;
+        }
+        if line.starts_with("| Area |") {
+            in_table = true;
+            continue;
+        }
+        if in_table && !line.contains("---") {
+            if let Some(area) = line.trim_matches('|').split('|').next().map(str::trim) {
+                areas.push(area.to_string());
+            }
+        }
+    }
+
+    areas
 }
