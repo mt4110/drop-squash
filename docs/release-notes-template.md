@@ -35,6 +35,7 @@ license keys, private store IDs, or certificate material.
 - Empty key activation:
 - Invalid license key handling:
 - License network failure:
+- Expired license refresh:
 - Local license forget:
 - Public website URL:
 - Refund policy URL:
@@ -77,6 +78,7 @@ weak public evidence before the release is published.
 - Empty key activation: mention Activate disabled for empty input, `raw key`, no fingerprint, no instance, and cache evidence.
 - Invalid license key handling: mention disabled action state, friendly error, `raw key`, no fingerprint, no instance, and cache evidence.
 - License network failure: mention a friendly network error, preserved existing valid cache, 64-character hex fingerprint, `instance_id`, and `raw key` absence.
+- Expired license refresh: mention the expired offline grace cache, reconnect prompt, conversion blocked before starting, `raw key` absence, and cache evidence.
 - Local license forget: mention disabled action state, cache removal, and trial or locked state.
 - Public website URL: use the production `/release-status` URL.
 - Refund policy URL: use the production `/refund` URL after the policy is final.

@@ -35,6 +35,7 @@ fn manual_qa_release_blockers() -> &'static [&'static str] {
         "Valid sandbox activation",
         "Invalid license key handling",
         "License network failure",
+        "Expired license refresh",
         "Local license forget",
         "Gatekeeper clean-machine open",
         "Benchmark release set",

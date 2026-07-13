@@ -24,6 +24,7 @@ pub(super) const ALL: &[(&str, &str)] = &[
     ("Empty key activation", "Empty key activation"),
     ("Invalid license key handling", "Invalid key activation"),
     ("License network failure", "License network failure"),
+    ("Expired license refresh", "Expired license refresh"),
     ("Local license forget", "Forget license on this Mac"),
     ("Signed DMG verification", "Codesign verification"),
     (

@@ -9,7 +9,7 @@ pub(super) const URL: [(&str, url::Kind); 6] = [
     ("Homebrew tap PR URL", url::Kind::HomebrewPullRequest),
 ];
 
-pub(super) const EVIDENCE: [&str; 22] = [
+pub(super) const EVIDENCE: [&str; 23] = [
     "`codesign`",
     "`spctl`",
     "`stapler`",
@@ -26,6 +26,7 @@ pub(super) const EVIDENCE: [&str; 22] = [
     "Empty key activation",
     "Invalid license key handling",
     "License network failure",
+    "Expired license refresh",
     "Local license forget",
     "GitHub Release checksum",
     "Homebrew tap PR",

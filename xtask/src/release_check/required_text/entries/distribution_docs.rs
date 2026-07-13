@@ -19,6 +19,9 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "disabled while Forgetting"),
     ("docs/release.md", "private store IDs"),
     ("docs/release.md", "License network failure"),
+    ("docs/release.md", "Expired license refresh"),
+    ("docs/release.md", "expired offline grace cache"),
+    ("docs/release.md", "conversion blocked before"),
     (
         "docs/release.md",
         "Lemon Squeezy sandbox activation request",

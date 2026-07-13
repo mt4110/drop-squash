@@ -128,7 +128,9 @@ Invalid-key evidence must show submit is disabled while Activating, the error is
 friendly, and no raw key, fingerprint, or instance was written. Valid activation
 evidence must name the Lemon Squeezy sandbox activation request and show submit
 is disabled while Activating, and local-forget evidence must show the action is
-disabled while Forgetting.
+disabled while Forgetting. Expired license refresh evidence must show the
+expired offline grace cache, reconnect prompt, conversion blocked before
+starting, and raw-key absence in the local cache.
 Do not record sandbox keys or private store IDs in the manual QA table.
 
 - Lemon Squeezy product setup
@@ -137,6 +139,7 @@ Do not record sandbox keys or private store IDs in the manual QA table.
 - Empty key activation
 - Invalid key activation
 - License network failure
+- Expired license refresh
 - Local license forget
 
 Record these rows:
@@ -147,11 +150,12 @@ Record these rows:
 - Invalid key activation
 - Valid sandbox activation
 - License network failure
+- Expired license refresh
 - Forget license on this Mac
 
 Keep the matching release blockers in `docs/release-blockers.md` blocked until
-the sandbox purchase, activation, empty-key, invalid-key, network-failure, and
-local-forget evidence exist.
+the sandbox purchase, activation, empty-key, invalid-key, network-failure,
+expired-refresh, and local-forget evidence exist.
 
 Generate SHA-256 checksum lines for release artifacts with:
 

@@ -45,7 +45,7 @@ pub(super) fn is_metadata_field(check: &str) -> bool {
     METADATA_FIELDS.contains(&check)
 }
 
-pub(super) const MANUAL_BLOCKERS: [(&str, &[&str]); 10] = [
+pub(super) const MANUAL_BLOCKERS: [(&str, &[&str]); 11] = [
     ("Packaged macOS manual QA", PACKAGED_MACOS_EVIDENCE),
     ("Lemon Squeezy product setup", &["Sandbox product setup"]),
     ("Lemon Squeezy sandbox purchase", &["Sandbox purchase"]),
@@ -53,6 +53,7 @@ pub(super) const MANUAL_BLOCKERS: [(&str, &[&str]); 10] = [
     ("Valid sandbox activation", &["Valid sandbox activation"]),
     ("Invalid license key handling", &["Invalid key activation"]),
     ("License network failure", &["License network failure"]),
+    ("Expired license refresh", &["Expired license refresh"]),
     ("Local license forget", &["Forget license on this Mac"]),
     ("Gatekeeper clean-machine open", &["Gatekeeper open test"]),
     (

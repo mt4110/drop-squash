@@ -38,6 +38,7 @@ fn accepts_concrete_production_urls() {
 - Empty key activation: Activate disabled for empty input and raw key absent from cache with no fingerprint and no instance
 - Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache with no fingerprint and no instance
 - License network failure: friendly network error shown, existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
+- Expired license refresh: expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
@@ -80,6 +81,7 @@ fn rejects_weak_distribution_evidence() {
 - Empty key activation: empty key handled
 - Invalid license key handling: invalid key handled
 - License network failure: network failed
+- Expired license refresh: refresh required
 - Local license forget: forgot license
 - Public website URL: https://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/pricing
@@ -375,6 +377,32 @@ fn rejects_network_failure_without_fingerprint_instance_evidence() {
     assert!(errors
         .iter()
         .any(|error| error.contains("License network failure")));
+}
+
+#[test]
+fn rejects_expired_refresh_without_reconnect_prompt() {
+    let errors = check_text(
+        r#"
+- Expired license refresh: expired offline grace cache blocked conversion before starting and raw key absent from cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Expired license refresh")));
+}
+
+#[test]
+fn rejects_expired_refresh_without_blocked_conversion() {
+    let errors = check_text(
+        r#"
+- Expired license refresh: expired offline grace cache showed reconnect prompt and raw key absent from cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Expired license refresh")));
 }
 
 #[test]

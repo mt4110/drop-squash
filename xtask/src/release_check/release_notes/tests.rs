@@ -32,6 +32,7 @@ Empty key activation
 Invalid license key handling: mention
 Invalid license key handling
 License network failure
+Expired license refresh
 Local license forget
 Public website URL
 Refund policy URL
