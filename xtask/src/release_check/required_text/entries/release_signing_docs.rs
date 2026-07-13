@@ -84,21 +84,21 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "Block unsigned Phase 0 release"),
     (
         "docs/release.md",
-        "runner executes the reviewed keychain, codesign, codesign verification",
+        "release notes, manual QA, release blockers",
     ),
+    ("docs/release.md", "website URLs, checkout URL"),
+    ("docs/release.md", "Homebrew tap PR URL"),
+    ("docs/release.md", "`publish-check` evidence are complete"),
     (
         "docs/release.md",
         "The runner must run temporary keychain cleanup even when",
     ),
     (
         "docs/release.md",
-        "signing, notarization, or verification step fails",
+        "notarization, or verification step fails",
     ),
-    (
-        "docs/release.md",
-        "only the checked signed `DropSquash.dmg`",
-    ),
-    ("docs/release.md", "clearly named unsigned"),
+    ("docs/release.md", "checked signed `DropSquash.dmg`"),
+    ("docs/release.md", "named unsigned"),
     (
         "docs/release.md",
         "public GitHub Release publication remains",

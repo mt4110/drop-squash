@@ -78,7 +78,7 @@ run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-
 name: Cleanup macOS signing keychain
 always() && matrix.os == 'macos-latest'
 name: Block unsigned Phase 0 release
-echo "Signed release packaging is not implemented."
+echo "Public Phase 0 release is blocked until publish-check evidence is complete."
 exit 1
 "#,
     );
@@ -160,7 +160,7 @@ fn reports_missing_release_workflow_gates() {
             "Cleanup macOS signing keychain",
             "always() && matrix.os == 'macos-latest'",
             "Block unsigned Phase 0 release",
-            "Signed release packaging is not implemented.",
+            "Public Phase 0 release is blocked until publish-check evidence is complete.",
             "exit 1"
         ]
     );

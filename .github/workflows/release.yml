@@ -203,5 +203,5 @@ jobs:
       - name: Block unsigned Phase 0 release
         shell: bash
         run: |
-          echo "Signed release packaging is not implemented."
+          echo "Public Phase 0 release is blocked until publish-check evidence is complete."
           exit 1

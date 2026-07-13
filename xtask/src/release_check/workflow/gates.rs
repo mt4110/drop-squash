@@ -80,7 +80,7 @@ pub(super) const RELEASE: &[&str] = &[
     "Cleanup macOS signing keychain",
     "always() && matrix.os == 'macos-latest'",
     "Block unsigned Phase 0 release",
-    "Signed release packaging is not implemented.",
+    "Public Phase 0 release is blocked until publish-check evidence is complete.",
     "exit 1",
 ];
 
