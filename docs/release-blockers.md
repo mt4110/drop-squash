@@ -35,7 +35,7 @@ Use the exact forms `GitHub Release https://...` and
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL without Gatekeeper warning | TBD | `docs/manual-qa.md` |
 | Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, 20% regression threshold, and release candidate baseline | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA256SUMS with the lowercase SHA-256 line for public `DropSquash.dmg` matching the release notes Artifact URL is attached to the GitHub Release | TBD | GitHub Release |
-| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` from the release notes Artifact URL with matching lowercase SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
+| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` from the release notes Artifact URL with matching lowercase SHA-256, `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
 
 ## Evidence Classes
 
@@ -63,7 +63,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL in a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings, record backend, saved percent, duration, speed ratio, the absolute CSV path outside repo, and threshold evidence | `docs/manual-qa.md` |
 | Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` lowercase SHA-256 line matching the release notes Artifact URL to the GitHub Release | GitHub Release URL |
-| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify `brew install --cask`, versioned `DropSquash.dmg` Artifact URL, matching lowercase SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
+| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify `brew install --cask`, `brew uninstall --cask`, versioned `DropSquash.dmg` Artifact URL, matching lowercase SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
 
 ## Execution Order
 

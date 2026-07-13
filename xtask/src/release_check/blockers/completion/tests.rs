@@ -422,6 +422,15 @@ fn reports_homebrew_completion_without_matching_sha256() {
 }
 
 #[test]
+fn reports_homebrew_completion_without_uninstall_result() {
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact from the release notes Artifact URL with matching lowercase SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_valid_activation_completion_without_cache_observation() {
     let text = "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
 
@@ -521,7 +530,7 @@ fn described_blockers() -> String {
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",
         "| Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, 20% regression threshold, and release candidate baseline | TBD | `docs/manual-qa.md` |\n",
         "| Published checksum | Blocked | SHA256SUMS with the lowercase SHA-256 line for public `DropSquash.dmg` matching the release notes Artifact URL is attached to the GitHub Release | TBD | GitHub Release |\n",
-        "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` from the release notes Artifact URL with matching lowercase SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n",
+        "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` from the release notes Artifact URL with matching lowercase SHA-256, `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n",
     ]
     .join("")
 }

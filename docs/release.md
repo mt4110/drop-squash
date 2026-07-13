@@ -230,7 +230,8 @@ Homebrew evidence; Gatekeeper evidence must mention signed, notarized, stapled,
 the public `DropSquash.dmg` matching the Artifact URL, and no warning;
 benchmark evidence must name the Benchmark sample set, same-machine release candidate baseline, and 20% regression threshold result;
 Homebrew evidence must mention the Homebrew tap PR URL, artifact URL, matching
-lowercase SHA-256 digest, `auto_updates false`, and `zap` cleanup:
+lowercase SHA-256 digest, `brew install --cask`, `brew uninstall --cask`,
+`auto_updates false`, and `zap` cleanup:
 
 ```sh
 cargo run -p xtask -- release-notes-check path/to/release-notes.md

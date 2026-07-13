@@ -37,4 +37,5 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Homebrew cask install", "matching lowercase SHA-256"),
     ("Homebrew cask install", "auto_updates false"),
     ("Homebrew cask install", "zap"),
+    ("Homebrew cask install", "brew uninstall --cask"),
 ];

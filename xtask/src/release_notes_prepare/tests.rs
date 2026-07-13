@@ -170,8 +170,9 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("zap cleanup path"));
     assert!(text.contains("Homebrew install result evidence draft"));
     assert!(text.contains("brew install --cask mt4110/tap/dropsquash"));
+    assert!(text.contains("brew uninstall --cask mt4110/tap/dropsquash"));
     assert!(text.contains("from the Artifact URL above"));
-    assert!(text.contains("replace this line with observed install evidence"));
+    assert!(text.contains("replace this line with observed install and uninstall evidence"));
     let checksum = text
         .find("GitHub Release checksum")
         .expect("checksum field");

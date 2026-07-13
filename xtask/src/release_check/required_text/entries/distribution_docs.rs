@@ -53,6 +53,9 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release-blockers.md",
         "matching the release notes Artifact URL",
     ),
+    ("docs/release-blockers.md", "brew uninstall --cask"),
+    ("docs/release-notes-template.md", "brew uninstall --cask"),
+    ("docs/release.md", "brew uninstall --cask"),
     (
         "docs/release.md",
         "Gatekeeper evidence must mention signed, notarized, stapled",

@@ -16,6 +16,8 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> Option<bool> 
             &["versioned"],
             &["dropsquash.dmg"],
             &["sha-256", "sha256"],
+            &["brew uninstall"],
+            &["--cask"],
         ][..],
         _ => return None,
     };
