@@ -23,3 +23,14 @@ fn rejects_existing_markdown_output() {
 
     assert!(error.contains("failed to create"));
 }
+
+#[test]
+fn prepared_markdown_is_rejected_by_release_notes_check() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+
+    write(&path, &["## Distribution".into()]).unwrap();
+    let error = crate::release_notes_check::check_file(&path).unwrap_err();
+
+    assert!(error.contains("prepared draft markers"));
+}
