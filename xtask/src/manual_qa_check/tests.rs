@@ -598,6 +598,18 @@ fn reports_signing_results_without_artifact_path() {
 }
 
 #[test]
+fn reports_notarization_without_stapled_status() {
+    let (_directory, path) = write_manual_qa(
+        "| Notarization staple verification | Passes | notary accepted, stapler ran, and spctl accepted for public DropSquash.dmg |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization staple verification")));
+}
+
+#[test]
 fn reports_non_iso_date() {
     let (_directory, path) = write_manual_qa("| Date | 7/11/2026 |\n");
     let missing = check_file(&path).unwrap();

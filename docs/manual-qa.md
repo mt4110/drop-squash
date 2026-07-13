@@ -202,5 +202,5 @@ rows to the exact Artifact URL for the same public `DropSquash.dmg`.
 | `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character lowercase SHA-256 digest and `DropSquash.dmg` recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
-| Notarization staple verification | Public DMG/app artifact passes notary, stapler, and `spctl` assessment |  |
+| Notarization staple verification | Public DMG/app artifact passes notary, stapler validate or stapled status, and `spctl` assessment |  |
 | Gatekeeper open test | Signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL opens cleanly without Gatekeeper warning |  |

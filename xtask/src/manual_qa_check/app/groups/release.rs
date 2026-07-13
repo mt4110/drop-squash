@@ -9,6 +9,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "Notarization staple verification" => &[
             &["notary", "notarization"],
             &["stapler", "staple"],
+            &["stapled", "validate"],
             &["spctl"],
             &["public"],
             &["dropsquash.dmg"],
