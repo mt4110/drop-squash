@@ -118,6 +118,45 @@ fn rejects_incomplete_release_notes() {
     assert!(error.contains("release-notes-check"));
 }
 
+#[test]
+fn rejects_release_notes_for_different_tag() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.4");
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("tag"));
+}
+
+#[test]
+fn rejects_release_notes_for_different_checksum() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.3");
+    write_file(
+        &request.checksum,
+        "1111111111111111111111111111111111111111111111111111111111111111  DropSquash.dmg",
+    );
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("SHA256SUMS digest"));
+}
+
+#[test]
+fn rejects_release_notes_without_matching_download_url() {
+    let directory = tempfile::tempdir().unwrap();
+    let request = request(directory.path(), "v1.2.3");
+    let text = release_notes(directory.path()).replace(
+        "https://github.com/mt4110/drop-squash/releases/download/v1.2.3/DropSquash.dmg",
+        "https://github.com/mt4110/drop-squash/releases/download/v1.2.3/DropSquash-beta.dmg",
+    );
+    write_file(&request.notes, &text);
+
+    let error = command(&request).unwrap_err();
+
+    assert!(error.contains("release-notes-check") || error.contains("Artifact URL"));
+}
+
 fn request(directory: &std::path::Path, tag: &str) -> Request {
     let dmg = directory.join("DropSquash.dmg");
     let checksum = directory.join("SHA256SUMS");
