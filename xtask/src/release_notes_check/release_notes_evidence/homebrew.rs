@@ -3,6 +3,7 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> Option<bool> 
         "Homebrew tap PR" => &[
             &["cask"][..],
             &["pr"],
+            &["public"],
             &["versioned"],
             &["zap"],
             &["dropsquash.dmg"],
