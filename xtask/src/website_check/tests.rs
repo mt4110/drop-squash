@@ -441,6 +441,21 @@ fn rejects_missing_pricing_draft_copy() {
 }
 
 #[test]
+fn rejects_missing_pricing_refund_link() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "pricing.html",
+        "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("refund.html")));
+}
+
+#[test]
 fn rejects_pre_release_cta_copy() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -615,7 +630,7 @@ fn required_page_text(page: &str) -> &'static str {
         }
         "download.html" => "macOS beta DropSquash.dmg notarization checksum release-status/",
         "pricing.html" => {
-            "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy"
+            "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy"
         }
         "privacy.html" => {
             "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 metadata_policy = preserve file names instead of absolute paths License activation contacts Lemon Squeezy"
