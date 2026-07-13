@@ -51,20 +51,32 @@ fn load_cache_bytes(bytes: &[u8]) -> dropsquash_core::Result<LicenseCache> {
 }
 
 fn reject_raw_key_fields(value: &serde_json::Value) -> dropsquash_core::Result<()> {
-    let Some(object) = value.as_object() else {
-        return Ok(());
-    };
-    if object.keys().any(|key| {
-        matches!(
-            key.as_str(),
-            "license_key" | "raw_key" | "raw_license_key" | "licenseKey"
-        )
-    }) {
-        return Err(AppError::License(
-            "license cache contains a raw license key field".to_string(),
-        ));
+    match value {
+        serde_json::Value::Object(object) => {
+            if object.keys().any(|key| is_raw_key_field(key)) {
+                return Err(AppError::License(
+                    "license cache contains a raw license key field".to_string(),
+                ));
+            }
+            for child in object.values() {
+                reject_raw_key_fields(child)?;
+            }
+        }
+        serde_json::Value::Array(values) => {
+            for child in values {
+                reject_raw_key_fields(child)?;
+            }
+        }
+        _ => {}
     }
     Ok(())
+}
+
+fn is_raw_key_field(key: &str) -> bool {
+    matches!(
+        key,
+        "license_key" | "raw_key" | "raw_license_key" | "licenseKey"
+    )
 }
 
 fn temporary_path_for(path: &Path) -> PathBuf {
