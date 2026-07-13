@@ -37,12 +37,26 @@ struct Request {
 impl Request {
     fn parse(args: Vec<String>) -> Result<Self, String> {
         match args.as_slice() {
-            [cask, notes] => Ok(Self {
-                cask: PathBuf::from(cask),
-                notes: PathBuf::from(notes),
-            }),
+            [cask, notes] => {
+                let request = Self {
+                    cask: PathBuf::from(cask),
+                    notes: PathBuf::from(notes),
+                };
+                request.validate()?;
+                Ok(request)
+            }
             _ => Err("homebrew-cask-check requires <dropsquash.rb> <release-notes.md>".into()),
         }
+    }
+
+    fn validate(&self) -> Result<(), String> {
+        if self.cask.file_name().and_then(|value| value.to_str()) != Some("dropsquash.rb") {
+            return Err("homebrew-cask-check cask must be named dropsquash.rb".to_string());
+        }
+        if self.notes.extension().and_then(|value| value.to_str()) != Some("md") {
+            return Err("homebrew-cask-check release notes must be a .md file".to_string());
+        }
+        Ok(())
     }
 }
 

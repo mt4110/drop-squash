@@ -21,6 +21,42 @@ fn accepts_cask_matching_release_notes() {
 }
 
 #[test]
+fn rejects_noncanonical_cask_file_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let result = super::Request::parse(vec![
+        directory.path().join("other.rb").display().to_string(),
+        directory
+            .path()
+            .join("release-notes.md")
+            .display()
+            .to_string(),
+    ]);
+    let Err(error) = result else {
+        panic!("noncanonical cask path should fail");
+    };
+
+    assert!(error.contains("dropsquash.rb"));
+}
+
+#[test]
+fn rejects_non_markdown_release_notes_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let result = super::Request::parse(vec![
+        directory.path().join("dropsquash.rb").display().to_string(),
+        directory
+            .path()
+            .join("release-notes.txt")
+            .display()
+            .to_string(),
+    ]);
+    let Err(error) = result else {
+        panic!("non-markdown release notes path should fail");
+    };
+
+    assert!(error.contains(".md"));
+}
+
+#[test]
 fn rejects_version_mismatch() {
     let directory = tempfile::tempdir().unwrap();
     let cask = write(
