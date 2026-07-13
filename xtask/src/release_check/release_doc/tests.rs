@@ -25,12 +25,14 @@ cargo run -p xtask -- macos-signing-check
 docs/release-blockers.md
 Lemon Squeezy sandbox purchase
 Valid sandbox activation
+Expired license refresh
 cargo run -p xtask -- homebrew-cask 0.1.0
 auto_updates false
 zap
 cargo run -p xtask -- release-notes-check
 Benchmark sample set
 20% regression threshold
+Expired license refresh
 Homebrew evidence
 "#;
 

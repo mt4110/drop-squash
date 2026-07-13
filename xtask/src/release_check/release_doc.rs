@@ -41,6 +41,7 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
             "docs/release-blockers.md",
             "Lemon Squeezy sandbox purchase",
             "Valid sandbox activation",
+            "Expired license refresh",
         ],
     ),
     (
@@ -57,6 +58,7 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
             "cargo run -p xtask -- release-notes-check",
             "Benchmark sample set",
             "20% regression threshold",
+            "Expired license refresh",
             "Homebrew evidence",
         ],
     ),
