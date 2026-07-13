@@ -28,8 +28,10 @@ pub(super) fn encode_with_avfoundation(
     let verification = verify_output(&job.input_path, &temporary_output)?;
     if !verification.is_valid_output {
         return Err(AppError::Encoder(format!(
-            "native export failed output verification ({} bytes -> {} bytes)",
-            verification.original_bytes, verification.output_bytes,
+            "native export failed output verification: {} ({} bytes -> {} bytes)",
+            verification.failure_summary(),
+            verification.original_bytes,
+            verification.output_bytes,
         )));
     }
 

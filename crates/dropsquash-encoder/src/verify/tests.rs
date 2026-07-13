@@ -19,6 +19,7 @@ fn accepts_smaller_mp4_with_file_type_box() {
     assert!(verification.duration_matches_source);
     assert!(verification.is_smaller_than_original);
     assert!(verification.is_valid_output);
+    assert!(verification.failure_summary().is_empty());
 }
 
 #[test]
@@ -34,6 +35,9 @@ fn rejects_smaller_non_mp4_payload() {
     assert!(verification.is_smaller_than_original);
     assert!(!verification.has_mp4_file_type);
     assert!(!verification.is_valid_output);
+    assert!(verification
+        .failure_summary()
+        .contains("mp4 file-type box missing"));
 }
 
 #[test]
@@ -53,6 +57,9 @@ fn rejects_non_mp4_extension() {
     assert!(verification.has_mp4_file_type);
     assert!(verification.has_nonzero_duration);
     assert!(!verification.is_valid_output);
+    assert!(verification
+        .failure_summary()
+        .contains("output extension is not mp4"));
 }
 
 #[test]
@@ -68,6 +75,9 @@ fn rejects_zero_duration_mp4() {
     assert!(verification.has_mp4_file_type);
     assert!(!verification.has_nonzero_duration);
     assert!(!verification.is_valid_output);
+    assert!(verification
+        .failure_summary()
+        .contains("duration is zero or unreadable"));
 }
 
 #[test]
@@ -85,6 +95,9 @@ fn rejects_output_with_mismatched_duration() {
     assert!(verification.has_nonzero_duration);
     assert!(!verification.duration_matches_source);
     assert!(!verification.is_valid_output);
+    assert!(verification
+        .failure_summary()
+        .contains("duration differs from source"));
 }
 
 fn fixture_mp4(duration: u32) -> Vec<u8> {

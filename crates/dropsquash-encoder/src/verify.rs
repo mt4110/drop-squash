@@ -18,6 +18,31 @@ pub struct OutputVerification {
     pub is_valid_output: bool,
 }
 
+impl OutputVerification {
+    pub fn failure_summary(&self) -> String {
+        let mut reasons = Vec::new();
+        if !self.output_exists {
+            reasons.push("output missing");
+        }
+        if !self.is_smaller_than_original {
+            reasons.push("output is not smaller");
+        }
+        if !self.output_extension_is_mp4 {
+            reasons.push("output extension is not mp4");
+        }
+        if !self.has_mp4_file_type {
+            reasons.push("mp4 file-type box missing");
+        }
+        if !self.has_nonzero_duration {
+            reasons.push("duration is zero or unreadable");
+        }
+        if !self.duration_matches_source {
+            reasons.push("duration differs from source");
+        }
+        reasons.join(", ")
+    }
+}
+
 pub fn verify_output(original: &Path, output: &Path) -> Result<OutputVerification> {
     let original_bytes = std::fs::metadata(original)?.len();
     let output_metadata = std::fs::metadata(output).ok();
