@@ -20,6 +20,8 @@
     "src/lib/queueWire.ts",
     "src/lib/queueWire.test.ts",
     "src/lib/settings.ts",
-    "src/lib/settings.test.ts"
+    "src/lib/settings.test.ts",
+    "src/lib/sourceAction.ts",
+    "src/lib/sourceAction.test.ts"
   ]
 }

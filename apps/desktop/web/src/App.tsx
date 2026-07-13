@@ -51,6 +51,7 @@ import {
 } from "./lib/queueWire";
 import { lockedMessage } from "./lib/licenseLock";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
+import { applySourceActionDecision, sourceActionError } from "./lib/sourceAction";
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
@@ -293,12 +294,13 @@ export function App() {
         sourcePath,
         outputPath,
       });
-      if (decision.action !== "move-original-to-trash") {
-        setError(decision.reason);
+      setResult((current) => applySourceActionDecision(current, outputPath, decision));
+      setQueue((current) => markSourceAction(current, outputPath, decision.action));
+      const decisionError = sourceActionError(decision);
+      if (decisionError) {
+        setError(decisionError);
         return;
       }
-      setResult((current) => current ? { ...current, sourceAction: decision.action } : current);
-      setQueue((current) => markSourceAction(current, outputPath, decision.action));
     } catch (reason) {
       setError(String(reason));
     } finally {
