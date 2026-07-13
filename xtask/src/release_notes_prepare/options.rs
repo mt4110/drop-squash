@@ -23,6 +23,9 @@ impl Input {
                 markdown_output = Some(PathBuf::from(value));
                 continue;
             }
+            if arg.starts_with('-') {
+                return Err(format!("unknown release-notes-prepare argument: {arg}"));
+            }
             positional.push(arg);
         }
         if positional.len() != 2 {

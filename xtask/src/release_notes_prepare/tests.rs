@@ -52,6 +52,18 @@ fn rejects_duplicate_markdown_output() {
 }
 
 #[test]
+fn rejects_unknown_options() {
+    let error = Input::parse(vec![
+        "target/release/bundle/dmg/DropSquash.dmg".into(),
+        "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        "--draft".into(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("unknown release-notes-prepare argument"));
+}
+
+#[test]
 fn rejects_relative_markdown_output() {
     let error = Input::parse(vec![
         "target/release/bundle/dmg/DropSquash.dmg".into(),
