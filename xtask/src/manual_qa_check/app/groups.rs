@@ -73,6 +73,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["offline grace"],
             &["reconnect"],
             &["blocked"],
+            &["before starting"],
             &["cache", "license.json"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],

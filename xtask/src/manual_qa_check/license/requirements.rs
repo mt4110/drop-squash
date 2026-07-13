@@ -37,6 +37,7 @@ pub(super) const EXPIRED_REFRESH: &[&str] = &[
     "offline grace",
     "reconnect",
     "blocked",
+    "before starting",
     "raw key",
 ];
 

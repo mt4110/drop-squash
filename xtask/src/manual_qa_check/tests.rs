@@ -878,6 +878,18 @@ fn reports_expired_refresh_without_reconnect_prompt() {
 }
 
 #[test]
+fn reports_expired_refresh_without_pre_start_block() {
+    let (_directory, path) = write_manual_qa(
+        "| Expired license refresh | Reconnect prompt | expired offline grace license.json cache showed reconnect prompt, blocked conversion, and had no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Expired license refresh")));
+}
+
+#[test]
 fn reports_activation_with_persisted_raw_key() {
     let (_directory, path) = write_manual_qa(
         "| Empty key activation | Friendly validation error | friendly validation shown and license.json cache checked with raw key persisted |\n",
