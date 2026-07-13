@@ -850,6 +850,23 @@ fn rejects_unsupported_platform_download_channel_claims() {
         .any(|error| error.contains("unsupported platform")));
 }
 
+#[test]
+fn rejects_short_unsupported_platform_download_ctas() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta DropSquash.dmg notarization checksum Download Linux",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unsupported platform")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",

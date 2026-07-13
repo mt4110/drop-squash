@@ -3,6 +3,8 @@ use std::path::Path;
 const FORBIDDEN: &[&str] = &[
     "download for windows",
     "download for linux",
+    "download windows",
+    "download linux",
     "download on windows",
     "download on linux",
     "windows download",
