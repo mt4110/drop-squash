@@ -68,6 +68,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "signed-dmg-check"),
     (
         "docs/release.md",
+        "checksum /tmp/dropsquash-signed/DropSquash.dmg --output /tmp/dropsquash-signed/SHA256SUMS",
+    ),
+    (
+        "docs/release.md",
         "It does not replace `codesign`, notary, stapler, or Gatekeeper evidence",
     ),
     ("docs/release.md", "Block unsigned Phase 0 release"),

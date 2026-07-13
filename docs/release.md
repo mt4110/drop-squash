@@ -72,6 +72,7 @@ cargo run -p xtask -- macos-notary-plan /tmp/dropsquash-signed/DropSquash.dmg --
 cargo run -p xtask -- macos-stapler-plan /tmp/dropsquash-signed/DropSquash.dmg
 cargo run -p xtask -- macos-spctl-plan /tmp/dropsquash-signed/DropSquash.dmg
 cargo run -p xtask -- signed-dmg-check /tmp/dropsquash-signed/DropSquash.dmg target/release/bundle/dmg/DropSquash.dmg
+cargo run -p xtask -- checksum /tmp/dropsquash-signed/DropSquash.dmg --output /tmp/dropsquash-signed/SHA256SUMS
 cargo run -p xtask -- macos-keychain-cleanup-plan /tmp/dropsquash-signed/keychain
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-check
