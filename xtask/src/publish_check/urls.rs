@@ -25,6 +25,9 @@ struct Parts<'a> {
 }
 
 fn parts(value: &str) -> Option<Parts<'_>> {
+    if value.chars().any(char::is_whitespace) {
+        return None;
+    }
     if !crate::url_scheme::is_https(value) {
         return None;
     }
@@ -32,6 +35,9 @@ fn parts(value: &str) -> Option<Parts<'_>> {
     let (host, rest) = without_scheme
         .split_once('/')
         .unwrap_or((without_scheme, ""));
+    if host.is_empty() {
+        return None;
+    }
     Some(Parts { host, rest })
 }
 
@@ -97,5 +103,10 @@ mod tests {
             "https://github.com/MT4110/drop-squash/releases/tag/v0.1.0",
             "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
         ));
+        assert!(!same_https(
+            "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 TBD",
+            "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
+        ));
+        assert!(!same_https("https://", "HTTPS://"));
     }
 }
