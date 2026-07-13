@@ -95,6 +95,36 @@ fn signing_distribution_blockers_map_to_template_fields() {
     }
 }
 
+#[test]
+fn signing_distribution_execution_order_maps_to_release_fields() {
+    let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+    let blockers_text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+    let blockers = execution_order_blockers(&blockers_text, "Signing and distribution proof");
+    assert_eq!(
+        blockers,
+        vec![
+            "Signed DMG",
+            "Notarized and stapled DMG",
+            "Gatekeeper clean-machine open",
+            "Published checksum",
+            "Homebrew cask install",
+        ]
+    );
+
+    for blocker in blockers {
+        let (_, fields) = blockers::MAPPING
+            .iter()
+            .find(|(mapped, _)| *mapped == blocker)
+            .expect(blocker);
+        for field in *fields {
+            assert!(
+                template.contains(&format!("- {field}:")),
+                "{blocker}: {field}"
+            );
+        }
+    }
+}
+
 fn checked_field(field: &str) -> bool {
     URL.iter().any(|(label, _)| *label == field)
         || EVIDENCE.contains(&field)
@@ -102,4 +132,26 @@ fn checked_field(field: &str) -> bool {
             field,
             "Benchmark sample set" | "Benchmark regression threshold"
         )
+}
+
+fn execution_order_blockers<'a>(text: &'a str, track: &str) -> Vec<&'a str> {
+    text.lines()
+        .filter(|line| line.starts_with('|'))
+        .find_map(|line| {
+            let cells = line
+                .split('|')
+                .map(str::trim)
+                .filter(|cell| !cell.is_empty())
+                .collect::<Vec<_>>();
+            (cells.get(1) == Some(&track)).then(|| {
+                cells
+                    .get(2)
+                    .into_iter()
+                    .flat_map(|value| value.split(','))
+                    .map(str::trim)
+                    .filter(|value| !value.is_empty())
+                    .collect()
+            })
+        })
+        .unwrap_or_default()
 }
