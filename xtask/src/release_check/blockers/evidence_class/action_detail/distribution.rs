@@ -16,6 +16,7 @@ pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
             "stapler",
         ]),
         "Published checksum" => Some(&[
+            "SHA256SUMS",
             "public",
             "DropSquash.dmg",
             "Artifact URL",

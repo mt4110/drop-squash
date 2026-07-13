@@ -347,6 +347,15 @@ fn reports_checksum_action_without_public_sha256_artifact() {
 }
 
 #[test]
+fn reports_checksum_action_without_sha256sums_artifact() {
+    let text = "| Published checksum | Distribution | Attach checksum containing the public DropSquash.dmg lowercase SHA-256 line matching the release notes Artifact URL to the GitHub Release | GitHub Release URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Published checksum"));
+}
+
+#[test]
 fn reports_checksum_action_without_artifact_url_context() {
     let text = "| Published checksum | Distribution | Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line to the GitHub Release | GitHub Release URL |\n";
 
