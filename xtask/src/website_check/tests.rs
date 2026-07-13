@@ -680,6 +680,40 @@ fn rejects_lowercase_unsupported_platform_availability_claims() {
         .any(|error| error.contains("unsupported platform")));
 }
 
+#[test]
+fn rejects_available_for_unsupported_platform_claims() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta DropSquash.dmg notarization checksum available for Linux",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unsupported platform")));
+}
+
+#[test]
+fn rejects_unsupported_platform_download_channel_claims() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta DropSquash.dmg notarization checksum Flatpak download",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unsupported platform")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",
