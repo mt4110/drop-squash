@@ -4,6 +4,7 @@ mod completion;
 mod duplicates;
 mod evidence_class;
 mod evidence_ref;
+mod execution_order;
 mod issues;
 mod placeholders;
 mod records;
@@ -37,6 +38,8 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let mismatched_urls = url_pairs::mismatched_verified_url_pairs(&text);
     let unclassified = evidence_class::unclassified_blockers(&text);
     let unknown_classifications = evidence_class::unknown_classification_rows(&text);
+    let unplanned = execution_order::unplanned_blockers(&text);
+    let unknown_plan_rows = execution_order::unknown_blockers(&text);
     let duplicate_rows = duplicates::release_blocker_rows(&text);
     let duplicate_classifications = duplicates::classification_rows(&text);
     let secret_values = secrets::values(&text);
@@ -51,6 +54,8 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         mismatched_urls,
         unclassified,
         unknown_classifications,
+        unplanned,
+        unknown_plan_rows,
         duplicate_rows,
         duplicate_classifications,
         secret_values,
