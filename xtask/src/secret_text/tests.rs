@@ -28,12 +28,24 @@ fn rejects_apple_notarization_secret_assignments() {
 
 #[test]
 fn rejects_apple_notarization_colon_secrets() {
-    let text = "APPLE_API_KEY: ABCDEF1234 APPLE_PASSWORD: app-pass";
+    let text = "Apple API key: ABCDEF1234 APPLE_PASSWORD: app-pass Apple team id: ABCDE12345";
 
     let errors = violations("evidence", text);
 
-    assert!(errors.iter().any(|error| error.contains("apple_api_key:")));
+    assert!(errors.iter().any(|error| error.contains("apple api key:")));
     assert!(errors.iter().any(|error| error.contains("apple_password:")));
+    assert!(errors.iter().any(|error| error.contains("apple team id:")));
+}
+
+#[test]
+fn rejects_human_readable_store_api_secrets() {
+    let text = "Lemon Squeezy API key: live-secret";
+
+    let errors = violations("evidence", text);
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lemon squeezy api key:")));
 }
 
 #[test]
