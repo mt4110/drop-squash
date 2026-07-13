@@ -112,9 +112,9 @@ fn reports_verified_blocker_without_evidence_reference() {
 #[test]
 fn accepts_public_release_evidence_references() {
     let text = "\
-| Signed DMG | Verified | `codesign` verified Developer ID for public DropSquash.dmg | Release notes | Release notes |
-| Published checksum | Verified | SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg attached to the GitHub Release | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Signed DMG | Verified | `codesign` verified Developer ID for public DropSquash.dmg matching the release notes Artifact URL | Release notes | Release notes |
+| Published checksum | Verified | SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg matching the release notes Artifact URL attached to the GitHub Release | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
 
     let unverified = unverified_blockers(text);
@@ -345,34 +345,38 @@ fn reference(blocker: &str) -> &'static str {
 
 fn evidence(blocker: &str) -> &'static str {
     match blocker {
-        "Signed DMG" => "`codesign` verified Developer ID for public DropSquash.dmg",
-        "Notarized and stapled DMG" => "`spctl`, notary, stapled public DropSquash.dmg",
+        "Signed DMG" => {
+            "`codesign` verified Developer ID for public DropSquash.dmg matching the release notes Artifact URL"
+        }
+        "Notarized and stapled DMG" => {
+            "`spctl`, notary, stapled public DropSquash.dmg matching the release notes Artifact URL"
+        }
         "Gatekeeper clean-machine open" => {
-            "Fresh macOS account opened signed, notarized, stapled app from public DropSquash.dmg without Gatekeeper warning"
+            "Fresh macOS account opened signed, notarized, stapled app from public DropSquash.dmg matching the release notes Artifact URL without Gatekeeper warning"
         }
         "Published checksum" => {
-            "SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg attached to the GitHub Release"
+            "SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg matching the release notes Artifact URL attached to the GitHub Release"
         }
         "Homebrew cask install" => {
-            "brew install --cask installed versioned artifact DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap"
+            "brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, auto_updates false, and zap"
         }
         "Packaged macOS manual QA" => {
-            "Tested the public DropSquash.dmg artifact with manual-qa-check evidence recorded"
+            "Tested the public DropSquash.dmg artifact matching the release notes Artifact URL with manual-qa-check evidence recorded"
         }
         "Empty key activation" => {
             "Activate stays disabled and raw key, fingerprint, and instance are absent from local cache"
         }
         "Valid sandbox activation" => {
-            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache"
+            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache"
         }
         "Invalid license key handling" => {
             "Activating state disables submit, friendly error, raw key, fingerprint, and instance are absent from local cache"
         }
         "License network failure" => {
-            "Friendly network error, existing valid local cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
+            "Friendly network error, existing valid local cache was checked with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
         }
         "Expired license refresh" => {
-            "Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache"
+            "expired offline grace cache shows reconnect prompt, attempted conversion is blocked before starting, and raw key is absent from local cache"
         }
         "Local license forget" => {
             "Forgetting state disables action, local cache removed, trial or locked state"

@@ -4,6 +4,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Packaged macOS manual QA", "Tested"),
     ("Packaged macOS manual QA", "public"),
     ("Packaged macOS manual QA", "DropSquash.dmg"),
+    ("Packaged macOS manual QA", "Artifact URL"),
     ("Packaged macOS manual QA", "manual-qa-check"),
     ("Empty key activation", "Activate stays disabled"),
     (
