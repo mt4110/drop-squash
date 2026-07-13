@@ -906,6 +906,40 @@ fn rejects_benchmark_sample_set_without_csv_path_context() {
 }
 
 #[test]
+fn rejects_benchmark_sample_set_with_repo_local_csv_path() {
+    let csv = std::env::current_dir()
+        .unwrap()
+        .join("target/dropsquash-bench/results.csv");
+    let errors = check_text(&format!(
+        "\
+- Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
+",
+        csv.display()
+    ));
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("CSV path outside repo")));
+}
+
+#[test]
+fn rejects_benchmark_sample_set_with_normalized_repo_local_csv_path() {
+    let csv = normalized_repo_path("target/dropsquash-bench/results.csv");
+    let errors = check_text(&format!(
+        "\
+- Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
+",
+        csv.display()
+    ));
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("CSV path outside repo")));
+}
+
+#[test]
 fn rejects_benchmark_threshold_without_baseline_context() {
     let errors = check_text(
         r#"
@@ -1109,4 +1143,14 @@ fn rejects_noncanonical_artifact_name() {
     );
 
     assert!(errors.iter().any(|error| error.contains("Artifact")));
+}
+
+fn normalized_repo_path(child: &str) -> std::path::PathBuf {
+    let cwd = std::env::current_dir().unwrap();
+    cwd.parent()
+        .unwrap()
+        .join("outside")
+        .join("..")
+        .join(cwd.file_name().unwrap())
+        .join(child)
 }

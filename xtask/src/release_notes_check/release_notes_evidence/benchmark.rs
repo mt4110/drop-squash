@@ -1,3 +1,5 @@
+use std::path::{Component, Path, PathBuf};
+
 use super::value;
 
 pub(super) fn validate(text: &str) -> Vec<String> {
@@ -22,7 +24,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
         .iter()
         .all(|needle| lower.contains(needle))
         && lower.contains("smaller")
-        && has_csv_path_context(&lower)
+        && has_csv_path_context(value)
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
@@ -66,5 +68,38 @@ fn has_os_context(value: &str) -> bool {
 fn has_csv_path_context(value: &str) -> bool {
     (value.contains("outside repo") || value.contains("outside repository"))
         && value.contains(".csv")
-        && value.contains('/')
+        && csv_path_outside_repo(value)
+}
+
+fn csv_path_outside_repo(value: &str) -> bool {
+    value.split_whitespace().any(|token| {
+        let path = token
+            .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
+        is_absolute_csv_outside_repo(path)
+    })
+}
+
+fn is_absolute_csv_outside_repo(value: &str) -> bool {
+    let path = Path::new(value);
+    if !path.is_absolute() || path.extension().and_then(|value| value.to_str()) != Some("csv") {
+        return false;
+    }
+    let Ok(repo) = std::env::current_dir() else {
+        return false;
+    };
+    !normalize(path).starts_with(normalize(&repo))
+}
+
+fn normalize(path: &Path) -> PathBuf {
+    let mut normalized = PathBuf::new();
+    for component in path.components() {
+        match component {
+            Component::CurDir => {}
+            Component::ParentDir => {
+                normalized.pop();
+            }
+            other => normalized.push(other.as_os_str()),
+        }
+    }
+    normalized
 }
