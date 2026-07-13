@@ -13,10 +13,26 @@ pub(super) fn cache_observation_ok(label: &str, value: &str) -> bool {
 }
 
 pub(super) fn raw_key_absent(value: &str) -> bool {
-    value.contains("raw key absent")
-        || value.contains("raw key is absent")
-        || value.contains("no raw key")
-        || value.contains("without raw key")
+    !has_raw_key_contradiction(value)
+        && (value.contains("raw key absent")
+            || value.contains("raw key is absent")
+            || value.contains("no raw key")
+            || value.contains("without raw key"))
+}
+
+fn has_raw_key_contradiction(value: &str) -> bool {
+    [
+        "raw key persisted",
+        "raw key present",
+        "raw key stored",
+        "raw key written",
+        "raw key saved",
+        "persisted raw key",
+        "stored raw key",
+        "saved raw key",
+    ]
+    .iter()
+    .any(|needle| value.contains(needle))
 }
 
 pub(super) fn observation_ok(label: &str, value: &str) -> bool {

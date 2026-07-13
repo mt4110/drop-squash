@@ -1182,6 +1182,18 @@ fn reports_activation_with_persisted_raw_key() {
 }
 
 #[test]
+fn reports_activation_with_contradictory_raw_key_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Valid sandbox activation | Pro state | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and checked license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent but raw key persisted |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
 fn reports_license_results_without_action_state() {
     let (_directory, path) = write_manual_qa(
         "| Invalid key activation | Friendly license error | friendly error shown and license.json cache has no raw key |\n\
