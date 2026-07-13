@@ -46,6 +46,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/manual-qa.md", "notary, stapler, `spctl` assessment"),
     ("docs/manual-qa.md", "notary/stapler/`spctl`"),
     ("docs/manual-qa.md", "same public `DropSquash.dmg` file"),
+    ("docs/manual-qa.md", "64-character lowercase SHA-256 digest"),
     (
         "docs/manual-qa.md",
         "app from public `DropSquash.dmg` opens cleanly",

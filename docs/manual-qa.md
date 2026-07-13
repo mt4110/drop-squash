@@ -191,7 +191,7 @@ include the `App artifact` absolute path.
 | Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples without a documented reason |  |
 | `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
 | `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes |  |
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character SHA-256 digest and `DropSquash.dmg` recorded |  |
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character lowercase SHA-256 digest and `DropSquash.dmg` recorded |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
 | Notarization staple verification | Public DMG/app artifact passes notary, stapler, and `spctl` assessment |  |

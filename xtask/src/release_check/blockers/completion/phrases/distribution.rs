@@ -20,7 +20,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Gatekeeper clean-machine open",
         "without Gatekeeper warning",
     ),
-    ("Published checksum", "SHA-256"),
+    ("Published checksum", "lowercase SHA-256"),
     ("Published checksum", "SHA256SUMS"),
     ("Published checksum", "public"),
     ("Published checksum", "DropSquash.dmg"),
@@ -29,7 +29,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Homebrew cask install", "brew install --cask"),
     ("Homebrew cask install", "versioned artifact"),
     ("Homebrew cask install", "DropSquash.dmg"),
-    ("Homebrew cask install", "matching SHA-256"),
+    ("Homebrew cask install", "matching lowercase SHA-256"),
     ("Homebrew cask install", "auto_updates false"),
     ("Homebrew cask install", "zap"),
 ];

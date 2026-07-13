@@ -80,7 +80,7 @@ These checks still require a packaged macOS app or external service state:
 | Notarized/stapled DMG verification | Requires the public DMG/app artifact and Apple notary, stapler, and `spctl` assessment for the same `.dmg` file |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, a clean machine, and no Gatekeeper warning |
 | Published checksum | Requires SHA256SUMS attached to the public GitHub Release for `DropSquash.dmg` |
-| Homebrew cask install | Requires the Homebrew tap PR and `brew install --cask` evidence for the versioned `DropSquash.dmg` artifact, matching SHA-256, `auto_updates false`, and `zap` cleanup |
+| Homebrew cask install | Requires the Homebrew tap PR and `brew install --cask` evidence for the versioned `DropSquash.dmg` artifact, matching lowercase SHA-256, `auto_updates false`, and `zap` cleanup |
 
 Only `docs/manual-qa.md` should be used to record those manual results. Record
 the exact app artifact, input sample set, and output folder so the evidence can

@@ -311,10 +311,10 @@ fn action_for(blocker: &str) -> &'static str {
             "Run release-set benchmark and record backend, saved percent, duration, speed ratio, and absolute CSV path outside repo"
         }
         "Published checksum" => {
-            "Attach SHA256SUMS containing public DropSquash.dmg SHA-256 line to the GitHub Release"
+            "Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line to the GitHub Release"
         }
         "Homebrew cask install" => {
-            "Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg, matching SHA-256, auto_updates false, and zap cleanup"
+            "Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg, matching lowercase SHA-256, auto_updates false, and zap cleanup"
         }
         _ => "Capture concrete release evidence",
     }

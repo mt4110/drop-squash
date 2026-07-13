@@ -70,8 +70,8 @@ fn reports_verified_blocker_without_evidence_reference() {
 fn accepts_public_release_evidence_references() {
     let text = "\
 | Signed DMG | Verified | `codesign` verified Developer ID for public DropSquash.dmg | Release notes | Release notes |
-| Published checksum | Verified | SHA256SUMS with SHA-256 for public DropSquash.dmg attached to the GitHub Release | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
-| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg with matching SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+| Published checksum | Verified | SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg attached to the GitHub Release | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
 
     let unverified = unverified_blockers(text);
@@ -250,10 +250,10 @@ fn evidence(blocker: &str) -> &'static str {
             "Fresh macOS account opened signed, notarized, stapled app from public DropSquash.dmg without Gatekeeper warning"
         }
         "Published checksum" => {
-            "SHA256SUMS with SHA-256 for public DropSquash.dmg attached to the GitHub Release"
+            "SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg attached to the GitHub Release"
         }
         "Homebrew cask install" => {
-            "brew install --cask installed versioned artifact DropSquash.dmg with matching SHA-256, auto_updates false, and zap"
+            "brew install --cask installed versioned artifact DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap"
         }
         "Packaged macOS manual QA" => {
             "Tested the public DropSquash.dmg artifact with manual-qa-check evidence recorded"

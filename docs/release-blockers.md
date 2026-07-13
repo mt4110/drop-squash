@@ -29,8 +29,8 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` without Gatekeeper warning | TBD | `docs/manual-qa.md` |
 | Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, and 20% regression threshold | TBD | `docs/manual-qa.md` |
-| Published checksum | Blocked | SHA256SUMS with the SHA-256 line for public `DropSquash.dmg` is attached to the GitHub Release | TBD | GitHub Release |
-| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` with matching SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
+| Published checksum | Blocked | SHA256SUMS with the lowercase SHA-256 line for public `DropSquash.dmg` is attached to the GitHub Release | TBD | GitHub Release |
+| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` with matching lowercase SHA-256 and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |
 
 ## Evidence Classes
 
@@ -57,5 +57,5 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured `spctl`, notary, and stapler verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from public `DropSquash.dmg` in a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
 | Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large local recordings, record backend, saved percent, duration, speed ratio, the absolute CSV path outside repo, and threshold evidence | `docs/manual-qa.md` |
-| Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` SHA-256 line to the GitHub Release | GitHub Release URL |
-| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify `brew install --cask`, versioned `DropSquash.dmg` URL, matching SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
+| Published checksum | Distribution | Attach SHA256SUMS containing the public `DropSquash.dmg` lowercase SHA-256 line to the GitHub Release | GitHub Release URL |
+| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify `brew install --cask`, versioned `DropSquash.dmg` URL, matching lowercase SHA-256, `auto_updates false`, and `zap` cleanup path | Homebrew tap PR URL |
