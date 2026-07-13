@@ -56,7 +56,7 @@ fn accepts_nested_release_status_page() {
     write(
         directory.path(),
         "release-status/index.html",
-        r#"Paid beta is not public yet signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
+        r#"Paid beta is not public yet signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../support.html ../refund.html <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -904,7 +904,7 @@ fn required_page_text(page: &str) -> &'static str {
     match page {
         "index.html" => "Release status",
         "release-status/index.html" => {
-            "Paid beta is not public yet signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation"
+            "Paid beta is not public yet signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../support.html ../refund.html"
         }
         "download.html" => "macOS beta DropSquash.dmg notarization checksum release-status/",
         "pricing.html" => {
