@@ -30,7 +30,10 @@ fn plan(request: &Request) -> Result<Vec<String>, String> {
             "cargo run -p xtask -- macos-codesign-plan {} 'Developer ID Application: ...'",
             display(&target)
         ),
-        format!("xcrun notarytool submit {}", display(&target)),
+        format!(
+            "cargo run -p xtask -- macos-notary-plan {} --api-key",
+            display(&target)
+        ),
         format!("xcrun stapler validate {}", display(&target)),
         format!(
             "cargo run -p xtask -- signed-dmg-check {} {}",

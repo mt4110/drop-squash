@@ -54,6 +54,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "does not execute `codesign` or import signing credentials",
     ),
+    ("docs/release.md", "macos-notary-plan"),
+    (
+        "docs/release.md",
+        "prints environment variable references only, not notarization secret values",
+    ),
     ("docs/release.md", "signed-dmg-prepare"),
     (
         "docs/release.md",
