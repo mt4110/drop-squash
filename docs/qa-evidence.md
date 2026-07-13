@@ -78,7 +78,7 @@ These checks still require a packaged macOS app or external service state:
 | Live checkout link | Requires the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the intended product |
 | Signed DMG verification | Requires the public DMG/app artifact matching the release notes Artifact URL and Developer ID signature state for the same `.dmg` file |
 | Notarized/stapled DMG verification | Requires the public DMG/app artifact matching the release notes Artifact URL and Apple notary, stapler, and `spctl` assessment for the same `.dmg` file |
-| Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, a clean machine, and no Gatekeeper warning |
+| Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, a clean machine, and no Gatekeeper warning for the public `DropSquash.dmg` matching the release notes Artifact URL |
 | Published checksum | Requires SHA256SUMS attached to the public GitHub Release for the `DropSquash.dmg` matching the release notes Artifact URL |
 | Homebrew cask install | Requires the public Homebrew tap PR and `brew install --cask` plus `brew uninstall --cask` evidence for the versioned `DropSquash.dmg` Artifact URL, matching lowercase SHA-256, `auto_updates false`, and `zap` cleanup |
 

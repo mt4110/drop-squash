@@ -18,6 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Gatekeeper no-warning evidence"),
     (
         "docs/qa-evidence.md",
+        "no Gatekeeper warning for the public `DropSquash.dmg` matching the release notes Artifact URL",
+    ),
+    (
+        "docs/qa-evidence.md",
         "same-machine release candidate benchmark baseline evidence",
     ),
     (
