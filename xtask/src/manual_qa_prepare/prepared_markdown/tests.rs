@@ -19,6 +19,20 @@ fn writes_fields_and_release_candidate_rows() {
 }
 
 #[test]
+fn written_draft_is_rejected_by_manual_qa_check() {
+    let directory = tempfile::tempdir().unwrap();
+    let output = directory.path().join("prepared.md");
+    let fields: Vec<markdown::Field> = vec![("App build", "DropSquash 0.1.0 git abc1234".into())];
+
+    write(&output, &fields, None).unwrap();
+    let missing = crate::manual_qa_check::check_file(&output).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("prepared draft markers")));
+}
+
+#[test]
 fn rejects_existing_output_file() {
     let directory = tempfile::tempdir().unwrap();
     let output = directory.path().join("prepared.md");
