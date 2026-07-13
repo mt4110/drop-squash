@@ -19,7 +19,7 @@ fn labeled_public_ref(value: &str, label: &str) -> bool {
     };
     let mut urls = rest
         .split_whitespace()
-        .filter(|part| part.starts_with("https://"));
+        .filter(|part| crate::url_scheme::is_https(part));
     let Some(url) = urls.next() else {
         return false;
     };

@@ -1,9 +1,7 @@
 use std::path::Path;
 
 pub(super) fn check(_root: &Path, path: &Path, src: &str, errors: &mut Vec<String>) {
-    if starts_with_scheme(src, "http://")
-        || starts_with_scheme(src, "https://")
-        || src.starts_with("//")
+    if crate::url_scheme::is_http(src) || crate::url_scheme::is_https(src) || src.starts_with("//")
     {
         errors.push(format!("{} loads external resource: {src}", path.display()));
         return;
@@ -11,12 +9,6 @@ pub(super) fn check(_root: &Path, path: &Path, src: &str, errors: &mut Vec<Strin
     if !src.is_empty() && !src.starts_with('#') && !local_resource_exists(path, src) {
         errors.push(format!("{} loads missing {src}", path.display()));
     }
-}
-
-fn starts_with_scheme(value: &str, scheme: &str) -> bool {
-    value
-        .get(..scheme.len())
-        .is_some_and(|prefix| prefix.eq_ignore_ascii_case(scheme))
 }
 
 fn local_resource_exists(path: &Path, src: &str) -> bool {

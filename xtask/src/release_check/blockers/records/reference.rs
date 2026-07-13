@@ -9,7 +9,7 @@ pub(super) fn matches_record_target(blocker: &str, reference: &str) -> bool {
             is_refund_policy(reference)
         }
         Some("`https://...`") if blocker == "Live checkout link" => is_live_checkout(reference),
-        Some("`https://...`") => reference.starts_with("https://"),
+        Some("`https://...`") => crate::url_scheme::is_https(reference),
         Some("GitHub Release") => has_expected_url(
             reference,
             "GitHub Release",

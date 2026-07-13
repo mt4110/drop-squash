@@ -36,7 +36,10 @@ fn verified_reference<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {
 }
 
 fn origin(url: &str) -> Option<&str> {
-    let without_scheme = url.strip_prefix("https://")?;
+    if !crate::url_scheme::is_https(url) {
+        return None;
+    }
+    let without_scheme = &url["https://".len()..];
     Some(without_scheme.split('/').next().unwrap_or(without_scheme))
 }
 

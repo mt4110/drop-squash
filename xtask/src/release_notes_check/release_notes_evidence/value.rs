@@ -38,8 +38,8 @@ fn invalid_public_url(value: &str) -> bool {
             character.is_whitespace() || matches!(character, '"' | '\'' | '<' | '>')
         })
         .any(|part| {
-            part.starts_with("http://")
-                || (part.starts_with("https://")
+            crate::url_scheme::is_http(part)
+                || (crate::url_scheme::is_https(part)
                     && crate::public_url::HttpsUrl::parse(part).is_none())
         })
 }

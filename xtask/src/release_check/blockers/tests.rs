@@ -102,7 +102,7 @@ fn reports_verified_rows_with_local_only_url_reference() {
 #[test]
 fn accepts_labeled_public_url_references() {
     let text = "\
-| Published checksum | Verified | checksum evidence | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Published checksum | Verified | checksum evidence | GitHub Release HTTPS://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
 | Homebrew cask install | Verified | cask evidence | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
 

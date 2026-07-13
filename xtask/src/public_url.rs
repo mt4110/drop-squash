@@ -10,10 +10,10 @@ impl<'a> HttpsUrl<'a> {
         if value.chars().any(char::is_whitespace) {
             return None;
         }
-        let scheme_len = "https://".len();
-        if !value.get(..scheme_len)?.eq_ignore_ascii_case("https://") {
+        if !crate::url_scheme::is_https(value) {
             return None;
         }
+        let scheme_len = "https://".len();
         let without_scheme = &value[scheme_len..];
         let (host, path) = without_scheme
             .split_once('/')

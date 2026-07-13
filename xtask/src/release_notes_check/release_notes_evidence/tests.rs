@@ -40,7 +40,7 @@ fn accepts_concrete_production_urls() {
 - License network failure: friendly network error shown, existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 - Expired license refresh: expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
-- Public website URL: https://dropsquash.app/release-status
+- Public website URL: HTTPS://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0

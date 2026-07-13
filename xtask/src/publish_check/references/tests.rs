@@ -3,10 +3,10 @@ use super::mismatched;
 #[test]
 fn accepts_matching_release_note_references() {
     let blockers = "\
-| Public website deployment | Verified | done | https://dropsquash.app/release-status | `https://...` |
+| Public website deployment | Verified | done | HTTPS://dropsquash.app/release-status | `https://...` |
 | Refund policy finalized | Verified | done | https://dropsquash.app/refund | `https://...` |
 | Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |
-| Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release HTTPS://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
 | Homebrew cask install | Verified | brew install --cask installs versioned DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 ";
     let notes = release_notes("v0.1.0", "1");

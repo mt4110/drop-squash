@@ -3,7 +3,7 @@ use super::mismatched_verified_url_pairs;
 #[test]
 fn accepts_verified_public_site_and_refund_on_same_origin() {
     let text = "\
-| Public website deployment | Verified | pages online | https://dropsquash.app/release-status | `https://...` |
+| Public website deployment | Verified | pages online | HTTPS://dropsquash.app/release-status | `https://...` |
 | Refund policy finalized | Verified | refund final | https://dropsquash.app/refund | `https://...` |
 ";
 
