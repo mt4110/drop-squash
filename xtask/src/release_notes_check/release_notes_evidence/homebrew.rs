@@ -18,6 +18,11 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> Option<bool> 
             &["sha-256", "sha256"],
             &["brew uninstall"],
             &["--cask"],
+            &[
+                "removed cleanly",
+                "removed it cleanly",
+                "removes it cleanly",
+            ],
         ][..],
         _ => return None,
     };

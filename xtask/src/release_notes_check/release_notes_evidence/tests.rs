@@ -570,6 +570,21 @@ fn rejects_homebrew_install_without_uninstall_result() {
 }
 
 #[test]
+fn rejects_homebrew_install_without_clean_uninstall_result() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for versioned DropSquash.dmg artifact from https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef and brew uninstall --cask mt4110/tap/dropsquash ran
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew install result")));
+}
+
+#[test]
 fn rejects_prepared_homebrew_install_draft() {
     let errors = check_text(
         r#"

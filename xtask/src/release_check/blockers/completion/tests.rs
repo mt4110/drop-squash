@@ -431,6 +431,15 @@ fn reports_homebrew_completion_without_uninstall_result() {
 }
 
 #[test]
+fn reports_homebrew_completion_without_clean_uninstall_result() {
+    let text = "| Homebrew cask install | Blocked | `brew install --cask mt4110/tap/dropsquash` installs the versioned artifact `DropSquash.dmg` from the release notes Artifact URL with matching lowercase SHA-256, `brew uninstall --cask mt4110/tap/dropsquash` ran, and cask includes `auto_updates false` plus `zap` cleanup | TBD | Homebrew tap PR |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_valid_activation_completion_without_cache_observation() {
     let text = "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
 
