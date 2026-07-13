@@ -1,6 +1,7 @@
 use super::blockers::row;
 use std::path::Path;
 
+mod benchmark;
 mod field_quality;
 mod mapping;
 mod quality;
@@ -31,10 +32,20 @@ fn missing_manual_verified_evidence(blockers: &str, manual: &str) -> Vec<&'stati
         .filter(|(blocker, checks)| {
             row::find(blockers, blocker)
                 .filter(|line| row::has_status(line, blocker, "Verified"))
-                .is_some_and(|_| checks.iter().any(|check| missing_result(manual, check)))
+                .is_some_and(|_| {
+                    checks.iter().any(|check| missing_result(manual, check))
+                        || lacks_blocker_evidence(blocker, manual)
+                })
         })
         .map(|(blocker, _)| blocker)
         .collect()
+}
+
+fn lacks_blocker_evidence(blocker: &str, manual: &str) -> bool {
+    match blocker {
+        "Benchmark release set" => benchmark::lacks_matching_csv(manual),
+        _ => false,
+    }
 }
 
 fn missing_result(manual: &str, check: &str) -> bool {
