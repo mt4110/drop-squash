@@ -6,6 +6,7 @@ fn parses_https_host_and_path() {
 
     assert!(url.host_is("github.com"));
     assert_eq!(url.path(), "a/b");
+    assert!(url.has_query_or_fragment());
 }
 
 #[test]
@@ -45,4 +46,11 @@ fn matches_subdomain_boundary() {
 
     assert!(url.host_is_or_subdomain_of("lemonsqueezy.com"));
     assert!(!imposter.host_is_or_subdomain_of("lemonsqueezy.com"));
+}
+
+#[test]
+fn reports_absent_query_and_fragment() {
+    let url = HttpsUrl::parse("https://github.com/a/b").unwrap();
+
+    assert!(!url.has_query_or_fragment());
 }

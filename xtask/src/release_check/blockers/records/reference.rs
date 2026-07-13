@@ -73,7 +73,9 @@ fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
     };
     super::super::reference_urls::labeled(reference, label).is_some_and(|value| {
         crate::public_url::HttpsUrl::parse(value).is_some_and(|url| {
-            url.host_is("github.com") && url.path().strip_prefix(prefix).is_some_and(suffix_matches)
+            !url.has_query_or_fragment()
+                && url.host_is("github.com")
+                && url.path().strip_prefix(prefix).is_some_and(suffix_matches)
         })
     })
 }
