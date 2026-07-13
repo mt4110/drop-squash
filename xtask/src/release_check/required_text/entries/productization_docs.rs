@@ -76,6 +76,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
+        "macOS verification command/evidence drafts",
+    ),
+    (
+        "docs/productization.md",
         "required release notes URL field publish gate",
     ),
     ("docs/productization.md", "checkout blocker URL rule"),

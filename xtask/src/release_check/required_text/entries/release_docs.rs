@@ -33,6 +33,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release.md",
+        "macOS verification commands, signing evidence drafts",
+    ),
+    (
+        "docs/release.md",
         "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
     ),
     ("docs/release.md", "checkout, and refund links"),

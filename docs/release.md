@@ -194,6 +194,7 @@ checksum values as lowercase SHA-256 hex so later publish checks compare them
 to the same digest string generated from the DMG.
 Generate the release notes artifact fields from the same DMG and public
 artifact URL to avoid hand-copying the version, checksum, git commit,
+macOS verification commands, signing evidence drafts,
 Homebrew cask command inputs, Homebrew tap PR evidence draft, and Homebrew
 install result evidence draft:
 

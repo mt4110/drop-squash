@@ -148,6 +148,17 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("- Version: v0.1.0"));
     assert!(text.contains("- Artifact: DropSquash.dmg"));
     assert!(text.contains("- Git commit: abc1234"));
+    assert!(text.contains("## macOS Verification"));
+    assert!(text.contains("macOS verification commands:"));
+    assert!(text.contains("codesign --verify --deep --strict --verbose=2 /tmp/DropSquash.dmg"));
+    assert!(text.contains("spctl --assess --type open --verbose=4 /tmp/DropSquash.dmg"));
+    assert!(text.contains("xcrun stapler validate /tmp/DropSquash.dmg"));
+    assert!(text.contains("- `codesign`: pending Developer ID verification"));
+    assert!(text.contains("- `spctl`: pending Gatekeeper assessment"));
+    assert!(text.contains("- `stapler`: pending stapled ticket validation"));
+    assert!(text.contains("- Apple notary log: pending notarytool accepted log"));
+    assert!(text.contains("- Gatekeeper clean-machine open: pending clean-machine open test"));
+    assert!(text.contains("signed, notarized, stapled, and no warning"));
     assert!(text.contains("## Productization Evidence"));
     assert!(text.contains("- Public website URL: pending production deployment"));
     assert!(text.contains("- Pricing URL: pending final pricing"));
@@ -196,8 +207,12 @@ fn renders_prepared_release_notes_fields() {
     let productization_heading = text
         .find("## Productization Evidence")
         .expect("productization heading");
+    let verification_heading = text
+        .find("## macOS Verification")
+        .expect("verification heading");
     let distribution_heading = text.find("## Distribution").expect("distribution heading");
-    assert!(artifact_heading < productization_heading);
+    assert!(artifact_heading < verification_heading);
+    assert!(verification_heading < productization_heading);
     assert!(productization_heading < distribution_heading);
     assert!(checksum < release_url);
 }
@@ -222,6 +237,26 @@ fn prepared_public_url_drafts_are_not_release_evidence() {
     assert!(error.contains("Pricing URL"));
     assert!(error.contains("Refund policy URL"));
     assert!(error.contains("Live checkout URL"));
+}
+
+#[test]
+fn prepared_macos_verification_drafts_are_not_release_evidence() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    let notes = PreparedNotes {
+        version: "0.1.0".into(),
+        artifact_path: "/tmp/DropSquash.dmg".into(),
+        artifact_url:
+            "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".into(),
+        commit: "abc1234".into(),
+    };
+    std::fs::write(&path, notes.lines().join("\n")).unwrap();
+    let error = crate::release_notes_check::check_file(&path).unwrap_err();
+
+    assert!(error.contains("`codesign`"));
+    assert!(error.contains("Apple notary log"));
+    assert!(error.contains("Gatekeeper clean-machine open"));
 }
 
 #[test]
