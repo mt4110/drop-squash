@@ -30,7 +30,8 @@ fn check_signing(env: &BTreeMap<String, String>) -> Result<(), String> {
             "APPLE_CERTIFICATE_PASSWORD",
             "CI macOS signing requires APPLE_CERTIFICATE with password",
         )
-        .and_then(|()| require_keychain_password(env));
+        .and_then(|()| require_keychain_password(env))
+        .and_then(|()| check_ci_codesign_identity(env));
     }
     if present(env, "APPLE_SIGNING_IDENTITY") {
         return check_signing_identity(env);
@@ -62,6 +63,16 @@ fn check_signing_identity(env: &BTreeMap<String, String>) -> Result<(), String> 
         return Ok(());
     }
     Err("APPLE_SIGNING_IDENTITY must be a Developer ID Application identity".to_string())
+}
+
+fn check_ci_codesign_identity(env: &BTreeMap<String, String>) -> Result<(), String> {
+    let Some(identity) = value(env, "APPLE_CODESIGN_IDENTITY") else {
+        return Err("CI macOS signing requires APPLE_CODESIGN_IDENTITY".to_string());
+    };
+    if identity.contains("Developer ID Application") {
+        return Ok(());
+    }
+    Err("APPLE_CODESIGN_IDENTITY must be a Developer ID Application identity".to_string())
 }
 
 fn check_certificate(env: &BTreeMap<String, String>) -> Result<(), String> {

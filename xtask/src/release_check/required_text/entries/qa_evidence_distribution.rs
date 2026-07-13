@@ -59,6 +59,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "CI App Store Connect key file preparation",
     ),
+    ("docs/qa-evidence.md", "CI codesign execution runner"),
     ("docs/qa-evidence.md", "macOS signing command plan"),
     ("docs/qa-evidence.md", "macOS keychain argv plan"),
     ("docs/qa-evidence.md", "macOS keychain cleanup argv plan"),

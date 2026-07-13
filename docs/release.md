@@ -27,6 +27,11 @@ The macOS job maps signing and notarization secrets into `macos-signing-check`,
 writes the App Store Connect `.p8` key only into the runner temporary directory,
 and fails deterministically before signed packaging is enabled when CI
 credentials are missing.
+It now runs `Import macOS signing certificate`, `Sign macOS DMG`,
+`Verify macOS codesign`, and `Cleanup macOS signing keychain` against the
+isolated signing target with `APPLE_CODESIGN_IDENTITY`. Notarization, stapling,
+`spctl`, signed checksum publication, and public GitHub Release publication
+remain blocked until their execution steps and evidence are complete.
 
 Build public QA and release artifacts from a clean git worktree. If Tauri or
 Git reports a dirty tree, either commit or intentionally remove the unrelated
@@ -172,9 +177,10 @@ values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
 `APPLE_CERTIFICATE_PASSWORD`, plus `APPLE_KEYCHAIN_PASSWORD` for the temporary
 keychain import; a local keychain identity name is not enough for a fresh
 runner. Use `macos-keychain-plan` to generate the `security create-keychain`,
-certificate decode/import, and key partition list argv without printing secret
-values. Pair it with `macos-keychain-cleanup-plan` so the temporary keychain and
-decoded certificate cleanup argv are reviewed before signing execution is added.
+temporary keychain selection, certificate decode/import, and key partition list
+argv without printing secret values. Pair it with `macos-keychain-cleanup-plan`
+so the temporary keychain and decoded certificate cleanup argv are reviewed
+before signing execution is added.
 GitHub Actions should store the App Store Connect private key as
 `APPLE_API_KEY_P8`, write it to `$RUNNER_TEMP`, and export the generated
 `APPLE_API_KEY_PATH`; do not store `APPLE_API_KEY_PATH` as a repository secret.

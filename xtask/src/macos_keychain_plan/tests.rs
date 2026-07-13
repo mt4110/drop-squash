@@ -7,13 +7,14 @@ fn prints_keychain_import_plan() {
     })
     .unwrap();
 
-    assert_eq!(lines.len(), 7);
+    assert_eq!(lines.len(), 8);
     assert!(lines[0].contains("mkdir -p /tmp/dropsquash-signing"));
     assert!(lines[1].contains("$APPLE_CERTIFICATE"));
     assert!(lines[1].contains("base64 --decode"));
     assert!(lines[2].contains("security create-keychain"));
-    assert!(lines[5].contains("security import"));
-    assert!(lines[6].contains("security set-key-partition-list"));
+    assert!(lines[5].contains("security list-keychains"));
+    assert!(lines[6].contains("security import"));
+    assert!(lines[7].contains("security set-key-partition-list"));
 }
 
 #[test]

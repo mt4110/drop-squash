@@ -41,17 +41,25 @@ APPLE_API_KEY_PATH=$key_path
 APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
 APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
 APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}
 run: cargo run -p xtask -- macos-signing-check
 run: cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- macos-keychain-plan "$RUNNER_TEMP/dropsquash-signing"
+name: Import macOS signing certificate
+security list-keychains -d user -s "$keychain"
 run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
+codesign --force --options runtime --timestamp --sign "$APPLE_CODESIGN_IDENTITY"
 run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+codesign --verify --deep --strict --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+codesign -dv --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
 run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
+name: Cleanup macOS signing keychain
+always() && matrix.os == 'macos-latest'
 name: Block unsigned Phase 0 release
 echo "Signed release packaging is not implemented."
 exit 1
@@ -98,17 +106,25 @@ fn reports_missing_release_workflow_gates() {
             "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
             "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
             "APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}",
+            "APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}",
             "cargo run -p xtask -- macos-signing-check",
             "cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- macos-keychain-plan \"$RUNNER_TEMP/dropsquash-signing\"",
+            "Import macOS signing certificate",
+            "security list-keychains -d user -s \"$keychain\"",
             "cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- macos-codesign-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" \"Developer ID Application: ...\"",
+            "codesign --force --options runtime --timestamp --sign \"$APPLE_CODESIGN_IDENTITY\"",
             "cargo run -p xtask -- macos-codesign-verify-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
+            "codesign --verify --deep --strict --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
+            "codesign -dv --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-notary-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --api-key",
             "cargo run -p xtask -- macos-stapler-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",
+            "Cleanup macOS signing keychain",
+            "always() && matrix.os == 'macos-latest'",
             "Block unsigned Phase 0 release",
             "Signed release packaging is not implemented.",
             "exit 1"

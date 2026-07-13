@@ -20,6 +20,7 @@ fn commands(request: &Request) -> Result<Vec<String>, String> {
         format!("security create-keychain -p \"$APPLE_KEYCHAIN_PASSWORD\" {keychain}"),
         format!("security set-keychain-settings -lut 21600 {keychain}"),
         format!("security unlock-keychain -p \"$APPLE_KEYCHAIN_PASSWORD\" {keychain}"),
+        format!("security list-keychains -d user -s {keychain}"),
         format!(
             "security import {cert} -P \"$APPLE_CERTIFICATE_PASSWORD\" -A -t cert -f pkcs12 -k {keychain}"
         ),

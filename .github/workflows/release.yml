@@ -96,6 +96,7 @@ jobs:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+          APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -108,6 +109,26 @@ jobs:
       - name: Plan macOS temporary keychain commands
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-keychain-plan "$RUNNER_TEMP/dropsquash-signing"
+      - name: Import macOS signing certificate
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          work_dir="$RUNNER_TEMP/dropsquash-signing"
+          cert="$work_dir/DropSquash-signing.p12"
+          keychain="$work_dir/DropSquash-signing.keychain-db"
+          mkdir -p "$work_dir"
+          printf '%s' "$APPLE_CERTIFICATE" | base64 --decode > "$cert"
+          security create-keychain -p "$APPLE_KEYCHAIN_PASSWORD" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$APPLE_KEYCHAIN_PASSWORD" "$keychain"
+          security list-keychains -d user -s "$keychain"
+          security import "$cert" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$APPLE_KEYCHAIN_PASSWORD" "$keychain"
       - name: Prepare signed DMG target
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
@@ -117,9 +138,19 @@ jobs:
       - name: Plan macOS codesign command
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
+      - name: Sign macOS DMG
+        if: matrix.os == 'macos-latest'
+        env:
+          APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}
+        run: codesign --force --options runtime --timestamp --sign "$APPLE_CODESIGN_IDENTITY" "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
       - name: Plan macOS codesign verification commands
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+      - name: Verify macOS codesign
+        if: matrix.os == 'macos-latest'
+        run: |
+          codesign --verify --deep --strict --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+          codesign -dv --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
       - name: Plan macOS notarization command
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
@@ -132,6 +163,14 @@ jobs:
       - name: Plan macOS temporary keychain cleanup
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
+      - name: Cleanup macOS signing keychain
+        if: always() && matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          keychain="$RUNNER_TEMP/dropsquash-signing/DropSquash-signing.keychain-db"
+          cert="$RUNNER_TEMP/dropsquash-signing/DropSquash-signing.p12"
+          security delete-keychain "$keychain" || true
+          rm -f "$cert" "$keychain"
       - name: Block unsigned Phase 0 release
         shell: bash
         run: |

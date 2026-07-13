@@ -9,9 +9,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "macos-keychain-plan"),
     ("docs/release.md", "macos-keychain-cleanup-plan"),
     ("docs/release.md", "APPLE_KEYCHAIN_PASSWORD"),
+    ("docs/release.md", "APPLE_CODESIGN_IDENTITY"),
+    ("docs/release.md", "Import macOS signing certificate"),
+    ("docs/release.md", "Sign macOS DMG"),
+    ("docs/release.md", "Verify macOS codesign"),
+    ("docs/release.md", "Cleanup macOS signing keychain"),
     (
         "docs/release.md",
-        "certificate decode/import, and key partition list argv without printing secret",
+        "temporary keychain selection, certificate decode/import",
     ),
     (
         "docs/release.md",
@@ -75,4 +80,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "only the checked signed `DropSquash.dmg`",
     ),
     ("docs/release.md", "clearly named unsigned"),
+    (
+        "docs/release.md",
+        "remain blocked until their execution steps",
+    ),
 ];
