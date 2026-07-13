@@ -30,6 +30,7 @@ pub(super) fn expected_target(blocker: &str) -> Option<&'static str> {
         | "Valid sandbox activation"
         | "Invalid license key handling"
         | "License network failure"
+        | "Expired license refresh"
         | "Local license forget"
         | "Gatekeeper clean-machine open"
         | "Benchmark release set" => Some("`docs/manual-qa.md`"),

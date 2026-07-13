@@ -20,6 +20,7 @@ For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 | Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |
 | License network failure | Blocked | Friendly network error appears, existing valid local cache with 64-character hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
+| Expired license refresh | Blocked | Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
 | Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |
@@ -47,6 +48,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Valid sandbox activation | License sandbox | Run the Lemon Squeezy sandbox activation request, confirm submit is disabled while Activating, and inspect local license cache 64-character hex fingerprint, `instance_id`, plus raw-key absence | `docs/manual-qa.md` |
 | Invalid license key handling | License sandbox | Enter an invalid key, confirm submit is disabled while activating, friendly error appears, and inspect local license cache raw-key, fingerprint, and instance absence | `docs/manual-qa.md` |
 | License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache 64-character hex fingerprint, `instance_id`, and raw-key absence | `docs/manual-qa.md` |
+| Expired license refresh | License sandbox | Seed the expired offline grace cache, confirm the reconnect prompt, confirm conversion is blocked before starting, and inspect local license cache raw-key absence | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify release-status, privacy, pricing, support, and download pages | Public website URL |
 | Refund policy finalized | Public web | Publish the final refund policy URL before checkout goes live | Refund policy URL |

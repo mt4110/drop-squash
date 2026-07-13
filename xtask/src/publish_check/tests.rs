@@ -270,6 +270,9 @@ fn evidence(blocker: &str) -> &'static str {
         "License network failure" => {
             "Friendly network error, existing valid local cache with 64-character hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
         }
+        "Expired license refresh" => {
+            "Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache"
+        }
         "Local license forget" => {
             "Forgetting state disables action, local cache removed, trial or locked state"
         }

@@ -286,6 +286,9 @@ fn action_for(blocker: &str) -> &'static str {
         "License network failure" => {
             "Simulate failed activation request and inspect friendly error plus preserved local cache 64-character hex fingerprint, `instance_id`, and raw-key absence"
         }
+        "Expired license refresh" => {
+            "Seed the expired offline grace cache, confirm the reconnect prompt, confirm conversion is blocked before starting, and inspect local license cache raw-key absence"
+        }
         "Local license forget" => {
             "Use local forget action, confirm disabled while forgetting, and inspect returned app state"
         }

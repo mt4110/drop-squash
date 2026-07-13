@@ -11,6 +11,7 @@ pub(super) fn expected(blocker: &str) -> Option<&'static str> {
         | "Valid sandbox activation"
         | "Invalid license key handling"
         | "License network failure"
+        | "Expired license refresh"
         | "Local license forget" => Some("License sandbox"),
         "Public website deployment" | "Refund policy finalized" | "Live checkout link" => {
             Some("Public web")

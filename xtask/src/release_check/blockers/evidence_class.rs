@@ -84,6 +84,7 @@ fn has_required_owner_detail(blocker: &str, owner: &str) -> bool {
         | "Valid sandbox activation"
         | "Invalid license key handling"
         | "License network failure"
+        | "Expired license refresh"
         | "Local license forget"
         | "Gatekeeper clean-machine open"
         | "Benchmark release set" => owner == "`docs/manual-qa.md`",

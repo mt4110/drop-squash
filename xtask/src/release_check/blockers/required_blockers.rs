@@ -6,6 +6,7 @@ pub(super) const ALL: &[&str] = &[
     "Valid sandbox activation",
     "Invalid license key handling",
     "License network failure",
+    "Expired license refresh",
     "Local license forget",
     "Public website deployment",
     "Refund policy finalized",

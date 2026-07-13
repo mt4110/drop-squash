@@ -39,6 +39,12 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "`instance_id`",
             "raw-key absence",
         ],
+        "Expired license refresh" => &[
+            "expired offline grace cache",
+            "reconnect prompt",
+            "blocked before starting",
+            "raw-key absence",
+        ],
         "Local license forget" => &["disabled while forgetting", "returned app state"],
         "Public website deployment" => &[
             "production site",
