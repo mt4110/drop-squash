@@ -262,13 +262,13 @@ fn evidence(blocker: &str) -> &'static str {
             "Activate stays disabled and raw key, fingerprint, and instance are absent from local cache"
         }
         "Valid sandbox activation" => {
-            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache"
+            "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache"
         }
         "Invalid license key handling" => {
             "Activating state disables submit, friendly error, raw key, fingerprint, and instance are absent from local cache"
         }
         "License network failure" => {
-            "Friendly network error, existing valid local cache with 64-character hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
+            "Friendly network error, existing valid local cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
         }
         "Expired license refresh" => {
             "Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache"
@@ -277,7 +277,7 @@ fn evidence(blocker: &str) -> &'static str {
             "Forgetting state disables action, local cache removed, trial or locked state"
         }
         "Benchmark release set" => {
-            "Release-set benchmark CSV absolute path outside repo covers short, medium, and large samples, smaller outputs, machine/OS context, and 20% regression threshold"
+            "Release-set benchmark CSV absolute path outside repo covers backend, saved percent, duration, speed ratio, short, medium, and large samples, smaller outputs, machine/OS context, and 20% regression threshold"
         }
         "Lemon Squeezy product setup" => {
             "Sandbox product is configured for intended product DropSquash with license keys enabled"

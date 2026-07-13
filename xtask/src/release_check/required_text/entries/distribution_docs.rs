@@ -53,7 +53,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/manual-qa.md", "license cache has no raw key"),
     (
         "docs/manual-qa.md",
-        "existing valid cache with 64-character hex fingerprint and `instance_id` fields remains intact and has no raw key",
+        "existing valid cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact and has no raw key",
     ),
     (
         "docs/manual-qa.md",

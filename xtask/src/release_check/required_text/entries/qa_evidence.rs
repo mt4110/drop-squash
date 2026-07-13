@@ -90,7 +90,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "privacy receipt file-name handling"),
     (
         "docs/qa-evidence.md",
-        "64-character hex fingerprint requirements",
+        "64-character lowercase hex fingerprint requirements",
     ),
     (
         "docs/qa-evidence.md",
@@ -116,7 +116,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "verified smaller Trash output"),
     (
         "docs/qa-evidence.md",
-        "Lemon Squeezy sandbox activation with 64-character hex fingerprint and `instance_id`",
+        "Lemon Squeezy sandbox activation with 64-character lowercase hex fingerprint and `instance_id`",
     ),
     ("docs/qa-evidence.md", "unchanged trial counts"),
 ];

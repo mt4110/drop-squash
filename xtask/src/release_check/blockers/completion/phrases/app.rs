@@ -18,7 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Valid sandbox activation", "Lemon Squeezy"),
     ("Valid sandbox activation", "sandbox"),
     ("Valid sandbox activation", "Pro state"),
-    ("Valid sandbox activation", "64-character hex fingerprint"),
+    (
+        "Valid sandbox activation",
+        "64-character lowercase hex fingerprint",
+    ),
     ("Valid sandbox activation", "`instance_id` fields"),
     ("Valid sandbox activation", "raw key is absent"),
     ("Valid sandbox activation", "local cache"),
@@ -34,7 +37,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Invalid license key handling", "local cache"),
     ("License network failure", "Friendly network error"),
     ("License network failure", "existing valid local cache"),
-    ("License network failure", "64-character hex fingerprint"),
+    (
+        "License network failure",
+        "64-character lowercase hex fingerprint",
+    ),
     ("License network failure", "`instance_id` fields"),
     ("License network failure", "raw key is absent"),
     ("License network failure", "local cache"),
