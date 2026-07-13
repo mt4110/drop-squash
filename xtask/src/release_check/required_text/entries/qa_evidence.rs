@@ -60,7 +60,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "prepared Markdown label synchronization",
+        "prepared Markdown draft marker and label synchronization",
+    ),
+    (
+        "docs/qa-evidence.md",
+        "prepared manual QA draft markers",
     ),
     ("docs/qa-evidence.md", "--restore-state"),
     ("docs/qa-evidence.md", "Tauri DMG output is normalized"),
