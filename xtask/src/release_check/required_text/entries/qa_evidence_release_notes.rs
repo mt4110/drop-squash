@@ -36,6 +36,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "waiting or queued row cancellation",
     ),
     (
+        "docs/release-notes-template.md",
+        "concrete order id or order number",
+    ),
+    (
         "docs/qa-evidence.md",
         "new absolute `.md` path outside the repository",
     ),

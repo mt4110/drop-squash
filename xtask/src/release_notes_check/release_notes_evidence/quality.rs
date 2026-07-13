@@ -14,6 +14,7 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
 fn lacks_special_evidence(label: &str, value: &str) -> bool {
     match label {
         "Queue evidence" => count_numbers(value) < 5,
+        "Lemon Squeezy sandbox purchase" => !has_order_id(value),
         "Valid sandbox activation" | "License network failure" => {
             !has_hex_fingerprint(value)
                 || !has_instance_id(value)
@@ -32,6 +33,15 @@ fn count_numbers(value: &str) -> usize {
         .split(|character: char| !character.is_ascii_digit())
         .filter(|part| !part.is_empty())
         .count()
+}
+
+fn has_order_id(value: &str) -> bool {
+    value
+        .to_ascii_lowercase()
+        .split(|character: char| !character.is_ascii_alphanumeric())
+        .collect::<Vec<_>>()
+        .windows(2)
+        .any(|parts| parts[0] == "order" && parts[1].chars().any(|part| part.is_ascii_digit()))
 }
 
 fn has_hex_fingerprint(value: &str) -> bool {

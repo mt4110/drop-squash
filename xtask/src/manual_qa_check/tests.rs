@@ -982,6 +982,18 @@ fn reports_purchase_without_checkout_context() {
 }
 
 #[test]
+fn reports_purchase_without_concrete_order_id() {
+    let (_directory, path) = write_manual_qa(
+        "| Sandbox purchase | Checkout completes | sandbox checkout completed for intended product by test buyer order completed |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Sandbox purchase")));
+}
+
+#[test]
 fn reports_forget_license_without_cache_removal() {
     let (_directory, path) = write_manual_qa(
         "| Forget license on this Mac | Local cache clears | license cache checked and app returned to trial state |\n",

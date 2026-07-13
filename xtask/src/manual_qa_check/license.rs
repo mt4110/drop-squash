@@ -15,7 +15,12 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
                 "manual QA Sandbox product setup must say private store IDs were not recorded",
             );
         }
-        "Sandbox purchase" => evidence::require_all(label, result, requirements::PURCHASE, missing),
+        "Sandbox purchase" => {
+            evidence::require_all(label, result, requirements::PURCHASE, missing);
+            if !has_order_id(result) {
+                missing.push("manual QA result needs concrete order id: Sandbox purchase".into());
+            }
+        }
         "Empty key activation" => {
             evidence::require_license_cache(label, result, requirements::EMPTY_KEY_CACHE, missing);
             evidence::require_action_state(label, result, requirements::EMPTY_KEY_ACTION, missing);
@@ -48,4 +53,13 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
         }
         _ => {}
     }
+}
+
+fn has_order_id(result: &str) -> bool {
+    result
+        .to_ascii_lowercase()
+        .split(|value: char| !value.is_ascii_alphanumeric())
+        .collect::<Vec<_>>()
+        .windows(2)
+        .any(|parts| parts[0] == "order" && parts[1].chars().any(|value| value.is_ascii_digit()))
 }

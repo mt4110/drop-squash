@@ -19,6 +19,7 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
         "Batch summary" => count_numbers(result) < 5,
         "Multi-file queue" => !contains_number(result, "3") || !contains_number(result, "1"),
         "Trash source policy" => lacks_verified_smaller_output(result),
+        "Sandbox purchase" => !has_order_id(result),
         "Valid sandbox activation" | "License network failure" => {
             !has_hex_fingerprint(result) || !has_instance_id(result)
         }
@@ -49,6 +50,15 @@ fn contains_number(result: &str, expected: &str) -> bool {
 fn lacks_verified_smaller_output(result: &str) -> bool {
     let lower = result.to_ascii_lowercase();
     !lower.contains("verified") || !lower.contains("smaller")
+}
+
+fn has_order_id(result: &str) -> bool {
+    result
+        .to_ascii_lowercase()
+        .split(|value: char| !value.is_ascii_alphanumeric())
+        .collect::<Vec<_>>()
+        .windows(2)
+        .any(|parts| parts[0] == "order" && parts[1].chars().any(|value| value.is_ascii_digit()))
 }
 
 fn has_hex_fingerprint(result: &str) -> bool {

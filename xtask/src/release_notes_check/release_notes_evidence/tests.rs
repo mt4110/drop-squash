@@ -1424,6 +1424,19 @@ fn rejects_sandbox_purchase_without_sandbox_context() {
 }
 
 #[test]
+fn rejects_sandbox_purchase_without_concrete_order_id() {
+    let errors = check_text(
+        r#"
+- Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order completed
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
+}
+
+#[test]
 fn rejects_incomplete_benchmark_evidence() {
     let errors = check_text(
         r#"

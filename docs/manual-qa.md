@@ -151,7 +151,7 @@ error plus the unchanged original and trial count.
 Record concrete results. The checker requires:
 
 - Sandbox product setup: mention the sandbox product, DropSquash, the intended product, license keys enabled, and private store IDs not recorded.
-- Sandbox purchase: mention the sandbox checkout, intended product, test buyer, and order.
+- Sandbox purchase: mention the sandbox checkout, intended product, test buyer, and concrete order id or order number.
 - Empty key activation: mention the disabled Activate state and that `license.json` or the license cache was checked and has no raw key, no fingerprint, and no instance.
 - Invalid key activation: mention the Activating/disabled state, a friendly error, and that `license.json` or the license cache was inspected and has no raw key, no fingerprint, and no instance.
 - Valid sandbox activation: mention the Lemon Squeezy sandbox activation request, Activating/disabled state, Pro state, that `license.json` or the license cache was checked, the 64-character lowercase hex fingerprint, the `instance_id` field, and that it has no raw key.

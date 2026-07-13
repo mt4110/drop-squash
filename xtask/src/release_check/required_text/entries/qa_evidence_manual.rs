@@ -34,6 +34,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "concrete order id or order number evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
         "prepared Markdown draft marker and label synchronization",
     ),
     (

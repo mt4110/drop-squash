@@ -83,6 +83,16 @@ fn reports_verified_sandbox_purchase_without_order() {
 }
 
 #[test]
+fn reports_verified_sandbox_purchase_without_concrete_order_id() {
+    let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Sandbox purchase | Checkout completes | Sandbox checkout completed for intended product with test buyer order completed |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
 fn reports_verified_sandbox_purchase_without_sandbox_context() {
     let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual =

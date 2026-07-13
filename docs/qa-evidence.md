@@ -66,7 +66,7 @@ These checks still require a packaged macOS app or external service state:
 | Queued job cancellation | User-visible queue cancellation needs packaged observation that the waiting row is cancelled, never starts, and trial/history has no new success |
 | Batch summary | User-visible queue totals need packaged observation of numeric finished count, saved bytes, failed count, cancelled count, blocked count, and trial or license lock blocked jobs after mixed queue outcomes |
 | Lemon Squeezy product setup | Requires intended product, DropSquash, sandbox product and license-key configuration evidence outside the repository |
-| Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, test buyer, and order evidence outside the repository |
+| Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, test buyer, and concrete order id or order number evidence outside the repository |
 | Valid sandbox activation | Requires Lemon Squeezy sandbox activation, disabled submit state, Pro state, checked cache observation, 64-character lowercase hex fingerprint, `instance_id`, and raw-key absence evidence outside the repository |
 | Empty key activation | Requires packaged-app disabled Activate state and local cache inspection showing no raw key, fingerprint, or instance after an empty key |
 | Invalid license key handling | Requires packaged-app disabled submit state while Activating, friendly error, and inspected local cache showing no raw key, fingerprint, or instance after an invalid key |
