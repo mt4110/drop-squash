@@ -55,7 +55,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "checked local cache inspection",
+        "checked existing valid cache with 64-character lowercase hex fingerprint",
     ),
     ("docs/qa-evidence.md", "attempted conversion"),
     ("docs/qa-evidence.md", "confirmed cache removal"),
