@@ -63,7 +63,7 @@ fn has_csv_path_outside_repo(value: &str) -> bool {
             (path.is_absolute() && path.extension().and_then(|value| value.to_str()) == Some("csv"))
                 .then_some(path)
         })
-        .any(|path| outside_repo(&path))
+        .any(|path| path.is_file() && outside_repo(&path))
 }
 
 fn csv_token(token: &str) -> &str {

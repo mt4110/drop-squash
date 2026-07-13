@@ -72,6 +72,9 @@ fn is_absolute_csv_outside_repo(value: &str) -> bool {
     if !path.is_absolute() || path.extension().and_then(|value| value.to_str()) != Some("csv") {
         return false;
     }
+    if !path.is_file() {
+        return false;
+    }
     let Ok(repo) = std::env::current_dir() else {
         return false;
     };

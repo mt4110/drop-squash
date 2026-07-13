@@ -737,6 +737,19 @@ fn reports_benchmark_command_with_normalized_repo_local_csv_path() {
 }
 
 #[test]
+fn reports_benchmark_command_with_missing_csv_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = directory.path().join("missing.csv");
+    let (_manual_directory, path) = write_manual_qa(&format!(
+        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n",
+        csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("benchmark")));
+}
+
+#[test]
 fn reports_benchmark_sample_set_without_smaller_outputs() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | short medium large samples on MacBookPro18,4 macOS 26.5 |\n",
@@ -791,14 +804,32 @@ fn reports_benchmark_sample_set_with_repo_local_csv_path() {
 
 #[test]
 fn accepts_benchmark_sample_set_with_labeled_csv_path() {
-    let (_directory, path) = write_manual_qa(
-        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv=/tmp/dropsquash-bench/results.csv |\n",
-    );
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let (_manual_directory, path) = write_manual_qa(&format!(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        csv.display()
+    ));
     let missing = check_file(&path).unwrap();
 
     assert!(!missing
         .iter()
         .any(|error| error.contains("Benchmark sample set")));
+}
+
+#[test]
+fn reports_benchmark_sample_set_with_missing_csv_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = directory.path().join("missing.csv");
+    let (_manual_directory, path) = write_manual_qa(&format!(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("CSV path outside repo")));
 }
 
 #[test]
@@ -1653,6 +1684,12 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     (directory, path)
 }
 
+fn csv_file(directory: &std::path::Path, name: &str) -> std::path::PathBuf {
+    let path = directory.join(name);
+    std::fs::write(&path, "sample,duration_ms\nshort,100\n").unwrap();
+    path
+}
+
 fn template_labels(text: &str) -> Vec<String> {
     text.lines()
         .filter(|line| line.starts_with('|') && !line.contains("---"))
@@ -1667,6 +1704,7 @@ fn template_labels(text: &str) -> Vec<String> {
 
 fn complete_manual_qa(artifact: &std::path::Path) -> String {
     let output = artifact.parent().unwrap().join("qa-output");
+    let benchmark_csv = csv_file(artifact.parent().unwrap(), "benchmark-results.csv");
     std::fs::create_dir(&output).unwrap();
     let mut text = String::from("| Field | Value |\n|---|---|\n");
     for field in REQUIRED_FIELDS {
@@ -1694,10 +1732,14 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
     }
     text.push_str("| Check | Expected | Result |\n|---|---|---|\n");
     for check in REQUIRED_CHECKS {
-        if check.starts_with('`') {
+        if check
+            == "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`"
+        {
+            text.push_str(&format!("| {check} | Passes | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n", benchmark_csv.display()));
+        } else if check.starts_with('`') {
             text.push_str(&command_result(check));
         } else if check == "Benchmark sample set" {
-            text.push_str("| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |\n");
+            text.push_str(&format!("| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {} |\n", benchmark_csv.display()));
         } else if check == "Benchmark regression threshold" {
             text.push_str(
                 "| Benchmark regression threshold | Passes | no sample exceeded 20% regression against the same-machine release candidate baseline |\n",
