@@ -31,6 +31,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/release.md", "manual QA"),
     ("docs/release.md", "release-notes-prepare"),
+    ("docs/release.md", "`--output` target must be named `SHA256SUMS`"),
     (
         "docs/release.md",
         "--markdown-output /tmp/dropsquash-release-notes-prepared.md",

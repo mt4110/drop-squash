@@ -164,7 +164,8 @@ cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS
 ```
 
 The generated `SHA256SUMS` line uses the artifact file name, not the local
-build directory path, and `--output` refuses to overwrite an existing file.
+build directory path. The `--output` target must be named `SHA256SUMS`, and
+the command refuses to overwrite an existing file.
 It can be attached directly to the public release. Keep the release notes and
 Homebrew cask checksum values as lowercase SHA-256 hex so later publish checks
 compare them to the same digest string generated from the DMG.
