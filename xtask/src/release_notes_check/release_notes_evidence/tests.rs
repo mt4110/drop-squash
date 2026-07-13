@@ -551,6 +551,23 @@ fn rejects_placeholders_and_wrong_url_kinds() {
 }
 
 #[test]
+fn rejects_ellipsis_placeholder_urls() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://.../release-status
+- GitHub Release URL: GitHub Release https://...
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Public website URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release URL")));
+}
+
+#[test]
 fn rejects_release_urls_with_imposter_hosts() {
     let errors = check_text(
         r#"

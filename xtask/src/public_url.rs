@@ -46,6 +46,7 @@ fn format_path(path: &str) -> &str {
 fn is_placeholder_host(host: &str) -> bool {
     let lower = host.to_ascii_lowercase();
     lower == "localhost"
+        || lower.contains("...")
         || lower.contains('@')
         || lower.contains(':')
         || lower.parse::<Ipv4Addr>().is_ok()
@@ -99,6 +100,7 @@ mod tests {
         assert!(HttpsUrl::parse("https://store.lemonsqueezy.com@evil.com/checkout").is_none());
         assert!(HttpsUrl::parse("https://192.168.0.10/release-status").is_none());
         assert!(HttpsUrl::parse("https://dropsquash.local/release-status").is_none());
+        assert!(HttpsUrl::parse("https://.../release-status").is_none());
     }
 
     #[test]

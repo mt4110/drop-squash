@@ -91,6 +91,16 @@ fn reports_verified_rows_with_placeholder_url_reference() {
 }
 
 #[test]
+fn reports_verified_rows_with_ellipsis_url_reference() {
+    let text =
+        "| Public website deployment | Verified | Production website serves pages | https://.../release-status | `https://...` |\n";
+
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Public website deployment"));
+}
+
+#[test]
 fn reports_verified_rows_with_local_only_url_reference() {
     let text = "| Public website deployment | Verified | Production website serves pages | https://192.168.0.10/release-status | `https://...` |\n";
 
