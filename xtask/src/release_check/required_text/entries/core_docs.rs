@@ -72,6 +72,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/benchmarking.md", "20%"),
     ("docs/manual-qa.md", "manual QA Markdown fields"),
     ("docs/manual-qa.md", "manual QA Release Candidate rows"),
+    (
+        "docs/manual-qa.md",
+        "Manual QA does not replace the required release notes URL fields",
+    ),
     ("docs/manual-qa.md", "clean git worktree"),
     ("docs/manual-qa.md", "CSV path outside repo"),
     ("docs/manual-qa.md", "private store IDs"),

@@ -186,6 +186,9 @@ include the `App artifact` absolute path. Codesign, notary/stapler/`spctl`,
 and Gatekeeper rows must also include that same absolute path before marking
 the release evidence complete. The final public release notes must tie those
 rows to the exact Artifact URL for the same public `DropSquash.dmg`.
+Manual QA does not replace the required release notes URL fields; `publish-check`
+still requires Artifact URL, Public website URL, Pricing URL, Refund policy URL,
+Live checkout URL, GitHub Release URL, and Homebrew tap PR URL before publish.
 
 | Check | Expected | Result |
 |---|---|---|
