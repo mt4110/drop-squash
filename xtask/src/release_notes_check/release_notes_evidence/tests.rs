@@ -1102,6 +1102,7 @@ fn rejects_public_website_urls_outside_canonical_host() {
     let errors = check_text(
         r#"
 - Public website URL: https://other.example/release-status
+- Pricing URL: https://other.example/pricing
 - Refund policy URL: https://other.example/refund
 "#,
     );
@@ -1109,6 +1110,7 @@ fn rejects_public_website_urls_outside_canonical_host() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Public website URL")));
+    assert!(errors.iter().any(|error| error.contains("Pricing URL")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Refund policy URL")));
