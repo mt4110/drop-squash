@@ -176,9 +176,19 @@ fn reports_verified_empty_key_blocker_without_cache_evidence() {
 #[test]
 fn accepts_verified_empty_key_blocker_with_cache_evidence() {
     let blockers = "| Empty key activation | Verified | Friendly validation error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| Empty key activation | Empty key leaves Activate disabled | Activate disabled for empty input and license.json cache has no raw key, no fingerprint, and no instance |\n";
+    let manual = "| Empty key activation | Empty key leaves Activate disabled | Activate disabled for empty input and checked license.json cache has no raw key, no fingerprint, and no instance |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
+fn reports_verified_empty_key_without_cache_observation() {
+    let blockers = "| Empty key activation | Verified | Friendly validation error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Empty key activation | Empty key leaves Activate disabled | Activate disabled for empty input and license.json cache has no raw key, no fingerprint, and no instance |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Empty key activation"));
 }
 
 #[test]
@@ -215,9 +225,19 @@ fn reports_verified_network_failure_without_existing_valid_cache() {
 #[test]
 fn accepts_verified_network_failure_with_preserved_cache() {
     let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n";
+    let manual = "| License network failure | Friendly network error | friendly network error shown and checked existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
+fn reports_verified_network_failure_without_cache_observation() {
+    let blockers = "| License network failure | Verified | Friendly network error | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"License network failure"));
 }
 
 #[test]
@@ -401,6 +421,16 @@ fn reports_verified_invalid_key_with_contradictory_raw_key_evidence() {
 fn reports_verified_invalid_key_without_fingerprint_instance_absence() {
     let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Invalid key activation | Friendly license error; no raw key persisted | Activating state disabled submit; friendly error shown; license.json cache checked; raw key absent |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Invalid license key handling"));
+}
+
+#[test]
+fn reports_verified_invalid_key_without_cache_observation() {
+    let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Invalid key activation | Friendly license error; no raw key persisted | Activating state disabled submit; friendly error shown; license.json cache has raw key absent, no fingerprint, and no instance |\n";
 
     let missing = missing_manual_verified_evidence(blockers, manual);
 

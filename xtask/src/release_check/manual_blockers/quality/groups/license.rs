@@ -45,6 +45,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
                 "without fingerprint",
             ],
             &["no instance", "instance absent", "without instance"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "Invalid key activation" => Some(&[
             &["activating"],
@@ -59,6 +60,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
                 "without fingerprint",
             ],
             &["no instance", "instance absent", "without instance"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "License network failure" => Some(&[
             &["cache", "license.json"],
@@ -71,6 +73,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["instance"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "Expired license refresh" => Some(&[
             &["cache", "license.json"],
