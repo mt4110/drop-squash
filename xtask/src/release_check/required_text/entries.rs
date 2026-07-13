@@ -4,6 +4,7 @@ mod distribution_docs;
 mod native_docs;
 mod productization_docs;
 mod qa_evidence;
+mod qa_evidence_artifacts;
 mod qa_evidence_distribution;
 mod qa_evidence_manual;
 mod qa_evidence_publish;
@@ -22,6 +23,7 @@ const GROUPS: &[&[Entry]] = &[
     native_docs::ENTRIES,
     productization_docs::ENTRIES,
     qa_evidence::ENTRIES,
+    qa_evidence_artifacts::ENTRIES,
     qa_evidence_release_blockers::ENTRIES,
     qa_evidence_manual::ENTRIES,
     qa_evidence_release_notes::ENTRIES,
