@@ -365,22 +365,22 @@ fn evidence(blocker: &str) -> &'static str {
             "Forgetting state disables action, local cache removed, trial or locked state"
         }
         "Benchmark release set" => {
-            "Release-set benchmark CSV absolute path outside repo covers backend, saved percent, duration, speed ratio, short, medium, and large samples, smaller outputs, machine/OS context, and 20% regression threshold"
+            "Release-set benchmark CSV absolute path outside repo covers backend, saved percent, duration, speed ratio, short, medium, and large samples, smaller outputs, machine/OS context, 20% regression threshold, and release candidate baseline"
         }
         "Lemon Squeezy product setup" => {
-            "Sandbox product is configured for intended product DropSquash with license keys enabled"
+            "Sandbox product is configured for intended product DropSquash with license keys enabled and private store IDs not recorded"
         }
         "Lemon Squeezy sandbox purchase" => {
             "Sandbox checkout completed for intended product, test buyer, and order"
         }
         "Public website deployment" => {
-            "Production website serves release-status, privacy, pricing, support, and download"
+            "Production website production URL serves release-status, privacy, pricing, support, and download"
         }
         "Refund policy finalized" => {
             "Production refund policy is final and linked before checkout goes live"
         }
         "Live checkout link" => {
-            "Public pricing page opens the tested Lemon Squeezy checkout for intended product"
+            "Public pricing page opens the live checkout URL for tested Lemon Squeezy checkout and intended product"
         }
         _ => "concrete evidence recorded",
     }

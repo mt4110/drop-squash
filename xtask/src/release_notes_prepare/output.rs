@@ -27,7 +27,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             shell_arg(fields.artifact_path)
         ),
         format!(
-            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS to {release_url} for {} with lowercase SHA-256 {}, replace this line with public release evidence",
+            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS to public {release_url} for public {} with lowercase SHA-256 {}, replace this line with public release evidence",
             fields.artifact_url, fields.sha256
         ),
         format!("- GitHub Release URL: {release_url}"),
@@ -39,7 +39,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         "Homebrew tap PR evidence draft:".into(),
         "- Homebrew tap PR URL: pending tap PR; replace this line with the reviewed Homebrew tap PR URL".into(),
         format!(
-            "- Homebrew tap PR: cask PR for versioned DropSquash.dmg uses {} with lowercase SHA-256 {}, auto_updates false, and zap cleanup path; replace this line with reviewed PR evidence that includes the Homebrew tap PR URL above",
+            "- Homebrew tap PR: public cask PR for versioned DropSquash.dmg uses public {} with lowercase SHA-256 {}, auto_updates false, and zap cleanup path; replace this line with reviewed public PR evidence that includes the Homebrew tap PR URL above",
             fields.artifact_url, fields.sha256
         ),
         "Homebrew install result evidence draft:".into(),
