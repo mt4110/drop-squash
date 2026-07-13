@@ -1,6 +1,7 @@
 pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
     match blocker {
         "Signed DMG" => Some(&[
+            "macos-signing-check",
             "public",
             "DropSquash.dmg",
             "Artifact URL",
@@ -8,6 +9,7 @@ pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
             "Developer ID",
         ]),
         "Notarized and stapled DMG" => Some(&[
+            "macos-signing-check",
             "public",
             "DropSquash.dmg",
             "Artifact URL",

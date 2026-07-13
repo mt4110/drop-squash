@@ -510,10 +510,10 @@ fn action_for(blocker: &str) -> &'static str {
             "Verify the public pricing page opens the live store.lemonsqueezy.com/checkout/buy/<id> URL for the tested Lemon Squeezy checkout for the intended product"
         }
         "Signed DMG" => {
-            "Sign the public DropSquash.dmg matching the release notes Artifact URL and capture `codesign` Developer ID verification output"
+            "Run macos-signing-check, sign the public DropSquash.dmg matching the release notes Artifact URL, and capture `codesign` Developer ID verification output"
         }
         "Notarized and stapled DMG" => {
-            "Notarize, confirm stapled status, and assess the public DropSquash.dmg matching the release notes Artifact URL with captured `spctl`, notary, and stapler verification output"
+            "Run macos-signing-check, notarize, confirm stapled status, and assess the public DropSquash.dmg matching the release notes Artifact URL with captured `spctl`, notary, and stapler verification output"
         }
         "Benchmark release set" => {
             "Run release-set benchmark with short, medium, and large samples and record backend, saved percent, duration, speed ratio, absolute CSV path outside repo, 20% threshold result, same-machine comparison, and release candidate baseline"
