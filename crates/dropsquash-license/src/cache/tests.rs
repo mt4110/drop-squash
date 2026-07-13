@@ -29,6 +29,26 @@ fn serialized_cache_never_contains_raw_license_key() {
 }
 
 #[test]
+fn serialized_cache_schema_has_no_raw_license_key_field() {
+    let value = serde_json::to_value(LicenseCache::default()).unwrap();
+    let keys = value.as_object().unwrap().keys().collect::<Vec<_>>();
+
+    assert!(!keys.iter().any(|key| is_raw_key_field_name(key)));
+}
+
+fn is_raw_key_field_name(key: &str) -> bool {
+    let normalized = key
+        .chars()
+        .filter(|character| character.is_ascii_alphanumeric())
+        .flat_map(char::to_lowercase)
+        .collect::<String>();
+    matches!(
+        normalized.as_str(),
+        "licensekey" | "rawkey" | "rawlicensekey"
+    )
+}
+
+#[test]
 fn saves_and_loads_cache_without_temp_leftover() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("license.json");
