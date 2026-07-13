@@ -50,6 +50,10 @@ fn rejects_public_url_references_with_query_or_fragment() {
             "https://dropsquash.app/refund#policy",
         ),
         (
+            "Pricing finalized",
+            "https://dropsquash.app/pricing?utm=release",
+        ),
+        (
             "Live checkout link",
             "https://dropsquash.lemonsqueezy.com/checkout/buy/abc123?discount=beta",
         ),
@@ -61,6 +65,22 @@ fn rejects_public_url_references_with_query_or_fragment() {
             "{blocker} accepted {reference}"
         );
     }
+}
+
+#[test]
+fn rejects_pricing_reference_that_points_to_checkout() {
+    assert!(!reference_matches_record_target(
+        "Pricing finalized",
+        "https://dropsquash.app/pricing/checkout",
+    ));
+}
+
+#[test]
+fn rejects_pricing_reference_outside_dropsquash_domain() {
+    assert!(!reference_matches_record_target(
+        "Pricing finalized",
+        "https://store.lemonsqueezy.com/checkout/buy/abc123",
+    ));
 }
 
 #[test]
