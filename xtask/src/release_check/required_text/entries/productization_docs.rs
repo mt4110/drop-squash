@@ -70,6 +70,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "publish Artifact URL completion evidence gate",
     ),
+    (
+        "docs/productization.md",
+        "required release notes URL field publish gate",
+    ),
+    ("docs/productization.md", "checkout blocker URL rule"),
     ("docs/productization.md", "pricing-finalization blocker"),
     ("docs/productization.md", "final pricing"),
     (
