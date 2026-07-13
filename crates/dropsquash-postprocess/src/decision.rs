@@ -19,6 +19,25 @@ impl SourceSafety {
             && self.original_bytes > 0
             && self.output_bytes < self.original_bytes
     }
+
+    fn failure_reason(&self) -> &'static str {
+        if !self.conversion_succeeded {
+            return "conversion did not succeed";
+        }
+        if !self.output_exists {
+            return "output file is missing";
+        }
+        if self.original_bytes == 0 {
+            return "original size is unavailable";
+        }
+        if self.output_bytes == 0 {
+            return "output size is zero";
+        }
+        if self.output_bytes >= self.original_bytes {
+            return "output is not smaller than original";
+        }
+        "source movement safety gates were not satisfied"
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -43,7 +62,7 @@ pub fn decide_source_action(
     if !safety.permits_original_movement() {
         return SourceActionDecision {
             action: SourceAction::KeepOriginal,
-            reason: "source movement safety gates were not satisfied".to_string(),
+            reason: safety.failure_reason().to_string(),
             source_path,
         };
     }

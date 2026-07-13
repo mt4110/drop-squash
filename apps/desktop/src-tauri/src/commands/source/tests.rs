@@ -114,7 +114,7 @@ fn failed_result_keeps_original_even_when_sizes_are_smaller() {
     let decision = handle_source_action(&result, SourcePolicy::Trash).unwrap();
 
     assert_eq!(decision.action, SourceAction::KeepOriginal);
-    assert!(decision.reason.contains("safety gates"));
+    assert!(decision.reason.contains("conversion did not succeed"));
     assert!(source.exists());
 }
 

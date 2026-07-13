@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use dropsquash_core::SourcePolicy;
 
-use super::{decide_source_action, SourceAction, SourceSafety};
+use super::{decide_source_action, SourceAction, SourceActionDecision, SourceSafety};
 
 fn safe() -> SourceSafety {
     SourceSafety {
@@ -13,8 +13,12 @@ fn safe() -> SourceSafety {
     }
 }
 
+fn decision(policy: SourcePolicy, safety: SourceSafety) -> SourceActionDecision {
+    decide_source_action(PathBuf::from("input.mov"), policy, safety)
+}
+
 fn action(policy: SourcePolicy, safety: SourceSafety) -> SourceAction {
-    decide_source_action(PathBuf::from("input.mov"), policy, safety).action
+    decision(policy, safety).action
 }
 
 #[test]
@@ -42,58 +46,58 @@ fn trash_policy_moves_only_when_safe() {
 fn failed_conversion_keeps_original() {
     let mut safety = safe();
     safety.conversion_succeeded = false;
-    assert_eq!(
-        action(SourcePolicy::Trash, safety),
-        SourceAction::KeepOriginal
-    );
+    let decision = decision(SourcePolicy::Trash, safety);
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert_eq!(decision.reason, "conversion did not succeed");
 }
 
 #[test]
 fn missing_output_keeps_original() {
     let mut safety = safe();
     safety.output_exists = false;
-    assert_eq!(
-        action(SourcePolicy::Trash, safety),
-        SourceAction::KeepOriginal
-    );
+    let decision = decision(SourcePolicy::Trash, safety);
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert_eq!(decision.reason, "output file is missing");
 }
 
 #[test]
 fn zero_output_keeps_original() {
     let mut safety = safe();
     safety.output_bytes = 0;
-    assert_eq!(
-        action(SourcePolicy::Trash, safety),
-        SourceAction::KeepOriginal
-    );
+    let decision = decision(SourcePolicy::Trash, safety);
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert_eq!(decision.reason, "output size is zero");
 }
 
 #[test]
 fn zero_original_keeps_original() {
     let mut safety = safe();
     safety.original_bytes = 0;
-    assert_eq!(
-        action(SourcePolicy::Trash, safety),
-        SourceAction::KeepOriginal
-    );
+    let decision = decision(SourcePolicy::Trash, safety);
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert_eq!(decision.reason, "original size is unavailable");
 }
 
 #[test]
 fn larger_output_keeps_original() {
     let mut safety = safe();
     safety.output_bytes = 120;
-    assert_eq!(
-        action(SourcePolicy::Trash, safety),
-        SourceAction::KeepOriginal
-    );
+    let decision = decision(SourcePolicy::Trash, safety);
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert_eq!(decision.reason, "output is not smaller than original");
 }
 
 #[test]
 fn equal_size_output_keeps_original() {
     let mut safety = safe();
     safety.output_bytes = safety.original_bytes;
-    assert_eq!(
-        action(SourcePolicy::Trash, safety),
-        SourceAction::KeepOriginal
-    );
+    let decision = decision(SourcePolicy::Trash, safety);
+
+    assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert_eq!(decision.reason, "output is not smaller than original");
 }
