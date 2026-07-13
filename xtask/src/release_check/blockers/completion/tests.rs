@@ -143,6 +143,15 @@ fn reports_live_checkout_completion_without_product_context() {
 }
 
 #[test]
+fn reports_live_checkout_completion_without_live_url_context() {
+    let text = "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_valid_activation_completion_without_cache() {
     let text = "| Valid sandbox activation | Blocked | Activating state disables submit, app reaches Pro state, and raw key is absent | TBD | `docs/manual-qa.md` |\n";
 
@@ -452,7 +461,7 @@ fn described_blockers() -> String {
         "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
-        "| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
+        "| Live checkout link | Blocked | Public pricing page opens the live checkout URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |\n",
         "| Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` without Gatekeeper warning | TBD | `docs/manual-qa.md` |\n",

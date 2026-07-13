@@ -26,7 +26,7 @@ Use the exact forms `GitHub Release https://...` and
 | Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
 | Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |
-| Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
+| Live checkout link | Blocked | Public pricing page opens the live checkout URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact | TBD | Release notes |
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` without Gatekeeper warning | TBD | `docs/manual-qa.md` |
@@ -54,7 +54,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify the production URL serves release-status, privacy, pricing, support, and download pages | Public website URL |
 | Refund policy finalized | Public web | Publish the final refund policy URL and confirm it is linked before checkout goes live | Refund policy URL |
-| Live checkout link | Public web | Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
+| Live checkout link | Public web | Verify the public pricing page opens the live checkout URL for the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture `codesign` Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured `spctl`, notary, and stapler verification output | Release notes |
 | Gatekeeper clean-machine open | Manual packaged-app | Open the signed, notarized, stapled app from public `DropSquash.dmg` in a fresh macOS account or clean machine and confirm no Gatekeeper warning | `docs/manual-qa.md` |
