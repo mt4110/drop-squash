@@ -1084,6 +1084,22 @@ fn reports_license_results_without_action_state() {
 }
 
 #[test]
+fn reports_activating_state_without_submit_context() {
+    let (_directory, path) = write_manual_qa(
+        "| Invalid key activation | Friendly license error | Activating state disabled; friendly error shown and inspected license.json cache has no raw key, no fingerprint, and no instance |\n\
+| Valid sandbox activation | Pro state | Lemon Squeezy sandbox activation request entered Activating state, disabled, reached Pro state, and license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Invalid key activation")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+}
+
+#[test]
 fn reports_incomplete_packaged_app_results() {
     let (_directory, path) = write_manual_qa(
         "| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\

@@ -19,7 +19,7 @@ pub(super) const VALID_KEY_CACHE: &[&str] = &[
     "instance",
     "raw key",
 ];
-pub(super) const ACTIVATING_ACTION: &[&str] = &["activating", "disabled"];
+pub(super) const ACTIVATING_ACTION: &[&str] = &["activating", "disabled", "submit"];
 
 pub(super) const NETWORK_FAILURE_CACHE: &[&str] = &[
     "friendly",

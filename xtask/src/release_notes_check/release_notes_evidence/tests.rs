@@ -520,6 +520,23 @@ fn rejects_valid_activation_without_fingerprint_instance_evidence() {
 }
 
 #[test]
+fn rejects_activation_without_submit_context() {
+    let errors = check_text(
+        r#"
+- Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled, reached Pro state, and cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
+- Invalid license key handling: Activating state disabled; friendly error shown and raw key absent from cache with no fingerprint and no instance
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Invalid license key handling")));
+}
+
+#[test]
 fn rejects_valid_activation_without_hex_fingerprint_evidence() {
     let errors = check_text(
         r#"

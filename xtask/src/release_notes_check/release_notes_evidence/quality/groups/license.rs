@@ -19,6 +19,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["sandbox"],
             &["activating"],
             &["disabled"],
+            &["submit"],
             &["pro"],
             &["fingerprint"],
             &["instance"],
@@ -42,6 +43,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
         "Invalid license key handling" => Some(&[
             &["activating"],
             &["disabled"],
+            &["submit"],
             &["friendly"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
