@@ -44,10 +44,17 @@ fn check_insecure_href(path: &Path, href: &str, errors: &mut Vec<String>) {
 
 fn check_disallowed_live_href(path: &Path, href: &str, errors: &mut Vec<String>) {
     let lower = href.to_ascii_lowercase();
-    if lower.contains(".dmg") || lower.contains("lemonsqueezy") || lower.contains("checkout") {
+    if has_release_artifact(&lower) || lower.contains("lemonsqueezy") || lower.contains("checkout")
+    {
         errors.push(format!(
             "{} contains pre-release live link: {href}",
             path.display()
         ));
     }
+}
+
+fn has_release_artifact(value: &str) -> bool {
+    [".dmg", ".zip", ".pkg", ".app"]
+        .iter()
+        .any(|extension| value.contains(extension))
 }

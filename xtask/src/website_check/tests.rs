@@ -535,6 +535,22 @@ fn rejects_pre_release_download_or_checkout_links() {
 }
 
 #[test]
+fn rejects_pre_release_alternate_artifact_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        r#"<a href="https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.zip">Download</a><a href="https://example.invalid/DropSquash.pkg">PKG</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains(".zip")));
+    assert!(errors.iter().any(|error| error.contains(".pkg")));
+}
+
+#[test]
 fn rejects_pre_release_checkout_form_actions() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
