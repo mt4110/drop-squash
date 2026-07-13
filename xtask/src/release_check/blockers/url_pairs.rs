@@ -23,7 +23,7 @@ fn require_same_origin(
     ) else {
         return;
     };
-    if origin(first_url) == origin(second_url) {
+    if crate::url_origin::same(first_url, second_url) {
         return;
     }
     mismatched.push(second);
@@ -33,14 +33,6 @@ fn verified_reference<'a>(text: &'a str, blocker: &str) -> Option<&'a str> {
     row::find(text, blocker)
         .filter(|line| row::has_status(line, blocker, "Verified"))
         .and_then(row::evidence_reference)
-}
-
-fn origin(url: &str) -> Option<&str> {
-    if !crate::url_scheme::is_https(url) {
-        return None;
-    }
-    let without_scheme = &url["https://".len()..];
-    Some(without_scheme.split('/').next().unwrap_or(without_scheme))
 }
 
 #[cfg(test)]

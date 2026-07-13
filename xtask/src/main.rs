@@ -19,6 +19,7 @@ mod release_notes_check;
 mod release_notes_prepare;
 mod release_url_fields;
 mod secret_text;
+mod url_origin;
 mod url_scheme;
 mod website_check;
 

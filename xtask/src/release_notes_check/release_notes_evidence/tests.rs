@@ -727,6 +727,20 @@ fn rejects_refund_policy_url_on_different_origin() {
 }
 
 #[test]
+fn accepts_refund_policy_url_on_same_origin_with_host_case_difference() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://DropSquash.app/release-status
+- Refund policy URL: https://dropsquash.app/refund
+"#,
+    );
+
+    assert!(!errors
+        .iter()
+        .any(|error| error.contains("Refund policy URL must use the same origin")));
+}
+
+#[test]
 fn rejects_html_release_status_url() {
     let errors = check_text(
         r#"

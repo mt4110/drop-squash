@@ -11,6 +11,16 @@ fn accepts_verified_public_site_and_refund_on_same_origin() {
 }
 
 #[test]
+fn accepts_verified_public_site_and_refund_with_host_case_difference() {
+    let text = "\
+| Public website deployment | Verified | pages online | https://DropSquash.app/release-status | `https://...` |
+| Refund policy finalized | Verified | refund final | https://dropsquash.app/refund | `https://...` |
+";
+
+    assert!(mismatched_verified_url_pairs(text).is_empty());
+}
+
+#[test]
 fn reports_verified_refund_url_on_different_origin() {
     let text = "\
 | Public website deployment | Verified | pages online | https://dropsquash.app/release-status | `https://...` |

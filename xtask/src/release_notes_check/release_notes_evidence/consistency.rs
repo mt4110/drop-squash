@@ -55,18 +55,10 @@ fn require_same_origin(
     ) else {
         return;
     };
-    if origin(first) == origin(second) {
+    if crate::url_origin::same(first, second) {
         return;
     }
     errors.push(format!(
         "{second_label} must use the same origin as {first_label}"
     ));
-}
-
-fn origin(url: &str) -> Option<&str> {
-    if !crate::url_scheme::is_https(url) {
-        return None;
-    }
-    let without_scheme = &url["https://".len()..];
-    Some(without_scheme.split('/').next().unwrap_or(without_scheme))
 }
