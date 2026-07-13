@@ -53,6 +53,7 @@ pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
+cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-check
 ```
@@ -92,6 +93,11 @@ generated Tauri DMG to `DropSquash.dmg` before artifact checks, checksums,
 manual QA evidence, or public release notes refer to it. Public release still
 requires signing, notarization, stapling, artifact checks, checksums, and
 Gatekeeper no-warning evidence for the signed app.
+Before the signing implementation writes a public artifact, run
+`signed-dmg-prepare` against the checked unsigned `DropSquash.dmg` and a separate
+output directory. The command rejects non-canonical or `/nix/store`-tainted
+inputs, refuses to overwrite an existing signed target, and refuses to use the
+unsigned artifact directory as the signed output directory.
 
 Run the media policy gate directly after touching native backends or desktop
 commands:

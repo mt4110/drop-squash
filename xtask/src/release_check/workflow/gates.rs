@@ -43,6 +43,7 @@ pub(super) const RELEASE: &[&str] = &[
     "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
     "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
     "cargo run -p xtask -- macos-signing-check",
+    "cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
     "Block unsigned Phase 0 release",
     "Signed release packaging is not implemented.",
     "exit 1",
