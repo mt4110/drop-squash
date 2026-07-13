@@ -15,6 +15,11 @@ assert(
 );
 
 assert(
-  lockedTitle(lockedMessage("license-refresh-required")) === "License refresh required",
+  lockedTitle("license-refresh-required") === "License refresh required",
   "refresh lock should not look like trial completion",
+);
+
+assert(
+  lockedTitle("trial-complete") === "Trial complete",
+  "trial lock title should stay distinct",
 );

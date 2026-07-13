@@ -1,4 +1,5 @@
 import type { ConversionSummary } from "../lib/commands";
+import type { LockedReason } from "../lib/commands";
 import { displayPath, fileName, formatBytes, parentPath } from "../lib/format";
 import { lockedTitle } from "../lib/licenseLock";
 
@@ -6,6 +7,7 @@ type DropZoneProps = {
   isBusy: boolean;
   isDragging: boolean;
   isLocked: boolean;
+  lockedReason?: LockedReason;
   lockedMessage?: string;
   progress?: number;
   inputPath?: string;
@@ -24,6 +26,7 @@ export function DropZone({
   isBusy,
   isDragging,
   isLocked,
+  lockedReason,
   lockedMessage,
   progress,
   inputPath,
@@ -39,7 +42,7 @@ export function DropZone({
 }: DropZoneProps) {
   const canTrashOriginal = result?.sourceAction === "ask-user";
   const receiptPath = result?.privacyReceiptPath;
-  const lockTitle = lockedTitle(lockedMessage);
+  const lockTitle = lockedTitle(lockedReason);
 
   return (
     <section

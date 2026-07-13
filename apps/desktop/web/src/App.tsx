@@ -353,6 +353,7 @@ export function App() {
         isBusy={isBusy}
         isDragging={isDragging}
         isLocked={state.isLocked}
+        lockedReason={state.lockedReason}
         lockedMessage={currentLockedMessage}
         progress={progress}
         result={result}
