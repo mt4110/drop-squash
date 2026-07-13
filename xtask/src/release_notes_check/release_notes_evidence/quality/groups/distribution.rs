@@ -45,7 +45,11 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["public"],
             &["dropsquash.dmg"],
         ]),
-        "Known limitations" => Some(&[&["macos"], &["windows", "linux", "platform"]]),
+        "Known limitations" => Some(&[
+            &["macos"],
+            &["windows", "linux", "platform"],
+            &["unreleased", "not released", "not available", "later"],
+        ]),
         "Support contact" => Some(&[&["support"], &["github issues", "@"]]),
         _ => None,
     }

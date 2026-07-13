@@ -1165,6 +1165,19 @@ fn rejects_release_evidence_with_embedded_placeholders() {
 }
 
 #[test]
+fn rejects_limitations_without_unreleased_platform_status() {
+    let errors = check_text(
+        r#"
+- Known limitations: macOS MVP only; Windows and Linux platform builds are planned
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+}
+
+#[test]
 fn rejects_release_evidence_with_local_only_urls() {
     let errors = check_text(
         r#"
