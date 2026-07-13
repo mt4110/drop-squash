@@ -664,6 +664,19 @@ fn reports_packaged_macos_manual_qa_with_unverified_trash_output() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_trash_only_after_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Trash source policy",
+        "button showed Moving original and was disabled; original moved to Trash after verified smaller output",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_failed_conversion() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(

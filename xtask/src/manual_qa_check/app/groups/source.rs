@@ -14,6 +14,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["moving original", "moving"],
             &["disabled"],
             &["verified", "smaller"],
+            &["only after"],
         ],
         _ => return None,
     };

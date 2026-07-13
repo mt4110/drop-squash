@@ -39,6 +39,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["disabled"],
             &["verified"],
             &["smaller"],
+            &["only after"],
             &["trash"],
         ]),
         _ => None,

@@ -169,6 +169,19 @@ fn rejects_queue_evidence_without_lock_blocking_context() {
 }
 
 #[test]
+fn rejects_trash_policy_without_only_after_evidence() {
+    let errors = check_text(
+        r#"
+- Trash source policy: Moving original state disabled action; original moved to Trash after verified smaller output
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Trash source policy")));
+}
+
+#[test]
 fn rejects_sandbox_purchase_without_checkout_context() {
     let errors = check_text(
         r#"

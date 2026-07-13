@@ -1398,6 +1398,18 @@ fn reports_trash_source_without_smaller_verification() {
 }
 
 #[test]
+fn reports_trash_source_without_only_after_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Trash source policy | Successful conversion | Original moves | button showed Moving original and was disabled; original moved to Trash after verified smaller output |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Trash source policy")));
+}
+
+#[test]
 fn reports_failed_conversion_without_friendly_error() {
     let (_directory, path) = write_manual_qa(
         "| Failed conversion | Unsupported input | Original remains | original remained and trial count unchanged after failure |\n",

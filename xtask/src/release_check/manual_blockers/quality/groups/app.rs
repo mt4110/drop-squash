@@ -68,6 +68,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["moving original", "moving"],
             &["disabled"],
             &["verified", "smaller"],
+            &["only after"],
         ]),
         "Failed conversion" => Some(&[
             &["friendly", "error"],
