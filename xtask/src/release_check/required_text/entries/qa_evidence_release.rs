@@ -68,6 +68,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "version-matched public Artifact URL with host/path boundaries",
     ),
+    (
+        "docs/qa-evidence.md",
+        "Artifact URL/GitHub Release URL version mismatch",
+    ),
     ("docs/qa-evidence.md", "imposter public URL hosts"),
     (
         "docs/qa-evidence.md",
