@@ -64,6 +64,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
     ("docs/qa-evidence.md", "non-HTTPS URLs"),
+    ("docs/qa-evidence.md", "URL query or fragment parts"),
     (
         "docs/qa-evidence.md",
         "version-matched public Artifact URL with host/path boundaries",
