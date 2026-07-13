@@ -73,6 +73,9 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/product.md", "macOS today"),
     ("docs/product.md", "Windows and Linux support is planned"),
     ("docs/privacy.md", "dropsquash receipt <output.mp4>"),
+    ("docs/privacy.md", "The updater is disabled"),
+    ("docs/privacy.md", "must not send media contents"),
+    ("docs/privacy.md", "raw license keys"),
     (
         "docs/benchmarking.md",
         "at least three private local samples",

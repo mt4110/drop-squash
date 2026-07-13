@@ -33,6 +33,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("privacy.html", "metadata_policy = preserve"),
     ("privacy.html", "file names instead of absolute paths"),
     ("privacy.html", "License activation contacts Lemon Squeezy"),
+    ("privacy.html", "updater is disabled"),
     ("license.html", "license-key fingerprint"),
     ("license.html", "does not persist the raw license key"),
     ("license.html", "local license cache"),

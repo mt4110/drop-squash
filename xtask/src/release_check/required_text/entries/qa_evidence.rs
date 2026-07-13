@@ -51,6 +51,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "approved external links with host/path boundaries and no query/fragment tracking",
     ),
+    ("docs/qa-evidence.md", "updater enablement"),
     (
         "docs/qa-evidence.md",
         "quoted and unquoted HTML links/resources/form actions",

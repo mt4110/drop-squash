@@ -16,3 +16,6 @@ The media worker has no network capability. License validation is isolated from
 the media path and never receives media contents or media-derived metadata. The
 privacy gate rejects network clients outside the license provider, including
 browser fetch calls, generic HTTP clients, and Tauri HTTP plugin imports.
+The updater is disabled for the first paid beta. If an updater is enabled in a
+future release, update checks must be explicit release infrastructure traffic
+and must not send media contents, media-derived metadata, or raw license keys.
