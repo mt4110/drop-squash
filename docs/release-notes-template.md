@@ -71,9 +71,9 @@ for the same checked DMG:
 
 - Git commit: use the current lowercase 7-character or full 40-character commit hash.
 - `codesign`: include `codesign --verify`, `codesign -dv`, `Developer ID`, `public`, and the exact Artifact URL.
-- `spctl`: include `spctl`, `accepted`, `public`, and the exact Artifact URL.
+- `spctl`: include `spctl --assess --type open`, `accepted`, `public`, and the exact Artifact URL.
 - `stapler`: include `stapler` or `staple`, `stapled` or `validate`, confirm stapled status, `public`, and the exact Artifact URL.
-- Apple notary log: include `notary` or `notarytool`, `accepted`, `public`, and the exact Artifact URL.
+- Apple notary log: include `notarytool`, `accepted`, `log`, `public`, and the exact Artifact URL.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, `clean` or `fresh`, `public`, the exact Artifact URL, `signed`, `notarized`, `stapled`, and `without warning` or `no warning`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md`, the tested exact Artifact URL, and `manual-qa-check` passing.

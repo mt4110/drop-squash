@@ -10,7 +10,14 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["public"],
             &["dropsquash.dmg"],
         ]),
-        "`spctl`" => Some(&[&["spctl"], &["accepted"], &["public"], &["dropsquash.dmg"]]),
+        "`spctl`" => Some(&[
+            &["spctl"],
+            &["--assess", "assess"],
+            &["--type open", "type open"],
+            &["accepted"],
+            &["public"],
+            &["dropsquash.dmg"],
+        ]),
         "`stapler`" => Some(&[
             &["stapler", "staple"],
             &["stapled", "validate"],
@@ -18,8 +25,9 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["dropsquash.dmg"],
         ]),
         "Apple notary log" => Some(&[
-            &["notary", "notarytool"],
+            &["notarytool"],
             &["accepted"],
+            &["log"],
             &["public"],
             &["dropsquash.dmg"],
         ]),

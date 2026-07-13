@@ -157,7 +157,7 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains(
         "- `codesign`: pending codesign --verify and codesign -dv Developer ID verification"
     ));
-    assert!(text.contains("- `spctl`: pending Gatekeeper assessment"));
+    assert!(text.contains("- `spctl`: pending spctl --assess --type open Gatekeeper assessment"));
     assert!(text.contains("- `stapler`: pending stapled ticket validation"));
     assert!(text.contains("- Apple notary log: pending notarytool accepted log"));
     assert!(text.contains("- Gatekeeper clean-machine open: pending clean-machine open test"));
