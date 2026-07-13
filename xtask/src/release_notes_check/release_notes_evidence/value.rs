@@ -19,7 +19,7 @@ pub(super) fn is_placeholder(value: &str) -> bool {
         || lower.contains("localhost")
         || lower.contains(".test/")
         || lower.ends_with(".test")
-        || invalid_public_https_url(value)
+        || invalid_public_url(value)
 }
 
 pub(super) fn is_concrete_evidence(value: &str) -> bool {
@@ -32,11 +32,14 @@ fn has_placeholder_token(value: &str) -> bool {
         .any(|token| matches!(token.to_ascii_lowercase().as_str(), "tbd" | "todo"))
 }
 
-fn invalid_public_https_url(value: &str) -> bool {
+fn invalid_public_url(value: &str) -> bool {
     value
         .split(|character: char| {
             character.is_whitespace() || matches!(character, '"' | '\'' | '<' | '>')
         })
-        .filter(|part| part.starts_with("https://"))
-        .any(|part| crate::public_url::HttpsUrl::parse(part).is_none())
+        .any(|part| {
+            part.starts_with("http://")
+                || (part.starts_with("https://")
+                    && crate::public_url::HttpsUrl::parse(part).is_none())
+        })
 }

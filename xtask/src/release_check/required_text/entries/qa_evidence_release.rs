@@ -55,6 +55,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "new absolute `.md` path outside the repository",
     ),
     ("docs/qa-evidence.md", "version-matched public Artifact URL"),
+    ("docs/qa-evidence.md", "non-HTTPS URLs"),
     (
         "docs/qa-evidence.md",
         "version-matched public Artifact URL with host/path boundaries",
