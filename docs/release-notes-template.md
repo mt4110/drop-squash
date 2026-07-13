@@ -64,7 +64,8 @@ Live checkout URL, GitHub Release URL, and Homebrew tap PR URL.
 Use `release-notes-prepare` to generate the macOS verification command drafts
 for the same checked DMG:
 
-- `codesign --verify --deep --strict --verbose=2`
+- `codesign --verify --deep --strict --verbose=4`
+- `codesign -dv --verbose=4`
 - `spctl --assess --type open --verbose=4`
 - `xcrun stapler validate`
 

@@ -10,7 +10,8 @@ Artifact URL
 SHA-256
 Git commit
 release-notes-prepare
-codesign --verify --deep --strict --verbose=2
+codesign --verify --deep --strict --verbose=4
+codesign -dv --verbose=4
 spctl --assess --type open --verbose=4
 xcrun stapler validate
 codesign

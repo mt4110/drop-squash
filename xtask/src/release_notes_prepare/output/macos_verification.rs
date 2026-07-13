@@ -5,9 +5,10 @@ pub(super) fn lines(artifact_path: &str, artifact_url: &str) -> Vec<String> {
         "## macOS Verification".into(),
         "macOS verification commands:".into(),
         format!(
-            "codesign --verify --deep --strict --verbose=2 {}",
+            "codesign --verify --deep --strict --verbose=4 {}",
             shell_arg(artifact_path)
         ),
+        format!("codesign -dv --verbose=4 {}", shell_arg(artifact_path)),
         format!(
             "spctl --assess --type open --verbose=4 {}",
             shell_arg(artifact_path)
@@ -29,7 +30,8 @@ mod tests {
     fn generated_macos_commands_exist_in_release_notes_template() {
         let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
         for command in [
-            "codesign --verify --deep --strict --verbose=2",
+            "codesign --verify --deep --strict --verbose=4",
+            "codesign -dv --verbose=4",
             "spctl --assess --type open --verbose=4",
             "xcrun stapler validate",
         ] {

@@ -150,7 +150,8 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("- Git commit: abc1234"));
     assert!(text.contains("## macOS Verification"));
     assert!(text.contains("macOS verification commands:"));
-    assert!(text.contains("codesign --verify --deep --strict --verbose=2 /tmp/DropSquash.dmg"));
+    assert!(text.contains("codesign --verify --deep --strict --verbose=4 /tmp/DropSquash.dmg"));
+    assert!(text.contains("codesign -dv --verbose=4 /tmp/DropSquash.dmg"));
     assert!(text.contains("spctl --assess --type open --verbose=4 /tmp/DropSquash.dmg"));
     assert!(text.contains("xcrun stapler validate /tmp/DropSquash.dmg"));
     assert!(text.contains("- `codesign`: pending Developer ID verification"));
@@ -287,8 +288,9 @@ fn shell_quotes_macos_verification_command_paths() {
     let text = notes.lines().join("\n");
 
     assert!(text.contains(
-        "codesign --verify --deep --strict --verbose=2 '/tmp/drop squash/DropSquash.dmg'"
+        "codesign --verify --deep --strict --verbose=4 '/tmp/drop squash/DropSquash.dmg'"
     ));
+    assert!(text.contains("codesign -dv --verbose=4 '/tmp/drop squash/DropSquash.dmg'"));
     assert!(
         text.contains("spctl --assess --type open --verbose=4 '/tmp/drop squash/DropSquash.dmg'")
     );
