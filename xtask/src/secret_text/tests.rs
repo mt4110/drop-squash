@@ -38,12 +38,29 @@ fn rejects_apple_notarization_colon_secrets() {
 
 #[test]
 fn rejects_colon_form_store_and_variant_ids() {
-    let text = "store id: 123; variant id: 456";
+    let text = "store id: 123; variant id: 456; LEMON_SQUEEZY_PRODUCT_ID: 789";
 
     let errors = violations("evidence", text);
 
     assert!(errors.iter().any(|error| error.contains("store id:")));
     assert!(errors.iter().any(|error| error.contains("variant id:")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lemon_squeezy_product_id:")));
+}
+
+#[test]
+fn rejects_lemon_squeezy_colon_ids() {
+    let text = "LEMON_SQUEEZY_STORE_ID: 123 LEMON_SQUEEZY_VARIANT_ID: 456";
+
+    let errors = violations("evidence", text);
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lemon_squeezy_store_id:")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lemon_squeezy_variant_id:")));
 }
 
 #[test]

@@ -1,4 +1,4 @@
-const DISALLOWED: [&str; 31] = [
+const DISALLOWED: [&str; 34] = [
     "-----begin ",
     "private key-----",
     "apple_api_issuer=",
@@ -17,8 +17,11 @@ const DISALLOWED: [&str; 31] = [
     "lemon_squeezy_api_key=",
     "lemon_squeezy_api_key:",
     "lemon_squeezy_product_id=",
+    "lemon_squeezy_product_id:",
     "lemon_squeezy_store_id=",
+    "lemon_squeezy_store_id:",
     "lemon_squeezy_variant_id=",
+    "lemon_squeezy_variant_id:",
     "license_key=",
     "license key=",
     "license key:",
