@@ -54,7 +54,7 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "support",
             "download",
         ],
-        "Refund policy finalized" => &["final refund policy URL", "checkout goes live"],
+        "Refund policy finalized" => &["final refund policy URL", "linked", "checkout goes live"],
         "Live checkout link" => &[
             "public pricing page",
             "tested Lemon Squeezy checkout",

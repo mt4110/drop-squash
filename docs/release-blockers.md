@@ -53,7 +53,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | Expired license refresh | License sandbox | Seed the expired offline grace cache, confirm the reconnect prompt, confirm conversion is blocked before starting, and inspect local license cache raw-key absence | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
 | Public website deployment | Public web | Deploy the production site and verify release-status, privacy, pricing, support, and download pages | Public website URL |
-| Refund policy finalized | Public web | Publish the final refund policy URL before checkout goes live | Refund policy URL |
+| Refund policy finalized | Public web | Publish the final refund policy URL and confirm it is linked before checkout goes live | Refund policy URL |
 | Live checkout link | Public web | Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture `codesign` Developer ID verification output | Release notes |
 | Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public `DropSquash.dmg` with captured `spctl`, notary, and stapler verification output | Release notes |

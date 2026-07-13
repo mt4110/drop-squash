@@ -194,6 +194,15 @@ fn reports_public_website_action_without_required_pages() {
 }
 
 #[test]
+fn reports_refund_policy_action_without_linked_policy() {
+    let text = "| Refund policy finalized | Public web | Publish the final refund policy URL before checkout goes live | Refund policy URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_live_checkout_action_without_product_context() {
     let text = "| Live checkout link | Public web | Verify the pricing page opens checkout | Live checkout URL |\n";
 
@@ -296,7 +305,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Deploy the production site and verify release-status, privacy, pricing, support, and download pages"
         }
         "Refund policy finalized" => {
-            "Publish the final refund policy URL before checkout goes live"
+            "Publish the final refund policy URL and confirm it is linked before checkout goes live"
         }
         "Live checkout link" => {
             "Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product"
