@@ -154,6 +154,9 @@ jobs:
       - name: Plan macOS notarization command
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
+      - name: Notarize macOS DMG
+        if: matrix.os == 'macos-latest'
+        run: xcrun notarytool submit "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --wait --key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY" --issuer "$APPLE_API_ISSUER"
       - name: Plan macOS stapler commands
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"

@@ -55,6 +55,8 @@ run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-s
 codesign --verify --deep --strict --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 codesign -dv --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
+name: Notarize macOS DMG
+xcrun notarytool submit "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --wait --key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY" --issuer "$APPLE_API_ISSUER"
 run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
@@ -120,6 +122,8 @@ fn reports_missing_release_workflow_gates() {
             "codesign --verify --deep --strict --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "codesign -dv --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-notary-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --api-key",
+            "Notarize macOS DMG",
+            "xcrun notarytool submit \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --wait --key \"$APPLE_API_KEY_PATH\" --key-id \"$APPLE_API_KEY\" --issuer \"$APPLE_API_ISSUER\"",
             "cargo run -p xtask -- macos-stapler-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",

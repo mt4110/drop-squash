@@ -26,6 +26,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "signing runner acceptance criteria",
     ),
     ("docs/productization.md", "CI codesign execution runner"),
+    ("docs/productization.md", "CI notarization execution runner"),
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG copy isolation"),
     ("docs/productization.md", "signed DMG artifact guard"),

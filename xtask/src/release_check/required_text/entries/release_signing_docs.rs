@@ -13,6 +13,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "Import macOS signing certificate"),
     ("docs/release.md", "Sign macOS DMG"),
     ("docs/release.md", "Verify macOS codesign"),
+    ("docs/release.md", "Notarize macOS DMG"),
     ("docs/release.md", "Cleanup macOS signing keychain"),
     (
         "docs/release.md",
@@ -82,6 +83,6 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "clearly named unsigned"),
     (
         "docs/release.md",
-        "remain blocked until their execution steps",
+        "public GitHub Release publication remain blocked",
     ),
 ];
