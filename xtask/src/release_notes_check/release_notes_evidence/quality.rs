@@ -14,6 +14,7 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
 fn lacks_special_evidence(label: &str, value: &str) -> bool {
     match label {
         "Queue evidence" => count_numbers(value) < 5,
+        "Valid sandbox activation" | "License network failure" => !has_hex_fingerprint(value),
         _ => false,
     }
 }
@@ -23,4 +24,15 @@ fn count_numbers(value: &str) -> usize {
         .split(|character: char| !character.is_ascii_digit())
         .filter(|part| !part.is_empty())
         .count()
+}
+
+fn has_hex_fingerprint(value: &str) -> bool {
+    value
+        .split(|character: char| !character.is_ascii_hexdigit())
+        .any(|part| {
+            part.len() == 64
+                && part.chars().all(|character| {
+                    character.is_ascii_hexdigit() && !character.is_ascii_uppercase()
+                })
+        })
 }
