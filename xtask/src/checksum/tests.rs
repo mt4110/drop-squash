@@ -98,6 +98,20 @@ fn noncanonical_dmg_names_are_rejected() {
 }
 
 #[test]
+fn nix_store_references_are_rejected() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("DropSquash.dmg");
+    std::fs::File::create(&path)
+        .unwrap()
+        .write_all(&dmg_bytes(b"/nix/store/abc"))
+        .unwrap();
+
+    let error = checksum_line(&path).unwrap_err();
+
+    assert!(error.contains("/nix/store"));
+}
+
+#[test]
 fn writes_checksum_output_once() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");

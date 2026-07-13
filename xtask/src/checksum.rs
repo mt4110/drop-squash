@@ -1,4 +1,3 @@
-use crate::dmg;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -51,7 +50,7 @@ fn require_checksum_output_name(path: &Path) -> Result<(), String> {
 }
 
 pub(crate) fn checksum_line(path: &Path) -> Result<String, String> {
-    let bytes = dmg::read(path, "checksum")?;
+    let bytes = crate::artifact_check::read_checked(path, "checksum")?;
     Ok(format!("{}  {}", sha256_hex(&bytes), artifact_name(path)?))
 }
 

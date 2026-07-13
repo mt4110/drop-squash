@@ -5,6 +5,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "wrong DMG names"),
     (
         "docs/qa-evidence.md",
+        "`/nix/store` references are rejected",
+    ),
+    (
+        "docs/qa-evidence.md",
         "asset URLs with query or fragment parts",
     ),
     ("docs/qa-evidence.md", "non-canonical homepages"),
