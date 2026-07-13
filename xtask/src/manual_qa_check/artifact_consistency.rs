@@ -1,6 +1,6 @@
-use crate::dmg;
-use sha2::{Digest, Sha256};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
+
+mod checksum;
 
 const ARTIFACT_CHECK: &str = "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`";
 const CHECKSUM: &str =
@@ -91,24 +91,13 @@ fn require_checksum_digest(rows: &[(String, String)], missing: &mut Vec<String>)
     let Some(result) = value_for(rows, CHECKSUM) else {
         return;
     };
-    let Ok(expected) = artifact_digest(&path) else {
+    let Ok(expected) = checksum::artifact_digest(&path) else {
         return;
     };
     if result.to_ascii_lowercase().contains(&expected) {
         return;
     }
     missing.push("manual QA checksum must match App artifact digest".to_string());
-}
-
-fn artifact_digest(path: &Path) -> Result<String, String> {
-    let bytes = dmg::read(path, "manual QA checksum artifact")?;
-    let mut hasher = Sha256::new();
-    hasher.update(bytes);
-    Ok(hasher
-        .finalize()
-        .iter()
-        .map(|byte| format!("{byte:02x}"))
-        .collect())
 }
 
 fn value_for<'a>(rows: &'a [(String, String)], label: &str) -> Option<&'a str> {
