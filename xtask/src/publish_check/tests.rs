@@ -442,6 +442,22 @@ fn publish_requires_release_notes_pricing_url() {
 }
 
 #[test]
+fn publish_requires_release_notes_refund_policy_url() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(
+        &path,
+        "- Public website URL: https://dropsquash.app/release-status\n- Pricing URL: https://dropsquash.app/pricing\n",
+    )
+    .unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("Refund policy URL"));
+}
+
+#[test]
 fn publish_rejects_prepared_homebrew_release_note_draft() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("release-notes.md");
