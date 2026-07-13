@@ -26,6 +26,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "SHA256SUMS line"),
     ("docs/qa-evidence.md", "SHA256SUMS output command"),
+    ("docs/qa-evidence.md", "GitHub Release command plan"),
     ("docs/qa-evidence.md", "`--output` must be named `SHA256SUMS`"),
     ("docs/qa-evidence.md", "pending checksum upload placeholder"),
     (

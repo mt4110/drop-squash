@@ -178,6 +178,10 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("with lowercase SHA-256"));
     assert!(text.contains("SHA256SUMS output command:"));
     assert!(text.contains("checksum /tmp/DropSquash.dmg --output SHA256SUMS"));
+    assert!(text.contains("GitHub Release command plan:"));
+    assert!(text.contains(
+        "github-release-plan v0.1.0 /tmp/DropSquash.dmg SHA256SUMS /tmp/dropsquash-release-notes.md"
+    ));
     assert!(text.contains("pending upload"));
     assert!(!text.contains("GitHub Release checksum after upload"));
     assert!(text.contains("Homebrew cask command"));

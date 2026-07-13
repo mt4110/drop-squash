@@ -71,6 +71,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "checksum /tmp/dropsquash-signed/DropSquash.dmg --output /tmp/dropsquash-signed/SHA256SUMS",
     ),
     ("docs/release.md", "github-release-plan"),
+    (
+        "docs/release.md",
+        "prepared release notes file can be reviewed together",
+    ),
     ("docs/release.md", "gh release create"),
     ("docs/release.md", "It does not publish the release"),
     (

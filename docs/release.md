@@ -271,6 +271,9 @@ command refuses to overwrite an existing file.
 The prepared fields also include the matching `SHA256SUMS` output command for
 the checked DMG, so the checksum file can be regenerated without changing
 artifact paths by hand.
+They also include a `github-release-plan` command so the tag, signed DMG,
+`SHA256SUMS`, and prepared release notes file can be reviewed together before
+publication.
 The macOS verification command drafts also use the same checked DMG path, so
 codesign, `spctl`, and stapler evidence are recorded against the same artifact.
 The generated checksum line is a pre-upload aid and the generated

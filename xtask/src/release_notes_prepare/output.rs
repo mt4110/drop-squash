@@ -44,6 +44,12 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             fields.artifact_url, fields.sha256
         ),
         format!("- GitHub Release URL: {release_url}"),
+        "GitHub Release command plan:".into(),
+        format!(
+            "cargo run -p xtask -- github-release-plan v{} {} SHA256SUMS /tmp/dropsquash-release-notes.md",
+            fields.version,
+            shell_arg(fields.artifact_path)
+        ),
         "Homebrew cask command:".into(),
         format!(
             "cargo run -p xtask -- homebrew-cask {} {} {} https://github.com/mt4110/drop-squash",
