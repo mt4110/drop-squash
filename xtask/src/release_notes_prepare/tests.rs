@@ -274,6 +274,27 @@ fn shell_quotes_checksum_command_path() {
     assert!(text.contains("checksum '/tmp/drop squash/DropSquash.dmg' --output SHA256SUMS"));
 }
 
+#[test]
+fn shell_quotes_macos_verification_command_paths() {
+    let notes = PreparedNotes {
+        version: "0.1.0".into(),
+        artifact_path: "/tmp/drop squash/DropSquash.dmg".into(),
+        artifact_url:
+            "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".into(),
+        commit: "abc1234".into(),
+    };
+    let text = notes.lines().join("\n");
+
+    assert!(text.contains(
+        "codesign --verify --deep --strict --verbose=2 '/tmp/drop squash/DropSquash.dmg'"
+    ));
+    assert!(
+        text.contains("spctl --assess --type open --verbose=4 '/tmp/drop squash/DropSquash.dmg'")
+    );
+    assert!(text.contains("xcrun stapler validate '/tmp/drop squash/DropSquash.dmg'"));
+}
+
 fn write_dmg(prefix: &[u8]) -> (tempfile::TempDir, std::path::PathBuf) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("DropSquash.dmg");
