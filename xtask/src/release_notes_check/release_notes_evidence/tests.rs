@@ -1014,6 +1014,7 @@ fn rejects_release_urls_with_query_or_fragment() {
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg?download=1
 - Public website URL: https://dropsquash.app/release-status?source=release
+- Pricing URL: https://dropsquash.app/pricing?source=release
 - Refund policy URL: https://dropsquash.app/refund#terms
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123?utm=release
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0#assets
@@ -1025,6 +1026,7 @@ fn rejects_release_urls_with_query_or_fragment() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Public website URL")));
+    assert!(errors.iter().any(|error| error.contains("Pricing URL")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Refund policy URL")));
