@@ -25,6 +25,18 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release-notes-template.md",
+        "Before publish, fill every required URL field",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "Artifact URL, Public website URL, Pricing URL, Refund policy URL",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
+    ),
+    (
+        "docs/release-notes-template.md",
         "cancellation returning ready after temp cleanup",
     ),
     (

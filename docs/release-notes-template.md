@@ -59,6 +59,8 @@ license keys, private store IDs, or certificate material.
 
 Use concrete wording in each filled field so `release-notes-check` can reject
 weak public evidence before the release is published.
+Before publish, fill every required URL field: Artifact URL, Public website URL, Pricing URL, Refund policy URL,
+Live checkout URL, GitHub Release URL, and Homebrew tap PR URL.
 
 - Git commit: use the current lowercase 7-character or full 40-character commit hash.
 - `codesign`: include `codesign`, `Developer ID`, `public`, and the exact Artifact URL.
