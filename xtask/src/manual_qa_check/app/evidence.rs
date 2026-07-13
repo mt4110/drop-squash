@@ -40,6 +40,27 @@ fn batch_summary(label: &str, result: &str) -> bool {
         .filter(|part| !part.is_empty())
         .count()
         >= 5
+        && has_positive_blocked_lock_count(result)
+}
+
+fn has_positive_blocked_lock_count(result: &str) -> bool {
+    let lower = result.to_ascii_lowercase();
+    if !lower.contains("trial lock") && !lower.contains("license lock") {
+        return true;
+    }
+    blocked_count(&lower).is_some_and(|count| count > 0)
+}
+
+fn blocked_count(result: &str) -> Option<u64> {
+    let tokens = result
+        .split(|value: char| !value.is_ascii_alphanumeric())
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>();
+    tokens.windows(2).find_map(|parts| {
+        (parts[0] == "blocked")
+            .then(|| parts[1].parse::<u64>().ok())
+            .flatten()
+    })
 }
 
 fn multi_file_queue(label: &str, result: &str) -> bool {

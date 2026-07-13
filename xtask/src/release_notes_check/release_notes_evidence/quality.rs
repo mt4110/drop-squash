@@ -13,7 +13,7 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
 
 fn lacks_special_evidence(label: &str, value: &str) -> bool {
     match label {
-        "Queue evidence" => count_numbers(value) < 5,
+        "Queue evidence" => count_numbers(value) < 5 || lacks_blocked_lock_count(value),
         "Lemon Squeezy sandbox purchase" => !has_order_id(value),
         "Valid sandbox activation" | "License network failure" => {
             !has_hex_fingerprint(value)
@@ -33,6 +33,29 @@ fn count_numbers(value: &str) -> usize {
         .split(|character: char| !character.is_ascii_digit())
         .filter(|part| !part.is_empty())
         .count()
+}
+
+fn lacks_blocked_lock_count(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    if !lower.contains("trial lock") && !lower.contains("license lock") {
+        return false;
+    }
+    match blocked_count(&lower) {
+        Some(count) => count == 0,
+        None => true,
+    }
+}
+
+fn blocked_count(value: &str) -> Option<u64> {
+    let tokens = value
+        .split(|character: char| !character.is_ascii_alphanumeric())
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>();
+    tokens.windows(2).find_map(|parts| {
+        (parts[0] == "blocked")
+            .then(|| parts[1].parse::<u64>().ok())
+            .flatten()
+    })
 }
 
 fn has_order_id(value: &str) -> bool {

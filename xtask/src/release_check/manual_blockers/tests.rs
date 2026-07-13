@@ -741,6 +741,19 @@ fn reports_packaged_macos_manual_qa_without_queue_lock_context() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_zero_blocked_lock_count() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Batch summary",
+        "trial lock blocked pending jobs; summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_without_temp_cleanup_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -1113,7 +1126,7 @@ fn packaged_result(label: &str) -> String {
             "queued row marked cancelled and never started; trial count unchanged and history showed no new success".into()
         }
         "Batch summary" => {
-            "trial lock blocked pending jobs; summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0".into()
+            "trial lock blocked pending jobs; summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 1".into()
         }
         "Ask source policy" => "Ask prompt let tester choose Trash or Keep; original remained unchanged".into(),
         "Trash source policy" => {

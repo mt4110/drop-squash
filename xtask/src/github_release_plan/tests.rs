@@ -193,7 +193,7 @@ fn release_notes(directory: &std::path::Path) -> String {
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md tested public https://github.com/mt4110/drop-squash/releases/download/v1.2.3/DropSquash.dmg and manual-qa-check passed
 - Conversion safety evidence: cancellation returned ready after temp cleanup; failed conversion and larger output not smaller failure preserved original with trial count unchanged; history showed no new success
-- Queue evidence: multi-file queue, queued row cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
+- Queue evidence: multi-file queue, queued row cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 1
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
 - Benchmark sample set: three short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline

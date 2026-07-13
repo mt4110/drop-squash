@@ -15,7 +15,7 @@ pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
 fn lacks_special_evidence(check: &str, result: &str) -> bool {
     match check {
         "Privacy receipt sidecar" => lacks_privacy_receipt_values(result),
-        "Batch summary" => count_numbers(result) < 5,
+        "Batch summary" => count_numbers(result) < 5 || lacks_blocked_lock_count(result),
         "Multi-file queue" => !contains_number(result, "3") || !contains_number(result, "1"),
         "Trash source policy" => lacks_verified_smaller_output(result),
         "Sandbox purchase" => !license::has_order_id(result),
@@ -43,6 +43,29 @@ fn count_numbers(result: &str) -> usize {
         .split(|value: char| !value.is_ascii_digit())
         .filter(|part| !part.is_empty())
         .count()
+}
+
+fn lacks_blocked_lock_count(result: &str) -> bool {
+    let lower = result.to_ascii_lowercase();
+    if !lower.contains("trial lock") && !lower.contains("license lock") {
+        return false;
+    }
+    match blocked_count(&lower) {
+        Some(count) => count == 0,
+        None => true,
+    }
+}
+
+fn blocked_count(result: &str) -> Option<u64> {
+    let tokens = result
+        .split(|value: char| !value.is_ascii_alphanumeric())
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>();
+    tokens.windows(2).find_map(|parts| {
+        (parts[0] == "blocked")
+            .then(|| parts[1].parse::<u64>().ok())
+            .flatten()
+    })
 }
 
 fn contains_number(result: &str, expected: &str) -> bool {
