@@ -6,14 +6,24 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "Duplicate output naming" => &[&["second output"], &["squashed-2"], &[".mp4"]],
         "Failed conversion" => &[
             &["friendly", "error"],
-            &["original"],
+            &[
+                "original remained",
+                "original remains",
+                "original unchanged",
+                "preserved original",
+            ],
             &["trial count unchanged", "trial unchanged"],
         ],
         "Larger output" => &[
             &["larger"],
             &["not smaller", "cannot be made smaller"],
             &["failure", "failed"],
-            &["original"],
+            &[
+                "original remained",
+                "original remains",
+                "original unchanged",
+                "preserved original",
+            ],
             &["trial count unchanged", "trial unchanged"],
         ],
         "Reveal output" => &[&["finder"], &[".squashed.mp4"], &["selected"]],

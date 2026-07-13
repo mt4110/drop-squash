@@ -64,14 +64,24 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         ]),
         "Failed conversion" => Some(&[
             &["friendly", "error"],
-            &["original"],
+            &[
+                "original remained",
+                "original remains",
+                "original unchanged",
+                "preserved original",
+            ],
             &["trial count unchanged", "trial unchanged"],
         ]),
         "Larger output" => Some(&[
             &["larger"],
             &["not smaller", "cannot be made smaller"],
             &["failure", "failed"],
-            &["original"],
+            &[
+                "original remained",
+                "original remains",
+                "original unchanged",
+                "preserved original",
+            ],
             &["trial count unchanged", "trial unchanged"],
         ]),
         "Reveal output" => Some(&[&["finder"], &[".squashed.mp4"], &["selected"]]),

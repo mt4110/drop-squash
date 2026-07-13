@@ -15,7 +15,12 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["failed conversion", "failure"],
             &["larger output"],
             &["not smaller", "cannot be made smaller"],
-            &["original"],
+            &[
+                "original remained",
+                "original remains",
+                "original unchanged",
+                "preserved original",
+            ],
             &["trial count unchanged", "trial unchanged"],
         ]),
         "Queue evidence" => Some(&[

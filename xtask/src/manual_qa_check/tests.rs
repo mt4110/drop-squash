@@ -1276,9 +1276,31 @@ fn reports_failed_conversion_without_friendly_error() {
 }
 
 #[test]
+fn reports_failed_conversion_without_original_remained_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Failed conversion | Unsupported input | Original remains | friendly error shown; original checked and trial count unchanged after failure |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Failed conversion")));
+}
+
+#[test]
 fn reports_larger_output_without_original_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Larger output | Input that cannot be made smaller | Treated as failure | failed and trial count unchanged |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Larger output")));
+}
+
+#[test]
+fn reports_larger_output_without_original_remained_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Larger output | Input that cannot be made smaller | Treated as failure | larger not smaller result failed; original checked and trial count unchanged |\n",
     );
     let missing = check_file(&path).unwrap();
 

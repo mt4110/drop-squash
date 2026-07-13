@@ -606,6 +606,19 @@ fn reports_packaged_macos_manual_qa_with_weak_failed_conversion() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_unclear_original_state() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Failed conversion",
+        "friendly error appeared; original checked and trial count unchanged after failure",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_duplicate_name() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(

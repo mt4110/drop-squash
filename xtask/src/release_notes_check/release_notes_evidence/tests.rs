@@ -131,6 +131,19 @@ fn rejects_weak_distribution_evidence() {
 }
 
 #[test]
+fn rejects_conversion_safety_without_original_remained_evidence() {
+    let errors = check_text(
+        r#"
+- Conversion safety evidence: cancellation, failed conversion, and larger output not smaller failure checked original with trial count unchanged
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Conversion safety evidence")));
+}
+
+#[test]
 fn rejects_queue_evidence_without_numeric_counts() {
     let errors = check_text(
         r#"
