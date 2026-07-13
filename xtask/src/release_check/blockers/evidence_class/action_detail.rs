@@ -70,6 +70,7 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
         ],
         "Live checkout link" => &[
             "public pricing page",
+            "live",
             "store.lemonsqueezy.com/checkout/buy/<id>",
             "tested Lemon Squeezy checkout",
             "intended product",

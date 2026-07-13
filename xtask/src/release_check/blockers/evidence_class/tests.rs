@@ -266,6 +266,15 @@ fn reports_live_checkout_action_without_product_context() {
 }
 
 #[test]
+fn reports_live_checkout_action_without_live_url_context() {
+    let text = "| Live checkout link | Public web | Verify the public pricing page opens the store.lemonsqueezy.com/checkout/buy/<id> URL for the tested Lemon Squeezy checkout for the intended product | Live checkout URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Live checkout link"));
+}
+
+#[test]
 fn reports_signing_classification_without_release_notes_owner() {
     let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output | `docs/manual-qa.md` |\n";
 
@@ -371,7 +380,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Publish the final refund policy URL on dropsquash.app and confirm it is linked before checkout goes live"
         }
         "Live checkout link" => {
-            "Verify the public pricing page opens the store.lemonsqueezy.com/checkout/buy/<id> URL for the tested Lemon Squeezy checkout for the intended product"
+            "Verify the public pricing page opens the live store.lemonsqueezy.com/checkout/buy/<id> URL for the tested Lemon Squeezy checkout for the intended product"
         }
         "Signed DMG" => {
             "Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output"
