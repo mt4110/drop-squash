@@ -56,6 +56,7 @@ cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output
 cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
+cargo run -p xtask -- macos-codesign-plan /tmp/dropsquash-signed/DropSquash.dmg "Developer ID Application: ..."
 cargo run -p xtask -- signed-dmg-check /tmp/dropsquash-signed/DropSquash.dmg target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-check
@@ -103,6 +104,7 @@ with `notarytool`, validate stapling, then run `signed-dmg-check`.
 The plan does not execute signing commands and must not print secret values.
 Use `signed-dmg-copy` only to create the isolated signing target before
 `codesign`; it refuses existing targets and still checks the unsigned input.
+Use `macos-codesign-plan` to generate the exact `codesign --force --options runtime --timestamp --sign` argv for the checked signing target and a Developer ID Application identity. It validates the target artifact and identity but does not execute `codesign` or import signing credentials.
 Before the signing implementation writes a public artifact, run
 `signed-dmg-prepare` against the checked unsigned `DropSquash.dmg` and a separate
 output directory. The command rejects non-canonical or `/nix/store`-tainted

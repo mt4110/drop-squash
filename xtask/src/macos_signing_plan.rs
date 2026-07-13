@@ -26,7 +26,10 @@ fn plan(request: &Request) -> Result<Vec<String>, String> {
             display(&request.unsigned),
             display(&request.output_dir)
         ),
-        format!("codesign Developer ID signature for {}", display(&target)),
+        format!(
+            "cargo run -p xtask -- macos-codesign-plan {} 'Developer ID Application: ...'",
+            display(&target)
+        ),
         format!("xcrun notarytool submit {}", display(&target)),
         format!("xcrun stapler validate {}", display(&target)),
         format!(

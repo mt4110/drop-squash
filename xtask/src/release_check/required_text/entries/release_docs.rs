@@ -49,6 +49,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "refuses existing targets and still checks the unsigned input",
     ),
+    ("docs/release.md", "macos-codesign-plan"),
+    (
+        "docs/release.md",
+        "does not execute `codesign` or import signing credentials",
+    ),
     ("docs/release.md", "signed-dmg-prepare"),
     (
         "docs/release.md",

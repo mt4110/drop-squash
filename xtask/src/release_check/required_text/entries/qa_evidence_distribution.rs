@@ -60,6 +60,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "CI App Store Connect key file preparation",
     ),
     ("docs/qa-evidence.md", "macOS signing command plan"),
+    ("docs/qa-evidence.md", "macOS codesign argv plan"),
     ("docs/qa-evidence.md", "signed DMG target preparation"),
     ("docs/qa-evidence.md", "signed DMG copy isolation"),
     ("docs/qa-evidence.md", "signed DMG artifact guard"),
