@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+mod artifact_files;
 mod external_policy;
 mod href_policy;
 mod html_files;
@@ -37,6 +38,7 @@ fn check_root(root: &Path) -> Result<Vec<String>, String> {
     let mut errors = Vec::new();
     required_pages::check(root, &mut errors);
     release_copy::check(root, &mut errors);
+    artifact_files::check(root, &mut errors)?;
     for path in html_files::collect(root)? {
         check_html(root, &path, &mut errors)?;
     }
