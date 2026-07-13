@@ -2,15 +2,19 @@ use super::require_notes_csv_matches_manual_qa;
 
 #[test]
 fn accepts_matching_benchmark_csv_paths() {
-    let notes = notes_with_csv("/tmp/dropsquash-bench/results.csv");
-    let (_directory, manual) = manual_qa_with_csv("/tmp/dropsquash-bench/results.csv");
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let notes = notes_with_csv(csv.to_str().unwrap());
+    let (_manual_directory, manual) = manual_qa_with_csv(csv.to_str().unwrap());
 
     assert!(require_notes_csv_matches_manual_qa(&notes, &manual).is_ok());
 }
 
 #[test]
 fn accepts_matching_benchmark_csv_paths_with_labels() {
-    let csv = "/tmp/dropsquash-bench/results.csv";
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let csv = csv.to_str().unwrap();
     let notes = format!(
         "- Benchmark sample set: short medium large smaller outputs on MacBook macOS csv={csv}\n"
     );
@@ -23,8 +27,11 @@ fn accepts_matching_benchmark_csv_paths_with_labels() {
 
 #[test]
 fn rejects_mismatched_benchmark_csv_paths() {
-    let notes = notes_with_csv("/tmp/dropsquash-bench/results.csv");
-    let (_directory, manual) = manual_qa_with_csv("/tmp/other-bench/results.csv");
+    let directory = tempfile::tempdir().unwrap();
+    let notes_csv = csv_file(directory.path(), "results.csv");
+    let manual_csv = csv_file(directory.path(), "other.csv");
+    let notes = notes_with_csv(notes_csv.to_str().unwrap());
+    let (_manual_directory, manual) = manual_qa_with_csv(manual_csv.to_str().unwrap());
 
     let error = require_notes_csv_matches_manual_qa(&notes, &manual).unwrap_err();
 
@@ -43,7 +50,9 @@ fn rejects_missing_release_notes_csv_path() {
 
 #[test]
 fn rejects_missing_manual_qa_csv_path() {
-    let notes = notes_with_csv("/tmp/dropsquash-bench/results.csv");
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let notes = notes_with_csv(csv.to_str().unwrap());
     let (_directory, manual) = write_manual_qa(
         "| Benchmark sample set | Passes | short medium large smaller on MacBook macOS |\n",
     );
@@ -51,6 +60,19 @@ fn rejects_missing_manual_qa_csv_path() {
     let error = require_notes_csv_matches_manual_qa(&notes, &manual).unwrap_err();
 
     assert!(error.contains("manual QA Benchmark sample set"));
+}
+
+#[test]
+fn rejects_missing_matching_csv_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = directory.path().join("missing.csv");
+    let csv = csv.to_str().unwrap();
+    let notes = notes_with_csv(csv);
+    let (_manual_directory, manual) = manual_qa_with_csv(csv);
+
+    let error = require_notes_csv_matches_manual_qa(&notes, &manual).unwrap_err();
+
+    assert!(error.contains("CSV path must exist before publish"));
 }
 
 #[test]
@@ -96,6 +118,12 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let path = directory.path().join("manual-qa.md");
     std::fs::write(&path, text).unwrap();
     (directory, path)
+}
+
+fn csv_file(directory: &std::path::Path, name: &str) -> std::path::PathBuf {
+    let path = directory.join(name);
+    std::fs::write(&path, "sample,duration_ms\nshort,100\n").unwrap();
+    path
 }
 
 fn normalized_repo_path(child: &str) -> std::path::PathBuf {
