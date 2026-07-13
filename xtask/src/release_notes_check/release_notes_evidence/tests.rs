@@ -40,7 +40,7 @@ fn accepts_concrete_production_urls() {
 - Empty key activation: Activate disabled for empty input and checked cache showed raw key absent with no fingerprint and no instance
 - Invalid license key handling: Activating state disabled submit; friendly error shown and inspected cache showed raw key absent with no fingerprint and no instance
 - License network failure: friendly network error shown, checked existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
-- Expired license refresh: attempted conversion with expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
+- Expired license refresh: attempted conversion with expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and checked cache confirmed raw key absent
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
 - Public website URL: HTTPS://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
@@ -681,6 +681,19 @@ fn rejects_expired_refresh_without_conversion_attempt() {
     let errors = check_text(
         r#"
 - Expired license refresh: expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Expired license refresh")));
+}
+
+#[test]
+fn rejects_expired_refresh_without_checked_cache() {
+    let errors = check_text(
+        r#"
+- Expired license refresh: attempted conversion with expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
 "#,
     );
 
