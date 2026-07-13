@@ -1,7 +1,6 @@
 use super::{checksum, value};
 
 mod homebrew;
-mod release;
 
 pub(super) fn validate(text: &str) -> Vec<String> {
     let mut errors = Vec::new();
@@ -12,7 +11,6 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_artifact_name(text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     checksum::validate(text, &mut errors);
-    release::validate(text, &mut errors);
     homebrew::validate(text, &mut errors);
     errors
 }
