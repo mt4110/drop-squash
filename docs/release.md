@@ -314,6 +314,18 @@ cargo run -p xtask -- homebrew-cask 0.1.0 \
   https://github.com/mt4110/drop-squash > packaging/homebrew/Casks/dropsquash.rb
 ```
 
+Check the generated cask against the public release notes before opening the
+Homebrew tap PR:
+
+```sh
+cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md
+```
+
+The check verifies the cask version, release artifact URL, and lowercase
+SHA-256 match the release notes `Version`, `Artifact URL`, and `SHA-256`
+fields, and confirms the cask still declares `auto_updates false` and the
+DropSquash app-state `zap` path.
+
 After notarization succeeds, publish the checksum with the GitHub Release and
 fill `docs/release-notes-template.md` with codesign, spctl, stapler, notary,
 checksum, Gatekeeper, and Homebrew evidence. The public release notes must name
