@@ -17,7 +17,9 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
         "Batch summary" => count_numbers(result) < 5,
         "Multi-file queue" => !contains_number(result, "3") || !contains_number(result, "1"),
         "Trash source policy" => lacks_verified_smaller_output(result),
-        "Valid sandbox activation" | "License network failure" => !has_hex_fingerprint(result),
+        "Valid sandbox activation" | "License network failure" => {
+            !has_hex_fingerprint(result) || !has_instance_id(result)
+        }
         _ => false,
     }
 }
@@ -54,4 +56,9 @@ fn has_hex_fingerprint(result: &str) -> bool {
                     .chars()
                     .all(|value| value.is_ascii_hexdigit() && !value.is_ascii_uppercase())
         })
+}
+
+fn has_instance_id(result: &str) -> bool {
+    let lower = result.to_ascii_lowercase();
+    lower.contains("instance id") || lower.contains("instance_id")
 }

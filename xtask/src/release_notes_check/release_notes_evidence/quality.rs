@@ -14,7 +14,9 @@ pub(super) fn lacks_required_evidence(label: &str, value: &str) -> bool {
 fn lacks_special_evidence(label: &str, value: &str) -> bool {
     match label {
         "Queue evidence" => count_numbers(value) < 5,
-        "Valid sandbox activation" | "License network failure" => !has_hex_fingerprint(value),
+        "Valid sandbox activation" | "License network failure" => {
+            !has_hex_fingerprint(value) || !has_instance_id(value)
+        }
         _ => false,
     }
 }
@@ -35,4 +37,9 @@ fn has_hex_fingerprint(value: &str) -> bool {
                     character.is_ascii_hexdigit() && !character.is_ascii_uppercase()
                 })
         })
+}
+
+fn has_instance_id(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    lower.contains("instance id") || lower.contains("instance_id")
 }
