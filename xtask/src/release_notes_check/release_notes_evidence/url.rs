@@ -9,7 +9,8 @@ pub(super) enum Kind {
 }
 
 pub(super) fn is_valid(kind: Kind, value: &str) -> bool {
-    crate::public_url::HttpsUrl::parse(value).is_some_and(|url| matches_kind(kind, &url))
+    crate::public_url::HttpsUrl::parse(value)
+        .is_some_and(|url| !url.has_query_or_fragment() && matches_kind(kind, &url))
 }
 
 fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {

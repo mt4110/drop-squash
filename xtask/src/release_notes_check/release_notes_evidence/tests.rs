@@ -653,6 +653,37 @@ fn rejects_release_urls_with_imposter_hosts() {
 }
 
 #[test]
+fn rejects_release_urls_with_query_or_fragment() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg?download=1
+- Public website URL: https://dropsquash.app/release-status?source=release
+- Refund policy URL: https://dropsquash.app/refund#terms
+- Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123?utm=release
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0#assets
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1?plain=1
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("Artifact URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Public website URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Refund policy URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Live checkout URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Homebrew tap PR URL")));
+}
+
+#[test]
 fn rejects_nested_artifact_download_url() {
     let errors = check_text(
         r#"
