@@ -57,7 +57,7 @@ These checks still require a packaged macOS app or external service state:
 | Ask source policy | The post-conversion prompt must offer Trash and Keep while the original remains unchanged |
 | Trash source policy | NSFileManager Trash behavior must move the original to Trash only after verified smaller output, with moving/disabled action state |
 | Failed conversion | Packaged-app failure state must show a friendly error while preserving the original and trial count |
-| Larger output | Packaged-app larger-output handling must show larger-output failure while preserving the original and trial count |
+| Larger output | Packaged-app larger-output handling must show not-smaller output failure while preserving the original and trial count |
 | Large-recording cancellation | User-visible timing, progress, cleanup, ready state, and no-success trial/history evidence need real media and packaged app behavior |
 | Benchmark sample results | Compression ratio, duration, speed ratio, and throughput depend on private local media and target Mac hardware |
 | Benchmark sample set | Release coverage needs private short, medium, and large local recordings with smaller outputs, backend, saved percent, duration, speed ratio, and CSV evidence outside the repository |

@@ -1484,7 +1484,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Failed conversion | Passes | friendly error shown; original remained and trial count unchanged after failure |\n");
         } else if check == "Larger output" {
             text.push_str(
-                "| Larger output | Passes | larger result failed, original remained, and trial count unchanged |\n",
+                "| Larger output | Passes | larger not smaller result failed, original remained, and trial count unchanged |\n",
             );
         } else if check == "Reveal output" {
             text.push_str(

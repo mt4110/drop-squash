@@ -27,7 +27,7 @@ fn accepts_concrete_production_urls() {
 - Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh account without Gatekeeper warning
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md tested public DropSquash.dmg and manual-qa-check passed
-- Conversion safety evidence: cancellation, failed conversion, and larger output preserved original with trial count unchanged
+- Conversion safety evidence: cancellation, failed conversion, and larger output not smaller failure preserved original with trial count unchanged
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
 - Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv

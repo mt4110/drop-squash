@@ -842,7 +842,9 @@ fn packaged_result(label: &str) -> String {
         "Failed conversion" => {
             "friendly error appeared; original remained and trial count unchanged after failure".into()
         }
-        "Larger output" => "larger result failed; original remained and trial count unchanged".into(),
+        "Larger output" => {
+            "larger not smaller result failed; original remained and trial count unchanged".into()
+        }
         "Reveal output" => "Finder opened with clip.squashed.mp4 selected".into(),
         "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed".into(),
         _ => "concrete evidence".into(),

@@ -138,7 +138,7 @@ error plus the unchanged original and trial count.
 | Ask source policy | Successful conversion | User can choose Trash or Keep while original remains unchanged |  |
 | Trash source policy | Successful conversion | Trash button shows moving/disabled state; original moves to Trash only after verified smaller output |  |
 | Failed conversion | Unsupported or intentionally bad input | Friendly error appears; original remains; trial count unchanged |  |
-| Larger output | Input that cannot be made smaller | Larger result is treated as failure; original remains; trial count unchanged |  |
+| Larger output | Input that cannot be made smaller | Larger/not-smaller result is treated as failure; original remains; trial count unchanged |  |
 | Reveal output | Completed output link | Finder opens with generated `.squashed.mp4` selected |  |
 
 ## License Sandbox

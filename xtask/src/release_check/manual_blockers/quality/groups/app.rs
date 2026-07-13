@@ -69,6 +69,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         ]),
         "Larger output" => Some(&[
             &["larger"],
+            &["not smaller", "cannot be made smaller"],
             &["failure", "failed"],
             &["original"],
             &["trial count unchanged", "trial unchanged"],
