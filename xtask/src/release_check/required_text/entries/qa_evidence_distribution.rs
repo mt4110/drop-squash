@@ -65,6 +65,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "CI Gatekeeper assessment runner"),
     ("docs/qa-evidence.md", "CI signed DMG artifact check"),
     ("docs/qa-evidence.md", "CI signed checksum generation"),
+    (
+        "docs/qa-evidence.md",
+        "private CI signed DMG artifact upload",
+    ),
+    ("docs/qa-evidence.md", "private CI signed checksum upload"),
     ("docs/qa-evidence.md", "macOS signing command plan"),
     ("docs/qa-evidence.md", "macOS keychain argv plan"),
     ("docs/qa-evidence.md", "macOS keychain cleanup argv plan"),

@@ -68,6 +68,12 @@ name: Check signed DMG artifact
 run: cargo run -p xtask -- signed-dmg-check "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" target/release/bundle/dmg/DropSquash.dmg
 name: Write signed DMG checksum
 run: cargo run -p xtask -- checksum "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --output "$RUNNER_TEMP/dropsquash-signed/SHA256SUMS"
+name: Upload signed DMG artifact
+name: dropsquash-signed-dmg
+path: ${{ runner.temp }}/dropsquash-signed/DropSquash.dmg
+name: Upload signed DMG checksum
+name: dropsquash-signed-dmg-checksum
+path: ${{ runner.temp }}/dropsquash-signed/SHA256SUMS
 run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
 name: Cleanup macOS signing keychain
 always() && matrix.os == 'macos-latest'
@@ -144,6 +150,12 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- signed-dmg-check \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" target/release/bundle/dmg/DropSquash.dmg",
             "Write signed DMG checksum",
             "cargo run -p xtask -- checksum \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --output \"$RUNNER_TEMP/dropsquash-signed/SHA256SUMS\"",
+            "Upload signed DMG artifact",
+            "dropsquash-signed-dmg",
+            "${{ runner.temp }}/dropsquash-signed/DropSquash.dmg",
+            "Upload signed DMG checksum",
+            "dropsquash-signed-dmg-checksum",
+            "${{ runner.temp }}/dropsquash-signed/SHA256SUMS",
             "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",
             "Cleanup macOS signing keychain",
             "always() && matrix.os == 'macos-latest'",

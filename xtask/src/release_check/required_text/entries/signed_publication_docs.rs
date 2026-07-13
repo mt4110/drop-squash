@@ -31,6 +31,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "CI Gatekeeper assessment runner"),
     ("docs/productization.md", "CI signed DMG artifact check"),
     ("docs/productization.md", "CI signed checksum generation"),
+    (
+        "docs/productization.md",
+        "private CI signed DMG artifact upload",
+    ),
+    (
+        "docs/productization.md",
+        "private CI signed checksum upload",
+    ),
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG copy isolation"),
     ("docs/productization.md", "signed DMG artifact guard"),

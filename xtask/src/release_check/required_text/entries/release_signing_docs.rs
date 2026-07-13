@@ -18,7 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "Assess macOS Gatekeeper"),
     ("docs/release.md", "Check signed DMG artifact"),
     ("docs/release.md", "Write signed DMG checksum"),
+    ("docs/release.md", "Upload signed DMG artifact"),
+    ("docs/release.md", "Upload signed DMG checksum"),
     ("docs/release.md", "Cleanup macOS signing keychain"),
+    ("docs/release.md", "private CI artifacts for review"),
     (
         "docs/release.md",
         "temporary keychain selection, certificate decode/import",
@@ -87,6 +90,6 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "clearly named unsigned"),
     (
         "docs/release.md",
-        "public GitHub Release publication remain blocked",
+        "public GitHub Release publication remains",
     ),
 ];

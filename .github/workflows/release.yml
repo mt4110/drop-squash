@@ -177,6 +177,18 @@ jobs:
       - name: Write signed DMG checksum
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- checksum "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --output "$RUNNER_TEMP/dropsquash-signed/SHA256SUMS"
+      - name: Upload signed DMG artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dropsquash-signed-dmg
+          path: ${{ runner.temp }}/dropsquash-signed/DropSquash.dmg
+      - name: Upload signed DMG checksum
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dropsquash-signed-dmg-checksum
+          path: ${{ runner.temp }}/dropsquash-signed/SHA256SUMS
       - name: Plan macOS temporary keychain cleanup
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"

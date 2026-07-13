@@ -30,10 +30,12 @@ credentials are missing.
 It now runs `Import macOS signing certificate`, `Sign macOS DMG`,
 `Verify macOS codesign`, `Notarize macOS DMG`, `Staple macOS DMG`,
 `Assess macOS Gatekeeper`, `Check signed DMG artifact`,
-`Write signed DMG checksum`, and `Cleanup macOS signing keychain` against the
-isolated signing target with `APPLE_CODESIGN_IDENTITY`. Signed checksum upload
-and public GitHub Release publication remain blocked until their execution
-steps and evidence are complete.
+`Write signed DMG checksum`, `Upload signed DMG artifact`,
+`Upload signed DMG checksum`, and `Cleanup macOS signing keychain` against the
+isolated signing target with `APPLE_CODESIGN_IDENTITY`. The signed uploads are
+private CI artifacts for review; public GitHub Release publication remains
+blocked until release notes, manual QA evidence, and distribution evidence are
+complete.
 
 Build public QA and release artifacts from a clean git worktree. If Tauri or
 Git reports a dirty tree, either commit or intentionally remove the unrelated
