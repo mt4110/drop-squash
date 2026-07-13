@@ -28,6 +28,17 @@ fn reports_missing_execution_order_blocker() {
 }
 
 #[test]
+fn reports_missing_pricing_execution_order_blocker() {
+    let text = "\
+| 3 | Public web proof | Public website deployment, Refund policy finalized, Live checkout link | Production website URLs | Production website URLs |
+";
+
+    let unplanned = unplanned_blockers(text);
+
+    assert!(unplanned.contains(&"Pricing finalized"));
+}
+
+#[test]
 fn reports_blocker_in_wrong_execution_track() {
     let text = "\
 | 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Public DMG evidence | `docs/manual-qa.md` |
