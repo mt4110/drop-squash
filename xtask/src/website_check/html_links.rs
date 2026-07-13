@@ -7,7 +7,9 @@ pub(super) fn srcs(text: &str) -> Vec<String> {
 }
 
 pub(super) fn actions(text: &str) -> Vec<String> {
-    attr_values(text, "action")
+    let mut values = attr_values(text, "action");
+    values.extend(attr_values(text, "formaction"));
+    values
 }
 
 fn attr_values(text: &str, name: &str) -> Vec<String> {
