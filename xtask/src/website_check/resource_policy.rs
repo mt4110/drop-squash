@@ -6,9 +6,23 @@ pub(super) fn check(root: &Path, path: &Path, src: &str, errors: &mut Vec<String
         errors.push(format!("{} loads external resource: {src}", path.display()));
         return;
     }
+    if has_release_artifact(src) {
+        errors.push(format!(
+            "{} loads pre-release artifact resource: {src}",
+            path.display()
+        ));
+        return;
+    }
     if !src.is_empty() && !src.starts_with('#') && !local_resource_exists(root, path, src) {
         errors.push(format!("{} loads missing {src}", path.display()));
     }
+}
+
+fn has_release_artifact(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    [".dmg", ".zip", ".pkg", ".app"]
+        .iter()
+        .any(|extension| lower.contains(extension))
 }
 
 fn local_resource_exists(root: &Path, path: &Path, src: &str) -> bool {
