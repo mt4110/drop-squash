@@ -39,6 +39,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "private CI signed checksum upload",
     ),
+    ("docs/productization.md", "GitHub release command plan"),
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG copy isolation"),
     ("docs/productization.md", "signed DMG artifact guard"),

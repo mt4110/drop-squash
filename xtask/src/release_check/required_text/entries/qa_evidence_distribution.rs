@@ -70,6 +70,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "private CI signed DMG artifact upload",
     ),
     ("docs/qa-evidence.md", "private CI signed checksum upload"),
+    ("docs/qa-evidence.md", "GitHub release command plan"),
     ("docs/qa-evidence.md", "macOS signing command plan"),
     ("docs/qa-evidence.md", "macOS keychain argv plan"),
     ("docs/qa-evidence.md", "macOS keychain cleanup argv plan"),

@@ -283,6 +283,16 @@ Prepared draft placeholders, including pending upload notes and Homebrew
 evidence drafts, are not public release evidence. Replace every prepared draft
 line with observed public evidence before running `publish-check`;
 `release-notes-check` and `publish-check` reject those draft placeholders.
+Before publishing, generate the reviewed GitHub Release command from the same
+tag, signed DMG, `SHA256SUMS`, and release notes file:
+
+```sh
+cargo run -p xtask -- github-release-plan v0.1.0 /tmp/dropsquash-signed/DropSquash.dmg /tmp/dropsquash-signed/SHA256SUMS /tmp/dropsquash-release-notes.md
+```
+
+The plan validates the signed `DropSquash.dmg`, requires a `SHA256SUMS` file
+containing the `DropSquash.dmg` checksum line, requires an existing `.md` notes
+file, and prints a `gh release create` command. It does not publish the release.
 
 Reject release artifacts that accidentally capture development-only Nix store
 references:
