@@ -56,6 +56,22 @@ pub(super) fn unknown_blockers(text: &str) -> Vec<&str> {
         .collect()
 }
 
+pub(super) fn duplicate_blockers(text: &str) -> Vec<&'static str> {
+    REQUIRED_BLOCKERS
+        .iter()
+        .copied()
+        .filter(|blocker| execution_count(text, blocker) > 1)
+        .collect()
+}
+
+fn execution_count(text: &str, blocker: &str) -> usize {
+    text.lines()
+        .filter_map(execution_row)
+        .flat_map(|(_, blockers)| split_blockers(blockers))
+        .filter(|value| *value == blocker)
+        .count()
+}
+
 fn row_contains_blocker(text: &str, track: &str, blocker: &str) -> bool {
     text.lines()
         .filter_map(execution_row)

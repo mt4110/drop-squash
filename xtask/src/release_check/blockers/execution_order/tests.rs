@@ -1,4 +1,4 @@
-use super::{unknown_blockers, unplanned_blockers};
+use super::{duplicate_blockers, unknown_blockers, unplanned_blockers};
 
 #[test]
 fn release_blockers_template_plans_required_rows() {
@@ -6,6 +6,7 @@ fn release_blockers_template_plans_required_rows() {
 
     assert!(unplanned_blockers(&text).is_empty());
     assert!(unknown_blockers(&text).is_empty());
+    assert!(duplicate_blockers(&text).is_empty());
 }
 
 #[test]
@@ -40,6 +41,18 @@ fn reports_unknown_execution_order_blocker() {
     let unknown = unknown_blockers(text);
 
     assert_eq!(unknown, vec!["Extra launch task"]);
+}
+
+#[test]
+fn reports_duplicate_execution_order_blocker() {
+    let text = "\
+| 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Public DMG evidence | `docs/manual-qa.md` |
+| 2 | License sandbox proof | Benchmark release set, Valid sandbox activation | License evidence | `docs/manual-qa.md` |
+";
+
+    let duplicates = duplicate_blockers(text);
+
+    assert_eq!(duplicates, vec!["Benchmark release set"]);
 }
 
 #[test]
