@@ -37,6 +37,17 @@ fn rejects_verified_blockers_with_wrong_reference_kind() {
 }
 
 #[test]
+fn rejects_manual_qa_reference_with_inline_note() {
+    let text = "\
+| Packaged macOS manual QA | Verified | Tested the public DropSquash.dmg artifact with manual-qa-check evidence recorded | `docs/manual-qa.md` row 1 | `docs/manual-qa.md` |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn rejects_live_checkout_reference_with_extra_path_after_buy_id() {
     let text = "| Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123/extra | `https://...` |\n";
 

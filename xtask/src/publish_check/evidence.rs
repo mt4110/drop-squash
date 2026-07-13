@@ -1,7 +1,7 @@
 use super::urls;
 
 pub(super) fn matches(blocker: &str, reference: &str) -> bool {
-    let reference = reference.trim().trim_matches('`');
+    let reference = reference.trim();
     if reference.is_empty() || has_placeholder_token(reference) {
         return false;
     }
@@ -12,7 +12,7 @@ pub(super) fn matches(blocker: &str, reference: &str) -> bool {
         "Public website deployment" => is_public_site(reference),
         "Refund policy finalized" => is_refund(reference),
         "Live checkout link" => is_checkout(reference),
-        _ => reference == "docs/manual-qa.md",
+        _ => reference == "`docs/manual-qa.md`",
     }
 }
 
