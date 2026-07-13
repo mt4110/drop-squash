@@ -70,6 +70,31 @@ fn mapped_release_note_fields_are_checked() {
     assert!(missing.is_empty());
 }
 
+#[test]
+fn signing_distribution_blockers_map_to_template_fields() {
+    let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+    let blockers_text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+    for blocker in [
+        "Signed DMG",
+        "Notarized and stapled DMG",
+        "Gatekeeper clean-machine open",
+        "Published checksum",
+        "Homebrew cask install",
+    ] {
+        assert!(blockers_text.contains(blocker), "{blocker}");
+        let (_, fields) = blockers::MAPPING
+            .iter()
+            .find(|(mapped, _)| *mapped == blocker)
+            .expect(blocker);
+        for field in *fields {
+            assert!(
+                template.contains(&format!("- {field}:")),
+                "{blocker}: {field}"
+            );
+        }
+    }
+}
+
 fn checked_field(field: &str) -> bool {
     URL.iter().any(|(label, _)| *label == field)
         || EVIDENCE.contains(&field)
