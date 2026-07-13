@@ -29,6 +29,11 @@ enabled.
 
 Run the local readiness gate before preparing any release artifact:
 
+Build public QA and release artifacts from a clean git worktree. If Tauri or
+Git reports a dirty tree, either commit or intentionally remove the unrelated
+local change, then rebuild the `.app` and `.dmg` before recording manual QA or
+release evidence.
+
 Use the Nix development shell for local release builds when the host Node or
 pnpm version differs from `apps/desktop/package.json`; for example:
 

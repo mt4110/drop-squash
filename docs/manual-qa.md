@@ -41,6 +41,10 @@ of deleting it:
 cargo run -p xtask -- manual-qa-prepare
 ```
 
+Use an app artifact built from a clean git worktree. If the build reported a
+dirty tree, rebuild after committing or intentionally removing the unrelated
+local change before recording packaged-app evidence.
+
 This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
 run. It fails if required environment fields cannot be detected or the selected

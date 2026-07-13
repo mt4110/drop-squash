@@ -40,6 +40,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "same-machine release candidate baseline",
     ),
     ("docs/release.md", "manual QA"),
+    ("docs/release.md", "clean git worktree"),
     ("docs/release.md", "release-notes-prepare"),
     ("docs/release.md", "`--output` target must be named `SHA256SUMS`"),
     (
@@ -105,6 +106,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/manual-qa.md", "manual QA Markdown fields"),
     ("docs/manual-qa.md", "manual QA Release Candidate rows"),
+    ("docs/manual-qa.md", "clean git worktree"),
     ("docs/manual-qa.md", "CSV path outside repo"),
     ("docs/manual-qa.md", "private store IDs"),
     (
