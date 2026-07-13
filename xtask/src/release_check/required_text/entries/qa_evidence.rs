@@ -94,7 +94,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "expired license refresh reconnect/block evidence",
+        "expired license refresh reconnect/pre-start block evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
+        "expired license refresh pre-start block evidence",
     ),
     ("docs/qa-evidence.md", "cache identity, offline grace"),
     (
