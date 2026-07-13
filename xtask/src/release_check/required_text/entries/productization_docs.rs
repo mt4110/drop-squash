@@ -63,6 +63,23 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
+        "prepared release notes/manual QA Markdown draft rejection",
+    ),
+    ("docs/productization.md", "stapled manual QA evidence"),
+    (
+        "docs/productization.md",
+        "publish Artifact URL completion evidence gate",
+    ),
+    (
+        "docs/productization.md",
+        "Homebrew install evidence tied to the Homebrew tap PR URL",
+    ),
+    (
+        "docs/productization.md",
+        "complete public web and distribution Execution Order exit evidence",
+    ),
+    (
+        "docs/productization.md",
         "release blocker classification/execution-order synchronization",
     ),
     (
@@ -77,5 +94,9 @@ pub(super) const ENTRIES: &[Entry] = &[
     (
         "docs/productization.md",
         "download/checkout link and form action guard",
+    ),
+    (
+        "docs/productization.md",
+        "Public web proof exit coverage for release-status, privacy, pricing, support, download, checkout, and refund",
     ),
 ];
