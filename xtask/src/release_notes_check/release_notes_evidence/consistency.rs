@@ -9,6 +9,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     checksum::validate(text, &mut errors);
     require_homebrew_artifact_url(text, &mut errors);
+    require_homebrew_pr_url(text, &mut errors);
     require_homebrew_sha256(text, &mut errors);
     require_homebrew_install_sha256(text, &mut errors);
     errors
@@ -74,6 +75,19 @@ fn require_homebrew_artifact_url(text: &str, errors: &mut Vec<String>) {
         return;
     }
     errors.push("Homebrew tap PR must include the Artifact URL".to_string());
+}
+
+fn require_homebrew_pr_url(text: &str, errors: &mut Vec<String>) {
+    let (Some(url), Some(evidence)) = (
+        value::field("Homebrew tap PR URL", text),
+        value::field("Homebrew tap PR", text),
+    ) else {
+        return;
+    };
+    if evidence.contains(url) {
+        return;
+    }
+    errors.push("Homebrew tap PR must include the Homebrew tap PR URL".to_string());
 }
 
 fn require_homebrew_sha256(text: &str, errors: &mut Vec<String>) {
