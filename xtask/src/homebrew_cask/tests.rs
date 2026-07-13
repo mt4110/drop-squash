@@ -78,6 +78,20 @@ fn rejects_example_dot_com_url() {
 }
 
 #[test]
+fn rejects_ellipsis_placeholder_url() {
+    let error = Input::parse(vec![
+        "0.1.0".to_string(),
+        "https://.../DropSquash.dmg".to_string(),
+        SHA256.to_string(),
+        "https://github.com/mt4110/drop-squash".to_string(),
+    ])
+    .err()
+    .unwrap();
+
+    assert!(error.contains("https://"));
+}
+
+#[test]
 fn rejects_non_dmg_url() {
     let error = Input::parse(vec![
         "0.1.0".to_string(),
