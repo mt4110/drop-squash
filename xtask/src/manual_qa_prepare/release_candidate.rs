@@ -28,7 +28,7 @@ pub(super) fn rows(path: &Path) -> Result<Vec<String>, String> {
             path.display()
         ),
         format!(
-            "| {CHECKSUM} | SHA-256 line recorded | SHA256SUMS created with SHA-256 {checksum} for {} |",
+            "| {CHECKSUM} | SHA-256 line recorded | SHA256SUMS created with lowercase SHA-256 {checksum} for {} |",
             path.display()
         ),
     ])
@@ -49,7 +49,7 @@ mod tests {
         assert_eq!(rows.len(), 2);
         assert!(rows[0].contains("artifact-check passed"));
         assert!(rows[0].contains(path.to_str().unwrap()));
-        assert!(rows[1].contains("SHA-256"));
+        assert!(rows[1].contains("lowercase SHA-256"));
         assert!(rows[1].contains("SHA256SUMS"));
         assert!(rows[1].contains("DropSquash.dmg"));
         print_rows(&path).unwrap();
