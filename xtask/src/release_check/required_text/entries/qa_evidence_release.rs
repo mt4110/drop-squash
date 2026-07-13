@@ -78,6 +78,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "host-boundary checked public publish references without query or fragment parts",
     ),
+    (
+        "docs/qa-evidence.md",
+        "missing existing benchmark CSV path outside repo",
+    ),
     ("docs/qa-evidence.md", "imposter GitHub release hosts"),
     (
         "docs/qa-evidence.md",

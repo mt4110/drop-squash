@@ -35,7 +35,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
         return None;
     }
     Some(
-        "Benchmark sample set must mention short, medium, large, smaller outputs, backend, saved percent, duration, speed ratio, CSV path outside repo, machine, and OS context"
+        "Benchmark sample set must mention short, medium, large, smaller outputs, backend, saved percent, duration, speed ratio, existing CSV path outside repo, machine, and OS context"
             .to_string(),
     )
 }
@@ -92,7 +92,7 @@ fn is_absolute_csv_outside_repo(value: &str) -> bool {
     let Ok(repo) = std::env::current_dir() else {
         return false;
     };
-    !normalize(path).starts_with(normalize(&repo))
+    path.is_file() && !normalize(path).starts_with(normalize(&repo))
 }
 
 fn normalize(path: &Path) -> PathBuf {

@@ -13,7 +13,9 @@ fn reports_missing_release_notes_path() {
 
 #[test]
 fn accepts_concrete_production_urls() {
-    let errors = check_text(
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let errors = check_text(&format!(
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 - Version: v0.1.0
@@ -30,7 +32,7 @@ fn accepts_concrete_production_urls() {
 - Conversion safety evidence: cancellation, failed conversion, and larger output not smaller failure preserved original with trial count unchanged
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
-- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled and private store IDs not recorded
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
@@ -51,7 +53,8 @@ fn accepts_concrete_production_urls() {
 - Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased
 - Support contact: support handled through GitHub Issues until paid support opens
 "#,
-    );
+        csv.display()
+    ));
 
     assert!(errors.is_empty());
 }
@@ -1302,6 +1305,23 @@ fn rejects_benchmark_sample_set_with_normalized_repo_local_csv_path() {
 }
 
 #[test]
+fn rejects_benchmark_sample_set_with_missing_csv_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = directory.path().join("missing.csv");
+    let errors = check_text(&format!(
+        "\
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
+",
+        csv.display()
+    ));
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("CSV path outside repo")));
+}
+
+#[test]
 fn rejects_benchmark_threshold_without_baseline_context() {
     let errors = check_text(
         r#"
@@ -1546,6 +1566,12 @@ fn rejects_noncanonical_artifact_name() {
     );
 
     assert!(errors.iter().any(|error| error.contains("Artifact")));
+}
+
+fn csv_file(directory: &std::path::Path, name: &str) -> std::path::PathBuf {
+    let path = directory.join(name);
+    std::fs::write(&path, "sample,duration_ms\nshort,100\n").unwrap();
+    path
 }
 
 fn normalized_repo_path(child: &str) -> std::path::PathBuf {
