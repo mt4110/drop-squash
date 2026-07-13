@@ -976,6 +976,18 @@ fn reports_network_failure_without_instance_id_evidence() {
 }
 
 #[test]
+fn reports_network_failure_without_cache_observation() {
+    let (_directory, path) = write_manual_qa(
+        "| License network failure | Friendly network error | friendly network error shown and existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("License network failure")));
+}
+
+#[test]
 fn reports_expired_refresh_without_reconnect_prompt() {
     let (_directory, path) = write_manual_qa(
         "| Expired license refresh | Reconnect prompt | expired offline grace cache blocked conversion and license.json cache has no raw key |\n",
@@ -991,6 +1003,18 @@ fn reports_expired_refresh_without_reconnect_prompt() {
 fn reports_expired_refresh_without_pre_start_block() {
     let (_directory, path) = write_manual_qa(
         "| Expired license refresh | Reconnect prompt | expired offline grace license.json cache showed reconnect prompt, blocked conversion, and had no raw key |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Expired license refresh")));
+}
+
+#[test]
+fn reports_expired_refresh_without_conversion_attempt() {
+    let (_directory, path) = write_manual_qa(
+        "| Expired license refresh | Reconnect prompt | expired offline grace license.json cache showed reconnect prompt, blocked conversion before starting, and had no raw key |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1549,9 +1573,9 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Valid sandbox activation" {
             text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent |\n");
         } else if check == "License network failure" {
-            text.push_str("| License network failure | Passes | friendly network error shown and existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n");
+            text.push_str("| License network failure | Passes | friendly network error shown and checked existing valid license.json cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with no raw key |\n");
         } else if check == "Expired license refresh" {
-            text.push_str("| Expired license refresh | Passes | expired offline grace license.json cache showed reconnect prompt, blocked conversion before starting, and had no raw key |\n");
+            text.push_str("| Expired license refresh | Passes | attempted conversion with expired offline grace license.json cache; reconnect prompt appeared, blocked conversion before starting, and had no raw key |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; license cache cleared and app returned to trial state |\n");
         } else if check == "Choose recording conversion" {

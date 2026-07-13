@@ -11,3 +11,13 @@ pub(super) fn raw_key_absent(value: &str) -> bool {
         || value.contains("no raw key")
         || value.contains("without raw key")
 }
+
+pub(super) fn observation_ok(label: &str, value: &str) -> bool {
+    match label {
+        "License network failure" => {
+            value.contains("checked") || value.contains("inspected") || value.contains("confirmed")
+        }
+        "Expired license refresh" => value.contains("attempted") || value.contains("attempt"),
+        _ => true,
+    }
+}

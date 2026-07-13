@@ -70,8 +70,8 @@ These checks still require a packaged macOS app or external service state:
 | Valid sandbox activation | Requires Lemon Squeezy sandbox product, keys, and server response outside the repository |
 | Empty key activation | Requires packaged-app disabled Activate state and local cache inspection showing no raw key, fingerprint, or instance after an empty key |
 | Invalid license key handling | Requires packaged-app disabled Activating state, friendly error, and inspected local cache showing no raw key, fingerprint, or instance after an invalid key |
-| License network failure | Requires packaged-app UI and local cache inspection after a failed activation request |
-| Expired license refresh | Requires packaged-app UI and local cache inspection for an expired offline grace cache before conversion starts |
+| License network failure | Requires packaged-app UI and checked local cache inspection after a failed activation request |
+| Expired license refresh | Requires packaged-app UI, attempted conversion, and local cache inspection for an expired offline grace cache before conversion starts |
 | Local license forget | Requires packaged-app forgetting/disabled action state and local cache inspection after forgetting the license |
 | Public website deployment | Requires the production website URL and public release pages |
 | Refund policy finalized | Requires the production refund policy URL before checkout goes live |

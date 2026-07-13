@@ -55,6 +55,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "checked local cache inspection",
+    ),
+    ("docs/qa-evidence.md", "attempted conversion"),
+    (
+        "docs/qa-evidence.md",
         "expired license refresh reconnect/pre-start block evidence",
     ),
     (

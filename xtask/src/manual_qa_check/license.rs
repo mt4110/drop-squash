@@ -57,6 +57,7 @@ fn require_license_cache_evidence(
         && needles.iter().all(|needle| lower.contains(needle))
         && cache::raw_key_absent(&lower)
         && cache::absence_inspection_ok(label, &lower)
+        && cache::observation_ok(label, &lower)
         && fingerprint_evidence_ok(label, result)
         && instance_id_evidence_ok(label, &lower)
     {
