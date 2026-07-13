@@ -129,10 +129,11 @@ They cover both cache safety and UI action state. Empty-key evidence must show
 Activate is disabled and that no raw key, fingerprint, or instance was written.
 Invalid-key evidence must show submit is disabled while Activating, the error is
 friendly, and no raw key, fingerprint, or instance was written. Valid activation
-evidence must name the Lemon Squeezy sandbox activation request and show submit
-is disabled while Activating, and local-forget evidence must show the action is
-disabled while Forgetting. Expired license refresh evidence must show the
-expired offline grace cache, reconnect prompt, conversion blocked before
+evidence must name the Lemon Squeezy sandbox activation request, show submit is
+disabled while Activating, and include checked local-cache fingerprint,
+`instance_id`, and raw-key absence evidence. Local-forget evidence must show the
+action is disabled while Forgetting. Expired license refresh evidence must show
+the expired offline grace cache, reconnect prompt, conversion blocked before
 starting, and raw-key absence in the local cache.
 Do not record sandbox keys or private store IDs in the manual QA table.
 
