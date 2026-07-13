@@ -67,6 +67,22 @@ mod tests {
     }
 
     #[test]
+    fn checked_release_note_urls_are_publish_checked() {
+        let missing = URL
+            .iter()
+            .map(|(label, _)| *label)
+            .filter(|label| *label != "Artifact URL")
+            .filter(|label| {
+                !crate::release_url_fields::PAIRS
+                    .iter()
+                    .any(|(_, field)| field == label)
+            })
+            .collect::<Vec<_>>();
+
+        assert!(missing.is_empty());
+    }
+
+    #[test]
     fn release_url_pairs_point_to_required_blockers() {
         let missing = crate::release_url_fields::PAIRS
             .iter()
