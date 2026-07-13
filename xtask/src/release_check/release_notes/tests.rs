@@ -9,6 +9,10 @@ Artifact: DropSquash.dmg
 Artifact URL
 SHA-256
 Git commit
+release-notes-prepare
+codesign --verify --deep --strict --verbose=2
+spctl --assess --type open --verbose=4
+xcrun stapler validate
 codesign
 spctl
 stapler
@@ -75,6 +79,8 @@ fn reports_missing_release_note_evidence_fields() {
     let missing = missing_text("");
 
     assert!(missing.contains(&"codesign"));
+    assert!(missing.contains(&"release-notes-prepare"));
+    assert!(missing.contains(&"xcrun stapler validate"));
     assert!(missing.contains(&"SHA-256"));
     assert!(missing.contains(&"Artifact URL"));
     assert!(missing.contains(&"tested exact Artifact URL"));

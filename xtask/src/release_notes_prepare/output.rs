@@ -1,3 +1,5 @@
+mod macos_verification;
+
 pub(super) struct Fields<'a> {
     pub(super) version: &'a str,
     pub(super) artifact_path: &'a str,
@@ -11,7 +13,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         "https://github.com/mt4110/drop-squash/releases/tag/v{}",
         fields.version
     );
-    vec![
+    let mut lines = vec![
         "release notes prepared fields:".into(),
         "## Artifact".into(),
         format!("- Version: v{}", fields.version),
@@ -19,22 +21,12 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         format!("- Artifact URL: {}", fields.artifact_url),
         format!("- SHA-256: {}", fields.sha256),
         format!("- Git commit: {}", fields.commit),
-        "## macOS Verification".into(),
-        "macOS verification commands:".into(),
-        format!(
-            "codesign --verify --deep --strict --verbose=2 {}",
-            shell_arg(fields.artifact_path)
-        ),
-        format!(
-            "spctl --assess --type open --verbose=4 {}",
-            shell_arg(fields.artifact_path)
-        ),
-        format!("xcrun stapler validate {}", shell_arg(fields.artifact_path)),
-        format!("- `codesign`: pending Developer ID verification for public {}; replace this line with observed `codesign` evidence that includes the exact Artifact URL", fields.artifact_url),
-        format!("- `spctl`: pending Gatekeeper assessment for public {}; replace this line with observed `spctl` accepted evidence that includes the exact Artifact URL", fields.artifact_url),
-        format!("- `stapler`: pending stapled ticket validation for public {}; replace this line with observed `stapler` validate evidence that includes the exact Artifact URL", fields.artifact_url),
-        format!("- Apple notary log: pending notarytool accepted log for public {}; replace this line with observed notary evidence that includes the exact Artifact URL", fields.artifact_url),
-        format!("- Gatekeeper clean-machine open: pending clean-machine open test for public {}; replace this line with observed Gatekeeper evidence that includes signed, notarized, stapled, and no warning", fields.artifact_url),
+    ];
+    lines.extend(macos_verification::lines(
+        fields.artifact_path,
+        fields.artifact_url,
+    ));
+    lines.extend([
         "## Productization Evidence".into(),
         "- Public website URL: pending production deployment; replace with https://dropsquash.app/release-status".into(),
         "- Pricing URL: pending final pricing; replace with https://dropsquash.app/pricing after draft price copy is removed".into(),
@@ -68,7 +60,8 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             "- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` from the Homebrew tap PR URL above installs the versioned DropSquash.dmg artifact from the Artifact URL above {} with lowercase SHA-256 {} and `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, replace this line with observed install and uninstall evidence",
             fields.artifact_url, fields.sha256
         ),
-    ]
+    ]);
+    lines
 }
 
 fn shell_arg(value: &str) -> String {

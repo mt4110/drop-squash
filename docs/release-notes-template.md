@@ -61,6 +61,12 @@ Use concrete wording in each filled field so `release-notes-check` can reject
 weak public evidence before the release is published.
 Before publish, fill every required URL field: Artifact URL, Public website URL, Pricing URL, Refund policy URL,
 Live checkout URL, GitHub Release URL, and Homebrew tap PR URL.
+Use `release-notes-prepare` to generate the macOS verification command drafts
+for the same checked DMG:
+
+- `codesign --verify --deep --strict --verbose=2`
+- `spctl --assess --type open --verbose=4`
+- `xcrun stapler validate`
 
 - Git commit: use the current lowercase 7-character or full 40-character commit hash.
 - `codesign`: include `codesign`, `Developer ID`, `public`, and the exact Artifact URL.
