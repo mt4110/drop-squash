@@ -651,6 +651,32 @@ fn reports_packaged_macos_manual_qa_without_queue_lock_context() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_temp_cleanup_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Cancellation",
+        "app returned ready and trial count unchanged; history showed no new success",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_packaged_macos_manual_qa_without_waiting_row_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Queued job cancellation",
+        "cancellation marked cancelled and never started; trial count unchanged and history showed no new success",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_unverified_trash_output() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -967,7 +993,7 @@ fn packaged_result(label: &str) -> String {
         "Reveal privacy receipt" => "Finder opened with clip.privacy.json selected".into(),
         "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix".into(),
         "Cancellation" => {
-            "app returned ready and trial count unchanged; history showed no new success".into()
+            "app returned ready after temp cleanup; trial count unchanged; history showed no new success".into()
         }
         "Multi-file queue" => {
             "3 recordings queued with 1 active sequential conversion; completed job finished and unrelated failures did not block it".into()
