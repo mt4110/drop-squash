@@ -22,6 +22,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Valid sandbox activation",
         "64-character lowercase hex fingerprint",
     ),
+    ("Valid sandbox activation", "local cache was checked"),
     ("Valid sandbox activation", "`instance_id` fields"),
     ("Valid sandbox activation", "raw key is absent"),
     ("Valid sandbox activation", "local cache"),
