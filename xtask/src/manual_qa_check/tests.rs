@@ -880,6 +880,30 @@ fn reports_network_failure_without_existing_valid_cache() {
 }
 
 #[test]
+fn reports_empty_key_without_cache_inspection() {
+    let (_directory, path) = write_manual_qa(
+        "| Empty key activation | Empty key leaves Activate disabled | Activate disabled for empty input and license.json cache has no raw key, no fingerprint, and no instance |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Empty key activation")));
+}
+
+#[test]
+fn reports_invalid_key_without_cache_inspection() {
+    let (_directory, path) = write_manual_qa(
+        "| Invalid key activation | Friendly license error | Activating state disabled submit; friendly error shown and license.json cache has no raw key, no fingerprint, and no instance |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Invalid key activation")));
+}
+
+#[test]
 fn reports_valid_activation_without_fingerprint_instance_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Valid sandbox activation | Pro state | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and raw key absent from license.json cache |\n",
@@ -1519,9 +1543,9 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Sandbox purchase" {
             text.push_str("| Sandbox purchase | Passes | sandbox checkout completed for intended product by test buyer order abc123 |\n");
         } else if check == "Empty key activation" {
-            text.push_str("| Empty key activation | Passes | Activate disabled for empty input and license.json cache has no raw key, no fingerprint, and no instance |\n");
+            text.push_str("| Empty key activation | Passes | Activate disabled for empty input and checked license.json cache has no raw key, no fingerprint, and no instance |\n");
         } else if check == "Invalid key activation" {
-            text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and license.json cache has no raw key, no fingerprint, and no instance |\n");
+            text.push_str("| Invalid key activation | Passes | Activating state disabled submit; friendly error shown and inspected license.json cache has no raw key, no fingerprint, and no instance |\n");
         } else if check == "Valid sandbox activation" {
             text.push_str("| Valid sandbox activation | Passes | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent |\n");
         } else if check == "License network failure" {

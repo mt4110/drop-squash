@@ -55,6 +55,7 @@ fn require_license_cache_evidence(
     if mentions_cache
         && needles.iter().all(|needle| lower.contains(needle))
         && raw_key_absent(&lower)
+        && absence_inspection_ok(label, &lower)
         && fingerprint_evidence_ok(label, result)
         && instance_id_evidence_ok(label, &lower)
     {
@@ -63,6 +64,13 @@ fn require_license_cache_evidence(
     missing.push(format!(
         "manual QA {label} needs license cache and raw-key evidence"
     ));
+}
+
+fn absence_inspection_ok(label: &str, value: &str) -> bool {
+    if !matches!(label, "Empty key activation" | "Invalid key activation") {
+        return true;
+    }
+    value.contains("checked") || value.contains("inspected")
 }
 
 fn raw_key_absent(value: &str) -> bool {
