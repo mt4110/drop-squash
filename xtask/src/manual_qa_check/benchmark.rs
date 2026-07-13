@@ -1,3 +1,5 @@
+use std::path::{Path, PathBuf};
+
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
         "Benchmark sample set" => require_sample_set(result, missing),
@@ -16,7 +18,7 @@ fn require_sample_set(result: &str, missing: &mut Vec<String>) {
         && lower.contains("saved")
         && lower.contains("duration")
         && lower.contains("speed ratio")
-        && has_csv_path_context(&lower)
+        && has_csv_path_outside_repo(result)
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
@@ -51,8 +53,46 @@ fn has_os_context(value: &str) -> bool {
     value.contains("macos") || value.contains("os ")
 }
 
-fn has_csv_path_context(value: &str) -> bool {
-    (value.contains("outside repo") || value.contains("outside repository"))
-        && value.contains(".csv")
-        && value.contains('/')
+fn has_csv_path_outside_repo(value: &str) -> bool {
+    value
+        .split_whitespace()
+        .map(csv_token)
+        .filter_map(|token| {
+            let path = PathBuf::from(token);
+            (path.is_absolute() && path.extension().and_then(|value| value.to_str()) == Some("csv"))
+                .then_some(path)
+        })
+        .any(|path| outside_repo(&path))
+}
+
+fn csv_token(token: &str) -> &str {
+    let token = token
+        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
+    token
+        .strip_prefix("csv=")
+        .or_else(|| token.strip_prefix("CSV="))
+        .or_else(|| token.strip_prefix("csv:"))
+        .or_else(|| token.strip_prefix("CSV:"))
+        .unwrap_or(token)
+}
+
+fn outside_repo(path: &Path) -> bool {
+    let Ok(repo) = std::env::current_dir() else {
+        return false;
+    };
+    !normalize(path).starts_with(normalize(&repo))
+}
+
+fn normalize(path: &Path) -> PathBuf {
+    let mut normalized = PathBuf::new();
+    for component in path.components() {
+        match component {
+            std::path::Component::CurDir => {}
+            std::path::Component::ParentDir => {
+                normalized.pop();
+            }
+            other => normalized.push(other.as_os_str()),
+        }
+    }
+    normalized
 }

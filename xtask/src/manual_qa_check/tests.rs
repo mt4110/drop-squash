@@ -708,6 +708,47 @@ fn reports_benchmark_sample_set_without_csv_path() {
 }
 
 #[test]
+fn reports_benchmark_sample_set_with_relative_csv_path() {
+    let (_directory, path) = write_manual_qa(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at results.csv |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("CSV path outside repo")));
+}
+
+#[test]
+fn reports_benchmark_sample_set_with_repo_local_csv_path() {
+    let repo_csv = std::env::current_dir()
+        .unwrap()
+        .join("target")
+        .join("dropsquash-bench.csv");
+    let (_directory, path) = write_manual_qa(&format!(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at {} |\n",
+        repo_csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("CSV path outside repo")));
+}
+
+#[test]
+fn accepts_benchmark_sample_set_with_labeled_csv_path() {
+    let (_directory, path) = write_manual_qa(
+        "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv=/tmp/dropsquash-bench/results.csv |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(!missing
+        .iter()
+        .any(|error| error.contains("Benchmark sample set")));
+}
+
+#[test]
 fn reports_benchmark_sample_set_without_backend() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | short medium large samples produced smaller outputs on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |\n",
