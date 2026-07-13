@@ -84,5 +84,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "Lemon Squeezy sandbox activation with 64-character lowercase hex fingerprint and `instance_id`",
     ),
+    ("docs/qa-evidence.md", "disabled submit state"),
+    ("docs/qa-evidence.md", "raw-key absence evidence"),
     ("docs/qa-evidence.md", "unchanged trial counts"),
 ];
