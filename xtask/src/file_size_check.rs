@@ -4,7 +4,11 @@ const RUST_PRODUCTION_LIMIT: usize = 128;
 const TYPESCRIPT_LIMIT: usize = 512;
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
-    let root = PathBuf::from(args.first().map(String::as_str).unwrap_or("."));
+    let root = match args.as_slice() {
+        [] => PathBuf::from("."),
+        [root] => PathBuf::from(root),
+        _ => return Err("file-size-check accepts at most one <root>".to_string()),
+    };
     let violations = check_root(&root)?;
     if violations.is_empty() {
         println!("file size checks passed");

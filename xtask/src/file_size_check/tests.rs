@@ -3,6 +3,13 @@ use std::io::Write;
 use super::check_root;
 
 #[test]
+fn rejects_extra_file_size_roots() {
+    let error = super::run(vec![".".into(), "extra".into()]).unwrap_err();
+
+    assert!(error.contains("at most one"));
+}
+
+#[test]
 fn accepts_files_within_limits() {
     let directory = tempfile::tempdir().unwrap();
     write_lines(&directory.path().join("src/lib.rs"), 128);
