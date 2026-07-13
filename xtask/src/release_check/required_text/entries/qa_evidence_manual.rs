@@ -18,6 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "absolute CSV evidence outside the repository",
+    ),
+    (
+        "docs/qa-evidence.md",
         "intended product license setup evidence",
     ),
     (

@@ -60,7 +60,7 @@ These checks still require a packaged macOS app or external service state:
 | Larger output | Packaged-app larger-output handling must show not-smaller output failure while preserving the original and trial count |
 | Large-recording cancellation | User-visible timing, progress, cleanup, ready state, and no-success trial/history evidence need real media and packaged app behavior |
 | Benchmark sample results | Compression ratio, duration, speed ratio, and throughput depend on private local media and target Mac hardware |
-| Benchmark sample set | Release coverage needs private short, medium, and large local recordings with smaller outputs, backend, saved percent, duration, speed ratio, and CSV evidence outside the repository |
+| Benchmark sample set | Release coverage needs private short, medium, and large local recordings with smaller outputs, backend, saved percent, duration, speed ratio, and absolute CSV evidence outside the repository |
 | Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
 | Multi-file queue | UI ergonomics and repeated drops need packaged observation of 3 queued recordings, 1 active job, sequential completion, and unrelated failure not blocking finished jobs |
 | Queued job cancellation | User-visible queue cancellation needs packaged observation that the waiting row is cancelled, never starts, and trial/history has no new success |
