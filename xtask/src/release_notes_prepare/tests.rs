@@ -145,6 +145,7 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("releases/tag/v0.1.0"));
     assert!(text.contains("- SHA256SUMS line:"));
     assert!(text.contains("- GitHub Release checksum:"));
+    assert!(text.contains("with lowercase SHA-256"));
     assert!(text.contains("SHA256SUMS output command:"));
     assert!(text.contains("checksum /tmp/DropSquash.dmg --output SHA256SUMS"));
     assert!(text.contains("pending upload"));

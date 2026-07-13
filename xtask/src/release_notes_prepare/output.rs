@@ -27,7 +27,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             shell_arg(fields.artifact_path)
         ),
         format!(
-            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS to {release_url} for {} with {}, replace this line with public release evidence",
+            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS to {release_url} for {} with lowercase SHA-256 {}, replace this line with public release evidence",
             fields.artifact_url, fields.sha256
         ),
         format!("- GitHub Release URL: {release_url}"),
