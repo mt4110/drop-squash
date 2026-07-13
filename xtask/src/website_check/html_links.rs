@@ -17,6 +17,10 @@ pub(super) fn actions(text: &str) -> Vec<String> {
     values
 }
 
+pub(super) fn ids(text: &str) -> Vec<String> {
+    attr_values(text, "id")
+}
+
 fn attr_values(text: &str, name: &str) -> Vec<String> {
     let mut values = Vec::new();
     let mut rest = text;

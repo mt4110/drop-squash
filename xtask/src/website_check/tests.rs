@@ -30,10 +30,57 @@ fn accepts_local_links_with_fragments() {
     write(
         directory.path(),
         "pricing.html",
-        required_page_text("pricing.html"),
+        r#"<section id="plans">Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy</section>"#,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
+fn accepts_same_page_fragments() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r##"Release status <a href="#top">Top</a><main id="top"></main>"##,
+    );
+
+    assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
+fn rejects_missing_local_fragments() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r##"Release status <a href="pricing.html#missing">Pricing</a>"##,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("missing fragment pricing.html#missing")));
+}
+
+#[test]
+fn rejects_missing_same_page_fragments() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r##"Release status <a href="#missing">Missing</a>"##,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("missing fragment #missing")));
 }
 
 #[test]
@@ -126,13 +173,13 @@ fn rejects_example_dot_com_placeholders() {
 }
 
 #[test]
-fn ignores_external_links_and_anchors() {
+fn accepts_external_links_and_valid_anchors() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
     write(
         directory.path(),
         "index.html",
-        r##"Release status <a href="#top">Top</a><a href="https://github.com/mt4110/drop-squash">External</a>"##,
+        r##"Release status <a href="#top">Top</a><main id="top"></main><a href="https://github.com/mt4110/drop-squash">External</a>"##,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());

@@ -60,12 +60,18 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
     for href in html_links::hrefs(&text) {
         href_policy::check(path, &href, errors);
         external_policy::check(path, &href, errors);
+        if href.starts_with('#') {
+            check_fragment(root, path, &href, errors)?;
+            continue;
+        }
         if href_policy::is_external_or_anchor(&href) {
             continue;
         }
         if !local_links::exists(root, path, &href) {
             errors.push(format!("{} links to missing {href}", path.display()));
+            continue;
         }
+        check_fragment(root, path, &href, errors)?;
     }
     for src in html_links::srcs(&text) {
         resource_policy::check(root, path, &src, errors);
@@ -77,6 +83,21 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         {
             errors.push(format!("{} links to missing {action}", path.display()));
         }
+    }
+    Ok(())
+}
+
+fn check_fragment(
+    root: &Path,
+    path: &Path,
+    href: &str,
+    errors: &mut Vec<String>,
+) -> Result<(), String> {
+    if !local_links::fragment_exists(root, path, href)? {
+        errors.push(format!(
+            "{} links to missing fragment {href}",
+            path.display()
+        ));
     }
     Ok(())
 }
