@@ -70,6 +70,22 @@ fn accepts_verified_rows_with_traceable_evidence_reference() {
 }
 
 #[test]
+fn reports_verified_rows_with_unclosed_docs_reference() {
+    let text = "| Packaged macOS manual QA | Verified | table filled | `docs/manual-qa.md | `docs/manual-qa.md` |\n";
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn reports_verified_rows_with_docs_reference_inline_note() {
+    let text = "| Packaged macOS manual QA | Verified | table filled | `docs/manual-qa.md` row 1 | `docs/manual-qa.md` |\n";
+    let unproven = row_status::unproven_verified_rows(text);
+
+    assert!(unproven.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_verified_rows_with_vague_evidence_reference() {
     let text = REQUIRED_BLOCKERS
         .iter()
