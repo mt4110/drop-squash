@@ -11,6 +11,9 @@ MVPs are implemented and verified.
 Unsigned payload creation is kept separate from signing and timestamping. CI must test each native backend on its own operating system and reject release artifacts containing `/nix/store` references.
 
 No signing secrets belong in the repository.
+Media conversion remains local-first: do not add `ffmpeg`, `ffprobe`, shell
+execution, or `PATH` lookup to the media path, do not upload media files to a
+cloud service, and do not enable telemetry by default.
 The public paid beta remains blocked until every item in
 `docs/release-blockers.md` has concrete evidence in the named location.
 

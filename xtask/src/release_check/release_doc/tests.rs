@@ -15,6 +15,9 @@ cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS
 unsigned DMG as a QA artifact
 No signing secrets belong in the repository
+`ffmpeg`, `ffprobe`, shell
+do not upload media files
+do not enable telemetry by default
 cargo run -p xtask -- media-policy-check
 cargo run -p xtask -- privacy-policy-check
 cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
