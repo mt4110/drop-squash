@@ -1,4 +1,4 @@
-use super::{clean_status, require_dmg_name, url, Input, PreparedNotes};
+use super::{git_state::clean_status, require_dmg_name, url, Input, PreparedNotes};
 use std::io::Write;
 
 #[test]

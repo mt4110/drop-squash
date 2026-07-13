@@ -2,8 +2,8 @@ use crate::artifact_check;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::path::Path;
-use std::process::Command;
 
+mod git_state;
 mod options;
 mod output;
 mod prepared_markdown;
@@ -39,7 +39,7 @@ impl PreparedNotes {
         let bytes = artifact_check::read_checked(&input.artifact, "release notes artifact")?;
         require_dmg_name(&input.artifact)?;
         crate::artifact_age::require_not_older_than_head(&input.artifact, "release notes")?;
-        require_clean_worktree()?;
+        git_state::require_clean_worktree()?;
         let version = read_version(Path::new(TAURI_CONFIG))?;
         url::validate(&input.artifact_url, &version)?;
         Ok(Self {
@@ -47,7 +47,7 @@ impl PreparedNotes {
             artifact_path: input.artifact.display().to_string(),
             artifact_url: input.artifact_url.clone(),
             sha256: sha256_hex(&bytes),
-            commit: git_commit()?,
+            commit: git_state::commit()?,
         })
     }
 
@@ -77,38 +77,6 @@ fn read_version(path: &Path) -> Result<String, String> {
         .and_then(Value::as_str)
         .map(str::to_string)
         .ok_or_else(|| format!("{} is missing version", path.display()))
-}
-
-fn git_commit() -> Result<String, String> {
-    let output = Command::new("git")
-        .args(["rev-parse", "--short=7", "HEAD"])
-        .output()
-        .map_err(|error| error.to_string())?;
-    if !output.status.success() {
-        return Err("git rev-parse failed".into());
-    }
-    String::from_utf8(output.stdout)
-        .map_err(|error| error.to_string())
-        .map(|value| value.trim().to_string())
-}
-
-fn require_clean_worktree() -> Result<(), String> {
-    let output = Command::new("git")
-        .args(["status", "--porcelain"])
-        .output()
-        .map_err(|error| error.to_string())?;
-    if !output.status.success() {
-        return Err("git status failed".into());
-    }
-    let status = String::from_utf8(output.stdout).map_err(|error| error.to_string())?;
-    if clean_status(&status) {
-        return Ok(());
-    }
-    Err("release notes require a clean git worktree".into())
-}
-
-fn clean_status(status: &str) -> bool {
-    status.trim().is_empty()
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {
