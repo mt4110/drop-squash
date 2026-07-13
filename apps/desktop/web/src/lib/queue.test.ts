@@ -1,10 +1,12 @@
 import {
   LICENSE_LOCK_QUEUE_MESSAGE,
+  blockQueued,
   blockQueuedForLicenseLock,
   markSourceAction,
   queueSummary,
   type QueueEntry,
 } from "./queue.js";
+import { lockedMessage } from "./licenseLock.js";
 
 function assert(condition: boolean, message: string) {
   if (!condition) throw new Error(message);
@@ -40,6 +42,18 @@ function licenseLockSummaryCountsBlockedJobsAsFinished() {
   assert(summary.savedBytes === 80, "blocked jobs should not add saved bytes");
 }
 
+function refreshLockKeepsReconnectMessage() {
+  const error = lockedMessage("license-refresh-required");
+  const items = blockQueued([
+    entry(1, "running"),
+    entry(2, "queued"),
+  ], error);
+
+  assert(items[0]?.status === "running", "running job changed");
+  assert(items[1]?.status === "blocked", "queued job not blocked");
+  assert(items[1]?.error === error, "refresh lock message was not preserved");
+}
+
 function sourceActionUpdatesOnlyMatchingOutput() {
   const items = markSourceAction([
     entry(1, "succeeded", { outputPath: "/tmp/a.mp4", sourceAction: "ask-user" }),
@@ -68,4 +82,5 @@ function entry(
 
 licenseLockBlocksOnlyQueuedJobs();
 licenseLockSummaryCountsBlockedJobsAsFinished();
+refreshLockKeepsReconnectMessage();
 sourceActionUpdatesOnlyMatchingOutput();
