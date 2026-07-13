@@ -12,6 +12,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/productization.md", "macOS signing command plan"),
     ("docs/productization.md", "macOS keychain argv plan"),
+    ("docs/productization.md", "macOS keychain cleanup argv plan"),
     ("docs/productization.md", "macOS codesign argv plan"),
     (
         "docs/productization.md",

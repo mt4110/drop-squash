@@ -63,6 +63,7 @@ cargo run -p xtask -- macos-notary-plan /tmp/dropsquash-signed/DropSquash.dmg --
 cargo run -p xtask -- macos-stapler-plan /tmp/dropsquash-signed/DropSquash.dmg
 cargo run -p xtask -- macos-spctl-plan /tmp/dropsquash-signed/DropSquash.dmg
 cargo run -p xtask -- signed-dmg-check /tmp/dropsquash-signed/DropSquash.dmg target/release/bundle/dmg/DropSquash.dmg
+cargo run -p xtask -- macos-keychain-cleanup-plan /tmp/dropsquash-signed/keychain
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-check
 ```
@@ -106,11 +107,13 @@ Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the
 Developer ID `codesign` signature, verify the signed target, submit with
-`notarytool`, validate stapling, assess Gatekeeper, then run `signed-dmg-check`.
+`notarytool`, validate stapling, assess Gatekeeper, run `signed-dmg-check`, then
+plan temporary signing keychain cleanup.
 The plan does not execute signing commands and must not print secret values.
 Use `signed-dmg-copy` only to create the isolated signing target before
 `codesign`; it refuses existing targets and still checks the unsigned input.
 Use `macos-codesign-plan` to generate the exact `codesign --force --options runtime --timestamp --sign` argv for the checked signing target and a Developer ID Application identity. It validates the target artifact and identity but does not execute `codesign` or import signing credentials.
+Use `macos-keychain-cleanup-plan` to generate `security delete-keychain` and `rm -f` cleanup argv for the temporary signing keychain and decoded certificate. It validates the work directory and does not print signing secret values.
 Use `macos-codesign-verify-plan` to generate the `codesign --verify --deep --strict --verbose=4` and `codesign -dv --verbose=4` argv for the checked signing target. It validates the target artifact and does not execute codesign verification.
 Use `macos-notary-plan` to generate the `xcrun notarytool submit --wait` argv for either the App Store Connect API key path or the Apple ID credential path. It validates the target artifact and prints environment variable references only, not notarization secret values.
 Use `macos-stapler-plan` to generate the `xcrun stapler staple` and `xcrun stapler validate` argv for the checked signing target. It validates the target artifact and does not execute stapler.
@@ -162,7 +165,9 @@ values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
 keychain import; a local keychain identity name is not enough for a fresh
 runner. Use `macos-keychain-plan` to generate the `security create-keychain`,
 certificate decode/import, and key partition list argv without printing secret
-values. GitHub Actions should store the App Store Connect private key as
+values. Pair it with `macos-keychain-cleanup-plan` so the temporary keychain and
+decoded certificate cleanup argv are reviewed before signing execution is added.
+GitHub Actions should store the App Store Connect private key as
 `APPLE_API_KEY_P8`, write it to `$RUNNER_TEMP`, and export the generated
 `APPLE_API_KEY_PATH`; do not store `APPLE_API_KEY_PATH` as a repository secret.
 The certificate value must be base64-encoded certificate data, not a placeholder

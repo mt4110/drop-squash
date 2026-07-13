@@ -55,6 +55,10 @@ fn plan(request: &Request) -> Result<Vec<String>, String> {
             display(&target),
             display(&request.unsigned)
         ),
+        format!(
+            "cargo run -p xtask -- macos-keychain-cleanup-plan {}",
+            display(&request.output_dir.join("keychain"))
+        ),
     ])
 }
 

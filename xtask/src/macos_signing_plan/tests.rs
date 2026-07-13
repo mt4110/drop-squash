@@ -9,7 +9,7 @@ fn plans_signing_steps_in_safe_order() {
 
     let steps = plan(&request).unwrap();
 
-    assert_eq!(steps.len(), 9);
+    assert_eq!(steps.len(), 10);
     assert!(steps[0].contains("signed-dmg-prepare"));
     assert!(steps[1].contains("signed-dmg-copy"));
     assert!(steps[2].contains("macos-keychain-plan"));
@@ -19,6 +19,7 @@ fn plans_signing_steps_in_safe_order() {
     assert!(steps[6].contains("macos-stapler-plan"));
     assert!(steps[7].contains("macos-spctl-plan"));
     assert!(steps[8].contains("signed-dmg-check"));
+    assert!(steps[9].contains("macos-keychain-cleanup-plan"));
 }
 
 #[test]

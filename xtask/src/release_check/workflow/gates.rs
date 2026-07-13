@@ -53,6 +53,7 @@ pub(super) const RELEASE: &[&str] = &[
     "cargo run -p xtask -- macos-notary-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --api-key",
     "cargo run -p xtask -- macos-stapler-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
     "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
+    "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",
     "Block unsigned Phase 0 release",
     "Signed release packaging is not implemented.",
     "exit 1",

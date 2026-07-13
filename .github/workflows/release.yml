@@ -129,6 +129,9 @@ jobs:
       - name: Plan macOS Gatekeeper assessment
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+      - name: Plan macOS temporary keychain cleanup
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
       - name: Block unsigned Phase 0 release
         shell: bash
         run: |

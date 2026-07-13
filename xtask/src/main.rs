@@ -9,6 +9,7 @@ mod git_head_match;
 mod homebrew_cask;
 mod macos_codesign_plan;
 mod macos_codesign_verify_plan;
+mod macos_keychain_cleanup_plan;
 mod macos_keychain_plan;
 mod macos_notary_plan;
 mod macos_signing_check;
@@ -44,6 +45,7 @@ fn main() {
         Some("homebrew-cask") => homebrew_cask::run(args.collect()),
         Some("macos-codesign-verify-plan") => macos_codesign_verify_plan::run(args.collect()),
         Some("macos-codesign-plan") => macos_codesign_plan::run(args.collect()),
+        Some("macos-keychain-cleanup-plan") => macos_keychain_cleanup_plan::run(args.collect()),
         Some("macos-keychain-plan") => macos_keychain_plan::run(args.collect()),
         Some("macos-notary-plan") => macos_notary_plan::run(args.collect()),
         Some("macos-signing-plan") => macos_signing_plan::run(args.collect()),
@@ -74,7 +76,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }

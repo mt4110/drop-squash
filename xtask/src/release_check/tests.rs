@@ -51,6 +51,7 @@ run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-s
 run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
 run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
 name: Block unsigned Phase 0 release
 echo "Signed release packaging is not implemented."
 exit 1
@@ -107,6 +108,7 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- macos-notary-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --api-key",
             "cargo run -p xtask -- macos-stapler-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
+            "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",
             "Block unsigned Phase 0 release",
             "Signed release packaging is not implemented.",
             "exit 1"
