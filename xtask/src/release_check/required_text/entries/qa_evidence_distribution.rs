@@ -14,8 +14,16 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "non-canonical homepages"),
     ("docs/qa-evidence.md", "placeholder checksums"),
     ("docs/qa-evidence.md", "Public website deployment"),
+    (
+        "docs/qa-evidence.md",
+        "production `dropsquash.app` website URL",
+    ),
     ("docs/qa-evidence.md", "secret-like values"),
     ("docs/qa-evidence.md", "Live checkout link"),
+    (
+        "docs/qa-evidence.md",
+        "production `dropsquash.app` refund policy URL",
+    ),
     (
         "docs/qa-evidence.md",
         "store.lemonsqueezy.com/checkout/buy/<id>",

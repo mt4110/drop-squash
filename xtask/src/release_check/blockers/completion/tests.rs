@@ -116,6 +116,15 @@ fn reports_refund_policy_without_linked_policy() {
 }
 
 #[test]
+fn reports_refund_policy_without_production_domain() {
+    let text = "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_public_website_completion_without_required_pages() {
     let text = "| Public website deployment | Blocked | Production website serves public pages | TBD | `https://...` |\n";
 
@@ -127,6 +136,15 @@ fn reports_public_website_completion_without_required_pages() {
 #[test]
 fn reports_public_website_completion_without_production_url_context() {
     let text = "| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Public website deployment"));
+}
+
+#[test]
+fn reports_public_website_completion_without_production_domain() {
+    let text = "| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -531,8 +549,8 @@ fn described_blockers() -> String {
         "| License network failure | Blocked | Friendly network error appears, existing valid local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields remain intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Expired license refresh | Blocked | attempted conversion with expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
-        "| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
-        "| Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |\n",
+        "| Public website deployment | Blocked | Production website production URL on dropsquash.app serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
+        "| Refund policy finalized | Blocked | Production refund policy is final on dropsquash.app and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact matching the release notes Artifact URL | TBD | Release notes |\n",
         "| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact matching the release notes Artifact URL | TBD | Release notes |\n",

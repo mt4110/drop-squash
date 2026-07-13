@@ -55,13 +55,19 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
         ],
         "Public website deployment" => &[
             "production site",
+            "dropsquash.app",
             "release-status",
             "privacy",
             "pricing",
             "support",
             "download",
         ],
-        "Refund policy finalized" => &["final refund policy URL", "linked", "checkout goes live"],
+        "Refund policy finalized" => &[
+            "final refund policy URL",
+            "dropsquash.app",
+            "linked",
+            "checkout goes live",
+        ],
         "Live checkout link" => &[
             "public pricing page",
             "store.lemonsqueezy.com/checkout/buy/<id>",
