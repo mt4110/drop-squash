@@ -15,6 +15,7 @@ fn prints_gh_release_create_command() {
     assert!(text.contains("DropSquash.dmg"));
     assert!(text.contains("SHA256SUMS"));
     assert!(text.contains("--title v1.2.3"));
+    assert!(text.contains("--draft"));
     assert!(text.contains("--notes-file"));
 }
 

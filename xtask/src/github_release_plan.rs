@@ -24,6 +24,7 @@ fn command(request: &Request) -> Result<String, String> {
         &request.checksum.display().to_string(),
         "--title",
         &request.tag,
+        "--draft",
         "--notes-file",
         &request.notes.display().to_string(),
     ]))

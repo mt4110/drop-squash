@@ -295,7 +295,7 @@ cargo run -p xtask -- github-release-plan v0.1.0 /tmp/dropsquash-signed/DropSqua
 
 The plan validates the signed `DropSquash.dmg`, requires a `SHA256SUMS` file
 containing the `DropSquash.dmg` checksum line, requires an existing `.md` notes
-file, and prints a `gh release create` command. It does not publish the release.
+file, and prints a `gh release create --draft` command. It does not publish the release.
 
 Reject release artifacts that accidentally capture development-only Nix store
 references:
