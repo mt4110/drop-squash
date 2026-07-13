@@ -33,7 +33,7 @@ Use the exact forms `GitHub Release https://...` and
 | Refund policy finalized | Blocked | Production refund policy is final at `https://dropsquash.app/refund` and linked before checkout goes live | TBD | `https://...` |
 | Live checkout link | Blocked | Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact matching the release notes Artifact URL | TBD | Release notes |
-| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapled evidence for the public `DropSquash.dmg` artifact matching the release notes Artifact URL | TBD | Release notes |
+| Notarized and stapled DMG | Blocked | `spctl`, notary, and stapler evidence for the public `DropSquash.dmg` artifact matching the release notes Artifact URL | TBD | Release notes |
 | Gatekeeper clean-machine open | Blocked | Fresh macOS account or clean machine opens the signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL without Gatekeeper warning | TBD | `docs/manual-qa.md` |
 | Benchmark release set | Blocked | Release-set benchmark absolute CSV path outside repo is recorded and covers backend, saved percent, duration, speed ratio, short, medium, and large local samples, smaller outputs, machine/OS context, 20% regression threshold, and release candidate baseline | TBD | `docs/manual-qa.md` |
 | Published checksum | Blocked | SHA256SUMS with the lowercase SHA-256 line for public `DropSquash.dmg` matching the release notes Artifact URL is attached to the GitHub Release | TBD | GitHub Release |

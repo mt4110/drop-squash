@@ -8,7 +8,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Signed DMG", "Artifact URL"),
     ("Notarized and stapled DMG", "`spctl`"),
     ("Notarized and stapled DMG", "notary"),
-    ("Notarized and stapled DMG", "stapled"),
+    ("Notarized and stapled DMG", "stapler"),
     ("Notarized and stapled DMG", "public"),
     ("Notarized and stapled DMG", "DropSquash.dmg"),
     ("Notarized and stapled DMG", "Artifact URL"),
