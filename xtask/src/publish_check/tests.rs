@@ -366,6 +366,22 @@ fn publish_requires_final_release_notes() {
 }
 
 #[test]
+fn publish_rejects_prepared_homebrew_release_note_draft() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(
+        &path,
+        "- Homebrew tap PR: public cask PR for versioned DropSquash.dmg; replace this line with reviewed public PR evidence\n",
+    )
+    .unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("Homebrew tap PR"));
+}
+
+#[test]
 fn publish_rejects_prepared_release_note_draft_marker() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("release-notes.md");
