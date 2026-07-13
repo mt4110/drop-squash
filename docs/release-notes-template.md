@@ -62,7 +62,7 @@ weak public evidence before the release is published.
 - Git commit: use the current lowercase 7-character or full 40-character commit hash.
 - `codesign`: include `codesign`, `Developer ID`, `public`, and the exact Artifact URL.
 - `spctl`: include `spctl`, `accepted`, `public`, and the exact Artifact URL.
-- `stapler`: include `stapler` or `staple`, `stapled` or `validate`, `public`, and the exact Artifact URL.
+- `stapler`: include `stapler` or `staple`, `stapled` or `validate`, confirm stapled status, `public`, and the exact Artifact URL.
 - Apple notary log: include `notary` or `notarytool`, `accepted`, `public`, and the exact Artifact URL.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, `clean` or `fresh`, `public`, the exact Artifact URL, `signed`, `notarized`, `stapled`, and `without warning` or `no warning`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
@@ -83,8 +83,8 @@ weak public evidence before the release is published.
 - Public website URL: use the production `https://dropsquash.app/release-status` URL.
 - Refund policy URL: use the production `https://dropsquash.app/refund` URL after the policy is final.
 - Live checkout URL: use the `https://store.lemonsqueezy.com/checkout/buy/<id>` URL for the product.
-- GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, public `DropSquash.dmg`, that it is attached, the GitHub Release URL above, the Artifact URL above, and the exact lowercase SHA-256 digest above.
+- GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, public `DropSquash.dmg`, attached to the GitHub Release URL above, the Artifact URL above, and the exact lowercase SHA-256 digest above.
 - Homebrew tap PR: mention the cask, public PR, the Homebrew tap PR URL above, versioned `DropSquash.dmg`, the Artifact URL above, the exact lowercase SHA-256 digest above, `auto_updates false`, and `zap` cleanup path.
-- Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash`, `brew uninstall --cask mt4110/tap/dropsquash`, the versioned `DropSquash.dmg` artifact, the Artifact URL above, and the exact lowercase SHA-256 digest above.
+- Homebrew install result: mention `brew install --cask mt4110/tap/dropsquash`, `brew uninstall --cask mt4110/tap/dropsquash`, removes it cleanly, the versioned `DropSquash.dmg` artifact, the Artifact URL above, and the exact lowercase SHA-256 digest above.
 - Known limitations: mention the macOS MVP and unreleased Windows/Linux platform builds.
 - Support contact: mention support through GitHub Issues or a support email address.

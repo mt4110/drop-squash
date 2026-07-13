@@ -12,6 +12,7 @@ Git commit
 codesign
 spctl
 stapler
+confirm stapled status
 Apple notary log
 Gatekeeper
 docs/release-blockers.md
@@ -39,11 +40,14 @@ Refund policy URL
 Live checkout URL
 store.lemonsqueezy.com/checkout/buy
 GitHub Release checksum
+attached to the GitHub Release
 the Artifact URL above
 GitHub Release URL
 Homebrew tap PR
 Homebrew tap PR URL
 Homebrew install result
+brew uninstall --cask mt4110/tap/dropsquash
+removes it cleanly
 the versioned `DropSquash.dmg` artifact, the Artifact URL above
 Known limitations
 Support contact
@@ -76,7 +80,9 @@ fn reports_missing_release_note_evidence_fields() {
     assert!(missing.contains(&"Benchmark sample set"));
     assert!(missing.contains(&"Lemon Squeezy product setup"));
     assert!(missing.contains(&"GitHub Release URL"));
+    assert!(missing.contains(&"attached to the GitHub Release"));
     assert!(missing.contains(&"Refund policy URL"));
+    assert!(missing.contains(&"removes it cleanly"));
     assert!(missing.contains(&"Live checkout URL"));
     assert!(missing.contains(&"Support contact"));
 }
