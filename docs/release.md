@@ -62,6 +62,8 @@ embed only the updater public key in `tauri.conf.json`; never commit the updater
 provide it to CI only through GitHub Secrets, and treat private-key loss as a
 breaking update event because installed users cannot receive trusted updates
 from a replacement key.
+Do not commit `latest.json` or update manifest files while the updater is
+disabled.
 
 The `manual-qa-prepare` step preserves local DropSquash app state and creates a
 dedicated output folder before packaged-app QA evidence is recorded.

@@ -54,6 +54,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "updater enablement"),
     (
         "docs/qa-evidence.md",
+        "missing update manifests while updater is disabled",
+    ),
+    (
+        "docs/qa-evidence.md",
         "quoted and unquoted HTML links/resources/form actions",
     ),
     (

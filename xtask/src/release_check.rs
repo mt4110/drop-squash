@@ -11,6 +11,7 @@ mod release_notes;
 mod required_text;
 mod secret_files;
 mod tauri_config;
+mod updater_manifest;
 mod workflow;
 
 use std::path::Path;
@@ -38,6 +39,7 @@ pub fn run() -> Result<(), String> {
     productization::check(Path::new("docs/productization.md"))?;
     release_doc::check(Path::new("docs/release.md"))?;
     release_notes::check(Path::new("docs/release-notes-template.md"))?;
+    updater_manifest::reject_committed_manifests(Path::new("."))?;
     workflow::check_all()?;
     tauri_config::check(Path::new("apps/desktop/src-tauri/tauri.conf.json"))?;
     required_text::check()?;

@@ -58,6 +58,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "Tauri updater remains disabled"),
     ("docs/release.md", "updater public key"),
     ("docs/release.md", "never commit the updater private key"),
+    ("docs/release.md", "Do not commit `latest.json`"),
+    ("docs/release.md", "update manifest files"),
     ("docs/release.md", "password manager with a tested backup"),
     ("docs/release.md", "GitHub Secrets"),
     (
