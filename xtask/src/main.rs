@@ -11,6 +11,7 @@ mod macos_codesign_plan;
 mod macos_notary_plan;
 mod macos_signing_check;
 mod macos_signing_plan;
+mod macos_stapler_plan;
 mod manual_qa_check;
 mod manual_qa_prepare;
 mod media_policy_check;
@@ -44,6 +45,7 @@ fn main() {
         Some("macos-notary-plan") => macos_notary_plan::run(args.collect()),
         Some("macos-signing-plan") => macos_signing_plan::run(args.collect()),
         Some("macos-signing-check") => macos_signing_check::run(),
+        Some("macos-stapler-plan") => macos_stapler_plan::run(args.collect()),
         Some("media-policy-check") => media_policy_check::run(),
         Some("normalize-dmg") => normalize_dmg::run(args.collect()),
         Some("privacy-policy-check") => privacy_policy_check::run(),
@@ -66,7 +68,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|macos-codesign-plan|macos-notary-plan|manual-qa-check|manual-qa-prepare|macos-signing-check|macos-signing-plan|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|macos-codesign-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }

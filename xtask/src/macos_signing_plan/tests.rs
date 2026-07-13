@@ -14,7 +14,7 @@ fn plans_signing_steps_in_safe_order() {
     assert!(steps[1].contains("signed-dmg-copy"));
     assert!(steps[2].contains("macos-codesign-plan"));
     assert!(steps[3].contains("macos-notary-plan"));
-    assert!(steps[4].contains("stapler validate"));
+    assert!(steps[4].contains("macos-stapler-plan"));
     assert!(steps[5].contains("signed-dmg-check"));
 }
 

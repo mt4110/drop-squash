@@ -13,6 +13,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "macOS signing command plan"),
     ("docs/productization.md", "macOS codesign argv plan"),
     ("docs/productization.md", "macOS notarytool argv plan"),
+    ("docs/productization.md", "macOS stapler argv plan"),
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG copy isolation"),
     ("docs/productization.md", "signed DMG artifact guard"),

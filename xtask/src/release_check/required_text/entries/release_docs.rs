@@ -59,6 +59,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "prints environment variable references only, not notarization secret values",
     ),
+    ("docs/release.md", "macos-stapler-plan"),
+    (
+        "docs/release.md",
+        "It validates the target artifact and does not execute stapler",
+    ),
     ("docs/release.md", "signed-dmg-prepare"),
     (
         "docs/release.md",
