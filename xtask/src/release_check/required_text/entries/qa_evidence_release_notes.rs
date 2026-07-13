@@ -13,6 +13,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "Signing and distribution Execution Order to release notes template field synchronization",
+    ),
+    (
+        "docs/qa-evidence.md",
         "macOS verification draft to signed blocker label synchronization",
     ),
     ("docs/qa-evidence.md", "GitHub Release URL"),
