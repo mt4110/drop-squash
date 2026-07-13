@@ -838,12 +838,14 @@ fn packaged_result(label: &str) -> String {
         }
         "Reveal privacy receipt" => "Finder opened with clip.privacy.json selected".into(),
         "Duplicate output naming" => "second output used numbered clip.squashed-2.mp4 suffix".into(),
-        "Cancellation" => "app returned ready and trial history showed no new success".into(),
+        "Cancellation" => {
+            "app returned ready and trial count unchanged; history showed no new success".into()
+        }
         "Multi-file queue" => {
             "3 recordings queued with 1 active sequential conversion; completed job finished and unrelated failures did not block it".into()
         }
         "Queued job cancellation" => {
-            "queued row marked cancelled and never started; trial history showed no new success".into()
+            "queued row marked cancelled and never started; trial count unchanged and history showed no new success".into()
         }
         "Batch summary" => {
             "trial lock blocked pending jobs; summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0".into()

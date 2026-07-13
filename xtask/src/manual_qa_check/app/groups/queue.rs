@@ -2,7 +2,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
     let groups: &[&[&str]] = match label {
         "Cancellation" => &[
             &["ready"],
-            &["trial"],
+            &["trial count unchanged", "trial unchanged", "no trial count"],
             &["history"],
             &["no new success", "no success"],
         ],
@@ -17,7 +17,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "Queued job cancellation" => &[
             &["cancelled"],
             &["never starts", "never started"],
-            &["trial"],
+            &["trial count unchanged", "trial unchanged", "no trial count"],
             &["history"],
             &["no new success", "no success"],
         ],

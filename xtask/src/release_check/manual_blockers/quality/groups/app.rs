@@ -20,7 +20,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         "Duplicate output naming" => Some(&[&["second output"], &["squashed-2"], &[".mp4"]]),
         "Cancellation" => Some(&[
             &["ready"],
-            &["trial"],
+            &["trial count unchanged", "trial unchanged", "no trial count"],
             &["history"],
             &["no new success", "no success"],
         ]),
@@ -35,7 +35,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         "Queued job cancellation" => Some(&[
             &["cancelled"],
             &["never starts", "never started"],
-            &["trial"],
+            &["trial count unchanged", "trial unchanged", "no trial count"],
             &["history"],
             &["no new success", "no success"],
         ]),
