@@ -1,12 +1,14 @@
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use dropsquash_core::AppError;
+
 use crate::LicenseCache;
 
 impl LicenseCache {
     pub fn load_or_default(path: &Path) -> dropsquash_core::Result<Self> {
         match std::fs::read(path) {
-            Ok(bytes) => Ok(serde_json::from_slice(&bytes)?),
+            Ok(bytes) => load_cache_bytes(&bytes),
             Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(Self::default()),
             Err(error) => Err(error.into()),
         }
@@ -41,6 +43,28 @@ impl LicenseCache {
             Err(error) => Err(error.into()),
         }
     }
+}
+
+fn load_cache_bytes(bytes: &[u8]) -> dropsquash_core::Result<LicenseCache> {
+    reject_raw_key_fields(&serde_json::from_slice(bytes)?)?;
+    Ok(serde_json::from_slice(bytes)?)
+}
+
+fn reject_raw_key_fields(value: &serde_json::Value) -> dropsquash_core::Result<()> {
+    let Some(object) = value.as_object() else {
+        return Ok(());
+    };
+    if object.keys().any(|key| {
+        matches!(
+            key.as_str(),
+            "license_key" | "raw_key" | "raw_license_key" | "licenseKey"
+        )
+    }) {
+        return Err(AppError::License(
+            "license cache contains a raw license key field".to_string(),
+        ));
+    }
+    Ok(())
 }
 
 fn temporary_path_for(path: &Path) -> PathBuf {
