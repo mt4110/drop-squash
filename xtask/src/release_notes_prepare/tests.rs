@@ -146,6 +146,9 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("- SHA256SUMS line:"));
     assert!(text.contains("- GitHub Release checksum:"));
     assert!(text.contains("public https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"));
+    assert!(text.contains("the exact Artifact URL"));
+    assert!(text.contains("GitHub Release URL above"));
+    assert!(text.contains("Artifact URL above"));
     assert!(text.contains("with lowercase SHA-256"));
     assert!(text.contains("SHA256SUMS output command:"));
     assert!(text.contains("checksum /tmp/DropSquash.dmg --output SHA256SUMS"));
@@ -158,6 +161,7 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("versioned DropSquash.dmg"));
     assert!(text.contains("Homebrew tap PR URL above"));
     assert!(text.contains("reviewed public PR evidence"));
+    assert!(text.contains("uses the Artifact URL above"));
     assert!(text.contains(
         "with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
     ));
@@ -166,6 +170,7 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("zap cleanup path"));
     assert!(text.contains("Homebrew install result evidence draft"));
     assert!(text.contains("brew install --cask mt4110/tap/dropsquash"));
+    assert!(text.contains("from the Artifact URL above"));
     assert!(text.contains("replace this line with observed install evidence"));
     let checksum = text
         .find("GitHub Release checksum")
