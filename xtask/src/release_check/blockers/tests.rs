@@ -1,4 +1,4 @@
-use super::{row_status, secrets, REQUIRED_BLOCKERS};
+use super::{evidence_class, execution_order, row_status, secrets, REQUIRED_BLOCKERS};
 
 #[test]
 fn accepts_all_required_release_blockers() {
@@ -19,6 +19,19 @@ fn release_blockers_template_contains_required_rows() {
 
     assert!(row_status::missing_release_blockers(&text).is_empty());
     assert!(row_status::invalid_status_rows(&text).is_empty());
+}
+
+#[test]
+fn release_blockers_template_classification_and_execution_sets_match() {
+    let text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+    let classified = evidence_class::classified_blockers(&text)
+        .into_iter()
+        .collect::<std::collections::BTreeSet<_>>();
+    let planned = execution_order::planned_blockers(&text)
+        .into_iter()
+        .collect::<std::collections::BTreeSet<_>>();
+
+    assert_eq!(classified, planned);
 }
 
 #[test]

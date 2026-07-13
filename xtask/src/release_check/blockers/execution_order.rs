@@ -66,6 +66,14 @@ pub(super) fn duplicate_blockers(text: &str) -> Vec<&'static str> {
         .collect()
 }
 
+#[cfg(test)]
+pub(super) fn planned_blockers(text: &str) -> Vec<&str> {
+    rows::all(text)
+        .flat_map(|row| split_blockers(row.blockers))
+        .filter(|blocker| REQUIRED_BLOCKERS.contains(blocker))
+        .collect()
+}
+
 pub(super) fn misordered_tracks(text: &str) -> Vec<&'static str> {
     tracks::misordered_tracks(text)
 }
