@@ -12,6 +12,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "exact `GitHub Release https://...` and `Homebrew tap PR https://...`",
+    ),
+    (
+        "docs/qa-evidence.md",
         "complete manual QA evidence for a UDIF public `DropSquash.dmg`",
     ),
     ("docs/qa-evidence.md", "`App build` matching current `HEAD`"),

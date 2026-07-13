@@ -39,7 +39,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
-        "release-notes URL reference matching",
+        "exact distribution evidence references",
     ),
     ("docs/release.md", "tested public `DropSquash.dmg`"),
     ("docs/release.md", "outside the repository"),
