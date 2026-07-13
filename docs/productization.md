@@ -48,7 +48,7 @@ Nothing uploads.
 | 3 | Decide canonical repository slug | Done | Metadata follows the current GitHub remote, `mt4110/drop-squash` |
 | 4 | Replace macOS hard-link finalization | Done | Uses no-clobber atomic rename on macOS |
 | 5 | Split oversized production files | Done | All Rust production files are now <= 128 lines; TS/TSX remain <= 512 lines |
-| 6 | Add output media validation beyond size | Done | Requires smaller `.mp4`, MP4 file-type box, non-zero `mvhd` duration, and success-only history writes |
+| 6 | Add output media validation beyond size | Done | Requires smaller `.mp4`, MP4 file-type box, non-zero `mvhd` duration, source/output duration closeness when readable, and success-only history writes |
 | 7 | Add cancellation | In progress | Command/UI/encoder path and post-encode postprocess/history guard are implemented; reproducible `docs/manual-qa.md` packaged-app evidence remains |
 | 8 | Add sequential queue | In progress | Queue model, React sequential runner backed by Rust queue lifecycle commands, queued job cancellation, and batch summary are implemented; reproducible `docs/manual-qa.md` multi-file, queued-cancellation, and batch-summary evidence remains |
 | 9 | Wire source policy and Trash | In progress | Setting is persisted; Ask has explicit Trash action; Trash uses macOS NSFileManager after command-side output revalidation; reproducible `docs/manual-qa.md` Trash evidence remains |

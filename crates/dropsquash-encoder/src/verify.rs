@@ -1,4 +1,5 @@
 use std::path::Path;
+use std::time::Duration;
 
 use dropsquash_core::Result;
 use dropsquash_media::inspect_mp4;
@@ -12,6 +13,7 @@ pub struct OutputVerification {
     pub output_extension_is_mp4: bool,
     pub has_mp4_file_type: bool,
     pub has_nonzero_duration: bool,
+    pub duration_matches_source: bool,
     pub is_smaller_than_original: bool,
     pub is_valid_output: bool,
 }
@@ -24,7 +26,9 @@ pub fn verify_output(original: &Path, output: &Path) -> Result<OutputVerificatio
         .extension()
         .and_then(|extension| extension.to_str())
         .is_some_and(|extension| extension.eq_ignore_ascii_case("mp4"));
+    let original_mp4 = inspect_mp4(original);
     let mp4 = inspect_mp4(output);
+    let duration_matches_source = duration_close(original_mp4.duration, mp4.duration);
     let is_smaller_than_original =
         output_bytes > 0 && original_bytes > 0 && output_bytes < original_bytes;
 
@@ -35,12 +39,24 @@ pub fn verify_output(original: &Path, output: &Path) -> Result<OutputVerificatio
         output_extension_is_mp4,
         has_mp4_file_type: mp4.has_file_type,
         has_nonzero_duration: mp4.has_nonzero_duration(),
+        duration_matches_source,
         is_smaller_than_original,
         is_valid_output: is_smaller_than_original
             && output_extension_is_mp4
             && mp4.has_file_type
-            && mp4.has_nonzero_duration(),
+            && mp4.has_nonzero_duration()
+            && duration_matches_source,
     })
+}
+
+fn duration_close(original: Option<Duration>, output: Option<Duration>) -> bool {
+    let (Some(original), Some(output)) = (original, output) else {
+        return true;
+    };
+    let original = original.as_secs_f64();
+    let output = output.as_secs_f64();
+    let tolerance = (original * 0.05).max(1.0);
+    (original - output).abs() <= tolerance
 }
 
 #[cfg(test)]

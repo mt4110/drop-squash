@@ -16,6 +16,7 @@ fn accepts_smaller_mp4_with_file_type_box() {
     assert!(verification.output_extension_is_mp4);
     assert!(verification.has_mp4_file_type);
     assert!(verification.has_nonzero_duration);
+    assert!(verification.duration_matches_source);
     assert!(verification.is_smaller_than_original);
     assert!(verification.is_valid_output);
 }
@@ -66,6 +67,23 @@ fn rejects_zero_duration_mp4() {
 
     assert!(verification.has_mp4_file_type);
     assert!(!verification.has_nonzero_duration);
+    assert!(!verification.is_valid_output);
+}
+
+#[test]
+fn rejects_output_with_mismatched_duration() {
+    let directory = tempfile::tempdir().unwrap();
+    let original = directory.path().join("input.mov");
+    let output = directory.path().join("output.mp4");
+    let mut original_bytes = fixture_mp4(6_000);
+    original_bytes.extend_from_slice(&[0; 128]);
+    std::fs::write(&original, original_bytes).unwrap();
+    std::fs::write(&output, fixture_mp4(12)).unwrap();
+
+    let verification = verify_output(&original, &output).unwrap();
+
+    assert!(verification.has_nonzero_duration);
+    assert!(!verification.duration_matches_source);
     assert!(!verification.is_valid_output);
 }
 
