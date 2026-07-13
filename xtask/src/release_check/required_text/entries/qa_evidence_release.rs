@@ -81,7 +81,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "imposter GitHub release hosts"),
     (
         "docs/qa-evidence.md",
-        "checksum evidence without the Artifact URL, GitHub Release URL, or exact lowercase SHA-256 digest",
+        "checksum evidence without public context, the Artifact URL, GitHub Release URL, or exact lowercase SHA-256 digest",
     ),
     (
         "docs/qa-evidence.md",

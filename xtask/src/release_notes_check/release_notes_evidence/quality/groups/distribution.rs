@@ -42,6 +42,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
         "GitHub Release checksum" => Some(&[
             &["sha256sums", "sha-256"],
             &["attached"],
+            &["public"],
             &["dropsquash.dmg"],
         ]),
         "Known limitations" => Some(&[&["macos"], &["windows", "linux", "platform"]]),
