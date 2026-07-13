@@ -925,6 +925,21 @@ fn rejects_missing_or_generic_release_evidence() {
 }
 
 #[test]
+fn rejects_short_success_release_evidence() {
+    let errors = check_text(
+        r#"
+- Known limitations: Looks good
+- Support contact: Success
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+    assert!(errors.iter().any(|error| error.contains("Support contact")));
+}
+
+#[test]
 fn rejects_release_notes_manual_qa_record_without_public_dmg() {
     let errors = check_text(
         r#"

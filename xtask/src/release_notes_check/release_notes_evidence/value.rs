@@ -12,8 +12,12 @@ pub(super) fn is_placeholder(value: &str) -> bool {
         || lower == "n/a"
         || lower == "none"
         || lower == "pass"
+        || lower == "passed"
         || lower == "ok"
         || lower == "done"
+        || lower == "looks good"
+        || lower == "success"
+        || lower == "successful"
         || lower.contains("replace this line")
         || lower.contains("example.")
         || lower.contains("localhost")
