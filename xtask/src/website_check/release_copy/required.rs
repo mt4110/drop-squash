@@ -1,6 +1,7 @@
 pub(super) const TEXT: &[(&str, &str)] = &[
     ("index.html", "Release status"),
     ("release-status/index.html", "Paid beta is not public yet"),
+    ("release-status/index.html", "Developer ID"),
     ("release-status/index.html", "signed and notarized"),
     ("release-status/index.html", "docs/release-blockers.md"),
     ("release-status/index.html", "Evidence reference"),
