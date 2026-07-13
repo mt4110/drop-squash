@@ -68,6 +68,18 @@ fn reports_verified_reference_without_matching_release_note_field() {
 }
 
 #[test]
+fn reports_verified_homebrew_reference_without_release_note_field() {
+    let blockers = "\
+| Homebrew cask install | Verified | brew install --cask installs versioned DropSquash.dmg with matching lowercase SHA-256, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+    let notes = "- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0\n";
+
+    let mismatched = mismatched(blockers, notes);
+
+    assert!(mismatched.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_reference_with_extra_url_before_expected_url() {
     let blockers = "\
 | Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
