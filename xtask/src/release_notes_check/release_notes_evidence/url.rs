@@ -22,11 +22,16 @@ fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
                 && path.ends_with(".dmg")
         }
         Kind::Website => {
-            has_release_status_path(&path)
+            url.host_is("dropsquash.app")
+                && has_release_status_path(&path)
                 && !url.host_is_or_subdomain_of("lemonsqueezy.com")
                 && !path.contains("checkout")
         }
-        Kind::Refund => has_refund_path(&path) && !has_store_or_checkout(url, &path),
+        Kind::Refund => {
+            url.host_is("dropsquash.app")
+                && has_refund_path(&path)
+                && !has_store_or_checkout(url, &path)
+        }
         Kind::Checkout => {
             url.host_is_or_subdomain_of("lemonsqueezy.com") && has_checkout_buy_id(&path)
         }

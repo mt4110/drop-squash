@@ -25,7 +25,8 @@ pub(super) fn matches_record_target(blocker: &str, reference: &str) -> bool {
 fn is_public_website(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         let path = url.path().to_ascii_lowercase();
-        has_release_status_path(&path)
+        url.host_is("dropsquash.app")
+            && has_release_status_path(&path)
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
     })
@@ -56,7 +57,8 @@ fn has_single_path_segment(value: &str) -> bool {
 fn is_refund_policy(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         let path = url.path().to_ascii_lowercase();
-        (path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/"))
+        url.host_is("dropsquash.app")
+            && (path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/"))
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
     })

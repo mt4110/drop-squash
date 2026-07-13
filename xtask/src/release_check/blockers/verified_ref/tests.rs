@@ -84,6 +84,19 @@ fn reports_public_website_with_html_release_status_reference() {
 }
 
 #[test]
+fn reports_public_web_references_outside_canonical_host() {
+    let text = "\
+| Public website deployment | Verified | pages online | https://other.example/release-status | `https://...` |
+| Refund policy finalized | Verified | refund final | https://other.example/refund | `https://...` |
+";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Public website deployment"));
+    assert!(misplaced.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_live_checkout_without_buy_reference() {
     let text =
         "| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout | `https://...` |\n";

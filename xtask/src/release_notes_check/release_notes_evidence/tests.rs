@@ -826,6 +826,23 @@ fn rejects_release_notes_without_specific_public_urls() {
 }
 
 #[test]
+fn rejects_public_website_urls_outside_canonical_host() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://other.example/release-status
+- Refund policy URL: https://other.example/refund
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Public website URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Refund policy URL")));
+}
+
+#[test]
 fn rejects_checkout_url_without_buy_id() {
     let errors = check_text(
         r#"

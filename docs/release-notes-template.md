@@ -80,8 +80,8 @@ weak public evidence before the release is published.
 - License network failure: mention a friendly network error, preserved existing valid cache, 64-character lowercase hex fingerprint, `instance_id`, and `raw key` absence.
 - Expired license refresh: mention the expired offline grace cache, reconnect prompt, conversion blocked before starting, `raw key` absence, and cache evidence.
 - Local license forget: mention disabled action state, cache removal, and trial or locked state.
-- Public website URL: use the production `/release-status` URL.
-- Refund policy URL: use the production `/refund` URL after the policy is final.
+- Public website URL: use the production `https://dropsquash.app/release-status` URL.
+- Refund policy URL: use the production `https://dropsquash.app/refund` URL after the policy is final.
 - Live checkout URL: use the Lemon Squeezy `/checkout/buy/` URL for the product.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, public `DropSquash.dmg`, that it is attached, the GitHub Release URL above, the Artifact URL above, and the exact lowercase SHA-256 digest above.
 - Homebrew tap PR: mention the cask, public PR, the Homebrew tap PR URL above, versioned `DropSquash.dmg`, the Artifact URL above, the exact lowercase SHA-256 digest above, `auto_updates false`, and `zap` cleanup path.
