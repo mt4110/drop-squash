@@ -56,6 +56,13 @@ external media process security gate, verify that production CSP does not open
 remote network origins, keep desktop capabilities minimal, keep the unsigned
 release workflow blocked, and verify that the updater is not enabled before
 signing keys are ready.
+
+Tauri updater remains disabled for the first paid beta. Before enabling it,
+embed only the updater public key in `tauri.conf.json`; never commit the updater private key. Store the private key in a password manager with a tested backup,
+provide it to CI only through GitHub Secrets, and treat private-key loss as a
+breaking update event because installed users cannot receive trusted updates
+from a replacement key.
+
 The `manual-qa-prepare` step preserves local DropSquash app state and creates a
 dedicated output folder before packaged-app QA evidence is recorded.
 It also refuses to print an `App build` value when the selected app artifact is

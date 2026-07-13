@@ -50,6 +50,15 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "than `HEAD`"),
     ("docs/release.md", "non-empty `.p8` file"),
     ("docs/release.md", "private key data"),
+    ("docs/release.md", "Tauri updater remains disabled"),
+    ("docs/release.md", "updater public key"),
+    ("docs/release.md", "never commit the updater private key"),
+    ("docs/release.md", "password manager with a tested backup"),
+    ("docs/release.md", "GitHub Secrets"),
+    (
+        "docs/release.md",
+        "installed users cannot receive trusted updates",
+    ),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
     (
