@@ -37,6 +37,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release-blockers.md", "GitHub Release https://..."),
     ("docs/release-blockers.md", "Homebrew tap PR https://..."),
     ("docs/release-blockers.md", "dropsquash.app"),
+    (
+        "docs/release-blockers.md",
+        "must not include query or fragment parts",
+    ),
     ("docs/release-blockers.md", "## Execution Order"),
     ("docs/release-blockers.md", "Local packaged-app proof"),
     ("docs/release-blockers.md", "License sandbox proof"),
