@@ -27,8 +27,6 @@ The macOS job maps signing and notarization secrets into `macos-signing-check`
 so missing CI credentials fail deterministically before signed packaging is
 enabled.
 
-Run the local readiness gate before preparing any release artifact:
-
 Build public QA and release artifacts from a clean git worktree. If Tauri or
 Git reports a dirty tree, either commit or intentionally remove the unrelated
 local change, then rebuild the `.app` and `.dmg` before recording manual QA or
@@ -41,17 +39,21 @@ pnpm version differs from `apps/desktop/package.json`; for example:
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 ```
 
+Use this order for local QA and release preparation:
+
 ```sh
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
-cargo run -p xtask -- manual-qa-prepare
-cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- release-check
 pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
+cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
+cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
+cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
+cargo run -p xtask -- manual-qa-check
 ```
 
 These gates keep production files within the repository size rules, verify the
