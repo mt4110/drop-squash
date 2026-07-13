@@ -1119,6 +1119,7 @@ fn rejects_nested_public_website_and_refund_paths() {
     let errors = check_text(
         r#"
 - Public website URL: https://dropsquash.app/beta/release-status
+- Pricing URL: https://dropsquash.app/beta/pricing
 - Refund policy URL: https://dropsquash.app/beta/refund
 "#,
     );
@@ -1126,6 +1127,7 @@ fn rejects_nested_public_website_and_refund_paths() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Public website URL")));
+    assert!(errors.iter().any(|error| error.contains("Pricing URL")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Refund policy URL")));
