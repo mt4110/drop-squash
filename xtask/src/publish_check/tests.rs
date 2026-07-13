@@ -406,7 +406,7 @@ fn evidence(blocker: &str) -> &'static str {
             "Production refund policy is final and linked before checkout goes live"
         }
         "Live checkout link" => {
-            "Public pricing page opens the live checkout URL for tested Lemon Squeezy checkout and intended product"
+            "Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for tested Lemon Squeezy checkout and intended product"
         }
         _ => "concrete evidence recorded",
     }

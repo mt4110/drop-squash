@@ -39,6 +39,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release-blockers.md", "dropsquash.app"),
     (
         "docs/release-blockers.md",
+        "store.lemonsqueezy.com/checkout/buy/<id>",
+    ),
+    (
+        "docs/release-blockers.md",
         "must not include query or fragment parts",
     ),
     ("docs/release-blockers.md", "## Execution Order"),

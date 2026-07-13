@@ -18,7 +18,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Live checkout link"),
     (
         "docs/qa-evidence.md",
-        "store.lemonsqueezy.com/checkout/buy/...",
+        "store.lemonsqueezy.com/checkout/buy/<id>",
     ),
     ("docs/qa-evidence.md", "pricing refund link"),
     ("docs/qa-evidence.md", "pre-release CTA copy"),

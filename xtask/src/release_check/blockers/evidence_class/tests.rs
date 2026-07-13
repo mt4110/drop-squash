@@ -326,7 +326,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Publish the final refund policy URL and confirm it is linked before checkout goes live"
         }
         "Live checkout link" => {
-            "Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product"
+            "Verify the public pricing page opens the store.lemonsqueezy.com/checkout/buy/<id> URL for the tested Lemon Squeezy checkout for the intended product"
         }
         "Signed DMG" => {
             "Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output"

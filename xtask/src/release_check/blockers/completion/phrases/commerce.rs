@@ -25,7 +25,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Refund policy finalized", "linked"),
     ("Refund policy finalized", "checkout goes live"),
     ("Live checkout link", "Public pricing page opens"),
-    ("Live checkout link", "live checkout URL"),
+    (
+        "Live checkout link",
+        "live `store.lemonsqueezy.com/checkout/buy/<id>` URL",
+    ),
     ("Live checkout link", "tested Lemon Squeezy checkout"),
     ("Live checkout link", "intended product"),
 ];

@@ -75,7 +75,7 @@ These checks still require a packaged macOS app or external service state:
 | Local license forget | Requires packaged-app forgetting/disabled action state, confirmed cache removal, and observed trial or locked app state after forgetting the license |
 | Public website deployment | Requires the production website URL and public release pages |
 | Refund policy finalized | Requires the production refund policy URL before checkout goes live |
-| Live checkout link | Requires the live `store.lemonsqueezy.com/checkout/buy/...` URL for the intended product |
+| Live checkout link | Requires the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the intended product |
 | Signed DMG verification | Requires the public DMG/app artifact matching the release notes Artifact URL and Developer ID signature state for the same `.dmg` file |
 | Notarized/stapled DMG verification | Requires the public DMG/app artifact matching the release notes Artifact URL and Apple notary, stapler, and `spctl` assessment for the same `.dmg` file |
 | Signed/notarized Gatekeeper open | Requires Developer ID signing, notarization, stapling, a clean machine, and no Gatekeeper warning |
