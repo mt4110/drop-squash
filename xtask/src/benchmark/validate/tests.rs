@@ -29,6 +29,17 @@ fn rejects_missing_output() {
     assert!(result(&encode_result(output, 10, 3, true)).is_err());
 }
 
+#[test]
+fn rejects_output_size_that_no_longer_matches_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let output = directory.path().join("out.mp4");
+    std::fs::write(&output, [1, 2, 3]).unwrap();
+
+    let error = result(&encode_result(output, 10, 2, true)).unwrap_err();
+
+    assert!(error.contains("output size changed"));
+}
+
 fn encode_result(
     output_path: std::path::PathBuf,
     original: u64,

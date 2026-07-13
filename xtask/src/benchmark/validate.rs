@@ -15,6 +15,12 @@ pub fn result(result: &EncodeResult) -> Result<(), String> {
             result.output_path.display()
         ));
     }
+    if metadata.len() != result.output_bytes {
+        return Err(format!(
+            "benchmark output size changed before CSV evidence: {}",
+            result.output_path.display()
+        ));
+    }
     Ok(())
 }
 
