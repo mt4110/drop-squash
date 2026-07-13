@@ -50,6 +50,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "malformed or repeated App Store Connect key ids",
     ),
+    (
+        "docs/qa-evidence.md",
+        "CI signing certificate secret mapping",
+    ),
     ("docs/qa-evidence.md", "malformed or all-zero issuer UUIDs"),
     (
         "docs/qa-evidence.md",
