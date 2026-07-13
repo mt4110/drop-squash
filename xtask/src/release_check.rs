@@ -1,5 +1,6 @@
 use crate::{media_policy_check, privacy_policy_check, website_check};
 mod blockers;
+mod changelog;
 mod desktop_capability;
 mod dev_environment;
 mod evidence;
@@ -29,6 +30,7 @@ pub fn run() -> Result<(), String> {
         Path::new("docs/manual-qa.md"),
     )?;
     blockers::check_release_blockers(Path::new("docs/release-blockers.md"))?;
+    changelog::check(Path::new("CHANGELOG.md"))?;
     manual_blockers::check(
         Path::new("docs/release-blockers.md"),
         Path::new("docs/manual-qa.md"),

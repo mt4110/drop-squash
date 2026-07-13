@@ -23,6 +23,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "do not upload media files"),
     ("docs/release.md", "do not enable telemetry by default"),
     ("docs/release.md", "release notes `SHA-256` field"),
+    ("docs/release.md", "update `CHANGELOG.md`"),
+    (
+        "docs/release.md",
+        "`apps/desktop/src-tauri/tauri.conf.json` version",
+    ),
     ("docs/release.md", "lowercase SHA-256 hex"),
     ("docs/release.md", "`App artifact` recorded"),
     (

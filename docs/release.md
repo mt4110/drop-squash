@@ -240,6 +240,8 @@ Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after
 `docs/manual-qa.md` records the tested public `DropSquash.dmg` matching the release notes Artifact URL
 and every row in `docs/release-blockers.md` is `Verified` with concrete Completion evidence
 and a traceable Evidence reference.
+Before preparing public release notes, update `CHANGELOG.md` and bump the
+`apps/desktop/src-tauri/tauri.conf.json` version for the release candidate.
 The publish check also requires the release notes `Git commit` field to exactly
 match the current short or full `HEAD`, so rebuild and recheck the artifact
 after any final commit.
