@@ -5,6 +5,7 @@ fn accepts_verified_reference_in_expected_record_target() {
     let text = "\
 | Signed DMG | Verified | codesign output | Release notes | Release notes |
 | Public website deployment | Verified | pages online | https://dropsquash.app/release-status | `https://...` |
+| Pricing finalized | Verified | pricing final | https://dropsquash.app/pricing | `https://...` |
 | Refund policy finalized | Verified | refund policy final | https://dropsquash.app/refund | `https://...` |
 | Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |
 | Published checksum | Verified | SHA-256 attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
@@ -26,6 +27,25 @@ fn reports_verified_reference_in_wrong_record_target() {
 
     assert!(misplaced.contains(&"Signed DMG"));
     assert!(misplaced.contains(&"Homebrew cask install"));
+}
+
+#[test]
+fn reports_pricing_without_pricing_url() {
+    let text =
+        "| Pricing finalized | Verified | pricing final | https://dropsquash.app/refund | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Pricing finalized"));
+}
+
+#[test]
+fn reports_pricing_with_checkout_reference() {
+    let text = "| Pricing finalized | Verified | pricing final | https://store.lemonsqueezy.com/checkout/buy/example | `https://...` |\n";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Pricing finalized"));
 }
 
 #[test]
@@ -87,12 +107,14 @@ fn reports_public_website_with_html_release_status_reference() {
 fn reports_nested_public_web_references() {
     let text = "\
 | Public website deployment | Verified | pages online | https://dropsquash.app/beta/release-status | `https://...` |
+| Pricing finalized | Verified | pricing final | https://dropsquash.app/beta/pricing | `https://...` |
 | Refund policy finalized | Verified | refund final | https://dropsquash.app/beta/refund | `https://...` |
 ";
 
     let misplaced = misplaced_verified_references(text);
 
     assert!(misplaced.contains(&"Public website deployment"));
+    assert!(misplaced.contains(&"Pricing finalized"));
     assert!(misplaced.contains(&"Refund policy finalized"));
 }
 
@@ -100,12 +122,14 @@ fn reports_nested_public_web_references() {
 fn reports_public_web_references_outside_canonical_host() {
     let text = "\
 | Public website deployment | Verified | pages online | https://other.example/release-status | `https://...` |
+| Pricing finalized | Verified | pricing final | https://other.example/pricing | `https://...` |
 | Refund policy finalized | Verified | refund final | https://other.example/refund | `https://...` |
 ";
 
     let misplaced = misplaced_verified_references(text);
 
     assert!(misplaced.contains(&"Public website deployment"));
+    assert!(misplaced.contains(&"Pricing finalized"));
     assert!(misplaced.contains(&"Refund policy finalized"));
 }
 
