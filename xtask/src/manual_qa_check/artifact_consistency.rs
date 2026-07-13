@@ -21,7 +21,7 @@ pub(super) fn validate(rows: &[(String, String)], missing: &mut Vec<String>) {
             require_same_artifact(label, result, &name, missing);
         }
     }
-    for label in [ARTIFACT_CHECK, CHECKSUM] {
+    for label in [ARTIFACT_CHECK, CHECKSUM, CODESIGN, NOTARIZATION, GATEKEEPER] {
         if let Some(result) = value_for(rows, label) {
             require_same_artifact_path(label, result, rows, missing);
         }

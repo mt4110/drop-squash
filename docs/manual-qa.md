@@ -177,7 +177,9 @@ notary, stapler, `spctl` assessment, and Gatekeeper clean/fresh-machine
 observation where the row asks for them. When `App artifact` is a `.dmg`,
 artifact-check, checksum, codesign, notary/stapler/`spctl`, and Gatekeeper result rows must name the
 same public `DropSquash.dmg` file. Artifact-check and checksum rows must
-include the `App artifact` absolute path.
+include the `App artifact` absolute path. Codesign, notary/stapler/`spctl`,
+and Gatekeeper rows must also include that same absolute path before marking
+the release evidence complete.
 
 | Check | Expected | Result |
 |---|---|---|

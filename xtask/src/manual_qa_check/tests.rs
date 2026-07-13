@@ -4,8 +4,8 @@ use super::requirements::{REQUIRED_CHECKS, REQUIRED_FIELDS};
 #[test]
 fn accepts_complete_manual_qa_tables() {
     let directory = tempfile::tempdir().unwrap();
-    let artifact = directory.path().join("DropSquash.app");
-    std::fs::create_dir(&artifact).unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
     let path = directory.path().join("manual-qa.md");
     std::fs::write(&path, complete_manual_qa(&artifact)).unwrap();
 
@@ -565,6 +565,36 @@ fn reports_signing_results_for_different_dmg_artifact() {
     assert!(missing
         .iter()
         .any(|error| error.contains("Notarization") && error.contains("Other.dmg")));
+}
+
+#[test]
+fn reports_signing_results_without_artifact_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let path = directory.path().join("manual-qa.md");
+    std::fs::write(
+        &path,
+        format!(
+            "| App artifact | {} |\n\
+| Codesign verification | Passes | codesign verified Developer ID Application signature for public DropSquash.dmg |\n\
+| Notarization staple verification | Passes | notary accepted, stapler validate passed, and spctl accepted for public DropSquash.dmg |\n\
+| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh macOS account without Gatekeeper warning |\n",
+            artifact.display()
+        ),
+    )
+    .unwrap();
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Codesign") && error.contains("path")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Notarization") && error.contains("path")));
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Gatekeeper") && error.contains("path")));
 }
 
 #[test]
@@ -1768,7 +1798,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         {
             text.push_str(&format!("| {check} | Passes | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n", benchmark_csv.display()));
         } else if check.starts_with('`') {
-            text.push_str(&command_result(check));
+            text.push_str(&command_result(check, artifact));
         } else if check == "Benchmark sample set" {
             text.push_str(&format!("| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {} |\n", benchmark_csv.display()));
         } else if check == "Benchmark regression threshold" {
@@ -1828,11 +1858,20 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
                 "| Reveal output | Passes | Finder opened with clip.squashed.mp4 selected |\n",
             );
         } else if check == "Codesign verification" {
-            text.push_str("| Codesign verification | Passes | codesign verified Developer ID Application signature for public DropSquash.dmg |\n");
+            text.push_str(&format!(
+                "| Codesign verification | Passes | codesign verified Developer ID Application signature for public {} |\n",
+                artifact.display()
+            ));
         } else if check == "Notarization staple verification" {
-            text.push_str("| Notarization staple verification | Passes | notary accepted, stapler validate passed, and spctl accepted for public DropSquash.dmg |\n");
+            text.push_str(&format!(
+                "| Notarization staple verification | Passes | notary accepted, stapler validate passed, and spctl accepted for public {} |\n",
+                artifact.display()
+            ));
         } else if check == "Gatekeeper open test" {
-            text.push_str("| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app from public DropSquash.dmg cleanly in fresh macOS account without Gatekeeper warning |\n");
+            text.push_str(&format!(
+                "| Gatekeeper open test | Passes | Gatekeeper opened signed, notarized, stapled app from public {} cleanly in fresh macOS account without Gatekeeper warning |\n",
+                artifact.display()
+            ));
         } else {
             text.push_str(&format!(
                 "| {check} | Passes | Evidence recorded with artifact, file name, or count |\n"
@@ -1842,27 +1881,32 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
     text
 }
 
-fn command_result(check: &str) -> String {
+fn command_result(check: &str, artifact: &std::path::Path) -> String {
+    let digest = std::fs::read(artifact)
+        .map(|bytes| sha256_hex(&bytes))
+        .unwrap_or_else(|_| {
+            "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".to_string()
+        });
     let result = match check {
         "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`" => {
-            "artifact-check passed for public UDIF DropSquash.dmg"
+            format!("artifact-check passed for public UDIF {}", artifact.display())
         }
         "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`" => {
-            "SHA256SUMS created with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef DropSquash.dmg"
+            format!("SHA256SUMS created with SHA-256 {digest} {}", artifact.display())
         }
         "`cargo run -p xtask -- macos-signing-check`" => {
-            "macos-signing-check passed in release environment"
+            "macos-signing-check passed in release environment".to_string()
         }
-        "`cargo run -p xtask -- release-check`" => "release-check passed",
-        "`cargo run -p xtask -- file-size-check`" => "file-size-check passed",
-        "`cargo run -p xtask -- media-policy-check`" => "media-policy-check passed",
-        "`cargo run -p xtask -- privacy-policy-check`" => "privacy-policy-check passed",
-        "`cargo run -p xtask -- website-check`" => "website-check passed",
-        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed",
+        "`cargo run -p xtask -- release-check`" => "release-check passed".to_string(),
+        "`cargo run -p xtask -- file-size-check`" => "file-size-check passed".to_string(),
+        "`cargo run -p xtask -- media-policy-check`" => "media-policy-check passed".to_string(),
+        "`cargo run -p xtask -- privacy-policy-check`" => "privacy-policy-check passed".to_string(),
+        "`cargo run -p xtask -- website-check`" => "website-check passed".to_string(),
+        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed".to_string(),
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`" => {
-            "CSV recorded for three samples, outputs were smaller, saved outside repo at /tmp/dropsquash-bench/results.csv"
+            "CSV recorded for three samples, outputs were smaller, saved outside repo at /tmp/dropsquash-bench/results.csv".to_string()
         }
-        _ => "Pass",
+        _ => "Pass".to_string(),
     };
     format!("| {check} | Passes | {result} |\n")
 }
