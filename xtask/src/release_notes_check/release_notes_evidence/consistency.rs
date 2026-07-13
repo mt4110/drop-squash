@@ -1,5 +1,7 @@
 use super::{checksum, value};
 
+mod homebrew;
+
 pub(super) fn validate(text: &str) -> Vec<String> {
     let mut errors = Vec::new();
     let version = value::field("Version", text);
@@ -8,10 +10,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_artifact_name(text, &mut errors);
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     checksum::validate(text, &mut errors);
-    require_homebrew_artifact_url(text, &mut errors);
-    require_homebrew_pr_url(text, &mut errors);
-    require_homebrew_sha256(text, &mut errors);
-    require_homebrew_install_sha256(text, &mut errors);
+    homebrew::validate(text, &mut errors);
     errors
 }
 
@@ -62,58 +61,6 @@ fn require_same_origin(
     errors.push(format!(
         "{second_label} must use the same origin as {first_label}"
     ));
-}
-
-fn require_homebrew_artifact_url(text: &str, errors: &mut Vec<String>) {
-    let (Some(url), Some(evidence)) = (
-        value::field("Artifact URL", text),
-        value::field("Homebrew tap PR", text),
-    ) else {
-        return;
-    };
-    if evidence.contains(url) {
-        return;
-    }
-    errors.push("Homebrew tap PR must include the Artifact URL".to_string());
-}
-
-fn require_homebrew_pr_url(text: &str, errors: &mut Vec<String>) {
-    let (Some(url), Some(evidence)) = (
-        value::field("Homebrew tap PR URL", text),
-        value::field("Homebrew tap PR", text),
-    ) else {
-        return;
-    };
-    if evidence.contains(url) {
-        return;
-    }
-    errors.push("Homebrew tap PR must include the Homebrew tap PR URL".to_string());
-}
-
-fn require_homebrew_sha256(text: &str, errors: &mut Vec<String>) {
-    let (Some(digest), Some(evidence)) = (
-        value::field("SHA-256", text),
-        value::field("Homebrew tap PR", text),
-    ) else {
-        return;
-    };
-    if evidence.contains(digest) {
-        return;
-    }
-    errors.push("Homebrew tap PR must include the lowercase SHA-256 digest".to_string());
-}
-
-fn require_homebrew_install_sha256(text: &str, errors: &mut Vec<String>) {
-    let (Some(digest), Some(evidence)) = (
-        value::field("SHA-256", text),
-        value::field("Homebrew install result", text),
-    ) else {
-        return;
-    };
-    if evidence.contains(digest) {
-        return;
-    }
-    errors.push("Homebrew install result must include the lowercase SHA-256 digest".to_string());
 }
 
 fn origin(url: &str) -> Option<&str> {
