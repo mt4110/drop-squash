@@ -1,9 +1,13 @@
-const DISALLOWED: [&str; 20] = [
+const DISALLOWED: [&str; 24] = [
     "-----begin ",
     "private key-----",
+    "apple_api_issuer=",
+    "apple_api_key=",
     "apple_certificate=",
     "apple_certificate_password=",
+    "apple_id=",
     "apple_password=",
+    "apple_team_id=",
     "lemon_squeezy_api_key=",
     "lemon_squeezy_product_id=",
     "lemon_squeezy_store_id=",
@@ -45,14 +49,28 @@ mod tests {
 
     #[test]
     fn rejects_secret_like_assignments() {
-        let text = "APPLE_PASSWORD=x LEMON_SQUEEZY_STORE_ID=123 license_key=raw product id: 1";
+        let text = "APPLE_PASSWORD=x LEMON_SQUEEZY_STORE_ID=123 license_key=raw product id: 1 APPLE_API_KEY=ABCDEF1234";
 
         let errors = violations("evidence", text);
 
         assert!(errors.iter().any(|error| error.contains("apple_password")));
+        assert!(errors.iter().any(|error| error.contains("apple_api_key")));
         assert!(errors.iter().any(|error| error.contains("store_id")));
         assert!(errors.iter().any(|error| error.contains("license_key")));
         assert!(errors.iter().any(|error| error.contains("product id:")));
+    }
+
+    #[test]
+    fn rejects_apple_notarization_secret_assignments() {
+        let text = "APPLE_API_ISSUER=uuid APPLE_ID=dev@example.com APPLE_TEAM_ID=ABCDE12345";
+
+        let errors = violations("evidence", text);
+
+        assert!(errors
+            .iter()
+            .any(|error| error.contains("apple_api_issuer")));
+        assert!(errors.iter().any(|error| error.contains("apple_id")));
+        assert!(errors.iter().any(|error| error.contains("apple_team_id")));
     }
 
     #[test]
