@@ -99,7 +99,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "verified smaller Trash output"),
     (
         "docs/qa-evidence.md",
-        "Lemon Squeezy sandbox activation context",
+        "Lemon Squeezy sandbox activation with 64-character hex fingerprint and `instance_id`",
     ),
     ("docs/qa-evidence.md", "unchanged trial counts"),
 ];

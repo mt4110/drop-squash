@@ -22,7 +22,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
-        "Lemon Squeezy sandbox activation context",
+        "Lemon Squeezy sandbox activation identity evidence",
     ),
     (
         "docs/productization.md",
