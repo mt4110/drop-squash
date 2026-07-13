@@ -206,8 +206,26 @@ fn reports_empty_key_completion_without_cache() {
 }
 
 #[test]
+fn reports_empty_key_completion_without_cache_observation() {
+    let text = "| Empty key activation | Blocked | Activate stays disabled for empty input, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Empty key activation"));
+}
+
+#[test]
 fn reports_invalid_key_completion_without_friendly_error() {
     let text = "| Invalid license key handling | Blocked | Activating state disables submit and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Invalid license key handling"));
+}
+
+#[test]
+fn reports_invalid_key_completion_without_cache_observation() {
+    let text = "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n";
 
     let incomplete = incomplete_requirements(text);
 
@@ -552,9 +570,9 @@ fn described_blockers() -> String {
         "| Packaged macOS manual QA | Blocked | Tested the public `DropSquash.dmg` artifact matching the release notes Artifact URL with the filled manual QA table and `manual-qa-check` passing | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy product setup | Blocked | Sandbox product is configured for the intended product, DropSquash, with license keys enabled and private store IDs not recorded | TBD | `docs/manual-qa.md` |\n",
         "| Lemon Squeezy sandbox purchase | Blocked | Sandbox checkout completes with the intended product, test buyer, and order | TBD | `docs/manual-qa.md` |\n",
-        "| Empty key activation | Blocked | Activate stays disabled for empty input, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Empty key activation | Blocked | Activate stays disabled for empty input, local cache was checked, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
-        "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, local cache was checked, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| License network failure | Blocked | Friendly network error appears, existing valid local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields remain intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Expired license refresh | Blocked | attempted conversion with expired offline grace cache shows reconnect prompt, conversion is blocked before starting, local cache was checked, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",

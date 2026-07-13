@@ -11,6 +11,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Empty key activation",
         "raw key, fingerprint, and instance are absent",
     ),
+    ("Empty key activation", "local cache was checked"),
     ("Empty key activation", "local cache"),
     (
         "Valid sandbox activation",
@@ -36,6 +37,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Invalid license key handling",
         "raw key, fingerprint, and instance are absent",
     ),
+    ("Invalid license key handling", "local cache was checked"),
     ("Invalid license key handling", "local cache"),
     ("License network failure", "Friendly network error"),
     (
