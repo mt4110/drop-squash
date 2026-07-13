@@ -8,6 +8,7 @@ mod file_size_check;
 mod git_head_match;
 mod homebrew_cask;
 mod macos_codesign_plan;
+mod macos_keychain_plan;
 mod macos_notary_plan;
 mod macos_signing_check;
 mod macos_signing_plan;
@@ -40,14 +41,15 @@ fn main() {
         Some("checksum") => checksum::run(args.collect()),
         Some("file-size-check") => file_size_check::run(args.collect()),
         Some("homebrew-cask") => homebrew_cask::run(args.collect()),
-        Some("manual-qa-check") => manual_qa_check::run(args.collect()),
-        Some("manual-qa-prepare") => manual_qa_prepare::run(args.collect()),
         Some("macos-codesign-plan") => macos_codesign_plan::run(args.collect()),
+        Some("macos-keychain-plan") => macos_keychain_plan::run(args.collect()),
         Some("macos-notary-plan") => macos_notary_plan::run(args.collect()),
         Some("macos-signing-plan") => macos_signing_plan::run(args.collect()),
         Some("macos-signing-check") => macos_signing_check::run(),
         Some("macos-spctl-plan") => macos_spctl_plan::run(args.collect()),
         Some("macos-stapler-plan") => macos_stapler_plan::run(args.collect()),
+        Some("manual-qa-check") => manual_qa_check::run(args.collect()),
+        Some("manual-qa-prepare") => manual_qa_prepare::run(args.collect()),
         Some("media-policy-check") => media_policy_check::run(),
         Some("normalize-dmg") => normalize_dmg::run(args.collect()),
         Some("privacy-policy-check") => privacy_policy_check::run(),
@@ -70,7 +72,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|macos-codesign-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|homebrew-cask|macos-codesign-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }

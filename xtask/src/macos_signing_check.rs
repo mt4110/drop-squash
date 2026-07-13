@@ -29,7 +29,8 @@ fn check_signing(env: &BTreeMap<String, String>) -> Result<(), String> {
             "APPLE_CERTIFICATE",
             "APPLE_CERTIFICATE_PASSWORD",
             "CI macOS signing requires APPLE_CERTIFICATE with password",
-        );
+        )
+        .and_then(|()| require_keychain_password(env));
     }
     if present(env, "APPLE_SIGNING_IDENTITY") {
         return check_signing_identity(env);
@@ -75,6 +76,16 @@ fn check_certificate(env: &BTreeMap<String, String>) -> Result<(), String> {
         return Ok(());
     }
     Err("APPLE_CERTIFICATE must be base64-encoded certificate data".to_string())
+}
+
+fn require_keychain_password(env: &BTreeMap<String, String>) -> Result<(), String> {
+    if present(env, "APPLE_KEYCHAIN_PASSWORD") {
+        return Ok(());
+    }
+    Err(
+        "CI macOS signing requires APPLE_KEYCHAIN_PASSWORD for temporary keychain import"
+            .to_string(),
+    )
 }
 
 fn is_base64_char(value: char) -> bool {

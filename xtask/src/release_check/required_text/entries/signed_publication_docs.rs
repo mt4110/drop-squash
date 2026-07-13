@@ -11,6 +11,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "signed, notarized, stapled, checksummed, installable, and opens without warning",
     ),
     ("docs/productization.md", "macOS signing command plan"),
+    ("docs/productization.md", "macOS keychain argv plan"),
     ("docs/productization.md", "macOS codesign argv plan"),
     ("docs/productization.md", "macOS notarytool argv plan"),
     ("docs/productization.md", "macOS stapler argv plan"),

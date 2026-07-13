@@ -55,12 +55,28 @@ fn accepts_certificate_signing_in_ci() {
         ("GITHUB_ACTIONS", "true"),
         ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
         ("APPLE_CERTIFICATE_PASSWORD", "cert-passphrase-123"),
+        ("APPLE_KEYCHAIN_PASSWORD", "keychain-passphrase-123"),
         ("APPLE_ID", "dev@example.com"),
         ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
         ("APPLE_TEAM_ID", "ABCDE12345"),
     ]);
 
     assert!(check(&env).is_ok());
+}
+
+#[test]
+fn rejects_missing_ci_keychain_password() {
+    let env = env([
+        ("GITHUB_ACTIONS", "true"),
+        ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
+        ("APPLE_CERTIFICATE_PASSWORD", "cert-passphrase-123"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_KEYCHAIN_PASSWORD"));
 }
 
 #[test]

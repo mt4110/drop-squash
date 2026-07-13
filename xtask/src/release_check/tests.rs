@@ -40,8 +40,10 @@ install -m 600 /dev/null "$key_path"
 APPLE_API_KEY_PATH=$key_path
 APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
 APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
 run: cargo run -p xtask -- macos-signing-check
 run: cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
+run: cargo run -p xtask -- macos-keychain-plan "$RUNNER_TEMP/dropsquash-signing"
 run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
@@ -93,8 +95,10 @@ fn reports_missing_release_workflow_gates() {
             "APPLE_API_KEY_PATH=$key_path",
             "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
             "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
+            "APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}",
             "cargo run -p xtask -- macos-signing-check",
             "cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
+            "cargo run -p xtask -- macos-keychain-plan \"$RUNNER_TEMP/dropsquash-signing\"",
             "cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- macos-codesign-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" \"Developer ID Application: ...\"",

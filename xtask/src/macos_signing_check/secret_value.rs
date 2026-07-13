@@ -2,8 +2,9 @@ use std::collections::BTreeMap;
 
 use super::env::value;
 
-const SECRET_KEYS: [&str; 4] = [
+const SECRET_KEYS: [&str; 5] = [
     "APPLE_CERTIFICATE_PASSWORD",
+    "APPLE_KEYCHAIN_PASSWORD",
     "APPLE_PASSWORD",
     "APPLE_API_KEY",
     "APPLE_API_ISSUER",

@@ -9,14 +9,15 @@ fn plans_signing_steps_in_safe_order() {
 
     let steps = plan(&request).unwrap();
 
-    assert_eq!(steps.len(), 7);
+    assert_eq!(steps.len(), 8);
     assert!(steps[0].contains("signed-dmg-prepare"));
     assert!(steps[1].contains("signed-dmg-copy"));
-    assert!(steps[2].contains("macos-codesign-plan"));
-    assert!(steps[3].contains("macos-notary-plan"));
-    assert!(steps[4].contains("macos-stapler-plan"));
-    assert!(steps[5].contains("macos-spctl-plan"));
-    assert!(steps[6].contains("signed-dmg-check"));
+    assert!(steps[2].contains("macos-keychain-plan"));
+    assert!(steps[3].contains("macos-codesign-plan"));
+    assert!(steps[4].contains("macos-notary-plan"));
+    assert!(steps[5].contains("macos-stapler-plan"));
+    assert!(steps[6].contains("macos-spctl-plan"));
+    assert!(steps[7].contains("signed-dmg-check"));
 }
 
 #[test]
@@ -31,6 +32,9 @@ fn plan_uses_canonical_signed_target() {
     assert!(steps
         .iter()
         .any(|step| step.contains("/tmp/signed/DropSquash.dmg")));
+    assert!(steps
+        .iter()
+        .any(|step| step.contains("/tmp/signed/keychain")));
 }
 
 #[test]

@@ -27,6 +27,10 @@ fn plan(request: &Request) -> Result<Vec<String>, String> {
             display(&request.output_dir)
         ),
         format!(
+            "cargo run -p xtask -- macos-keychain-plan {}",
+            display(&request.output_dir.join("keychain"))
+        ),
+        format!(
             "cargo run -p xtask -- macos-codesign-plan {} 'Developer ID Application: ...'",
             display(&target)
         ),

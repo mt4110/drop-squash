@@ -44,6 +44,12 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "The plan does not execute signing commands and must not print secret values",
     ),
+    ("docs/release.md", "macos-keychain-plan"),
+    ("docs/release.md", "APPLE_KEYCHAIN_PASSWORD"),
+    (
+        "docs/release.md",
+        "certificate decode/import, and key partition list argv without printing secret",
+    ),
     ("docs/release.md", "signed-dmg-copy"),
     (
         "docs/release.md",

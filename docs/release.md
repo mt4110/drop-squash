@@ -54,6 +54,7 @@ cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
 cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
+cargo run -p xtask -- macos-keychain-plan /tmp/dropsquash-signed/keychain
 cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- macos-codesign-plan /tmp/dropsquash-signed/DropSquash.dmg "Developer ID Application: ..."
@@ -102,9 +103,9 @@ requires signing, notarization, stapling, artifact checks, checksums, and
 Gatekeeper no-warning evidence for the signed app.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
-unsigned DMG to that target, apply the Developer ID `codesign` signature, submit
-with `notarytool`, validate stapling, assess Gatekeeper, then run
-`signed-dmg-check`.
+unsigned DMG to that target, prepare the temporary signing keychain, apply the
+Developer ID `codesign` signature, submit with `notarytool`, validate stapling,
+assess Gatekeeper, then run `signed-dmg-check`.
 The plan does not execute signing commands and must not print secret values.
 Use `signed-dmg-copy` only to create the isolated signing target before
 `codesign`; it refuses existing targets and still checks the unsigned input.
@@ -155,8 +156,11 @@ notarization it accepts either the App Store Connect API variables
 `APPLE_API_KEY`, `APPLE_API_ISSUER`, and `APPLE_API_KEY_PATH`, or the Apple ID
 variables `APPLE_ID`, `APPLE_PASSWORD`, and `APPLE_TEAM_ID`. Do not commit these
 values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
-`APPLE_CERTIFICATE_PASSWORD`; a local keychain identity name is not enough for a
-fresh runner. GitHub Actions should store the App Store Connect private key as
+`APPLE_CERTIFICATE_PASSWORD`, plus `APPLE_KEYCHAIN_PASSWORD` for the temporary
+keychain import; a local keychain identity name is not enough for a fresh
+runner. Use `macos-keychain-plan` to generate the `security create-keychain`,
+certificate decode/import, and key partition list argv without printing secret
+values. GitHub Actions should store the App Store Connect private key as
 `APPLE_API_KEY_P8`, write it to `$RUNNER_TEMP`, and export the generated
 `APPLE_API_KEY_PATH`; do not store `APPLE_API_KEY_PATH` as a repository secret.
 The certificate value must be base64-encoded certificate data, not a placeholder
