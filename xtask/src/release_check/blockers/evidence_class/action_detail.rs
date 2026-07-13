@@ -75,10 +75,21 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "tested Lemon Squeezy checkout",
             "intended product",
         ],
-        "Signed DMG" => &["public", "DropSquash.dmg", "`codesign`", "Developer ID"],
-        "Notarized and stapled DMG" => {
-            &["public", "DropSquash.dmg", "`spctl`", "notary", "stapler"]
-        }
+        "Signed DMG" => &[
+            "public",
+            "DropSquash.dmg",
+            "Artifact URL",
+            "`codesign`",
+            "Developer ID",
+        ],
+        "Notarized and stapled DMG" => &[
+            "public",
+            "DropSquash.dmg",
+            "Artifact URL",
+            "`spctl`",
+            "notary",
+            "stapler",
+        ],
         "Benchmark release set" => &[
             "short, medium, and large",
             "backend",
@@ -93,6 +104,7 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
         "Published checksum" => &[
             "public",
             "DropSquash.dmg",
+            "Artifact URL",
             "lowercase SHA-256",
             "GitHub Release",
         ],
@@ -100,6 +112,7 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             "brew install",
             "versioned",
             "DropSquash.dmg",
+            "Artifact URL",
             "matching lowercase SHA-256",
             "auto_updates false",
             "zap",

@@ -293,8 +293,26 @@ fn reports_signing_action_without_codesign_detail() {
 }
 
 #[test]
+fn reports_signing_action_without_artifact_url_context() {
+    let text = "| Signed DMG | Signing/notarization | Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output | Release notes |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Signed DMG"));
+}
+
+#[test]
 fn reports_notarization_action_without_spctl_or_stapler_detail() {
     let text = "| Notarized and stapled DMG | Signing/notarization | Notarize and assess the public DropSquash.dmg with captured verification output | Release notes |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Notarized and stapled DMG"));
+}
+
+#[test]
+fn reports_notarization_action_without_artifact_url_context() {
+    let text = "| Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public DropSquash.dmg with captured `spctl`, notary, and stapler verification output | Release notes |\n";
 
     let unclassified = unclassified_blockers(text);
 
@@ -329,8 +347,26 @@ fn reports_checksum_action_without_public_sha256_artifact() {
 }
 
 #[test]
+fn reports_checksum_action_without_artifact_url_context() {
+    let text = "| Published checksum | Distribution | Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line to the GitHub Release | GitHub Release URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Published checksum"));
+}
+
+#[test]
 fn reports_homebrew_action_without_versioned_artifact() {
     let text = "| Homebrew cask install | Distribution | Open the Homebrew tap PR and verify the cask install command, DropSquash.dmg URL, matching SHA-256, auto_updates false, and zap cleanup path | Homebrew tap PR URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Homebrew cask install"));
+}
+
+#[test]
+fn reports_homebrew_action_without_artifact_url_context() {
+    let text = "| Homebrew cask install | Distribution | Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg, matching lowercase SHA-256, auto_updates false, and zap cleanup | Homebrew tap PR URL |\n";
 
     let unclassified = unclassified_blockers(text);
 
@@ -383,19 +419,19 @@ fn action_for(blocker: &str) -> &'static str {
             "Verify the public pricing page opens the live store.lemonsqueezy.com/checkout/buy/<id> URL for the tested Lemon Squeezy checkout for the intended product"
         }
         "Signed DMG" => {
-            "Sign the public DropSquash.dmg and capture `codesign` Developer ID verification output"
+            "Sign the public DropSquash.dmg matching the release notes Artifact URL and capture `codesign` Developer ID verification output"
         }
         "Notarized and stapled DMG" => {
-            "Notarize, staple, and assess the public DropSquash.dmg with captured `spctl`, notary, and stapler verification output"
+            "Notarize, staple, and assess the public DropSquash.dmg matching the release notes Artifact URL with captured `spctl`, notary, and stapler verification output"
         }
         "Benchmark release set" => {
             "Run release-set benchmark with short, medium, and large samples and record backend, saved percent, duration, speed ratio, absolute CSV path outside repo, 20% threshold result, same-machine comparison, and release candidate baseline"
         }
         "Published checksum" => {
-            "Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line to the GitHub Release"
+            "Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line matching the release notes Artifact URL to the GitHub Release"
         }
         "Homebrew cask install" => {
-            "Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg, matching lowercase SHA-256, auto_updates false, and zap cleanup"
+            "Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg Artifact URL, matching lowercase SHA-256, auto_updates false, and zap cleanup"
         }
         _ => "Capture concrete release evidence",
     }
