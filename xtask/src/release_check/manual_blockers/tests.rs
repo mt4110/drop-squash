@@ -690,7 +690,7 @@ fn reports_verified_benchmark_blocker_without_threshold() {
     let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "\
 | `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | benchmark CSV recorded for three samples with smaller outputs outside repo |
-| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
+| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
 | Benchmark regression threshold | Passes | no regression recorded |
 ";
 
@@ -728,11 +728,25 @@ fn reports_verified_benchmark_blocker_without_csv_path() {
 }
 
 #[test]
-fn accepts_verified_benchmark_blocker_with_release_set_evidence() {
+fn reports_verified_benchmark_blocker_without_backend() {
     let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "\
 | `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | benchmark CSV recorded for three samples with smaller outputs outside repo at /tmp/dropsquash-bench/results.csv |
 | Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
+| Benchmark regression threshold | Passes | no sample exceeded 20% regression against the same-machine release candidate baseline |
+";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Benchmark release set"));
+}
+
+#[test]
+fn accepts_verified_benchmark_blocker_with_release_set_evidence() {
+    let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "\
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | benchmark CSV recorded for three samples with smaller outputs outside repo at /tmp/dropsquash-bench/results.csv |
+| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
 | Benchmark regression threshold | Passes | no sample exceeded 20% regression against the same-machine release candidate baseline |
 ";
 
@@ -744,7 +758,7 @@ fn accepts_verified_benchmark_blocker_with_percent_wording() {
     let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "\
 | `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | benchmark CSV recorded for three samples with smaller outputs outside repo at /tmp/dropsquash-bench/results.csv |
-| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
+| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
 | Benchmark regression threshold | Passes | no sample exceeded 20 percent regression against the same-machine release candidate baseline |
 ";
 
@@ -756,7 +770,7 @@ fn reports_verified_benchmark_blocker_without_baseline_context() {
     let blockers = "| Benchmark release set | Verified | Release-set benchmark CSV covers samples | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "\
 | `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | benchmark CSV recorded for three samples with smaller outputs outside repo at /tmp/dropsquash-bench/results.csv |
-| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
+| Benchmark sample set | Passes | short, medium, and large samples produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |
 | Benchmark regression threshold | Passes | no sample exceeded 20% regression |
 ";
 

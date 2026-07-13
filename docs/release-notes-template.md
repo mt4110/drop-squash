@@ -70,7 +70,7 @@ weak public evidence before the release is published.
 - Conversion safety evidence: mention cancellation, failed conversion, larger output, original preservation, and unchanged trial count.
 - Queue evidence: mention multi-file queue, queued cancellation, batch summary, trial or license lock blocked jobs, finished count, saved bytes, and failed/cancelled/blocked counts.
 - Trash source policy: mention Moving original or moving state, disabled action state, verified smaller output, and Trash.
-- Benchmark sample set: mention short, medium, and large samples, smaller outputs, CSV path outside the repository, machine, and OS context.
+- Benchmark sample set: mention short, medium, and large samples, smaller outputs, backend, CSV path outside the repository, machine, and OS context.
 - Benchmark regression threshold: mention the 20% regression threshold, whether any sample exceeded it, the same-machine comparison, and the release candidate baseline.
 - Lemon Squeezy product setup: mention DropSquash, the sandbox product, the intended product, and license keys enabled without private store IDs.
 - Lemon Squeezy sandbox purchase: mention the sandbox checkout, intended product, `test buyer`, and `order`.

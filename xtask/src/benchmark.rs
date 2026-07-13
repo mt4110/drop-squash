@@ -48,7 +48,11 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
             .await
             .map_err(|error| error.to_string())?;
         validate::result(&result)?;
-        rows.push(BenchmarkRow::from_result(result, started.elapsed()));
+        rows.push(BenchmarkRow::from_result(
+            encoder.name(),
+            result,
+            started.elapsed(),
+        ));
     }
     if let Some(path) = args.csv_output {
         report::write(&path, &rows)?;

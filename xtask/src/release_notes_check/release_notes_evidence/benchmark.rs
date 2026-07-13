@@ -24,6 +24,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
         .iter()
         .all(|needle| lower.contains(needle))
         && lower.contains("smaller")
+        && lower.contains("backend")
         && has_csv_path_context(value)
         && has_machine_context(&lower)
         && has_os_context(&lower)
@@ -31,7 +32,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
         return None;
     }
     Some(
-        "Benchmark sample set must mention short, medium, large, smaller outputs, CSV path outside repo, machine, and OS context"
+        "Benchmark sample set must mention short, medium, large, smaller outputs, backend, CSV path outside repo, machine, and OS context"
             .to_string(),
     )
 }
