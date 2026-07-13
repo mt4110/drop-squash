@@ -17,6 +17,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Public website deployment", "download"),
     ("Refund policy finalized", "Production refund policy"),
     ("Refund policy finalized", "final"),
+    ("Refund policy finalized", "linked"),
     ("Refund policy finalized", "checkout goes live"),
     ("Live checkout link", "Public pricing page opens"),
     ("Live checkout link", "tested Lemon Squeezy checkout"),

@@ -107,6 +107,15 @@ fn reports_refund_policy_without_final_policy() {
 }
 
 #[test]
+fn reports_refund_policy_without_linked_policy() {
+    let text = "| Refund policy finalized | Blocked | Production refund policy is final before checkout goes live | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_public_website_completion_without_required_pages() {
     let text = "| Public website deployment | Blocked | Production website serves public pages | TBD | `https://...` |\n";
 
