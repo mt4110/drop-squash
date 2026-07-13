@@ -35,6 +35,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "expired refresh priority over trial completion",
     ),
+    (
+        "docs/qa-evidence.md",
+        "license networking outside the pinned Lemon Squeezy API endpoint",
+    ),
     ("docs/qa-evidence.md", "benchmark CSV path evidence"),
     (
         "docs/qa-evidence.md",

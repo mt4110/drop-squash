@@ -76,10 +76,38 @@ fn allows_license_provider_network_client() {
     write(
         directory.path(),
         "crates/dropsquash-license/src/lemonsqueezy/transport.rs",
-        "reqwest::Client::new()",
+        r#"const API_BASE: &str = "https://api.lemonsqueezy.com/v1/licenses"; reqwest::Client::new()"#,
     );
 
     assert!(check_roots(&[directory.path().join("crates")]).is_ok());
+}
+
+#[test]
+fn rejects_license_provider_without_pinned_api_base() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/dropsquash-license/src/lemonsqueezy/transport.rs",
+        "reqwest::Client::new()",
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("must pin license networking"));
+}
+
+#[test]
+fn rejects_license_provider_with_extra_https_endpoint() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "crates/dropsquash-license/src/lemonsqueezy/transport.rs",
+        r#"const API_BASE: &str = "https://api.lemonsqueezy.com/v1/licenses"; const OTHER: &str = "https://analytics.example.invalid"; reqwest::Client::new()"#,
+    );
+
+    let error = check_roots(&[directory.path().join("crates")]).unwrap_err();
+
+    assert!(error.contains("disallowed license network URL"));
 }
 
 #[test]

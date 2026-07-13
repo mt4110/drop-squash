@@ -2,6 +2,8 @@ use std::path::{Path, PathBuf};
 
 mod markers;
 
+const LICENSE_API_BASE: &str = "https://api.lemonsqueezy.com/v1/licenses";
+
 pub fn run() -> Result<(), String> {
     check_default_roots()?;
     println!("privacy policy checks passed");
@@ -64,8 +66,35 @@ fn scan_file(path: &Path, violations: &mut Vec<String>) -> Result<(), String> {
                 ));
             }
         }
+    } else {
+        validate_license_network_source(path, &text, violations);
     }
     Ok(())
+}
+
+fn validate_license_network_source(path: &Path, text: &str, violations: &mut Vec<String>) {
+    if !text.contains(LICENSE_API_BASE) {
+        violations.push(format!(
+            "{} must pin license networking to {LICENSE_API_BASE}",
+            path.display()
+        ));
+    }
+    for url in https_literals(text) {
+        if url != LICENSE_API_BASE {
+            violations.push(format!(
+                "{} contains disallowed license network URL {url}",
+                path.display()
+            ));
+        }
+    }
+}
+
+fn https_literals(text: &str) -> Vec<&str> {
+    text.split(|character: char| {
+        character.is_whitespace() || matches!(character, '"' | '\'' | '<' | '>' | ')' | ']')
+    })
+    .filter(|part| part.starts_with("https://"))
+    .collect()
 }
 
 fn is_license_network_source(path: &Path) -> bool {
