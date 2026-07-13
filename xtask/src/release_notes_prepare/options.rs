@@ -14,6 +14,9 @@ impl Input {
         let mut args = args.into_iter();
         while let Some(arg) = args.next() {
             if arg == "--markdown-output" {
+                if markdown_output.is_some() {
+                    return Err("--markdown-output must be specified at most once".to_string());
+                }
                 let value = args
                     .next()
                     .ok_or_else(|| "--markdown-output requires a value".to_string())?;
