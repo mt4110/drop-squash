@@ -66,6 +66,25 @@ fn rejects_live_checkout_reference_with_prefixed_checkout_path() {
 }
 
 #[test]
+fn rejects_public_references_with_query_or_fragment() {
+    let text = "\
+| Public website deployment | Verified | done | https://dropsquash.app/release-status?source=publish | `https://...` |
+| Refund policy finalized | Verified | done | https://dropsquash.app/refund#terms | `https://...` |
+| Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123?utm=publish | `https://...` |
+| Published checksum | Verified | SHA256SUMS for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0#assets | GitHub Release |
+| Homebrew cask install | Verified | versioned DropSquash.dmg cask includes auto_updates false and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1?plain=1 | Homebrew tap PR |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Refund policy finalized"));
+    assert!(unverified.contains(&"Live checkout link"));
+    assert!(unverified.contains(&"Published checksum"));
+    assert!(unverified.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_verified_blocker_without_evidence_reference() {
     let text = crate::release_check::required_blockers()
         .iter()
@@ -358,10 +377,10 @@ fn evidence(blocker: &str) -> &'static str {
             "Production website serves release-status, privacy, pricing, support, and download"
         }
         "Refund policy finalized" => {
-            "Production refund policy final before checkout goes live"
+            "Production refund policy is final and linked before checkout goes live"
         }
         "Live checkout link" => {
-            "Public pricing page opens tested Lemon Squeezy checkout for intended product"
+            "Public pricing page opens the tested Lemon Squeezy checkout for intended product"
         }
         _ => "concrete evidence recorded",
     }

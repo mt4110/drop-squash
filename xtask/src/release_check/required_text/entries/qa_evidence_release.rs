@@ -8,7 +8,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "public publish references that point to the release notes URLs",
+        "public publish references without query or fragment parts that point to the release notes URLs",
     ),
     (
         "docs/qa-evidence.md",
@@ -76,7 +76,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "imposter public URL hosts"),
     (
         "docs/qa-evidence.md",
-        "host-boundary checked public publish references",
+        "host-boundary checked public publish references without query or fragment parts",
     ),
     ("docs/qa-evidence.md", "imposter GitHub release hosts"),
     (

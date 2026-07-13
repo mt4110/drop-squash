@@ -25,7 +25,8 @@ fn has_placeholder_token(reference: &str) -> bool {
 fn is_public_site(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         let path = url.path().to_ascii_lowercase();
-        is_release_status_path(&path)
+        !url.has_query_or_fragment()
+            && is_release_status_path(&path)
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
     })
@@ -34,7 +35,8 @@ fn is_public_site(reference: &str) -> bool {
 fn is_refund(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         let path = url.path().to_ascii_lowercase();
-        is_refund_path(&path)
+        !url.has_query_or_fragment()
+            && is_refund_path(&path)
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
     })
@@ -42,7 +44,8 @@ fn is_refund(reference: &str) -> bool {
 
 fn is_checkout(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
-        url.host_is_or_subdomain_of("lemonsqueezy.com")
+        !url.has_query_or_fragment()
+            && url.host_is_or_subdomain_of("lemonsqueezy.com")
             && url
                 .path()
                 .to_ascii_lowercase()
@@ -70,7 +73,8 @@ fn has_release_tag(reference: &str) -> bool {
     reference.starts_with("GitHub Release ")
         && urls::labeled_https(reference, "GitHub Release").is_some_and(|part| {
             crate::public_url::HttpsUrl::parse(part).is_some_and(|url| {
-                url.host_is("github.com")
+                !url.has_query_or_fragment()
+                    && url.host_is("github.com")
                     && url
                         .path()
                         .strip_prefix("mt4110/drop-squash/releases/tag/")
@@ -94,7 +98,8 @@ fn has_homebrew_pr(reference: &str) -> bool {
     reference.starts_with("Homebrew tap PR ")
         && urls::labeled_https(reference, "Homebrew tap PR").is_some_and(|part| {
             crate::public_url::HttpsUrl::parse(part).is_some_and(|url| {
-                url.host_is("github.com")
+                !url.has_query_or_fragment()
+                    && url.host_is("github.com")
                     && url
                         .path()
                         .strip_prefix("mt4110/homebrew-tap/pull/")
