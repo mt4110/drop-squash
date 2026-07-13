@@ -9,9 +9,9 @@ Do not leave a row `Blocked` after adding an `Evidence reference`; update the
 status and keep the reference traceable.
 For `Verified` rows, `Evidence reference` must point to `docs/...`, an
 `https://...` URL, `Release notes`, `GitHub Release`, or `Homebrew tap PR`.
-Public website and refund references must use the production `dropsquash.app`
-host.
-Public website, refund, and checkout references must not include query or fragment parts.
+Public website, pricing, and refund references must use the production
+`dropsquash.app` host.
+Public website, pricing, refund, and checkout references must not include query or fragment parts.
 `GitHub Release` and `Homebrew tap PR` references must include the public URL.
 Use the exact forms `GitHub Release https://...` and
 `Homebrew tap PR https://...` without extra words in the Evidence reference.
