@@ -14,14 +14,5 @@ fn public_https(value: &str) -> bool {
 }
 
 fn labeled_public_ref(value: &str, label: &str) -> bool {
-    let Some(rest) = value.strip_prefix(label) else {
-        return false;
-    };
-    let mut urls = rest
-        .split_whitespace()
-        .filter(|part| crate::url_scheme::is_https(part));
-    let Some(url) = urls.next() else {
-        return false;
-    };
-    urls.next().is_none() && public_https(url)
+    super::reference_urls::labeled(value, label).is_some_and(public_https)
 }

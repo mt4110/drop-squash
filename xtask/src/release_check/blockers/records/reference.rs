@@ -72,7 +72,7 @@ fn has_expected_url(reference: &str, label: &str, prefix: &str) -> bool {
     } else {
         is_v_semver
     };
-    super::super::reference_urls::single(reference).is_some_and(|value| {
+    super::super::reference_urls::labeled(reference, label).is_some_and(|value| {
         crate::public_url::HttpsUrl::parse(value).is_some_and(|url| {
             url.host_is("github.com") && url.path().strip_prefix(prefix).is_some_and(suffix_matches)
         })

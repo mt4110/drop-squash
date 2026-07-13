@@ -68,7 +68,7 @@ fn has_single_path_segment(value: &str) -> bool {
 
 fn has_release_tag(reference: &str) -> bool {
     reference.starts_with("GitHub Release ")
-        && urls::single_https(reference).is_some_and(|part| {
+        && urls::labeled_https(reference, "GitHub Release").is_some_and(|part| {
             crate::public_url::HttpsUrl::parse(part).is_some_and(|url| {
                 url.host_is("github.com")
                     && url
@@ -92,7 +92,7 @@ fn is_v_semver(value: &str) -> bool {
 
 fn has_homebrew_pr(reference: &str) -> bool {
     reference.starts_with("Homebrew tap PR ")
-        && urls::single_https(reference).is_some_and(|part| {
+        && urls::labeled_https(reference, "Homebrew tap PR").is_some_and(|part| {
             crate::public_url::HttpsUrl::parse(part).is_some_and(|url| {
                 url.host_is("github.com")
                     && url

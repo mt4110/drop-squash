@@ -148,6 +148,19 @@ fn reports_distribution_references_with_placeholder_notes() {
 }
 
 #[test]
+fn reports_distribution_references_with_extra_label_words() {
+    let text = "\
+| Published checksum | Verified | SHA-256 attached | GitHub Release approved https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install output | Homebrew tap PR ready https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+
+    let misplaced = misplaced_verified_references(text);
+
+    assert!(misplaced.contains(&"Published checksum"));
+    assert!(misplaced.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn reports_distribution_references_with_multiple_urls() {
     let text = "\
 | Published checksum | Verified | SHA-256 attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |

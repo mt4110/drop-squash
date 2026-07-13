@@ -1,7 +1,4 @@
-pub(super) fn single(value: &str) -> Option<&str> {
-    let mut urls = value
-        .split_whitespace()
-        .filter(|part| crate::url_scheme::is_https(part));
-    let first = urls.next()?;
-    urls.next().is_none().then_some(first)
+pub(super) fn labeled<'a>(value: &'a str, label: &str) -> Option<&'a str> {
+    let rest = value.strip_prefix(label)?.trim();
+    crate::url_scheme::is_https(rest).then_some(rest)
 }

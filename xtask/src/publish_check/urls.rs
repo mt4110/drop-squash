@@ -6,6 +6,11 @@ pub(super) fn single_https(value: &str) -> Option<&str> {
     urls.next().is_none().then_some(first)
 }
 
+pub(super) fn labeled_https<'a>(value: &'a str, label: &str) -> Option<&'a str> {
+    let rest = value.strip_prefix(label)?.trim();
+    crate::url_scheme::is_https(rest).then_some(rest)
+}
+
 pub(super) fn same_https(left: &str, right: &str) -> bool {
     without_scheme(left).is_some_and(|left| without_scheme(right) == Some(left))
 }
@@ -16,7 +21,7 @@ fn without_scheme(value: &str) -> Option<&str> {
 
 #[cfg(test)]
 mod tests {
-    use super::{same_https, single_https};
+    use super::{labeled_https, same_https, single_https};
 
     #[test]
     fn returns_one_https_url() {
@@ -34,6 +39,14 @@ mod tests {
             "first https://dropsquash.app/release-status second https://dropsquash.app/refund";
 
         assert_eq!(single_https(value), None);
+    }
+
+    #[test]
+    fn rejects_extra_words_before_labeled_url() {
+        let value =
+            "GitHub Release approved https://github.com/mt4110/drop-squash/releases/tag/v0.1.0";
+
+        assert_eq!(labeled_https(value, "GitHub Release"), None);
     }
 
     #[test]
