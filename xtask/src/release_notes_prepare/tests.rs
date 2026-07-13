@@ -154,7 +154,9 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("codesign -dv --verbose=4 /tmp/DropSquash.dmg"));
     assert!(text.contains("spctl --assess --type open --verbose=4 /tmp/DropSquash.dmg"));
     assert!(text.contains("xcrun stapler validate /tmp/DropSquash.dmg"));
-    assert!(text.contains("- `codesign`: pending Developer ID verification"));
+    assert!(text.contains(
+        "- `codesign`: pending codesign --verify and codesign -dv Developer ID verification"
+    ));
     assert!(text.contains("- `spctl`: pending Gatekeeper assessment"));
     assert!(text.contains("- `stapler`: pending stapled ticket validation"));
     assert!(text.contains("- Apple notary log: pending notarytool accepted log"));

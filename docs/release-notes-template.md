@@ -70,7 +70,7 @@ for the same checked DMG:
 - `xcrun stapler validate`
 
 - Git commit: use the current lowercase 7-character or full 40-character commit hash.
-- `codesign`: include `codesign`, `Developer ID`, `public`, and the exact Artifact URL.
+- `codesign`: include `codesign --verify`, `codesign -dv`, `Developer ID`, `public`, and the exact Artifact URL.
 - `spctl`: include `spctl`, `accepted`, `public`, and the exact Artifact URL.
 - `stapler`: include `stapler` or `staple`, `stapled` or `validate`, confirm stapled status, `public`, and the exact Artifact URL.
 - Apple notary log: include `notary` or `notarytool`, `accepted`, `public`, and the exact Artifact URL.

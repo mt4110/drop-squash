@@ -14,7 +14,7 @@ pub(super) fn lines(artifact_path: &str, artifact_url: &str) -> Vec<String> {
             shell_arg(artifact_path)
         ),
         format!("xcrun stapler validate {}", shell_arg(artifact_path)),
-        format!("- `codesign`: pending Developer ID verification for public {artifact_url}; replace this line with observed `codesign` evidence that includes the exact Artifact URL"),
+        format!("- `codesign`: pending codesign --verify and codesign -dv Developer ID verification for public {artifact_url}; replace this line with observed `codesign` evidence that includes the exact Artifact URL"),
         format!("- `spctl`: pending Gatekeeper assessment for public {artifact_url}; replace this line with observed `spctl` accepted evidence that includes the exact Artifact URL"),
         format!("- `stapler`: pending stapled ticket validation for public {artifact_url}; replace this line with observed `stapler` validate evidence that includes the exact Artifact URL"),
         format!("- Apple notary log: pending notarytool accepted log for public {artifact_url}; replace this line with observed notary evidence that includes the exact Artifact URL"),

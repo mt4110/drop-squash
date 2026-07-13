@@ -4,6 +4,8 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
     match label {
         "`codesign`" => Some(&[
             &["codesign"],
+            &["--verify", "verify"],
+            &["-dv"],
             &["developer id"],
             &["public"],
             &["dropsquash.dmg"],

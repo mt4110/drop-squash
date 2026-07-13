@@ -22,7 +22,7 @@ fn accepts_concrete_production_urls() {
 - Artifact: DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Git commit: abc1234
-- `codesign`: codesign verified Developer ID Application signature for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- `codesign`: codesign --verify passed and codesign -dv showed Developer ID Application signature for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 - `spctl`: spctl accepted Developer ID source for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 - `stapler`: stapler validate showed ticket stapled successfully for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 - Apple notary log: notarytool accepted request abc123 for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
@@ -263,6 +263,18 @@ fn rejects_signing_evidence_without_public_artifact_name() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Apple notary log")));
+}
+
+#[test]
+fn rejects_codesign_evidence_without_verify_and_display_detail() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- `codesign`: codesign showed Developer ID Application signature for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("`codesign`")));
 }
 
 #[test]
