@@ -27,7 +27,16 @@ const EXIT_PHRASES: &[(&str, &[&str])] = &[
     ),
     (
         "Public web proof",
-        &["dropsquash.app", "checkout", "refund"],
+        &[
+            "dropsquash.app",
+            "release-status",
+            "privacy",
+            "pricing",
+            "support",
+            "download",
+            "checkout",
+            "refund",
+        ],
     ),
     (
         "Signing and distribution proof",

@@ -119,6 +119,17 @@ fn reports_signing_distribution_exit_without_stapled_state() {
 }
 
 #[test]
+fn reports_public_web_exit_without_download_page() {
+    let text = "\
+| 3 | Public web proof | Public website deployment, Refund policy finalized, Live checkout link | Production dropsquash.app release-status, privacy, pricing, support, checkout, and refund links are ready before the public beta | Production website URLs |
+";
+
+    let weak = weak_exit_conditions(text);
+
+    assert!(weak.contains(&"Public web proof"));
+}
+
+#[test]
 fn reports_placeholder_execution_exit_condition() {
     let text = "\
 | 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | TODO | `docs/manual-qa.md` |
