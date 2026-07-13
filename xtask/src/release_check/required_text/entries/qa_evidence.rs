@@ -47,6 +47,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "manual-only evidence mapping or external classification",
     ),
+    (
+        "docs/qa-evidence.md",
+        "Execution Order to Evidence Classes synchronization",
+    ),
     ("docs/qa-evidence.md", "placeholder checkout buy IDs"),
     (
         "docs/qa-evidence.md",
