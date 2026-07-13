@@ -1472,6 +1472,16 @@ fn reports_cancellation_without_trial_count_evidence() {
 }
 
 #[test]
+fn reports_cancellation_without_temp_cleanup_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Cancellation | Large recording | App returns ready | app returned ready, trial count unchanged, and history showed no new success |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Cancellation")));
+}
+
+#[test]
 fn reports_queued_cancellation_without_success_history_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Queued job cancellation | Three recordings | Waiting row cancelled | queued row marked cancelled and never started |\n",
@@ -1844,7 +1854,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Duplicate output naming" {
             text.push_str("| Duplicate output naming | Passes | second output used numbered clip.squashed-2.mp4 suffix |\n");
         } else if check == "Cancellation" {
-            text.push_str("| Cancellation | Passes | app returned ready and trial count unchanged; history showed no new success |\n");
+            text.push_str("| Cancellation | Passes | app returned ready after temp cleanup; trial count unchanged; history showed no new success |\n");
         } else if check == "Multi-file queue" {
             text.push_str("| Multi-file queue | Passes | 3 recordings queued with 1 active sequential conversion; 3 jobs finished and unrelated failure did not block the queue |\n");
         } else if check == "Queued job cancellation" {

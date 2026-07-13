@@ -2,6 +2,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
     let groups: &[&[&str]] = match label {
         "Cancellation" => &[
             &["ready"],
+            &["temp cleanup", "temporary file cleanup", "cleaned temp"],
             &["trial count unchanged", "trial unchanged", "no trial count"],
             &["history"],
             &["no new success", "no success"],

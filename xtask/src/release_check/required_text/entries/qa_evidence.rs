@@ -100,6 +100,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "post-encode postprocess/history guard",
     ),
+    ("docs/qa-evidence.md", "temp cleanup evidence"),
     ("docs/qa-evidence.md", "native-encoder-unavailable message"),
     ("docs/qa-evidence.md", "short download CTAs"),
     ("docs/qa-evidence.md", "natural release copy"),

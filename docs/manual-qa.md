@@ -136,7 +136,7 @@ error plus the unchanged original and trial count.
 | Privacy receipt sidecar | Successful conversion | Creates matching `.privacy.json` with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve` |  |
 | Reveal privacy receipt | Successful conversion with receipts enabled | Finder opens with generated `.privacy.json` selected |  |
 | Duplicate output naming | Same recording twice | Second output uses `.squashed-2.mp4` style numbered suffix |  |
-| Cancellation | Large recording | App returns to ready; no success history; trial count unchanged |  |
+| Cancellation | Large recording | App returns to ready after temp cleanup; no success history; trial count unchanged |  |
 | Multi-file queue | Three recordings | 3 recordings queue with 1 active sequential conversion; unrelated failures do not block finished jobs |  |
 | Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled, it never starts, trial count is unchanged, and history shows no new success |  |
 | Batch summary | Three recordings with at least one mixed outcome | Queue summary shows trial or license lock blocked jobs plus numeric finished count, saved bytes, failed count, cancelled count, and blocked count |  |
