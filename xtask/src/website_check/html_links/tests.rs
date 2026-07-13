@@ -43,6 +43,13 @@ fn extracts_uppercase_srcset_candidates() {
 }
 
 #[test]
+fn extracts_video_poster_resources() {
+    let sources = srcs(r#"<video poster="preview.png"></video>"#);
+
+    assert_eq!(sources, vec!["preview.png"]);
+}
+
+#[test]
 fn extracts_unquoted_src_values() {
     let sources = srcs(r#"<script src=app.js></script>"#);
 

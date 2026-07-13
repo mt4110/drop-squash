@@ -7,6 +7,7 @@ pub(super) fn srcs(text: &str) -> Vec<String> {
     for srcset in attr_values(text, "srcset") {
         values.extend(srcset_candidates(&srcset));
     }
+    values.extend(attr_values(text, "poster"));
     values
 }
 
