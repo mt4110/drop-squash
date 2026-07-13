@@ -10,6 +10,7 @@ mod qa_evidence_publish;
 mod qa_evidence_release_blockers;
 mod qa_evidence_release_notes;
 mod release_docs;
+mod signed_publication_docs;
 mod website_docs;
 
 type Entry = (&'static str, &'static str);
@@ -27,6 +28,7 @@ const GROUPS: &[&[Entry]] = &[
     qa_evidence_distribution::ENTRIES,
     distribution_docs::ENTRIES,
     release_docs::ENTRIES,
+    signed_publication_docs::ENTRIES,
     website_docs::ENTRIES,
 ];
 
