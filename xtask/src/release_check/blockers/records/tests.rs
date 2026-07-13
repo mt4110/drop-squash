@@ -1,4 +1,4 @@
-use super::{expected_target, misplaced_record_targets};
+use super::{expected_target, misplaced_record_targets, reference_matches_record_target};
 use crate::release_check::blockers::REQUIRED_BLOCKERS;
 
 #[test]
@@ -36,4 +36,29 @@ fn reports_misplaced_record_targets() {
     let misplaced = misplaced_record_targets(&text);
 
     assert!(misplaced.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
+fn rejects_public_url_references_with_query_or_fragment() {
+    let cases = [
+        (
+            "Public website deployment",
+            "https://dropsquash.app/release-status?utm=release",
+        ),
+        (
+            "Refund policy finalized",
+            "https://dropsquash.app/refund#policy",
+        ),
+        (
+            "Live checkout link",
+            "https://dropsquash.lemonsqueezy.com/checkout/buy/abc123?discount=beta",
+        ),
+    ];
+
+    for (blocker, reference) in cases {
+        assert!(
+            !reference_matches_record_target(blocker, reference),
+            "{blocker} accepted {reference}"
+        );
+    }
 }
