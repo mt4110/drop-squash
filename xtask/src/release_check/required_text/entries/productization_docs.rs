@@ -70,6 +70,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "publish Artifact URL completion evidence gate",
     ),
+    ("docs/productization.md", "pricing-finalization blocker"),
+    ("docs/productization.md", "final pricing"),
     (
         "docs/productization.md",
         "Homebrew install evidence tied to the Homebrew tap PR URL",

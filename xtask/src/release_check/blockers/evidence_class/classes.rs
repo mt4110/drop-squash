@@ -13,9 +13,10 @@ pub(super) fn expected(blocker: &str) -> Option<&'static str> {
         | "License network failure"
         | "Expired license refresh"
         | "Local license forget" => Some("License sandbox"),
-        "Public website deployment" | "Refund policy finalized" | "Live checkout link" => {
-            Some("Public web")
-        }
+        "Public website deployment"
+        | "Pricing finalized"
+        | "Refund policy finalized"
+        | "Live checkout link" => Some("Public web"),
         "Signed DMG" | "Notarized and stapled DMG" => Some("Signing/notarization"),
         "Benchmark release set" => Some("Benchmark"),
         "Published checksum" | "Homebrew cask install" => Some("Distribution"),

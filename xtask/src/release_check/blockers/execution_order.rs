@@ -25,6 +25,7 @@ const TRACKS: &[(&str, &[&str])] = &[
         "Public web proof",
         &[
             "Public website deployment",
+            "Pricing finalized",
             "Refund policy finalized",
             "Live checkout link",
         ],

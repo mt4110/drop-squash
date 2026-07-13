@@ -383,6 +383,7 @@ fn reference(blocker: &str) -> &'static str {
         }
         "Homebrew cask install" => "Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1",
         "Public website deployment" => "https://dropsquash.app/release-status",
+        "Pricing finalized" => "https://dropsquash.app/pricing",
         "Refund policy finalized" => "https://dropsquash.app/refund",
         "Live checkout link" => "https://store.lemonsqueezy.com/checkout/buy/abc123",
         _ => "`docs/manual-qa.md`",
@@ -438,6 +439,9 @@ fn evidence(blocker: &str) -> &'static str {
         }
         "Public website deployment" => {
             "Production website production URL on dropsquash.app serves release-status, privacy, pricing, support, and download"
+        }
+        "Pricing finalized" => {
+            "Production pricing page is final on dropsquash.app with no draft price copy before checkout goes live"
         }
         "Refund policy finalized" => {
             "Production refund policy is final on dropsquash.app and linked before checkout goes live"

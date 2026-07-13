@@ -20,6 +20,9 @@ pub(super) const ENTRIES: &[Entry] = &[
         "`release-notes-check` and `publish-check` reject those draft placeholders",
     ),
     ("docs/release.md", "The Public web proof must show"),
+    ("docs/release.md", "`Pricing finalized`"),
+    ("docs/release.md", "draft pricing"),
+    ("docs/release.md", "Pricing URL"),
     ("docs/release.md", "checkout, and refund links"),
     (
         "docs/release.md",

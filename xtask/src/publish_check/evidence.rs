@@ -10,6 +10,7 @@ pub(super) fn matches(blocker: &str, reference: &str) -> bool {
         "Published checksum" => has_release_tag(reference),
         "Homebrew cask install" => has_homebrew_pr(reference),
         "Public website deployment" => is_public_site(reference),
+        "Pricing finalized" => is_pricing(reference),
         "Refund policy finalized" => is_refund(reference),
         "Live checkout link" => is_checkout(reference),
         _ => reference == "`docs/manual-qa.md`",
@@ -44,6 +45,17 @@ fn is_refund(reference: &str) -> bool {
     })
 }
 
+fn is_pricing(reference: &str) -> bool {
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        let path = url.path().to_ascii_lowercase();
+        !url.has_query_or_fragment()
+            && url.host_is("dropsquash.app")
+            && is_pricing_path(&path)
+            && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && !path.contains("checkout")
+    })
+}
+
 fn is_checkout(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         !url.has_query_or_fragment()
@@ -58,6 +70,10 @@ fn is_release_status_path(path: &str) -> bool {
 
 fn is_refund_path(path: &str) -> bool {
     path == "refund" || path == "refund/"
+}
+
+fn is_pricing_path(path: &str) -> bool {
+    path == "pricing" || path == "pricing/"
 }
 
 fn has_release_tag(reference: &str) -> bool {

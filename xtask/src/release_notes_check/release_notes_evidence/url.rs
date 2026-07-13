@@ -2,6 +2,7 @@
 pub(super) enum Kind {
     Artifact,
     Website,
+    Pricing,
     Refund,
     Checkout,
     GitHubRelease,
@@ -27,6 +28,11 @@ fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
                 && !url.host_is_or_subdomain_of("lemonsqueezy.com")
                 && !path.contains("checkout")
         }
+        Kind::Pricing => {
+            url.host_is("dropsquash.app")
+                && has_pricing_path(&path)
+                && !has_store_or_checkout(url, &path)
+        }
         Kind::Refund => {
             url.host_is("dropsquash.app")
                 && has_refund_path(&path)
@@ -47,6 +53,10 @@ fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
 
 fn has_refund_path(lower: &str) -> bool {
     lower == "refund" || lower == "refund/"
+}
+
+fn has_pricing_path(lower: &str) -> bool {
+    lower == "pricing" || lower == "pricing/"
 }
 
 fn has_store_or_checkout(url: &crate::public_url::HttpsUrl<'_>, lower_path: &str) -> bool {

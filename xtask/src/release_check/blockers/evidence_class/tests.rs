@@ -448,6 +448,9 @@ fn action_for(blocker: &str) -> &'static str {
         "Public website deployment" => {
             "Deploy the production site on dropsquash.app and verify release-status, privacy, pricing, support, and download pages"
         }
+        "Pricing finalized" => {
+            "Publish the final pricing page URL on dropsquash.app and confirm no draft price copy remains before checkout goes live"
+        }
         "Refund policy finalized" => {
             "Publish the final refund policy URL on dropsquash.app and confirm it is linked before checkout goes live"
         }

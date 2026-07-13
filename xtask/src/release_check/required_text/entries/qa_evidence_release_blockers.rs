@@ -31,6 +31,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "Pricing finalized production URL evidence",
+    ),
+    ("docs/qa-evidence.md", "release notes URLs including Pricing URL"),
+    (
+        "docs/qa-evidence.md",
         "notarized stapled-status Next action evidence",
     ),
     (

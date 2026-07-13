@@ -3,9 +3,10 @@ mod blockers;
 
 use super::url;
 
-pub(super) const URL: [(&str, url::Kind); 6] = [
+pub(super) const URL: [(&str, url::Kind); 7] = [
     ("Artifact URL", url::Kind::Artifact),
     ("Public website URL", url::Kind::Website),
+    ("Pricing URL", url::Kind::Pricing),
     ("Refund policy URL", url::Kind::Refund),
     ("Live checkout URL", url::Kind::Checkout),
     ("GitHub Release URL", url::Kind::GitHubRelease),

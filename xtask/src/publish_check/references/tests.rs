@@ -4,6 +4,7 @@ use super::mismatched;
 fn accepts_matching_release_note_references() {
     let blockers = "\
 | Public website deployment | Verified | done | HTTPS://dropsquash.app/release-status | `https://...` |
+| Pricing finalized | Verified | done | https://dropsquash.app/pricing | `https://...` |
 | Refund policy finalized | Verified | done | https://dropsquash.app/refund | `https://...` |
 | Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |
 | Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release HTTPS://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
@@ -42,6 +43,7 @@ fn reports_distribution_references_that_do_not_match_release_notes() {
 fn reports_public_web_references_that_do_not_match_release_notes() {
     let blockers = "\
 | Public website deployment | Verified | done | https://other.example/release-status | `https://...` |
+| Pricing finalized | Verified | done | https://dropsquash.app/draft-pricing | `https://...` |
 | Refund policy finalized | Verified | done | https://dropsquash.app/old-refund | `https://...` |
 | Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/wrong | `https://...` |
 ";
@@ -49,6 +51,7 @@ fn reports_public_web_references_that_do_not_match_release_notes() {
     let mismatched = mismatched(blockers, &notes);
 
     assert!(mismatched.contains(&"Public website deployment"));
+    assert!(mismatched.contains(&"Pricing finalized"));
     assert!(mismatched.contains(&"Refund policy finalized"));
     assert!(mismatched.contains(&"Live checkout link"));
 }
@@ -143,6 +146,7 @@ fn release_notes(version: &str, pr: &str) -> String {
     format!(
         "\
 - Public website URL: https://dropsquash.app/release-status
+- Pricing URL: https://dropsquash.app/pricing
 - Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/{version}

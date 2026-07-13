@@ -106,9 +106,12 @@ privacy-sensitive code:
 cargo run -p xtask -- privacy-policy-check
 ```
 
-Before live checkout is enabled, publish the final refund policy and update the
-`Refund policy finalized` row in `docs/release-blockers.md` with the production
-`/refund` URL. Do not treat the draft refund page as paid-beta evidence.
+Before live checkout is enabled, publish the final pricing page and refund
+policy. Update the `Pricing finalized` row in `docs/release-blockers.md` with
+the production `/pricing` URL, fill the release notes Pricing URL field with
+the same URL, and update the `Refund policy finalized` row with the production
+`/refund` URL. Do not treat draft pricing or the draft refund page as paid-beta
+evidence.
 
 Check the local macOS signing and notarization environment before a signed build:
 
@@ -263,12 +266,12 @@ The release notes Benchmark sample set CSV path must also match an existing
 manual QA Benchmark sample set CSV path, so benchmark evidence cannot drift
 between private QA and the public release notes.
 The publish check also requires release blocker URLs to match the release notes
-URLs for the public website, refund policy, live checkout, GitHub Release, and
-Homebrew tap PR. Public publish references must point to the same release notes
-URLs, not to a different release or tap PR.
+URLs for the public website, pricing page, refund policy, live checkout, GitHub
+Release, and Homebrew tap PR. Public publish references must point to the same
+release notes URLs, not to a different release or tap PR.
 The Public web proof must show the production `dropsquash.app` release-status
-and refund URLs serving release-status, privacy, pricing, support, download,
-checkout, and refund links before the public beta.
+pricing, and refund URLs serving release-status, privacy, pricing, support,
+download, checkout, and refund links before the public beta.
 The Signing and distribution proof must show the same public `DropSquash.dmg`
 from the release notes Artifact URL is signed, notarized, stapled, checksummed,
 installable through the Homebrew tap PR, and opens without warning.

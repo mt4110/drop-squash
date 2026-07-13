@@ -43,6 +43,7 @@ fn accepts_concrete_production_urls() {
 - Expired license refresh: attempted conversion with expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and checked cache confirmed raw key absent
 - Local license forget: Forgetting state disabled action; confirmed license cache removed and observed trial state restored
 - Public website URL: HTTPS://dropsquash.app/release-status
+- Pricing URL: https://dropsquash.app/pricing
 - Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
@@ -87,6 +88,7 @@ fn rejects_weak_distribution_evidence() {
 - Expired license refresh: refresh required
 - Local license forget: forgot license
 - Public website URL: https://dropsquash.app/release-status
+- Pricing URL: https://dropsquash.app/draft-pricing
 - Refund policy URL: https://dropsquash.app/pricing
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release checksum: SHA256SUMS attached

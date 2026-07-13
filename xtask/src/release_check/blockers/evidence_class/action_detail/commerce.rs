@@ -16,6 +16,12 @@ pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
             "support",
             "download",
         ]),
+        "Pricing finalized" => Some(&[
+            "final pricing page URL",
+            "dropsquash.app",
+            "no draft price copy",
+            "checkout goes live",
+        ]),
         "Refund policy finalized" => Some(&[
             "final refund policy URL",
             "dropsquash.app",

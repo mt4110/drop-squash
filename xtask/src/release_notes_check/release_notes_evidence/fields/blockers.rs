@@ -18,6 +18,7 @@ pub(super) const MAPPING: &[(&str, &[&str])] = &[
     ("Expired license refresh", &["Expired license refresh"]),
     ("Local license forget", &["Local license forget"]),
     ("Public website deployment", &["Public website URL"]),
+    ("Pricing finalized", &["Pricing URL"]),
     ("Refund policy finalized", &["Refund policy URL"]),
     ("Live checkout link", &["Live checkout URL"]),
     ("Signed DMG", &["`codesign`"]),

@@ -36,6 +36,7 @@ License network failure
 Expired license refresh
 Local license forget
 Public website URL
+Pricing URL
 Refund policy URL
 Live checkout URL
 store.lemonsqueezy.com/checkout/buy

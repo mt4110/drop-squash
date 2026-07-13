@@ -5,6 +5,7 @@ pub(super) fn matches_record_target(blocker: &str, reference: &str) -> bool {
         Some("`https://...`") if blocker == "Public website deployment" => {
             is_public_website(reference)
         }
+        Some("`https://...`") if blocker == "Pricing finalized" => is_pricing(reference),
         Some("`https://...`") if blocker == "Refund policy finalized" => {
             is_refund_policy(reference)
         }
@@ -51,6 +52,17 @@ fn is_refund_policy(reference: &str) -> bool {
         !url.has_query_or_fragment()
             && url.host_is("dropsquash.app")
             && (path == "refund" || path == "refund/")
+            && !url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && !path.contains("checkout")
+    })
+}
+
+fn is_pricing(reference: &str) -> bool {
+    crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
+        let path = url.path().to_ascii_lowercase();
+        !url.has_query_or_fragment()
+            && url.host_is("dropsquash.app")
+            && (path == "pricing" || path == "pricing/")
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
     })

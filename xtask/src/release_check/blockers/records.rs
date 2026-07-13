@@ -34,9 +34,10 @@ pub(super) fn expected_target(blocker: &str) -> Option<&'static str> {
         | "Local license forget"
         | "Gatekeeper clean-machine open"
         | "Benchmark release set" => Some("`docs/manual-qa.md`"),
-        "Public website deployment" | "Refund policy finalized" | "Live checkout link" => {
-            Some("`https://...`")
-        }
+        "Public website deployment"
+        | "Pricing finalized"
+        | "Refund policy finalized"
+        | "Live checkout link" => Some("`https://...`"),
         "Signed DMG" | "Notarized and stapled DMG" => Some("Release notes"),
         "Published checksum" => Some("GitHub Release"),
         "Homebrew cask install" => Some("Homebrew tap PR"),

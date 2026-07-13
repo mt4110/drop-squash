@@ -38,6 +38,7 @@ license keys, private store IDs, or certificate material.
 - Expired license refresh:
 - Local license forget:
 - Public website URL:
+- Pricing URL:
 - Refund policy URL:
 - Live checkout URL:
 
@@ -81,6 +82,7 @@ weak public evidence before the release is published.
 - Expired license refresh: mention the attempted conversion, expired offline grace cache, reconnect prompt, conversion blocked before starting, checked cache evidence, and `raw key` absence.
 - Local license forget: mention disabled action state, confirmed cache removal, and observed trial or locked state.
 - Public website URL: use the production `https://dropsquash.app/release-status` URL.
+- Pricing URL: use the production `https://dropsquash.app/pricing` URL after the price is final and draft price copy is removed.
 - Refund policy URL: use the production `https://dropsquash.app/refund` URL after the policy is final.
 - Live checkout URL: use the `https://store.lemonsqueezy.com/checkout/buy/<id>` URL for the product.
 - GitHub Release checksum: mention `SHA256SUMS` or `SHA-256`, public `DropSquash.dmg`, attached to the GitHub Release URL above, the Artifact URL above, and the exact lowercase SHA-256 digest above.
