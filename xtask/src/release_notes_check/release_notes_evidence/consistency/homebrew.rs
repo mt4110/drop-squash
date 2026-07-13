@@ -4,6 +4,7 @@ pub(super) fn validate(text: &str, errors: &mut Vec<String>) {
     require_artifact_url(text, errors);
     require_pr_url(text, errors);
     require_sha256(text, errors);
+    require_install_artifact_url(text, errors);
     require_install_sha256(text, errors);
 }
 
@@ -43,6 +44,16 @@ fn require_install_sha256(text: &str, errors: &mut Vec<String>) {
         "SHA-256",
         "Homebrew install result",
         "Homebrew install result must include the lowercase SHA-256 digest",
+        errors,
+    );
+}
+
+fn require_install_artifact_url(text: &str, errors: &mut Vec<String>) {
+    require_contains(
+        text,
+        "Artifact URL",
+        "Homebrew install result",
+        "Homebrew install result must include the Artifact URL",
         errors,
     );
 }
