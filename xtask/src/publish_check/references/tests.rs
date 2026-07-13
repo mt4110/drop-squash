@@ -102,6 +102,34 @@ fn reports_reference_with_extra_url_after_expected_url() {
 }
 
 #[test]
+fn reports_release_note_field_with_extra_url() {
+    let blockers = "\
+| Public website deployment | Verified | done | https://dropsquash.app/release-status | `https://...` |
+";
+    let notes = "\
+- Public website URL: https://dropsquash.app/release-status https://dropsquash.app/refund
+";
+
+    let mismatched = mismatched(blockers, notes);
+
+    assert!(mismatched.contains(&"Public website deployment"));
+}
+
+#[test]
+fn reports_release_note_field_with_placeholder_note() {
+    let blockers = "\
+| Refund policy finalized | Verified | done | https://dropsquash.app/refund | `https://...` |
+";
+    let notes = "\
+- Refund policy URL: https://dropsquash.app/refund TODO
+";
+
+    let mismatched = mismatched(blockers, notes);
+
+    assert!(mismatched.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn ignores_blocked_references() {
     let blockers = "\
 | Published checksum | Blocked | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
