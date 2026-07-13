@@ -382,6 +382,22 @@ fn publish_rejects_prepared_homebrew_release_note_draft() {
 }
 
 #[test]
+fn publish_rejects_prepared_homebrew_install_draft() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(
+        &path,
+        "- Homebrew install result: brew install and uninstall evidence pending; replace this line with observed install and uninstall evidence\n",
+    )
+    .unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("Homebrew install result"));
+}
+
+#[test]
 fn publish_rejects_prepared_release_note_draft_marker() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("release-notes.md");
