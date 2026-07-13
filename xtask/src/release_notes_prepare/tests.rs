@@ -203,6 +203,28 @@ fn renders_prepared_release_notes_fields() {
 }
 
 #[test]
+fn prepared_public_url_drafts_are_not_release_evidence() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    let notes = PreparedNotes {
+        version: "0.1.0".into(),
+        artifact_path: "/tmp/DropSquash.dmg".into(),
+        artifact_url:
+            "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg".into(),
+        sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".into(),
+        commit: "abc1234".into(),
+    };
+    std::fs::write(&path, notes.lines().join("\n")).unwrap();
+
+    let error = crate::release_notes_check::check_file(&path).unwrap_err();
+
+    assert!(error.contains("Public website URL"));
+    assert!(error.contains("Pricing URL"));
+    assert!(error.contains("Refund policy URL"));
+    assert!(error.contains("Live checkout URL"));
+}
+
+#[test]
 fn shell_quotes_checksum_command_path() {
     let notes = PreparedNotes {
         version: "0.1.0".into(),
