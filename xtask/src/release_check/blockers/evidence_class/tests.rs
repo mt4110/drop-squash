@@ -382,6 +382,24 @@ fn reports_homebrew_action_without_install_policy_details() {
     assert!(unclassified.contains(&"Homebrew cask install"));
 }
 
+#[test]
+fn reports_homebrew_action_without_uninstall_result() {
+    let text = "| Homebrew cask install | Distribution | Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg Artifact URL, matching lowercase SHA-256, auto_updates false, and zap cleanup | Homebrew tap PR URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Homebrew cask install"));
+}
+
+#[test]
+fn reports_homebrew_action_without_clean_uninstall_result() {
+    let text = "| Homebrew cask install | Distribution | Open Homebrew tap PR and verify brew install --cask, brew uninstall --cask, versioned DropSquash.dmg Artifact URL, matching lowercase SHA-256, auto_updates false, and zap cleanup | Homebrew tap PR URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Homebrew cask install"));
+}
+
 fn action_for(blocker: &str) -> &'static str {
     match blocker {
         "Packaged macOS manual QA" => "Run public DropSquash.dmg artifact through manual QA",
@@ -431,7 +449,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line matching the release notes Artifact URL to the GitHub Release"
         }
         "Homebrew cask install" => {
-            "Open Homebrew tap PR and verify brew install --cask for versioned DropSquash.dmg Artifact URL, matching lowercase SHA-256, auto_updates false, and zap cleanup"
+            "Open Homebrew tap PR and verify brew install --cask, brew uninstall --cask removes it cleanly, versioned DropSquash.dmg Artifact URL, matching lowercase SHA-256, auto_updates false, and zap cleanup"
         }
         _ => "Capture concrete release evidence",
     }

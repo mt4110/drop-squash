@@ -28,6 +28,8 @@ pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
             "DropSquash.dmg",
             "Artifact URL",
             "matching lowercase SHA-256",
+            "brew uninstall",
+            "removes it cleanly",
             "auto_updates false",
             "zap",
         ]),
