@@ -37,6 +37,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
             fields.version, fields.artifact_url, fields.sha256
         ),
         "Homebrew tap PR evidence draft:".into(),
+        "- Homebrew tap PR URL: pending tap PR; replace this line with the reviewed Homebrew tap PR URL".into(),
         format!(
             "- Homebrew tap PR: cask PR for versioned DropSquash.dmg uses {} with lowercase SHA-256 {}, auto_updates false, and zap cleanup path; replace this line with reviewed PR evidence that includes the Homebrew tap PR URL above",
             fields.artifact_url, fields.sha256
