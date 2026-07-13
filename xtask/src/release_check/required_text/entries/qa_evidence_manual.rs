@@ -26,6 +26,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "existing benchmark CSV path evidence",
+    ),
+    (
+        "docs/qa-evidence.md",
         "intended product license setup evidence",
     ),
     (
