@@ -57,7 +57,7 @@ fn generated_rows_satisfy_manual_qa_field_checks() {
 }
 
 #[test]
-fn generated_field_labels_are_required_manual_qa_fields() {
+fn generated_field_labels_match_required_manual_qa_fields() {
     let fields = vec![
         ("App build", String::new()),
         ("App artifact", String::new()),
@@ -71,13 +71,15 @@ fn generated_field_labels_are_required_manual_qa_fields() {
         ("Tester", String::new()),
         ("Date", String::new()),
     ];
-    let untracked = fields
+    let generated = fields
         .iter()
         .map(|(label, _)| *label)
-        .filter(|label| !crate::manual_qa_check::requirements::REQUIRED_FIELDS.contains(label))
-        .collect::<Vec<_>>();
+        .collect::<std::collections::BTreeSet<_>>();
+    let required = crate::manual_qa_check::requirements::REQUIRED_FIELDS
+        .into_iter()
+        .collect::<std::collections::BTreeSet<_>>();
 
-    assert!(untracked.is_empty(), "{untracked:?}");
+    assert_eq!(generated, required);
 }
 
 fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
