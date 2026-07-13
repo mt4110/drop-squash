@@ -57,6 +57,9 @@ impl Options {
         if self.reset_trial && self.restore_state {
             return Err("--reset-trial and --restore-state cannot be combined".to_string());
         }
+        if self.restore_state && self.has_prepare_only_input() {
+            return Err("--restore-state only accepts --app-state-dir and --state-dir".to_string());
+        }
         if self.reset_trial && self.input_sample_set.is_none() {
             return Err(
                 "--reset-trial requires --input-sample-set with short, medium, and large recordings"
@@ -81,6 +84,12 @@ impl Options {
         path_policy::require_outside_repo("--output-dir", &self.output_dir)?;
         path_policy::require_outside_repo("--state-dir", &self.state_dir)?;
         Ok(())
+    }
+
+    fn has_prepare_only_input(&self) -> bool {
+        self.app_artifact.is_some()
+            || self.input_sample_set.is_some()
+            || self.markdown_output.is_some()
     }
 
     fn default() -> Result<Self, String> {

@@ -145,6 +145,18 @@ fn parses_restore_state() {
 }
 
 #[test]
+fn restore_rejects_prepare_only_inputs() {
+    let error = Options::parse(vec![
+        "--restore-state".to_string(),
+        "--input-sample-set".to_string(),
+        "short, medium, and large local recordings".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--restore-state only accepts"));
+}
+
+#[test]
 fn prints_usage_for_help() {
     let error = Options::parse(vec!["--help".to_string()]).unwrap_err();
 
