@@ -8,6 +8,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "release notes template field-label synchronization",
     ),
     ("docs/qa-evidence.md", "GitHub Release URL"),
+    (
+        "docs/qa-evidence.md",
+        "required public website, pricing, refund, and live checkout URL placeholders",
+    ),
     ("docs/qa-evidence.md", "SHA256SUMS line"),
     ("docs/qa-evidence.md", "SHA256SUMS output command"),
     ("docs/qa-evidence.md", "`--output` must be named `SHA256SUMS`"),

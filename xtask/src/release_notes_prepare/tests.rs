@@ -148,6 +148,11 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("- Version: v0.1.0"));
     assert!(text.contains("- Artifact: DropSquash.dmg"));
     assert!(text.contains("- Git commit: abc1234"));
+    assert!(text.contains("## Productization Evidence"));
+    assert!(text.contains("- Public website URL: pending production deployment"));
+    assert!(text.contains("- Pricing URL: pending final pricing"));
+    assert!(text.contains("- Refund policy URL: pending final refund policy"));
+    assert!(text.contains("- Live checkout URL: pending live checkout"));
     assert!(text.contains("- GitHub Release URL:"));
     assert!(text.contains("releases/tag/v0.1.0"));
     assert!(text.contains("- SHA256SUMS line:"));
@@ -188,8 +193,12 @@ fn renders_prepared_release_notes_fields() {
         .find("- GitHub Release URL:")
         .expect("release URL field");
     let artifact_heading = text.find("## Artifact").expect("artifact heading");
+    let productization_heading = text
+        .find("## Productization Evidence")
+        .expect("productization heading");
     let distribution_heading = text.find("## Distribution").expect("distribution heading");
-    assert!(artifact_heading < distribution_heading);
+    assert!(artifact_heading < productization_heading);
+    assert!(productization_heading < distribution_heading);
     assert!(checksum < release_url);
 }
 
