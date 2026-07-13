@@ -42,6 +42,11 @@ impl LicenseApiClient {
             .send()
             .await
             .map_err(|_| AppError::License("License server is unreachable.".to_string()))?;
+        if !response.status().is_success() {
+            return Err(AppError::License(
+                "License request was not accepted.".to_string(),
+            ));
+        }
         response.json::<LicenseApiResponse>().await.map_err(|_| {
             AppError::License("License server returned an unreadable response.".to_string())
         })

@@ -189,6 +189,25 @@ async fn activate_posts_license_key_and_instance_name() {
 }
 
 #[tokio::test]
+async fn activation_rejects_non_success_http_status() {
+    let response = r#"{"activated":true,"instance":{"id":"remote-instance-1"}}"#;
+    let (base_url, request) = capture_one_request_with_status("500 Internal Server Error", response)
+        .await;
+    let provider = LemonSqueezyProvider {
+        client: LicenseApiClient::test(base_url),
+    };
+
+    let error = provider
+        .activate("LS-SECRET-RAW-KEY", "device-1")
+        .await
+        .unwrap_err();
+
+    assert!(request.await.unwrap().starts_with("POST /activate HTTP/1.1"));
+    assert!(error.to_string().contains("License request was not accepted."));
+    assert!(!error.to_string().contains("LS-SECRET-RAW-KEY"));
+}
+
+#[tokio::test]
 async fn validate_posts_license_key_and_instance_id() {
     let (base_url, request) = capture_one_request(r#"{"valid":true}"#).await;
     let provider = LemonSqueezyProvider {
@@ -225,6 +244,13 @@ async fn deactivate_posts_license_key_and_instance_id() {
 async fn capture_one_request(
     response_json: &'static str,
 ) -> (String, tokio::task::JoinHandle<String>) {
+    capture_one_request_with_status("200 OK", response_json).await
+}
+
+async fn capture_one_request_with_status(
+    status: &'static str,
+    response_json: &'static str,
+) -> (String, tokio::task::JoinHandle<String>) {
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let base_url = format!("http://{}", listener.local_addr().unwrap());
     let task = tokio::spawn(async move {
@@ -240,7 +266,7 @@ async fn capture_one_request(
             }
         }
         let response = format!(
-            "HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: {}\r\n\r\n{}",
+            "HTTP/1.1 {status}\r\ncontent-type: application/json\r\ncontent-length: {}\r\n\r\n{}",
             response_json.len(),
             response_json
         );
