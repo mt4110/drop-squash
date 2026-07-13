@@ -160,9 +160,17 @@ jobs:
       - name: Plan macOS stapler commands
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+      - name: Staple macOS DMG
+        if: matrix.os == 'macos-latest'
+        run: |
+          xcrun stapler staple "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+          xcrun stapler validate "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
       - name: Plan macOS Gatekeeper assessment
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+      - name: Assess macOS Gatekeeper
+        if: matrix.os == 'macos-latest'
+        run: spctl --assess --type open --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
       - name: Plan macOS temporary keychain cleanup
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"

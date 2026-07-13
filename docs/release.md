@@ -28,11 +28,11 @@ writes the App Store Connect `.p8` key only into the runner temporary directory,
 and fails deterministically before signed packaging is enabled when CI
 credentials are missing.
 It now runs `Import macOS signing certificate`, `Sign macOS DMG`,
-`Verify macOS codesign`, `Notarize macOS DMG`, and
-`Cleanup macOS signing keychain` against the isolated signing target with
-`APPLE_CODESIGN_IDENTITY`. Stapling, `spctl`, signed checksum publication, and
-public GitHub Release publication remain blocked until their execution steps and
-evidence are complete.
+`Verify macOS codesign`, `Notarize macOS DMG`, `Staple macOS DMG`,
+`Assess macOS Gatekeeper`, and `Cleanup macOS signing keychain` against the
+isolated signing target with `APPLE_CODESIGN_IDENTITY`. Signed checksum
+publication and public GitHub Release publication remain blocked until their
+execution steps and evidence are complete.
 
 Build public QA and release artifacts from a clean git worktree. If Tauri or
 Git reports a dirty tree, either commit or intentionally remove the unrelated

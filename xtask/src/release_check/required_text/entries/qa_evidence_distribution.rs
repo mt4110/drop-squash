@@ -61,6 +61,8 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "CI codesign execution runner"),
     ("docs/qa-evidence.md", "CI notarization execution runner"),
+    ("docs/qa-evidence.md", "CI stapler execution runner"),
+    ("docs/qa-evidence.md", "CI Gatekeeper assessment runner"),
     ("docs/qa-evidence.md", "macOS signing command plan"),
     ("docs/qa-evidence.md", "macOS keychain argv plan"),
     ("docs/qa-evidence.md", "macOS keychain cleanup argv plan"),
