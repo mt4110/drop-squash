@@ -2,6 +2,13 @@ use super::check_file;
 use super::requirements::{REQUIRED_CHECKS, REQUIRED_FIELDS};
 
 #[test]
+fn rejects_extra_manual_qa_arguments() {
+    let error = super::run(vec!["docs/manual-qa.md".into(), "extra.md".into()]).unwrap_err();
+
+    assert!(error.contains("at most one"));
+}
+
+#[test]
 fn accepts_complete_manual_qa_tables() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");

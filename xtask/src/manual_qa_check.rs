@@ -12,11 +12,11 @@ mod validation;
 use requirements::{require_labels, REQUIRED_CHECKS, REQUIRED_FIELDS};
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
-    let path = PathBuf::from(
-        args.first()
-            .map(String::as_str)
-            .unwrap_or("docs/manual-qa.md"),
-    );
+    let path = match args.as_slice() {
+        [] => PathBuf::from("docs/manual-qa.md"),
+        [path] => PathBuf::from(path),
+        _ => return Err("manual-qa-check accepts at most one <manual-qa.md>".to_string()),
+    };
     let missing = check_file(&path)?;
     if missing.is_empty() {
         println!("manual QA checks passed");
