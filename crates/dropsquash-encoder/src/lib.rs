@@ -47,7 +47,9 @@ mod tests {
                 })
                 .await
                 .unwrap_err();
-            assert!(error.to_string().contains("cannot use the native encoder"));
+            let message = error.to_string();
+            assert!(message.contains("native-encoder-unavailable"));
+            assert!(message.contains(backend.name()));
         }
     }
 }

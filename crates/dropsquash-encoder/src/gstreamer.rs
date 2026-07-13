@@ -25,8 +25,9 @@ impl EncoderBackend for GStreamerEncoder {
     }
 
     async fn encode(&self, _job: EncodeJob) -> Result<EncodeResult> {
-        Err(AppError::Encoder(
-            "This build cannot use the native encoder on this system.".to_string(),
-        ))
+        Err(AppError::Encoder(format!(
+            "native-encoder-unavailable: {} is not implemented yet; no external media fallback is used",
+            self.name()
+        )))
     }
 }
