@@ -66,6 +66,15 @@ fn rejects_live_checkout_reference_with_prefixed_checkout_path() {
 }
 
 #[test]
+fn rejects_live_checkout_reference_outside_store_host() {
+    let text = "| Live checkout link | Verified | done | https://dropsquash.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |\n";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Live checkout link"));
+}
+
+#[test]
 fn rejects_public_references_with_query_or_fragment() {
     let text = "\
 | Public website deployment | Verified | done | https://dropsquash.app/release-status?source=publish | `https://...` |

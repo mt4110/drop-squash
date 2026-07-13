@@ -62,3 +62,11 @@ fn rejects_public_url_references_with_query_or_fragment() {
         );
     }
 }
+
+#[test]
+fn rejects_live_checkout_outside_store_host() {
+    assert!(!reference_matches_record_target(
+        "Live checkout link",
+        "https://dropsquash.lemonsqueezy.com/checkout/buy/abc123",
+    ));
+}

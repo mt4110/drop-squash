@@ -37,6 +37,7 @@ Local license forget
 Public website URL
 Refund policy URL
 Live checkout URL
+store.lemonsqueezy.com/checkout/buy
 GitHub Release checksum
 the Artifact URL above
 GitHub Release URL

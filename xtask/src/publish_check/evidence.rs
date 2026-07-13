@@ -47,7 +47,7 @@ fn is_refund(reference: &str) -> bool {
 fn is_checkout(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         !url.has_query_or_fragment()
-            && url.host_is_or_subdomain_of("lemonsqueezy.com")
+            && url.host_is("store.lemonsqueezy.com")
             && url
                 .path()
                 .to_ascii_lowercase()

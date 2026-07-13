@@ -970,6 +970,19 @@ fn rejects_checkout_url_without_buy_id() {
 }
 
 #[test]
+fn rejects_checkout_url_outside_store_host() {
+    let errors = check_text(
+        r#"
+- Live checkout URL: https://dropsquash.lemonsqueezy.com/checkout/buy/abc123
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Live checkout URL")));
+}
+
+#[test]
 fn rejects_checkout_url_with_extra_path_after_buy_id() {
     let errors = check_text(
         r#"

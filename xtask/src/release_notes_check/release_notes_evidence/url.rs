@@ -32,9 +32,7 @@ fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
                 && has_refund_path(&path)
                 && !has_store_or_checkout(url, &path)
         }
-        Kind::Checkout => {
-            url.host_is_or_subdomain_of("lemonsqueezy.com") && has_checkout_buy_id(&path)
-        }
+        Kind::Checkout => url.host_is("store.lemonsqueezy.com") && has_checkout_buy_id(&path),
         Kind::GitHubRelease => {
             url.host_is("github.com")
                 && has_release_tag_suffix(url.path(), "mt4110/drop-squash/releases/tag/")
