@@ -254,6 +254,22 @@ fn publish_requires_final_release_notes() {
     assert!(error.contains("GitHub Release checksum"));
 }
 
+#[test]
+fn publish_rejects_prepared_release_note_draft_marker() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(
+        &path,
+        "Prepared draft only. Replace every pending line before public release.\n",
+    )
+    .unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("prepared draft markers"));
+}
+
 fn reference(blocker: &str) -> &'static str {
     match blocker {
         "Signed DMG" | "Notarized and stapled DMG" => "Release notes",
