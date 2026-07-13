@@ -264,4 +264,7 @@ fn pro_rejects_malformed_fingerprint() {
 
     cache.license_key_fingerprint = Some("z".repeat(64));
     assert!(!cache.permits_pro(100));
+
+    cache.license_key_fingerprint = Some("A".repeat(64));
+    assert!(!cache.permits_pro(100));
 }

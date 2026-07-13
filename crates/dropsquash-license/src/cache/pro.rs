@@ -31,5 +31,8 @@ fn has_value(value: &Option<String>) -> bool {
 }
 
 fn is_fingerprint(value: &str) -> bool {
-    value.len() == 64 && value.chars().all(|char| char.is_ascii_hexdigit())
+    value.len() == 64
+        && value
+            .chars()
+            .all(|char| char.is_ascii_hexdigit() && !char.is_ascii_uppercase())
 }
