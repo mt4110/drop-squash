@@ -72,10 +72,11 @@ fn is_sha256(value: &str) -> bool {
 }
 
 fn validate_notes(path: &Path) -> Result<(), String> {
-    if path.extension().and_then(|value| value.to_str()) == Some("md") && path.is_file() {
-        return Ok(());
+    if path.extension().and_then(|value| value.to_str()) != Some("md") || !path.is_file() {
+        return Err("GitHub Release notes must be an existing .md file".to_string());
     }
-    Err("GitHub Release notes must be an existing .md file".to_string())
+    crate::release_notes_check::check_file_silent(path)
+        .map_err(|error| format!("GitHub Release notes must pass release-notes-check:\n{error}"))
 }
 
 fn shell_command(args: &[&str]) -> String {

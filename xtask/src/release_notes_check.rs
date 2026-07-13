@@ -10,9 +10,14 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 }
 
 pub(crate) fn check_file(path: &Path) -> Result<(), String> {
+    check_file_silent(path)?;
+    println!("release notes checks passed");
+    Ok(())
+}
+
+pub(crate) fn check_file_silent(path: &Path) -> Result<(), String> {
     let errors = release_notes_evidence::check(path)?;
     if errors.is_empty() {
-        println!("release notes checks passed");
         return Ok(());
     }
     Err(errors.join("\n"))
