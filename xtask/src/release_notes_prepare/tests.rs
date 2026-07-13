@@ -153,8 +153,9 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("homebrew-cask 0.1.0"));
     assert!(text.contains("Homebrew tap PR evidence draft"));
     assert!(text.contains("versioned DropSquash.dmg"));
-    assert!(text
-        .contains("with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"));
+    assert!(text.contains(
+        "with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    ));
     assert!(text.contains("replace this line with reviewed PR evidence"));
     assert!(text.contains("auto_updates false"));
     assert!(text.contains("zap cleanup path"));

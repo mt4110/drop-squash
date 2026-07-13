@@ -45,9 +45,9 @@ fn accepts_concrete_production_urls() {
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
 - GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
 - GitHub Release checksum: SHA256SUMS attached to https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 for https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-- Homebrew tap PR: cask update reviewed in tap PR for versioned DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path
+- Homebrew tap PR: cask update reviewed in tap PR for versioned DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path
 - Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
-- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for versioned DropSquash.dmg artifact with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- Homebrew install result: brew install --cask mt4110/tap/dropsquash completed for versioned DropSquash.dmg artifact with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 - Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased
 - Support contact: support handled through GitHub Issues until paid support opens
 "#,
@@ -290,7 +290,7 @@ fn rejects_homebrew_tap_pr_without_versioned_artifact_context() {
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-- Homebrew tap PR: cask update reviewed in tap PR for DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path
+- Homebrew tap PR: cask update reviewed in tap PR for DropSquash.dmg using https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path
 "#,
     );
 
@@ -329,7 +329,7 @@ fn rejects_prepared_homebrew_install_draft() {
     let errors = check_text(
         r#"
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, replace this line with observed install evidence
+- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, replace this line with observed install evidence
 "#,
     );
 
@@ -344,7 +344,7 @@ fn rejects_prepared_homebrew_tap_pr_draft() {
         r#"
 - Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-- Homebrew tap PR: cask PR for versioned DropSquash.dmg uses https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path; replace this line with reviewed PR evidence
+- Homebrew tap PR: cask PR for versioned DropSquash.dmg uses https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, auto_updates false, and zap cleanup path; replace this line with reviewed PR evidence
 "#,
     );
 
