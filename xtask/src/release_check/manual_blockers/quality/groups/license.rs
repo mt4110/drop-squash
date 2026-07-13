@@ -31,6 +31,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["instance"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "Empty key activation" => Some(&[
             &["activate"],
@@ -80,6 +81,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["before starting"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "Forget license on this Mac" => Some(&[
             &["forgetting"],
