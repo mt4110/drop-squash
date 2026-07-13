@@ -89,6 +89,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "Homebrew install evidence tied to the Homebrew tap PR URL",
     ),
+    ("docs/productization.md", "Homebrew cask release match check"),
+    ("docs/productization.md", "manual QA cask check evidence"),
     (
         "docs/productization.md",
         "complete public web and distribution Execution Order exit evidence",
