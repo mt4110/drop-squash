@@ -86,7 +86,7 @@ fn require_homebrew_sha256(text: &str, errors: &mut Vec<String>) {
     if evidence.contains(digest) {
         return;
     }
-    errors.push("Homebrew tap PR must include the SHA-256 digest".to_string());
+    errors.push("Homebrew tap PR must include the lowercase SHA-256 digest".to_string());
 }
 
 fn require_homebrew_install_sha256(text: &str, errors: &mut Vec<String>) {
@@ -99,7 +99,7 @@ fn require_homebrew_install_sha256(text: &str, errors: &mut Vec<String>) {
     if evidence.contains(digest) {
         return;
     }
-    errors.push("Homebrew install result must include the SHA-256 digest".to_string());
+    errors.push("Homebrew install result must include the lowercase SHA-256 digest".to_string());
 }
 
 fn origin(url: &str) -> Option<&str> {

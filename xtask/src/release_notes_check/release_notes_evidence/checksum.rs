@@ -1,7 +1,7 @@
 use super::value;
 
 pub(super) fn validate(text: &str, errors: &mut Vec<String>) {
-    require_in_evidence(text, "SHA-256", "the SHA-256 digest", errors);
+    require_in_evidence(text, "SHA-256", "the lowercase SHA-256 digest", errors);
     require_in_evidence(text, "Artifact URL", "the Artifact URL", errors);
     require_in_evidence(text, "GitHub Release URL", "the GitHub Release URL", errors);
 }

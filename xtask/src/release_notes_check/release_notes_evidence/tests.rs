@@ -281,7 +281,9 @@ fn rejects_homebrew_tap_pr_without_sha256_digest() {
 "#,
     );
 
-    assert!(errors.iter().any(|error| error.contains("SHA-256 digest")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lowercase SHA-256 digest")));
 }
 
 #[test]
