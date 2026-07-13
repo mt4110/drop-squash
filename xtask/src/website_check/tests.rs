@@ -624,6 +624,24 @@ fn rejects_pre_release_artifact_resources() {
 }
 
 #[test]
+fn rejects_pre_release_artifact_srcset_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "DropSquash.dmg", "");
+    write(
+        directory.path(),
+        "download.html",
+        r#"<img srcset="logo.png 1x, DropSquash.dmg?download=1 2x" alt="download">"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("pre-release artifact resource")));
+}
+
+#[test]
 fn rejects_pre_release_artifact_files_in_website_root() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());

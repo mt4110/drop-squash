@@ -3,7 +3,11 @@ pub(super) fn hrefs(text: &str) -> Vec<String> {
 }
 
 pub(super) fn srcs(text: &str) -> Vec<String> {
-    attr_values(text, "src")
+    let mut values = attr_values(text, "src");
+    for srcset in attr_values(text, "srcset") {
+        values.extend(srcset_candidates(&srcset));
+    }
+    values
 }
 
 pub(super) fn actions(text: &str) -> Vec<String> {
@@ -32,6 +36,15 @@ fn attr_values(text: &str, name: &str) -> Vec<String> {
 
 fn is_attr_name_char(value: char) -> bool {
     value.is_ascii_alphanumeric() || value == '-' || value == '_'
+}
+
+fn srcset_candidates(value: &str) -> Vec<String> {
+    value
+        .split(',')
+        .filter_map(|candidate| candidate.split_whitespace().next())
+        .filter(|candidate| !candidate.is_empty())
+        .map(str::to_string)
+        .collect()
 }
 
 fn take_href(text: &str) -> Option<(&str, &str)> {

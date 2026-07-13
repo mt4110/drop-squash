@@ -29,6 +29,20 @@ fn extracts_src_values() {
 }
 
 #[test]
+fn extracts_srcset_candidates() {
+    let sources = srcs(r#"<img srcset="small.png 1x, large.png 2x">"#);
+
+    assert_eq!(sources, vec!["small.png", "large.png"]);
+}
+
+#[test]
+fn extracts_uppercase_srcset_candidates() {
+    let sources = srcs(r#"<img SRCSET='small.png 400w, large.png 800w'>"#);
+
+    assert_eq!(sources, vec!["small.png", "large.png"]);
+}
+
+#[test]
 fn extracts_unquoted_src_values() {
     let sources = srcs(r#"<script src=app.js></script>"#);
 
