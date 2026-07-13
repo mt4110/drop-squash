@@ -29,6 +29,7 @@ pub(super) fn completion_is_complete(blocker: &str, value: &str) -> bool {
 pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let missing = row_status::missing_release_blockers(&text);
+    let unknown = row_status::unknown_release_blockers(&text);
     let invalid = row_status::invalid_status_rows(&text);
     let unproven = row_status::unproven_verified_rows(&text);
     let stale = row_status::stale_blocked_rows(&text);
@@ -49,6 +50,7 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let secret_values = secrets::values(&text);
     let issues = issues::Issues {
         missing,
+        unknown,
         invalid,
         unproven,
         stale,

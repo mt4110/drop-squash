@@ -2,6 +2,7 @@ use std::path::Path;
 
 pub(super) struct Issues<'a> {
     pub missing: Vec<&'a str>,
+    pub unknown: Vec<&'a str>,
     pub invalid: Vec<&'a str>,
     pub unproven: Vec<&'a str>,
     pub stale: Vec<&'a str>,
@@ -25,6 +26,7 @@ pub(super) struct Issues<'a> {
 impl Issues<'_> {
     pub(super) fn is_empty(&self) -> bool {
         self.missing.is_empty()
+            && self.unknown.is_empty()
             && self.invalid.is_empty()
             && self.unproven.is_empty()
             && self.stale.is_empty()
@@ -47,9 +49,10 @@ impl Issues<'_> {
 
     pub(super) fn format(self, path: &Path) -> String {
         format!(
-            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
+            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
             path.display(),
             join_prefix("missing ", self.missing),
+            join_prefix(" unknown release blocker ", self.unknown),
             join_prefix(" invalid status ", self.invalid),
             join_prefix(" unproven verified ", self.unproven),
             join_prefix(" stale blocked ", self.stale),

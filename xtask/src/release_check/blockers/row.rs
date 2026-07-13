@@ -30,6 +30,12 @@ pub(super) fn record_in(line: &str) -> Option<&str> {
     cells(line).and_then(|cells| cells.get(RECORD_IN_COLUMN).copied())
 }
 
+pub(super) fn blocker_with_status(line: &str) -> Option<&str> {
+    let cells = cells(line)?;
+    let status = cells.get(STATUS_COLUMN)?;
+    matches!(*status, "Blocked" | "Verified").then(|| cells[BLOCKER_COLUMN])
+}
+
 fn cells(line: &str) -> Option<Vec<&str>> {
     if !line.starts_with('|') {
         return None;

@@ -29,6 +29,14 @@ fn reports_missing_release_blocker() {
 }
 
 #[test]
+fn reports_unknown_release_blocker_rows() {
+    let text = "| Surprise blocker | Blocked | Evidence required | TBD | docs |\n";
+    let unknown = row_status::unknown_release_blockers(text);
+
+    assert_eq!(unknown, vec!["Surprise blocker"]);
+}
+
+#[test]
 fn reports_missing_release_blocker_status() {
     let text = REQUIRED_BLOCKERS
         .iter()

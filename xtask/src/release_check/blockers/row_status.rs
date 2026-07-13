@@ -45,6 +45,13 @@ pub(super) fn stale_blocked_rows(text: &str) -> Vec<&'static str> {
         .collect()
 }
 
+pub(super) fn unknown_release_blockers(text: &str) -> Vec<&str> {
+    text.lines()
+        .filter_map(row::blocker_with_status)
+        .filter(|blocker| !REQUIRED_BLOCKERS.contains(blocker))
+        .collect()
+}
+
 fn missing_evidence_reference(line: &str) -> bool {
     match row::evidence_reference(line) {
         Some(value) => !evidence_ref::is_evidence_reference(value),
