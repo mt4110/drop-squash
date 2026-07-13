@@ -82,6 +82,17 @@ fn generated_field_labels_match_required_manual_qa_fields() {
     assert_eq!(generated, required);
 }
 
+#[test]
+fn required_field_labels_exist_in_manual_qa_template() {
+    let template = std::fs::read_to_string("../docs/manual-qa.md").unwrap();
+    let missing = crate::manual_qa_check::requirements::REQUIRED_FIELDS
+        .into_iter()
+        .filter(|label| !template.contains(&format!("| {label} |")))
+        .collect::<Vec<_>>();
+
+    assert!(missing.is_empty(), "{missing:?}");
+}
+
 fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     let mut bytes = prefix.to_vec();
     let mut trailer = vec![0; 512];
