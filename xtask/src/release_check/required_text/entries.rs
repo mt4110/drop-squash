@@ -9,6 +9,7 @@ mod qa_evidence_manual;
 mod qa_evidence_publish;
 mod qa_evidence_release_blockers;
 mod qa_evidence_release_notes;
+mod qa_evidence_release_template;
 mod release_docs;
 mod signed_publication_docs;
 mod website_docs;
@@ -24,6 +25,7 @@ const GROUPS: &[&[Entry]] = &[
     qa_evidence_release_blockers::ENTRIES,
     qa_evidence_manual::ENTRIES,
     qa_evidence_release_notes::ENTRIES,
+    qa_evidence_release_template::ENTRIES,
     qa_evidence_publish::ENTRIES,
     qa_evidence_distribution::ENTRIES,
     distribution_docs::ENTRIES,
