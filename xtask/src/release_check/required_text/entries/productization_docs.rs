@@ -51,6 +51,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "unsigned release failure gate"),
     (
         "docs/productization.md",
+        "signed/notarized publication remains",
+    ),
+    (
+        "docs/productization.md",
         "exact distribution evidence references",
     ),
     (

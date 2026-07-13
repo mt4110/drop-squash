@@ -19,6 +19,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "`release-notes-check` and `publish-check` reject those draft placeholders",
     ),
+    (
+        "docs/release.md",
+        "publication until signed packaging exists",
+    ),
     ("docs/release.md", "The Public web proof must show"),
     ("docs/release.md", "`Pricing finalized`"),
     ("docs/release.md", "draft pricing"),
