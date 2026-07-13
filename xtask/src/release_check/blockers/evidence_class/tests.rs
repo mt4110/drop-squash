@@ -293,6 +293,15 @@ fn reports_benchmark_action_without_external_csv_path() {
 }
 
 #[test]
+fn reports_benchmark_action_without_same_machine_baseline() {
+    let text = "| Benchmark release set | Benchmark | Run the release-set benchmark with short, medium, and large samples and record backend, saved percent, duration, speed ratio, absolute CSV path outside repo, and 20% threshold result | `docs/manual-qa.md` |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Benchmark release set"));
+}
+
+#[test]
 fn reports_checksum_action_without_public_sha256_artifact() {
     let text = "| Published checksum | Distribution | Attach checksum file to the GitHub Release | GitHub Release URL |\n";
 
@@ -362,7 +371,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Notarize, staple, and assess the public DropSquash.dmg with captured `spctl`, notary, and stapler verification output"
         }
         "Benchmark release set" => {
-            "Run release-set benchmark and record backend, saved percent, duration, speed ratio, and absolute CSV path outside repo"
+            "Run release-set benchmark with short, medium, and large samples and record backend, saved percent, duration, speed ratio, absolute CSV path outside repo, 20% threshold result, same-machine comparison, and release candidate baseline"
         }
         "Published checksum" => {
             "Attach SHA256SUMS containing public DropSquash.dmg lowercase SHA-256 line to the GitHub Release"

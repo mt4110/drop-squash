@@ -79,11 +79,15 @@ fn required_phrases(blocker: &str) -> &'static [&'static str] {
             &["public", "DropSquash.dmg", "`spctl`", "notary", "stapler"]
         }
         "Benchmark release set" => &[
+            "short, medium, and large",
             "backend",
             "saved percent",
             "duration",
             "speed ratio",
             "absolute CSV path outside repo",
+            "20% threshold",
+            "same-machine",
+            "release candidate baseline",
         ],
         "Published checksum" => &[
             "public",
