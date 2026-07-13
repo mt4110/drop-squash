@@ -86,6 +86,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "website-root boundary rejection for local links/resources",
     ),
+    ("docs/qa-evidence.md", "local link fragments"),
     ("docs/qa-evidence.md", "clean git worktree preflight"),
     (
         "docs/qa-evidence.md",
