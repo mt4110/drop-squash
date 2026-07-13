@@ -12,11 +12,27 @@ pub(super) fn labeled_https<'a>(value: &'a str, label: &str) -> Option<&'a str> 
 }
 
 pub(super) fn same_https(left: &str, right: &str) -> bool {
-    without_scheme(left).is_some_and(|left| without_scheme(right) == Some(left))
+    parts(left).is_some_and(|left| {
+        parts(right).is_some_and(|right| {
+            left.host.eq_ignore_ascii_case(right.host) && left.rest == right.rest
+        })
+    })
 }
 
-fn without_scheme(value: &str) -> Option<&str> {
-    crate::url_scheme::is_https(value).then_some(&value["https://".len()..])
+struct Parts<'a> {
+    host: &'a str,
+    rest: &'a str,
+}
+
+fn parts(value: &str) -> Option<Parts<'_>> {
+    if !crate::url_scheme::is_https(value) {
+        return None;
+    }
+    let without_scheme = &value["https://".len()..];
+    let (host, rest) = without_scheme
+        .split_once('/')
+        .unwrap_or((without_scheme, ""));
+    Some(Parts { host, rest })
 }
 
 #[cfg(test)]
@@ -69,8 +85,16 @@ mod tests {
             "HTTPS://github.com/mt4110/drop-squash/releases/tag/v0.1.0",
             "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
         ));
+        assert!(same_https(
+            "https://GitHub.com/mt4110/drop-squash/releases/tag/v0.1.0",
+            "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
+        ));
         assert!(!same_https(
             "HTTPS://github.com/mt4110/drop-squash/releases/tag/v0.2.0",
+            "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
+        ));
+        assert!(!same_https(
+            "https://github.com/MT4110/drop-squash/releases/tag/v0.1.0",
             "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
         ));
     }

@@ -15,6 +15,17 @@ fn accepts_matching_release_note_references() {
 }
 
 #[test]
+fn accepts_matching_release_note_references_with_host_case_difference() {
+    let blockers = "\
+| Public website deployment | Verified | done | https://DropSquash.app/release-status | `https://...` |
+| Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://GitHub.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+";
+    let notes = release_notes("v0.1.0", "1");
+
+    assert!(mismatched(blockers, &notes).is_empty());
+}
+
+#[test]
 fn reports_distribution_references_that_do_not_match_release_notes() {
     let blockers = "\
 | Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 | GitHub Release |
