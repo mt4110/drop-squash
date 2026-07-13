@@ -22,6 +22,7 @@ fn lacks_special_evidence(label: &str, value: &str) -> bool {
         "Empty key activation" | "Invalid license key handling" | "Expired license refresh" => {
             has_raw_key_contradiction(value)
         }
+        "Known limitations" => has_unsupported_platform_release_claim(value),
         _ => false,
     }
 }
@@ -60,6 +61,22 @@ fn has_raw_key_contradiction(value: &str) -> bool {
         "persisted raw key",
         "stored raw key",
         "saved raw key",
+    ]
+    .iter()
+    .any(|needle| lower.contains(needle))
+}
+
+fn has_unsupported_platform_release_claim(value: &str) -> bool {
+    let lower = value.to_ascii_lowercase();
+    [
+        "download the windows",
+        "download the linux",
+        "get the windows",
+        "get the linux",
+        "windows version available",
+        "linux version available",
+        "windows app available",
+        "linux app available",
     ]
     .iter()
     .any(|needle| lower.contains(needle))

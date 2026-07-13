@@ -1277,6 +1277,19 @@ fn rejects_limitations_without_unreleased_platform_status() {
 }
 
 #[test]
+fn rejects_limitations_with_unsupported_platform_release_copy() {
+    let errors = check_text(
+        r#"
+- Known limitations: macOS MVP only; Windows and Linux platform builds remain unreleased; Download the Windows build
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Known limitations")));
+}
+
+#[test]
 fn rejects_release_evidence_with_local_only_urls() {
     let errors = check_text(
         r#"
