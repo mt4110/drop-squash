@@ -1,6 +1,5 @@
+mod distribution;
 mod macos_verification;
-
-use std::path::Path;
 
 pub(super) struct Fields<'a> {
     pub(super) version: &'a str,
@@ -15,7 +14,6 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         "https://github.com/mt4110/drop-squash/releases/tag/v{}",
         fields.version
     );
-    let checksum_path = checksum_path(fields.artifact_path);
     let mut lines = vec![
         "release notes prepared fields:".into(),
         "## Artifact".into(),
@@ -35,51 +33,15 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         "- Pricing URL: pending final pricing; replace with https://dropsquash.app/pricing after draft price copy is removed".into(),
         "- Refund policy URL: pending final refund policy; replace with https://dropsquash.app/refund".into(),
         "- Live checkout URL: pending live checkout; replace with the tested https://store.lemonsqueezy.com/checkout/buy/<id> URL".into(),
-        "## Distribution".into(),
-        format!("- SHA256SUMS line: {}  DropSquash.dmg", fields.sha256),
-        "SHA256SUMS output command:".into(),
-        format!(
-            "cargo run -p xtask -- checksum {} --output {}",
-            shell_arg(fields.artifact_path),
-            shell_arg(&checksum_path)
-        ),
-        format!(
-            "- GitHub Release checksum: pending upload; after attaching SHA256SUMS to public {release_url} for the exact Artifact URL {} with lowercase SHA-256 {}, replace this line with public release evidence that includes the GitHub Release URL above and the Artifact URL above",
-            fields.artifact_url, fields.sha256
-        ),
-        format!("- GitHub Release URL: {release_url}"),
-        "GitHub Release command plan:".into(),
-        format!(
-            "cargo run -p xtask -- github-release-plan v{} {} {} /tmp/dropsquash-release-notes.md",
-            fields.version,
-            shell_arg(fields.artifact_path),
-            shell_arg(&checksum_path)
-        ),
-        "Homebrew cask command:".into(),
-        format!(
-            "cargo run -p xtask -- homebrew-cask {} {} {} https://github.com/mt4110/drop-squash",
-            fields.version, fields.artifact_url, fields.sha256
-        ),
-        "Homebrew tap PR evidence draft:".into(),
-        "- Homebrew tap PR URL: pending tap PR; replace this line with the reviewed Homebrew tap PR URL".into(),
-        format!(
-            "- Homebrew tap PR: public cask PR for versioned DropSquash.dmg uses the Artifact URL above {} with lowercase SHA-256 {}, auto_updates false, and zap cleanup path; replace this line with reviewed public PR evidence that includes the Homebrew tap PR URL above",
-            fields.artifact_url, fields.sha256
-        ),
-        "Homebrew install result evidence draft:".into(),
-        format!(
-            "- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` from the Homebrew tap PR URL above installs the versioned DropSquash.dmg artifact from the Artifact URL above {} with lowercase SHA-256 {} and `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, replace this line with observed install and uninstall evidence",
-            fields.artifact_url, fields.sha256
-        ),
     ]);
+    lines.extend(distribution::lines(distribution::Fields {
+        version: fields.version,
+        artifact_path: fields.artifact_path,
+        artifact_url: fields.artifact_url,
+        sha256: fields.sha256,
+        release_url: &release_url,
+    }));
     lines
-}
-
-fn checksum_path(artifact_path: &str) -> String {
-    Path::new(artifact_path)
-        .with_file_name("SHA256SUMS")
-        .display()
-        .to_string()
 }
 
 fn shell_arg(value: &str) -> String {

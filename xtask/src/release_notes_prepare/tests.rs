@@ -186,6 +186,10 @@ fn renders_prepared_release_notes_fields() {
     assert!(!text.contains("GitHub Release checksum after upload"));
     assert!(text.contains("Homebrew cask command"));
     assert!(text.contains("homebrew-cask 0.1.0"));
+    assert!(text.contains("Homebrew cask check command"));
+    assert!(text.contains(
+        "homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb /tmp/dropsquash-release-notes.md"
+    ));
     assert!(text.contains("Homebrew tap PR evidence draft"));
     assert!(text.contains("- Homebrew tap PR URL: pending tap PR"));
     assert!(text.contains("versioned DropSquash.dmg"));

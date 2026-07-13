@@ -39,6 +39,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "dirty git worktrees are rejected"),
     ("docs/qa-evidence.md", "matching Homebrew cask command"),
+    ("docs/qa-evidence.md", "Homebrew cask check command"),
     ("docs/qa-evidence.md", "Homebrew tap PR evidence draft"),
     (
         "docs/qa-evidence.md",
