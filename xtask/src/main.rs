@@ -6,6 +6,7 @@ mod csv_evidence;
 mod dmg;
 mod file_size_check;
 mod git_head_match;
+mod git_status;
 mod github_release_plan;
 mod homebrew_cask;
 mod homebrew_cask_check;

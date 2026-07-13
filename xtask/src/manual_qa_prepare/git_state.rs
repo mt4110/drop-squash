@@ -1,5 +1,7 @@
 use std::process::Command;
 
+use crate::git_status;
+
 pub(super) fn require_clean_worktree() -> Result<(), String> {
     let output = Command::new("git")
         .args(["status", "--porcelain"])
@@ -19,17 +21,11 @@ pub(super) fn require_clean_worktree() -> Result<(), String> {
 }
 
 pub(super) fn clean_status(status: &str) -> bool {
-    status.trim().is_empty()
+    git_status::is_clean(status)
 }
 
 fn dirty_paths(status: &str) -> String {
-    status
-        .lines()
-        .map(str::trim_end)
-        .filter(|line| !line.is_empty())
-        .take(10)
-        .collect::<Vec<_>>()
-        .join("\n")
+    git_status::dirty_paths(status)
 }
 
 #[cfg(test)]
@@ -51,5 +47,16 @@ mod tests {
         let summary = dirty_paths(" M docs/manual-qa.md\n D old.md\n");
 
         assert_eq!(summary, " M docs/manual-qa.md\n D old.md");
+    }
+
+    #[test]
+    fn reports_truncated_dirty_paths() {
+        let status = (0..12)
+            .map(|index| format!(" M file-{index}.md"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let summary = dirty_paths(&status);
+
+        assert!(summary.ends_with("... and 2 more"));
     }
 }
