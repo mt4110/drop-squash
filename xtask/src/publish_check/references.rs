@@ -14,7 +14,9 @@ fn mismatch(
     field: &str,
 ) -> Option<&'static str> {
     let reference = verified_reference(blockers, blocker)?;
-    let expected = field_value(notes, field)?;
+    let Some(expected) = field_value(notes, field) else {
+        return Some(blocker);
+    };
     let matches =
         urls::single_https(reference).is_some_and(|actual| urls::same_https(actual, expected));
     (!matches).then_some(blocker)

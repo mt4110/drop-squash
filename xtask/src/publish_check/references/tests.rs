@@ -54,6 +54,20 @@ fn reports_public_web_references_that_do_not_match_release_notes() {
 }
 
 #[test]
+fn reports_verified_reference_without_matching_release_note_field() {
+    let blockers = "\
+| Public website deployment | Verified | done | https://dropsquash.app/release-status | `https://...` |
+| Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+";
+    let notes = "- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1\n";
+
+    let mismatched = mismatched(blockers, notes);
+
+    assert!(mismatched.contains(&"Public website deployment"));
+    assert!(mismatched.contains(&"Published checksum"));
+}
+
+#[test]
 fn reports_reference_with_extra_url_before_expected_url() {
     let blockers = "\
 | Published checksum | Verified | SHA256SUMS with the lowercase SHA-256 line for public DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.2.0 https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
