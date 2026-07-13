@@ -12,6 +12,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
         ]),
         "Conversion safety evidence" => Some(&[
             &["cancellation", "cancelled"],
+            &["temp cleanup", "temporary file cleanup", "cleaned temp"],
             &["failed conversion", "failure"],
             &["larger output"],
             &["not smaller", "cannot be made smaller"],
@@ -22,10 +23,13 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
                 "preserved original",
             ],
             &["trial count unchanged", "trial unchanged"],
+            &["history"],
+            &["no new success", "no success"],
         ]),
         "Queue evidence" => Some(&[
             &["multi-file", "queue"],
-            &["queued cancellation", "queued row"],
+            &["queued cancellation", "cancelled"],
+            &["waiting row", "queued row"],
             &["batch summary"],
             &["finished"],
             &["saved bytes"],
