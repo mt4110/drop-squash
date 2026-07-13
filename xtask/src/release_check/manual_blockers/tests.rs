@@ -94,6 +94,17 @@ fn reports_verified_sandbox_purchase_without_sandbox_context() {
 }
 
 #[test]
+fn reports_verified_sandbox_purchase_without_checkout_context() {
+    let blockers = "| Lemon Squeezy sandbox purchase | Verified | Sandbox checkout completes | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual =
+        "| Sandbox purchase | Checkout completes | Sandbox completed for intended product with test buyer order abc123 |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Lemon Squeezy sandbox purchase"));
+}
+
+#[test]
 fn reports_verified_product_setup_without_license_keys() {
     let blockers = "| Lemon Squeezy product setup | Verified | Sandbox product configured | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Sandbox product setup | DropSquash sandbox product exists | intended product confirmed |\n";

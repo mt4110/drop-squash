@@ -10,6 +10,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         ]),
         "Sandbox purchase" => Some(&[
             &["sandbox"],
+            &["checkout"],
             &["intended product"],
             &["test buyer"],
             &["order"],

@@ -4,7 +4,13 @@ pub(super) const PRODUCT_SETUP: &[&str] = &[
     "intended product",
     "license keys enabled",
 ];
-pub(super) const PURCHASE: &[&str] = &["sandbox", "intended product", "test buyer", "order"];
+pub(super) const PURCHASE: &[&str] = &[
+    "sandbox",
+    "checkout",
+    "intended product",
+    "test buyer",
+    "order",
+];
 
 pub(super) const EMPTY_KEY_CACHE: &[&str] = &["raw key", "no fingerprint", "no instance"];
 pub(super) const EMPTY_KEY_ACTION: &[&str] = &["activate", "disabled"];

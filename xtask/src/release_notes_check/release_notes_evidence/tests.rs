@@ -166,6 +166,19 @@ fn rejects_queue_evidence_without_lock_blocking_context() {
 }
 
 #[test]
+fn rejects_sandbox_purchase_without_checkout_context() {
+    let errors = check_text(
+        r#"
+- Lemon Squeezy sandbox purchase: sandbox completed for intended product by test buyer order abc123
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Lemon Squeezy sandbox purchase")));
+}
+
+#[test]
 fn rejects_signing_evidence_without_public_artifact_name() {
     let errors = check_text(
         r#"

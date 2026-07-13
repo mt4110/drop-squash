@@ -10,6 +10,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
         ]),
         "Lemon Squeezy sandbox purchase" => Some(&[
             &["sandbox"],
+            &["checkout"],
             &["intended product"],
             &["test buyer"],
             &["order"],
