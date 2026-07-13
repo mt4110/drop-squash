@@ -68,6 +68,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("README.md", "macOS today"),
     ("README.md", "Windows and Linux support is planned"),
+    ("README.md", "native encoder unavailable error"),
     (
         "Cargo.toml",
         "repository = \"https://github.com/mt4110/drop-squash\"",

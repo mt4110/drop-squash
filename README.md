@@ -51,7 +51,8 @@ cargo run -p xtask -- file-size-check
 cargo run -p xtask -- release-check
 ```
 
-On macOS, the CLI uses the native encoder. On Windows and Linux, the backend contracts are present but the encoders still return a clear not-implemented error:
+On macOS, the CLI uses the native encoder. On Windows and Linux, the backend
+contracts are present but the encoders still return a clear native encoder unavailable error:
 
 ```bash
 cargo run -p dropsquash -- convert ./demo.mov --output-dir ./out --profile auto
