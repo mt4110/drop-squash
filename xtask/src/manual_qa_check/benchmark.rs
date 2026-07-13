@@ -1,11 +1,30 @@
-use std::path::{Path, PathBuf};
+pub(super) mod csv_path;
+
+const BENCHMARK_COMMAND: &str =
+    "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`";
+const SAMPLE_SET: &str = "Benchmark sample set";
 
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
-        "Benchmark sample set" => require_sample_set(result, missing),
+        SAMPLE_SET => require_sample_set(result, missing),
         "Benchmark regression threshold" => require_threshold(result, missing),
         _ => {}
     }
+}
+
+pub(super) fn validate_rows(rows: &[(String, String)], missing: &mut Vec<String>) {
+    let Some(command_csv) = csv_for(rows, BENCHMARK_COMMAND) else {
+        return;
+    };
+    let Some(sample_csv) = csv_for(rows, SAMPLE_SET) else {
+        return;
+    };
+    if command_csv == sample_csv {
+        return;
+    }
+    missing.push(
+        "manual QA benchmark command and sample set must reference the same CSV path".to_string(),
+    );
 }
 
 fn require_sample_set(result: &str, missing: &mut Vec<String>) {
@@ -19,7 +38,7 @@ fn require_sample_set(result: &str, missing: &mut Vec<String>) {
         && lower.contains("saved")
         && lower.contains("duration")
         && lower.contains("speed ratio")
-        && has_csv_path_outside_repo(result)
+        && csv_path::has_existing_outside_repo_path(result)
         && has_machine_context(&lower)
         && has_os_context(&lower)
     {
@@ -61,46 +80,8 @@ fn has_three_sample_context(value: &str) -> bool {
         .any(|part| part == "three" || part == "3")
 }
 
-fn has_csv_path_outside_repo(value: &str) -> bool {
-    value
-        .split_whitespace()
-        .map(csv_token)
-        .filter_map(|token| {
-            let path = PathBuf::from(token);
-            (path.is_absolute() && path.extension().and_then(|value| value.to_str()) == Some("csv"))
-                .then_some(path)
-        })
-        .any(|path| path.is_file() && outside_repo(&path))
-}
-
-fn csv_token(token: &str) -> &str {
-    let token = token
-        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
-    token
-        .strip_prefix("csv=")
-        .or_else(|| token.strip_prefix("CSV="))
-        .or_else(|| token.strip_prefix("csv:"))
-        .or_else(|| token.strip_prefix("CSV:"))
-        .unwrap_or(token)
-}
-
-fn outside_repo(path: &Path) -> bool {
-    let Ok(repo) = std::env::current_dir() else {
-        return false;
-    };
-    !normalize(path).starts_with(normalize(&repo))
-}
-
-fn normalize(path: &Path) -> PathBuf {
-    let mut normalized = PathBuf::new();
-    for component in path.components() {
-        match component {
-            std::path::Component::CurDir => {}
-            std::path::Component::ParentDir => {
-                normalized.pop();
-            }
-            other => normalized.push(other.as_os_str()),
-        }
-    }
-    normalized
+fn csv_for(rows: &[(String, String)], label: &str) -> Option<std::path::PathBuf> {
+    rows.iter()
+        .find(|(row_label, _)| row_label == label)
+        .and_then(|(_, value)| csv_path::existing_outside_repo_path(value))
 }

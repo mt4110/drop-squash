@@ -37,6 +37,7 @@ pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
         rows::check_line(line, &mut missing, &mut labels, &mut rows);
     }
     artifact_consistency::validate(&rows, &mut missing);
+    benchmark::validate_rows(&rows, &mut missing);
     require_labels(
         "manual QA field is missing",
         &REQUIRED_FIELDS,

@@ -870,6 +870,22 @@ fn accepts_benchmark_sample_set_with_labeled_csv_path() {
 }
 
 #[test]
+fn reports_mismatched_benchmark_command_and_sample_set_csv_paths() {
+    let directory = tempfile::tempdir().unwrap();
+    let command_csv = csv_file(directory.path(), "command.csv");
+    let sample_csv = csv_file(directory.path(), "sample.csv");
+    let (_manual_directory, path) = write_manual_qa(&format!(
+        "| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | CSV recorded | CSV recorded for three samples, outputs were smaller, saved outside repo at {} |\n\
+| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        command_csv.display(),
+        sample_csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("same CSV path")));
+}
+
+#[test]
 fn reports_benchmark_sample_set_with_missing_csv_file() {
     let directory = tempfile::tempdir().unwrap();
     let csv = directory.path().join("missing.csv");
