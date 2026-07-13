@@ -47,6 +47,7 @@ run: cargo run -p xtask -- macos-keychain-plan "$RUNNER_TEMP/dropsquash-signing"
 run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
+run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
 run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
 run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
@@ -102,6 +103,7 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- macos-codesign-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" \"Developer ID Application: ...\"",
+            "cargo run -p xtask -- macos-codesign-verify-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-notary-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --api-key",
             "cargo run -p xtask -- macos-stapler-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
             "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",

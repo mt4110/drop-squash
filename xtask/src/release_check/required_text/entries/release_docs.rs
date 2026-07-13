@@ -60,6 +60,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "does not execute `codesign` or import signing credentials",
     ),
+    ("docs/release.md", "macos-codesign-verify-plan"),
+    (
+        "docs/release.md",
+        "It validates the target artifact and does not execute codesign verification",
+    ),
     ("docs/release.md", "macos-notary-plan"),
     (
         "docs/release.md",

@@ -58,6 +58,7 @@ cargo run -p xtask -- macos-keychain-plan /tmp/dropsquash-signed/keychain
 cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- macos-codesign-plan /tmp/dropsquash-signed/DropSquash.dmg "Developer ID Application: ..."
+cargo run -p xtask -- macos-codesign-verify-plan /tmp/dropsquash-signed/DropSquash.dmg
 cargo run -p xtask -- macos-notary-plan /tmp/dropsquash-signed/DropSquash.dmg --api-key
 cargo run -p xtask -- macos-stapler-plan /tmp/dropsquash-signed/DropSquash.dmg
 cargo run -p xtask -- macos-spctl-plan /tmp/dropsquash-signed/DropSquash.dmg
@@ -104,12 +105,13 @@ Gatekeeper no-warning evidence for the signed app.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the
-Developer ID `codesign` signature, submit with `notarytool`, validate stapling,
-assess Gatekeeper, then run `signed-dmg-check`.
+Developer ID `codesign` signature, verify the signed target, submit with
+`notarytool`, validate stapling, assess Gatekeeper, then run `signed-dmg-check`.
 The plan does not execute signing commands and must not print secret values.
 Use `signed-dmg-copy` only to create the isolated signing target before
 `codesign`; it refuses existing targets and still checks the unsigned input.
 Use `macos-codesign-plan` to generate the exact `codesign --force --options runtime --timestamp --sign` argv for the checked signing target and a Developer ID Application identity. It validates the target artifact and identity but does not execute `codesign` or import signing credentials.
+Use `macos-codesign-verify-plan` to generate the `codesign --verify --deep --strict --verbose=4` and `codesign -dv --verbose=4` argv for the checked signing target. It validates the target artifact and does not execute codesign verification.
 Use `macos-notary-plan` to generate the `xcrun notarytool submit --wait` argv for either the App Store Connect API key path or the Apple ID credential path. It validates the target artifact and prints environment variable references only, not notarization secret values.
 Use `macos-stapler-plan` to generate the `xcrun stapler staple` and `xcrun stapler validate` argv for the checked signing target. It validates the target artifact and does not execute stapler.
 Use `macos-spctl-plan` to generate the `spctl --assess --type open --verbose=4` argv for the checked signing target. It validates the target artifact and does not execute Gatekeeper assessment.
