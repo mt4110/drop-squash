@@ -1,4 +1,7 @@
-use super::{duplicate_blockers, unknown_blockers, unplanned_blockers};
+use super::{
+    duplicate_blockers, misordered_tracks, misplaced_record_targets, unknown_blockers,
+    unplanned_blockers,
+};
 
 #[test]
 fn release_blockers_template_plans_required_rows() {
@@ -7,6 +10,8 @@ fn release_blockers_template_plans_required_rows() {
     assert!(unplanned_blockers(&text).is_empty());
     assert!(unknown_blockers(&text).is_empty());
     assert!(duplicate_blockers(&text).is_empty());
+    assert!(misordered_tracks(&text).is_empty());
+    assert!(misplaced_record_targets(&text).is_empty());
 }
 
 #[test]
@@ -53,6 +58,28 @@ fn reports_duplicate_execution_order_blocker() {
     let duplicates = duplicate_blockers(text);
 
     assert_eq!(duplicates, vec!["Benchmark release set"]);
+}
+
+#[test]
+fn reports_misordered_execution_track() {
+    let text = "\
+| 2 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Public DMG evidence | `docs/manual-qa.md` |
+";
+
+    let misordered = misordered_tracks(text);
+
+    assert!(misordered.contains(&"Local packaged-app proof"));
+}
+
+#[test]
+fn reports_misplaced_execution_record_target() {
+    let text = "\
+| 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Public DMG evidence | Release notes |
+";
+
+    let misplaced = misplaced_record_targets(text);
+
+    assert!(misplaced.contains(&"Local packaged-app proof"));
 }
 
 #[test]

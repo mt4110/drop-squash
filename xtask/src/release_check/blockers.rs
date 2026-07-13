@@ -41,6 +41,8 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
     let unplanned = execution_order::unplanned_blockers(&text);
     let unknown_plan_rows = execution_order::unknown_blockers(&text);
     let duplicate_plan_rows = execution_order::duplicate_blockers(&text);
+    let misordered_plan_rows = execution_order::misordered_tracks(&text);
+    let misplaced_plan_targets = execution_order::misplaced_record_targets(&text);
     let duplicate_rows = duplicates::release_blocker_rows(&text);
     let duplicate_classifications = duplicates::classification_rows(&text);
     let secret_values = secrets::values(&text);
@@ -58,6 +60,8 @@ pub(super) fn check_release_blockers(path: &Path) -> Result<(), String> {
         unplanned,
         unknown_plan_rows,
         duplicate_plan_rows,
+        misordered_plan_rows,
+        misplaced_plan_targets,
         duplicate_rows,
         duplicate_classifications,
         secret_values,
