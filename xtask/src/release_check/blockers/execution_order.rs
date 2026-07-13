@@ -70,6 +70,10 @@ pub(super) fn misordered_tracks(text: &str) -> Vec<&'static str> {
     tracks::misordered_tracks(text)
 }
 
+pub(super) fn duplicate_tracks(text: &str) -> Vec<&'static str> {
+    tracks::duplicate_tracks(text)
+}
+
 pub(super) fn misplaced_record_targets(text: &str) -> Vec<&'static str> {
     tracks::misplaced_record_targets(text)
 }

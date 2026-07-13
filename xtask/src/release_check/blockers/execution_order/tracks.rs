@@ -59,6 +59,14 @@ pub(super) fn misplaced_record_targets(text: &str) -> Vec<&'static str> {
         .collect()
 }
 
+pub(super) fn duplicate_tracks(text: &str) -> Vec<&'static str> {
+    TRACK_ROWS
+        .iter()
+        .filter(|(_, track, _)| track_count(text, track) > 1)
+        .map(|(_, track, _)| *track)
+        .collect()
+}
+
 pub(super) fn weak_exit_conditions(text: &str) -> Vec<&'static str> {
     EXIT_PHRASES
         .iter()
@@ -85,6 +93,10 @@ fn has_track_order(text: &str, order: &str, track: &str) -> bool {
 
 fn has_track(text: &str, track: &str) -> bool {
     rows::all(text).any(|row| row.track == track)
+}
+
+fn track_count(text: &str, track: &str) -> usize {
+    rows::all(text).filter(|row| row.track == track).count()
 }
 
 fn has_track_target(text: &str, track: &str, target: &str) -> bool {
