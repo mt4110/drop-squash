@@ -49,6 +49,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "Manual QA required field/check label synchronization",
+    ),
+    (
+        "docs/qa-evidence.md",
         "Execution Order to Evidence Classes synchronization",
     ),
     ("docs/qa-evidence.md", "placeholder checkout buy IDs"),
