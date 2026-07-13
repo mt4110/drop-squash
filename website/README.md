@@ -7,8 +7,8 @@ The public website deployment and live checkout link stay blocked in
 `docs/release-blockers.md` until production URLs are verified.
 
 Run the static site gate before changing copy or links. It verifies required
-sales pages, local links and resources, CSS `url(...)` resources, `srcset`
-candidates, video posters, quoted and unquoted HTML links, form actions,
+sales pages, local links and resources, local link fragments, CSS `url(...)` resources,
+`srcset` candidates, video posters, quoted and unquoted HTML links, form actions,
 approved external-link host/path boundaries, placeholder URLs, unsupported platform availability claims
 including short download CTAs and natural release copy, release-status page,
 privacy, license, refund, support contact copy, and

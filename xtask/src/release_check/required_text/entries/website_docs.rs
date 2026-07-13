@@ -2,6 +2,7 @@ use super::Entry;
 
 pub(super) const ENTRIES: &[Entry] = &[
     ("website/README.md", "local links and resources"),
+    ("website/README.md", "local link fragments"),
     ("website/README.md", "CSS `url(...)` resources"),
     ("website/README.md", "`srcset`"),
     ("website/README.md", "video posters"),
