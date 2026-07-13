@@ -12,9 +12,26 @@ const SECRET_EXTENSIONS: [&str; 9] = [
     "provisionprofile",
 ];
 
-const LOCAL_EVIDENCE_EXTENSIONS: [&str; 16] = [
-    "appimage", "csv", "dmg", "exe", "flatpak", "gz", "jsonl", "m4v", "mov", "mp4", "msi", "pkg",
-    "tar", "tgz", "webm", "zip",
+const LOCAL_EVIDENCE_EXTENSIONS: [&str; 19] = [
+    "app",
+    "appimage",
+    "csv",
+    "dmg",
+    "dsym",
+    "exe",
+    "flatpak",
+    "gz",
+    "jsonl",
+    "m4v",
+    "mov",
+    "mp4",
+    "msi",
+    "pkg",
+    "tar",
+    "tgz",
+    "webm",
+    "xcarchive",
+    "zip",
 ];
 
 pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
@@ -88,6 +105,7 @@ fn collect_files(path: &Path, files: &mut Vec<PathBuf>) -> Result<(), String> {
             continue;
         }
         if path.is_dir() {
+            files.push(path.clone());
             collect_files(&path, files)?;
         } else {
             files.push(path);

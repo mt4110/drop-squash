@@ -410,6 +410,17 @@ fn rejects_committed_release_archive_outputs() {
 }
 
 #[test]
+fn rejects_committed_release_artifact_directories() {
+    let directory = tempfile::tempdir().unwrap();
+    std::fs::create_dir_all(directory.path().join("release/DropSquash.app")).unwrap();
+
+    let error = reject_secret_files(directory.path()).unwrap_err();
+
+    assert!(error.contains("local evidence file"));
+    assert!(error.contains("DropSquash.app"));
+}
+
+#[test]
 fn rejects_committed_checksum_output() {
     let directory = tempfile::tempdir().unwrap();
     write(directory.path(), "SHA256SUMS", "checksum");
