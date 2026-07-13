@@ -9,7 +9,7 @@ The public website deployment and live checkout link stay blocked in
 Run the static site gate before changing copy or links. It verifies required
 sales pages, local links and resources, quoted and unquoted HTML links,
 form actions, approved external-link host/path boundaries, placeholder URLs,
-unsupported platform availability claims including short download CTAs, release-status page, privacy,
+unsupported platform availability claims including short download CTAs and natural release copy, release-status page, privacy,
 license, refund, support contact copy, and pre-release CTA copy. It also keeps
 download or checkout links and form actions non-live before release:
 

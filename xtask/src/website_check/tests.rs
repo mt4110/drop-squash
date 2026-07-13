@@ -867,6 +867,23 @@ fn rejects_short_unsupported_platform_download_ctas() {
         .any(|error| error.contains("unsupported platform")));
 }
 
+#[test]
+fn rejects_natural_unsupported_platform_release_copy() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "Download the Windows build. Get the Linux app. Windows version available.",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unsupported platform")));
+}
+
 fn write_required_pages(root: &std::path::Path) {
     for page in [
         "index.html",

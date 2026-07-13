@@ -13,6 +13,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "unsupported platform availability claims",
     ),
     ("website/README.md", "short download CTAs"),
+    ("website/README.md", "natural release copy"),
     ("website/README.md", "pre-release CTA copy"),
     (
         "website/README.md",
