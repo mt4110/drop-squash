@@ -59,7 +59,7 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
         if href_policy::is_external_or_anchor(&href) {
             continue;
         }
-        if !local_links::exists(path, &href) {
+        if !local_links::exists(root, path, &href) {
             errors.push(format!("{} links to missing {href}", path.display()));
         }
     }
@@ -69,7 +69,8 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
     for action in html_links::actions(&text) {
         href_policy::check(path, &action, errors);
         external_policy::check(path, &action, errors);
-        if !href_policy::is_external_or_anchor(&action) && !local_links::exists(path, &action) {
+        if !href_policy::is_external_or_anchor(&action) && !local_links::exists(root, path, &action)
+        {
             errors.push(format!("{} links to missing {action}", path.display()));
         }
     }

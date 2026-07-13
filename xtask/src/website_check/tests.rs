@@ -93,6 +93,24 @@ fn rejects_missing_local_links() {
 }
 
 #[test]
+fn rejects_local_links_outside_website_root() {
+    let directory = tempfile::tempdir().unwrap();
+    let root = directory.path().join("site");
+    std::fs::create_dir(&root).unwrap();
+    std::fs::write(directory.path().join("outside.html"), "outside").unwrap();
+    write_required_pages(&root);
+    write(
+        &root,
+        "index.html",
+        r#"Release status <a href="../outside.html">Outside</a>"#,
+    );
+
+    let errors = check_root(&root).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("outside.html")));
+}
+
+#[test]
 fn rejects_example_dot_com_placeholders() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -342,6 +360,24 @@ fn rejects_missing_local_loaded_resources() {
     let errors = check_root(directory.path()).unwrap();
 
     assert!(errors.iter().any(|error| error.contains("missing.png")));
+}
+
+#[test]
+fn rejects_local_resources_outside_website_root() {
+    let directory = tempfile::tempdir().unwrap();
+    let root = directory.path().join("site");
+    std::fs::create_dir(&root).unwrap();
+    std::fs::write(directory.path().join("outside.png"), "outside").unwrap();
+    write_required_pages(&root);
+    write(
+        &root,
+        "index.html",
+        r#"Release status <img src="../outside.png" alt="" />"#,
+    );
+
+    let errors = check_root(&root).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("outside.png")));
 }
 
 #[test]
