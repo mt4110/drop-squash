@@ -1,4 +1,4 @@
-use std::path::{Component, Path, PathBuf};
+use std::path::{Path, PathBuf};
 
 pub(super) fn require_notes_csv_matches_manual_qa(
     notes: &str,
@@ -57,25 +57,11 @@ fn table_result<'a>(text: &'a str, label: &str) -> Option<&'a str> {
 fn csv_path(value: &str) -> Option<PathBuf> {
     value
         .split_whitespace()
-        .map(csv_token)
-        .find(|token| token.starts_with('/') && token.ends_with(".csv"))
-        .map(PathBuf::from)
-}
-
-fn csv_token(token: &str) -> &str {
-    let token = token
-        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
-    token
-        .strip_prefix("csv=")
-        .or_else(|| token.strip_prefix("CSV="))
-        .or_else(|| token.strip_prefix("csv:"))
-        .or_else(|| token.strip_prefix("CSV:"))
-        .unwrap_or(token)
+        .find_map(crate::csv_evidence::absolute_path)
 }
 
 fn require_outside_repo(path: &Path, label: &str) -> Result<(), String> {
-    let cwd = std::env::current_dir().map_err(|error| error.to_string())?;
-    if normalize(path).starts_with(normalize(&cwd)) {
+    if !crate::csv_evidence::outside_repo_path(path) {
         return Err(format!("{label} CSV path must stay outside the repository"));
     }
     Ok(())
@@ -89,20 +75,6 @@ fn ready_csv_path(path: &Path, label: &str) -> Result<PathBuf, String> {
     let path = path.canonicalize().map_err(|error| error.to_string())?;
     require_outside_repo(&path, label)?;
     Ok(path)
-}
-
-fn normalize(path: &Path) -> PathBuf {
-    let mut normalized = PathBuf::new();
-    for component in path.components() {
-        match component {
-            Component::CurDir => {}
-            Component::ParentDir => {
-                normalized.pop();
-            }
-            other => normalized.push(other.as_os_str()),
-        }
-    }
-    normalized
 }
 
 #[cfg(test)]

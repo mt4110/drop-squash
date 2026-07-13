@@ -1,7 +1,5 @@
 use super::value;
 
-mod csv_path;
-
 pub(super) fn validate(text: &str) -> Vec<String> {
     [
         validate_sample_set(text),
@@ -80,5 +78,5 @@ fn has_three_sample_context(value: &str) -> bool {
 fn has_csv_path_context(value: &str) -> bool {
     (value.contains("outside repo") || value.contains("outside repository"))
         && value.contains(".csv")
-        && csv_path::outside_repo(value)
+        && crate::csv_evidence::existing_outside_repo_path(value).is_some()
 }

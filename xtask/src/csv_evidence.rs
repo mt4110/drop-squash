@@ -3,18 +3,24 @@ use std::path::{Path, PathBuf};
 pub(crate) fn existing_outside_repo_path(value: &str) -> Option<PathBuf> {
     value
         .split_whitespace()
-        .map(csv_token)
-        .filter_map(absolute_csv)
+        .filter_map(absolute_path)
         .find(|path| path.is_file() && outside_repo(path))
 }
 
 pub(crate) fn canonical_existing_path(value: &str) -> Option<PathBuf> {
     value
         .split_whitespace()
-        .map(csv_token)
-        .filter_map(absolute_csv)
+        .filter_map(absolute_path)
         .find(|path| path.is_file())
         .and_then(|path| path.canonicalize().ok())
+}
+
+pub(crate) fn absolute_path(token: &str) -> Option<PathBuf> {
+    absolute_csv(csv_token(token))
+}
+
+pub(crate) fn outside_repo_path(path: &Path) -> bool {
+    outside_repo(path)
 }
 
 fn absolute_csv(token: &str) -> Option<PathBuf> {
