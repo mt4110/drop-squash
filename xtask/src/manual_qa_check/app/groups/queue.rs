@@ -16,6 +16,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["did not block", "do not block"],
         ],
         "Queued job cancellation" => &[
+            &["waiting row", "queued row"],
             &["cancelled"],
             &["never starts", "never started"],
             &["trial count unchanged", "trial unchanged", "no trial count"],

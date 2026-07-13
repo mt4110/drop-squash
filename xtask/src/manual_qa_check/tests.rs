@@ -1506,6 +1506,18 @@ fn reports_queued_cancellation_without_trial_count_evidence() {
 }
 
 #[test]
+fn reports_queued_cancellation_without_waiting_row_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Queued job cancellation | Three recordings | Waiting row cancelled | cancellation marked cancelled and never started; trial count unchanged and history showed no new success |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Queued job cancellation")));
+}
+
+#[test]
 fn reports_multi_file_queue_without_numeric_queue_counts() {
     let (_directory, path) = write_manual_qa(
         "| Multi-file queue | Three recordings | Queue runs sequentially | three recordings queued with one active sequential conversion; unrelated failure did not block finished jobs |\n",
