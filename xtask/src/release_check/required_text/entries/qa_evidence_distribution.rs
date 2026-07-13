@@ -12,6 +12,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "Public website deployment"),
     ("docs/qa-evidence.md", "secret-like values"),
     ("docs/qa-evidence.md", "Live checkout link"),
+    ("docs/qa-evidence.md", "pricing refund link"),
     ("docs/qa-evidence.md", "pre-release CTA copy"),
     ("docs/qa-evidence.md", "Published checksum"),
     ("docs/qa-evidence.md", "Homebrew cask install"),
