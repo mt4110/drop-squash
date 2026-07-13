@@ -60,5 +60,13 @@ fn compares_https_urls_with_scheme_case_ignored() {
         "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 TBD",
         "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0"
     ));
+    assert!(!same_https(
+        "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0?ref=publish",
+        "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0?ref=publish"
+    ));
+    assert!(!same_https(
+        "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0#assets",
+        "https://github.com/mt4110/drop-squash/releases/tag/v0.1.0#assets"
+    ));
     assert!(!same_https("https://", "HTTPS://"));
 }

@@ -28,6 +28,9 @@ fn parts(value: &str) -> Option<Parts<'_>> {
     if value.chars().any(char::is_whitespace) {
         return None;
     }
+    if value.contains(['?', '#']) {
+        return None;
+    }
     if !crate::url_scheme::is_https(value) {
         return None;
     }
