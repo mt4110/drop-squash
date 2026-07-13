@@ -311,6 +311,15 @@ fn reports_notarization_action_without_spctl_or_stapler_detail() {
 }
 
 #[test]
+fn reports_notarization_action_without_stapled_status() {
+    let text = "| Notarized and stapled DMG | Signing/notarization | Notarize and assess the public DropSquash.dmg matching the release notes Artifact URL with captured `spctl`, notary, and stapler verification output | Release notes |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Notarized and stapled DMG"));
+}
+
+#[test]
 fn reports_notarization_action_without_artifact_url_context() {
     let text = "| Notarized and stapled DMG | Signing/notarization | Notarize, staple, and assess the public DropSquash.dmg with captured `spctl`, notary, and stapler verification output | Release notes |\n";
 
@@ -449,7 +458,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Sign the public DropSquash.dmg matching the release notes Artifact URL and capture `codesign` Developer ID verification output"
         }
         "Notarized and stapled DMG" => {
-            "Notarize, staple, and assess the public DropSquash.dmg matching the release notes Artifact URL with captured `spctl`, notary, and stapler verification output"
+            "Notarize, confirm stapled status, and assess the public DropSquash.dmg matching the release notes Artifact URL with captured `spctl`, notary, and stapler verification output"
         }
         "Benchmark release set" => {
             "Run release-set benchmark with short, medium, and large samples and record backend, saved percent, duration, speed ratio, absolute CSV path outside repo, 20% threshold result, same-machine comparison, and release candidate baseline"

@@ -13,6 +13,7 @@ pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
             "Artifact URL",
             "`spctl`",
             "notary",
+            "stapled",
             "stapler",
         ]),
         "Published checksum" => Some(&[
