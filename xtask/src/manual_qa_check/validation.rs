@@ -29,7 +29,7 @@ pub(super) fn has_placeholder_evidence(value: &str) -> bool {
 
 fn has_result_placeholder(label: &str, value: &str) -> bool {
     has_placeholder_token(value, |token| {
-        label == "Batch summary" && token == "blocked"
+        matches!(label, "Batch summary" | "Expired license refresh") && token == "blocked"
     })
 }
 

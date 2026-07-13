@@ -1,7 +1,9 @@
+mod command_groups;
 mod groups;
 
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
-    let Some(groups) = groups::for_label(label.trim()) else {
+    let label = label.trim();
+    let Some(groups) = groups::for_label(label).or_else(|| command_groups::for_label(label)) else {
         return;
     };
     let lower = result.to_ascii_lowercase();

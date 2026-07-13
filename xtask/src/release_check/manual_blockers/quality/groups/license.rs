@@ -65,6 +65,15 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
         ]),
+        "Expired license refresh" => Some(&[
+            &["cache", "license.json"],
+            &["expired"],
+            &["offline grace"],
+            &["reconnect"],
+            &["blocked"],
+            &["raw key"],
+            &["absent", "no raw key", "without raw key"],
+        ]),
         "Forget license on this Mac" => Some(&[
             &["forgetting"],
             &["disabled"],

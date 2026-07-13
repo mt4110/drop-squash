@@ -12,7 +12,7 @@ pub(crate) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(crate) const REQUIRED_CHECKS: [&str; 36] = [
+pub(crate) const REQUIRED_CHECKS: [&str; 37] = [
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",
@@ -33,6 +33,7 @@ pub(crate) const REQUIRED_CHECKS: [&str; 36] = [
     "Invalid key activation",
     "Valid sandbox activation",
     "License network failure",
+    "Expired license refresh",
     "Forget license on this Mac",
     "`cargo run -p xtask -- release-check`",
     "`cargo run -p xtask -- file-size-check`",

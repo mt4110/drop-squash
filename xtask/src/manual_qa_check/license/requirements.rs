@@ -32,4 +32,12 @@ pub(super) const NETWORK_FAILURE_CACHE: &[&str] = &[
     "raw key",
 ];
 
+pub(super) const EXPIRED_REFRESH: &[&str] = &[
+    "expired",
+    "offline grace",
+    "reconnect",
+    "blocked",
+    "raw key",
+];
+
 pub(super) const FORGET_ACTION: &[&str] = &["forgetting", "disabled"];

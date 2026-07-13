@@ -1,4 +1,7 @@
+mod identity;
 mod requirements;
+
+use identity::{fingerprint_evidence_ok, instance_id_evidence_ok};
 
 pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<String>) {
     match label.trim() {
@@ -22,6 +25,9 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
             requirements::NETWORK_FAILURE_CACHE,
             missing,
         ),
+        "Expired license refresh" => {
+            require_license_cache_evidence(label, result, requirements::EXPIRED_REFRESH, missing)
+        }
         "Forget license on this Mac" => {
             require_any_state(result, missing);
             require_action_state(label, result, requirements::FORGET_ACTION, missing);
@@ -64,33 +70,6 @@ fn raw_key_absent(value: &str) -> bool {
         || value.contains("raw key is absent")
         || value.contains("no raw key")
         || value.contains("without raw key")
-}
-
-fn fingerprint_evidence_ok(label: &str, result: &str) -> bool {
-    if !requires_activation_identity(label) {
-        return true;
-    }
-    result
-        .split(|character: char| !character.is_ascii_hexdigit())
-        .any(|part| {
-            part.len() == 64
-                && part.chars().all(|character| {
-                    character.is_ascii_hexdigit() && !character.is_ascii_uppercase()
-                })
-        })
-}
-
-fn instance_id_evidence_ok(label: &str, lower: &str) -> bool {
-    !requires_activation_identity(label)
-        || lower.contains("instance id")
-        || lower.contains("instance_id")
-}
-
-fn requires_activation_identity(label: &str) -> bool {
-    matches!(
-        label,
-        "Valid sandbox activation" | "License network failure"
-    )
 }
 
 fn require_action_state(label: &str, result: &str, needles: &[&str], missing: &mut Vec<String>) {
