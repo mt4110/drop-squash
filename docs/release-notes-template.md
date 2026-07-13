@@ -75,8 +75,8 @@ weak public evidence before the release is published.
 - Lemon Squeezy product setup: mention DropSquash, the sandbox product, the intended product, license keys enabled, and private store IDs absent or not recorded.
 - Lemon Squeezy sandbox purchase: mention the sandbox checkout, intended product, `test buyer`, and concrete order id or order number.
 - Valid sandbox activation: mention the Lemon Squeezy sandbox request, disabled action state, Pro state, checked cache evidence, 64-character lowercase hex fingerprint, `instance_id`, and `raw key` absence.
-- Empty key activation: mention Activate disabled for empty input, `raw key`, no fingerprint, no instance, and cache evidence.
-- Invalid license key handling: mention disabled action state, friendly error, `raw key`, no fingerprint, no instance, and cache evidence.
+- Empty key activation: mention Activate disabled for empty input, checked cache evidence, `raw key`, no fingerprint, and no instance.
+- Invalid license key handling: mention disabled action state, friendly error, inspected cache evidence, `raw key`, no fingerprint, and no instance.
 - License network failure: mention a friendly network error, checked preserved existing valid cache, 64-character lowercase hex fingerprint, `instance_id`, and `raw key` absence.
 - Expired license refresh: mention the attempted conversion, expired offline grace cache, reconnect prompt, conversion blocked before starting, `raw key` absence, and cache evidence.
 - Local license forget: mention disabled action state, cache removal, and trial or locked state.

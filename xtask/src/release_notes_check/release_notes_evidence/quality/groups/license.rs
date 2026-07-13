@@ -46,6 +46,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             ],
             &["no instance", "instance absent", "without instance"],
             &["cache"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "Invalid license key handling" => Some(&[
             &["activating"],
@@ -61,6 +62,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             ],
             &["no instance", "instance absent", "without instance"],
             &["cache"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "License network failure" => Some(&[
             &["friendly"],

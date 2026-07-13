@@ -40,6 +40,14 @@ pub(super) const ENTRIES: &[Entry] = &[
         "concrete order id or order number",
     ),
     (
+        "docs/release-notes-template.md",
+        "checked cache evidence",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "inspected cache evidence",
+    ),
+    (
         "docs/qa-evidence.md",
         "new absolute `.md` path outside the repository",
     ),

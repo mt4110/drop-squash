@@ -37,8 +37,8 @@ fn accepts_concrete_production_urls() {
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled and private store IDs not recorded
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
 - Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and checked cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
-- Empty key activation: Activate disabled for empty input and raw key absent from cache with no fingerprint and no instance
-- Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache with no fingerprint and no instance
+- Empty key activation: Activate disabled for empty input and checked cache showed raw key absent with no fingerprint and no instance
+- Invalid license key handling: Activating state disabled submit; friendly error shown and inspected cache showed raw key absent with no fingerprint and no instance
 - License network failure: friendly network error shown, checked existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 - Expired license refresh: attempted conversion with expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
@@ -766,6 +766,23 @@ fn rejects_activation_without_submit_context() {
     assert!(errors
         .iter()
         .any(|error| error.contains("Valid sandbox activation")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Invalid license key handling")));
+}
+
+#[test]
+fn rejects_empty_and_invalid_key_without_checked_cache_evidence() {
+    let errors = check_text(
+        r#"
+- Empty key activation: Activate disabled for empty input and raw key absent from cache with no fingerprint and no instance
+- Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache with no fingerprint and no instance
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Empty key activation")));
     assert!(errors
         .iter()
         .any(|error| error.contains("Invalid license key handling")));
