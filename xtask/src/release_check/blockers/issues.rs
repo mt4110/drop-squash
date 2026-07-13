@@ -16,6 +16,7 @@ pub(super) struct Issues<'a> {
     pub duplicate_plan_rows: Vec<&'a str>,
     pub misordered_plan_rows: Vec<&'a str>,
     pub misplaced_plan_targets: Vec<&'a str>,
+    pub weak_plan_exits: Vec<&'a str>,
     pub duplicate_rows: Vec<&'a str>,
     pub duplicate_classifications: Vec<&'a str>,
     pub secret_values: Vec<String>,
@@ -38,6 +39,7 @@ impl Issues<'_> {
             && self.duplicate_plan_rows.is_empty()
             && self.misordered_plan_rows.is_empty()
             && self.misplaced_plan_targets.is_empty()
+            && self.weak_plan_exits.is_empty()
             && self.duplicate_rows.is_empty()
             && self.duplicate_classifications.is_empty()
             && self.secret_values.is_empty()
@@ -45,7 +47,7 @@ impl Issues<'_> {
 
     pub(super) fn format(self, path: &Path) -> String {
         format!(
-            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
+            "{} has release blocker issues: {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
             path.display(),
             join_prefix("missing ", self.missing),
             join_prefix(" invalid status ", self.invalid),
@@ -65,6 +67,7 @@ impl Issues<'_> {
                 " misplaced execution record target ",
                 self.misplaced_plan_targets,
             ),
+            join_prefix(" weak execution exit condition ", self.weak_plan_exits),
             join_prefix(" duplicate release blocker row ", self.duplicate_rows),
             join_prefix(
                 " duplicate evidence classification row ",

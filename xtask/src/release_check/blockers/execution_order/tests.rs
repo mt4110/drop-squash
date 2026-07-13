@@ -1,6 +1,6 @@
 use super::{
     duplicate_blockers, misordered_tracks, misplaced_record_targets, unknown_blockers,
-    unplanned_blockers,
+    unplanned_blockers, weak_exit_conditions,
 };
 
 #[test]
@@ -12,6 +12,7 @@ fn release_blockers_template_plans_required_rows() {
     assert!(duplicate_blockers(&text).is_empty());
     assert!(misordered_tracks(&text).is_empty());
     assert!(misplaced_record_targets(&text).is_empty());
+    assert!(weak_exit_conditions(&text).is_empty());
 }
 
 #[test]
@@ -80,6 +81,28 @@ fn reports_misplaced_execution_record_target() {
     let misplaced = misplaced_record_targets(text);
 
     assert!(misplaced.contains(&"Local packaged-app proof"));
+}
+
+#[test]
+fn reports_weak_execution_exit_condition() {
+    let text = "\
+| 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | Run tests | `docs/manual-qa.md` |
+";
+
+    let weak = weak_exit_conditions(text);
+
+    assert!(weak.contains(&"Local packaged-app proof"));
+}
+
+#[test]
+fn reports_placeholder_execution_exit_condition() {
+    let text = "\
+| 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | TODO | `docs/manual-qa.md` |
+";
+
+    let weak = weak_exit_conditions(text);
+
+    assert!(weak.contains(&"Local packaged-app proof"));
 }
 
 #[test]

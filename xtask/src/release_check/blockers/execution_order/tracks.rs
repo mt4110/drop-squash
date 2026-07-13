@@ -11,6 +11,36 @@ const TRACK_ROWS: &[(&str, &str, &str)] = &[
     ),
 ];
 
+const EXIT_PHRASES: &[(&str, &[&str])] = &[
+    (
+        "Local packaged-app proof",
+        &[
+            "DropSquash.dmg",
+            "manual QA",
+            "CSV outside the repo",
+            "manual-qa-check",
+        ],
+    ),
+    (
+        "License sandbox proof",
+        &["Sandbox purchase", "friendly failures", "raw-key absence"],
+    ),
+    (
+        "Public web proof",
+        &["dropsquash.app", "checkout", "refund"],
+    ),
+    (
+        "Signing and distribution proof",
+        &[
+            "Release notes",
+            "GitHub Release",
+            "Homebrew tap PR",
+            "signed",
+            "notarized",
+        ],
+    ),
+];
+
 pub(super) fn misordered_tracks(text: &str) -> Vec<&'static str> {
     TRACK_ROWS
         .iter()
@@ -27,6 +57,26 @@ pub(super) fn misplaced_record_targets(text: &str) -> Vec<&'static str> {
         })
         .map(|(_, track, _)| *track)
         .collect()
+}
+
+pub(super) fn weak_exit_conditions(text: &str) -> Vec<&'static str> {
+    EXIT_PHRASES
+        .iter()
+        .filter(|(track, phrases)| !has_exit_phrases(text, track, phrases))
+        .map(|(track, _)| *track)
+        .collect()
+}
+
+fn has_exit_phrases(text: &str, track: &str, phrases: &[&str]) -> bool {
+    rows::all(text).any(|row| {
+        row.track == track
+            && !has_placeholder(row.exit)
+            && phrases.iter().all(|phrase| row.exit.contains(phrase))
+    })
+}
+
+fn has_placeholder(value: &str) -> bool {
+    value.contains("...") || super::super::placeholders::has_token(value)
 }
 
 fn has_track_order(text: &str, order: &str, track: &str) -> bool {

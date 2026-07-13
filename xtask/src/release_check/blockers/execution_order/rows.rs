@@ -2,6 +2,7 @@ pub(super) struct Row<'a> {
     pub order: &'a str,
     pub track: &'a str,
     pub blockers: &'a str,
+    pub exit: &'a str,
     pub target: &'a str,
 }
 
@@ -22,6 +23,7 @@ fn execution_row(line: &str) -> Option<Row<'_>> {
         order: cells[0],
         track: cells[1],
         blockers: cells[2],
+        exit: cells[3],
         target: cells[4],
     })
 }

@@ -74,6 +74,10 @@ pub(super) fn misplaced_record_targets(text: &str) -> Vec<&'static str> {
     tracks::misplaced_record_targets(text)
 }
 
+pub(super) fn weak_exit_conditions(text: &str) -> Vec<&'static str> {
+    tracks::weak_exit_conditions(text)
+}
+
 fn execution_count(text: &str, blocker: &str) -> usize {
     rows::all(text)
         .flat_map(|row| split_blockers(row.blockers))
