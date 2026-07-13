@@ -63,40 +63,7 @@ fn benchmark_csv(label: &str, result: &str) -> bool {
     {
         return true;
     }
-    result
-        .split_whitespace()
-        .map(|value| {
-            value.trim_matches(|character: char| matches!(character, ',' | ';' | '.' | ')' | '('))
-        })
-        .any(is_absolute_csv_outside_repo)
-}
-
-fn is_absolute_csv_outside_repo(value: &str) -> bool {
-    let path = std::path::Path::new(value);
-    if !path.is_absolute() || path.extension().and_then(|value| value.to_str()) != Some("csv") {
-        return false;
-    }
-    if !path.is_file() {
-        return false;
-    }
-    let Ok(repo) = std::env::current_dir() else {
-        return false;
-    };
-    !normalize(path).starts_with(normalize(&repo))
-}
-
-fn normalize(path: &std::path::Path) -> std::path::PathBuf {
-    let mut normalized = std::path::PathBuf::new();
-    for component in path.components() {
-        match component {
-            std::path::Component::CurDir => {}
-            std::path::Component::ParentDir => {
-                normalized.pop();
-            }
-            other => normalized.push(other.as_os_str()),
-        }
-    }
-    normalized
+    crate::csv_evidence::existing_outside_repo_path(result).is_some()
 }
 
 fn contains_number(result: &str, expected: &str) -> bool {
