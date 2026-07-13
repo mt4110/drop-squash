@@ -65,14 +65,16 @@ fn rejects_lemon_squeezy_colon_ids() {
 
 #[test]
 fn rejects_secret_like_values_with_spaced_separators() {
-    let text = "product_id = 123; store id : 456; license key : raw; raw key = test";
+    let text =
+        "product_id : 123; store_id : 456; variant_id: 789; license_key: raw; raw_key : test";
 
     let errors = violations("evidence", text);
 
-    assert!(errors.iter().any(|error| error.contains("product_id")));
-    assert!(errors.iter().any(|error| error.contains("store id:")));
-    assert!(errors.iter().any(|error| error.contains("license key:")));
-    assert!(errors.iter().any(|error| error.contains("raw key=")));
+    assert!(errors.iter().any(|error| error.contains("product_id:")));
+    assert!(errors.iter().any(|error| error.contains("store_id:")));
+    assert!(errors.iter().any(|error| error.contains("variant_id:")));
+    assert!(errors.iter().any(|error| error.contains("license_key:")));
+    assert!(errors.iter().any(|error| error.contains("raw_key:")));
 }
 
 #[test]

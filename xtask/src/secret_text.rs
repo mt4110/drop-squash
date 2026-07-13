@@ -1,4 +1,4 @@
-const DISALLOWED: [&str; 34] = [
+const DISALLOWED: [&str; 39] = [
     "-----begin ",
     "private key-----",
     "apple_api_issuer=",
@@ -23,16 +23,21 @@ const DISALLOWED: [&str; 34] = [
     "lemon_squeezy_variant_id=",
     "lemon_squeezy_variant_id:",
     "license_key=",
+    "license_key:",
     "license key=",
     "license key:",
     "product id:",
     "product_id=",
+    "product_id:",
     "raw key=",
     "raw key:",
+    "raw_key:",
     "store id:",
     "store_id=",
+    "store_id:",
     "variant id:",
     "variant_id=",
+    "variant_id:",
 ];
 
 pub(crate) fn violations(scope: &str, text: &str) -> Vec<String> {
