@@ -24,7 +24,7 @@ Use the exact forms `GitHub Release https://...` and
 | License network failure | Blocked | Friendly network error appears, existing valid local cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Expired license refresh | Blocked | Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
-| Public website deployment | Blocked | Production website serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
+| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |
 | Refund policy finalized | Blocked | Production refund policy is final and linked before checkout goes live | TBD | `https://...` |
 | Live checkout link | Blocked | Public pricing page opens the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |
 | Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact | TBD | Release notes |
@@ -52,7 +52,7 @@ recorded in the location above. Do not use placeholder text such as `TBD`,
 | License network failure | License sandbox | Simulate a failed activation request and inspect the friendly error plus preserved local cache 64-character lowercase hex fingerprint, `instance_id`, and raw-key absence | `docs/manual-qa.md` |
 | Expired license refresh | License sandbox | Seed the expired offline grace cache, confirm the reconnect prompt, confirm conversion is blocked before starting, and inspect local license cache raw-key absence | `docs/manual-qa.md` |
 | Local license forget | License sandbox | Use the local forget action, confirm the action is disabled while forgetting, and inspect the returned app state | `docs/manual-qa.md` |
-| Public website deployment | Public web | Deploy the production site and verify release-status, privacy, pricing, support, and download pages | Public website URL |
+| Public website deployment | Public web | Deploy the production site and verify the production URL serves release-status, privacy, pricing, support, and download pages | Public website URL |
 | Refund policy finalized | Public web | Publish the final refund policy URL and confirm it is linked before checkout goes live | Refund policy URL |
 | Live checkout link | Public web | Verify the public pricing page opens the tested Lemon Squeezy checkout for the intended product | Live checkout URL |
 | Signed DMG | Signing/notarization | Sign the public `DropSquash.dmg` and capture `codesign` Developer ID verification output | Release notes |
