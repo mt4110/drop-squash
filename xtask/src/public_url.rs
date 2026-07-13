@@ -48,6 +48,24 @@ impl<'a> HttpsUrl<'a> {
     }
 }
 
+pub(crate) fn has_checkout_buy_path(path: &str) -> bool {
+    path.to_ascii_lowercase()
+        .strip_prefix("checkout/buy/")
+        .is_some_and(has_checkout_id)
+}
+
+fn has_checkout_id(value: &str) -> bool {
+    let id = value.split('?').next().unwrap_or(value);
+    !id.is_empty() && !id.contains('/') && !is_placeholder_checkout_id(id)
+}
+
+fn is_placeholder_checkout_id(value: &str) -> bool {
+    matches!(
+        value.to_ascii_lowercase().as_str(),
+        "example" | "test" | "demo" | "placeholder" | "tbd" | "todo"
+    )
+}
+
 fn format_path(path: &str) -> &str {
     path.split(['?', '#']).next().unwrap_or(path)
 }

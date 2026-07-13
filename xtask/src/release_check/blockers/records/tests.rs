@@ -70,3 +70,11 @@ fn rejects_live_checkout_outside_store_host() {
         "https://dropsquash.lemonsqueezy.com/checkout/buy/abc123",
     ));
 }
+
+#[test]
+fn rejects_placeholder_live_checkout_buy_id() {
+    assert!(!reference_matches_record_target(
+        "Live checkout link",
+        "https://store.lemonsqueezy.com/checkout/buy/example",
+    ));
+}

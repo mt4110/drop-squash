@@ -54,3 +54,11 @@ fn reports_absent_query_and_fragment() {
 
     assert!(!url.has_query_or_fragment());
 }
+
+#[test]
+fn rejects_placeholder_checkout_buy_ids() {
+    assert!(super::has_checkout_buy_path("checkout/buy/abc123"));
+    assert!(!super::has_checkout_buy_path("checkout/buy/example"));
+    assert!(!super::has_checkout_buy_path("checkout/buy/test"));
+    assert!(!super::has_checkout_buy_path("checkout/buy/abc123/extra"));
+}

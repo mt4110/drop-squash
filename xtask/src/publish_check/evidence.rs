@@ -48,11 +48,7 @@ fn is_checkout(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         !url.has_query_or_fragment()
             && url.host_is("store.lemonsqueezy.com")
-            && url
-                .path()
-                .to_ascii_lowercase()
-                .strip_prefix("checkout/buy/")
-                .is_some_and(has_single_path_segment)
+            && crate::public_url::has_checkout_buy_path(url.path())
     })
 }
 
@@ -64,11 +60,6 @@ fn is_release_status_path(path: &str) -> bool {
 
 fn is_refund_path(path: &str) -> bool {
     path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/")
-}
-
-fn has_single_path_segment(value: &str) -> bool {
-    let id = value.split('?').next().unwrap_or(value);
-    !id.is_empty() && !id.contains('/')
 }
 
 fn has_release_tag(reference: &str) -> bool {

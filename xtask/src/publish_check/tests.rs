@@ -75,6 +75,15 @@ fn rejects_live_checkout_reference_outside_store_host() {
 }
 
 #[test]
+fn rejects_live_checkout_reference_with_placeholder_buy_id() {
+    let text = "| Live checkout link | Verified | done | https://store.lemonsqueezy.com/checkout/buy/example | `https://...` |\n";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Live checkout link"));
+}
+
+#[test]
 fn rejects_public_references_with_query_or_fragment() {
     let text = "\
 | Public website deployment | Verified | done | https://dropsquash.app/release-status?source=publish | `https://...` |

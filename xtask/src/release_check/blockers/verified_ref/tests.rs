@@ -6,7 +6,7 @@ fn accepts_verified_reference_in_expected_record_target() {
 | Signed DMG | Verified | codesign output | Release notes | Release notes |
 | Public website deployment | Verified | pages online | https://dropsquash.app/release-status | `https://...` |
 | Refund policy finalized | Verified | refund policy final | https://dropsquash.app/refund | `https://...` |
-| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout/buy/example | `https://...` |
+| Live checkout link | Verified | checkout opens | https://store.lemonsqueezy.com/checkout/buy/abc123 | `https://...` |
 | Published checksum | Verified | SHA-256 attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
 | Homebrew cask install | Verified | brew install output | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
 | Packaged macOS manual QA | Verified | table filled | `docs/manual-qa.md` | `docs/manual-qa.md` |

@@ -32,7 +32,9 @@ fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
                 && has_refund_path(&path)
                 && !has_store_or_checkout(url, &path)
         }
-        Kind::Checkout => url.host_is("store.lemonsqueezy.com") && has_checkout_buy_id(&path),
+        Kind::Checkout => {
+            url.host_is("store.lemonsqueezy.com") && crate::public_url::has_checkout_buy_path(&path)
+        }
         Kind::GitHubRelease => {
             url.host_is("github.com")
                 && has_release_tag_suffix(url.path(), "mt4110/drop-squash/releases/tag/")
@@ -49,17 +51,6 @@ fn has_refund_path(lower: &str) -> bool {
 
 fn has_store_or_checkout(url: &crate::public_url::HttpsUrl<'_>, lower_path: &str) -> bool {
     url.host_is_or_subdomain_of("lemonsqueezy.com") || lower_path.contains("checkout")
-}
-
-fn has_checkout_buy_id(lower: &str) -> bool {
-    lower
-        .strip_prefix("checkout/buy/")
-        .is_some_and(has_single_path_segment)
-}
-
-fn has_single_path_segment(value: &str) -> bool {
-    let id = value.split('?').next().unwrap_or(value);
-    !id.is_empty() && !id.contains('/')
 }
 
 fn has_release_status_path(lower: &str) -> bool {

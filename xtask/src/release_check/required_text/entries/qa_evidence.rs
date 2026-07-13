@@ -39,6 +39,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "release blocker to release notes evidence-field mapping",
     ),
+    ("docs/qa-evidence.md", "placeholder checkout buy IDs"),
     (
         "docs/qa-evidence.md",
         "backend/saved-percent/duration/speed-ratio CSV fields",
