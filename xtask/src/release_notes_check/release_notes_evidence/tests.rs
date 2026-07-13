@@ -1078,6 +1078,23 @@ fn rejects_public_website_urls_outside_canonical_host() {
 }
 
 #[test]
+fn rejects_nested_public_website_and_refund_paths() {
+    let errors = check_text(
+        r#"
+- Public website URL: https://dropsquash.app/beta/release-status
+- Refund policy URL: https://dropsquash.app/beta/refund
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Public website URL")));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Refund policy URL")));
+}
+
+#[test]
 fn rejects_checkout_url_without_buy_id() {
     let errors = check_text(
         r#"

@@ -53,13 +53,11 @@ fn is_checkout(reference: &str) -> bool {
 }
 
 fn is_release_status_path(path: &str) -> bool {
-    path == "release-status"
-        || path.ends_with("/release-status")
-        || path.ends_with("/release-status/")
+    path == "release-status" || path == "release-status/"
 }
 
 fn is_refund_path(path: &str) -> bool {
-    path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/")
+    path == "refund" || path == "refund/"
 }
 
 fn has_release_tag(reference: &str) -> bool {

@@ -116,6 +116,19 @@ fn rejects_public_web_references_outside_canonical_host() {
 }
 
 #[test]
+fn rejects_nested_public_web_references() {
+    let text = "\
+| Public website deployment | Verified | Production website production URL serves release-status, privacy, pricing, support, and download | https://dropsquash.app/beta/release-status | `https://...` |
+| Refund policy finalized | Verified | Production refund policy is final on dropsquash.app and linked before checkout goes live | https://dropsquash.app/beta/refund | `https://...` |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_verified_blocker_without_evidence_reference() {
     let text = crate::release_check::required_blockers()
         .iter()

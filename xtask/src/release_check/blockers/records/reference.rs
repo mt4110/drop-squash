@@ -34,9 +34,7 @@ fn is_public_website(reference: &str) -> bool {
 }
 
 fn has_release_status_path(lower: &str) -> bool {
-    lower == "release-status"
-        || lower.ends_with("/release-status")
-        || lower.ends_with("/release-status/")
+    lower == "release-status" || lower == "release-status/"
 }
 
 fn is_live_checkout(reference: &str) -> bool {
@@ -52,7 +50,7 @@ fn is_refund_policy(reference: &str) -> bool {
         let path = url.path().to_ascii_lowercase();
         !url.has_query_or_fragment()
             && url.host_is("dropsquash.app")
-            && (path == "refund" || path.ends_with("/refund") || path.ends_with("/refund/"))
+            && (path == "refund" || path == "refund/")
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
     })

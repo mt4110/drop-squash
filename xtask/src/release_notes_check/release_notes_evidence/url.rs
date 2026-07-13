@@ -46,7 +46,7 @@ fn matches_kind(kind: Kind, url: &crate::public_url::HttpsUrl<'_>) -> bool {
 }
 
 fn has_refund_path(lower: &str) -> bool {
-    lower == "refund" || lower.ends_with("/refund") || lower.ends_with("/refund/")
+    lower == "refund" || lower == "refund/"
 }
 
 fn has_store_or_checkout(url: &crate::public_url::HttpsUrl<'_>, lower_path: &str) -> bool {
@@ -54,9 +54,7 @@ fn has_store_or_checkout(url: &crate::public_url::HttpsUrl<'_>, lower_path: &str
 }
 
 fn has_release_status_path(lower: &str) -> bool {
-    lower == "release-status"
-        || lower.ends_with("/release-status")
-        || lower.ends_with("/release-status/")
+    lower == "release-status" || lower == "release-status/"
 }
 
 fn has_numeric_suffix(value: &str, prefix: &str) -> bool {
