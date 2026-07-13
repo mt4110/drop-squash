@@ -62,7 +62,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/benchmarking.md", "20%"),
     (
         "docs/release-notes-template.md",
-        "CSV path outside the repository",
+        "existing CSV path outside the repository",
     ),
     (
         "docs/release-notes-template.md",

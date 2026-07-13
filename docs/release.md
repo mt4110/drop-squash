@@ -234,9 +234,9 @@ The manual QA `App build` field must also name the current `HEAD`, so rerun
 packaged-app QA whenever the release commit changes.
 The release notes `SHA-256` field must match the `App artifact` recorded in
 manual QA, so do not reuse checksums from a different DMG.
-The release notes Benchmark sample set CSV path must also match the manual QA
-Benchmark sample set CSV path, so benchmark evidence cannot drift between
-private QA and the public release notes.
+The release notes Benchmark sample set CSV path must also match an existing
+manual QA Benchmark sample set CSV path, so benchmark evidence cannot drift
+between private QA and the public release notes.
 The publish check also requires release blocker URLs to match the release notes
 URLs for the public website, refund policy, live checkout, GitHub Release, and
 Homebrew tap PR. Public publish references must point to the same release notes
