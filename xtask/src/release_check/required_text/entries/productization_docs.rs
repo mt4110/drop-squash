@@ -5,6 +5,31 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "final publish gate"),
     (
         "docs/productization.md",
+        "macOS single-file conversion is verified",
+    ),
+    ("docs/productization.md", "cancel does not count trial"),
+    (
+        "docs/productization.md",
+        "failed conversion does not count trial",
+    ),
+    (
+        "docs/productization.md",
+        "larger output is treated as failure",
+    ),
+    (
+        "docs/productization.md",
+        "original is never moved without verified success",
+    ),
+    (
+        "docs/productization.md",
+        "privacy claims match implementation",
+    ),
+    (
+        "docs/productization.md",
+        "license secrets are not in the repository",
+    ),
+    (
+        "docs/productization.md",
         "refund/support contact copy gates",
     ),
     (
