@@ -46,8 +46,9 @@ impl LicenseCache {
 }
 
 fn load_cache_bytes(bytes: &[u8]) -> dropsquash_core::Result<LicenseCache> {
-    reject_raw_key_fields(&serde_json::from_slice(bytes)?)?;
-    Ok(serde_json::from_slice(bytes)?)
+    let value = serde_json::from_slice(bytes)?;
+    reject_raw_key_fields(&value)?;
+    Ok(serde_json::from_value(value)?)
 }
 
 fn reject_raw_key_fields(value: &serde_json::Value) -> dropsquash_core::Result<()> {
