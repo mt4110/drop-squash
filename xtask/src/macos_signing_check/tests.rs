@@ -19,6 +19,22 @@ fn accepts_identity_and_apple_id_notarization() {
 }
 
 #[test]
+fn ignores_empty_github_actions_flag() {
+    let env = env([
+        ("GITHUB_ACTIONS", " "),
+        (
+            "APPLE_SIGNING_IDENTITY",
+            "Developer ID Application: Example",
+        ),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "@env:APPLE_APP_PASSWORD"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+
+    assert!(check(&env).is_ok());
+}
+
+#[test]
 fn accepts_certificate_and_api_key_notarization() {
     let directory = tempfile::tempdir().unwrap();
     let key_path = write_api_key(directory.path(), TEST_API_KEY);
