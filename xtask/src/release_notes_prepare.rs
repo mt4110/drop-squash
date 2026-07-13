@@ -39,6 +39,7 @@ impl PreparedNotes {
         let bytes = artifact_check::read_checked(&input.artifact, "release notes artifact")?;
         require_dmg_name(&input.artifact)?;
         crate::artifact_age::require_not_older_than_head(&input.artifact, "release notes")?;
+        require_clean_worktree()?;
         let version = read_version(Path::new(TAURI_CONFIG))?;
         url::validate(&input.artifact_url, &version)?;
         Ok(Self {
@@ -89,6 +90,25 @@ fn git_commit() -> Result<String, String> {
     String::from_utf8(output.stdout)
         .map_err(|error| error.to_string())
         .map(|value| value.trim().to_string())
+}
+
+fn require_clean_worktree() -> Result<(), String> {
+    let output = Command::new("git")
+        .args(["status", "--porcelain"])
+        .output()
+        .map_err(|error| error.to_string())?;
+    if !output.status.success() {
+        return Err("git status failed".into());
+    }
+    let status = String::from_utf8(output.stdout).map_err(|error| error.to_string())?;
+    if clean_status(&status) {
+        return Ok(());
+    }
+    Err("release notes require a clean git worktree".into())
+}
+
+fn clean_status(status: &str) -> bool {
+    status.trim().is_empty()
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {

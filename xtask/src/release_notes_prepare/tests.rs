@@ -1,4 +1,4 @@
-use super::{require_dmg_name, url, Input, PreparedNotes};
+use super::{clean_status, require_dmg_name, url, Input, PreparedNotes};
 use std::io::Write;
 
 #[test]
@@ -84,6 +84,13 @@ fn rejects_wrong_artifact_name() {
     let error = require_dmg_name(std::path::Path::new("/tmp/Other.dmg")).unwrap_err();
 
     assert!(error.contains("DropSquash.dmg"));
+}
+
+#[test]
+fn detects_dirty_git_status() {
+    assert!(clean_status(""));
+    assert!(clean_status("\n"));
+    assert!(!clean_status(" M docs/release.md\n"));
 }
 
 #[test]

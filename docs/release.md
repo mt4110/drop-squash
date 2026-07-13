@@ -204,8 +204,8 @@ The generated checksum line is a pre-upload aid and the generated
 `GitHub Release checksum` field is intentionally marked pending. Replace it
 with concrete public evidence only after the matching `SHA256SUMS` file is
 attached to the GitHub Release. `release-notes-prepare` rejects artifacts older
-than `HEAD`; rebuild the DMG after any final release commit before generating
-public release notes.
+than `HEAD` and refuses to run from a dirty git worktree; rebuild the DMG after
+any final release commit before generating public release notes.
 Prepared draft placeholders, including pending upload notes and Homebrew
 evidence drafts, are not public release evidence. Replace every prepared draft
 line with observed public evidence before running `publish-check`;

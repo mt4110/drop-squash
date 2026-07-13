@@ -54,6 +54,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "`release-notes-prepare` rejects artifacts older",
     ),
     ("docs/release.md", "than `HEAD`"),
+    ("docs/release.md", "dirty git worktree"),
     ("docs/release.md", "non-empty `.p8` file"),
     ("docs/release.md", "private key data"),
     ("docs/release.md", "Tauri updater remains disabled"),
