@@ -42,4 +42,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "Public web proof completion evidence for release-status, privacy, pricing, support, download, checkout, and refund",
     ),
+    (
+        "docs/release-blockers.md",
+        "Checkout references must use the live `store.lemonsqueezy.com/checkout/buy/<id>` URL",
+    ),
 ];
