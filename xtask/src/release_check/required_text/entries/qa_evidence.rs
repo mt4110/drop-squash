@@ -41,6 +41,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "refresh-lock queued message preservation",
+    ),
+    (
+        "docs/qa-evidence.md",
         "approved external links with host/path boundaries and no query/fragment tracking",
     ),
     (
