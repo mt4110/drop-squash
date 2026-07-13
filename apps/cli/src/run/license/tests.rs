@@ -1,7 +1,7 @@
 use dropsquash_core::{LicenseState, TrialState};
 use dropsquash_license::{license_key_fingerprint, LicenseCache};
 
-use super::{forget_at_path, forget_lines, format_cache_diagnostics, format_state};
+use super::{diagnostics::format_cache_diagnostics, forget_at_path, forget_lines, format_state};
 
 #[test]
 fn formats_pro_state_without_trial_count() {
