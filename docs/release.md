@@ -23,9 +23,10 @@ be signed, notarized, stapled, checked, and checksummed before publication.
 The tag release workflow builds an unsigned macOS DMG, checks it, uploads the
 unsigned DMG as a QA artifact, writes and uploads `SHA256SUMS`, then blocks
 publication until signed packaging exists.
-The macOS job maps signing and notarization secrets into `macos-signing-check`
-so missing CI credentials fail deterministically before signed packaging is
-enabled.
+The macOS job maps signing and notarization secrets into `macos-signing-check`,
+writes the App Store Connect `.p8` key only into the runner temporary directory,
+and fails deterministically before signed packaging is enabled when CI
+credentials are missing.
 
 Build public QA and release artifacts from a clean git worktree. If Tauri or
 Git reports a dirty tree, either commit or intentionally remove the unrelated
@@ -126,8 +127,11 @@ notarization it accepts either the App Store Connect API variables
 variables `APPLE_ID`, `APPLE_PASSWORD`, and `APPLE_TEAM_ID`. Do not commit these
 values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
 `APPLE_CERTIFICATE_PASSWORD`; a local keychain identity name is not enough for a
-fresh runner. The certificate value must be base64-encoded certificate data, not
-a placeholder such as `base64`. The App Store Connect key id must be a
+fresh runner. GitHub Actions should store the App Store Connect private key as
+`APPLE_API_KEY_P8`, write it to `$RUNNER_TEMP`, and export the generated
+`APPLE_API_KEY_PATH`; do not store `APPLE_API_KEY_PATH` as a repository secret.
+The certificate value must be base64-encoded certificate data, not a placeholder
+such as `base64`. The App Store Connect key id must be a
 10-character `APPLE_API_KEY`, and `APPLE_API_ISSUER` must be the issuer UUID,
 not placeholder text or an all-zero value.
 `APPLE_API_KEY_PATH` must point to a non-empty `.p8` file containing App Store

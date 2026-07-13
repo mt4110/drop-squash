@@ -36,6 +36,10 @@ pub(super) const RELEASE: &[&str] = &[
     "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS",
     "actions/upload-artifact@v4",
     "dropsquash-unsigned-dmg-checksum",
+    "Prepare App Store Connect key file",
+    "APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}",
+    "install -m 600 /dev/null \"$key_path\"",
+    "APPLE_API_KEY_PATH=$key_path",
     "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
     "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
     "cargo run -p xtask -- macos-signing-check",
@@ -44,8 +48,10 @@ pub(super) const RELEASE: &[&str] = &[
     "exit 1",
 ];
 
-pub(super) const RELEASE_FORBIDDEN: &[&str] =
-    &["APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}"];
+pub(super) const RELEASE_FORBIDDEN: &[&str] = &[
+    "APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}",
+    "APPLE_API_KEY_PATH: ${{ secrets.APPLE_API_KEY_PATH }}",
+];
 
 pub(super) const DESKTOP: &[&str] = &[
     "permissions:",

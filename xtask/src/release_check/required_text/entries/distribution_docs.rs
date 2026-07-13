@@ -101,6 +101,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "In GitHub Actions, signing requires `APPLE_CERTIFICATE`",
     ),
+    ("docs/release.md", "APPLE_API_KEY_P8"),
+    (
+        "docs/release.md",
+        "do not store `APPLE_API_KEY_PATH` as a repository secret",
+    ),
     (
         "docs/release.md",
         "local keychain identity name is not enough",

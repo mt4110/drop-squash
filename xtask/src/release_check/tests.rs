@@ -34,6 +34,10 @@ name: dropsquash-unsigned-dmg
 run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
 uses: actions/upload-artifact@v4
 name: dropsquash-unsigned-dmg-checksum
+name: Prepare App Store Connect key file
+APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+install -m 600 /dev/null "$key_path"
+APPLE_API_KEY_PATH=$key_path
 APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
 APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
 run: cargo run -p xtask -- macos-signing-check
@@ -76,6 +80,10 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS",
             "actions/upload-artifact@v4",
             "dropsquash-unsigned-dmg-checksum",
+            "Prepare App Store Connect key file",
+            "APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}",
+            "install -m 600 /dev/null \"$key_path\"",
+            "APPLE_API_KEY_PATH=$key_path",
             "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
             "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
             "cargo run -p xtask -- macos-signing-check",
@@ -102,6 +110,17 @@ fn rejects_release_workflow_local_signing_identity_secret() {
     assert_eq!(
         found,
         vec!["APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}"]
+    );
+}
+
+#[test]
+fn rejects_release_workflow_api_key_path_secret() {
+    let found =
+        forbidden_release_workflow_values("APPLE_API_KEY_PATH: ${{ secrets.APPLE_API_KEY_PATH }}");
+
+    assert_eq!(
+        found,
+        vec!["APPLE_API_KEY_PATH: ${{ secrets.APPLE_API_KEY_PATH }}"]
     );
 }
 
