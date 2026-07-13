@@ -4,9 +4,7 @@ use super::{
 };
 
 pub(super) fn print_paths(options: &Options) -> Result<(), String> {
-    println!("manual QA state backup: {}", options.state_dir.display());
-    println!("manual QA output folder: {}", options.output_dir.display());
-    println!("app state source: {}", options.app_state_dir.display());
+    print_basic_paths(options);
     let artifact = qa_artifact(options)?;
     let mut fields: Vec<Field> = Vec::new();
     let identity = BuildIdentity::current_for_artifact(artifact.as_deref())?;
@@ -28,6 +26,17 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
         prepared_markdown::write(path, &fields, artifact.as_deref())?;
     }
     Ok(())
+}
+
+pub(super) fn print_basic_paths(options: &Options) {
+    println!("manual QA state backup: {}", options.state_dir.display());
+    println!("manual QA output folder: {}", options.output_dir.display());
+    println!("app state source: {}", options.app_state_dir.display());
+}
+
+pub(super) fn require_ready(options: &Options) -> Result<(), String> {
+    let artifact = qa_artifact(options)?;
+    BuildIdentity::current_for_artifact(artifact.as_deref()).map(|_| ())
 }
 
 fn print_artifact(artifact: &Option<std::path::PathBuf>, fields: &mut Vec<Field>) {

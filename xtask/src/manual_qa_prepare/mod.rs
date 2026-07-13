@@ -16,13 +16,14 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     let options = Options::parse(args)?;
     if options.restore_state {
         let restored = restore_state(&options)?;
-        output::print_paths(&options)?;
+        output::print_basic_paths(&options);
         for file in restored {
             println!("restored: {file}");
         }
         return Ok(());
     }
     require_reset_artifact(&options)?;
+    output::require_ready(&options)?;
     let copied = backup_state(&options)?;
     output::print_paths(&options)?;
     for file in copied {
