@@ -26,7 +26,7 @@ impl EncoderBackend for MediaFoundationEncoder {
 
     async fn encode(&self, _job: EncodeJob) -> Result<EncodeResult> {
         Err(AppError::Encoder(
-            "Media Foundation backend is not implemented in Phase 0".to_string(),
+            "This build cannot use the native encoder on this system.".to_string(),
         ))
     }
 }

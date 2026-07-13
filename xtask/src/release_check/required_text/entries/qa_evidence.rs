@@ -94,5 +94,6 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "post-encode postprocess/history guard",
     ),
+    ("docs/qa-evidence.md", "native-encoder-unavailable message"),
     ("docs/qa-evidence.md", "non-lowercase checksums"),
 ];

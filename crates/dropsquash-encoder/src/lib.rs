@@ -47,7 +47,7 @@ mod tests {
                 })
                 .await
                 .unwrap_err();
-            assert!(error.to_string().contains("not implemented"));
+            assert!(error.to_string().contains("cannot use the native encoder"));
         }
     }
 }
