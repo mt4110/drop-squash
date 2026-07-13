@@ -81,6 +81,21 @@ fn rejects_identity_only_signing_in_ci() {
 }
 
 #[test]
+fn rejects_blank_certificate_signing_in_ci() {
+    let env = env([
+        ("GITHUB_ACTIONS", "true"),
+        ("APPLE_CERTIFICATE", " "),
+        ("APPLE_CERTIFICATE_PASSWORD", "cert-passphrase-123"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("CI macOS signing requires"));
+}
+
+#[test]
 fn rejects_placeholder_certificate() {
     let env = env([
         ("APPLE_CERTIFICATE", "base64"),
