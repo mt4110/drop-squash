@@ -167,6 +167,21 @@ fn rejects_verified_blocker_with_weak_completion_evidence() {
 }
 
 #[test]
+fn rejects_distribution_completion_without_artifact_url() {
+    let text = "\
+| Signed DMG | Verified | `codesign` verified Developer ID for public DropSquash.dmg | Release notes | Release notes |
+| Published checksum | Verified | SHA256SUMS with lowercase SHA-256 for public DropSquash.dmg attached to the GitHub Release | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 | GitHub Release |
+| Homebrew cask install | Verified | brew install --cask installed versioned artifact DropSquash.dmg with matching lowercase SHA-256, brew uninstall --cask removes it cleanly, auto_updates false, and zap | Homebrew tap PR https://github.com/mt4110/homebrew-tap/pull/1 | Homebrew tap PR |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Signed DMG"));
+    assert!(unverified.contains(&"Published checksum"));
+    assert!(unverified.contains(&"Homebrew cask install"));
+}
+
+#[test]
 fn rejects_github_release_reference_without_semver_tag() {
     let text = "\
 | Published checksum | Verified | SHA256SUMS for DropSquash.dmg attached | GitHub Release https://github.com/mt4110/drop-squash/releases/tag/v0.1 | GitHub Release |
