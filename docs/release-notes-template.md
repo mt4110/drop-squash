@@ -66,7 +66,7 @@ weak public evidence before the release is published.
 - Apple notary log: include `notary` or `notarytool`, `accepted`, `public`, and the exact Artifact URL.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, `clean` or `fresh`, `public`, the exact Artifact URL, `signed`, `notarized`, `stapled`, and `without warning` or `no warning`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
-- Manual QA record: mention `docs/manual-qa.md`, the tested public `DropSquash.dmg`, and `manual-qa-check` passing.
+- Manual QA record: mention `docs/manual-qa.md`, the tested exact Artifact URL, and `manual-qa-check` passing.
 - Conversion safety evidence: mention cancellation, failed conversion, larger/not-smaller output, original preservation, and unchanged trial count.
 - Queue evidence: mention multi-file queue, queued cancellation, batch summary, trial or license lock blocked jobs, finished count, saved bytes, and failed/cancelled/blocked counts.
 - Trash source policy: mention Moving original or moving state, disabled action state, verified smaller output, and Trash.

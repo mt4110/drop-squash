@@ -1,6 +1,7 @@
 use super::{checksum, value};
 
 mod homebrew;
+mod manual_qa;
 mod signing;
 
 pub(super) fn validate(text: &str) -> Vec<String> {
@@ -13,6 +14,7 @@ pub(super) fn validate(text: &str) -> Vec<String> {
     require_same_origin("Public website URL", "Refund policy URL", text, &mut errors);
     checksum::validate(text, &mut errors);
     homebrew::validate(text, &mut errors);
+    manual_qa::validate(text, &mut errors);
     signing::validate(text, &mut errors);
     errors
 }

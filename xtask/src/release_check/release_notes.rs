@@ -14,7 +14,7 @@ const REQUIRED_TEXT: &[&str] = &[
     "Gatekeeper",
     "docs/release-blockers.md",
     "Manual QA record",
-    "tested public `DropSquash.dmg`",
+    "tested exact Artifact URL",
     "Conversion safety evidence",
     "Queue evidence",
     "Trash source policy",
