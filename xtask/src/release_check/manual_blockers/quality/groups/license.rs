@@ -71,6 +71,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["offline grace"],
             &["reconnect"],
             &["blocked"],
+            &["before starting"],
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
         ]),

@@ -220,6 +220,34 @@ fn reports_verified_network_failure_without_fingerprint_instance_evidence() {
 }
 
 #[test]
+fn accepts_verified_expired_refresh_with_reconnect_block_evidence() {
+    let blockers = "| Expired license refresh | Verified | Reconnect prompt before conversion | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Expired license refresh | Reconnect prompt | expired offline grace license.json cache showed reconnect prompt, blocked conversion before starting, and had no raw key |\n";
+
+    assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
+fn reports_verified_expired_refresh_without_reconnect_prompt() {
+    let blockers = "| Expired license refresh | Verified | Reconnect prompt before conversion | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Expired license refresh | Reconnect prompt | expired offline grace license.json cache blocked conversion before starting and had no raw key |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Expired license refresh"));
+}
+
+#[test]
+fn reports_verified_expired_refresh_without_pre_start_block() {
+    let blockers = "| Expired license refresh | Verified | Reconnect prompt before conversion | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Expired license refresh | Reconnect prompt | expired offline grace license.json cache showed reconnect prompt, blocked conversion, and had no raw key |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Expired license refresh"));
+}
+
+#[test]
 fn reports_verified_local_forget_blocker_without_manual_result() {
     let blockers = "| Local license forget | Verified | Local cache removed | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual =
