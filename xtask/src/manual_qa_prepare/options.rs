@@ -66,7 +66,8 @@ impl Options {
             .is_some_and(|value| !sample_set::is_valid(value))
         {
             return Err(
-                "--input-sample-set must mention short, medium, and large recordings".to_string(),
+                "--input-sample-set must mention local short, medium, and large recordings"
+                    .to_string(),
             );
         }
         path_policy::require_outside_repo("--app-state-dir", &self.app_state_dir)?;

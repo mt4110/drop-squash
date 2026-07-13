@@ -30,11 +30,12 @@ pub(super) fn validate_input_sample_set(value: &str, missing: &mut Vec<String>) 
         .iter()
         .all(|needle| lower.contains(needle));
     let has_media = lower.contains("recording") || lower.contains("sample");
-    if has_sizes && has_media {
+    if lower.contains("local") && has_sizes && has_media {
         return;
     }
     missing.push(
-        "manual QA Input sample set must mention short, medium, and large recordings".to_string(),
+        "manual QA Input sample set must mention local short, medium, and large recordings"
+            .to_string(),
     );
 }
 

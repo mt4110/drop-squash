@@ -130,6 +130,15 @@ fn reports_weak_input_sample_set() {
 }
 
 #[test]
+fn reports_non_local_input_sample_set() {
+    let (_directory, path) =
+        write_manual_qa("| Input sample set | short, medium, and large recordings |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("local")));
+}
+
+#[test]
 fn reports_wrong_state_paths() {
     let (_directory, path) = write_manual_qa(
         "| Config path | /tmp/config.json |\n\

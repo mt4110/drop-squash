@@ -24,7 +24,7 @@ pub(super) fn rows(path: &Path) -> Result<Vec<String>, String> {
     let checksum = crate::checksum::checksum_line(path)?;
     Ok(vec![
         format!(
-            "| {ARTIFACT_CHECK} | Passes | artifact-check passed for {} DropSquash.dmg |",
+            "| {ARTIFACT_CHECK} | Passes | artifact-check passed for public UDIF {} DropSquash.dmg |",
             path.display()
         ),
         format!(

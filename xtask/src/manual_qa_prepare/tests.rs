@@ -338,6 +338,17 @@ fn rejects_weak_input_sample_set() {
 }
 
 #[test]
+fn rejects_non_local_input_sample_set() {
+    let error = Options::parse(vec![
+        "--input-sample-set".to_string(),
+        "short, medium, and large recordings".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("local"));
+}
+
+#[test]
 fn rejects_state_backup_inside_repository() {
     let error = Options::parse(vec![
         "--state-dir".to_string(),
