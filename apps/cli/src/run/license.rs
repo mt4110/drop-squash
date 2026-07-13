@@ -18,9 +18,12 @@ pub fn gate() -> dropsquash_core::Result<LicenseGate> {
 pub async fn status(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
     let history = history.unwrap_or_else(default_history_path);
     let state = state(&history).await?;
+    let cache = LicenseCache::load_or_default(&default_license_cache_path())?;
     print_state(state);
     println!("license cache: {}", default_license_cache_path().display());
-    println!("raw license key persisted: no");
+    for line in format_cache_diagnostics(&cache, now_unix()) {
+        println!("{line}");
+    }
     Ok(())
 }
 
@@ -60,6 +63,46 @@ fn format_state(state: LicenseState) -> Vec<String> {
         LicenseState::Pro => vec!["license state: Pro".to_string()],
         LicenseState::Trial(trial) => trial_lines("Trial", trial),
         LicenseState::Locked(trial) => trial_lines("Locked", trial),
+    }
+}
+
+fn format_cache_diagnostics(cache: &LicenseCache, now: u64) -> Vec<String> {
+    vec![
+        "raw license key persisted: no".to_string(),
+        format!("license cache identity: {}", identity_label(cache)),
+        format!("offline grace: {}", grace_label(cache, now)),
+    ]
+}
+
+fn identity_label(cache: &LicenseCache) -> &'static str {
+    if has_hex_fingerprint(cache) && has_instance_id(cache) {
+        "present"
+    } else {
+        "missing"
+    }
+}
+
+fn has_hex_fingerprint(cache: &LicenseCache) -> bool {
+    cache
+        .license_key_fingerprint
+        .as_deref()
+        .is_some_and(|value| {
+            value.len() == 64 && value.chars().all(|char| char.is_ascii_hexdigit())
+        })
+}
+
+fn has_instance_id(cache: &LicenseCache) -> bool {
+    cache
+        .instance_id
+        .as_deref()
+        .is_some_and(|value| !value.trim().is_empty())
+}
+
+fn grace_label(cache: &LicenseCache, now: u64) -> String {
+    match cache.offline_grace_until_unix {
+        Some(until) if until >= now => format!("active until unix {until}"),
+        Some(until) => format!("expired at unix {until}"),
+        None => "absent".to_string(),
     }
 }
 

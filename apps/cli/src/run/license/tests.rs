@@ -1,7 +1,7 @@
 use dropsquash_core::{LicenseState, TrialState};
 use dropsquash_license::{license_key_fingerprint, LicenseCache};
 
-use super::{forget_at_path, forget_lines, format_state};
+use super::{forget_at_path, forget_lines, format_cache_diagnostics, format_state};
 
 #[test]
 fn formats_pro_state_without_trial_count() {
@@ -68,6 +68,58 @@ fn forget_output_says_server_activation_is_unchanged() {
         vec![
             "local license cache forgotten".to_string(),
             "server-side license activation unchanged".to_string(),
+        ]
+    );
+}
+
+#[test]
+fn cache_diagnostics_report_present_identity_and_active_grace() {
+    let cache = LicenseCache {
+        valid: true,
+        instance_name: Some("DropSquash CLI".to_string()),
+        instance_id: Some("instance-123".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        activation_id: None,
+        validated_at_unix: Some(100),
+        offline_grace_until_unix: Some(200),
+    };
+
+    assert_eq!(
+        format_cache_diagnostics(&cache, 150),
+        vec![
+            "raw license key persisted: no".to_string(),
+            "license cache identity: present".to_string(),
+            "offline grace: active until unix 200".to_string(),
+        ]
+    );
+}
+
+#[test]
+fn cache_diagnostics_report_missing_identity_and_expired_grace() {
+    let cache = LicenseCache {
+        valid: true,
+        offline_grace_until_unix: Some(200),
+        ..LicenseCache::default()
+    };
+
+    assert_eq!(
+        format_cache_diagnostics(&cache, 201),
+        vec![
+            "raw license key persisted: no".to_string(),
+            "license cache identity: missing".to_string(),
+            "offline grace: expired at unix 200".to_string(),
+        ]
+    );
+}
+
+#[test]
+fn cache_diagnostics_report_absent_grace() {
+    assert_eq!(
+        format_cache_diagnostics(&LicenseCache::default(), 1),
+        vec![
+            "raw license key persisted: no".to_string(),
+            "license cache identity: missing".to_string(),
+            "offline grace: absent".to_string(),
         ]
     );
 }
