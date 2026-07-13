@@ -477,6 +477,18 @@ fn reports_packaged_macos_manual_qa_with_invalid_calendar_date() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_missing_output_folder() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let directory = tempfile::tempdir().unwrap();
+    let missing_path = directory.path().join("missing-output");
+    let manual = packaged_manual_qa_with("Output folder", &missing_path.display().to_string());
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_placeholder_state_path() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -889,7 +901,10 @@ fn packaged_result(label: &str) -> String {
         "macOS version" => "macOS 15.5".into(),
         "Machine" => "Apple silicon Mac arm64".into(),
         "Input sample set" => "short, medium, and large local recordings".into(),
-        "Output folder" => "/tmp/dropsquash-manual-qa-output".into(),
+        "Output folder" => {
+            std::fs::create_dir_all("/tmp/dropsquash-manual-qa-output").unwrap();
+            "/tmp/dropsquash-manual-qa-output".into()
+        }
         "Config path" => "/Users/me/Library/Application Support/DropSquash/config.json".into(),
         "History path" => {
             "/Users/me/Library/Application Support/DropSquash/history.jsonl".into()

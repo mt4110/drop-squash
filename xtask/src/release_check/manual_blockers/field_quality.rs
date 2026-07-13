@@ -1,3 +1,5 @@
+use std::path::Path;
+
 pub(super) fn lacks_required_evidence(check: &str, result: &str) -> bool {
     let Some(groups) = groups_for(check) else {
         return false;
@@ -16,6 +18,7 @@ fn lacks_special_evidence(check: &str, result: &str) -> bool {
         "Config path" => !is_absolute_state_path(result, "config.json"),
         "History path" => !is_absolute_state_path(result, "history.jsonl"),
         "License cache path" => !is_absolute_state_path(result, "license.json"),
+        "Output folder" => !is_existing_absolute_dir(result),
         "Date" => !is_iso_date(result),
         _ => false,
     }
@@ -83,6 +86,11 @@ fn is_absolute_state_path(result: &str, file_name: &str) -> bool {
         && (result.contains("application support/dropsquash/")
             || result.contains("application support\\dropsquash\\"))
         && result.ends_with(file_name)
+}
+
+fn is_existing_absolute_dir(result: &str) -> bool {
+    let path = Path::new(result.trim());
+    path.is_absolute() && path.is_dir()
 }
 
 fn groups_for(check: &str) -> Option<&'static [&'static [&'static str]]> {
