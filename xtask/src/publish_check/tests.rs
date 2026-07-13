@@ -506,6 +506,23 @@ fn publish_rejects_prepared_homebrew_install_draft() {
 }
 
 #[test]
+fn publish_rejects_prepared_macos_verification_draft() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(
+        &path,
+        "- `codesign`: pending Developer ID verification for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg; replace this line with observed `codesign` evidence\n- Gatekeeper clean-machine open: pending clean-machine open test for public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg; replace this line with observed Gatekeeper evidence\n",
+    )
+    .unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("`codesign`"));
+    assert!(error.contains("Gatekeeper clean-machine open"));
+}
+
+#[test]
 fn publish_rejects_prepared_release_note_draft_marker() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("release-notes.md");
