@@ -20,6 +20,7 @@ pub(super) fn check(path: &Path) -> Result<Vec<String>, String> {
 
 fn check_text(text: &str) -> Vec<String> {
     let mut errors = duplicates::validate(text);
+    errors.extend(validate_document_markers(text));
     errors.extend(
         fields::URL
             .iter()
@@ -36,6 +37,13 @@ fn check_text(text: &str) -> Vec<String> {
             .filter_map(|label| validate_evidence_field(label, text)),
     );
     errors
+}
+
+fn validate_document_markers(text: &str) -> Option<String> {
+    if text.to_ascii_lowercase().contains("prepared draft only") {
+        return Some("release notes must not contain prepared draft markers".to_string());
+    }
+    None
 }
 
 fn validate_url_field(label: &'static str, kind: url::Kind, text: &str) -> Option<String> {

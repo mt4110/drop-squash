@@ -1313,6 +1313,19 @@ fn rejects_prepared_pending_release_checksum() {
 }
 
 #[test]
+fn rejects_prepared_draft_marker() {
+    let errors = check_text(
+        r#"
+Prepared draft only. Replace every pending line before public release.
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("prepared draft markers")));
+}
+
+#[test]
 fn rejects_mismatched_release_identity_values() {
     let errors = check_text(
         r#"
