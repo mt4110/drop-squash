@@ -1399,6 +1399,19 @@ fn rejects_uppercase_git_commit() {
 }
 
 #[test]
+fn rejects_placeholder_git_commit() {
+    let errors = check_text(
+        r#"
+- Git commit: 0000000
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("lowercase commit hash")));
+}
+
+#[test]
 fn rejects_uppercase_sha256() {
     let errors = check_text(
         r#"

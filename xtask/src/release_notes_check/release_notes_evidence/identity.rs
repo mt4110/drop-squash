@@ -39,6 +39,7 @@ fn validate_git_commit(text: &str) -> Option<String> {
         && value
             .chars()
             .all(|value| value.is_ascii_hexdigit() && !value.is_ascii_uppercase())
+        && !all_same_char(value)
     {
         return None;
     }
@@ -51,4 +52,11 @@ fn is_semver(value: &str) -> bool {
         && parts
             .iter()
             .all(|part| !part.is_empty() && part.chars().all(|value| value.is_ascii_digit()))
+}
+
+fn all_same_char(value: &str) -> bool {
+    value
+        .chars()
+        .next()
+        .is_some_and(|first| value.chars().all(|char| char == first))
 }
