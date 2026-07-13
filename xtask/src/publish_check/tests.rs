@@ -366,6 +366,18 @@ fn publish_requires_final_release_notes() {
 }
 
 #[test]
+fn publish_requires_release_notes_artifact_url() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("release-notes.md");
+    std::fs::write(&path, "- SHA-256: 0123456789abcdef\n").unwrap();
+
+    let error = ensure_release_notes_complete(&path).unwrap_err();
+
+    assert!(error.contains("release notes must pass before publish"));
+    assert!(error.contains("Artifact URL"));
+}
+
+#[test]
 fn publish_rejects_prepared_homebrew_release_note_draft() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("release-notes.md");
