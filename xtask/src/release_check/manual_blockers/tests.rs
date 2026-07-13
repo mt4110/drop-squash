@@ -492,6 +492,19 @@ fn reports_packaged_macos_manual_qa_with_weak_privacy_receipt() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_absolute_path_receipt() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Privacy receipt sidecar",
+        "clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, file names, and absolute paths",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_without_smaller_output_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(

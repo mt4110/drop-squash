@@ -978,6 +978,18 @@ fn reports_privacy_receipt_without_file_name_policy() {
 }
 
 #[test]
+fn reports_privacy_receipt_with_absolute_paths() {
+    let (_directory, path) = write_manual_qa(
+        "| Privacy receipt sidecar | Successful conversion | Creates receipt | clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, file names, and absolute paths |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Privacy receipt sidecar")));
+}
+
+#[test]
 fn reports_reveal_results_without_selection_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Reveal privacy receipt | Successful conversion | Finder opens | Finder opened clip.privacy.json |\n\

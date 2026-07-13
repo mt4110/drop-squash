@@ -10,7 +10,11 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["uploaded_bytes"],
             &["metadata_policy"],
             &["file names"],
-            &["absolute paths"],
+            &[
+                "instead of absolute paths",
+                "no absolute paths",
+                "without absolute paths",
+            ],
         ]),
         "Reveal privacy receipt" => Some(&[&["finder"], &[".privacy.json"], &["selected"]]),
         "Duplicate output naming" => Some(&[&["second output"], &["squashed-2"], &[".mp4"]]),
