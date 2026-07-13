@@ -320,6 +320,16 @@ fn reports_verified_license_blocker_with_persisted_raw_key() {
 }
 
 #[test]
+fn reports_verified_license_blocker_with_contradictory_raw_key_evidence() {
+    let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Valid sandbox activation | Pro state | Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and checked license.json cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent but raw key persisted |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Valid sandbox activation"));
+}
+
+#[test]
 fn reports_verified_license_blocker_without_sandbox_context() {
     let blockers = "| Valid sandbox activation | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = "| Valid sandbox activation | Pro state; raw key absent from cache | Activating state disabled submit; Pro reached; license.json cache checked; raw key absent |\n";
@@ -365,6 +375,16 @@ fn accepts_verified_license_blocker_with_cache_evidence() {
     let manual = "| Invalid key activation | Friendly license error; no raw key persisted | Activating state disabled submit; friendly error shown; license.json cache checked; raw key absent, no fingerprint, and no instance |\n";
 
     assert!(missing_manual_verified_evidence(blockers, manual).is_empty());
+}
+
+#[test]
+fn reports_verified_invalid_key_with_contradictory_raw_key_evidence() {
+    let blockers = "| Invalid license key handling | Verified | raw key is absent | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = "| Invalid key activation | Friendly license error | Activating state disabled submit; friendly error shown; license.json cache checked; raw key absent, no fingerprint, no instance, but raw key saved |\n";
+
+    let missing = missing_manual_verified_evidence(blockers, manual);
+
+    assert!(missing.contains(&"Invalid license key handling"));
 }
 
 #[test]
