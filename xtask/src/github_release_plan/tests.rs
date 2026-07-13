@@ -25,6 +25,14 @@ fn rejects_non_release_tag() {
 }
 
 #[test]
+fn rejects_malformed_release_tag() {
+    let directory = tempfile::tempdir().unwrap();
+    let error = command(&request(directory.path(), "v1.two.3")).unwrap_err();
+
+    assert!(error.contains("v1.2.3"));
+}
+
+#[test]
 fn rejects_wrong_checksum_name() {
     let directory = tempfile::tempdir().unwrap();
     let mut request = request(directory.path(), "v1.2.3");

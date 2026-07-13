@@ -28,10 +28,18 @@ fn command(request: &Request) -> Result<String, String> {
 }
 
 fn validate_tag(tag: &str) -> Result<(), String> {
-    if tag.starts_with('v') && tag.matches('.').count() == 2 {
+    let Some(version) = tag.strip_prefix('v') else {
+        return Err("GitHub Release tag must look like v1.2.3".to_string());
+    };
+    let parts = version.split('.').collect::<Vec<_>>();
+    if parts.len() == 3 && parts.iter().all(|part| is_numeric_part(part)) {
         return Ok(());
     }
     Err("GitHub Release tag must look like v1.2.3".to_string())
+}
+
+fn is_numeric_part(part: &str) -> bool {
+    !part.is_empty() && part.chars().all(|ch| ch.is_ascii_digit())
 }
 
 fn validate_checksum(path: &Path) -> Result<(), String> {
