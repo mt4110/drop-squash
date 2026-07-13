@@ -618,6 +618,24 @@ fn reports_generic_manual_results() {
 }
 
 #[test]
+fn reports_short_success_manual_results() {
+    let (_directory, path) =
+        write_manual_qa("| Cancellation | large.mov | Returns to ready | Success |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Cancellation".to_string()));
+}
+
+#[test]
+fn reports_looks_good_manual_results() {
+    let (_directory, path) =
+        write_manual_qa("| Gatekeeper open test | Opens cleanly | Looks good |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.contains(&"manual QA result needs evidence: Gatekeeper open test".to_string()));
+}
+
+#[test]
 fn reports_placeholder_field_values() {
     let (_directory, path) = write_manual_qa("| App build | TBD |\n");
     let missing = check_file(&path).unwrap();

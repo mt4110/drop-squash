@@ -19,7 +19,16 @@ fn has_vague_manual_result(label: &str, result: &str) -> bool {
     }
     matches!(
         result.trim().to_ascii_lowercase().as_str(),
-        "pass" | "ok" | "done" | "works" | "verified" | "observed expected behavior"
+        "pass"
+            | "passed"
+            | "ok"
+            | "done"
+            | "looks good"
+            | "success"
+            | "successful"
+            | "works"
+            | "verified"
+            | "observed expected behavior"
     )
 }
 
