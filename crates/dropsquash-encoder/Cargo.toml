@@ -9,6 +9,7 @@ rust-version.workspace = true
 [dependencies]
 async-trait.workspace = true
 dropsquash-core.workspace = true
+dropsquash-media.workspace = true
 serde.workspace = true
 tokio-util.workspace = true
 

@@ -30,7 +30,7 @@ fn accepts_concrete_production_urls() {
 - Conversion safety evidence: cancellation, failed conversion, and larger output preserved original with trial count unchanged
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
-- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
@@ -1030,7 +1030,7 @@ fn rejects_benchmark_sample_set_with_repo_local_csv_path() {
         .join("target/dropsquash-bench/results.csv");
     let errors = check_text(&format!(
         "\
-- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
 - Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
 ",
         csv.display()
@@ -1046,7 +1046,7 @@ fn rejects_benchmark_sample_set_with_normalized_repo_local_csv_path() {
     let csv = normalized_repo_path("target/dropsquash-bench/results.csv");
     let errors = check_text(&format!(
         "\
-- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
 - Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
 ",
         csv.display()
@@ -1061,7 +1061,7 @@ fn rejects_benchmark_sample_set_with_normalized_repo_local_csv_path() {
 fn rejects_benchmark_threshold_without_baseline_context() {
     let errors = check_text(
         r#"
-- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
 - Benchmark regression threshold: no sample exceeded 20% regression
 "#,
     );

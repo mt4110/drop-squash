@@ -18,7 +18,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "benchmark CSV path evidence"),
-    ("docs/qa-evidence.md", "backend/saved-percent CSV fields"),
+    (
+        "docs/qa-evidence.md",
+        "backend/saved-percent/duration/speed-ratio CSV fields",
+    ),
     (
         "docs/qa-evidence.md",
         "approved external links with host/path boundaries",

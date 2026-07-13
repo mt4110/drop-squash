@@ -22,8 +22,12 @@ evidence, use `--csv-output` with an absolute path outside the repository so the
 exact evidence file is part of the command:
 
 ```text
-backend,input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,saved_percent,throughput_mib_s
+backend,input,output,original_bytes,output_bytes,duration_s,elapsed_s,compression_ratio,saved_percent,throughput_mib_s,speed_ratio
 ```
+
+`duration_s` and `speed_ratio` are filled when the input MP4/MOV metadata
+contains a readable `mvhd` duration. If duration is unavailable, those cells are
+left blank instead of inventing a speed number.
 
 `--csv-output` refuses to overwrite an existing file. Use a fresh path for each
 release-candidate run so the recorded evidence cannot silently replace an older
@@ -47,14 +51,14 @@ Record this context with the CSV in `docs/manual-qa.md`:
 - DropSquash app version or commit.
 - macOS version and machine model.
 - Whether the app was run from a packaged `.app` or `xtask`.
-- Native backend name from the CSV.
+- Native backend name, saved percent, duration, and speed ratio from the CSV.
 - Profile and size arguments.
 - Output directory path.
 
 Use this compact format in the manual QA result cell:
 
 ```text
-Backend: apple-native. Samples: short.mov 58.0% saved 18.2 MiB/s; medium.mov 62.0% saved 21.0 MiB/s; large.mov 56.0% saved 19.5 MiB/s. CSV saved outside repo: /tmp/dropsquash-bench/results.csv
+Backend: apple-native. Samples: short.mov 58.0% saved 18.2 MiB/s 3.4x speed ratio; medium.mov 62.0% saved 21.0 MiB/s 2.9x speed ratio; large.mov 56.0% saved 19.5 MiB/s 2.4x speed ratio. CSV saved outside repo: /tmp/dropsquash-bench/results.csv
 ```
 
 Acceptance notes:

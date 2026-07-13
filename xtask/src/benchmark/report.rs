@@ -10,10 +10,16 @@ pub struct BenchmarkRow {
     pub original_bytes: u64,
     pub output_bytes: u64,
     pub elapsed: Duration,
+    pub duration: Option<Duration>,
 }
 
 impl BenchmarkRow {
-    pub fn from_result(backend: &str, result: EncodeResult, elapsed: Duration) -> Self {
+    pub fn from_result(
+        backend: &str,
+        result: EncodeResult,
+        elapsed: Duration,
+        duration: Option<Duration>,
+    ) -> Self {
         Self {
             backend: backend.to_string(),
             input: result.input_path.display().to_string(),
@@ -21,6 +27,7 @@ impl BenchmarkRow {
             original_bytes: result.original_bytes,
             output_bytes: result.output_bytes,
             elapsed,
+            duration,
         }
     }
 
@@ -39,6 +46,15 @@ impl BenchmarkRow {
         }
         self.original_bytes as f64 / 1_048_576.0 / seconds
     }
+
+    fn speed_ratio(&self) -> Option<f64> {
+        let elapsed = self.elapsed.as_secs_f64();
+        if elapsed == 0.0 {
+            return None;
+        }
+        self.duration
+            .map(|duration| duration.as_secs_f64() / elapsed)
+    }
 }
 
 pub fn print(rows: &[BenchmarkRow]) {
@@ -56,23 +72,29 @@ pub fn write(path: &std::path::Path, rows: &[BenchmarkRow]) -> Result<(), String
 
 fn csv(rows: &[BenchmarkRow]) -> String {
     let mut output = String::from(
-        "backend,input,output,original_bytes,output_bytes,elapsed_s,compression_ratio,saved_percent,throughput_mib_s\n",
+        "backend,input,output,original_bytes,output_bytes,duration_s,elapsed_s,compression_ratio,saved_percent,throughput_mib_s,speed_ratio\n",
     );
     for row in rows {
         output.push_str(&format!(
-            "{},{},{},{},{},{:.3},{:.3},{:.1},{:.3}\n",
+            "{},{},{},{},{},{},{:.3},{:.3},{:.1},{:.3},{}\n",
             csv_cell(&row.backend),
             csv_cell(&row.input),
             csv_cell(&row.output),
             row.original_bytes,
             row.output_bytes,
+            optional_f64(row.duration.map(|duration| duration.as_secs_f64())),
             row.elapsed.as_secs_f64(),
             row.compression_ratio(),
             row.saved_percent(),
-            row.throughput_mib_s()
+            row.throughput_mib_s(),
+            optional_f64(row.speed_ratio())
         ));
     }
     output
+}
+
+fn optional_f64(value: Option<f64>) -> String {
+    value.map_or_else(String::new, |value| format!("{value:.3}"))
 }
 
 fn csv_cell(value: &str) -> String {

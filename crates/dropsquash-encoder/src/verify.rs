@@ -1,9 +1,8 @@
 use std::path::Path;
 
 use dropsquash_core::Result;
+use dropsquash_media::inspect_mp4;
 use serde::{Deserialize, Serialize};
-
-mod mp4;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct OutputVerification {
@@ -25,7 +24,7 @@ pub fn verify_output(original: &Path, output: &Path) -> Result<OutputVerificatio
         .extension()
         .and_then(|extension| extension.to_str())
         .is_some_and(|extension| extension.eq_ignore_ascii_case("mp4"));
-    let mp4 = mp4::inspect(output);
+    let mp4 = inspect_mp4(output);
     let is_smaller_than_original =
         output_bytes > 0 && original_bytes > 0 && output_bytes < original_bytes;
 
@@ -35,12 +34,12 @@ pub fn verify_output(original: &Path, output: &Path) -> Result<OutputVerificatio
         original_bytes,
         output_extension_is_mp4,
         has_mp4_file_type: mp4.has_file_type,
-        has_nonzero_duration: mp4.has_nonzero_duration,
+        has_nonzero_duration: mp4.has_nonzero_duration(),
         is_smaller_than_original,
         is_valid_output: is_smaller_than_original
             && output_extension_is_mp4
             && mp4.has_file_type
-            && mp4.has_nonzero_duration,
+            && mp4.has_nonzero_duration(),
     })
 }
 

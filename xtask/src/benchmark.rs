@@ -7,6 +7,7 @@ use std::time::Instant;
 
 use dropsquash_core::{EncodeJob, SourcePolicy};
 use dropsquash_encoder::EncoderBackend;
+use dropsquash_media::probe;
 
 use args::BenchmarkArgs;
 use report::BenchmarkRow;
@@ -36,6 +37,9 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
 
     let mut rows = Vec::new();
     for input_path in args.inputs {
+        let input_duration = probe(&input_path)
+            .map_err(|error| error.to_string())?
+            .duration;
         let started = Instant::now();
         let result = encoder
             .encode(EncodeJob {
@@ -52,6 +56,7 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
             encoder.name(),
             result,
             started.elapsed(),
+            input_duration,
         ));
     }
     if let Some(path) = args.csv_output {

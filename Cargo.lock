@@ -969,6 +969,7 @@ dependencies = [
  "async-trait",
  "block2",
  "dropsquash-core",
+ "dropsquash-media",
  "libc",
  "objc2",
  "objc2-av-foundation",
@@ -1020,6 +1021,7 @@ name = "dropsquash-media"
 version = "0.1.0"
 dependencies = [
  "dropsquash-core",
+ "tempfile",
 ]
 
 [[package]]
@@ -5418,6 +5420,7 @@ version = "0.1.0"
 dependencies = [
  "dropsquash-core",
  "dropsquash-encoder",
+ "dropsquash-media",
  "serde_json",
  "sha2",
  "tempfile",

@@ -11,11 +11,12 @@ fn escapes_csv_path_cells() {
         original_bytes: 1_048_576,
         output_bytes: 524_288,
         elapsed: Duration::from_secs(2),
+        duration: Some(Duration::from_secs(8)),
     }]);
 
     assert!(text.contains("\"My, Recording.mov\""));
     assert!(text.contains("\"out \"\"quoted\"\".mp4\""));
-    assert!(text.contains(",0.500,50.0,0.500"));
+    assert!(text.contains(",8.000,2.000,0.500,50.0,0.500,4.000"));
 }
 
 #[test]
@@ -28,6 +29,16 @@ fn writes_csv_to_path() {
     let text = std::fs::read_to_string(path).unwrap();
     assert!(text.starts_with("backend,input,output,original_bytes"));
     assert!(text.contains("apple-native,a.mov,out.mp4,1048576,524288"));
+}
+
+#[test]
+fn leaves_duration_and_speed_blank_when_probe_has_no_duration() {
+    let text = csv(&[BenchmarkRow {
+        duration: None,
+        ..row()
+    }]);
+
+    assert!(text.contains(",524288,,2.000,0.500,50.0,0.500,\n"));
 }
 
 #[test]
@@ -49,5 +60,6 @@ fn row() -> BenchmarkRow {
         original_bytes: 1_048_576,
         output_bytes: 524_288,
         elapsed: Duration::from_secs(2),
+        duration: Some(Duration::from_secs(8)),
     }
 }
