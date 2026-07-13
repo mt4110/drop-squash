@@ -1,6 +1,30 @@
 use std::path::{Path, PathBuf};
 
 const DISALLOWED_VERSION_MANAGER_FILES: [&str; 3] = [".mise.toml", "mise.toml", ".tool-versions"];
+const REQUIRED_NIX_SYSTEMS: [&str; 4] = [
+    "aarch64-darwin",
+    "x86_64-darwin",
+    "aarch64-linux",
+    "x86_64-linux",
+];
+
+pub(super) fn require_nix_systems(path: &Path) -> Result<(), String> {
+    let text = std::fs::read_to_string(path)
+        .map_err(|error| format!("failed to read {}: {error}", path.display()))?;
+    let missing = REQUIRED_NIX_SYSTEMS
+        .iter()
+        .filter(|system| !text.contains(**system))
+        .copied()
+        .collect::<Vec<_>>();
+    if missing.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "{} is missing Nix dev shell systems: {}",
+        path.display(),
+        missing.join(", ")
+    ))
+}
 
 pub(super) fn reject_parallel_version_manager(root: &Path) -> Result<(), String> {
     for path in repo_files(root)? {

@@ -1,4 +1,4 @@
-use super::dev_environment::reject_parallel_version_manager;
+use super::dev_environment::{reject_parallel_version_manager, require_nix_systems};
 use super::secret_files::{is_secret_file, reject_secret_files, require_local_agent_ignore};
 use super::workflow::{
     forbidden_release_workflow_values, missing_ci_workflow_gates, missing_desktop_workflow_gates,
@@ -473,6 +473,30 @@ fn reports_missing_nix_output_ignore_rule() {
     let error = require_local_agent_ignore(&path).unwrap_err();
 
     assert!(error.contains("/result-*"));
+}
+
+#[test]
+fn accepts_required_nix_dev_shell_systems() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("flake.nix");
+    std::fs::write(
+        &path,
+        r#""aarch64-darwin" "x86_64-darwin" "aarch64-linux" "x86_64-linux""#,
+    )
+    .unwrap();
+
+    require_nix_systems(&path).unwrap();
+}
+
+#[test]
+fn reports_missing_intel_macos_nix_dev_shell_system() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("flake.nix");
+    std::fs::write(&path, r#""aarch64-darwin" "aarch64-linux" "x86_64-linux""#).unwrap();
+
+    let error = require_nix_systems(&path).unwrap_err();
+
+    assert!(error.contains("x86_64-darwin"));
 }
 
 #[test]

@@ -24,6 +24,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "unsigned release failure gate"),
     ("docs/qa-evidence.md", ".codex`/Nix local ignore policy"),
+    ("docs/qa-evidence.md", "required Nix dev shell systems"),
     ("docs/qa-evidence.md", "file names"),
     ("docs/qa-evidence.md", "raw-key field-name rejection"),
     (
