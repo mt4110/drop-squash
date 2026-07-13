@@ -26,6 +26,7 @@ fn is_public_site(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         let path = url.path().to_ascii_lowercase();
         !url.has_query_or_fragment()
+            && url.host_is("dropsquash.app")
             && is_release_status_path(&path)
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")
@@ -36,6 +37,7 @@ fn is_refund(reference: &str) -> bool {
     crate::public_url::HttpsUrl::parse(reference).is_some_and(|url| {
         let path = url.path().to_ascii_lowercase();
         !url.has_query_or_fragment()
+            && url.host_is("dropsquash.app")
             && is_refund_path(&path)
             && !url.host_is_or_subdomain_of("lemonsqueezy.com")
             && !path.contains("checkout")

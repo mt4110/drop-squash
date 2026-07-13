@@ -85,6 +85,19 @@ fn rejects_public_references_with_query_or_fragment() {
 }
 
 #[test]
+fn rejects_public_web_references_outside_canonical_host() {
+    let text = "\
+| Public website deployment | Verified | Production website production URL serves release-status, privacy, pricing, support, and download | https://other.example/release-status | `https://...` |
+| Refund policy finalized | Verified | Production refund policy is final and linked before checkout goes live | https://other.example/refund | `https://...` |
+";
+
+    let unverified = unverified_blockers(text);
+
+    assert!(unverified.contains(&"Public website deployment"));
+    assert!(unverified.contains(&"Refund policy finalized"));
+}
+
+#[test]
 fn reports_verified_blocker_without_evidence_reference() {
     let text = crate::release_check::required_blockers()
         .iter()
