@@ -25,7 +25,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "release notes benchmark CSV path matching manual QA",
+        "release notes canonical benchmark CSV path matching manual QA",
     ),
     (
         "docs/qa-evidence.md",
