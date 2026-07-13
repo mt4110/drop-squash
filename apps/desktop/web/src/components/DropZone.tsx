@@ -5,6 +5,7 @@ type DropZoneProps = {
   isBusy: boolean;
   isDragging: boolean;
   isLocked: boolean;
+  lockedMessage?: string;
   progress?: number;
   inputPath?: string;
   result?: ConversionSummary;
@@ -22,6 +23,7 @@ export function DropZone({
   isBusy,
   isDragging,
   isLocked,
+  lockedMessage,
   progress,
   inputPath,
   result,
@@ -36,6 +38,7 @@ export function DropZone({
 }: DropZoneProps) {
   const canTrashOriginal = result?.sourceAction === "ask-user";
   const receiptPath = result?.privacyReceiptPath;
+  const lockTitle = lockedMessage?.includes("refresh") ? "License refresh required" : "Trial complete";
 
   return (
     <section
@@ -43,7 +46,7 @@ export function DropZone({
       aria-label="Drop recording"
     >
       <p className="drop-title">
-        {isLocked ? "Trial complete" : isBusy ? "Compressing recording" : result ? "Saved" : "Drop Recording"}
+        {isLocked ? lockTitle : isBusy ? "Compressing recording" : result ? "Saved" : "Drop Recording"}
       </p>
       <p className={`drop-meta${error ? " is-error" : ""}`} role={error ? "alert" : undefined}>
         {error
@@ -53,7 +56,7 @@ export function DropZone({
           : result
             ? fileName(result.outputPath)
           : isLocked
-            ? "Enter a license key to continue"
+            ? lockedMessage ?? "Enter a license key to continue"
             : `${inputExtensions.map((extension) => extension.toUpperCase()).join(" / ")} here`}
       </p>
       {result && <button className="saved-destination" title="Show output in Finder" type="button" onClick={() => onRevealOutput(result.outputPath)}>Saved {formatBytes(result.savedBytes)} to {displayPath(parentPath(result.outputPath))}</button>}

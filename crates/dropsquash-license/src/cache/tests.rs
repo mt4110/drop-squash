@@ -121,6 +121,20 @@ fn pro_requires_valid_cache_inside_grace_window() {
 }
 
 #[test]
+fn expired_valid_cache_requires_license_refresh() {
+    let cache = LicenseCache {
+        instance_id: Some("instance-1".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        valid: true,
+        offline_grace_until_unix: Some(200),
+        ..LicenseCache::default()
+    };
+
+    assert!(!cache.requires_license_refresh(200));
+    assert!(cache.requires_license_refresh(201));
+}
+
+#[test]
 fn pro_requires_activation_identity() {
     let cache = LicenseCache {
         valid: true,

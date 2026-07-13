@@ -3,7 +3,7 @@ mod summary;
 
 pub use summary::ConversionSummary;
 
-use dropsquash_core::{AppConfig, LicenseState, OutputSize, Profile, SourcePolicy};
+use dropsquash_core::{AppConfig, LicenseState, LockedReason, OutputSize, Profile, SourcePolicy};
 use serde::{Deserialize, Serialize};
 
 use options::{
@@ -29,6 +29,7 @@ pub struct DropZoneState {
     pub trial_limit: u32,
     pub is_pro: bool,
     pub is_locked: bool,
+    pub locked_reason: Option<&'static str>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -57,9 +58,13 @@ pub fn drop_zone_state(
     license_state: LicenseState,
     input_extensions: Vec<String>,
 ) -> DropZoneState {
-    let is_pro = matches!(license_state, LicenseState::Pro);
+    let is_pro = matches!(&license_state, LicenseState::Pro);
+    let locked_reason = match &license_state {
+        LicenseState::Locked { reason, .. } => Some(locked_reason_label(*reason)),
+        _ => None,
+    };
     let trial_state = match license_state {
-        LicenseState::Trial(state) | LicenseState::Locked(state) => state,
+        LicenseState::Trial(state) | LicenseState::Locked { trial: state, .. } => state,
         LicenseState::Pro => dropsquash_core::TrialState {
             successful_conversions: 0,
             limit: config.trial_conversion_limit,
@@ -81,6 +86,14 @@ pub fn drop_zone_state(
         successful_conversions: trial_state.successful_conversions,
         trial_limit: trial_state.limit,
         is_pro,
-        is_locked: trial_state.is_locked(),
+        is_locked: locked_reason.is_some(),
+        locked_reason,
+    }
+}
+
+fn locked_reason_label(reason: LockedReason) -> &'static str {
+    match reason {
+        LockedReason::TrialComplete => "trial-complete",
+        LockedReason::LicenseRefreshRequired => "license-refresh-required",
     }
 }

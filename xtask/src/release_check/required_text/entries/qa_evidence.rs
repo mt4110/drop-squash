@@ -93,6 +93,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "failed activation raw-key/fingerprint/instance absence",
     ),
     ("docs/qa-evidence.md", "cache identity, offline grace"),
+    (
+        "docs/qa-evidence.md",
+        "expired offline-grace reconnect state",
+    ),
     ("docs/qa-evidence.md", "plain and encoded error redaction"),
     ("docs/qa-evidence.md", "non-lowercase checksums"),
     ("docs/qa-evidence.md", "no-success trial/history"),

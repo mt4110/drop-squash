@@ -12,6 +12,7 @@ export type Profile =
 export type OutputSize = "auto" | "1080p" | "720p" | "480p";
 export type SourcePolicy = "keep" | "trash" | "ask";
 export type SourceAction = "keep-original" | "ask-user" | "move-original-to-trash";
+export type LockedReason = "trial-complete" | "license-refresh-required";
 
 export type SelectOption<T> = {
   value: T;
@@ -34,6 +35,7 @@ export type DropZoneState = {
   trialLimit: number;
   isPro: boolean;
   isLocked: boolean;
+  lockedReason?: LockedReason;
 };
 
 export type ConversionSummary = {

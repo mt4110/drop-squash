@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
-use dropsquash_core::{default_history_path, AppError, EncodeJob, LicenseState, SourcePolicy};
+use dropsquash_core::{
+    default_history_path, AppError, EncodeJob, LicenseState, LockedReason, SourcePolicy,
+};
 use dropsquash_encoder::EncoderBackend;
 use dropsquash_history::{append_successful_record, read_records, HistoryMetrics};
 use dropsquash_privacy::PrivacyReceipt;
@@ -49,13 +51,17 @@ pub async fn run(
 async fn ensure_trial_available(history: &std::path::Path) -> dropsquash_core::Result<()> {
     let records = read_records(history).await?;
     let metrics = HistoryMetrics::from_records(&records);
-    if matches!(
-        license::gate()?.state_for_metrics(metrics),
-        LicenseState::Locked(_)
-    ) {
-        return Err(AppError::License(
-            "trial limit reached; enter a license key to continue".to_string(),
-        ));
+    if let LicenseState::Locked { reason, .. } = license::gate()?.state_for_metrics(metrics) {
+        return Err(AppError::License(locked_message(reason).to_string()));
     }
     Ok(())
+}
+
+fn locked_message(reason: LockedReason) -> &'static str {
+    match reason {
+        LockedReason::TrialComplete => "trial limit reached; enter a license key to continue",
+        LockedReason::LicenseRefreshRequired => {
+            "reconnect once with your license key to refresh Pro"
+        }
+    }
 }

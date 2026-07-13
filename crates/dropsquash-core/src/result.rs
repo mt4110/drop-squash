@@ -40,7 +40,16 @@ impl EncodeResult {
 pub enum LicenseState {
     Trial(TrialState),
     Pro,
-    Locked(TrialState),
+    Locked {
+        trial: TrialState,
+        reason: LockedReason,
+    },
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum LockedReason {
+    TrialComplete,
+    LicenseRefreshRequired,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

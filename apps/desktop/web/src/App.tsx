@@ -33,8 +33,7 @@ import {
 } from "./lib/queueCommands";
 import type { QueueEntry } from "./lib/queue";
 import {
-  LICENSE_LOCK_QUEUE_MESSAGE,
-  blockQueuedForLicenseLock,
+  blockQueued,
   cancelQueued,
   clearFinished,
   isCancelReason,
@@ -52,6 +51,12 @@ import {
 } from "./lib/queueWire";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
 
+function lockedMessage(reason: DropZoneState["lockedReason"]) {
+  return reason === "license-refresh-required"
+    ? "Reconnect once with your license key to refresh Pro."
+    : "Enter a license key to continue.";
+}
+
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
   const [result, setResult] = useState<ConversionSummary>();
@@ -65,6 +70,7 @@ export function App() {
   const [queue, setQueue] = useState<QueueEntry[]>([]);
   const stateRef = useRef<DropZoneState>(initialState);
   const activeQueueId = useRef<number>();
+  const currentLockedMessage = lockedMessage(state.lockedReason);
 
   useEffect(() => {
     stateRef.current = state;
@@ -194,12 +200,12 @@ export function App() {
 
   useEffect(() => {
     if (state.isLocked) {
-      void blockQueuedJobs(LICENSE_LOCK_QUEUE_MESSAGE).catch((reason) => {
+      void blockQueuedJobs(currentLockedMessage).catch((reason) => {
         setError(String(reason));
       });
-      setQueue(blockQueuedForLicenseLock);
+      setQueue((current) => blockQueued(current, currentLockedMessage));
     }
-  }, [state.isLocked]);
+  }, [currentLockedMessage, state.isLocked]);
 
   useConversionProgress({ activeQueueId, setProgress, setQueue });
 
@@ -341,6 +347,7 @@ export function App() {
         trialLimit={state.trialLimit}
         isPro={state.isPro}
         isLocked={state.isLocked}
+        lockedMessage={currentLockedMessage}
       />
       <LicensePanel
         isPro={state.isPro}
@@ -351,6 +358,7 @@ export function App() {
         isBusy={isBusy}
         isDragging={isDragging}
         isLocked={state.isLocked}
+        lockedMessage={currentLockedMessage}
         progress={progress}
         result={result}
         error={error}

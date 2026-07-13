@@ -11,9 +11,11 @@ mod diagnostics;
 
 pub fn gate() -> dropsquash_core::Result<LicenseGate> {
     let cache = LicenseCache::load_or_default(&default_license_cache_path())?;
+    let now = now_unix();
     Ok(LicenseGate {
         trial_limit: TRIAL_CONVERSION_LIMIT,
-        has_valid_license: cache.permits_pro(now_unix()),
+        has_valid_license: cache.permits_pro(now),
+        license_refresh_required: cache.requires_license_refresh(now),
     })
 }
 
@@ -64,7 +66,7 @@ fn format_state(state: LicenseState) -> Vec<String> {
     match state {
         LicenseState::Pro => vec!["license state: Pro".to_string()],
         LicenseState::Trial(trial) => trial_lines("Trial", trial),
-        LicenseState::Locked(trial) => trial_lines("Locked", trial),
+        LicenseState::Locked { trial, .. } => trial_lines("Locked", trial),
     }
 }
 

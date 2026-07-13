@@ -1,6 +1,6 @@
 use tokio_util::sync::CancellationToken;
 
-use dropsquash_core::{LicenseState, TrialState};
+use dropsquash_core::{LicenseState, LockedReason, TrialState};
 
 use super::{ensure_not_cancelled, reject_locked_license};
 
@@ -23,13 +23,30 @@ fn rejects_cancelled_token_before_postprocessing() {
 
 #[test]
 fn rejects_locked_trial_before_starting_conversion() {
-    let error = reject_locked_license(LicenseState::Locked(TrialState {
-        successful_conversions: 10,
-        limit: 10,
-    }))
+    let error = reject_locked_license(LicenseState::Locked {
+        reason: LockedReason::TrialComplete,
+        trial: TrialState {
+            successful_conversions: 10,
+            limit: 10,
+        },
+    })
     .unwrap_err();
 
     assert!(error.contains("Trial complete"));
+}
+
+#[test]
+fn reports_expired_license_before_starting_conversion() {
+    let error = reject_locked_license(LicenseState::Locked {
+        reason: LockedReason::LicenseRefreshRequired,
+        trial: TrialState {
+            successful_conversions: 3,
+            limit: 10,
+        },
+    })
+    .unwrap_err();
+
+    assert!(error.contains("refresh Pro"));
 }
 
 #[test]

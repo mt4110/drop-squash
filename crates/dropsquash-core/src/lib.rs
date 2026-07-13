@@ -10,4 +10,4 @@ pub use job::{EncodeJob, MediaInfo, OutputSize, Profile, SourcePolicy};
 pub use paths::{
     default_config_path, default_history_path, default_license_cache_path, default_output_dir,
 };
-pub use result::{EncodeResult, LicenseState, TrialState};
+pub use result::{EncodeResult, LicenseState, LockedReason, TrialState};

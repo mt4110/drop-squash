@@ -34,4 +34,5 @@ export const initialState: DropZoneState = {
   trialLimit: 10,
   isPro: false,
   isLocked: false,
+  lockedReason: undefined,
 };

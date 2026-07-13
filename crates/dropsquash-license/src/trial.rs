@@ -1,10 +1,11 @@
-use dropsquash_core::{LicenseState, TrialState};
+use dropsquash_core::{LicenseState, LockedReason, TrialState};
 use dropsquash_history::HistoryMetrics;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct LicenseGate {
     pub trial_limit: u32,
     pub has_valid_license: bool,
+    pub license_refresh_required: bool,
 }
 
 impl LicenseGate {
@@ -19,7 +20,15 @@ impl LicenseGate {
         };
 
         if trial.is_locked() {
-            LicenseState::Locked(trial)
+            LicenseState::Locked {
+                trial,
+                reason: LockedReason::TrialComplete,
+            }
+        } else if self.license_refresh_required {
+            LicenseState::Locked {
+                trial,
+                reason: LockedReason::LicenseRefreshRequired,
+            }
         } else {
             LicenseState::Trial(trial)
         }
@@ -59,11 +68,15 @@ mod tests {
         let gate = LicenseGate {
             trial_limit: 10,
             has_valid_license: false,
+            license_refresh_required: false,
         };
 
         assert!(matches!(
             gate.state_for_metrics(metrics),
-            LicenseState::Locked(_)
+            LicenseState::Locked {
+                reason: LockedReason::TrialComplete,
+                ..
+            }
         ));
     }
 
@@ -76,8 +89,30 @@ mod tests {
         let gate = LicenseGate {
             trial_limit: 10,
             has_valid_license: true,
+            license_refresh_required: true,
         };
 
         assert_eq!(gate.state_for_metrics(metrics), LicenseState::Pro);
+    }
+
+    #[test]
+    fn expired_license_cache_locks_before_trial_is_exhausted() {
+        let metrics = HistoryMetrics {
+            successful_conversion_count: 3,
+            ..HistoryMetrics::default()
+        };
+        let gate = LicenseGate {
+            trial_limit: 10,
+            has_valid_license: false,
+            license_refresh_required: true,
+        };
+
+        assert!(matches!(
+            gate.state_for_metrics(metrics),
+            LicenseState::Locked {
+                reason: LockedReason::LicenseRefreshRequired,
+                ..
+            }
+        ));
     }
 }

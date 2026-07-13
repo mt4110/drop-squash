@@ -1,4 +1,4 @@
-use dropsquash_core::{LicenseState, TrialState};
+use dropsquash_core::{LicenseState, LockedReason, TrialState};
 use dropsquash_license::{license_key_fingerprint, LicenseCache};
 
 use super::{diagnostics::format_cache_diagnostics, forget_at_path, forget_lines, format_state};
@@ -25,10 +25,13 @@ fn formats_trial_state_with_usage() {
 #[test]
 fn formats_locked_state_with_usage() {
     assert_eq!(
-        format_state(LicenseState::Locked(TrialState {
-            successful_conversions: 10,
-            limit: 10,
-        })),
+        format_state(LicenseState::Locked {
+            reason: LockedReason::TrialComplete,
+            trial: TrialState {
+                successful_conversions: 10,
+                limit: 10,
+            },
+        }),
         vec![
             "license state: Locked".to_string(),
             "trial: 10/10 successful conversions used".to_string(),

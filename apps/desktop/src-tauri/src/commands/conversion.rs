@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use dropsquash_core::{default_history_path, EncodeJob, LicenseState};
+use dropsquash_core::{default_history_path, EncodeJob, LicenseState, LockedReason};
 use dropsquash_encoder::EncoderBackend;
 use dropsquash_fileguard::{wait_until_stable, StabilityOptions};
 use dropsquash_history::append_successful_record;
@@ -80,10 +80,17 @@ async fn ensure_trial_open() -> Result<(), String> {
 
 fn reject_locked_license(state: LicenseState) -> Result<(), String> {
     match state {
-        LicenseState::Locked(_) => {
-            Err("Trial complete. Enter a license key to continue.".to_string())
-        }
+        LicenseState::Locked { reason, .. } => Err(locked_message(reason).to_string()),
         LicenseState::Trial(_) | LicenseState::Pro => Ok(()),
+    }
+}
+
+fn locked_message(reason: LockedReason) -> &'static str {
+    match reason {
+        LockedReason::TrialComplete => "Trial complete. Enter a license key to continue.",
+        LockedReason::LicenseRefreshRequired => {
+            "Reconnect once with your license key to refresh Pro."
+        }
     }
 }
 

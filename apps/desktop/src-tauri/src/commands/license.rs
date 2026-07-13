@@ -70,13 +70,15 @@ pub async fn current_license_state() -> dropsquash_core::Result<LicenseState> {
     let records = read_records(&default_history_path()).await?;
     let metrics = HistoryMetrics::from_records(&records);
     let cache = LicenseCache::load_or_default(&default_license_cache_path())?;
-    Ok(license_gate(cache.permits_pro(now_unix())).state_for_metrics(metrics))
+    let now = now_unix();
+    Ok(license_gate(&cache, now).state_for_metrics(metrics))
 }
 
-fn license_gate(has_valid_license: bool) -> LicenseGate {
+fn license_gate(cache: &LicenseCache, now: u64) -> LicenseGate {
     LicenseGate {
         trial_limit: TRIAL_CONVERSION_LIMIT,
-        has_valid_license,
+        has_valid_license: cache.permits_pro(now),
+        license_refresh_required: cache.requires_license_refresh(now),
     }
 }
 

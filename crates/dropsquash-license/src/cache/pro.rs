@@ -3,13 +3,21 @@ use crate::LicenseCache;
 impl LicenseCache {
     pub fn permits_pro(&self, now_unix: u64) -> bool {
         self.valid
-            && self.has_activation_identity()
+            && self.has_pro_identity()
             && self
                 .offline_grace_until_unix
                 .is_some_and(|until| now_unix <= until)
     }
 
-    fn has_activation_identity(&self) -> bool {
+    pub fn requires_license_refresh(&self, now_unix: u64) -> bool {
+        self.valid
+            && self.has_pro_identity()
+            && self
+                .offline_grace_until_unix
+                .is_some_and(|until| now_unix > until)
+    }
+
+    pub fn has_pro_identity(&self) -> bool {
         has_value(&self.instance_id)
             && self
                 .license_key_fingerprint
