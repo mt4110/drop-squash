@@ -61,6 +61,18 @@ fn reports_empty_environment_fields() {
 }
 
 #[test]
+fn rejects_prepared_manual_qa_draft_marker() {
+    let (_directory, path) = write_manual_qa(
+        "Prepared manual QA draft only. Replace this file with concrete observations.\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("prepared draft markers")));
+}
+
+#[test]
 fn reports_app_build_without_commit_identity() {
     let (_directory, path) = write_manual_qa("| App build | 0.1.0 |\n");
     let missing = check_file(&path).unwrap();

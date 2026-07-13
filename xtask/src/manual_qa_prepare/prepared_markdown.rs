@@ -18,10 +18,18 @@ pub(super) fn write(
         .create_new(true)
         .open(path)
         .map_err(|error| format!("failed to create manual QA Markdown output: {error}"))?;
-    writeln!(file, "{}", rows.join("\n"))
+    writeln!(file, "{}", markdown_text(&rows))
         .map_err(|error| format!("failed to write manual QA Markdown output: {error}"))?;
     println!("manual QA Markdown output: {}", path.display());
     Ok(())
+}
+
+fn markdown_text(rows: &[String]) -> String {
+    format!(
+        "{}\n\n{}",
+        "Prepared manual QA draft only. Replace this file with concrete observations.",
+        rows.join("\n")
+    )
 }
 
 #[cfg(test)]

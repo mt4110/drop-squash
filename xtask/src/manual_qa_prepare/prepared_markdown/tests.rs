@@ -12,6 +12,7 @@ fn writes_fields_and_release_candidate_rows() {
     write(&output, &fields, Some(&artifact)).unwrap();
     let text = std::fs::read_to_string(output).unwrap();
 
+    assert!(text.starts_with("Prepared manual QA draft only."));
     assert!(text.contains("| App build | DropSquash 0.1.0 git abc1234 |"));
     assert!(text.contains("artifact-check passed"));
     assert!(text.contains("SHA-256"));
