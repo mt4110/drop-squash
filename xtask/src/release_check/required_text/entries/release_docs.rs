@@ -19,6 +19,16 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "`release-notes-check` and `publish-check` reject those draft placeholders",
     ),
+    ("docs/release.md", "The Public web proof must show"),
+    ("docs/release.md", "checkout, and refund links"),
+    (
+        "docs/release.md",
+        "The Signing and distribution proof must show",
+    ),
+    (
+        "docs/release.md",
+        "installable through the Homebrew tap PR",
+    ),
     (
         "docs/release-notes-template.md",
         "existing CSV path outside the repository",

@@ -266,3 +266,9 @@ The publish check also requires release blocker URLs to match the release notes
 URLs for the public website, refund policy, live checkout, GitHub Release, and
 Homebrew tap PR. Public publish references must point to the same release notes
 URLs, not to a different release or tap PR.
+The Public web proof must show the production `dropsquash.app` release-status
+and refund URLs serving release-status, privacy, pricing, support, download,
+checkout, and refund links before the public beta.
+The Signing and distribution proof must show the same public `DropSquash.dmg`
+from the release notes Artifact URL is signed, notarized, stapled, checksummed,
+installable through the Homebrew tap PR, and opens without warning.
