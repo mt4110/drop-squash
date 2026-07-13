@@ -1,9 +1,13 @@
 pub(crate) fn host(value: &str) -> Option<&str> {
+    if value.chars().any(char::is_whitespace) {
+        return None;
+    }
     if !crate::url_scheme::is_https(value) {
         return None;
     }
     let without_scheme = &value["https://".len()..];
-    Some(without_scheme.split('/').next().unwrap_or(without_scheme))
+    let host = without_scheme.split('/').next().unwrap_or(without_scheme);
+    (!host.is_empty()).then_some(host)
 }
 
 pub(crate) fn same(left: &str, right: &str) -> bool {
@@ -33,5 +37,11 @@ mod tests {
     #[test]
     fn rejects_non_https_origin() {
         assert_eq!(host("http://dropsquash.app/refund"), None);
+    }
+
+    #[test]
+    fn rejects_missing_or_whitespace_host() {
+        assert_eq!(host("https://"), None);
+        assert_eq!(host("https://dropsquash.app refund"), None);
     }
 }
