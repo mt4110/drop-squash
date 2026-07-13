@@ -41,6 +41,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["failed"],
             &["cancelled"],
             &["blocked"],
+            &["trial lock", "license lock"],
         ]),
         "Ask source policy" => Some(&[
             &["ask", "choose"],

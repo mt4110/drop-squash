@@ -120,9 +120,9 @@ selection state: `uploaded_bytes = 0`, `metadata_policy = preserve`, file names
 instead of absolute paths, and `selected`. For duplicate output naming, record
 that the second output used a numbered file name such as `.squashed-2.mp4`.
 For queue rows, record concrete counts such as `3 recordings`, `1 active`,
-finished count, saved bytes, and failed/cancelled/blocked counts. For failed
-conversion rows, record the friendly error plus the unchanged original and
-trial count.
+finished count, saved bytes, failed/cancelled/blocked counts, and trial or
+license lock blocked jobs. For failed conversion rows, record the friendly
+error plus the unchanged original and trial count.
 
 | Check | Input | Expected | Result |
 |---|---|---|---|
@@ -134,7 +134,7 @@ trial count.
 | Cancellation | Large recording | App returns to ready; no success history; no trial count |  |
 | Multi-file queue | Three recordings | 3 recordings queue with 1 active sequential conversion; unrelated failures do not block finished jobs |  |
 | Queued job cancellation | Three recordings | Cancelling a waiting row marks it cancelled, it never starts, and trial/history shows no new success |  |
-| Batch summary | Three recordings with at least one mixed outcome | Queue summary shows numeric finished count, saved bytes, failed count, cancelled count, and blocked count |  |
+| Batch summary | Three recordings with at least one mixed outcome | Queue summary shows trial or license lock blocked jobs plus numeric finished count, saved bytes, failed count, cancelled count, and blocked count |  |
 | Ask source policy | Successful conversion | User can choose Trash or Keep while original remains unchanged |  |
 | Trash source policy | Successful conversion | Trash button shows moving/disabled state; original moves to Trash only after verified smaller output |  |
 | Failed conversion | Unsupported or intentionally bad input | Friendly error appears; original remains; trial count unchanged |  |

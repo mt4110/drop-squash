@@ -1148,6 +1148,16 @@ fn reports_batch_summary_without_all_mixed_counts() {
 }
 
 #[test]
+fn reports_batch_summary_without_lock_blocking_context() {
+    let (_directory, path) = write_manual_qa(
+        "| Batch summary | Three recordings | Queue summary | summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0 |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Batch summary")));
+}
+
+#[test]
 fn reports_ask_source_without_original_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Ask source policy | Successful conversion | User can choose | Ask prompt let tester choose Trash or Keep |\n",
@@ -1428,7 +1438,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Queued job cancellation | Passes | queued row marked cancelled and never started; trial history showed no new success |\n");
         } else if check == "Batch summary" {
             text.push_str(
-                "| Batch summary | Passes | summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, blocked 0 |\n",
+                "| Batch summary | Passes | trial lock blocked pending jobs; summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, blocked 0 |\n",
             );
         } else if check == "Ask source policy" {
             text.push_str(

@@ -64,7 +64,7 @@ These checks still require a packaged macOS app or external service state:
 | Benchmark regression threshold | Throughput regression needs same-machine comparison against the release candidate baseline |
 | Multi-file queue | UI ergonomics and repeated drops need packaged observation of 3 queued recordings, 1 active job, sequential completion, and unrelated failure not blocking finished jobs |
 | Queued job cancellation | User-visible queue cancellation needs packaged observation that the waiting row is cancelled, never starts, and trial/history has no new success |
-| Batch summary | User-visible queue totals need packaged observation of numeric finished count, saved bytes, failed count, cancelled count, and blocked count after mixed queue outcomes |
+| Batch summary | User-visible queue totals need packaged observation of numeric finished count, saved bytes, failed count, cancelled count, blocked count, and trial or license lock blocked jobs after mixed queue outcomes |
 | Lemon Squeezy product setup | Requires intended product, DropSquash, sandbox product and license-key configuration evidence outside the repository |
 | Lemon Squeezy sandbox purchase | Requires sandbox checkout, intended product, test buyer, and order evidence outside the repository |
 | Valid sandbox activation | Requires Lemon Squeezy sandbox product, keys, and server response outside the repository |
