@@ -1,4 +1,4 @@
-const DISALLOWED: [&str; 17] = [
+const DISALLOWED: [&str; 20] = [
     "-----begin ",
     "private key-----",
     "apple_certificate=",
@@ -9,9 +9,12 @@ const DISALLOWED: [&str; 17] = [
     "lemon_squeezy_store_id=",
     "lemon_squeezy_variant_id=",
     "license_key=",
+    "license key=",
     "license key:",
     "product id:",
     "product_id=",
+    "raw key=",
+    "raw key:",
     "store id:",
     "store_id=",
     "variant id:",
@@ -64,13 +67,21 @@ mod tests {
 
     #[test]
     fn rejects_secret_like_values_with_spaced_separators() {
-        let text = "product_id = 123; store id : 456; license key : raw";
+        let text = "product_id = 123; store id : 456; license key : raw; raw key = test";
 
         let errors = violations("evidence", text);
 
         assert!(errors.iter().any(|error| error.contains("product_id")));
         assert!(errors.iter().any(|error| error.contains("store id:")));
         assert!(errors.iter().any(|error| error.contains("license key:")));
+        assert!(errors.iter().any(|error| error.contains("raw key=")));
+    }
+
+    #[test]
+    fn rejects_license_key_with_spaced_equals() {
+        let errors = violations("evidence", "license key = raw-test-key");
+
+        assert!(errors.iter().any(|error| error.contains("license key=")));
     }
 
     #[test]
