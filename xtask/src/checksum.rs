@@ -33,6 +33,7 @@ fn output_request(paths: &[String]) -> Result<Option<(PathBuf, PathBuf)>, String
 }
 
 fn write_output(artifact: &Path, output: &Path) -> Result<(), String> {
+    require_checksum_output_name(output)?;
     let line = checksum_line(artifact)?;
     let mut file = OpenOptions::new()
         .write(true)
@@ -40,6 +41,13 @@ fn write_output(artifact: &Path, output: &Path) -> Result<(), String> {
         .open(output)
         .map_err(|error| format!("failed to create checksum output: {error}"))?;
     writeln!(file, "{line}").map_err(|error| format!("failed to write checksum output: {error}"))
+}
+
+fn require_checksum_output_name(path: &Path) -> Result<(), String> {
+    if path.file_name().and_then(|value| value.to_str()) == Some("SHA256SUMS") {
+        return Ok(());
+    }
+    Err("checksum output must be named SHA256SUMS".to_string())
 }
 
 pub(crate) fn checksum_line(path: &Path) -> Result<String, String> {

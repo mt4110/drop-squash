@@ -140,6 +140,26 @@ fn rejects_existing_checksum_output() {
 }
 
 #[test]
+fn rejects_noncanonical_checksum_output_name() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("checksums.txt");
+    std::fs::File::create(&artifact)
+        .unwrap()
+        .write_all(&dmg_bytes(b"dropsquash"))
+        .unwrap();
+
+    let error = run(vec![
+        artifact.display().to_string(),
+        "--output".into(),
+        output.display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("SHA256SUMS"));
+}
+
+#[test]
 fn rejects_output_with_multiple_artifacts() {
     let error = run(vec![
         "first.dmg".into(),
