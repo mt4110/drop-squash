@@ -57,6 +57,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "website-root boundary rejection for local links/resources",
+    ),
+    (
+        "docs/qa-evidence.md",
         "repository-local and relative app-state/state/output/markdown-output path rejection",
     ),
     ("docs/qa-evidence.md", "`.md` markdown-output rejection"),
