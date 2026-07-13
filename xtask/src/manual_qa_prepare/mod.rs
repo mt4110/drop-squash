@@ -1,6 +1,7 @@
 mod artifact;
 mod build_identity;
 mod environment;
+mod git_state;
 mod markdown;
 mod options;
 mod output;
@@ -22,6 +23,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         }
         return Ok(());
     }
+    git_state::require_clean_worktree()?;
     require_reset_artifact(&options)?;
     output::require_ready(&options)?;
     let copied = backup_state(&options)?;
