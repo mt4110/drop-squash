@@ -969,6 +969,27 @@ fn rejects_placeholders_and_wrong_url_kinds() {
 }
 
 #[test]
+fn reports_missing_required_url_fields() {
+    let errors = check_text(
+        r#"
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+"#,
+    );
+
+    for field in [
+        "Artifact URL",
+        "Public website URL",
+        "Pricing URL",
+        "Refund policy URL",
+        "Live checkout URL",
+        "GitHub Release URL",
+        "Homebrew tap PR URL",
+    ] {
+        assert!(errors.iter().any(|error| error.contains(field)), "{field}");
+    }
+}
+
+#[test]
 fn rejects_ellipsis_placeholder_urls() {
     let errors = check_text(
         r#"
