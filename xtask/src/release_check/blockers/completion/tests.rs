@@ -1,10 +1,25 @@
-use super::incomplete_requirements;
+use super::{incomplete_requirements, REQUIRED_BLOCKERS};
 
 #[test]
 fn accepts_described_completion_evidence() {
     let text = described_blockers();
 
     assert!(incomplete_requirements(&text).is_empty());
+}
+
+#[test]
+fn described_completion_evidence_covers_required_blockers() {
+    let text = described_blockers();
+    let missing = REQUIRED_BLOCKERS
+        .iter()
+        .filter(|blocker| !text.contains(&format!("| {blocker} |")))
+        .copied()
+        .collect::<Vec<_>>();
+
+    assert!(
+        missing.is_empty(),
+        "missing described blockers: {missing:?}"
+    );
 }
 
 #[test]
@@ -149,6 +164,33 @@ fn reports_public_website_completion_without_production_domain() {
     let incomplete = incomplete_requirements(text);
 
     assert!(incomplete.contains(&"Public website deployment"));
+}
+
+#[test]
+fn reports_pricing_completion_without_final_copy() {
+    let text = "| Pricing finalized | Blocked | Production pricing page on dropsquash.app is published before checkout goes live | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Pricing finalized"));
+}
+
+#[test]
+fn reports_pricing_completion_without_draft_removal() {
+    let text = "| Pricing finalized | Blocked | Production pricing page on dropsquash.app is final before checkout goes live | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Pricing finalized"));
+}
+
+#[test]
+fn reports_pricing_completion_without_production_domain() {
+    let text = "| Pricing finalized | Blocked | Production pricing page is final and no draft price copy remains before checkout goes live | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Pricing finalized"));
 }
 
 #[test]
@@ -595,6 +637,7 @@ fn described_blockers() -> String {
         "| Expired license refresh | Blocked | attempted conversion with expired offline grace cache shows reconnect prompt, conversion is blocked before starting, local cache was checked, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Local license forget | Blocked | Forgetting state disables action, confirmed local cache is removed, and observed app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website production URL on dropsquash.app serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
+        "| Pricing finalized | Blocked | Production pricing page on dropsquash.app is final, no draft price copy remains, and checkout goes live only after that | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final on dropsquash.app and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
         "| Signed DMG | Blocked | `codesign` verification shows Developer ID for the public `DropSquash.dmg` artifact matching the release notes Artifact URL | TBD | Release notes |\n",
