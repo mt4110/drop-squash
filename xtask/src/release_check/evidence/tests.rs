@@ -74,6 +74,17 @@ fn external_manual_only_areas_are_release_url_fields() {
 }
 
 #[test]
+fn release_url_fields_are_external_manual_only_areas() {
+    let missing = crate::release_url_fields::PAIRS
+        .iter()
+        .map(|(blocker, _)| *blocker)
+        .filter(|blocker| !EXTERNAL_ONLY_AREAS.contains(blocker))
+        .collect::<Vec<_>>();
+
+    assert!(missing.is_empty(), "{missing:?}");
+}
+
+#[test]
 fn rejects_partial_manual_qa_label_match() {
     let evidence = manual_pairs::ALL
         .iter()
