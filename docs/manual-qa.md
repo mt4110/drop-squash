@@ -179,7 +179,8 @@ artifact-check, checksum, codesign, notary/stapler/`spctl`, and Gatekeeper resul
 same public `DropSquash.dmg` file. Artifact-check and checksum rows must
 include the `App artifact` absolute path. Codesign, notary/stapler/`spctl`,
 and Gatekeeper rows must also include that same absolute path before marking
-the release evidence complete.
+the release evidence complete. The final public release notes must tie those
+rows to the exact Artifact URL for the same public `DropSquash.dmg`.
 
 | Check | Expected | Result |
 |---|---|---|
@@ -197,4 +198,4 @@ the release evidence complete.
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
 | Notarization staple verification | Public DMG/app artifact passes notary, stapler, and `spctl` assessment |  |
-| Gatekeeper open test | Signed, notarized, stapled app from public `DropSquash.dmg` opens cleanly without Gatekeeper warning |  |
+| Gatekeeper open test | Signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL opens cleanly without Gatekeeper warning |  |

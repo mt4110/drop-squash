@@ -47,24 +47,30 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release-blockers.md",
-        "same public `DropSquash.dmg`",
+        "matching the release notes Artifact URL",
     ),
     (
         "docs/release.md",
         "Gatekeeper evidence must mention signed, notarized, stapled",
     ),
-    ("docs/release.md", "public `DropSquash.dmg`, and no warning"),
+    (
+        "docs/release.md",
+        "the public `DropSquash.dmg` matching the Artifact URL, and no warning",
+    ),
     (
         "docs/manual-qa.md",
         "and Gatekeeper result rows must name the",
     ),
     ("docs/manual-qa.md", "notary, stapler, `spctl` assessment"),
     ("docs/manual-qa.md", "notary/stapler/`spctl`"),
-    ("docs/manual-qa.md", "same public `DropSquash.dmg` file"),
+    (
+        "docs/manual-qa.md",
+        "exact Artifact URL for the same public `DropSquash.dmg`",
+    ),
     ("docs/manual-qa.md", "64-character lowercase SHA-256 digest"),
     (
         "docs/manual-qa.md",
-        "app from public `DropSquash.dmg` opens cleanly",
+        "app from public `DropSquash.dmg` matching the release notes Artifact URL opens cleanly",
     ),
     ("docs/manual-qa.md", "license cache has no raw key"),
     (

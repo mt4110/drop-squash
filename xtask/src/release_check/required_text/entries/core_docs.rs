@@ -5,7 +5,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "concrete Completion evidence"),
     ("docs/release.md", "traceable Evidence"),
     ("docs/release-blockers.md", "must include the public URL"),
-    ("docs/release.md", "tested public `DropSquash.dmg`"),
+    (
+        "docs/release.md",
+        "tested public `DropSquash.dmg` matching the release notes Artifact URL",
+    ),
     ("docs/release.md", "outside the repository"),
     (
         "docs/release.md",

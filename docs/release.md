@@ -218,9 +218,9 @@ cargo run -p xtask -- homebrew-cask 0.1.0 \
 After notarization succeeds, publish the checksum with the GitHub Release and
 fill `docs/release-notes-template.md` with codesign, spctl, stapler, notary,
 checksum, Gatekeeper, and Homebrew evidence. The public release notes must name
-`DropSquash.dmg` in the signing, notarization, checksum, Gatekeeper, and
+the exact Artifact URL in the signing, notarization, checksum, Gatekeeper, and
 Homebrew evidence; Gatekeeper evidence must mention signed, notarized, stapled,
-public `DropSquash.dmg`, and no warning;
+the public `DropSquash.dmg` matching the Artifact URL, and no warning;
 benchmark evidence must name the Benchmark sample set, same-machine release candidate baseline, and 20% regression threshold result;
 Homebrew evidence must mention the Homebrew tap PR URL, artifact URL, matching
 lowercase SHA-256 digest, `auto_updates false`, and `zap` cleanup:
@@ -229,9 +229,9 @@ lowercase SHA-256 digest, `auto_updates false`, and `zap` cleanup:
 cargo run -p xtask -- release-notes-check path/to/release-notes.md
 ```
 Run `cargo run -p xtask -- publish-check path/to/release-notes.md` only after
-`docs/manual-qa.md` records the tested public `DropSquash.dmg` and every row in
-`docs/release-blockers.md` is `Verified` with concrete Completion evidence and
-a traceable Evidence reference.
+`docs/manual-qa.md` records the tested public `DropSquash.dmg` matching the release notes Artifact URL
+and every row in `docs/release-blockers.md` is `Verified` with concrete Completion evidence
+and a traceable Evidence reference.
 The publish check also requires the release notes `Git commit` field to exactly
 match the current short or full `HEAD`, so rebuild and recheck the artifact
 after any final commit.

@@ -16,7 +16,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "complete manual QA evidence for a UDIF public `DropSquash.dmg`",
+        "complete manual QA evidence for a UDIF public `DropSquash.dmg` matching the release notes Artifact URL",
     ),
     ("docs/qa-evidence.md", "`App build` matching current `HEAD`"),
     (
@@ -99,18 +99,18 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "non-lowercase Git commits"),
     (
         "docs/qa-evidence.md",
-        "Gatekeeper evidence without the public `DropSquash.dmg`",
+        "signing/notary/stapler/`spctl`, Manual QA record, and Gatekeeper evidence without the exact Artifact URL",
     ),
     (
         "docs/qa-evidence.md",
-        "signing/notary/stapler/`spctl` evidence without public `DropSquash.dmg`",
+        "distribution completion without the release notes Artifact URL",
     ),
     (
         "docs/qa-evidence.md",
-        "public signing/notary/stapler/`spctl` evidence for `DropSquash.dmg`",
+        "artifact-check/checksum/signing/Gatekeeper path evidence",
     ),
     (
         "docs/qa-evidence.md",
-        "Gatekeeper completion without the public `DropSquash.dmg`",
+        "concrete Completion evidence that names the release notes Artifact URL",
     ),
 ];

@@ -16,7 +16,7 @@ Apple notary log
 Gatekeeper
 docs/release-blockers.md
 Manual QA record
-tested public `DropSquash.dmg`
+tested exact Artifact URL
 Conversion safety evidence
 Queue evidence
 Trash source policy
@@ -70,7 +70,7 @@ fn reports_missing_release_note_evidence_fields() {
     assert!(missing.contains(&"codesign"));
     assert!(missing.contains(&"SHA-256"));
     assert!(missing.contains(&"Artifact URL"));
-    assert!(missing.contains(&"tested public `DropSquash.dmg`"));
+    assert!(missing.contains(&"tested exact Artifact URL"));
     assert!(missing.contains(&"Benchmark sample set"));
     assert!(missing.contains(&"Lemon Squeezy product setup"));
     assert!(missing.contains(&"GitHub Release URL"));

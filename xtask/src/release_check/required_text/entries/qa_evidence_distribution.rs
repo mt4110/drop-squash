@@ -22,7 +22,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "short, medium, and large local recordings with smaller outputs",
     ),
     ("docs/qa-evidence.md", "CSV evidence outside the repository"),
-    ("docs/qa-evidence.md", "versioned `DropSquash.dmg` artifact"),
+    (
+        "docs/qa-evidence.md",
+        "versioned `DropSquash.dmg` Artifact URL",
+    ),
     ("docs/qa-evidence.md", "matching lowercase SHA-256"),
     ("docs/qa-evidence.md", "`auto_updates false`"),
     ("docs/qa-evidence.md", "declares no in-app auto-update"),
