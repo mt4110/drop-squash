@@ -78,7 +78,7 @@ weak public evidence before the release is published.
 - Empty key activation: mention Activate disabled for empty input, `raw key`, no fingerprint, no instance, and cache evidence.
 - Invalid license key handling: mention disabled action state, friendly error, `raw key`, no fingerprint, no instance, and cache evidence.
 - License network failure: mention a friendly network error, checked preserved existing valid cache, 64-character lowercase hex fingerprint, `instance_id`, and `raw key` absence.
-- Expired license refresh: mention the expired offline grace cache, reconnect prompt, conversion blocked before starting, `raw key` absence, and cache evidence.
+- Expired license refresh: mention the attempted conversion, expired offline grace cache, reconnect prompt, conversion blocked before starting, `raw key` absence, and cache evidence.
 - Local license forget: mention disabled action state, cache removal, and trial or locked state.
 - Public website URL: use the production `https://dropsquash.app/release-status` URL.
 - Refund policy URL: use the production `https://dropsquash.app/refund` URL after the policy is final.
