@@ -1,6 +1,13 @@
 use super::check_root;
 
 #[test]
+fn rejects_extra_website_check_arguments() {
+    let error = super::run(vec!["website".into(), "extra".into()]).unwrap_err();
+
+    assert!(error.contains("at most one"));
+}
+
+#[test]
 fn accepts_local_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());

@@ -14,7 +14,11 @@ mod required_pages;
 mod resource_policy;
 
 pub fn run(args: Vec<String>) -> Result<(), String> {
-    let root = PathBuf::from(args.first().map(String::as_str).unwrap_or("website"));
+    let root = match args.as_slice() {
+        [] => PathBuf::from("website"),
+        [root] => PathBuf::from(root),
+        _ => return Err("website-check accepts at most one <website-root>".to_string()),
+    };
     let errors = check_root(&root)?;
     if errors.is_empty() {
         println!("website checks passed");
