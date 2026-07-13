@@ -34,6 +34,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Lemon Squeezy sandbox activation request",
     ),
     ("docs/release.md", "release blocker URLs to match"),
+    ("docs/release-blockers.md", "GitHub Release https://..."),
+    ("docs/release-blockers.md", "Homebrew tap PR https://..."),
     (
         "docs/release.md",
         "Gatekeeper evidence must mention signed, notarized, stapled",
