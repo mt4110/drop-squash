@@ -73,6 +73,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["raw key"],
             &["absent", "no raw key", "without raw key"],
             &["cache"],
+            &["checked", "inspected", "confirmed"],
         ]),
         "Expired license refresh" => Some(&[
             &["expired"],

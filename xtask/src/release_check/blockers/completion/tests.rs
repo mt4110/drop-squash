@@ -404,6 +404,15 @@ fn reports_valid_activation_completion_without_cache_observation() {
 }
 
 #[test]
+fn reports_network_failure_completion_without_cache_observation() {
+    let text = "| License network failure | Blocked | Friendly network error appears, existing valid local cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"License network failure"));
+}
+
+#[test]
 fn reports_benchmark_completion_without_threshold() {
     let text = "| Benchmark release set | Blocked | Release-set benchmark CSV covers backend, saved percent, short, medium, and large local samples, smaller outputs, and machine/OS context | TBD | `docs/manual-qa.md` |\n";
 
@@ -465,7 +474,7 @@ fn described_blockers() -> String {
         "| Empty key activation | Blocked | Activate stays disabled for empty input, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Valid sandbox activation | Blocked | Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
-        "| License network failure | Blocked | Friendly network error appears, existing valid local cache with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
+        "| License network failure | Blocked | Friendly network error appears, existing valid local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields remain intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Expired license refresh | Blocked | Expired offline grace cache shows reconnect prompt, conversion is blocked before starting, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",

@@ -37,7 +37,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("Invalid license key handling", "local cache"),
     ("License network failure", "Friendly network error"),
-    ("License network failure", "existing valid local cache"),
+    (
+        "License network failure",
+        "existing valid local cache was checked",
+    ),
     (
         "License network failure",
         "64-character lowercase hex fingerprint",

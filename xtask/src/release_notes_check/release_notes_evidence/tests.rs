@@ -39,7 +39,7 @@ fn accepts_concrete_production_urls() {
 - Valid sandbox activation: Lemon Squeezy sandbox activation request entered Activating state, disabled submit, reached Pro state, and checked cache kept fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 - Empty key activation: Activate disabled for empty input and raw key absent from cache with no fingerprint and no instance
 - Invalid license key handling: Activating state disabled submit; friendly error shown and raw key absent from cache with no fingerprint and no instance
-- License network failure: friendly network error shown, existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
+- License network failure: friendly network error shown, checked existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 - Expired license refresh: expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and raw key absent from cache
 - Local license forget: Forgetting state disabled action; license cache removed and trial state restored
 - Public website URL: HTTPS://dropsquash.app/release-status
@@ -665,6 +665,19 @@ fn rejects_network_failure_without_instance_id_evidence() {
     let errors = check_text(
         r#"
 - License network failure: friendly network error shown, existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance fields with raw key absent
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("License network failure")));
+}
+
+#[test]
+fn rejects_network_failure_without_cache_observation() {
+    let errors = check_text(
+        r#"
+- License network failure: friendly network error shown, existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 "#,
     );
 
