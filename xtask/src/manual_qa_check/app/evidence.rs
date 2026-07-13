@@ -13,7 +13,11 @@ fn checksum(label: &str, result: &str) -> bool {
     }
     result
         .split(|value: char| !value.is_ascii_hexdigit())
-        .any(|part| part.len() == 64 && part.chars().all(|value| !value.is_ascii_uppercase()))
+        .any(|part| {
+            part.len() == 64
+                && part.chars().all(|value| !value.is_ascii_uppercase())
+                && !all_same_char(part)
+        })
         && result.to_ascii_lowercase().contains("sha256sums")
 }
 
@@ -99,4 +103,11 @@ fn contains_number(result: &str, expected: &str) -> bool {
     result
         .split(|value: char| !value.is_ascii_digit())
         .any(|part| part == expected)
+}
+
+fn all_same_char(value: &str) -> bool {
+    value
+        .chars()
+        .next()
+        .is_some_and(|first| value.chars().all(|char| char == first))
 }
