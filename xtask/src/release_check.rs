@@ -4,6 +4,7 @@ mod desktop_capability;
 mod dev_environment;
 mod evidence;
 mod manual_blockers;
+mod productization;
 mod release_doc;
 mod release_notes;
 mod required_text;
@@ -32,6 +33,7 @@ pub fn run() -> Result<(), String> {
         Path::new("docs/release-blockers.md"),
         Path::new("docs/manual-qa.md"),
     )?;
+    productization::check(Path::new("docs/productization.md"))?;
     release_doc::check(Path::new("docs/release.md"))?;
     release_notes::check(Path::new("docs/release-notes-template.md"))?;
     workflow::check_all()?;
