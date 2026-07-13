@@ -39,9 +39,14 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
         "store",
         &[
             "docs/release-blockers.md",
+            "Lemon Squeezy product setup",
             "Lemon Squeezy sandbox purchase",
             "Valid sandbox activation",
+            "Empty key activation",
+            "Invalid key activation",
+            "License network failure",
             "Expired license refresh",
+            "Local license forget",
         ],
     ),
     (
