@@ -13,4 +13,5 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/native-backends.md", "No shell or `PATH` lookup"),
     ("docs/native-backends.md", "no silent software fallback"),
     ("docs/native-backends.md", "reject `gst-libav`"),
+    ("docs/troubleshooting.md", "native-encoder-unavailable"),
 ];
