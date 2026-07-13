@@ -19,21 +19,27 @@ fn invalid_public_https_url(text: &str) -> bool {
     text.split(|character: char| {
         character.is_whitespace() || matches!(character, '"' | '\'' | '<' | '>')
     })
-    .filter(|part| part.starts_with("https://"))
+    .filter(|part| starts_with_scheme(part, "https://"))
     .any(|part| crate::public_url::HttpsUrl::parse(part).is_none())
 }
 
 pub(super) fn is_external_or_anchor(href: &str) -> bool {
     href.is_empty()
         || href.starts_with('#')
-        || href.starts_with("http://")
-        || href.starts_with("https://")
-        || href.starts_with("mailto:")
-        || href.starts_with("tel:")
+        || starts_with_scheme(href, "http://")
+        || starts_with_scheme(href, "https://")
+        || starts_with_scheme(href, "mailto:")
+        || starts_with_scheme(href, "tel:")
+}
+
+fn starts_with_scheme(value: &str, scheme: &str) -> bool {
+    value
+        .get(..scheme.len())
+        .is_some_and(|prefix| prefix.eq_ignore_ascii_case(scheme))
 }
 
 fn check_insecure_href(path: &Path, href: &str, errors: &mut Vec<String>) {
-    if href.starts_with("http://") {
+    if starts_with_scheme(href, "http://") {
         errors.push(format!("{} contains insecure link: {href}", path.display()));
     }
 }

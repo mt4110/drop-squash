@@ -151,6 +151,23 @@ fn rejects_unapproved_external_links() {
 }
 
 #[test]
+fn rejects_uppercase_unapproved_external_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <a href="HTTPS://github.com/mt4110/drop-squash/releases">Releases</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unapproved external URL")));
+}
+
+#[test]
 fn rejects_github_issue_like_external_path() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -222,6 +239,21 @@ fn rejects_insecure_external_links() {
         directory.path(),
         "support.html",
         r#"FAQ What is a privacy receipt? Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version <a href="http://dropsquash.app">Support</a>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("insecure link")));
+}
+
+#[test]
+fn rejects_uppercase_insecure_external_links() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "support.html",
+        r#"FAQ What is a privacy receipt? Does DropSquash upload my videos? Does it use ffmpeg? Do not send screen recordings app version <a href="HTTP://dropsquash.app">Support</a>"#,
     );
 
     let errors = check_root(directory.path()).unwrap();

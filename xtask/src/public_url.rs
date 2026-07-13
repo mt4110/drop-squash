@@ -10,7 +10,11 @@ impl<'a> HttpsUrl<'a> {
         if value.chars().any(char::is_whitespace) {
             return None;
         }
-        let without_scheme = value.strip_prefix("https://")?;
+        let scheme_len = "https://".len();
+        if !value.get(..scheme_len)?.eq_ignore_ascii_case("https://") {
+            return None;
+        }
+        let without_scheme = &value[scheme_len..];
         let (host, path) = without_scheme
             .split_once('/')
             .map(|(host, path)| (host, format_path(path)))
@@ -63,6 +67,14 @@ mod tests {
     #[test]
     fn parses_https_host_and_path() {
         let url = HttpsUrl::parse("https://github.com/a/b?x=1").unwrap();
+
+        assert!(url.host_is("github.com"));
+        assert_eq!(url.path(), "a/b");
+    }
+
+    #[test]
+    fn accepts_uppercase_https_scheme() {
+        let url = HttpsUrl::parse("HTTPS://github.com/a/b").unwrap();
 
         assert!(url.host_is("github.com"));
         assert_eq!(url.path(), "a/b");
