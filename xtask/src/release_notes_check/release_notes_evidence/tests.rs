@@ -604,8 +604,10 @@ fn rejects_homebrew_install_without_clean_uninstall_result() {
 fn rejects_prepared_homebrew_install_draft() {
     let errors = check_text(
         r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- Homebrew tap PR URL: https://github.com/mt4110/homebrew-tap/pull/1
 - SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` installs the versioned DropSquash.dmg artifact with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef, replace this line with observed install evidence
+- Homebrew install result: after `brew install --cask mt4110/tap/dropsquash` from the Homebrew tap PR URL above https://github.com/mt4110/homebrew-tap/pull/1 installs the versioned DropSquash.dmg artifact from the Artifact URL above https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef and `brew uninstall --cask mt4110/tap/dropsquash` removes it cleanly, replace this line with observed install and uninstall evidence
 "#,
     );
 
