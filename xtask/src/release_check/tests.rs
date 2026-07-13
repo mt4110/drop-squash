@@ -34,6 +34,8 @@ name: dropsquash-unsigned-dmg
 run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
 uses: actions/upload-artifact@v4
 name: dropsquash-unsigned-dmg-checksum
+APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
 run: cargo run -p xtask -- macos-signing-check
 name: Block unsigned Phase 0 release
 echo "Signed release packaging is not implemented."
@@ -74,6 +76,8 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS",
             "actions/upload-artifact@v4",
             "dropsquash-unsigned-dmg-checksum",
+            "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
+            "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
             "cargo run -p xtask -- macos-signing-check",
             "Block unsigned Phase 0 release",
             "Signed release packaging is not implemented.",
