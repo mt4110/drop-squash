@@ -61,6 +61,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "macOS signing command plan"),
     ("docs/qa-evidence.md", "signed DMG target preparation"),
+    ("docs/qa-evidence.md", "signed DMG copy isolation"),
     ("docs/qa-evidence.md", "signed DMG artifact guard"),
     ("docs/qa-evidence.md", "malformed or all-zero issuer UUIDs"),
     (

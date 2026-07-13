@@ -11,7 +11,7 @@ fn plans_signing_steps_in_safe_order() {
 
     assert_eq!(steps.len(), 6);
     assert!(steps[0].contains("signed-dmg-prepare"));
-    assert!(steps[1].contains("copy unsigned DMG"));
+    assert!(steps[1].contains("signed-dmg-copy"));
     assert!(steps[2].contains("codesign Developer ID"));
     assert!(steps[3].contains("notarytool submit"));
     assert!(steps[4].contains("stapler validate"));

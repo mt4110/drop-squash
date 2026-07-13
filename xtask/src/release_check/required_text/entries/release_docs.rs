@@ -44,6 +44,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "The plan does not execute signing commands and must not print secret values",
     ),
+    ("docs/release.md", "signed-dmg-copy"),
+    (
+        "docs/release.md",
+        "refuses existing targets and still checks the unsigned input",
+    ),
     ("docs/release.md", "signed-dmg-prepare"),
     (
         "docs/release.md",

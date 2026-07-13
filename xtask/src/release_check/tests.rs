@@ -43,6 +43,7 @@ APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
 run: cargo run -p xtask -- macos-signing-check
 run: cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
+run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
 name: Block unsigned Phase 0 release
 echo "Signed release packaging is not implemented."
 exit 1
@@ -91,6 +92,7 @@ fn reports_missing_release_workflow_gates() {
             "cargo run -p xtask -- macos-signing-check",
             "cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
+            "cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
             "Block unsigned Phase 0 release",
             "Signed release packaging is not implemented.",
             "exit 1"

@@ -11,6 +11,13 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
+pub(crate) fn prepare_paths(source: &Path, output_dir: &Path) -> Result<PathBuf, String> {
+    prepare(&Request {
+        source: source.to_path_buf(),
+        output_dir: output_dir.to_path_buf(),
+    })
+}
+
 fn prepare(request: &Request) -> Result<PathBuf, String> {
     artifact_check::read_checked(&request.source, "unsigned signing input")?;
     std::fs::create_dir_all(&request.output_dir).map_err(|error| {
