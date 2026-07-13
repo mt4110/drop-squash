@@ -101,6 +101,9 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: cargo run -p xtask -- macos-signing-check
+      - name: Plan macOS signing commands
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
       - name: Prepare signed DMG target
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"

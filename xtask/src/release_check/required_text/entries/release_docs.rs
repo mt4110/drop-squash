@@ -39,6 +39,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "macOS verification command drafts also use the same checked DMG path",
     ),
+    ("docs/release.md", "macos-signing-plan"),
+    (
+        "docs/release.md",
+        "The plan does not execute signing commands and must not print secret values",
+    ),
     ("docs/release.md", "signed-dmg-prepare"),
     (
         "docs/release.md",

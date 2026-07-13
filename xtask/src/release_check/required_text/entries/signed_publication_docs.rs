@@ -10,6 +10,7 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release-blockers.md",
         "signed, notarized, stapled, checksummed, installable, and opens without warning",
     ),
+    ("docs/productization.md", "macOS signing command plan"),
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG artifact guard"),
 ];

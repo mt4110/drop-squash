@@ -53,6 +53,7 @@ pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
+cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg /tmp/dropsquash-signed
 cargo run -p xtask -- signed-dmg-check /tmp/dropsquash-signed/DropSquash.dmg target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
@@ -94,6 +95,11 @@ generated Tauri DMG to `DropSquash.dmg` before artifact checks, checksums,
 manual QA evidence, or public release notes refer to it. Public release still
 requires signing, notarization, stapling, artifact checks, checksums, and
 Gatekeeper no-warning evidence for the signed app.
+Before implementing the command runner, use `macos-signing-plan` to keep the
+macOS signing wrapper order deterministic: prepare the signed target, copy the
+unsigned DMG to that target, apply the Developer ID `codesign` signature, submit
+with `notarytool`, validate stapling, then run `signed-dmg-check`.
+The plan does not execute signing commands and must not print secret values.
 Before the signing implementation writes a public artifact, run
 `signed-dmg-prepare` against the checked unsigned `DropSquash.dmg` and a separate
 output directory. The command rejects non-canonical or `/nix/store`-tainted
