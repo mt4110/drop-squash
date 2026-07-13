@@ -37,6 +37,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release.md",
+        "macOS verification command drafts also use the same checked DMG path",
+    ),
+    (
+        "docs/release.md",
         "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
     ),
     ("docs/release.md", "checkout, and refund links"),
