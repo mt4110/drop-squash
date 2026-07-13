@@ -26,6 +26,7 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["failed"],
             &["cancelled"],
             &["blocked"],
+            &["trial lock", "license lock"],
         ]),
         "Trash source policy" => Some(&[
             &["moving original", "moving"],

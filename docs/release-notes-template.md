@@ -68,7 +68,7 @@ weak public evidence before the release is published.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md`, the tested public `DropSquash.dmg`, and `manual-qa-check` passing.
 - Conversion safety evidence: mention cancellation, failed conversion, larger output, original preservation, and unchanged trial count.
-- Queue evidence: mention multi-file queue, queued cancellation, batch summary, finished count, saved bytes, and failed/cancelled/blocked counts.
+- Queue evidence: mention multi-file queue, queued cancellation, batch summary, trial or license lock blocked jobs, finished count, saved bytes, and failed/cancelled/blocked counts.
 - Trash source policy: mention Moving original or moving state, disabled action state, verified smaller output, and Trash.
 - Benchmark sample set: mention short, medium, and large samples, smaller outputs, CSV path outside the repository, machine, and OS context.
 - Benchmark regression threshold: mention the 20% regression threshold, whether any sample exceeded it, the same-machine comparison, and the release candidate baseline.

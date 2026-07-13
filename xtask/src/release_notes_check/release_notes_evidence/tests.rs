@@ -28,7 +28,7 @@ fn accepts_concrete_production_urls() {
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md tested public DropSquash.dmg and manual-qa-check passed
 - Conversion safety evidence: cancellation, failed conversion, and larger output preserved original with trial count unchanged
-- Queue evidence: multi-file queue, queued cancellation, and batch summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
+- Queue evidence: multi-file queue, queued cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
 - Benchmark sample set: short medium large local recordings produced smaller outputs on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
@@ -135,6 +135,17 @@ fn rejects_queue_evidence_without_numeric_counts() {
     let errors = check_text(
         r#"
 - Queue evidence: multi-file queue, queued cancellation, and batch summary showed finished count, saved bytes, failed count, cancelled count, and blocked count
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("Queue evidence")));
+}
+
+#[test]
+fn rejects_queue_evidence_without_lock_blocking_context() {
+    let errors = check_text(
+        r#"
+- Queue evidence: multi-file queue, queued cancellation, and batch summary showed finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 0
 "#,
     );
 
