@@ -2,7 +2,10 @@ use super::Entry;
 
 pub(super) const ENTRIES: &[Entry] = &[
     ("docs/licensing.md", "Lemon Squeezy sandbox purchase"),
-    ("docs/licensing.md", "64-character hex license fingerprint"),
+    (
+        "docs/licensing.md",
+        "64-character lowercase hex license fingerprint",
+    ),
     (
         "docs/licensing.md",
         "available during Trial and Locked states",

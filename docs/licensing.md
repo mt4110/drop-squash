@@ -19,8 +19,8 @@ The app stores a local license cache with:
 - validity flag
 
 The app treats the cache as Pro only when it is valid, inside the offline grace
-window, and includes both a 64-character hex license fingerprint and Lemon
-Squeezy instance id.
+window, and includes both a 64-character lowercase hex license fingerprint and
+Lemon Squeezy instance id.
 When a previously valid cache has identity but the offline grace window has
 expired, the app locks conversion with a reconnect prompt instead of presenting
 the state as a trial-count failure.
