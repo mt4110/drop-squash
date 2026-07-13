@@ -97,6 +97,14 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Forgetting state disables action; confirmed license cache removed",
     ),
     ("docs/release.md", "10-character `APPLE_API_KEY`"),
+    (
+        "docs/release.md",
+        "In GitHub Actions, signing requires `APPLE_CERTIFICATE`",
+    ),
+    (
+        "docs/release.md",
+        "local keychain identity name is not enough",
+    ),
     ("docs/release.md", "APPLE_API_ISSUER"),
     ("docs/release.md", "all-zero value"),
     ("docs/release.md", "placeholder secret"),
