@@ -1031,6 +1031,19 @@ fn rejects_missing_or_generic_release_evidence() {
 }
 
 #[test]
+fn rejects_placeholder_version() {
+    let errors = check_text(
+        r#"
+- Version: v0.0.0
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Version must be a concrete semver version")));
+}
+
+#[test]
 fn rejects_short_success_release_evidence() {
     let errors = check_text(
         r#"

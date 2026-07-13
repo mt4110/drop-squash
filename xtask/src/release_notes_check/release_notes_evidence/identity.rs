@@ -15,7 +15,7 @@ fn validate_version(text: &str) -> Option<String> {
     let Some(value) = value::field("Version", text) else {
         return Some("Version must be present".to_string());
     };
-    if is_semver(value.strip_prefix('v').unwrap_or(value)) {
+    if is_concrete_semver(value.strip_prefix('v').unwrap_or(value)) {
         return None;
     }
     Some("Version must be a concrete semver version".to_string())
@@ -46,12 +46,13 @@ fn validate_git_commit(text: &str) -> Option<String> {
     Some("Git commit must be a concrete lowercase commit hash".to_string())
 }
 
-fn is_semver(value: &str) -> bool {
+fn is_concrete_semver(value: &str) -> bool {
     let parts = value.split('.').collect::<Vec<_>>();
     parts.len() == 3
         && parts
             .iter()
             .all(|part| !part.is_empty() && part.chars().all(|value| value.is_ascii_digit()))
+        && parts.iter().any(|part| part != &"0")
 }
 
 fn all_same_char(value: &str) -> bool {
