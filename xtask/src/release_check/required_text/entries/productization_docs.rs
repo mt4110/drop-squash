@@ -63,6 +63,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
+        "release blocker classification/execution-order synchronization",
+    ),
+    (
+        "docs/productization.md",
+        "release blocker Next action detail gates",
+    ),
+    (
+        "docs/productization.md",
         "clean worktree preflights for manual QA and release notes preparation",
     ),
     ("docs/productization.md", "pre-release CTA copy guard"),
