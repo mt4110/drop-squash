@@ -9,7 +9,7 @@ pub(super) fn read_mvhd_duration(
     let mut version = [0u8; 1];
     file.seek(SeekFrom::Start(content_start))?;
     file.read_exact(&mut version)?;
-    let (timescale_offset, duration_offset) = if version[0] == 1 { (20, 28) } else { (12, 16) };
+    let (timescale_offset, duration_offset) = if version[0] == 1 { (20, 24) } else { (12, 16) };
     let timescale = read_u32(file, content_start + timescale_offset)?;
     if timescale == 0 {
         return Ok(None);

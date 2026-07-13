@@ -19,7 +19,7 @@ pub(super) fn read_box_header(
     let mut kind = [0u8; 4];
     kind.copy_from_slice(&header[4..8]);
     let (content_start, end) = box_bounds(file, offset, limit, size)?;
-    if end <= content_start || end > limit {
+    if end < content_start || end > limit {
         return Ok(None);
     }
     Ok(Some(BoxHeader {
