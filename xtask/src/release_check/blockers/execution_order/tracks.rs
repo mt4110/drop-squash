@@ -37,6 +37,10 @@ const EXIT_PHRASES: &[(&str, &[&str])] = &[
             "Homebrew tap PR",
             "signed",
             "notarized",
+            "stapled",
+            "checksummed",
+            "installable",
+            "opens without warning",
         ],
     ),
 ];

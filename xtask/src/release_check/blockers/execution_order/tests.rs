@@ -108,6 +108,17 @@ fn reports_weak_execution_exit_condition() {
 }
 
 #[test]
+fn reports_signing_distribution_exit_without_stapled_state() {
+    let text = "\
+| 4 | Signing and distribution proof | Signed DMG, Notarized and stapled DMG, Gatekeeper clean-machine open, Published checksum, Homebrew cask install | Release notes, GitHub Release, and Homebrew tap PR prove the same public DropSquash.dmg is signed, notarized, checksummed, installable, and opens without warning | Release notes and public distribution URLs |
+";
+
+    let weak = weak_exit_conditions(text);
+
+    assert!(weak.contains(&"Signing and distribution proof"));
+}
+
+#[test]
 fn reports_placeholder_execution_exit_condition() {
     let text = "\
 | 1 | Local packaged-app proof | Packaged macOS manual QA, Benchmark release set | TODO | `docs/manual-qa.md` |
