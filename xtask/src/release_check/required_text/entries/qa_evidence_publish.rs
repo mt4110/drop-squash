@@ -31,6 +31,10 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "filled release notes evidence without prepared draft placeholders",
     ),
+    (
+        "docs/qa-evidence.md",
+        "required release notes URL fields including Artifact URL, Public website URL, Pricing URL, Refund policy URL, Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
+    ),
     ("docs/qa-evidence.md", "staying outside the repository"),
     ("docs/qa-evidence.md", "concrete Completion evidence"),
     ("docs/qa-evidence.md", "traceable Evidence reference"),
