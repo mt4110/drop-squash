@@ -10,6 +10,7 @@ pub(super) const ALL: &[(&str, &str)] = &[
     ("Failed conversion", "Failed conversion"),
     ("Larger output", "Larger output"),
     ("Large-recording cancellation", "Cancellation"),
+    ("Benchmark sample results", "Benchmark sample set"),
     ("Benchmark sample set", "Benchmark sample set"),
     (
         "Benchmark regression threshold",

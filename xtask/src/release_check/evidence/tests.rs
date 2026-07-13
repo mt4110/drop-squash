@@ -37,7 +37,6 @@ fn reports_missing_manual_qa_check() {
 }
 
 const EXTERNAL_ONLY_AREAS: &[&str] = &[
-    "Benchmark sample results",
     "Public website deployment",
     "Pricing finalized",
     "Refund policy finalized",
@@ -54,6 +53,20 @@ fn manual_only_qa_rows_are_mapped_or_classified() {
         .filter(|area| {
             !manual_pairs::ALL.iter().any(|(mapped, _)| mapped == area)
                 && !EXTERNAL_ONLY_AREAS.contains(&area.as_str())
+        })
+        .collect::<Vec<_>>();
+
+    assert!(missing.is_empty(), "{missing:?}");
+}
+
+#[test]
+fn external_manual_only_areas_are_release_url_fields() {
+    let missing = EXTERNAL_ONLY_AREAS
+        .iter()
+        .filter(|area| {
+            !crate::release_url_fields::PAIRS
+                .iter()
+                .any(|(blocker, _)| blocker == *area)
         })
         .collect::<Vec<_>>();
 
