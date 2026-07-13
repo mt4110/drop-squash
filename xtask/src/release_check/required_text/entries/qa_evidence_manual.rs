@@ -50,6 +50,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "Homebrew cask check evidence naming `dropsquash.rb` and `release-notes.md`",
+    ),
+    (
+        "docs/qa-evidence.md",
         "prepared manual QA draft markers",
     ),
     (
