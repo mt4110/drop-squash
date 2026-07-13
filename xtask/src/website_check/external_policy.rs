@@ -11,6 +11,9 @@ pub(super) fn check(path: &Path, href: &str, errors: &mut Vec<String>) {
 }
 
 fn is_allowed(href: &str) -> bool {
+    if href.contains('?') || href.contains('#') {
+        return false;
+    }
     crate::public_url::HttpsUrl::parse(href).is_some_and(|url| {
         url.host_is("github.com")
             && matches!(

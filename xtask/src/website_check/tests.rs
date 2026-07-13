@@ -134,6 +134,23 @@ fn accepts_github_issues_link() {
 }
 
 #[test]
+fn rejects_allowed_github_links_with_query_or_fragment() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r##"Release status <a href="https://github.com/mt4110/drop-squash?utm=1">Repo</a><a href="https://github.com/mt4110/drop-squash/issues#new">Issues</a>"##,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("unapproved external URL")));
+}
+
+#[test]
 fn rejects_unapproved_external_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
