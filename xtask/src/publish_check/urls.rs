@@ -7,7 +7,7 @@ pub(super) fn single_https(value: &str) -> Option<&str> {
 }
 
 pub(super) fn labeled_https<'a>(value: &'a str, label: &str) -> Option<&'a str> {
-    let rest = value.strip_prefix(label)?.trim();
+    let rest = value.strip_prefix(label)?.strip_prefix(' ')?;
     crate::url_scheme::is_https(rest).then_some(rest)
 }
 
@@ -45,6 +45,20 @@ mod tests {
     fn rejects_extra_words_before_labeled_url() {
         let value =
             "GitHub Release approved https://github.com/mt4110/drop-squash/releases/tag/v0.1.0";
+
+        assert_eq!(labeled_https(value, "GitHub Release"), None);
+    }
+
+    #[test]
+    fn rejects_labeled_url_without_separator_space() {
+        let value = "GitHub Releasehttps://github.com/mt4110/drop-squash/releases/tag/v0.1.0";
+
+        assert_eq!(labeled_https(value, "GitHub Release"), None);
+    }
+
+    #[test]
+    fn rejects_labeled_url_with_extra_separator_space() {
+        let value = "GitHub Release  https://github.com/mt4110/drop-squash/releases/tag/v0.1.0";
 
         assert_eq!(labeled_https(value, "GitHub Release"), None);
     }
