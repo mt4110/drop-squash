@@ -38,6 +38,7 @@ cargo run -p xtask -- homebrew-cask 0.1.0
 auto_updates false
 zap
 cargo run -p xtask -- release-notes-check
+cargo run -p xtask -- github-release-plan
 cargo run -p xtask -- publish-check
 Benchmark sample set
 20% regression threshold
