@@ -43,6 +43,7 @@ GitHub Release URL
 Homebrew tap PR
 Homebrew tap PR URL
 Homebrew install result
+the versioned `DropSquash.dmg` artifact, the Artifact URL above
 Known limitations
 Support contact
 Do not paste signing secrets
