@@ -33,6 +33,7 @@ fn explicit_trash_revalidates_output_before_moving_original() {
     .unwrap();
 
     assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(decision.reason.contains("mp4 file-type box missing"));
     assert!(source.exists());
 }
 
@@ -51,6 +52,7 @@ fn explicit_trash_requires_matching_output_name() {
     .unwrap();
 
     assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(decision.reason.contains("output does not belong to source"));
     assert!(source.exists());
 }
 
@@ -69,6 +71,7 @@ fn explicit_trash_rejects_non_numeric_output_suffix() {
     .unwrap();
 
     assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(decision.reason.contains("output does not belong to source"));
     assert!(source.exists());
 }
 
@@ -111,6 +114,7 @@ fn failed_result_keeps_original_even_when_sizes_are_smaller() {
     let decision = handle_source_action(&result, SourcePolicy::Trash).unwrap();
 
     assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(decision.reason.contains("safety gates"));
     assert!(source.exists());
 }
 
@@ -126,6 +130,7 @@ fn trash_policy_revalidates_output_before_moving_original() {
         handle_source_action(&result(source.clone(), output), SourcePolicy::Trash).unwrap();
 
     assert_eq!(decision.action, SourceAction::KeepOriginal);
+    assert!(decision.reason.contains("mp4 file-type box missing"));
     assert!(source.exists());
 }
 
