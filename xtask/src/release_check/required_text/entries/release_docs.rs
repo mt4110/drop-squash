@@ -64,6 +64,11 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/release.md",
         "It validates the target artifact and does not execute stapler",
     ),
+    ("docs/release.md", "macos-spctl-plan"),
+    (
+        "docs/release.md",
+        "It validates the target artifact and does not execute Gatekeeper assessment",
+    ),
     ("docs/release.md", "signed-dmg-prepare"),
     (
         "docs/release.md",

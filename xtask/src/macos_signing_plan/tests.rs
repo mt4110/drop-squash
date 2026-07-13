@@ -9,13 +9,14 @@ fn plans_signing_steps_in_safe_order() {
 
     let steps = plan(&request).unwrap();
 
-    assert_eq!(steps.len(), 6);
+    assert_eq!(steps.len(), 7);
     assert!(steps[0].contains("signed-dmg-prepare"));
     assert!(steps[1].contains("signed-dmg-copy"));
     assert!(steps[2].contains("macos-codesign-plan"));
     assert!(steps[3].contains("macos-notary-plan"));
     assert!(steps[4].contains("macos-stapler-plan"));
-    assert!(steps[5].contains("signed-dmg-check"));
+    assert!(steps[5].contains("macos-spctl-plan"));
+    assert!(steps[6].contains("signed-dmg-check"));
 }
 
 #[test]

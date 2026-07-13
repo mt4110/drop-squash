@@ -39,6 +39,10 @@ fn plan(request: &Request) -> Result<Vec<String>, String> {
             display(&target)
         ),
         format!(
+            "cargo run -p xtask -- macos-spctl-plan {}",
+            display(&target)
+        ),
+        format!(
             "cargo run -p xtask -- signed-dmg-check {} {}",
             display(&target),
             display(&request.unsigned)
