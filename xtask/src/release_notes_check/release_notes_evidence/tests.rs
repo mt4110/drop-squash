@@ -301,6 +301,54 @@ fn rejects_homebrew_tap_pr_without_matching_pr_url() {
 }
 
 #[test]
+fn rejects_github_release_checksum_without_release_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- GitHub Release checksum: SHA256SUMS attached for https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum")));
+}
+
+#[test]
+fn rejects_github_release_checksum_without_artifact_url() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- GitHub Release checksum: SHA256SUMS attached to https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 with lowercase SHA-256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum")));
+}
+
+#[test]
+fn rejects_github_release_checksum_without_sha256_digest() {
+    let errors = check_text(
+        r#"
+- Artifact URL: https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+- SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+- GitHub Release URL: https://github.com/mt4110/drop-squash/releases/tag/v0.1.0
+- GitHub Release checksum: SHA256SUMS attached to https://github.com/mt4110/drop-squash/releases/tag/v0.1.0 for https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("GitHub Release checksum")));
+}
+
+#[test]
 fn rejects_homebrew_tap_pr_without_versioned_artifact_context() {
     let errors = check_text(
         r#"
