@@ -78,10 +78,20 @@ fn has_csv_path_context(value: &str) -> bool {
 
 fn csv_path_outside_repo(value: &str) -> bool {
     value.split_whitespace().any(|token| {
-        let path = token
-            .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
+        let path = csv_token(token);
         is_absolute_csv_outside_repo(path)
     })
+}
+
+fn csv_token(token: &str) -> &str {
+    let token = token
+        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
+    token
+        .strip_prefix("csv=")
+        .or_else(|| token.strip_prefix("CSV="))
+        .or_else(|| token.strip_prefix("csv:"))
+        .or_else(|| token.strip_prefix("CSV:"))
+        .unwrap_or(token)
 }
 
 fn is_absolute_csv_outside_repo(value: &str) -> bool {

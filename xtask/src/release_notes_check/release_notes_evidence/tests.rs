@@ -1322,6 +1322,23 @@ fn rejects_benchmark_sample_set_with_missing_csv_file() {
 }
 
 #[test]
+fn accepts_benchmark_sample_set_with_labeled_csv_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = csv_file(directory.path(), "results.csv");
+    let errors = check_text(&format!(
+        "\
+- Benchmark sample set: short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at csv={}
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
+",
+        csv.display()
+    ));
+
+    assert!(!errors
+        .iter()
+        .any(|error| error.contains("Benchmark sample set")));
+}
+
+#[test]
 fn rejects_benchmark_threshold_without_baseline_context() {
     let errors = check_text(
         r#"
