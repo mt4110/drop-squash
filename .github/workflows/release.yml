@@ -110,6 +110,18 @@ jobs:
       - name: Copy DMG to signing target
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
+      - name: Plan macOS codesign command
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
+      - name: Plan macOS notarization command
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
+      - name: Plan macOS stapler commands
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+      - name: Plan macOS Gatekeeper assessment
+        if: matrix.os == 'macos-latest'
+        run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
       - name: Block unsigned Phase 0 release
         shell: bash
         run: |
