@@ -64,6 +64,7 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
         "release notes",
         &[
             "cargo run -p xtask -- release-notes-check",
+            "cargo run -p xtask -- publish-check",
             "Benchmark sample set",
             "20% regression threshold",
             "Expired license refresh",
