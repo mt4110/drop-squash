@@ -65,7 +65,7 @@ pub fn block_queued_jobs(
     app_state: tauri::State<'_, AppState>,
     error: String,
 ) -> Result<Vec<QueueEvent>, String> {
-    app_state.block_queued_jobs(error)
+    block_pending_jobs(&app_state, error)
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -83,6 +83,10 @@ fn job_from_request(request: ConvertRequest) -> EncodeJob {
         output_size: request.output_size,
         source_policy: request.source_policy,
     }
+}
+
+fn block_pending_jobs(app_state: &AppState, error: String) -> Result<Vec<QueueEvent>, String> {
+    app_state.block_queued_jobs(error)
 }
 
 #[cfg(test)]
