@@ -279,6 +279,23 @@ fn rejects_external_loaded_resources() {
 }
 
 #[test]
+fn rejects_uppercase_external_loaded_resources() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "index.html",
+        r#"Release status <script src="HTTPS://cdn.example.invalid/app.js"></script>"#,
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("loads external resource")));
+}
+
+#[test]
 fn rejects_unquoted_external_loaded_resources() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
