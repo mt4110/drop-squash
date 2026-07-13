@@ -106,6 +106,24 @@ fn load_rejects_nested_raw_license_key_field() {
 }
 
 #[test]
+fn load_rejects_raw_license_key_field_variants() {
+    for field in ["License_Key", "rawLicenseKey", "raw-key"] {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("license.json");
+        std::fs::write(&path, format!(r#"{{"{field}":"LS-SECRET-RAW-KEY"}}"#)).unwrap();
+
+        let error = LicenseCache::load_or_default(&path).unwrap_err();
+
+        assert!(
+            error
+                .to_string()
+                .contains("license cache contains a raw license key field"),
+            "{field} should be rejected"
+        );
+    }
+}
+
+#[test]
 fn forget_path_removes_cache_file() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("license.json");

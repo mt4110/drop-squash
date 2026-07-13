@@ -73,9 +73,14 @@ fn reject_raw_key_fields(value: &serde_json::Value) -> dropsquash_core::Result<(
 }
 
 fn is_raw_key_field(key: &str) -> bool {
+    let normalized = key
+        .chars()
+        .filter(|character| character.is_ascii_alphanumeric())
+        .flat_map(char::to_lowercase)
+        .collect::<String>();
     matches!(
-        key,
-        "license_key" | "raw_key" | "raw_license_key" | "licenseKey"
+        normalized.as_str(),
+        "licensekey" | "rawkey" | "rawlicensekey"
     )
 }
 
