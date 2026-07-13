@@ -13,6 +13,8 @@
     "src/lib/initialState.ts",
     "src/lib/license.ts",
     "src/lib/license.test.ts",
+    "src/lib/licenseLock.ts",
+    "src/lib/licenseLock.test.ts",
     "src/lib/queue.ts",
     "src/lib/queue.test.ts",
     "src/lib/queueWire.ts",

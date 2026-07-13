@@ -49,13 +49,8 @@ import {
   queueEntryFromRustItem,
   requestFromRustItem,
 } from "./lib/queueWire";
+import { lockedMessage } from "./lib/licenseLock";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
-
-function lockedMessage(reason: DropZoneState["lockedReason"]) {
-  return reason === "license-refresh-required"
-    ? "Reconnect once with your license key to refresh Pro."
-    : "Enter a license key to continue.";
-}
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);

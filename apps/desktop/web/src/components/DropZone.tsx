@@ -1,5 +1,6 @@
 import type { ConversionSummary } from "../lib/commands";
 import { displayPath, fileName, formatBytes, parentPath } from "../lib/format";
+import { lockedTitle } from "../lib/licenseLock";
 
 type DropZoneProps = {
   isBusy: boolean;
@@ -38,7 +39,7 @@ export function DropZone({
 }: DropZoneProps) {
   const canTrashOriginal = result?.sourceAction === "ask-user";
   const receiptPath = result?.privacyReceiptPath;
-  const lockTitle = lockedMessage?.includes("refresh") ? "License refresh required" : "Trial complete";
+  const lockTitle = lockedTitle(lockedMessage);
 
   return (
     <section
