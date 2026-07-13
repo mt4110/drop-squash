@@ -67,8 +67,8 @@ weak public evidence before the release is published.
 - Gatekeeper clean-machine open: include `Gatekeeper`, `opened` or `opens`, `clean` or `fresh`, `public`, the exact Artifact URL, `signed`, `notarized`, `stapled`, and `without warning` or `no warning`.
 - `docs/release-blockers.md` status: mention `docs/release-blockers.md` and `all rows Verified`.
 - Manual QA record: mention `docs/manual-qa.md`, the tested exact Artifact URL, and `manual-qa-check` passing.
-- Conversion safety evidence: mention cancellation, failed conversion, larger/not-smaller output, original preservation, and unchanged trial count.
-- Queue evidence: mention multi-file queue, queued cancellation, batch summary, trial or license lock blocked jobs, finished count, saved bytes, and failed/cancelled/blocked counts.
+- Conversion safety evidence: mention cancellation returning ready after temp cleanup, failed conversion, larger/not-smaller output, original preservation, unchanged trial count, history, and no new success.
+- Queue evidence: mention multi-file queue, waiting or queued row cancellation, batch summary, trial or license lock blocked jobs, finished count, saved bytes, and failed/cancelled/blocked counts.
 - Trash source policy: mention Moving original or moving state, disabled action state, verified smaller output, and Trash.
 - Benchmark sample set: mention short, medium, and large samples, smaller outputs, backend, saved percent, duration, speed ratio, existing CSV path outside the repository, machine, and OS context.
 - Benchmark regression threshold: mention the 20% regression threshold, whether any sample exceeded it, the same-machine comparison, and the release candidate baseline.

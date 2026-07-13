@@ -24,6 +24,18 @@ pub(super) const ENTRIES: &[Entry] = &[
         "Homebrew tap PR URL above",
     ),
     (
+        "docs/release-notes-template.md",
+        "cancellation returning ready after temp cleanup",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "history, and no new success",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "waiting or queued row cancellation",
+    ),
+    (
         "docs/qa-evidence.md",
         "new absolute `.md` path outside the repository",
     ),
