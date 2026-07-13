@@ -26,7 +26,7 @@ Use the exact forms `GitHub Release https://...` and
 | Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, local cache was checked, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |
 | License network failure | Blocked | Friendly network error appears, existing valid local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields remain intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
 | Expired license refresh | Blocked | attempted conversion with expired offline grace cache shows reconnect prompt, conversion is blocked before starting, local cache was checked, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |
-| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |
+| Local license forget | Blocked | Forgetting state disables action, confirmed local cache is removed, and observed app returns to trial or locked state | TBD | `docs/manual-qa.md` |
 | Public website deployment | Blocked | Production website production URL serves the release-status, privacy, pricing, support, and download pages on `dropsquash.app` | TBD | `https://...` |
 | Refund policy finalized | Blocked | Production refund policy is final on `dropsquash.app` and linked before checkout goes live | TBD | `https://...` |
 | Live checkout link | Blocked | Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |

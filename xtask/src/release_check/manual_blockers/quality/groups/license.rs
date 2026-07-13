@@ -91,6 +91,8 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["disabled"],
             &["cache", "license.json"],
             &["removed", "cleared", "deleted", "clears"],
+            &["confirmed"],
+            &["observed", "returned"],
             &["trial", "locked"],
         ]),
         _ => None,

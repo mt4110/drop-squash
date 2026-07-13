@@ -94,6 +94,8 @@ pub(super) fn for_label(label: &str) -> Option<Groups> {
             &["disabled"],
             &["cache"],
             &["removed", "cleared", "deleted", "clears"],
+            &["confirmed"],
+            &["observed", "returned"],
             &["trial", "locked"],
         ]),
         _ => None,

@@ -382,13 +382,13 @@ fn evidence(blocker: &str) -> &'static str {
             "Tested the public DropSquash.dmg artifact matching the release notes Artifact URL with manual-qa-check evidence recorded"
         }
         "Empty key activation" => {
-            "Activate stays disabled and raw key, fingerprint, and instance are absent from local cache"
+            "Activate stays disabled, local cache was checked, and raw key, fingerprint, and instance are absent from local cache"
         }
         "Valid sandbox activation" => {
             "Lemon Squeezy sandbox activation reaches Pro state, Activating state disables submit, local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields are present, and raw key is absent from local cache"
         }
         "Invalid license key handling" => {
-            "Activating state disables submit, friendly error, raw key, fingerprint, and instance are absent from local cache"
+            "Activating state disables submit, friendly error, local cache was checked, and raw key, fingerprint, and instance are absent from local cache"
         }
         "License network failure" => {
             "Friendly network error, existing valid local cache was checked with 64-character lowercase hex fingerprint and `instance_id` fields remains intact, and raw key is absent from local cache"
@@ -397,7 +397,7 @@ fn evidence(blocker: &str) -> &'static str {
             "expired offline grace cache shows reconnect prompt, attempted conversion is blocked before starting, local cache was checked, and raw key is absent from local cache"
         }
         "Local license forget" => {
-            "Forgetting state disables action, local cache removed, trial or locked state"
+            "Forgetting state disables action, confirmed local cache removed, observed trial or locked state"
         }
         "Benchmark release set" => {
             "Release-set benchmark CSV absolute path outside repo covers backend, saved percent, duration, speed ratio, short, medium, and large samples, smaller outputs, machine/OS context, 20% regression threshold, and release candidate baseline"

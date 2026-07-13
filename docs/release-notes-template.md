@@ -79,7 +79,7 @@ weak public evidence before the release is published.
 - Invalid license key handling: mention disabled action state, friendly error, inspected cache evidence, `raw key`, no fingerprint, and no instance.
 - License network failure: mention a friendly network error, checked preserved existing valid cache, 64-character lowercase hex fingerprint, `instance_id`, and `raw key` absence.
 - Expired license refresh: mention the attempted conversion, expired offline grace cache, reconnect prompt, conversion blocked before starting, checked cache evidence, and `raw key` absence.
-- Local license forget: mention disabled action state, cache removal, and trial or locked state.
+- Local license forget: mention disabled action state, confirmed cache removal, and observed trial or locked state.
 - Public website URL: use the production `https://dropsquash.app/release-status` URL.
 - Refund policy URL: use the production `https://dropsquash.app/refund` URL after the policy is final.
 - Live checkout URL: use the `https://store.lemonsqueezy.com/checkout/buy/<id>` URL for the product.

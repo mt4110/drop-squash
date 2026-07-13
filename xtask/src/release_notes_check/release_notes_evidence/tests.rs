@@ -41,7 +41,7 @@ fn accepts_concrete_production_urls() {
 - Invalid license key handling: Activating state disabled submit; friendly error shown and inspected cache showed raw key absent with no fingerprint and no instance
 - License network failure: friendly network error shown, checked existing valid cache preserved fingerprint 1111111111111111111111111111111111111111111111111111111111111111 plus instance_id field with raw key absent
 - Expired license refresh: attempted conversion with expired offline grace license cache showed reconnect prompt, blocked conversion before starting, and checked cache confirmed raw key absent
-- Local license forget: Forgetting state disabled action; license cache removed and trial state restored
+- Local license forget: Forgetting state disabled action; confirmed license cache removed and observed trial state restored
 - Public website URL: HTTPS://dropsquash.app/release-status
 - Refund policy URL: https://dropsquash.app/refund
 - Live checkout URL: https://store.lemonsqueezy.com/checkout/buy/abc123
@@ -616,6 +616,32 @@ fn rejects_local_license_forget_without_cache_removal() {
     let errors = check_text(
         r#"
 - Local license forget: license cache checked and trial state restored
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Local license forget")));
+}
+
+#[test]
+fn rejects_local_license_forget_without_confirmed_removal() {
+    let errors = check_text(
+        r#"
+- Local license forget: Forgetting state disabled action; license cache removed and observed trial state restored
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("Local license forget")));
+}
+
+#[test]
+fn rejects_local_license_forget_without_observed_state() {
+    let errors = check_text(
+        r#"
+- Local license forget: Forgetting state disabled action; confirmed license cache removed and trial state restored
 "#,
     );
 

@@ -269,6 +269,24 @@ fn reports_local_forget_completion_without_cache_removal() {
 }
 
 #[test]
+fn reports_local_forget_completion_without_confirmed_removal() {
+    let text = "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and observed app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Local license forget"));
+}
+
+#[test]
+fn reports_local_forget_completion_without_observed_state() {
+    let text = "| Local license forget | Blocked | Forgetting state disables action, confirmed local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Local license forget"));
+}
+
+#[test]
 fn reports_signed_completion_without_developer_id() {
     let text = "| Signed DMG | Blocked | `codesign` verification for the public DropSquash.dmg artifact | TBD | Release notes |\n";
 
@@ -575,7 +593,7 @@ fn described_blockers() -> String {
         "| Invalid license key handling | Blocked | Activating state disables submit, friendly error appears, local cache was checked, and raw key, fingerprint, and instance are absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| License network failure | Blocked | Friendly network error appears, existing valid local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields remain intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Expired license refresh | Blocked | attempted conversion with expired offline grace cache shows reconnect prompt, conversion is blocked before starting, local cache was checked, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
-        "| Local license forget | Blocked | Forgetting state disables action, local cache is removed, and app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
+        "| Local license forget | Blocked | Forgetting state disables action, confirmed local cache is removed, and observed app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
         "| Public website deployment | Blocked | Production website production URL on dropsquash.app serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final on dropsquash.app and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",
