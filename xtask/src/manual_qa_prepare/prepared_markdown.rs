@@ -51,6 +51,7 @@ fn markdown_text(
             benchmark::csv_check_command(options)
         ),
         benchmark_context(fields, options),
+        fill_commands(options, output_path),
     ];
     if let Some(path) =
         artifact.filter(|path| path.extension().and_then(|value| value.to_str()) == Some("dmg"))
@@ -76,6 +77,17 @@ fn markdown_text(
     ));
     sections.push(rows.join("\n"));
     sections.join("\n\n")
+}
+
+fn fill_commands(options: &Options, output_path: &Path) -> String {
+    format!(
+        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n```",
+        commands::fill_release_gates_command(output_path),
+        commands::fill_benchmark_command(
+            output_path,
+            &options.output_dir.join("benchmark-results.csv")
+        )
+    )
 }
 
 fn benchmark_context(fields: &[markdown::Field], options: &Options) -> String {

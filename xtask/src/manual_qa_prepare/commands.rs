@@ -21,6 +21,21 @@ pub(super) fn manual_check_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn fill_release_gates_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-fill-release-gates '{}'",
+        shell_single_quote(path)
+    )
+}
+
+pub(super) fn fill_benchmark_command(path: &Path, csv: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-fill-benchmark '{}' '{}'",
+        shell_single_quote(path),
+        shell_single_quote(csv)
+    )
+}
+
 fn shell_single_quote(path: &Path) -> String {
     path.display().to_string().replace('\'', "'\\''")
 }
