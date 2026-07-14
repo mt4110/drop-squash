@@ -1,4 +1,4 @@
-use dropsquash_platform::InstallLocation;
+use dropsquash_platform::{ApplicationsInstall, InstallLocation};
 use serde::Serialize;
 
 use super::format_error;
@@ -12,9 +12,22 @@ pub struct InstallLocationDto {
     pub should_offer_applications_move: bool,
 }
 
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ApplicationsInstallDto {
+    pub source_path: String,
+    pub target_path: String,
+}
+
 pub fn load_install_location() -> Result<InstallLocationDto, String> {
     dropsquash_platform::current_install_location()
         .map(InstallLocationDto::from)
+        .map_err(format_error)
+}
+
+pub fn copy_to_applications() -> Result<ApplicationsInstallDto, String> {
+    dropsquash_platform::copy_current_app_to_applications()
+        .map(ApplicationsInstallDto::from)
         .map_err(format_error)
 }
 
@@ -29,13 +42,22 @@ impl From<InstallLocation> for InstallLocationDto {
     }
 }
 
+impl From<ApplicationsInstall> for ApplicationsInstallDto {
+    fn from(install: ApplicationsInstall) -> Self {
+        Self {
+            source_path: install.source_path.display().to_string(),
+            target_path: install.target_path.display().to_string(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
 
-    use dropsquash_platform::InstallLocation;
+    use dropsquash_platform::{ApplicationsInstall, InstallLocation};
 
-    use super::InstallLocationDto;
+    use super::{ApplicationsInstallDto, InstallLocationDto};
 
     #[test]
     fn dto_preserves_install_location_flags() {
@@ -50,5 +72,16 @@ mod tests {
         assert!(dto.running_from_disk_image);
         assert!(!dto.installed_in_applications);
         assert!(dto.should_offer_applications_move);
+    }
+
+    #[test]
+    fn dto_preserves_applications_install_paths() {
+        let dto = ApplicationsInstallDto::from(ApplicationsInstall {
+            source_path: PathBuf::from("/Volumes/DropSquash/DropSquash.app"),
+            target_path: PathBuf::from("/Applications/DropSquash.app"),
+        });
+
+        assert_eq!(dto.source_path, "/Volumes/DropSquash/DropSquash.app");
+        assert_eq!(dto.target_path, "/Applications/DropSquash.app");
     }
 }

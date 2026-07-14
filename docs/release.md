@@ -122,19 +122,20 @@ Gatekeeper no-warning evidence for the signed app.
 Do not promise automatic deletion of the downloaded `.dmg` after Finder copy or
 drag-to-Applications install: that copy path does not execute DropSquash code,
 and the installed app cannot reliably know the original downloaded DMG path.
-A later first-launch helper may detect that the app is running from `/Volumes`
-and offer an explicit in-app install action. That action may copy DropSquash to
-`/Applications`, relaunch from the installed app, and eject the mounted installer
-volume after a verified move. It must not delete the downloaded `.dmg` without
-an explicit user action, and it may only offer downloaded-installer cleanup when
-the backing `.dmg` path is known through a deterministic macOS API. If that path
-cannot be proven, keep the mounted-volume eject only.
+A first-launch helper detects when the app is running from `/Volumes` and offers
+an explicit in-app install action. That action copies DropSquash to
+`/Applications` without replacing an existing app. It does not relaunch, eject
+the mounted installer volume, or delete the downloaded `.dmg` yet. Future
+downloaded-installer cleanup must require an explicit user action, and may only
+be offered when the backing `.dmg` path is known through a deterministic macOS
+API. If that path cannot be proven, keep the mounted-volume eject only.
 The desktop command `load_install_location` currently provides the read-only
 preflight for that helper: it reports the current `.app` path, whether launch is
 from `/Volumes`, whether the app is already under `/Applications`, and whether
-the app may offer an Applications move. The desktop UI now uses that preflight
-to warn when DropSquash is running from the disk image. The move/eject/delete
-actions are not implemented yet.
+the app may offer an Applications move. The desktop UI uses that preflight to
+warn when DropSquash is running from the disk image, and `copy_to_applications`
+performs the user-triggered copy. Relaunch, mounted-volume eject, and downloaded
+`.dmg` cleanup remain future work.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the

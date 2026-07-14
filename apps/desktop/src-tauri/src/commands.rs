@@ -46,6 +46,11 @@ pub fn load_install_location() -> std::result::Result<install::InstallLocationDt
 }
 
 #[tauri::command(rename_all = "camelCase")]
+pub fn copy_to_applications() -> std::result::Result<install::ApplicationsInstallDto, String> {
+    install::copy_to_applications()
+}
+
+#[tauri::command(rename_all = "camelCase")]
 pub async fn convert(
     app_state: tauri::State<'_, crate::state::AppState>,
     window: tauri::WebviewWindow,

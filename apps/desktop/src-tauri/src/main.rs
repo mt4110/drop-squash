@@ -9,6 +9,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             commands::load_state,
             commands::load_install_location,
+            commands::copy_to_applications,
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,

@@ -45,6 +45,11 @@ export type InstallLocation = {
   shouldOfferApplicationsMove: boolean;
 };
 
+export type ApplicationsInstall = {
+  sourcePath: string;
+  targetPath: string;
+};
+
 export type ConversionSummary = {
   outputPath: string;
   originalBytes: number;

@@ -2,6 +2,10 @@ use std::path::{Path, PathBuf};
 
 use dropsquash_core::AppError;
 
+mod copy;
+
+pub use copy::{copy_app_bundle, copy_current_app_to_applications, ApplicationsInstall};
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InstallLocation {
     pub app_path: PathBuf,

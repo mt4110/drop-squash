@@ -1031,6 +1031,7 @@ dependencies = [
  "dropsquash-core",
  "objc2",
  "objc2-foundation",
+ "tempfile",
 ]
 
 [[package]]

@@ -228,6 +228,12 @@ body,
   min-width: 0;
 }
 
+.install-notice div {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+}
+
 .install-notice button {
   background: transparent;
   border: 0;

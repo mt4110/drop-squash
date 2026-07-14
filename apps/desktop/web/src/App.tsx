@@ -13,6 +13,7 @@ import { useConversionProgress } from "./hooks/useConversionProgress";
 import { useInstallLocation } from "./hooks/useInstallLocation";
 import { useRecordingDropEvents } from "./hooks/useRecordingDropEvents";
 import type {
+  ApplicationsInstall,
   ConversionSummary,
   ConvertRequest,
   DropZoneState,
@@ -63,6 +64,7 @@ export function App() {
   const [isDragging, setIsDragging] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isInstallNoticeDismissed, setIsInstallNoticeDismissed] = useState(false);
+  const [isMovingToApplications, setIsMovingToApplications] = useState(false);
   const [isTrashingOriginal, setIsTrashingOriginal] = useState(false);
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
@@ -342,6 +344,24 @@ export function App() {
     }
   }, []);
 
+  const moveToApplications = useCallback(async () => {
+    if (!isTauri()) {
+      return;
+    }
+
+    setIsMovingToApplications(true);
+    try {
+      const install = await invoke<ApplicationsInstall>("copy_to_applications");
+      await revealItemInDir(install.targetPath);
+      setIsInstallNoticeDismissed(true);
+      setError(undefined);
+    } catch (reason) {
+      setError(String(reason));
+    } finally {
+      setIsMovingToApplications(false);
+    }
+  }, []);
+
   const shellClassName = [
     "shell",
     queue.length > 0 ? "has-queue" : "",
@@ -366,7 +386,9 @@ export function App() {
       {shouldShowInstallNotice && (
         <InstallNotice
           appPath={installLocation.appPath}
+          isMoving={isMovingToApplications}
           onDismiss={() => setIsInstallNoticeDismissed(true)}
+          onMove={() => void moveToApplications()}
         />
       )}
       <DropZone
