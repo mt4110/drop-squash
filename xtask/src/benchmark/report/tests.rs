@@ -16,7 +16,7 @@ fn escapes_csv_path_cells() {
 
     assert!(text.contains("\"My, Recording.mov\""));
     assert!(text.contains("\"out \"\"quoted\"\".mp4\""));
-    assert!(text.contains(",8.000,2.000,0.500,50.0,0.500,4.000"));
+    assert!(text.contains(",8.000,2.000000,0.500,50.000000,0.500,4.000"));
 }
 
 #[test]
@@ -38,7 +38,23 @@ fn leaves_duration_and_speed_blank_when_probe_has_no_duration() {
         ..row()
     }]);
 
-    assert!(text.contains(",524288,,2.000,0.500,50.0,0.500,\n"));
+    assert!(text.contains(",524288,,2.000000,0.500,50.000000,0.500,\n"));
+}
+
+#[test]
+fn keeps_near_equal_smaller_outputs_below_one_ratio_and_above_zero_saved_percent() {
+    let text = csv::from_rows(&[BenchmarkRow {
+        backend: "apple-native".to_string(),
+        input: "tiny.mov".to_string(),
+        output: "tiny.mp4".to_string(),
+        original_bytes: 1_177_311,
+        output_bytes: 1_177_000,
+        elapsed: Duration::from_secs_f64(0.055),
+        duration: Some(Duration::from_secs_f64(8.012)),
+    }]);
+
+    assert!(!text.contains(",1.000000,"));
+    assert!(!text.contains(",0.000000,0.500,"));
 }
 
 #[test]

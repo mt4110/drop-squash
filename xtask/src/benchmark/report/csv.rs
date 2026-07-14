@@ -6,7 +6,7 @@ pub(super) fn from_rows(rows: &[BenchmarkRow]) -> String {
     );
     for row in rows {
         output.push_str(&format!(
-            "{},{},{},{},{},{},{:.3},{:.3},{:.1},{:.3},{}\n",
+            "{},{},{},{},{},{},{:.6},{:.3},{:.6},{:.3},{}\n",
             cell(&row.backend),
             cell(&row.input),
             cell(&row.output),
