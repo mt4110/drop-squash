@@ -25,6 +25,15 @@ normal Finder install path.
 This is intentional. Guessing from Finder state, Download folder contents, or
 file names would be fragile and could move the wrong file.
 
+## Install Path Decision
+
+| Install path | Downloaded-DMG cleanup decision |
+|---|---|
+| Finder drag-and-drop to `/Applications` | Not supported; DropSquash cannot observe the copy completion or prove the downloaded `.dmg` path. |
+| Finder copy-and-paste to `/Applications` | Not supported for the same reason as drag-and-drop. |
+| DropSquash in-app install action from the mounted disk image | Allowed later, only as an explicit user action after the installed app and backing `.dmg` are verified. |
+| Homebrew cask | Let Homebrew own install and uninstall cleanup. DropSquash must not move Homebrew-managed artifacts. |
+
 ## Allowed Product Path
 
 Downloaded-DMG cleanup may only be added to the explicit in-app install flow:
