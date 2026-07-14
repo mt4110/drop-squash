@@ -30,6 +30,8 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("cargo run -p xtask -- manual-qa-clean-draft"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-pending"));
     assert!(text.contains("--section packaged-app"));
+    assert!(text.contains("--section license"));
+    assert!(text.contains("--section distribution"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-check"));
     assert!(text.contains("Packaged app command:"));
     assert!(text.contains("open -- '"));

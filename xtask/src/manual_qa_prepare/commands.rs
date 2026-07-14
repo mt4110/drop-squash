@@ -35,6 +35,20 @@ pub(super) fn pending_packaged_app_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn pending_license_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section license",
+        shell_single_quote(path)
+    )
+}
+
+pub(super) fn pending_distribution_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section distribution",
+        shell_single_quote(path)
+    )
+}
+
 pub(super) fn fill_release_gates_command(path: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-fill-release-gates '{}'",
