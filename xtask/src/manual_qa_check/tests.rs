@@ -920,6 +920,22 @@ fn reports_benchmark_sample_set_with_missing_csv_file() {
 }
 
 #[test]
+fn reports_benchmark_sample_set_with_invalid_csv_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = directory.path().join("results.csv");
+    std::fs::write(&csv, "sample,duration_ms\nshort,100\n").unwrap();
+    let (_manual_directory, path) = write_manual_qa(&format!(
+        "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5 with csv={} |\n",
+        csv.display()
+    ));
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("benchmark-csv-check")));
+}
+
+#[test]
 fn reports_benchmark_sample_set_without_backend() {
     let (_directory, path) = write_manual_qa(
         "| Benchmark sample set | Short, medium, and large samples | three short medium large samples produced smaller outputs on MacBookPro18,4 macOS 26.5 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv |\n",
@@ -1903,8 +1919,20 @@ fn write_manual_qa(text: &str) -> (tempfile::TempDir, std::path::PathBuf) {
 
 fn csv_file(directory: &std::path::Path, name: &str) -> std::path::PathBuf {
     let path = directory.join(name);
-    std::fs::write(&path, "sample,duration_ms\nshort,100\n").unwrap();
+    std::fs::write(&path, benchmark_csv(3, 50)).unwrap();
     path
+}
+
+fn benchmark_csv(rows: usize, output_bytes: u64) -> String {
+    let mut text = String::from(
+        "backend,input,output,original_bytes,output_bytes,duration_s,elapsed_s,compression_ratio,saved_percent,throughput_mib_s,speed_ratio\n",
+    );
+    for index in 0..rows {
+        text.push_str(&format!(
+            "apple-native,short-{index}.mov,short-{index}.mp4,100,{output_bytes},8.000,2.000,0.500,50.0,0.500,4.000\n",
+        ));
+    }
+    text
 }
 
 fn template_labels(text: &str) -> Vec<String> {

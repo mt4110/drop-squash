@@ -11,18 +11,25 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
 }
 
 pub(super) fn validate_rows(rows: &[(String, String)], missing: &mut Vec<String>) {
-    let Some(command_csv) = csv_for(rows, BENCHMARK_COMMAND) else {
-        return;
-    };
-    let Some(sample_csv) = csv_for(rows, SAMPLE_SET) else {
-        return;
-    };
-    if command_csv == sample_csv {
-        return;
+    let command_csv = csv_for(rows, BENCHMARK_COMMAND);
+    let sample_csv = csv_for(rows, SAMPLE_SET);
+    for (label, path) in [
+        (BENCHMARK_COMMAND, command_csv.as_deref()),
+        (SAMPLE_SET, sample_csv.as_deref()),
+    ] {
+        if let Some(path) = path {
+            require_valid_csv(label, path, missing);
+        }
     }
-    missing.push(
-        "manual QA benchmark command and sample set must reference the same CSV path".to_string(),
-    );
+    if let (Some(command_csv), Some(sample_csv)) = (command_csv, sample_csv) {
+        if command_csv == sample_csv {
+            return;
+        }
+        missing.push(
+            "manual QA benchmark command and sample set must reference the same CSV path"
+                .to_string(),
+        );
+    }
 }
 
 fn require_sample_set(result: &str, missing: &mut Vec<String>) {
@@ -82,4 +89,12 @@ fn csv_for(rows: &[(String, String)], label: &str) -> Option<std::path::PathBuf>
     rows.iter()
         .find(|(row_label, _)| row_label == label)
         .and_then(|(_, value)| crate::csv_evidence::existing_outside_repo_path(value))
+}
+
+fn require_valid_csv(label: &str, path: &std::path::Path, missing: &mut Vec<String>) {
+    if let Err(error) = crate::benchmark_csv_check::validate_path(path) {
+        missing.push(format!(
+            "manual QA benchmark CSV for {label} must pass benchmark-csv-check: {error}"
+        ));
+    }
 }
