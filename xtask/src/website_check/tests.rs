@@ -37,7 +37,7 @@ fn accepts_local_links_with_fragments() {
     write(
         directory.path(),
         "pricing.html",
-        r#"<section id="plans">Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy</section>"#,
+        r#"<section id="plans">Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy</section>"#,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -310,7 +310,7 @@ fn rejects_secret_like_website_values() {
     write(
         directory.path(),
         "pricing.html",
-        "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy product_id=123",
+        "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy product_id=123",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -554,7 +554,7 @@ fn rejects_missing_pricing_refund_link() {
     write(
         directory.path(),
         "pricing.html",
-        "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy",
+        "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -571,7 +571,7 @@ fn rejects_pre_release_cta_copy() {
         "download.html",
         "macOS beta DropSquash.dmg notarization checksum release-status/ Download now",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Buy now");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Buy now");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -588,7 +588,7 @@ fn rejects_pre_release_beta_and_checkout_cta_copy() {
         "download.html",
         "macOS beta DropSquash.dmg notarization checksum release-status/ Download the beta",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Start checkout");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Start checkout");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -607,7 +607,7 @@ fn rejects_pre_release_product_and_platform_cta_copy() {
         "download.html",
         "macOS beta DropSquash.dmg notarization checksum release-status/ Download DropSquash. Download for macOS.",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Buy DropSquash");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Buy DropSquash");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -629,7 +629,7 @@ fn rejects_pre_release_get_and_trial_cta_copy() {
         "download.html",
         "macOS beta DropSquash.dmg notarization checksum release-status/ Get DropSquash",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Start free trial");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Start free trial");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -962,7 +962,7 @@ fn required_page_text(page: &str) -> &'static str {
         }
         "download.html" => "macOS beta DropSquash.dmg notarization checksum release-status/",
         "pricing.html" => {
-            "Checkout opens after signed beta release Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy"
+            "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy"
         }
         "privacy.html" => {
             "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 metadata_policy = preserve file names instead of absolute paths License activation contacts Lemon Squeezy updater is disabled"
