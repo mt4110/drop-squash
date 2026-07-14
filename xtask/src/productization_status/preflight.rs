@@ -41,6 +41,7 @@ fn manual_qa_lines(status: &str) -> Vec<String> {
         "preflight: manual QA is blocked by dirty git worktree".to_string(),
         crate::git_status::dirty_paths(status),
         "preflight next: commit, stash, or intentionally remove these changes, then rebuild the app artifact".to_string(),
+        "preflight clean worktree option: git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD".to_string(),
     ];
     lines.extend(next_commands());
     lines
@@ -84,20 +85,21 @@ mod tests {
         assert!(lines[0].contains("blocked"));
         assert_eq!(lines[1], " M docs/manual-qa.md");
         assert!(lines[2].contains("rebuild the app artifact"));
-        assert!(lines[3].contains("apps/desktop install --frozen-lockfile"));
-        assert!(lines[4].contains("apps/desktop/web install --frozen-lockfile"));
-        assert!(lines[5].contains("nix develop --command pnpm"));
-        assert!(lines[5].contains("tauri build"));
-        assert!(lines[6].contains("normalize-dmg"));
-        assert!(lines[7].contains("artifact-check"));
-        assert!(lines[8].contains("manual-qa-prepare"));
-        assert!(lines[8].contains("--reset-trial"));
-        assert!(lines[8].contains("/tmp/dropsquash-manual-qa-prepared.md"));
-        assert!(lines[9].contains("checksum"));
-        assert!(lines[9].contains("SHA256SUMS"));
-        assert!(lines[10].contains("benchmark-results.csv"));
-        assert!(lines[11].contains("benchmark-csv-check"));
-        assert!(lines[12].contains("manual-qa-check"));
-        assert!(lines[13].contains("--restore-state"));
+        assert!(lines[3].contains("git worktree add --detach"));
+        assert!(lines[4].contains("apps/desktop install --frozen-lockfile"));
+        assert!(lines[5].contains("apps/desktop/web install --frozen-lockfile"));
+        assert!(lines[6].contains("nix develop --command pnpm"));
+        assert!(lines[6].contains("tauri build"));
+        assert!(lines[7].contains("normalize-dmg"));
+        assert!(lines[8].contains("artifact-check"));
+        assert!(lines[9].contains("manual-qa-prepare"));
+        assert!(lines[9].contains("--reset-trial"));
+        assert!(lines[9].contains("/tmp/dropsquash-manual-qa-prepared.md"));
+        assert!(lines[10].contains("checksum"));
+        assert!(lines[10].contains("SHA256SUMS"));
+        assert!(lines[11].contains("benchmark-results.csv"));
+        assert!(lines[12].contains("benchmark-csv-check"));
+        assert!(lines[13].contains("manual-qa-check"));
+        assert!(lines[14].contains("--restore-state"));
     }
 }
