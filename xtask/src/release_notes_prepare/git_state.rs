@@ -27,10 +27,7 @@ pub(super) fn require_clean_worktree() -> Result<(), String> {
     if clean_status(&status) {
         return Ok(());
     }
-    Err(format!(
-        "release notes require a clean git worktree; dirty paths:\n{}",
-        dirty_paths(&status)
-    ))
+    Err(dirty_worktree_error(&status))
 }
 
 pub(super) fn clean_status(status: &str) -> bool {
@@ -41,9 +38,16 @@ pub(super) fn dirty_paths(status: &str) -> String {
     git_status::dirty_paths(status)
 }
 
+fn dirty_worktree_error(status: &str) -> String {
+    format!(
+        "release notes require a clean git worktree; dirty paths:\n{}\nuse a detached release worktree with `git worktree add --detach /tmp/dropsquash-release-$(git rev-parse --short HEAD) HEAD`, or commit, stash, or intentionally remove these changes before regenerating release notes",
+        dirty_paths(status)
+    )
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{clean_status, dirty_paths};
+    use super::{clean_status, dirty_paths, dirty_worktree_error};
 
     #[test]
     fn accepts_empty_git_status() {
@@ -60,6 +64,14 @@ mod tests {
         let summary = dirty_paths(" D old.md\n M docs/release.md\n");
 
         assert_eq!(summary, " D old.md\n M docs/release.md");
+    }
+
+    #[test]
+    fn dirty_error_explains_detached_worktree_option() {
+        let error = dirty_worktree_error(" D old.md\n");
+
+        assert!(error.contains("git worktree add --detach"));
+        assert!(error.contains("commit, stash, or intentionally remove"));
     }
 
     #[test]
