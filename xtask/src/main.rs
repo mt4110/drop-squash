@@ -5,6 +5,7 @@ mod benchmark_csv_check;
 mod checksum;
 mod csv_evidence;
 mod dmg;
+mod dmg_cleanup_claims;
 mod file_size_check;
 mod git_head_match;
 mod git_status;
