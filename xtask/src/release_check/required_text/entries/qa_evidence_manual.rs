@@ -34,6 +34,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
+        "benchmark CSV content validation via `benchmark-csv-check`",
+    ),
+    (
+        "docs/qa-evidence.md",
         "intended product license setup evidence",
     ),
     (

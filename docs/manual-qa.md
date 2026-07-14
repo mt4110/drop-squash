@@ -21,6 +21,9 @@ its path into this file:
 cargo run -p xtask -- benchmark-csv-check /absolute/path/to/results.csv
 ```
 
+`manual-qa-check` also revalidates the referenced benchmark CSV with the same
+CSV-content rules, so the recorded path must keep pointing to the checked file.
+
 For manual observation rows, do not write only `Pass`, `OK`, `Done`, `Works`,
 `Verified`, or `Observed expected behavior` in the result. Record the concrete
 evidence you saw, such as the generated file name, trial count, Finder
