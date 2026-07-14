@@ -72,9 +72,11 @@ The command also prints `manual QA Markdown fields:` followed by table rows
 that can be pasted into the macOS Packaged App field table.
 It also prints the release-set benchmark command and the matching
 `benchmark-csv-check` command, followed by Release Candidate benchmark rows
-that can be pasted into the table before filling concrete results. Replace the
-three input placeholders with the actual short, medium, and large local
-recording paths before running them.
+that can be pasted into the table before filling concrete results. The suggested
+CSV path lives under the prepared QA output folder so benchmark evidence and
+generated outputs stay together outside the repository. Replace the three input
+placeholders with the actual short, medium, and large local recording paths
+before running them.
 When the selected app artifact is `DropSquash.dmg`, it also prints
 `manual QA Release Candidate rows:` for the artifact-check and checksum rows.
 Pass `--markdown-output /tmp/dropsquash-manual-qa-prepared.md` to write those

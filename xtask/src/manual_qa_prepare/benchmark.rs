@@ -22,11 +22,7 @@ pub(super) fn print_plan(options: &Options) {
 }
 
 fn csv_output(options: &Options) -> PathBuf {
-    options
-        .output_dir
-        .parent()
-        .map(|parent| parent.join("dropsquash-benchmark-results.csv"))
-        .unwrap_or_else(|| PathBuf::from("/tmp/dropsquash-benchmark-results.csv"))
+    options.output_dir.join("benchmark-results.csv")
 }
 
 pub(super) fn rows() -> Vec<String> {
@@ -52,7 +48,7 @@ mod tests {
     use crate::manual_qa_prepare::options::Options;
 
     #[test]
-    fn places_csv_next_to_output_parent() {
+    fn places_csv_inside_prepared_output_directory() {
         let options = Options {
             app_artifact: None,
             app_state_dir: PathBuf::from("/tmp/app-state"),
@@ -66,7 +62,7 @@ mod tests {
 
         assert_eq!(
             csv_output(&options),
-            PathBuf::from("/tmp/dropsquash-benchmark-results.csv")
+            PathBuf::from("/tmp/dropsquash-manual-qa-output/benchmark-results.csv")
         );
     }
 
