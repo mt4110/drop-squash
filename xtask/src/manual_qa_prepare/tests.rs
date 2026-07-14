@@ -4,8 +4,9 @@ use super::options::Options;
 use super::output::{manual_check_line, open_artifact_line, sample_set_line};
 use super::output_helper::{
     clean_draft_line, fill_benchmark_line, fill_benchmark_threshold_line, fill_check_line,
-    fill_release_gates_line, pending_benchmark_line, pending_distribution_line, pending_line,
-    pending_license_line, pending_local_proof_line, pending_packaged_app_line,
+    fill_local_proof_line, fill_release_gates_line, pending_benchmark_line,
+    pending_distribution_line, pending_line, pending_license_line,
+    pending_local_proof_line, pending_packaged_app_line,
 };
 use super::require_reset_artifact;
 use super::reset_trial_lines;
@@ -144,6 +145,10 @@ fn helper_output_quotes_paths() {
     assert_eq!(
         fill_release_gates_line(&markdown),
         "manual QA Fill release gates command: cargo run -p xtask -- manual-qa-fill-release-gates '/tmp/QA Path'\\''s/prepared.md'"
+    );
+    assert_eq!(
+        fill_local_proof_line(&markdown, &output_dir),
+        "manual QA Fill local proof command: cargo run -p xtask -- manual-qa-fill-local-proof '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
     );
     assert_eq!(
         fill_benchmark_line(&markdown, &output_dir),

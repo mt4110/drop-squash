@@ -26,6 +26,7 @@ mod manual_qa_check;
 mod manual_qa_clean_draft;
 mod manual_qa_fill_benchmark_threshold;
 mod manual_qa_fill_check;
+mod manual_qa_fill_local_proof;
 mod manual_qa_pending;
 mod manual_qa_prepare;
 mod manual_qa_release_gate_fill;
@@ -73,6 +74,7 @@ fn main() {
             manual_qa_fill_benchmark_threshold::run(args.collect())
         }
         Some("manual-qa-fill-check") => manual_qa_fill_check::run(args.collect()),
+        Some("manual-qa-fill-local-proof") => manual_qa_fill_local_proof::run(args.collect()),
         Some("manual-qa-check") => manual_qa_check::run(args.collect()),
         Some("manual-qa-pending") => manual_qa_pending::run(args.collect()),
         Some("manual-qa-fill-release-gates") => manual_qa_release_gate_fill::run(args.collect()),
@@ -100,7 +102,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|benchmark-csv-check|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-clean-draft|manual-qa-fill-benchmark|manual-qa-fill-benchmark-threshold|manual-qa-fill-check|manual-qa-fill-release-gates|manual-qa-pending|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|benchmark-csv-check|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-clean-draft|manual-qa-fill-benchmark|manual-qa-fill-benchmark-threshold|manual-qa-fill-check|manual-qa-fill-local-proof|manual-qa-fill-release-gates|manual-qa-pending|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }

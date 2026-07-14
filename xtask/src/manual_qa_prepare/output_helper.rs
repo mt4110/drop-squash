@@ -9,6 +9,13 @@ pub(super) fn fill_release_gates_line(path: &Path) -> String {
     )
 }
 
+pub(super) fn fill_local_proof_line(path: &Path, output_dir: &Path) -> String {
+    format!(
+        "manual QA Fill local proof command: {}",
+        commands::fill_local_proof_command(path, &output_dir.join("benchmark-results.csv"))
+    )
+}
+
 pub(super) fn fill_benchmark_line(path: &Path, output_dir: &Path) -> String {
     format!(
         "manual QA Fill benchmark command: {}",
@@ -81,6 +88,7 @@ pub(super) fn pending_distribution_line(path: &Path) -> String {
 
 pub(super) fn print_helper_commands(path: &Path, output_dir: &Path) {
     println!("{}", fill_release_gates_line(path));
+    println!("{}", fill_local_proof_line(path, output_dir));
     println!("{}", fill_benchmark_line(path, output_dir));
     println!("{}", fill_benchmark_threshold_line(path, output_dir));
     println!("{}", clean_draft_line(path));

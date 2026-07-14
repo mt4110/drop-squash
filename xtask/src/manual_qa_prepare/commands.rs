@@ -70,6 +70,14 @@ pub(super) fn fill_release_gates_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn fill_local_proof_command(path: &Path, csv: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-fill-local-proof '{}' '{}'",
+        shell_single_quote(path),
+        shell_single_quote(csv)
+    )
+}
+
 pub(super) fn fill_benchmark_command(path: &Path, csv: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-fill-benchmark '{}' '{}'",
