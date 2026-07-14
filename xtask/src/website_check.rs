@@ -6,6 +6,7 @@ mod external_policy;
 mod href_policy;
 mod html_files;
 mod html_links;
+mod install_claims;
 mod local_links;
 mod platform_claims;
 mod pre_release_copy;
@@ -61,6 +62,7 @@ fn check_html(root: &Path, path: &Path, errors: &mut Vec<String>) -> Result<(), 
     if href_policy::has_placeholder_url(&text) {
         errors.push(format!("{} contains placeholder URL", path.display()));
     }
+    install_claims::check(path, &text, errors);
     for href in html_links::hrefs(&text) {
         href_policy::check(path, &href, errors);
         external_policy::check(path, &href, errors);

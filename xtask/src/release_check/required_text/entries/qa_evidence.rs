@@ -116,6 +116,10 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/qa-evidence.md", "native-encoder-unavailable message"),
     ("docs/qa-evidence.md", "short download CTAs"),
     ("docs/qa-evidence.md", "natural release copy"),
+    (
+        "docs/qa-evidence.md",
+        "unsupported DMG cleanup claim rejection",
+    ),
     ("docs/qa-evidence.md", "non-lowercase checksums"),
     ("docs/qa-evidence.md", "contradictory raw-key evidence"),
 ];
