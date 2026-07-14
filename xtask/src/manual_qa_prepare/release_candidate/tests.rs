@@ -1,4 +1,4 @@
-use super::{print_rows, rows};
+use super::{checksum_command, print_rows, rows};
 
 #[test]
 fn accepts_checked_dmg_artifact() {
@@ -14,7 +14,20 @@ fn accepts_checked_dmg_artifact() {
     assert!(rows[1].contains("lowercase SHA-256"));
     assert!(rows[1].contains("SHA256SUMS"));
     assert!(rows[1].contains("DropSquash.dmg"));
-    print_rows(&path).unwrap();
+    print_rows(&path, directory.path()).unwrap();
+}
+
+#[test]
+fn prints_checksum_command_for_prepared_output_folder() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("DropSquash.dmg");
+    let output_dir = directory.path().join("qa-output");
+
+    let command = checksum_command(&path, &output_dir);
+
+    assert!(command.contains("cargo run -p xtask -- checksum"));
+    assert!(command.contains(path.to_str().unwrap()));
+    assert!(command.contains(output_dir.join("SHA256SUMS").to_str().unwrap()));
 }
 
 #[test]
@@ -41,7 +54,7 @@ fn rejects_dmg_with_nix_reference() {
     let path = directory.path().join("DropSquash.dmg");
     std::fs::write(&path, dmg_bytes(b"/nix/store/abc")).unwrap();
 
-    let error = print_rows(&path).unwrap_err();
+    let error = print_rows(&path, directory.path()).unwrap_err();
 
     assert!(error.contains("/nix/store"));
 }

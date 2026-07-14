@@ -24,7 +24,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     packaged_app::print_rows();
     license_sandbox::print_plan();
     if let Some(path) = &artifact {
-        release_candidate::print_rows(path)?;
+        release_candidate::print_rows(path, &options.output_dir)?;
     }
     if let Some(path) = &options.markdown_output {
         prepared_markdown::write(path, &fields, artifact.as_deref())?;

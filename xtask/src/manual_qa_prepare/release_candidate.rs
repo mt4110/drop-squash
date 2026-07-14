@@ -4,11 +4,13 @@ const ARTIFACT_CHECK: &str = "`cargo run -p xtask -- artifact-check path/to/Drop
 const CHECKSUM: &str =
     "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`";
 
-pub(super) fn print_rows(path: &Path) -> Result<(), String> {
+pub(super) fn print_rows(path: &Path, output_dir: &Path) -> Result<(), String> {
     let rows = rows(path)?;
     if rows.is_empty() {
         return Ok(());
     }
+    println!("manual QA Checksum command:");
+    println!("{}", checksum_command(path, output_dir));
     println!("manual QA Release Candidate rows:");
     for row in rows {
         println!("{row}");
@@ -32,6 +34,15 @@ pub(super) fn rows(path: &Path) -> Result<Vec<String>, String> {
             path.display()
         ),
     ])
+}
+
+fn checksum_command(path: &Path, output_dir: &Path) -> String {
+    let output = output_dir.join("SHA256SUMS");
+    format!(
+        "cargo run -p xtask -- checksum {} --output {}",
+        path.display(),
+        output.display()
+    )
 }
 
 #[cfg(test)]
