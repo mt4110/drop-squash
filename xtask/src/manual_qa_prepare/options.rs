@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 mod path_policy;
 mod sample_set;
+mod validation;
 
 #[derive(Debug)]
 pub(super) struct Options {
@@ -36,7 +37,7 @@ impl Options {
                 .ok_or_else(|| format!("{arg} requires a value\n{}", usage()))?;
             options.set_path(&arg, value)?;
         }
-        options.validate()?;
+        validation::validate(&options)?;
         Ok(options)
     }
 
@@ -51,45 +52,6 @@ impl Options {
             other => return Err(format!("unknown manual QA prepare argument: {other}")),
         }
         Ok(())
-    }
-
-    fn validate(&self) -> Result<(), String> {
-        if self.reset_trial && self.restore_state {
-            return Err("--reset-trial and --restore-state cannot be combined".to_string());
-        }
-        if self.restore_state && self.has_prepare_only_input() {
-            return Err("--restore-state only accepts --app-state-dir and --state-dir".to_string());
-        }
-        if self.reset_trial && self.input_sample_set.is_none() {
-            return Err(
-                "--reset-trial requires --input-sample-set with short, medium, and large recordings"
-                    .to_string(),
-            );
-        }
-        if self
-            .input_sample_set
-            .as_deref()
-            .is_some_and(|value| !sample_set::is_valid(value))
-        {
-            return Err(
-                "--input-sample-set must mention local short, medium, and large recordings"
-                    .to_string(),
-            );
-        }
-        path_policy::require_outside_repo("--app-state-dir", &self.app_state_dir)?;
-        if let Some(path) = &self.markdown_output {
-            path_policy::require_outside_repo("--markdown-output", path)?;
-            require_markdown_file(path)?;
-        }
-        path_policy::require_outside_repo("--output-dir", &self.output_dir)?;
-        path_policy::require_outside_repo("--state-dir", &self.state_dir)?;
-        Ok(())
-    }
-
-    fn has_prepare_only_input(&self) -> bool {
-        self.app_artifact.is_some()
-            || self.input_sample_set.is_some()
-            || self.markdown_output.is_some()
     }
 
     fn default() -> Result<Self, String> {
@@ -113,11 +75,4 @@ impl Options {
 fn usage() -> String {
     "usage: cargo run -p xtask -- manual-qa-prepare [--reset-trial|--restore-state] [--app-artifact <path>] [--input-sample-set <text>] [--markdown-output <path>] [--state-dir <dir>] [--output-dir <dir>] [--app-state-dir <dir>]"
         .to_string()
-}
-
-fn require_markdown_file(path: &std::path::Path) -> Result<(), String> {
-    if path.extension().and_then(|value| value.to_str()) == Some("md") {
-        return Ok(());
-    }
-    Err("--markdown-output must point to a .md file".to_string())
 }
