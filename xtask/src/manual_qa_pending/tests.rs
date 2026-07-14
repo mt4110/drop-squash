@@ -86,3 +86,25 @@ fn filters_benchmark_rows_to_requested_section() {
     assert_eq!(groups.len(), 1);
     assert_eq!(groups[0].0, "Benchmark Evidence");
 }
+
+#[test]
+fn local_proof_filter_includes_packaged_app_and_benchmark() {
+    let groups = grouped(
+        &[
+            (
+                "Choose recording conversion".to_string(),
+                "Small `.mov` screen recording".to_string(),
+            ),
+            ("Benchmark sample set".to_string(), "Three samples".to_string()),
+            (
+                "Codesign verification".to_string(),
+                "Public DMG/app artifact verifies".to_string(),
+            ),
+        ],
+        Some("local-proof"),
+    );
+
+    assert_eq!(groups.len(), 2);
+    assert_eq!(groups[0].0, "Packaged App");
+    assert_eq!(groups[1].0, "Benchmark Evidence");
+}

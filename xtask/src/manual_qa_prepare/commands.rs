@@ -35,6 +35,13 @@ pub(super) fn pending_packaged_app_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn pending_local_proof_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section local-proof",
+        shell_single_quote(path)
+    )
+}
+
 pub(super) fn pending_license_command(path: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-pending '{}' --section license",

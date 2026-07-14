@@ -46,6 +46,7 @@ cargo run -p xtask -- manual-qa-fill-benchmark-threshold /tmp/dropsquash-manual-
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section packaged-app
+cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section local-proof
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section license
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section benchmark
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section distribution

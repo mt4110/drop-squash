@@ -81,9 +81,9 @@ fn matches_filter(name: &str, filter: &str) -> bool {
     let normalized = filter.to_ascii_lowercase();
     matches!(
         (name, normalized.as_str()),
-        ("Packaged App", "packaged-app" | "packaged" | "app")
+        ("Packaged App", "packaged-app" | "packaged" | "app" | "local-proof")
             | ("License Sandbox", "license-sandbox" | "license")
-            | ("Benchmark Evidence", "benchmark")
+            | ("Benchmark Evidence", "benchmark" | "local-proof")
             | ("Distribution And Signing", "distribution" | "signing")
     )
 }

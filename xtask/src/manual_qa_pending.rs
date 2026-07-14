@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 mod section;
 
-const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-pending <manual-qa.md> [--section packaged-app|license|benchmark|distribution]";
+const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-pending <manual-qa.md> [--section packaged-app|license|benchmark|distribution|local-proof]";
 
 #[cfg(test)]
 mod tests;
