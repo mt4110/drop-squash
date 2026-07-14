@@ -22,6 +22,9 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("Benchmark commands:"));
     assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
+    assert!(text.contains("Packaged app command:"));
+    assert!(text.contains("open -- '"));
+    assert!(text.contains("DropSquash.dmg'"));
     assert!(text.contains("Checksum command:"));
     assert!(text.contains("cargo run -p xtask -- checksum"));
     assert!(text.contains("SHA256SUMS"));
@@ -36,6 +39,22 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("`cargo run -p dropsquash -- license status`"));
     assert!(text.contains("artifact-check passed"));
     assert!(text.contains("SHA-256"));
+}
+
+#[test]
+fn quotes_packaged_app_command_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let nested = directory.path().join("QA Path's");
+    std::fs::create_dir(&nested).unwrap();
+    let artifact = nested.join("DropSquash.dmg");
+    let output = directory.path().join("prepared.md");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+
+    write(&output, &[], Some(&artifact), &options(directory.path())).unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+
+    assert!(text.contains("open -- '"));
+    assert!(text.contains("QA Path'\\''s/DropSquash.dmg'"));
 }
 
 #[test]

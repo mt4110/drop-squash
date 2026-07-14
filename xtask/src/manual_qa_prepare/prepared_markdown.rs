@@ -45,12 +45,24 @@ fn markdown_text(rows: &[String], artifact: Option<&Path>, options: &Options) ->
         artifact.filter(|path| path.extension().and_then(|value| value.to_str()) == Some("dmg"))
     {
         sections.push(format!(
+            "Packaged app command:\n\n```sh\n{}\n```",
+            open_dmg_command(path)
+        ));
+        sections.push(format!(
             "Checksum command:\n\n```sh\n{}\n```",
             release_candidate::checksum_command(path, &options.output_dir)
         ));
     }
     sections.push(rows.join("\n"));
     sections.join("\n\n")
+}
+
+fn open_dmg_command(path: &Path) -> String {
+    format!("open -- '{}'", shell_single_quote(path))
+}
+
+fn shell_single_quote(path: &Path) -> String {
+    path.display().to_string().replace('\'', "'\\''")
 }
 
 #[cfg(test)]
