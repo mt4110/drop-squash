@@ -32,6 +32,7 @@ const EXIT_PHRASES: &[(&str, &[&str])] = &[
             "release-status",
             "privacy",
             "pricing",
+            "license",
             "support",
             "download",
             "checkout",

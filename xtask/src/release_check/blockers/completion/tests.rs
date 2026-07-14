@@ -167,6 +167,15 @@ fn reports_public_website_completion_without_production_domain() {
 }
 
 #[test]
+fn reports_public_website_completion_without_license_page() {
+    let text = "| Public website deployment | Blocked | Production website production URL on dropsquash.app serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n";
+
+    let incomplete = incomplete_requirements(text);
+
+    assert!(incomplete.contains(&"Public website deployment"));
+}
+
+#[test]
 fn reports_pricing_completion_without_final_copy() {
     let text = "| Pricing finalized | Blocked | Production pricing page on dropsquash.app is published before checkout goes live | TBD | `https://...` |\n";
 
@@ -636,7 +645,7 @@ fn described_blockers() -> String {
         "| License network failure | Blocked | Friendly network error appears, existing valid local cache was checked, 64-character lowercase hex fingerprint and `instance_id` fields remain intact, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Expired license refresh | Blocked | attempted conversion with expired offline grace cache shows reconnect prompt, conversion is blocked before starting, local cache was checked, and raw key is absent from local cache | TBD | `docs/manual-qa.md` |\n",
         "| Local license forget | Blocked | Forgetting state disables action, confirmed local cache is removed, and observed app returns to trial or locked state | TBD | `docs/manual-qa.md` |\n",
-        "| Public website deployment | Blocked | Production website production URL on dropsquash.app serves the release-status, privacy, pricing, support, and download pages | TBD | `https://...` |\n",
+        "| Public website deployment | Blocked | Production website production URL on dropsquash.app serves the release-status, privacy, pricing, license, support, and download pages | TBD | `https://...` |\n",
         "| Pricing finalized | Blocked | Production pricing page on dropsquash.app is final, no draft price copy remains, and checkout goes live only after that | TBD | `https://...` |\n",
         "| Refund policy finalized | Blocked | Production refund policy is final on dropsquash.app and linked before checkout goes live | TBD | `https://...` |\n",
         "| Live checkout link | Blocked | Public pricing page opens the live `store.lemonsqueezy.com/checkout/buy/<id>` URL for the tested Lemon Squeezy checkout for the intended product | TBD | `https://...` |\n",

@@ -19,6 +19,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("Public website deployment", "release-status"),
     ("Public website deployment", "privacy"),
     ("Public website deployment", "pricing"),
+    ("Public website deployment", "license"),
     ("Public website deployment", "support"),
     ("Public website deployment", "download"),
     ("Pricing finalized", "Production pricing page"),

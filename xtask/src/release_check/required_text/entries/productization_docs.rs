@@ -119,6 +119,6 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "local fragment link guard"),
     (
         "docs/productization.md",
-        "Public web proof exit coverage for release-status, privacy, pricing, support, download, checkout, and refund",
+        "Public web proof exit coverage for release-status, privacy, pricing, license, support, download, checkout, and refund",
     ),
 ];

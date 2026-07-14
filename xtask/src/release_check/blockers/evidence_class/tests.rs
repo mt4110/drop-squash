@@ -252,6 +252,15 @@ fn reports_public_website_action_without_production_domain() {
 }
 
 #[test]
+fn reports_public_website_action_without_license_page() {
+    let text = "| Public website deployment | Public web | Deploy the production site on dropsquash.app and verify release-status, privacy, pricing, support, and download pages | Public website URL |\n";
+
+    let unclassified = unclassified_blockers(text);
+
+    assert!(unclassified.contains(&"Public website deployment"));
+}
+
+#[test]
 fn reports_refund_policy_action_without_linked_policy() {
     let text = "| Refund policy finalized | Public web | Publish the final refund policy URL before checkout goes live | Refund policy URL |\n";
 
@@ -498,7 +507,7 @@ fn action_for(blocker: &str) -> &'static str {
             "Use local forget action, confirm disabled while forgetting, confirm cache removal, and observe the trial or locked state"
         }
         "Public website deployment" => {
-            "Deploy the production site on dropsquash.app and verify release-status, privacy, pricing, support, and download pages"
+            "Deploy the production site on dropsquash.app and verify release-status, privacy, pricing, license, support, and download pages"
         }
         "Pricing finalized" => {
             "Publish the final pricing page URL on dropsquash.app and confirm no draft price copy remains before checkout goes live"

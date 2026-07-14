@@ -13,6 +13,7 @@ pub(super) fn for_blocker(blocker: &str) -> Option<&'static [&'static str]> {
             "release-status",
             "privacy",
             "pricing",
+            "license",
             "support",
             "download",
         ]),
