@@ -59,6 +59,7 @@ mod tests {
         let lines = manual_qa_lines("");
 
         assert!(lines[0].contains("can start"));
+        assert!(lines[1].contains("nix develop --command pnpm"));
         assert!(lines[1].contains("tauri build"));
         assert!(lines[2].contains("normalize-dmg"));
         assert!(lines[3].contains("artifact-check"));
@@ -79,6 +80,7 @@ mod tests {
         assert!(lines[0].contains("blocked"));
         assert_eq!(lines[1], " M docs/manual-qa.md");
         assert!(lines[2].contains("rebuild the app artifact"));
+        assert!(lines[3].contains("nix develop --command pnpm"));
         assert!(lines[3].contains("tauri build"));
         assert!(lines[4].contains("normalize-dmg"));
         assert!(lines[5].contains("artifact-check"));

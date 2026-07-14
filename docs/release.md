@@ -58,7 +58,7 @@ cargo test --workspace
 cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
 cargo run -p xtask -- release-check
-pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS

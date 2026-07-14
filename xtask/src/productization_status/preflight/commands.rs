@@ -12,8 +12,7 @@ pub(super) fn local_packaged_app() -> Vec<String> {
 }
 
 fn build() -> String {
-    "preflight build: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci"
-        .to_string()
+    "preflight build: nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci".to_string()
 }
 
 fn normalize() -> String {
