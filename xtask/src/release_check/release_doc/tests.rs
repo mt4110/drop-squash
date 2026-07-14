@@ -9,9 +9,11 @@ cargo test --workspace
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- manual-qa-prepare
+--input-sample-set
 cargo run -p xtask -- manual-qa-prepare --restore-state
 cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- benchmark-csv-check
+/tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS
 unsigned DMG as a QA artifact
