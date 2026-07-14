@@ -123,6 +123,10 @@ recording evidence:
 cargo run -p xtask -- manual-qa-prepare --restore-state
 ```
 
+When prepare used custom state paths, use the printed
+`trial state restore command` so restore uses the same `--app-state-dir` and
+`--state-dir` values as the reset.
+
 The unsigned Tauri build is only a packaging and QA input. Normalize the
 generated Tauri DMG to `DropSquash.dmg` before artifact checks, checksums,
 manual QA evidence, or public release notes refer to it. Public release still

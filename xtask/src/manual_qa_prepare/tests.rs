@@ -137,6 +137,10 @@ fn reset_trial_output_names_state_directory_and_files() {
     assert!(lines.contains("/tmp/Library/Application Support/DropSquash"));
     assert!(lines.contains("history.jsonl"));
     assert!(lines.contains("license.json"));
+    assert!(lines.contains(
+        "manual-qa-prepare --restore-state --app-state-dir '/tmp/Library/Application Support/DropSquash'"
+    ));
+    assert!(lines.contains("--state-dir '/tmp/dropsquash-qa-state'"));
 }
 
 #[test]

@@ -130,6 +130,10 @@ After QA, restore the backed up local state when needed:
 cargo run -p xtask -- manual-qa-prepare --restore-state
 ```
 
+If the prepare step used custom `--app-state-dir` or `--state-dir` values,
+use the printed `trial state restore command` so restore reads from and writes
+to the same locations that were used during reset.
+
 `--restore-state` copies only backed up `config.json`, `history.jsonl`, and
 `license.json` files back into the app state directory. It fails if the backup
 directory does not exist or contains no restorable state files, so an empty

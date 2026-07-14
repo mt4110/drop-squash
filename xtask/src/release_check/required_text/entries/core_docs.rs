@@ -11,6 +11,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/release.md", "outside the repository"),
     ("docs/release.md", "Application Support/DropSquash"),
+    ("docs/release.md", "trial state restore command"),
     (
         "docs/release.md",
         "release notes `Git commit` field to exactly",
@@ -101,6 +102,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/manual-qa.md", "clean git worktree"),
     ("docs/manual-qa.md", "CSV path outside repo"),
     ("docs/manual-qa.md", "Application Support/DropSquash"),
+    ("docs/manual-qa.md", "trial state restore command"),
     ("docs/manual-qa.md", "private store IDs"),
     (
         "docs/manual-qa.md",

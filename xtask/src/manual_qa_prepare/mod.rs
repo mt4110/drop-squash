@@ -63,7 +63,20 @@ fn reset_trial_lines(options: &Options) -> Vec<String> {
             options.app_state_dir.display()
         ),
         format!("trial state reset: {}", RESET_FILES.join(", ")),
+        format!("trial state restore command: {}", restore_command(options)),
     ]
+}
+
+fn restore_command(options: &Options) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-prepare --restore-state --app-state-dir '{}' --state-dir '{}'",
+        shell_single_quote(&options.app_state_dir),
+        shell_single_quote(&options.state_dir)
+    )
+}
+
+fn shell_single_quote(path: &std::path::Path) -> String {
+    path.display().to_string().replace('\'', "'\\''")
 }
 
 #[cfg(test)]
