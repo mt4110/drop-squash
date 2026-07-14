@@ -1,3 +1,5 @@
+import { TRIAL_COMPLETE_MESSAGE } from "../lib/licenseLock";
+
 type TrialBannerProps = {
   successfulConversions: number;
   trialLimit: number;
@@ -16,7 +18,7 @@ export function TrialBanner({
   const message = isPro
     ? "DropSquash Pro active"
     : isLocked
-      ? lockedMessage ?? "Trial complete"
+      ? lockedMessage ?? TRIAL_COMPLETE_MESSAGE
       : `${successfulConversions} of ${trialLimit} free conversions used`;
 
   return (

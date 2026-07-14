@@ -1,7 +1,7 @@
 import type { ConversionSummary } from "../lib/commands";
 import type { LockedReason } from "../lib/commands";
 import { displayPath, fileName, formatBytes, parentPath } from "../lib/format";
-import { lockedTitle } from "../lib/licenseLock";
+import { lockedMessage as defaultLockedMessage, lockedTitle } from "../lib/licenseLock";
 
 type DropZoneProps = {
   isBusy: boolean;
@@ -43,6 +43,7 @@ export function DropZone({
   const canTrashOriginal = result?.sourceAction === "ask-user";
   const receiptPath = result?.privacyReceiptPath;
   const lockTitle = lockedTitle(lockedReason);
+  const lockMessage = lockedMessage ?? defaultLockedMessage(lockedReason);
 
   return (
     <section
@@ -60,7 +61,7 @@ export function DropZone({
           : result
             ? fileName(result.outputPath)
           : isLocked
-            ? lockedMessage ?? "Enter a license key to continue"
+            ? lockMessage
             : `${inputExtensions.map((extension) => extension.toUpperCase()).join(" / ")} here`}
       </p>
       {result && <button className="saved-destination" title="Show output in Finder" type="button" onClick={() => onRevealOutput(result.outputPath)}>Saved {formatBytes(result.savedBytes)} to {displayPath(parentPath(result.outputPath))}</button>}
