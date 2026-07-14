@@ -88,6 +88,10 @@ pub(super) const CORE: &[Entry] = &[
     ("docs/qa-evidence.md", "Nix QA build preflight"),
     (
         "docs/qa-evidence.md",
+        "cargo test -p xtask productization_status",
+    ),
+    (
+        "docs/qa-evidence.md",
         "repository-local and relative app-state/state/output/markdown-output path rejection",
     ),
     ("docs/qa-evidence.md", "`.md` markdown-output rejection"),
