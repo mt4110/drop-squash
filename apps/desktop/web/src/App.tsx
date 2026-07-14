@@ -65,7 +65,7 @@ export function App() {
   const [progress, setProgress] = useState<number>();
   const [queue, setQueue] = useState<QueueEntry[]>([]);
   const stateRef = useRef<DropZoneState>(initialState);
-  const activeQueueId = useRef<number>();
+  const activeQueueId = useRef<number | undefined>(undefined);
   const currentLockedMessage = lockedMessage(state.lockedReason);
 
   useEffect(() => {
