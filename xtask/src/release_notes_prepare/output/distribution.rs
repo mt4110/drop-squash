@@ -10,6 +10,7 @@ pub(super) struct Fields<'a> {
 
 pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
     let checksum_path = checksum_path(fields.artifact_path);
+    let cask_path = "packaging/homebrew/Casks/dropsquash.rb";
     vec![
         "## Distribution".into(),
         format!("- SHA256SUMS line: {}  DropSquash.dmg", fields.sha256),
@@ -33,11 +34,17 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
         ),
         "Homebrew cask command:".into(),
         format!(
-            "cargo run -p xtask -- homebrew-cask {} {} {} https://github.com/mt4110/drop-squash",
-            fields.version, fields.artifact_url, fields.sha256
+            "cargo run -p xtask -- homebrew-cask {} {} {} https://github.com/mt4110/drop-squash > {}",
+            fields.version,
+            shell_arg(fields.artifact_url),
+            fields.sha256,
+            shell_arg(cask_path)
         ),
         "Homebrew cask check command:".into(),
-        "cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb /tmp/dropsquash-release-notes.md".into(),
+        format!(
+            "cargo run -p xtask -- homebrew-cask-check {} /tmp/dropsquash-release-notes.md",
+            shell_arg(cask_path)
+        ),
         "Homebrew tap PR evidence draft:".into(),
         "- Homebrew tap PR URL: pending tap PR; replace this line with the reviewed Homebrew tap PR URL".into(),
         format!(
