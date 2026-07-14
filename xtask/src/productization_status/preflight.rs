@@ -2,6 +2,8 @@ use std::process::Command;
 
 use super::model::Report;
 
+mod commands;
+
 pub(super) fn lines(report: &Report) -> Result<Vec<String>, String> {
     let Some(track) = report
         .tracks
@@ -45,44 +47,7 @@ fn manual_qa_lines(status: &str) -> Vec<String> {
 }
 
 fn next_commands() -> Vec<String> {
-    vec![
-        build_command(),
-        normalize_command(),
-        artifact_check_command(),
-        manual_qa_command(),
-        benchmark_command(),
-        csv_check_command(),
-        manual_check_command(),
-    ]
-}
-
-fn build_command() -> String {
-    "preflight build: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci"
-        .to_string()
-}
-
-fn normalize_command() -> String {
-    "preflight normalize: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg".to_string()
-}
-
-fn artifact_check_command() -> String {
-    "preflight artifact check: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg".to_string()
-}
-
-fn manual_qa_command() -> String {
-    "preflight after clean: cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set \"short, medium, and large local recordings\"".to_string()
-}
-
-fn benchmark_command() -> String {
-    "preflight benchmark: cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mov --input /absolute/path/to/medium.mov --input /absolute/path/to/large.mov --output-dir /tmp/dropsquash-manual-qa-output --csv-output /tmp/dropsquash-manual-qa-output/benchmark-results.csv".to_string()
-}
-
-fn csv_check_command() -> String {
-    "preflight benchmark check: cargo run -p xtask -- benchmark-csv-check /tmp/dropsquash-manual-qa-output/benchmark-results.csv".to_string()
-}
-
-fn manual_check_command() -> String {
-    "preflight final gate: cargo run -p xtask -- manual-qa-check".to_string()
+    commands::local_packaged_app()
 }
 
 #[cfg(test)]
