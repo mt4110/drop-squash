@@ -102,6 +102,9 @@ concrete manual observations.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, use
 absolute paths outside the repository so private app state, generated videos,
 and QA evidence cannot be committed or deleted by accident.
+Custom `--app-state-dir` values must still point at an
+`Application Support/DropSquash` directory so the generated `config.json`,
+`history.jsonl`, and `license.json` evidence matches `manual-qa-check`.
 
 Then start from a known trial state if the run is meant to verify trial counts.
 The reset command requires the sample-set description so the run cannot begin

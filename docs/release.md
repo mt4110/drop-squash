@@ -112,6 +112,10 @@ repository.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.
+Custom `--app-state-dir` values must still point at an
+`Application Support/DropSquash` directory, because `manual-qa-check` requires
+the generated `config.json`, `history.jsonl`, and `license.json` paths to match
+that app-support shape.
 If the QA run used a reset trial state, restore the backed up local state after
 recording evidence:
 
