@@ -9,7 +9,7 @@ type ApplicationsInstallState = {
   installedPath?: string;
   isMoving: boolean;
   isOpeningInstalledApp: boolean;
-  isEjectingInstallerVolume: boolean;
+  isQuittingAfterEject: boolean;
   didOpenInstalledApp: boolean;
   didEjectInstallerVolume: boolean;
   didCopyToApplications: boolean;
@@ -18,7 +18,7 @@ type ApplicationsInstallState = {
   dismissNotice: () => void;
   moveToApplications: () => Promise<void>;
   openInstalledApp: () => Promise<void>;
-  ejectInstallerVolume: () => Promise<void>;
+  quitAfterInstallerVolumeEject: () => Promise<void>;
   quitCurrentApp: () => Promise<void>;
 };
 
@@ -29,7 +29,7 @@ export function useApplicationsInstall(
   const [isDismissed, setIsDismissed] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
   const [isOpeningInstalledApp, setIsOpeningInstalledApp] = useState(false);
-  const [isEjectingInstallerVolume, setIsEjectingInstallerVolume] = useState(false);
+  const [isQuittingAfterEject, setIsQuittingAfterEject] = useState(false);
   const [didOpenInstalledApp, setDidOpenInstalledApp] = useState(false);
   const [didEjectInstallerVolume, setDidEjectInstallerVolume] = useState(false);
   const [installedPath, setInstalledPath] = useState<string>();
@@ -82,14 +82,14 @@ export function useApplicationsInstall(
     }
   }, [installedPath, onError, onReady]);
 
-  const ejectInstallerVolume = useCallback(async () => {
+  const quitAfterInstallerVolumeEject = useCallback(async () => {
     if (!isTauri() || !cleanup?.mountedVolumePath) {
       return;
     }
 
-    setIsEjectingInstallerVolume(true);
+    setIsQuittingAfterEject(true);
     try {
-      await invoke("eject_installer_volume", {
+      await invoke("quit_after_installer_volume_eject", {
         mountedVolumePath: cleanup.mountedVolumePath,
       });
       setDidEjectInstallerVolume(true);
@@ -97,7 +97,7 @@ export function useApplicationsInstall(
     } catch (reason) {
       onError(String(reason));
     } finally {
-      setIsEjectingInstallerVolume(false);
+      setIsQuittingAfterEject(false);
     }
   }, [cleanup?.mountedVolumePath, onError, onReady]);
 
@@ -118,7 +118,7 @@ export function useApplicationsInstall(
     installedPath,
     isMoving,
     isOpeningInstalledApp,
-    isEjectingInstallerVolume,
+    isQuittingAfterEject,
     didOpenInstalledApp,
     didEjectInstallerVolume,
     didCopyToApplications: Boolean(installedPath),
@@ -127,7 +127,7 @@ export function useApplicationsInstall(
     dismissNotice: () => setIsDismissed(true),
     moveToApplications,
     openInstalledApp,
-    ejectInstallerVolume,
+    quitAfterInstallerVolumeEject,
     quitCurrentApp,
   };
 }

@@ -1129,7 +1129,7 @@ fn packaged_result(label: &str) -> String {
         "Tester" => "Manual tester".into(),
         "Date" => "2026-07-11".into(),
         "Disk image launch notice" => {
-            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, Open opened the installed app, Eject requested mounted-volume eject, Quit closed the disk image copy, and did not delete the downloaded .dmg".into()
+            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, Open opened the installed app, Eject & Quit requested mounted-volume eject and closed the disk image copy, and did not delete the downloaded .dmg".into()
         }
         "Choose recording conversion" => {
             "saved smaller clip.squashed.mp4 and original remained in place".into()

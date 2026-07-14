@@ -66,6 +66,16 @@ pub fn quit_current_app(app: tauri::AppHandle) {
 }
 
 #[tauri::command(rename_all = "camelCase")]
+pub fn quit_after_installer_volume_eject(
+    app: tauri::AppHandle,
+    mounted_volume_path: String,
+) -> std::result::Result<(), String> {
+    install::eject_installer_volume(mounted_volume_path)?;
+    app.exit(0);
+    Ok(())
+}
+
+#[tauri::command(rename_all = "camelCase")]
 pub async fn convert(
     app_state: tauri::State<'_, crate::state::AppState>,
     window: tauri::WebviewWindow,

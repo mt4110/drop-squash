@@ -7,7 +7,7 @@ pub(super) fn print_rows() {
 
 pub(super) fn rows() -> Vec<String> {
     vec![
-        "| Disk image launch notice | Launch from mounted `DropSquash.dmg` before copying to Applications | App warns that it is running from the disk image; Move copies `DropSquash.app` to `/Applications` without replacing an existing app, reveals the copied app in Finder, keeps a post-copy notice visible, opens the installed app on request, can request mounted-volume eject, can quit the disk image copy after the installed app opens, and does not delete the downloaded `.dmg` |  |".to_string(),
+        "| Disk image launch notice | Launch from mounted `DropSquash.dmg` before copying to Applications | App warns that it is running from the disk image; Move copies `DropSquash.app` to `/Applications` without replacing an existing app, reveals the copied app in Finder, keeps a post-copy notice visible, opens the installed app on request, can request mounted-volume eject and quit the disk image copy, and does not delete the downloaded `.dmg` |  |".to_string(),
     ]
 }
 

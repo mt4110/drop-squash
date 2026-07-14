@@ -3,12 +3,12 @@ type InstallNoticeProps = {
   didCopyToApplications: boolean;
   didOpenInstalledApp: boolean;
   installedPath?: string;
-  isEjectingInstallerVolume: boolean;
+  isQuittingAfterEject: boolean;
   isMoving: boolean;
   isOpeningInstalledApp: boolean;
   shouldOfferInstallerVolumeEject: boolean;
   onDismiss: () => void;
-  onEjectInstallerVolume: () => void;
+  onQuitAfterInstallerVolumeEject: () => void;
   onMove: () => void;
   onOpenInstalledApp: () => void;
   onQuitCurrentApp: () => void;
@@ -19,23 +19,23 @@ export function InstallNotice({
   didCopyToApplications,
   didOpenInstalledApp,
   installedPath,
-  isEjectingInstallerVolume,
+  isQuittingAfterEject,
   isMoving,
   isOpeningInstalledApp,
   shouldOfferInstallerVolumeEject,
   onDismiss,
-  onEjectInstallerVolume,
+  onQuitAfterInstallerVolumeEject,
   onMove,
   onOpenInstalledApp,
   onQuitCurrentApp,
 }: InstallNoticeProps) {
   const message = didOpenInstalledApp
-    ? "The Applications copy is open. Quit this disk image copy, then eject the disk image."
+    ? "The Applications copy is open. Eject this disk image copy, or quit it manually."
     : didCopyToApplications
       ? "DropSquash was copied to Applications. Open that copy, then eject the disk image."
       : "DropSquash is running from the disk image. Move it to Applications before regular use.";
   const title = installedPath ?? appPath;
-  const isBusy = isMoving || isOpeningInstalledApp || isEjectingInstallerVolume;
+  const isBusy = isMoving || isOpeningInstalledApp || isQuittingAfterEject;
 
   return (
     <section className="install-notice" aria-label="Install notice">
@@ -53,8 +53,8 @@ export function InstallNotice({
         )}
         {didOpenInstalledApp && (
           shouldOfferInstallerVolumeEject && (
-            <button type="button" disabled={isBusy} onClick={onEjectInstallerVolume}>
-              {isEjectingInstallerVolume ? "Ejecting..." : "Eject"}
+            <button type="button" disabled={isBusy} onClick={onQuitAfterInstallerVolumeEject}>
+              {isQuittingAfterEject ? "Ejecting..." : "Eject & Quit"}
             </button>
           )
         )}

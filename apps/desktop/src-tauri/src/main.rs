@@ -13,6 +13,7 @@ fn main() {
             commands::eject_installer_volume,
             commands::open_installed_application,
             commands::quit_current_app,
+            commands::quit_after_installer_volume_eject,
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,
