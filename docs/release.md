@@ -167,7 +167,7 @@ the same URL, and update the `Refund policy finalized` row with the production
 `/refund` URL. Do not treat draft pricing or the draft refund page as paid-beta
 evidence.
 
-Check the local macOS signing and notarization environment before a signed build:
+Check the local macOS signing and notarization credentials before a signed build:
 
 ```sh
 cargo run -p xtask -- macos-signing-check
@@ -181,7 +181,8 @@ variables `APPLE_ID`, `APPLE_PASSWORD`, and `APPLE_TEAM_ID`. Do not commit these
 values. In GitHub Actions, signing requires `APPLE_CERTIFICATE` and
 `APPLE_CERTIFICATE_PASSWORD`, plus `APPLE_KEYCHAIN_PASSWORD` for the temporary
 keychain import; a local keychain identity name is not enough for a fresh
-runner. Use `macos-keychain-plan` to generate the `security create-keychain`,
+runner. The signing identity must be a Developer ID Application identity before
+public release. Use `macos-keychain-plan` to generate the `security create-keychain`,
 temporary keychain selection, certificate decode/import, and key partition list
 argv without printing secret values. Pair it with `macos-keychain-cleanup-plan`
 so the temporary keychain and decoded certificate cleanup argv are reviewed
@@ -206,7 +207,9 @@ cargo run -p xtask -- manual-qa-check
 ```
 
 Before a paid beta, complete the license sandbox rows in `docs/manual-qa.md`.
-They cover both cache safety and UI action state. Empty-key evidence must show
+They cover the Lemon Squeezy product setup, license keys enabled, sandbox test purchase,
+Live checkout URL, refund policy, cache safety, and UI action state.
+Empty-key evidence must show
 Activate is disabled and that no raw key, fingerprint, or instance was written.
 Invalid-key evidence must show submit is disabled while Activating, the error is
 friendly, and no raw key, fingerprint, or instance was written. Valid activation

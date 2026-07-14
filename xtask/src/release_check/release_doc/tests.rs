@@ -24,9 +24,15 @@ cargo run -p xtask -- artifact-check path/to/DropSquash.dmg
 signed, notarized, stapled, checked, and checksummed
 Gatekeeper no-warning evidence
 first public beta target
+Developer ID Application
+notarization credentials
 cargo run -p xtask -- macos-signing-check
 docs/release-blockers.md
 Lemon Squeezy product setup
+license keys enabled
+test purchase
+Live checkout URL
+refund policy
 Lemon Squeezy sandbox purchase
 Valid sandbox activation
 Empty key activation
@@ -36,6 +42,8 @@ Expired license refresh
 Local license forget
 cargo run -p xtask -- homebrew-cask 0.1.0
 cargo run -p xtask -- homebrew-cask-check
+brew install --cask
+brew uninstall --cask
 auto_updates false
 zap
 cargo run -p xtask -- release-notes-check

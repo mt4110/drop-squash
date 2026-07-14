@@ -33,6 +33,8 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
         "macos",
         &[
             "first public beta target",
+            "Developer ID Application",
+            "notarization credentials",
             "signed, notarized, stapled, checked, and checksummed",
             "Gatekeeper no-warning evidence",
             "cargo run -p xtask -- macos-signing-check",
@@ -43,6 +45,10 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
         &[
             "docs/release-blockers.md",
             "Lemon Squeezy product setup",
+            "license keys enabled",
+            "test purchase",
+            "Live checkout URL",
+            "refund policy",
             "Lemon Squeezy sandbox purchase",
             "Valid sandbox activation",
             "Empty key activation",
@@ -57,6 +63,8 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
         &[
             "cargo run -p xtask -- homebrew-cask 0.1.0",
             "cargo run -p xtask -- homebrew-cask-check",
+            "brew install --cask",
+            "brew uninstall --cask",
             "auto_updates false",
             "zap",
         ],
