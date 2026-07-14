@@ -126,8 +126,9 @@ A first-launch helper detects when the app is running from `/Volumes` and offers
 an explicit in-app install action. That action copies DropSquash to
 `/Applications` without replacing an existing app. The post-copy notice can
 open the installed app through native macOS APIs and quit the disk image copy
-after the installed app opens. It does not eject the mounted installer volume
-or delete the downloaded `.dmg` yet. Future
+after the installed app opens. It can also offer explicit mounted-volume eject
+through native macOS APIs when the install copy result proves the source volume.
+It does not delete the downloaded `.dmg` yet. Future
 downloaded-installer cleanup must require an explicit user action, and may only
 be offered when the backing `.dmg` path is known through a deterministic macOS
 API. If that path cannot be proven, keep the mounted-volume eject only.
@@ -143,8 +144,7 @@ deterministic backing `.dmg` path is proven. The desktop command
 bundle with native `NSWorkspace`, `quit_current_app` exits only after explicit
 user action, and `eject_installer_volume` uses native `NSWorkspace` eject on a
 validated direct `/Volumes` mount; they do not shell out and do not delete the
-downloaded `.dmg`. Eject execution UI after
-installed-app launch and downloaded `.dmg` cleanup remain future work.
+downloaded `.dmg`. Downloaded `.dmg` cleanup remains future work.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the

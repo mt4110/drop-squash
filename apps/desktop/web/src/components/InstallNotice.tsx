@@ -3,9 +3,12 @@ type InstallNoticeProps = {
   didCopyToApplications: boolean;
   didOpenInstalledApp: boolean;
   installedPath?: string;
+  isEjectingInstallerVolume: boolean;
   isMoving: boolean;
   isOpeningInstalledApp: boolean;
+  shouldOfferInstallerVolumeEject: boolean;
   onDismiss: () => void;
+  onEjectInstallerVolume: () => void;
   onMove: () => void;
   onOpenInstalledApp: () => void;
   onQuitCurrentApp: () => void;
@@ -16,9 +19,12 @@ export function InstallNotice({
   didCopyToApplications,
   didOpenInstalledApp,
   installedPath,
+  isEjectingInstallerVolume,
   isMoving,
   isOpeningInstalledApp,
+  shouldOfferInstallerVolumeEject,
   onDismiss,
+  onEjectInstallerVolume,
   onMove,
   onOpenInstalledApp,
   onQuitCurrentApp,
@@ -29,7 +35,7 @@ export function InstallNotice({
       ? "DropSquash was copied to Applications. Open that copy, then eject the disk image."
       : "DropSquash is running from the disk image. Move it to Applications before regular use.";
   const title = installedPath ?? appPath;
-  const isBusy = isMoving || isOpeningInstalledApp;
+  const isBusy = isMoving || isOpeningInstalledApp || isEjectingInstallerVolume;
 
   return (
     <section className="install-notice" aria-label="Install notice">
@@ -44,6 +50,13 @@ export function InstallNotice({
           <button type="button" disabled={isBusy} onClick={onOpenInstalledApp}>
             {isOpeningInstalledApp ? "Opening..." : "Open"}
           </button>
+        )}
+        {didOpenInstalledApp && (
+          shouldOfferInstallerVolumeEject && (
+            <button type="button" disabled={isBusy} onClick={onEjectInstallerVolume}>
+              {isEjectingInstallerVolume ? "Ejecting..." : "Eject"}
+            </button>
+          )
         )}
         {didOpenInstalledApp && (
           <button type="button" disabled={isBusy} onClick={onQuitCurrentApp}>Quit</button>

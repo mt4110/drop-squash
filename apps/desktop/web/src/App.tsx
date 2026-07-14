@@ -369,9 +369,12 @@ export function App() {
           didCopyToApplications={applicationsInstall.didCopyToApplications}
           didOpenInstalledApp={applicationsInstall.didOpenInstalledApp}
           installedPath={applicationsInstall.installedPath}
+          isEjectingInstallerVolume={applicationsInstall.isEjectingInstallerVolume}
           isMoving={applicationsInstall.isMoving}
           isOpeningInstalledApp={applicationsInstall.isOpeningInstalledApp}
+          shouldOfferInstallerVolumeEject={applicationsInstall.shouldOfferInstallerVolumeEject}
           onDismiss={applicationsInstall.dismissNotice}
+          onEjectInstallerVolume={() => void applicationsInstall.ejectInstallerVolume()}
           onMove={() => void applicationsInstall.moveToApplications()}
           onOpenInstalledApp={() => void applicationsInstall.openInstalledApp()}
           onQuitCurrentApp={() => void applicationsInstall.quitCurrentApp()}

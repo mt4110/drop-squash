@@ -11,6 +11,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["post-copy", "copied app", "after copy"],
             &["open", "opened"],
             &["installed app", "applications copy"],
+            &["eject", "ejected"],
             &["quit"],
             &["disk image copy", "mounted copy"],
             &[
