@@ -22,9 +22,7 @@ pub(super) fn validate(label: &str, value: &str, missing: &mut Vec<String>) {
         "History path" => state_path::validate(value, "history.jsonl", missing),
         "License cache path" => state_path::validate(value, "license.json", missing),
         "Tester" => validate_tester(value, missing),
-        "Date" if !date::is_iso(value) => {
-            missing.push("manual QA Date must use YYYY-MM-DD".to_string());
-        }
+        "Date" => date::validate(value, missing),
         _ => {}
     }
 }

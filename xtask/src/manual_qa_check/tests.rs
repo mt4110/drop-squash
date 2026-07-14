@@ -650,10 +650,18 @@ fn reports_unusable_historical_date() {
 
 #[test]
 fn accepts_leap_day() {
-    let (_directory, path) = write_manual_qa("| Date | 2028-02-29 |\n");
+    let (_directory, path) = write_manual_qa("| Date | 2024-02-29 |\n");
     let missing = check_file(&path).unwrap();
 
     assert!(!missing.iter().any(|error| error.contains("manual QA Date")));
+}
+
+#[test]
+fn reports_future_date() {
+    let (_directory, path) = write_manual_qa("| Date | 9999-01-01 |\n");
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("future")));
 }
 
 #[test]
