@@ -108,12 +108,15 @@ packaged-app path or through `--app-artifact <path>`:
 
 ```sh
 cargo run -p xtask -- manual-qa-prepare --reset-trial --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set "short, medium, and large local recordings" --markdown-output /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output /tmp/dropsquash-manual-qa-output/SHA256SUMS
 ```
 
 `--reset-trial` removes only `history.jsonl` and `license.json`, and only after
 copying any existing state into the backup directory. The command prints the
 app state source and reset path; confirm they point to the DropSquash app
 support directory before starting observations.
+The checksum command writes the release-candidate `SHA256SUMS` evidence into
+the prepared output folder so checksum evidence stays outside the repository.
 
 After QA, restore the backed up local state when needed:
 

@@ -6,6 +6,7 @@ pub(super) fn local_packaged_app() -> Vec<String> {
         normalize(),
         artifact_check(),
         manual_qa(),
+        checksum(),
         benchmark(),
         csv_check(),
         manual_check(),
@@ -35,6 +36,10 @@ fn artifact_check() -> String {
 
 fn manual_qa() -> String {
     "preflight after clean: cargo run -p xtask -- manual-qa-prepare --reset-trial --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set \"short, medium, and large local recordings\" --markdown-output /tmp/dropsquash-manual-qa-prepared.md".to_string()
+}
+
+fn checksum() -> String {
+    "preflight checksum: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output /tmp/dropsquash-manual-qa-output/SHA256SUMS".to_string()
 }
 
 fn benchmark() -> String {

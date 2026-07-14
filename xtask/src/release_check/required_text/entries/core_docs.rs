@@ -87,6 +87,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/manual-qa.md",
+        "checksum target/release/bundle/dmg/DropSquash.dmg --output /tmp/dropsquash-manual-qa-output/SHA256SUMS",
+    ),
+    (
+        "docs/manual-qa.md",
+        "checksum evidence stays outside the repository",
+    ),
+    (
+        "docs/manual-qa.md",
         "Manual QA does not replace the required release notes URL fields",
     ),
     ("docs/manual-qa.md", "clean git worktree"),
