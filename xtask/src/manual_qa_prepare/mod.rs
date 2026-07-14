@@ -1,4 +1,5 @@
 mod artifact;
+mod benchmark;
 mod build_identity;
 mod environment;
 mod git_state;

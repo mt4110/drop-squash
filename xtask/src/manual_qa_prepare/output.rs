@@ -1,6 +1,6 @@
 use super::{
-    artifact::qa_artifact, build_identity::BuildIdentity, environment::Environment, markdown,
-    markdown::Field, options::Options, prepared_markdown, release_candidate,
+    artifact::qa_artifact, benchmark, build_identity::BuildIdentity, environment::Environment,
+    markdown, markdown::Field, options::Options, prepared_markdown, release_candidate,
 };
 
 pub(super) fn print_paths(options: &Options) -> Result<(), String> {
@@ -13,6 +13,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     fields.push(("App build", app_build));
     print_artifact(&artifact, &mut fields);
     print_sample_set(options, &mut fields);
+    benchmark::print_plan(options);
     let environment = Environment::current(options)?;
     for line in environment.manual_qa_lines() {
         println!("{line}");
