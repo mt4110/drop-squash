@@ -12,6 +12,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("release-status/index.html", "../download.html"),
     ("release-status/index.html", "../pricing.html"),
     ("release-status/index.html", "../privacy.html"),
+    ("release-status/index.html", "../license.html"),
     ("release-status/index.html", "../support.html"),
     ("release-status/index.html", "../refund.html"),
     ("download.html", "macOS beta"),

@@ -110,10 +110,25 @@ fn accepts_nested_release_status_page() {
     write(
         directory.path(),
         "release-status/index.html",
-        r#"Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../support.html ../refund.html <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
+        r#"Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../license.html ../support.html ../refund.html <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
+}
+
+#[test]
+fn rejects_release_status_without_license_link() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "release-status/index.html",
+        "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../support.html ../refund.html",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("../license.html")));
 }
 
 #[test]
@@ -958,7 +973,7 @@ fn required_page_text(page: &str) -> &'static str {
     match page {
         "index.html" => "Release status",
         "release-status/index.html" => {
-            "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../support.html ../refund.html"
+            "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../license.html ../support.html ../refund.html"
         }
         "download.html" => {
             "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/"
