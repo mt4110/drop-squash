@@ -4,7 +4,7 @@ use super::options::Options;
 use super::output::{manual_check_line, open_artifact_line, sample_set_line};
 use super::output_helper::{
     clean_draft_line, fill_benchmark_line, fill_benchmark_threshold_line, fill_check_line,
-    fill_release_gates_line, pending_distribution_line, pending_line,
+    fill_release_gates_line, pending_benchmark_line, pending_distribution_line, pending_line,
     pending_license_line, pending_packaged_app_line,
 };
 use super::require_reset_artifact;
@@ -168,6 +168,10 @@ fn helper_output_quotes_paths() {
     assert_eq!(
         pending_license_line(&markdown),
         "manual QA License pending command: cargo run -p xtask -- manual-qa-pending '/tmp/QA Path'\\''s/prepared.md' --section license"
+    );
+    assert_eq!(
+        pending_benchmark_line(&markdown),
+        "manual QA Benchmark pending command: cargo run -p xtask -- manual-qa-pending '/tmp/QA Path'\\''s/prepared.md' --section benchmark"
     );
     assert_eq!(
         pending_distribution_line(&markdown),

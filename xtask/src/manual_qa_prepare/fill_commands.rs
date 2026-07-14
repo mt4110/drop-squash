@@ -4,7 +4,7 @@ use super::{commands, options::Options};
 
 pub(super) fn block(options: &Options, output_path: &Path) -> String {
     format!(
-        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n```",
+        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n```",
         commands::fill_release_gates_command(output_path),
         commands::fill_benchmark_command(
             output_path,
@@ -18,6 +18,7 @@ pub(super) fn block(options: &Options, output_path: &Path) -> String {
         commands::pending_command(output_path),
         commands::pending_packaged_app_command(output_path),
         commands::pending_license_command(output_path),
+        commands::pending_benchmark_command(output_path),
         commands::pending_distribution_command(output_path),
         commands::fill_check_command(output_path)
     )

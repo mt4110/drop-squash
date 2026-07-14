@@ -26,6 +26,11 @@ pub(super) const LICENSE: &[&str] = &[
     "Forget license on this Mac",
     "`cargo run -p dropsquash -- license status`",
 ];
+pub(super) const BENCHMARK: &[&str] = &[
+    "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`",
+    "Benchmark sample set",
+    "Benchmark regression threshold",
+];
 
 pub(super) fn grouped(
     rows: &[(String, String)],
@@ -33,6 +38,7 @@ pub(super) fn grouped(
 ) -> Vec<(&'static str, Vec<(String, String)>)> {
     let mut packaged = Vec::new();
     let mut license = Vec::new();
+    let mut benchmark = Vec::new();
     let mut distribution = Vec::new();
     for (label, expected) in rows {
         let row = (label.clone(), expected.clone());
@@ -40,6 +46,8 @@ pub(super) fn grouped(
             packaged.push(row);
         } else if LICENSE.contains(&label.as_str()) {
             license.push(row);
+        } else if BENCHMARK.contains(&label.as_str()) {
+            benchmark.push(row);
         } else {
             distribution.push(row);
         }
@@ -47,6 +55,7 @@ pub(super) fn grouped(
     let mut groups = Vec::new();
     push_group(&mut groups, "Packaged App", packaged, filter);
     push_group(&mut groups, "License Sandbox", license, filter);
+    push_group(&mut groups, "Benchmark Evidence", benchmark, filter);
     push_group(
         &mut groups,
         "Distribution And Signing",
@@ -74,6 +83,7 @@ fn matches_filter(name: &str, filter: &str) -> bool {
         (name, normalized.as_str()),
         ("Packaged App", "packaged-app" | "packaged" | "app")
             | ("License Sandbox", "license-sandbox" | "license")
+            | ("Benchmark Evidence", "benchmark")
             | ("Distribution And Signing", "distribution" | "signing")
     )
 }

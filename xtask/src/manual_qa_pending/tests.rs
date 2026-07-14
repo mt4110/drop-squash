@@ -32,6 +32,10 @@ fn groups_pending_rows_by_section() {
                 "Sandbox activation".to_string(),
             ),
             (
+                "Benchmark sample set".to_string(),
+                "Three samples".to_string(),
+            ),
+            (
                 "Codesign verification".to_string(),
                 "Public DMG/app artifact verifies".to_string(),
             ),
@@ -41,7 +45,8 @@ fn groups_pending_rows_by_section() {
 
     assert_eq!(groups[0].0, "Packaged App");
     assert_eq!(groups[1].0, "License Sandbox");
-    assert_eq!(groups[2].0, "Distribution And Signing");
+    assert_eq!(groups[2].0, "Benchmark Evidence");
+    assert_eq!(groups[3].0, "Distribution And Signing");
 }
 
 #[test]
@@ -69,4 +74,15 @@ fn filters_grouped_rows_to_requested_section() {
 
     assert_eq!(groups.len(), 1);
     assert_eq!(groups[0].0, "Packaged App");
+}
+
+#[test]
+fn filters_benchmark_rows_to_requested_section() {
+    let groups = grouped(
+        &[("Benchmark sample set".to_string(), "Three samples".to_string())],
+        Some("benchmark"),
+    );
+
+    assert_eq!(groups.len(), 1);
+    assert_eq!(groups[0].0, "Benchmark Evidence");
 }

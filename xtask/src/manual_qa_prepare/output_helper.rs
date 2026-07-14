@@ -58,6 +58,13 @@ pub(super) fn pending_license_line(path: &Path) -> String {
     )
 }
 
+pub(super) fn pending_benchmark_line(path: &Path) -> String {
+    format!(
+        "manual QA Benchmark pending command: {}",
+        commands::pending_benchmark_command(path)
+    )
+}
+
 pub(super) fn pending_distribution_line(path: &Path) -> String {
     format!(
         "manual QA Distribution pending command: {}",
@@ -73,6 +80,7 @@ pub(super) fn print_helper_commands(path: &Path, output_dir: &Path) {
     println!("{}", pending_line(path));
     println!("{}", pending_packaged_app_line(path));
     println!("{}", pending_license_line(path));
+    println!("{}", pending_benchmark_line(path));
     println!("{}", pending_distribution_line(path));
     println!("{}", fill_check_line(path));
 }

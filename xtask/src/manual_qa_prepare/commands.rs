@@ -42,6 +42,13 @@ pub(super) fn pending_license_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn pending_benchmark_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section benchmark",
+        shell_single_quote(path)
+    )
+}
+
 pub(super) fn pending_distribution_command(path: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-pending '{}' --section distribution",
