@@ -28,6 +28,13 @@ pub(super) fn pending_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn pending_packaged_app_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section packaged-app",
+        shell_single_quote(path)
+    )
+}
+
 pub(super) fn fill_release_gates_command(path: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-fill-release-gates '{}'",

@@ -45,6 +45,7 @@ cargo run -p xtask -- manual-qa-fill-benchmark-threshold /tmp/dropsquash-manual-
 cargo run -p xtask -- manual-qa-fill-benchmark-threshold /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv /absolute/path/to/baseline-results.csv
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section packaged-app
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```
 
