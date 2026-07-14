@@ -20,6 +20,9 @@ pub(super) fn field<'a>(manual: &'a str, name: &str) -> Option<&'a str> {
             .split('|')
             .map(str::trim)
             .collect::<Vec<_>>();
-        (cells.len() == 2 && cells[0] == name).then_some(cells[1])
+        if cells.len() != 2 || cells[0] != name {
+            return None;
+        }
+        Some(cells[1])
     })
 }
