@@ -15,6 +15,10 @@ pub(super) fn print_plan(options: &Options) {
         "cargo run -p xtask -- benchmark-csv-check {}",
         csv.display()
     );
+    println!("manual QA Benchmark observation rows:");
+    for row in rows() {
+        println!("{row}");
+    }
 }
 
 fn csv_output(options: &Options) -> PathBuf {
@@ -25,11 +29,26 @@ fn csv_output(options: &Options) -> PathBuf {
         .unwrap_or_else(|| PathBuf::from("/tmp/dropsquash-benchmark-results.csv"))
 }
 
+pub(super) fn rows() -> Vec<String> {
+    vec![
+        format!(
+            "| {} | Existing absolute `.csv` path recorded outside repo for three local samples; outputs are smaller |  |",
+            command_label()
+        ),
+        "| Benchmark sample set | Three short, medium, and large private local recordings produce smaller outputs and are recorded with backend, saved percent, duration, speed ratio, existing absolute CSV path outside repo, machine, and OS context |  |".to_string(),
+        "| Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples against the same-machine release candidate baseline without a documented reason |  |".to_string(),
+    ]
+}
+
+fn command_label() -> &'static str {
+    "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`"
+}
+
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
 
-    use super::csv_output;
+    use super::{csv_output, rows};
     use crate::manual_qa_prepare::options::Options;
 
     #[test]
@@ -49,5 +68,29 @@ mod tests {
             csv_output(&options),
             PathBuf::from("/tmp/dropsquash-benchmark-results.csv")
         );
+    }
+
+    #[test]
+    fn generated_rows_match_required_manual_qa_checks() {
+        let rows = rows().join("\n");
+
+        for check in [
+            "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`",
+            "Benchmark sample set",
+            "Benchmark regression threshold",
+        ] {
+            assert!(crate::manual_qa_check::requirements::REQUIRED_CHECKS.contains(&check));
+            assert!(rows.contains(check));
+        }
+    }
+
+    #[test]
+    fn generated_rows_exist_in_manual_qa_template() {
+        let template = std::fs::read_to_string("../docs/manual-qa.md").unwrap();
+
+        for row in rows() {
+            let check = row.split('|').nth(1).unwrap().trim();
+            assert!(template.contains(check));
+        }
     }
 }
