@@ -49,6 +49,7 @@ fn next_commands() -> Vec<String> {
         manual_qa_command(),
         benchmark_command(),
         csv_check_command(),
+        manual_check_command(),
     ]
 }
 
@@ -64,6 +65,10 @@ fn csv_check_command() -> String {
     "preflight benchmark check: cargo run -p xtask -- benchmark-csv-check /tmp/dropsquash-manual-qa-output/benchmark-results.csv".to_string()
 }
 
+fn manual_check_command() -> String {
+    "preflight final gate: cargo run -p xtask -- manual-qa-check".to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::manual_qa_lines;
@@ -77,6 +82,7 @@ mod tests {
         assert!(lines[1].contains("--app-artifact"));
         assert!(lines[2].contains("benchmark --release-set"));
         assert!(lines[3].contains("benchmark-csv-check"));
+        assert!(lines[4].contains("manual-qa-check"));
     }
 
     #[test]
@@ -89,5 +95,6 @@ mod tests {
         assert!(lines[3].contains("manual-qa-prepare"));
         assert!(lines[4].contains("benchmark-results.csv"));
         assert!(lines[5].contains("benchmark-csv-check"));
+        assert!(lines[6].contains("manual-qa-check"));
     }
 }
