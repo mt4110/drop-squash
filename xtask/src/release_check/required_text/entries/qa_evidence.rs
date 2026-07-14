@@ -85,6 +85,7 @@ pub(super) const CORE: &[Entry] = &[
         "missing update manifests while updater is disabled",
     ),
     ("docs/qa-evidence.md", "clean git worktree preflight"),
+    ("docs/qa-evidence.md", "Nix QA build preflight"),
     (
         "docs/qa-evidence.md",
         "repository-local and relative app-state/state/output/markdown-output path rejection",
