@@ -72,6 +72,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/benchmarking.md", "20%"),
     ("docs/manual-qa.md", "manual QA Markdown fields"),
     ("docs/manual-qa.md", "manual QA Release Candidate rows"),
+    ("docs/manual-qa.md", "productization status gate"),
+    (
+        "docs/manual-qa.md",
+        "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
+    ),
     (
         "docs/manual-qa.md",
         "Manual QA does not replace the required release notes URL fields",

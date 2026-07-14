@@ -48,6 +48,16 @@ of deleting it:
 cargo run -p xtask -- manual-qa-prepare
 ```
 
+Before building the QA artifact, run the productization status gate and follow
+its Local packaged-app proof preflight:
+
+```sh
+cargo run -p xtask -- productization-status
+nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
+cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
+cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
+```
+
 Use an app artifact built from a clean git worktree. If the build reported a
 dirty tree, rebuild after committing or intentionally removing the unrelated
 local change before recording packaged-app evidence.
