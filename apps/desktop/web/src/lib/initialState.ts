@@ -8,12 +8,9 @@ export const initialState: DropZoneState = {
   profiles: [
     { value: "auto", label: "Auto" },
     { value: "slack", label: "Slack" },
-    { value: "teams", label: "Microsoft Teams" },
-    { value: "discord", label: "Discord" },
-    { value: "chatwork", label: "Chatwork" },
-    { value: "line", label: "LINE" },
-    { value: "whatsapp", label: "WhatsApp" },
     { value: "docs", label: "Docs" },
+    { value: "archive", label: "Archive" },
+    { value: "privacy", label: "Privacy" },
   ],
   outputSizes: [
     { value: "auto", label: "Auto" },

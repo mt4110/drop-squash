@@ -42,6 +42,23 @@ impl Profile {
         Self::Docs,
     ];
 
+    pub const DESKTOP: [Self; 5] = [
+        Self::Auto,
+        Self::Slack,
+        Self::Docs,
+        Self::Archive,
+        Self::Privacy,
+    ];
+
+    pub fn desktop_profile(self) -> Self {
+        match self {
+            Self::Teams | Self::Discord | Self::Chatwork | Self::Line | Self::WhatsApp => {
+                Self::Slack
+            }
+            Self::Auto | Self::Slack | Self::Docs | Self::Archive | Self::Privacy => self,
+        }
+    }
+
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Auto => "auto",

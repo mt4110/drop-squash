@@ -74,9 +74,9 @@ pub fn drop_zone_state(
     DropZoneState {
         product_name: "DropSquash",
         output_dir: config.output_dir.display().to_string(),
-        profile: config.default_profile,
+        profile: config.default_profile.desktop_profile(),
         output_size: config.default_output_size,
-        profiles: profile_options(Profile::DELIVERY),
+        profiles: profile_options(&Profile::DESKTOP),
         output_sizes: size_options(OutputSize::ALL),
         input_extensions,
         source_policy: config.source_policy,

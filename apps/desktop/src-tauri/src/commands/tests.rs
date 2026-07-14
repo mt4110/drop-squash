@@ -18,11 +18,30 @@ fn exposes_placeholder_drop_zone_state() {
     assert_eq!(state.privacy_mode, "local-only");
     assert_eq!(state.output_size, OutputSize::Auto);
     assert!(state.write_privacy_receipt);
-    assert_eq!(state.profiles.len(), Profile::DELIVERY.len());
+    assert_eq!(state.profiles.len(), Profile::DESKTOP.len());
     assert_eq!(state.output_sizes.len(), OutputSize::ALL.len());
     assert_eq!(state.input_extensions, ["mov", "mp4", "m4v"]);
     assert!(!state.is_locked);
     assert_eq!(state.locked_reason, None);
+}
+
+#[test]
+fn maps_hidden_delivery_profiles_to_chat_profile() {
+    let config = AppConfig {
+        default_profile: Profile::Discord,
+        ..AppConfig::default()
+    };
+
+    let state = drop_zone_state(
+        &config,
+        LicenseState::Trial(dropsquash_core::TrialState {
+            successful_conversions: 0,
+            limit: TRIAL_CONVERSION_LIMIT,
+        }),
+        vec!["mov".to_string()],
+    );
+
+    assert_eq!(state.profile, Profile::Slack);
 }
 
 #[test]

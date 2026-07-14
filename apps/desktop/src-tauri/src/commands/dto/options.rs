@@ -22,9 +22,10 @@ pub struct SourcePolicyOption {
     pub label: &'static str,
 }
 
-pub fn profile_options(values: [Profile; 8]) -> Vec<ProfileOption> {
+pub fn profile_options(values: &[Profile]) -> Vec<ProfileOption> {
     values
-        .into_iter()
+        .iter()
+        .copied()
         .map(|value| ProfileOption {
             value,
             label: value.display_name(),

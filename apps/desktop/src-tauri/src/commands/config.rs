@@ -62,7 +62,7 @@ pub fn save_config(
     let config_path = default_config_path();
     let mut config = AppConfig::load_or_default(&config_path).map_err(format_error)?;
     config.output_dir = output_dir;
-    config.default_profile = profile;
+    config.default_profile = profile.desktop_profile();
     config.default_output_size = output_size;
     config.source_policy = source_policy;
     config.write_privacy_receipt = write_privacy_receipt;
@@ -84,7 +84,7 @@ fn lock_error<T>(_error: T) -> String {
 fn saved_config(config: AppConfig) -> SavedConfig {
     SavedConfig {
         output_dir: config.output_dir.display().to_string(),
-        profile: config.default_profile,
+        profile: config.default_profile.desktop_profile(),
         output_size: config.default_output_size,
         source_policy: config.source_policy,
         write_privacy_receipt: config.write_privacy_receipt,
