@@ -59,6 +59,16 @@ Nothing uploads.
 
 ## Release Gate
 
+Use this command before choosing the next productization step:
+
+```sh
+cargo run -p xtask -- productization-status
+```
+
+It summarizes `docs/release-blockers.md`, groups the remaining blockers by
+Execution Order, and prints the next unfinished track. It must not be used to
+mark manual or external evidence as complete.
+
 Do not start a public paid beta until all of these are true:
 
 ```text

@@ -24,6 +24,7 @@ mod manual_qa_prepare;
 mod media_policy_check;
 mod normalize_dmg;
 mod privacy_policy_check;
+mod productization_status;
 mod public_url;
 mod publish_check;
 mod release_check;
@@ -62,6 +63,7 @@ fn main() {
         Some("media-policy-check") => media_policy_check::run(),
         Some("normalize-dmg") => normalize_dmg::run(args.collect()),
         Some("privacy-policy-check") => privacy_policy_check::run(),
+        Some("productization-status") => productization_status::run(args.collect()),
         Some("publish-check") => publish_check::run(args.collect()),
         Some("release-check") => release_check::run(),
         Some("release-notes-check") => release_notes_check::run(args.collect()),
@@ -81,7 +83,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }
