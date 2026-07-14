@@ -14,6 +14,13 @@ pub(super) fn open_dmg_command(path: &Path) -> String {
     format!("open -- '{}'", shell_single_quote(path))
 }
 
+pub(super) fn manual_check_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-check '{}'",
+        shell_single_quote(path)
+    )
+}
+
 fn shell_single_quote(path: &Path) -> String {
     path.display().to_string().replace('\'', "'\\''")
 }

@@ -29,6 +29,9 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("Checksum command:"));
     assert!(text.contains("cargo run -p xtask -- checksum"));
     assert!(text.contains("SHA256SUMS"));
+    assert!(text.contains("Manual QA check command after filling observations:"));
+    assert!(text.contains("cargo run -p xtask -- manual-qa-check"));
+    assert!(text.contains("prepared.md'"));
     assert!(text.contains("| App build | DropSquash 0.1.0 git abc1234 |"));
     assert!(text.contains("| Disk image launch notice |"));
     assert!(text.contains("| Choose recording conversion |"));
@@ -81,7 +84,7 @@ fn quotes_packaged_app_command_path() {
     let nested = directory.path().join("QA Path's");
     std::fs::create_dir(&nested).unwrap();
     let artifact = nested.join("DropSquash.dmg");
-    let output = directory.path().join("prepared.md");
+    let output = nested.join("prepared.md");
     std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
 
     write(&output, &[], Some(&artifact), &options(directory.path())).unwrap();
@@ -89,6 +92,8 @@ fn quotes_packaged_app_command_path() {
 
     assert!(text.contains("open -- '"));
     assert!(text.contains("QA Path'\\''s/DropSquash.dmg'"));
+    assert!(text.contains("manual-qa-check '"));
+    assert!(text.contains("QA Path'\\''s/prepared.md'"));
 }
 
 #[test]

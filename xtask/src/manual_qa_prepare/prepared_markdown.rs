@@ -26,8 +26,12 @@ pub(super) fn write(
         .create_new(true)
         .open(path)
         .map_err(|error| format!("failed to create manual QA Markdown output: {error}"))?;
-    writeln!(file, "{}", markdown_text(&rows, fields, artifact, options))
-        .map_err(|error| format!("failed to write manual QA Markdown output: {error}"))?;
+    writeln!(
+        file,
+        "{}",
+        markdown_text(&rows, fields, artifact, options, path)
+    )
+    .map_err(|error| format!("failed to write manual QA Markdown output: {error}"))?;
     println!("manual QA Markdown output: {}", path.display());
     Ok(())
 }
@@ -37,6 +41,7 @@ fn markdown_text(
     fields: &[markdown::Field],
     artifact: Option<&Path>,
     options: &Options,
+    output_path: &Path,
 ) -> String {
     let mut sections = vec![
         "Prepared manual QA draft only. Replace this file with concrete observations.".to_string(),
@@ -65,6 +70,10 @@ fn markdown_text(
             commands::restore_command(options)
         ));
     }
+    sections.push(format!(
+        "Manual QA check command after filling observations:\n\n```sh\n{}\n```",
+        commands::manual_check_command(output_path)
+    ));
     sections.push(rows.join("\n"));
     sections.join("\n\n")
 }
