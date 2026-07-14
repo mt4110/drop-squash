@@ -75,6 +75,8 @@ cargo run -p xtask -- signed-dmg-check /tmp/dropsquash-signed/DropSquash.dmg tar
 cargo run -p xtask -- checksum /tmp/dropsquash-signed/DropSquash.dmg --output /tmp/dropsquash-signed/SHA256SUMS
 cargo run -p xtask -- macos-keychain-cleanup-plan /tmp/dropsquash-signed/keychain
 cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg
+cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mov --input /absolute/path/to/medium.mov --input /absolute/path/to/large.mov --output-dir /tmp/dropsquash-benchmark-output --csv-output /tmp/dropsquash-benchmark-results.csv
+cargo run -p xtask -- benchmark-csv-check /tmp/dropsquash-benchmark-results.csv
 cargo run -p xtask -- manual-qa-check
 ```
 

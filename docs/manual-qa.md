@@ -14,6 +14,13 @@ Run this gate after filling every result:
 cargo run -p xtask -- manual-qa-check
 ```
 
+After running the release-set benchmark, check the generated CSV before copying
+its path into this file:
+
+```sh
+cargo run -p xtask -- benchmark-csv-check /absolute/path/to/results.csv
+```
+
 For manual observation rows, do not write only `Pass`, `OK`, `Done`, `Works`,
 `Verified`, or `Observed expected behavior` in the result. Record the concrete
 evidence you saw, such as the generated file name, trial count, Finder

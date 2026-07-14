@@ -1,6 +1,7 @@
 mod artifact_age;
 mod artifact_check;
 mod benchmark;
+mod benchmark_csv_check;
 mod checksum;
 mod csv_evidence;
 mod dmg;
@@ -44,6 +45,7 @@ fn main() {
     let result = match args.next().as_deref() {
         Some("artifact-check") => artifact_check::run(args.collect()),
         Some("benchmark") => benchmark::run(args.collect()),
+        Some("benchmark-csv-check") => benchmark_csv_check::run(args.collect()),
         Some("checksum") => checksum::run(args.collect()),
         Some("file-size-check") => file_size_check::run(args.collect()),
         Some("github-release-plan") => github_release_plan::run(args.collect()),
@@ -83,7 +85,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|benchmark-csv-check|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-prepare|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }
