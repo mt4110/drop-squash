@@ -1,4 +1,4 @@
-use super::model::{Blocker, Report, Track, TrackStatus};
+use super::model::{Blocker, EvidenceAction, Report, Track, TrackStatus};
 
 pub(super) fn report(text: &str) -> Result<Report, String> {
     let blockers = blockers(text);
@@ -9,10 +9,14 @@ pub(super) fn report(text: &str) -> Result<Report, String> {
     if tracks.is_empty() {
         return Err("execution order table has no track rows".into());
     }
-    Ok(build_report(blockers, tracks))
+    Ok(build_report(blockers, evidence_actions(text), tracks))
 }
 
-fn build_report(blockers: Vec<Blocker>, tracks: Vec<Track>) -> Report {
+fn build_report(
+    blockers: Vec<Blocker>,
+    actions: Vec<EvidenceAction>,
+    tracks: Vec<Track>,
+) -> Report {
     let verified = blockers
         .iter()
         .filter(|blocker| blocker.status == "Verified")
@@ -29,6 +33,7 @@ fn build_report(blockers: Vec<Blocker>, tracks: Vec<Track>) -> Report {
         total: blockers.len(),
         verified,
         blocked,
+        actions,
         tracks,
     }
 }
@@ -72,6 +77,26 @@ fn tracks(text: &str) -> Vec<Track> {
         .nth(1)
         .map(execution_rows)
         .unwrap_or_default()
+}
+
+fn evidence_actions(text: &str) -> Vec<EvidenceAction> {
+    text.split("## Evidence Classes")
+        .nth(1)
+        .and_then(|text| text.split("## Execution Order").next())
+        .map(action_rows)
+        .unwrap_or_default()
+}
+
+fn action_rows(text: &str) -> Vec<EvidenceAction> {
+    rows(text)
+        .filter(|cells| cells.len() == 4)
+        .filter(|cells| cells[0] != "Blocker" && !cells[0].starts_with("---"))
+        .map(|cells| EvidenceAction {
+            blocker: cells[0].clone(),
+            next_action: cells[2].clone(),
+            owner: cells[3].clone(),
+        })
+        .collect()
 }
 
 fn execution_rows(text: &str) -> Vec<Track> {

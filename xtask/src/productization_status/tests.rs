@@ -10,6 +10,13 @@ fn reports_counts_tracks_and_next_track() {
 | Benchmark release set | Blocked | evidence | TBD | docs |
 | Public website deployment | Blocked | evidence | TBD | url |
 
+## Evidence Classes
+
+| Blocker | Class | Next action | Evidence owner |
+|---|---|---|---|
+| Benchmark release set | Benchmark | Run release-set benchmark | docs/manual-qa.md |
+| Public website deployment | Public web | Deploy production site | Public website URL |
+
 ## Execution Order
 
 | Order | Track | Blockers | Exit condition | Record target |
@@ -28,7 +35,7 @@ fn reports_counts_tracks_and_next_track() {
     assert!(text.contains("release blockers: 3 total, 1 verified, 2 blocked"));
     assert!(text.contains("1. Local packaged-app proof: 1/2 remaining"));
     assert!(text.contains("next track: 1. Local packaged-app proof"));
-    assert!(text.contains("- Benchmark release set"));
+    assert!(text.contains("- Benchmark release set: Run release-set benchmark (docs/manual-qa.md)"));
 }
 
 #[test]

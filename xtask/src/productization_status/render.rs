@@ -34,6 +34,22 @@ fn next_track(report: &Report) -> Vec<String> {
         return vec!["next track: complete".to_string()];
     };
     let mut lines = vec![format!("next track: {}. {}", track.order, track.name)];
-    lines.extend(track.remaining.iter().map(|blocker| format!("- {blocker}")));
+    lines.extend(
+        track
+            .remaining
+            .iter()
+            .map(|blocker| next_action_line(report, blocker)),
+    );
     lines
+}
+
+fn next_action_line(report: &Report, blocker: &str) -> String {
+    let Some(action) = report
+        .actions
+        .iter()
+        .find(|action| action.blocker == blocker)
+    else {
+        return format!("- {blocker}");
+    };
+    format!("- {blocker}: {} ({})", action.next_action, action.owner)
 }
