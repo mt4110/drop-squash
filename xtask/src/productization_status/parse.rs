@@ -1,5 +1,7 @@
 use super::model::{Blocker, EvidenceAction, Report, Track, TrackStatus};
 
+mod table;
+
 pub(super) fn report(text: &str) -> Result<Report, String> {
     let blockers = blockers(text);
     if blockers.is_empty() {
@@ -61,7 +63,7 @@ fn status_for<'a>(blockers: &'a [Blocker], name: &str) -> Option<&'a str> {
 }
 
 fn blockers(text: &str) -> Vec<Blocker> {
-    rows(text)
+    table::rows(text)
         .filter(|cells| cells.len() == 5 && !cells[0].starts_with("---"))
         .filter(|cells| cells[0] != "Blocker")
         .filter(|cells| matches!(cells[1].as_str(), "Blocked" | "Verified"))
@@ -88,7 +90,7 @@ fn evidence_actions(text: &str) -> Vec<EvidenceAction> {
 }
 
 fn action_rows(text: &str) -> Vec<EvidenceAction> {
-    rows(text)
+    table::rows(text)
         .filter(|cells| cells.len() == 4)
         .filter(|cells| cells[0] != "Blocker" && !cells[0].starts_with("---"))
         .map(|cells| EvidenceAction {
@@ -100,7 +102,7 @@ fn action_rows(text: &str) -> Vec<EvidenceAction> {
 }
 
 fn execution_rows(text: &str) -> Vec<Track> {
-    rows(text)
+    table::rows(text)
         .filter(|cells| cells.len() == 5)
         .filter_map(|cells| {
             let order = cells[0].parse::<usize>().ok()?;
@@ -111,14 +113,4 @@ fn execution_rows(text: &str) -> Vec<Track> {
             })
         })
         .collect()
-}
-
-fn rows(text: &str) -> impl Iterator<Item = Vec<String>> + '_ {
-    text.lines()
-        .filter(|line| line.starts_with('|'))
-        .map(|line| line.trim_matches('|').split('|').map(cell).collect())
-}
-
-fn cell(value: &str) -> String {
-    value.trim().trim_matches('`').to_string()
 }
