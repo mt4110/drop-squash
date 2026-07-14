@@ -34,12 +34,24 @@ fn output_request(paths: &[String]) -> Result<Option<(PathBuf, PathBuf)>, String
 fn write_output(artifact: &Path, output: &Path) -> Result<(), String> {
     require_checksum_output_name(output)?;
     let line = checksum_line(artifact)?;
+    create_output_parent(output)?;
     let mut file = OpenOptions::new()
         .write(true)
         .create_new(true)
         .open(output)
         .map_err(|error| format!("failed to create checksum output: {error}"))?;
     writeln!(file, "{line}").map_err(|error| format!("failed to write checksum output: {error}"))
+}
+
+fn create_output_parent(path: &Path) -> Result<(), String> {
+    let Some(parent) = path
+        .parent()
+        .filter(|parent| !parent.as_os_str().is_empty())
+    else {
+        return Ok(());
+    };
+    std::fs::create_dir_all(parent)
+        .map_err(|error| format!("failed to create checksum output directory: {error}"))
 }
 
 fn require_checksum_output_name(path: &Path) -> Result<(), String> {

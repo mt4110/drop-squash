@@ -133,6 +133,27 @@ fn writes_checksum_output_once() {
 }
 
 #[test]
+fn creates_checksum_output_parent_directory() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("qa-output").join("SHA256SUMS");
+    std::fs::File::create(&artifact)
+        .unwrap()
+        .write_all(&dmg_bytes(b"dropsquash"))
+        .unwrap();
+
+    run(vec![
+        artifact.display().to_string(),
+        "--output".into(),
+        output.display().to_string(),
+    ])
+    .unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+
+    assert!(text.ends_with("  DropSquash.dmg\n"));
+}
+
+#[test]
 fn rejects_existing_checksum_output() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");
