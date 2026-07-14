@@ -1,7 +1,9 @@
+use std::path::Path;
+
 use super::{
-    artifact::qa_artifact, benchmark, build_identity::BuildIdentity, environment::Environment,
-    license_sandbox, markdown, markdown::Field, options::Options, packaged_app, prepared_markdown,
-    release_candidate,
+    artifact::qa_artifact, benchmark, build_identity::BuildIdentity, commands,
+    environment::Environment, license_sandbox, markdown, markdown::Field, options::Options,
+    packaged_app, prepared_markdown, release_candidate,
 };
 
 pub(super) fn print_paths(options: &Options) -> Result<(), String> {
@@ -28,6 +30,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     }
     if let Some(path) = &options.markdown_output {
         prepared_markdown::write(path, &fields, artifact.as_deref(), options)?;
+        print_manual_check(path);
     }
     Ok(())
 }
@@ -66,4 +69,15 @@ pub(super) fn sample_set_line(options: &Options) -> String {
             "manual QA Input sample set unavailable: pass --input-sample-set <text>".to_string()
         }
     }
+}
+
+pub(super) fn manual_check_line(path: &Path) -> String {
+    format!(
+        "manual QA Check command: {}",
+        commands::manual_check_command(path)
+    )
+}
+
+fn print_manual_check(path: &Path) {
+    println!("{}", manual_check_line(path));
 }

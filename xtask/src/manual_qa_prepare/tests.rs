@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use super::options::Options;
-use super::output::sample_set_line;
+use super::output::{manual_check_line, sample_set_line};
 use super::require_reset_artifact;
 use super::reset_trial_lines;
 use super::state::{backup_state, restore_state};
@@ -118,6 +118,16 @@ fn prints_provided_sample_set() {
     assert_eq!(
         sample_set_line(&options),
         "manual QA Input sample set: short, medium, and large local recordings"
+    );
+}
+
+#[test]
+fn manual_check_output_quotes_markdown_path() {
+    let line = manual_check_line(&PathBuf::from("/tmp/QA Path's/prepared.md"));
+
+    assert_eq!(
+        line,
+        "manual QA Check command: cargo run -p xtask -- manual-qa-check '/tmp/QA Path'\\''s/prepared.md'"
     );
 }
 
