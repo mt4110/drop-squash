@@ -99,6 +99,27 @@ fn rejects_duplicate_output_paths() {
     assert!(error.contains("duplicates output path"));
 }
 
+#[test]
+fn rejects_non_positive_duration() {
+    let error = validate_replaced_csv("8.000,2.000", "0.000,2.000");
+
+    assert!(error.contains("non-positive duration_s"));
+}
+
+#[test]
+fn rejects_out_of_range_compression_ratio() {
+    let error = validate_replaced_csv(",0.500,50.0", ",1.000,50.0");
+
+    assert!(error.contains("out-of-range compression_ratio"));
+}
+
+#[test]
+fn rejects_out_of_range_saved_percent() {
+    let error = validate_replaced_csv(",0.500,50.0", ",0.500,100.0");
+
+    assert!(error.contains("out-of-range saved_percent"));
+}
+
 fn csv(rows: usize, output_percent: u64) -> String {
     let mut text = String::from(
         "backend,input,output,original_bytes,output_bytes,duration_s,elapsed_s,compression_ratio,saved_percent,throughput_mib_s,speed_ratio\n",
@@ -109,4 +130,11 @@ fn csv(rows: usize, output_percent: u64) -> String {
         ));
     }
     text
+}
+
+fn validate_replaced_csv(from: &str, to: &str) -> String {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("results.csv");
+    std::fs::write(&path, csv(3, 50).replace(from, to)).unwrap();
+    validate_path(&path).unwrap_err()
 }

@@ -60,14 +60,18 @@ fn validate_row(line: usize, row: &[String]) -> Result<(), String> {
     require_text(line, row, 2, "output")?;
     let original = require_u64(line, row, 3, "original_bytes")?;
     let output = require_u64(line, row, 4, "output_bytes")?;
+    if original == 0 || output == 0 {
+        return Err(format!("benchmark CSV line {line} has zero byte count"));
+    }
     if output >= original {
         return Err(format!("benchmark CSV line {line} output is not smaller"));
     }
-    require_f64(line, row, 5, "duration_s")?;
-    require_f64(line, row, 6, "elapsed_s")?;
-    require_f64(line, row, 8, "saved_percent")?;
-    require_f64(line, row, 9, "throughput_mib_s")?;
-    require_f64(line, row, 10, "speed_ratio")?;
+    require_f64_range(line, row, 5, "duration_s", 0.0, f64::INFINITY)?;
+    require_f64_range(line, row, 6, "elapsed_s", 0.0, f64::INFINITY)?;
+    require_f64_range(line, row, 7, "compression_ratio", 0.0, 1.0)?;
+    require_f64_range(line, row, 8, "saved_percent", 0.0, 100.0)?;
+    require_f64_range(line, row, 9, "throughput_mib_s", 0.0, f64::INFINITY)?;
+    require_f64_range(line, row, 10, "speed_ratio", 0.0, f64::INFINITY)?;
     Ok(())
 }
 
@@ -92,4 +96,26 @@ fn require_f64(line: usize, row: &[String], index: usize, label: &str) -> Result
     value
         .parse()
         .map_err(|_| format!("benchmark CSV line {line} has invalid {label}"))
+}
+
+fn require_f64_range(
+    line: usize,
+    row: &[String],
+    index: usize,
+    label: &str,
+    min: f64,
+    max: f64,
+) -> Result<(), String> {
+    let value = require_f64(line, row, index, label)?;
+    if value <= min {
+        return Err(format!(
+            "benchmark CSV line {line} has non-positive {label}"
+        ));
+    }
+    if value >= max {
+        return Err(format!(
+            "benchmark CSV line {line} has out-of-range {label}"
+        ));
+    }
+    Ok(())
 }
