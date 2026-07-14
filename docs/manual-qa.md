@@ -63,9 +63,18 @@ cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
 ```
 
-Use an app artifact built from a clean git worktree. If the build reported a
-dirty tree, rebuild after committing or intentionally removing the unrelated
-local change before recording packaged-app evidence.
+Use an app artifact built from a clean git worktree. If the main worktree is
+dirty because of unrelated local changes, prefer a detached QA worktree:
+
+```sh
+git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD
+```
+
+Run the packaged-app build and QA-preparation commands from that detached
+worktree so the checked `DropSquash.dmg` still matches the current `HEAD`
+without touching unrelated local changes. If you stay in the current worktree,
+rebuild only after committing or intentionally removing the unrelated local
+change before recording packaged-app evidence.
 
 This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
