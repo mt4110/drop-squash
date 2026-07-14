@@ -5,11 +5,13 @@ fn finds_pending_result_rows() {
     let rows = pending_rows(
         "| App build | DropSquash 0.1.0 git abc1234 |\n\
 | Choose recording conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |\n\
+| `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |\n\
 | Benchmark sample set | Three samples | recorded |\n",
     );
 
-    assert_eq!(rows.len(), 1);
+    assert_eq!(rows.len(), 2);
     assert_eq!(rows[0].0, "Choose recording conversion");
+    assert_eq!(rows[1].0, "`cargo run -p xtask -- manual-qa-check`");
 }
 
 #[test]
