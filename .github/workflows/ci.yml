@@ -45,7 +45,11 @@ jobs:
       - name: clippy
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: test
+        if: runner.os != 'Windows'
         run: cargo test --workspace
+      - name: test windows
+        if: runner.os == 'Windows'
+        run: cargo test --workspace --exclude xtask
 
   nix:
     runs-on: ubuntu-latest

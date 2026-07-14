@@ -630,10 +630,10 @@ fn evidence(blocker: &str) -> &'static str {
             "Sandbox product is configured for intended product DropSquash with license keys enabled and private store IDs not recorded"
         }
         "Lemon Squeezy sandbox purchase" => {
-            "Sandbox checkout completed for intended product, test buyer, and order"
+            "Sandbox checkout completed for intended product, test buyer, order, and license activation path"
         }
         "Public website deployment" => {
-            "Production website production URL on dropsquash.app serves release-status, privacy, pricing, support, and download"
+            "Production website production URL on dropsquash.app serves release-status, privacy, pricing, license, support, and download"
         }
         "Pricing finalized" => {
             "Production pricing page is final on dropsquash.app with no draft price copy before checkout goes live"
