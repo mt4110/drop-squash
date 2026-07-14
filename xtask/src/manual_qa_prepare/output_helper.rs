@@ -37,10 +37,18 @@ pub(super) fn fill_check_line(path: &Path) -> String {
     )
 }
 
+pub(super) fn pending_line(path: &Path) -> String {
+    format!(
+        "manual QA Pending command: {}",
+        commands::pending_command(path)
+    )
+}
+
 pub(super) fn print_helper_commands(path: &Path, output_dir: &Path) {
     println!("{}", fill_release_gates_line(path));
     println!("{}", fill_benchmark_line(path, output_dir));
     println!("{}", fill_benchmark_threshold_line(path, output_dir));
     println!("{}", clean_draft_line(path));
+    println!("{}", pending_line(path));
     println!("{}", fill_check_line(path));
 }
