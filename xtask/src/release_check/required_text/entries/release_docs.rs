@@ -41,6 +41,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release.md",
+        "Do not promise automatic deletion of the downloaded `.dmg`",
+    ),
+    (
+        "docs/release.md",
+        "drag-to-Applications install",
+    ),
+    (
+        "docs/release.md",
         "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
     ),
     ("docs/release.md", "checkout, and refund links"),

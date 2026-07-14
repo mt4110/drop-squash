@@ -113,6 +113,13 @@ generated Tauri DMG to `DropSquash.dmg` before artifact checks, checksums,
 manual QA evidence, or public release notes refer to it. Public release still
 requires signing, notarization, stapling, artifact checks, checksums, and
 Gatekeeper no-warning evidence for the signed app.
+Do not promise automatic deletion of the downloaded `.dmg` after Finder copy or
+drag-to-Applications install: that copy path does not execute DropSquash code,
+and the installed app cannot reliably know the original downloaded DMG path.
+A later first-launch helper may detect that the app is running from `/Volumes`,
+offer to move the app to `/Applications`, and eject the mounted installer volume
+after successful move. It must not delete the downloaded `.dmg` without an
+explicit user action.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the

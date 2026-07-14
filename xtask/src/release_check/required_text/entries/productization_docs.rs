@@ -121,4 +121,8 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/productization.md",
         "Public web proof exit coverage for release-status, privacy, pricing, license, support, download, checkout, and refund",
     ),
+    (
+        "docs/productization.md",
+        "Finder copy or drag-to-Applications cannot run app code",
+    ),
 ];
