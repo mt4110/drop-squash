@@ -15,6 +15,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("release-status/index.html", "../support.html"),
     ("release-status/index.html", "../refund.html"),
     ("download.html", "macOS beta"),
+    ("download.html", "Developer ID signing"),
     ("download.html", "DropSquash.dmg"),
     ("download.html", "notarization"),
     ("download.html", "checksum"),

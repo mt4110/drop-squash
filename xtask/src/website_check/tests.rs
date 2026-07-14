@@ -569,7 +569,7 @@ fn rejects_pre_release_cta_copy() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum release-status/ Download now",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Download now",
     );
     write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Buy now");
 
@@ -586,7 +586,7 @@ fn rejects_pre_release_beta_and_checkout_cta_copy() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum release-status/ Download the beta",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Download the beta",
     );
     write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Start checkout");
 
@@ -605,7 +605,7 @@ fn rejects_pre_release_product_and_platform_cta_copy() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum release-status/ Download DropSquash. Download for macOS.",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Download DropSquash. Download for macOS.",
     );
     write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Buy DropSquash");
 
@@ -627,7 +627,7 @@ fn rejects_pre_release_get_and_trial_cta_copy() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum release-status/ Get DropSquash",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Get DropSquash",
     );
     write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Start free trial");
 
@@ -843,7 +843,7 @@ fn rejects_unsupported_platform_availability_claims() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum Download for Windows",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum Download for Windows",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -860,7 +860,7 @@ fn rejects_lowercase_unsupported_platform_availability_claims() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum available on windows",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum available on windows",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -877,7 +877,7 @@ fn rejects_available_for_unsupported_platform_claims() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum available for Linux",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum available for Linux",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -894,7 +894,7 @@ fn rejects_unsupported_platform_download_channel_claims() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum Flatpak download",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum Flatpak download",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -911,7 +911,7 @@ fn rejects_short_unsupported_platform_download_ctas() {
     write(
         directory.path(),
         "download.html",
-        "macOS beta DropSquash.dmg notarization checksum Download Linux",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum Download Linux",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -960,7 +960,9 @@ fn required_page_text(page: &str) -> &'static str {
         "release-status/index.html" => {
             "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../support.html ../refund.html"
         }
-        "download.html" => "macOS beta DropSquash.dmg notarization checksum release-status/",
+        "download.html" => {
+            "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/"
+        }
         "pricing.html" => {
             "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy"
         }
