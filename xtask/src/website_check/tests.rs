@@ -673,6 +673,24 @@ fn rejects_unsupported_dmg_cleanup_claims() {
 }
 
 #[test]
+fn rejects_finder_copy_dmg_cleanup_claims() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "download.html",
+        "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Finder copy automatically deletes the downloaded .dmg",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| {
+        error.contains("unsupported DMG cleanup claim")
+            && error.contains("finder copy automatically deletes the downloaded .dmg")
+    }));
+}
+
+#[test]
 fn rejects_pre_release_download_or_checkout_links() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
