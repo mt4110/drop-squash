@@ -1,4 +1,4 @@
-use super::{parse_args, pending_rows, USAGE};
+use super::{grouped, parse_args, pending_rows, USAGE};
 
 #[test]
 fn finds_pending_result_rows() {
@@ -15,4 +15,26 @@ fn finds_pending_result_rows() {
 #[test]
 fn rejects_invalid_arguments() {
     assert_eq!(parse_args(vec![]).unwrap_err(), USAGE);
+}
+
+#[test]
+fn groups_pending_rows_by_section() {
+    let groups = grouped(&[
+        (
+            "Choose recording conversion".to_string(),
+            "Small `.mov` screen recording".to_string(),
+        ),
+        (
+            "Valid sandbox activation".to_string(),
+            "Sandbox activation".to_string(),
+        ),
+        (
+            "Codesign verification".to_string(),
+            "Public DMG/app artifact verifies".to_string(),
+        ),
+    ]);
+
+    assert_eq!(groups[0].0, "Packaged App");
+    assert_eq!(groups[1].0, "License Sandbox");
+    assert_eq!(groups[2].0, "Distribution And Signing");
 }
