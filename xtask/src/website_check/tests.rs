@@ -519,6 +519,24 @@ fn rejects_missing_privacy_copy() {
 }
 
 #[test]
+fn rejects_metadata_removal_privacy_claims() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "privacy.html",
+        "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 metadata_policy = preserve file names instead of absolute paths License activation contacts Lemon Squeezy updater is disabled Guaranteed metadata removal",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| {
+        error.contains("unsupported metadata-removal claim")
+            && error.contains("guaranteed metadata removal")
+    }));
+}
+
+#[test]
 fn rejects_missing_license_copy() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
