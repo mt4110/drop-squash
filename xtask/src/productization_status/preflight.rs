@@ -69,6 +69,7 @@ mod tests {
         assert!(lines[5].contains("benchmark --release-set"));
         assert!(lines[6].contains("benchmark-csv-check"));
         assert!(lines[7].contains("manual-qa-check"));
+        assert!(lines[8].contains("--restore-state"));
     }
 
     #[test]
@@ -87,5 +88,6 @@ mod tests {
         assert!(lines[7].contains("benchmark-results.csv"));
         assert!(lines[8].contains("benchmark-csv-check"));
         assert!(lines[9].contains("manual-qa-check"));
+        assert!(lines[10].contains("--restore-state"));
     }
 }

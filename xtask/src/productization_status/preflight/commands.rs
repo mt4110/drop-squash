@@ -7,6 +7,7 @@ pub(super) fn local_packaged_app() -> Vec<String> {
         benchmark(),
         csv_check(),
         manual_check(),
+        restore_state(),
     ]
 }
 
@@ -37,4 +38,8 @@ fn csv_check() -> String {
 
 fn manual_check() -> String {
     "preflight final gate: cargo run -p xtask -- manual-qa-check".to_string()
+}
+
+fn restore_state() -> String {
+    "preflight restore state: cargo run -p xtask -- manual-qa-prepare --restore-state".to_string()
 }
