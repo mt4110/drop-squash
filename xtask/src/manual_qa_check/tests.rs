@@ -1860,6 +1860,16 @@ fn reports_checksum_result_with_uppercase_digest() {
 }
 
 #[test]
+fn reports_benchmark_threshold_without_regression_wording() {
+    let (_directory, path) = write_manual_qa(
+        "| Benchmark regression threshold | Passes | no sample exceeded 20% against the same-machine release candidate baseline |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("regression")));
+}
+
+#[test]
 fn reports_checksum_result_with_placeholder_digest() {
     let (_directory, path) = write_manual_qa(
         "| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with SHA-256 0000000000000000000000000000000000000000000000000000000000000000 DropSquash.dmg |\n",

@@ -1854,6 +1854,18 @@ fn rejects_benchmark_threshold_without_baseline_context() {
 }
 
 #[test]
+fn rejects_benchmark_threshold_without_regression_wording() {
+    let errors = check_text(
+        r#"
+- Benchmark sample set: three short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
+- Benchmark regression threshold: no sample exceeded 20% against the same-machine release candidate baseline
+"#,
+    );
+
+    assert!(errors.iter().any(|error| error.contains("regression")));
+}
+
+#[test]
 fn rejects_benchmark_threshold_without_release_candidate_context() {
     let errors = check_text(
         r#"
