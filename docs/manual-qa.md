@@ -23,6 +23,12 @@ cargo run -p xtask -- benchmark-csv-check /absolute/path/to/results.csv
 
 `manual-qa-check` also revalidates the referenced benchmark CSV with the same
 CSV-content rules, so the recorded path must keep pointing to the checked file.
+If the prepared Markdown draft still has empty release gate rows, you can fill
+the deterministic local ones after they pass:
+
+```sh
+cargo run -p xtask -- manual-qa-fill-release-gates /tmp/dropsquash-manual-qa-prepared.md
+```
 
 For manual observation rows, do not write only `Pass`, `OK`, `Done`, `Works`,
 `Verified`, or `Observed expected behavior` in the result. Record the concrete
