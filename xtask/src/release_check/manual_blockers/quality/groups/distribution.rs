@@ -36,6 +36,7 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         ]),
         "Benchmark regression threshold" => Some(&[
             &["20%", "20 percent"],
+            &["regression"],
             &["sample"],
             &["same-machine", "same machine"],
             &["release candidate baseline"],
