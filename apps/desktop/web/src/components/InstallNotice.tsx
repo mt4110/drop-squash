@@ -1,27 +1,33 @@
 type InstallNoticeProps = {
   appPath: string;
   didCopyToApplications: boolean;
+  didOpenInstalledApp: boolean;
   installedPath?: string;
   isMoving: boolean;
   isOpeningInstalledApp: boolean;
   onDismiss: () => void;
   onMove: () => void;
   onOpenInstalledApp: () => void;
+  onQuitCurrentApp: () => void;
 };
 
 export function InstallNotice({
   appPath,
   didCopyToApplications,
+  didOpenInstalledApp,
   installedPath,
   isMoving,
   isOpeningInstalledApp,
   onDismiss,
   onMove,
   onOpenInstalledApp,
+  onQuitCurrentApp,
 }: InstallNoticeProps) {
-  const message = didCopyToApplications
-    ? "DropSquash was copied to Applications. Open that copy, then eject the disk image."
-    : "DropSquash is running from the disk image. Move it to Applications before regular use.";
+  const message = didOpenInstalledApp
+    ? "The Applications copy is open. Quit this disk image copy, then eject the disk image."
+    : didCopyToApplications
+      ? "DropSquash was copied to Applications. Open that copy, then eject the disk image."
+      : "DropSquash is running from the disk image. Move it to Applications before regular use.";
   const title = installedPath ?? appPath;
   const isBusy = isMoving || isOpeningInstalledApp;
 
@@ -38,6 +44,9 @@ export function InstallNotice({
           <button type="button" disabled={isBusy} onClick={onOpenInstalledApp}>
             {isOpeningInstalledApp ? "Opening..." : "Open"}
           </button>
+        )}
+        {didOpenInstalledApp && (
+          <button type="button" disabled={isBusy} onClick={onQuitCurrentApp}>Quit</button>
         )}
         <button type="button" disabled={isBusy} onClick={onDismiss}>OK</button>
       </div>

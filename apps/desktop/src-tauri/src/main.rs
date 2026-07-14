@@ -12,6 +12,7 @@ fn main() {
             commands::copy_to_applications,
             commands::eject_installer_volume,
             commands::open_installed_application,
+            commands::quit_current_app,
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,

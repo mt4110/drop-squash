@@ -13,6 +13,8 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["post-copy", "copied app", "after copy"],
             &["open", "opened"],
             &["installed app", "applications copy"],
+            &["quit"],
+            &["disk image copy", "mounted copy"],
             &[
                 "does not delete",
                 "did not delete",

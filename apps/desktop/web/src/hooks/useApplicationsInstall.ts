@@ -9,11 +9,13 @@ type ApplicationsInstallState = {
   installedPath?: string;
   isMoving: boolean;
   isOpeningInstalledApp: boolean;
+  didOpenInstalledApp: boolean;
   didCopyToApplications: boolean;
   shouldShowNotice: boolean;
   dismissNotice: () => void;
   moveToApplications: () => Promise<void>;
   openInstalledApp: () => Promise<void>;
+  quitCurrentApp: () => Promise<void>;
 };
 
 export function useApplicationsInstall(
@@ -23,6 +25,7 @@ export function useApplicationsInstall(
   const [isDismissed, setIsDismissed] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
   const [isOpeningInstalledApp, setIsOpeningInstalledApp] = useState(false);
+  const [didOpenInstalledApp, setDidOpenInstalledApp] = useState(false);
   const [installedPath, setInstalledPath] = useState<string>();
   const installLocation = useInstallLocation(onError);
   const shouldShowNotice =
@@ -39,6 +42,7 @@ export function useApplicationsInstall(
       const install = await invoke<ApplicationsInstall>("copy_to_applications");
       await revealItemInDir(install.targetPath);
       setInstalledPath(install.targetPath);
+      setDidOpenInstalledApp(false);
       setIsDismissed(false);
       onReady();
     } catch (reason) {
@@ -56,6 +60,7 @@ export function useApplicationsInstall(
     setIsOpeningInstalledApp(true);
     try {
       await invoke("open_installed_application", { installedAppPath: installedPath });
+      setDidOpenInstalledApp(true);
       onReady();
     } catch (reason) {
       onError(String(reason));
@@ -64,15 +69,29 @@ export function useApplicationsInstall(
     }
   }, [installedPath, onError, onReady]);
 
+  const quitCurrentApp = useCallback(async () => {
+    if (!isTauri()) {
+      return;
+    }
+
+    try {
+      await invoke("quit_current_app");
+    } catch (reason) {
+      onError(String(reason));
+    }
+  }, [onError]);
+
   return {
     appPath: installLocation?.appPath,
     installedPath,
     isMoving,
     isOpeningInstalledApp,
+    didOpenInstalledApp,
     didCopyToApplications: Boolean(installedPath),
     shouldShowNotice,
     dismissNotice: () => setIsDismissed(true),
     moveToApplications,
     openInstalledApp,
+    quitCurrentApp,
   };
 }

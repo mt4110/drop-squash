@@ -61,6 +61,11 @@ pub fn open_installed_application(installed_app_path: String) -> std::result::Re
 }
 
 #[tauri::command(rename_all = "camelCase")]
+pub fn quit_current_app(app: tauri::AppHandle) {
+    app.exit(0);
+}
+
+#[tauri::command(rename_all = "camelCase")]
 pub async fn convert(
     app_state: tauri::State<'_, crate::state::AppState>,
     window: tauri::WebviewWindow,

@@ -367,12 +367,14 @@ export function App() {
         <InstallNotice
           appPath={applicationsInstall.appPath}
           didCopyToApplications={applicationsInstall.didCopyToApplications}
+          didOpenInstalledApp={applicationsInstall.didOpenInstalledApp}
           installedPath={applicationsInstall.installedPath}
           isMoving={applicationsInstall.isMoving}
           isOpeningInstalledApp={applicationsInstall.isOpeningInstalledApp}
           onDismiss={applicationsInstall.dismissNotice}
           onMove={() => void applicationsInstall.moveToApplications()}
           onOpenInstalledApp={() => void applicationsInstall.openInstalledApp()}
+          onQuitCurrentApp={() => void applicationsInstall.quitCurrentApp()}
         />
       )}
       <DropZone
