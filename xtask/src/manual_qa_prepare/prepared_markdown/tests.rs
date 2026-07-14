@@ -92,6 +92,27 @@ fn quotes_packaged_app_command_path() {
 }
 
 #[test]
+fn writes_restore_command_for_reset_trial() {
+    let directory = tempfile::tempdir().unwrap();
+    let output = directory.path().join("prepared.md");
+    let mut options = options(directory.path());
+    options.reset_trial = true;
+    options.app_state_dir = directory
+        .path()
+        .join("Library")
+        .join("Application Support")
+        .join("DropSquash");
+
+    write(&output, &[], None, &options).unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+
+    assert!(text.contains("Trial state restore command:"));
+    assert!(text.contains("manual-qa-prepare --restore-state"));
+    assert!(text.contains("Application Support/DropSquash'"));
+    assert!(text.contains("--state-dir '"));
+}
+
+#[test]
 fn release_candidate_draft_contains_every_required_check() {
     let directory = tempfile::tempdir().unwrap();
     let artifact = directory.path().join("DropSquash.dmg");

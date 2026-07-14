@@ -3,8 +3,8 @@ use std::io::Write;
 use std::path::Path;
 
 use super::{
-    benchmark, license_sandbox, markdown, options::Options, packaged_app, release_candidate,
-    release_gate,
+    benchmark, commands, license_sandbox, markdown, options::Options, packaged_app,
+    release_candidate, release_gate,
 };
 
 pub(super) fn write(
@@ -52,19 +52,21 @@ fn markdown_text(
     {
         sections.push(format!(
             "Packaged app command:\n\n```sh\n{}\n```",
-            open_dmg_command(path)
+            commands::open_dmg_command(path)
         ));
         sections.push(format!(
             "Checksum command:\n\n```sh\n{}\n```",
             release_candidate::checksum_command(path, &options.output_dir)
         ));
     }
+    if options.reset_trial {
+        sections.push(format!(
+            "Trial state restore command:\n\n```sh\n{}\n```",
+            commands::restore_command(options)
+        ));
+    }
     sections.push(rows.join("\n"));
     sections.join("\n\n")
-}
-
-fn open_dmg_command(path: &Path) -> String {
-    format!("open -- '{}'", shell_single_quote(path))
 }
 
 fn benchmark_context(fields: &[markdown::Field], options: &Options) -> String {
@@ -94,10 +96,6 @@ fn field_value<'a>(fields: &'a [markdown::Field], label: &str) -> Option<&'a str
         .iter()
         .find(|(field, _)| *field == label)
         .map(|(_, value)| value.as_str())
-}
-
-fn shell_single_quote(path: &Path) -> String {
-    path.display().to_string().replace('\'', "'\\''")
 }
 
 #[cfg(test)]
