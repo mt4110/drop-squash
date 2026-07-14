@@ -1,6 +1,8 @@
 pub(super) const CI: &[&str] = &[
     "permissions:",
     "contents: read",
+    "Install Linux desktop dependencies",
+    "libwebkit2gtk-4.1-dev",
     "cargo fmt --all -- --check",
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
@@ -17,6 +19,8 @@ pub(super) const RELEASE: &[&str] = &[
     "permissions:",
     "contents: read",
     "environment: production",
+    "Install Linux desktop dependencies",
+    "libwebkit2gtk-4.1-dev",
     "components: rustfmt, clippy",
     "cargo fmt --all -- --check",
     "cargo clippy --workspace --all-targets -- -D warnings",
@@ -92,6 +96,8 @@ pub(super) const RELEASE_FORBIDDEN: &[&str] = &[
 pub(super) const DESKTOP: &[&str] = &[
     "permissions:",
     "contents: read",
+    "Install Linux desktop dependencies",
+    "libwebkit2gtk-4.1-dev",
     "pnpm --dir apps/desktop/web install --frozen-lockfile",
     "pnpm --dir apps/desktop/web test",
     "pnpm --dir apps/desktop/web build",
@@ -102,6 +108,8 @@ pub(super) const DESKTOP: &[&str] = &[
 pub(super) const SECURITY: &[&str] = &[
     "permissions:",
     "contents: read",
+    "Install Linux desktop dependencies",
+    "libwebkit2gtk-4.1-dev",
     "cargo audit",
     "cargo deny check",
     "cargo run -p xtask -- media-policy-check",
