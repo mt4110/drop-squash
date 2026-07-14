@@ -1,38 +1,6 @@
 use std::path::{Path, PathBuf};
 
-const SECRET_EXTENSIONS: [&str; 9] = [
-    "cer",
-    "cert",
-    "crt",
-    "key",
-    "mobileprovision",
-    "p12",
-    "p8",
-    "pem",
-    "provisionprofile",
-];
-
-const LOCAL_EVIDENCE_EXTENSIONS: [&str; 19] = [
-    "app",
-    "appimage",
-    "csv",
-    "dmg",
-    "dsym",
-    "exe",
-    "flatpak",
-    "gz",
-    "jsonl",
-    "m4v",
-    "mov",
-    "mp4",
-    "msi",
-    "pkg",
-    "tar",
-    "tgz",
-    "webm",
-    "xcarchive",
-    "zip",
-];
+mod kinds;
 
 pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
     for path in repo_files(root)? {
@@ -41,13 +9,13 @@ pub(super) fn reject_secret_files(root: &Path) -> Result<(), String> {
             .and_then(|value| value.to_str())
             .unwrap_or("");
         let extension = path.extension().and_then(|value| value.to_str());
-        if is_secret_file(name, extension) {
+        if kinds::is_secret_file(name, extension) {
             return Err(format!(
                 "release secret-like file is present: {}",
                 path.display()
             ));
         }
-        if is_local_evidence_file(name, extension) {
+        if kinds::is_local_evidence_file(name, extension) {
             return Err(format!(
                 "release local evidence file must stay outside the repository: {}",
                 path.display()
@@ -74,22 +42,9 @@ fn require_ignore_line(text: &str, path: &Path, needle: &str) -> Result<(), Stri
     }
 }
 
+#[cfg(test)]
 pub(super) fn is_secret_file(name: &str, extension: Option<&str>) -> bool {
-    name == ".env"
-        || name == ".envrc"
-        || name.starts_with(".env.")
-        || extension.is_some_and(|value| {
-            let lower = value.to_ascii_lowercase();
-            SECRET_EXTENSIONS.contains(&lower.as_str())
-        })
-}
-
-fn is_local_evidence_file(name: &str, extension: Option<&str>) -> bool {
-    name == "SHA256SUMS"
-        || extension.is_some_and(|value| {
-            let lower = value.to_ascii_lowercase();
-            LOCAL_EVIDENCE_EXTENSIONS.contains(&lower.as_str())
-        })
+    kinds::is_secret_file(name, extension)
 }
 
 fn repo_files(root: &Path) -> Result<Vec<PathBuf>, String> {
