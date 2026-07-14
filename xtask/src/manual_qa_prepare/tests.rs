@@ -1,7 +1,10 @@
 use std::path::PathBuf;
 
 use super::options::Options;
-use super::output::{manual_check_line, open_artifact_line, sample_set_line};
+use super::output::{
+    fill_benchmark_line, fill_release_gates_line, manual_check_line, open_artifact_line,
+    sample_set_line,
+};
 use super::require_reset_artifact;
 use super::reset_trial_lines;
 use super::state::{backup_state, restore_state};
@@ -128,6 +131,21 @@ fn manual_check_output_quotes_markdown_path() {
     assert_eq!(
         line,
         "manual QA Check command: cargo run -p xtask -- manual-qa-check '/tmp/QA Path'\\''s/prepared.md'"
+    );
+}
+
+#[test]
+fn helper_output_quotes_paths() {
+    let markdown = PathBuf::from("/tmp/QA Path's/prepared.md");
+    let output_dir = PathBuf::from("/tmp/Output Path's");
+
+    assert_eq!(
+        fill_release_gates_line(&markdown),
+        "manual QA Fill release gates command: cargo run -p xtask -- manual-qa-fill-release-gates '/tmp/QA Path'\\''s/prepared.md'"
+    );
+    assert_eq!(
+        fill_benchmark_line(&markdown, &output_dir),
+        "manual QA Fill benchmark command: cargo run -p xtask -- manual-qa-fill-benchmark '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
     );
 }
 
