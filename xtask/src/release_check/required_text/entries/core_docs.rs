@@ -75,6 +75,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/manual-qa.md", "productization status gate"),
     (
         "docs/manual-qa.md",
+        "nix develop --command pnpm --dir apps/desktop install --frozen-lockfile",
+    ),
+    (
+        "docs/manual-qa.md",
+        "nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile",
+    ),
+    (
+        "docs/manual-qa.md",
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
     (

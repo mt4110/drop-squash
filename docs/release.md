@@ -46,6 +46,8 @@ Use the Nix development shell for local QA and release builds so Node, pnpm,
 Rust, and desktop build inputs match the pinned development environment:
 
 ```sh
+nix develop --command pnpm --dir apps/desktop install --frozen-lockfile
+nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 ```
 
@@ -58,6 +60,8 @@ cargo test --workspace
 cargo run -p xtask -- file-size-check
 cargo run -p xtask -- website-check
 cargo run -p xtask -- release-check
+nix develop --command pnpm --dir apps/desktop install --frozen-lockfile
+nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg

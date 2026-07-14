@@ -53,6 +53,8 @@ its Local packaged-app proof preflight:
 
 ```sh
 cargo run -p xtask -- productization-status
+nix develop --command pnpm --dir apps/desktop install --frozen-lockfile
+nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg

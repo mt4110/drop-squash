@@ -59,18 +59,20 @@ mod tests {
         let lines = manual_qa_lines("");
 
         assert!(lines[0].contains("can start"));
-        assert!(lines[1].contains("nix develop --command pnpm"));
-        assert!(lines[1].contains("tauri build"));
-        assert!(lines[2].contains("normalize-dmg"));
-        assert!(lines[3].contains("artifact-check"));
-        assert!(lines[4].contains("manual-qa-prepare"));
-        assert!(lines[4].contains("--reset-trial"));
-        assert!(lines[4].contains("--app-artifact"));
-        assert!(lines[4].contains("--markdown-output"));
-        assert!(lines[5].contains("benchmark --release-set"));
-        assert!(lines[6].contains("benchmark-csv-check"));
-        assert!(lines[7].contains("manual-qa-check"));
-        assert!(lines[8].contains("--restore-state"));
+        assert!(lines[1].contains("apps/desktop install --frozen-lockfile"));
+        assert!(lines[2].contains("apps/desktop/web install --frozen-lockfile"));
+        assert!(lines[3].contains("nix develop --command pnpm"));
+        assert!(lines[3].contains("tauri build"));
+        assert!(lines[4].contains("normalize-dmg"));
+        assert!(lines[5].contains("artifact-check"));
+        assert!(lines[6].contains("manual-qa-prepare"));
+        assert!(lines[6].contains("--reset-trial"));
+        assert!(lines[6].contains("--app-artifact"));
+        assert!(lines[6].contains("--markdown-output"));
+        assert!(lines[7].contains("benchmark --release-set"));
+        assert!(lines[8].contains("benchmark-csv-check"));
+        assert!(lines[9].contains("manual-qa-check"));
+        assert!(lines[10].contains("--restore-state"));
     }
 
     #[test]
@@ -80,16 +82,18 @@ mod tests {
         assert!(lines[0].contains("blocked"));
         assert_eq!(lines[1], " M docs/manual-qa.md");
         assert!(lines[2].contains("rebuild the app artifact"));
-        assert!(lines[3].contains("nix develop --command pnpm"));
-        assert!(lines[3].contains("tauri build"));
-        assert!(lines[4].contains("normalize-dmg"));
-        assert!(lines[5].contains("artifact-check"));
-        assert!(lines[6].contains("manual-qa-prepare"));
-        assert!(lines[6].contains("--reset-trial"));
-        assert!(lines[6].contains("/tmp/dropsquash-manual-qa-prepared.md"));
-        assert!(lines[7].contains("benchmark-results.csv"));
-        assert!(lines[8].contains("benchmark-csv-check"));
-        assert!(lines[9].contains("manual-qa-check"));
-        assert!(lines[10].contains("--restore-state"));
+        assert!(lines[3].contains("apps/desktop install --frozen-lockfile"));
+        assert!(lines[4].contains("apps/desktop/web install --frozen-lockfile"));
+        assert!(lines[5].contains("nix develop --command pnpm"));
+        assert!(lines[5].contains("tauri build"));
+        assert!(lines[6].contains("normalize-dmg"));
+        assert!(lines[7].contains("artifact-check"));
+        assert!(lines[8].contains("manual-qa-prepare"));
+        assert!(lines[8].contains("--reset-trial"));
+        assert!(lines[8].contains("/tmp/dropsquash-manual-qa-prepared.md"));
+        assert!(lines[9].contains("benchmark-results.csv"));
+        assert!(lines[10].contains("benchmark-csv-check"));
+        assert!(lines[11].contains("manual-qa-check"));
+        assert!(lines[12].contains("--restore-state"));
     }
 }

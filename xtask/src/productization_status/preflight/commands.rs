@@ -1,5 +1,7 @@
 pub(super) fn local_packaged_app() -> Vec<String> {
     vec![
+        install_desktop(),
+        install_web(),
         build(),
         normalize(),
         artifact_check(),
@@ -9,6 +11,14 @@ pub(super) fn local_packaged_app() -> Vec<String> {
         manual_check(),
         restore_state(),
     ]
+}
+
+fn install_desktop() -> String {
+    "preflight install desktop deps: nix develop --command pnpm --dir apps/desktop install --frozen-lockfile".to_string()
+}
+
+fn install_web() -> String {
+    "preflight install web deps: nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile".to_string()
 }
 
 fn build() -> String {

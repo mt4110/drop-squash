@@ -27,6 +27,8 @@ artifacts.
 Build the unsigned local QA DMG from the pinned development shell with:
 
 ```bash
+nix develop --command pnpm --dir apps/desktop install --frozen-lockfile
+nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 ```
 

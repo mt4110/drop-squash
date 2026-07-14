@@ -83,6 +83,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/reproducible-builds.md",
+        "nix develop --command pnpm --dir apps/desktop install --frozen-lockfile",
+    ),
+    (
+        "docs/reproducible-builds.md",
+        "nix develop --command pnpm --dir apps/desktop/web install --frozen-lockfile",
+    ),
+    (
+        "docs/reproducible-builds.md",
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
 ];
