@@ -136,8 +136,11 @@ the app may offer an Applications move. The desktop UI uses that preflight to
 warn when DropSquash is running from the disk image, and `copy_to_applications`
 performs the user-triggered copy. The copy result reports whether mounted-volume
 eject may be offered, but keeps downloaded `.dmg` Trash cleanup disabled until a
-deterministic backing `.dmg` path is proven. Relaunch, eject execution UI, and
-downloaded `.dmg` cleanup remain future work.
+deterministic backing `.dmg` path is proven. The desktop command
+`eject_installer_volume` uses native `NSWorkspace` eject on a validated direct
+`/Volumes` mount; it does not shell out and does not delete the downloaded
+`.dmg`. Relaunch, eject execution UI, and downloaded `.dmg` cleanup remain
+future work.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the

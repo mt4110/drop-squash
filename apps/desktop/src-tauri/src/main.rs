@@ -10,6 +10,7 @@ fn main() {
             commands::load_state,
             commands::load_install_location,
             commands::copy_to_applications,
+            commands::eject_installer_volume,
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,

@@ -9,11 +9,10 @@ import { LicensePanel } from "./components/LicensePanel";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
 import { TrialBanner } from "./components/TrialBanner";
+import { useApplicationsInstall } from "./hooks/useApplicationsInstall";
 import { useConversionProgress } from "./hooks/useConversionProgress";
-import { useInstallLocation } from "./hooks/useInstallLocation";
 import { useRecordingDropEvents } from "./hooks/useRecordingDropEvents";
 import type {
-  ApplicationsInstall,
   ConversionSummary,
   ConvertRequest,
   DropZoneState,
@@ -63,8 +62,6 @@ export function App() {
   const [isBusy, setIsBusy] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [isInstallNoticeDismissed, setIsInstallNoticeDismissed] = useState(false);
-  const [isMovingToApplications, setIsMovingToApplications] = useState(false);
   const [isTrashingOriginal, setIsTrashingOriginal] = useState(false);
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
@@ -72,9 +69,10 @@ export function App() {
   const stateRef = useRef<DropZoneState>(initialState);
   const activeQueueId = useRef<number | undefined>(undefined);
   const currentLockedMessage = lockedMessage(state.lockedReason);
-  const installLocation = useInstallLocation(setError);
-  const shouldShowInstallNotice =
-    installLocation?.shouldOfferApplicationsMove && !isInstallNoticeDismissed;
+  const applicationsInstall = useApplicationsInstall(
+    setError,
+    () => setError(undefined),
+  );
 
   useEffect(() => {
     stateRef.current = state;
@@ -344,28 +342,10 @@ export function App() {
     }
   }, []);
 
-  const moveToApplications = useCallback(async () => {
-    if (!isTauri()) {
-      return;
-    }
-
-    setIsMovingToApplications(true);
-    try {
-      const install = await invoke<ApplicationsInstall>("copy_to_applications");
-      await revealItemInDir(install.targetPath);
-      setIsInstallNoticeDismissed(true);
-      setError(undefined);
-    } catch (reason) {
-      setError(String(reason));
-    } finally {
-      setIsMovingToApplications(false);
-    }
-  }, []);
-
   const shellClassName = [
     "shell",
     queue.length > 0 ? "has-queue" : "",
-    shouldShowInstallNotice ? "has-install-notice" : "",
+    applicationsInstall.shouldShowNotice ? "has-install-notice" : "",
   ].filter(Boolean).join(" ");
 
   return (
@@ -383,12 +363,12 @@ export function App() {
         onActivate={activateLicense}
         onForget={forgetLicense}
       />
-      {shouldShowInstallNotice && (
+      {applicationsInstall.shouldShowNotice && applicationsInstall.appPath && (
         <InstallNotice
-          appPath={installLocation.appPath}
-          isMoving={isMovingToApplications}
-          onDismiss={() => setIsInstallNoticeDismissed(true)}
-          onMove={() => void moveToApplications()}
+          appPath={applicationsInstall.appPath}
+          isMoving={applicationsInstall.isMoving}
+          onDismiss={applicationsInstall.dismissNotice}
+          onMove={() => void applicationsInstall.moveToApplications()}
         />
       )}
       <DropZone
