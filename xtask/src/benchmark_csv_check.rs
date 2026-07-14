@@ -18,12 +18,16 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 
 pub(crate) fn validate_path(path: &Path) -> Result<(), String> {
     path_policy::validate(path)?;
+    validation::validate(&read_rows(path)?)
+}
+
+pub(crate) fn read_rows(path: &Path) -> Result<Vec<Vec<String>>, String> {
     if !path.is_file() {
         return Err(format!("benchmark CSV does not exist: {}", path.display()));
     }
     let text = std::fs::read_to_string(path)
         .map_err(|error| format!("failed to read benchmark CSV {}: {error}", path.display()))?;
-    validation::validate(&parse::parse(&text)?)
+    parse::parse(&text)
 }
 
 #[cfg(test)]

@@ -30,6 +30,13 @@ the deterministic local ones after they pass:
 cargo run -p xtask -- manual-qa-fill-release-gates /tmp/dropsquash-manual-qa-prepared.md
 ```
 
+After a real release-set benchmark CSV exists and `benchmark-csv-check` passes,
+you can fill the benchmark command and sample-set rows from that CSV:
+
+```sh
+cargo run -p xtask -- manual-qa-fill-benchmark /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+```
+
 For manual observation rows, do not write only `Pass`, `OK`, `Done`, `Works`,
 `Verified`, or `Observed expected behavior` in the result. Record the concrete
 evidence you saw, such as the generated file name, trial count, Finder
