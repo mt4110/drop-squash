@@ -30,6 +30,20 @@ fn does_not_offer_download_cleanup_when_dmg_path_is_unproven() {
 }
 
 #[test]
+fn normalizes_windows_style_test_paths() {
+    let cleanup = cleanup_after_applications_install(
+        Path::new("\\Volumes\\DropSquash\\DropSquash.app"),
+        Path::new("\\Applications\\DropSquash.app"),
+    );
+
+    assert_eq!(
+        cleanup.mounted_volume_path.as_deref(),
+        Some(Path::new("/Volumes/DropSquash"))
+    );
+    assert!(cleanup.should_offer_mounted_volume_eject);
+}
+
+#[test]
 fn rejects_non_volume_source_for_eject_offer() {
     let cleanup = cleanup_after_applications_install(
         Path::new("/Users/me/DropSquash.app"),

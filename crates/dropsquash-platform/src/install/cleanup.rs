@@ -13,7 +13,7 @@ pub struct InstallerCleanup {
 
 pub fn cleanup_after_applications_install(source: &Path, target: &Path) -> InstallerCleanup {
     let mounted_volume_path = mounted_volume_path(source);
-    let installed_in_applications = target.starts_with(Path::new("/Applications"));
+    let installed_in_applications = path_has_prefix(target, "/Applications/");
     let should_offer_mounted_volume_eject =
         mounted_volume_path.is_some() && installed_in_applications;
     InstallerCleanup {
@@ -25,13 +25,17 @@ pub fn cleanup_after_applications_install(source: &Path, target: &Path) -> Insta
 }
 
 fn mounted_volume_path(path: &Path) -> Option<PathBuf> {
-    let mut components = path.components();
-    if components.next()?.as_os_str() != "/" {
+    let path = path.to_string_lossy().replace('\\', "/");
+    let rest = path.strip_prefix("/Volumes/")?;
+    let volume_name = rest.split('/').next()?;
+    if volume_name.is_empty() {
         return None;
     }
-    if components.next()?.as_os_str() != "Volumes" {
-        return None;
-    }
-    let volume_name = components.next()?.as_os_str();
     Some(Path::new("/Volumes").join(volume_name))
+}
+
+fn path_has_prefix(path: &Path, prefix: &str) -> bool {
+    path.to_string_lossy()
+        .replace('\\', "/")
+        .starts_with(prefix)
 }
