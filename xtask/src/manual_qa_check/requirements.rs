@@ -12,7 +12,8 @@ pub(crate) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(crate) const REQUIRED_CHECKS: [&str; 38] = [
+pub(crate) const REQUIRED_CHECKS: [&str; 39] = [
+    "Disk image launch notice",
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",

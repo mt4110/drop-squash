@@ -2,6 +2,12 @@ use super::Groups;
 
 pub(super) fn for_check(check: &str) -> Option<Groups> {
     match check {
+        "Disk image launch notice" => Some(&[
+            &["disk image"],
+            &["/volumes", "mounted"],
+            &["applications"],
+            &["warn", "notice"],
+        ]),
         "Choose recording conversion" | "Drag-and-drop conversion" => Some(&[
             &[".squashed.mp4"],
             &["smaller"],

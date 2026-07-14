@@ -689,6 +689,16 @@ fn reports_packaged_macos_manual_qa_with_weak_reveal_evidence() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_with_weak_disk_image_notice() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with("Disk image launch notice", "install notice appeared");
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_batch_summary() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -1105,6 +1115,9 @@ fn packaged_result(label: &str) -> String {
         }
         "Tester" => "Manual tester".into(),
         "Date" => "2026-07-11".into(),
+        "Disk image launch notice" => {
+            "app launched from mounted disk image under /Volumes and showed warning notice to move DropSquash to Applications".into()
+        }
         "Choose recording conversion" => {
             "saved smaller clip.squashed.mp4 and original remained in place".into()
         }

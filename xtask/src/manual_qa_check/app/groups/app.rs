@@ -1,5 +1,11 @@
 pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]]> {
     let groups: &[&[&str]] = match label {
+        "Disk image launch notice" => &[
+            &["disk image"],
+            &["/volumes", "mounted"],
+            &["applications"],
+            &["warn", "notice"],
+        ],
         "Choose recording conversion" | "Drag-and-drop conversion" => &[
             &[".squashed.mp4"],
             &["smaller"],

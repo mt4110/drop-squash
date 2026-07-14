@@ -10,6 +10,7 @@ pub(super) const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "License cache path",
     "Tester",
     "Date",
+    "Disk image launch notice",
     "Choose recording conversion",
     "Drag-and-drop conversion",
     "Privacy receipt sidecar",

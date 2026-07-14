@@ -1304,12 +1304,16 @@ fn reports_activating_state_without_submit_context() {
 #[test]
 fn reports_incomplete_packaged_app_results() {
     let (_directory, path) = write_manual_qa(
-        "| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\
+        "| Disk image launch notice | Mounted DMG | Shows notice | app showed install prompt |\n\
+| Choose recording conversion | Small `.mov` | Creates output | converted file |\n\
 | Cancellation | Large recording | App returns ready | stopped |\n\
 | Reveal output | Completed output link | Finder opens | opened |\n",
     );
     let missing = check_file(&path).unwrap();
 
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Disk image launch notice")));
     assert!(missing
         .iter()
         .any(|error| error.contains("Choose recording conversion")));
@@ -1961,6 +1965,8 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Expired license refresh | Passes | attempted conversion with expired offline grace license.json cache; reconnect prompt appeared, blocked conversion before starting, and checked cache had no raw key |\n");
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; confirmed license cache cleared and observed app returned to trial state |\n");
+        } else if check == "Disk image launch notice" {
+            text.push_str("| Disk image launch notice | Passes | app launched from mounted disk image under /Volumes and showed warning notice to move DropSquash to Applications |\n");
         } else if check == "Choose recording conversion" {
             text.push_str("| Choose recording conversion | Passes | saved smaller clip.squashed.mp4 and original remained in place |\n");
         } else if check == "Drag-and-drop conversion" {
