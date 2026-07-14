@@ -61,7 +61,7 @@ Record this context with the CSV in `docs/manual-qa.md`:
 Use this compact format in the manual QA result cell:
 
 ```text
-Backend: apple-native. Samples: short.mov 58.0% saved 18.2 MiB/s 3.4x speed ratio; medium.mov 62.0% saved 21.0 MiB/s 2.9x speed ratio; large.mov 56.0% saved 19.5 MiB/s 2.4x speed ratio. CSV saved outside repo: /tmp/dropsquash-bench/results.csv
+Backend: apple-native. Samples: three short, medium, and large local recordings produced smaller outputs. short.mov duration 24.0s 58.0% saved 18.2 MiB/s 3.4x speed ratio; medium.mov duration 180.0s 62.0% saved 21.0 MiB/s 2.9x speed ratio; large.mov duration 720.0s 56.0% saved 19.5 MiB/s 2.4x speed ratio. Machine: MacBookPro18,4. OS: macOS 26.5. CSV saved outside repo: /tmp/dropsquash-bench/results.csv
 ```
 
 Acceptance notes:

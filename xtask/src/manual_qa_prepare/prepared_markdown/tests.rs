@@ -58,6 +58,9 @@ fn writes_benchmark_environment_context_when_available() {
     assert!(text.contains("benchmark-results.csv"));
     assert!(text.contains("- macOS: macOS 15.5"));
     assert!(text.contains("- Machine: MacBook Pro"));
+    assert!(text.contains("Result skeleton: Backend: apple-native"));
+    assert!(text.contains("short.mov duration <seconds>s"));
+    assert!(text.contains("CSV saved outside repo:"));
 }
 
 #[test]

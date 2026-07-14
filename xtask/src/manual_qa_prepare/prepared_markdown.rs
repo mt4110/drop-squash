@@ -70,11 +70,22 @@ fn open_dmg_command(path: &Path) -> String {
 fn benchmark_context(fields: &[markdown::Field], options: &Options) -> String {
     let macos = field_value(fields, "macOS version");
     let machine = field_value(fields, "Machine");
+    let csv = options.output_dir.join("benchmark-results.csv");
     format!(
-        "Benchmark context to record:\n\n- CSV: {}\n- macOS: {}\n- Machine: {}",
-        options.output_dir.join("benchmark-results.csv").display(),
+        "Benchmark context to record:\n\n- CSV: {}\n- macOS: {}\n- Machine: {}\n- Result skeleton: {}",
+        csv.display(),
         macos.unwrap_or("<record macOS version>"),
-        machine.unwrap_or("<record machine>")
+        machine.unwrap_or("<record machine>"),
+        result_skeleton(machine, macos, &csv)
+    )
+}
+
+fn result_skeleton(machine: Option<&str>, macos: Option<&str>, csv: &Path) -> String {
+    format!(
+        "Backend: apple-native. Samples: three short, medium, and large local recordings produced smaller outputs. short.mov duration <seconds>s <saved>% saved <throughput> MiB/s <ratio>x speed ratio; medium.mov duration <seconds>s <saved>% saved <throughput> MiB/s <ratio>x speed ratio; large.mov duration <seconds>s <saved>% saved <throughput> MiB/s <ratio>x speed ratio. Machine: {}. OS: {}. CSV saved outside repo: {}",
+        machine.unwrap_or("<record machine>"),
+        macos.unwrap_or("<record macOS version>"),
+        csv.display()
     )
 }
 
