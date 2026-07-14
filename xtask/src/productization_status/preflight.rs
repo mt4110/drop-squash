@@ -38,9 +38,9 @@ fn manual_qa_lines(status: &str) -> Vec<String> {
         return lines;
     }
     let mut lines = vec![
-        "preflight: manual QA is blocked by dirty git worktree".to_string(),
+        "preflight: current worktree is dirty; use a clean detached QA worktree or clean these changes before rebuilding the app artifact".to_string(),
         crate::git_status::dirty_paths(status),
-        "preflight next: commit, stash, or intentionally remove these changes, then rebuild the app artifact".to_string(),
+        "preflight current-worktree option: commit, stash, or intentionally remove these changes, then rebuild the app artifact".to_string(),
         "preflight clean worktree option: git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD".to_string(),
     ];
     lines.extend(next_commands());
@@ -87,7 +87,8 @@ mod tests {
     fn reports_dirty_manual_qa_preflight() {
         let lines = manual_qa_lines(" M docs/manual-qa.md\n");
 
-        assert!(lines[0].contains("blocked"));
+        assert!(lines[0].contains("current worktree is dirty"));
+        assert!(lines[0].contains("clean detached QA worktree"));
         assert_eq!(lines[1], " M docs/manual-qa.md");
         assert!(lines[2].contains("rebuild the app artifact"));
         assert!(lines[3].contains("git worktree add --detach"));
