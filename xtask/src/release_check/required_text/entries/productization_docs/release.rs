@@ -88,6 +88,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/productization.md",
-        "Finder copy or drag-to-Applications cannot run app code",
+        "Finder copy, copy-and-paste, or drag-to-Applications cannot run app code",
+    ),
+    ("docs/productization.md", "copy-and-paste"),
+    (
+        "docs/productization.md",
+        "deterministic backing-path detection",
     ),
 ];

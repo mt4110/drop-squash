@@ -139,6 +139,12 @@ be offered when the backing `.dmg` path is known through a deterministic macOS
 API and verified as the DropSquash distribution image. If that path cannot be
 proven, keep the mounted-volume eject only. The UI must say that it moves the
 downloaded DMG to Trash; it must not present the action as automatic deletion.
+Schedule downloaded-DMG Trash cleanup after signed/notarized DMG manual QA,
+because the proof must use the same distribution image shape that users receive.
+Acceptance requires a reproducible packaged-app check showing the mounted volume
+maps to the exact downloaded `DropSquash.dmg`, the image name and bundle identity
+match DropSquash, copy-and-paste installs still do not expose cleanup, and the
+Trash action is shown only after the user-triggered Applications copy succeeds.
 The desktop command `load_install_location` currently provides the read-only
 preflight for that helper: it reports the current `.app` path, whether launch is
 from `/Volumes`, whether the app is already under `/Applications`, and whether

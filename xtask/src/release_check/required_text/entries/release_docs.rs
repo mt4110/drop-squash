@@ -49,6 +49,11 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/release.md",
+        "Schedule downloaded-DMG Trash cleanup after signed/notarized DMG manual QA",
+    ),
+    ("docs/release.md", "copy-and-paste installs still do not expose cleanup"),
+    (
+        "docs/release.md",
         "Live checkout URL, GitHub Release URL, and Homebrew tap PR URL",
     ),
     ("docs/release.md", "checkout, and refund links"),
