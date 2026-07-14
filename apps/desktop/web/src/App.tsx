@@ -4,11 +4,13 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { DropZone } from "./components/DropZone";
 import { HelpPopover } from "./components/HelpPopover";
+import { InstallNotice } from "./components/InstallNotice";
 import { LicensePanel } from "./components/LicensePanel";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
 import { TrialBanner } from "./components/TrialBanner";
 import { useConversionProgress } from "./hooks/useConversionProgress";
+import { useInstallLocation } from "./hooks/useInstallLocation";
 import { useRecordingDropEvents } from "./hooks/useRecordingDropEvents";
 import type {
   ConversionSummary,
@@ -60,6 +62,7 @@ export function App() {
   const [isBusy, setIsBusy] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isInstallNoticeDismissed, setIsInstallNoticeDismissed] = useState(false);
   const [isTrashingOriginal, setIsTrashingOriginal] = useState(false);
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
@@ -67,6 +70,9 @@ export function App() {
   const stateRef = useRef<DropZoneState>(initialState);
   const activeQueueId = useRef<number | undefined>(undefined);
   const currentLockedMessage = lockedMessage(state.lockedReason);
+  const installLocation = useInstallLocation(setError);
+  const shouldShowInstallNotice =
+    installLocation?.shouldOfferApplicationsMove && !isInstallNoticeDismissed;
 
   useEffect(() => {
     stateRef.current = state;
@@ -336,8 +342,14 @@ export function App() {
     }
   }, []);
 
+  const shellClassName = [
+    "shell",
+    queue.length > 0 ? "has-queue" : "",
+    shouldShowInstallNotice ? "has-install-notice" : "",
+  ].filter(Boolean).join(" ");
+
   return (
-    <main className={`shell${queue.length > 0 ? " has-queue" : ""}`}>
+    <main className={shellClassName}>
       <button aria-label="Show quick tips" className="help-button" title="Show quick tips" type="button" onClick={() => setIsHelpOpen(true)}>?</button>
       <TrialBanner
         successfulConversions={state.successfulConversions}
@@ -351,6 +363,12 @@ export function App() {
         onActivate={activateLicense}
         onForget={forgetLicense}
       />
+      {shouldShowInstallNotice && (
+        <InstallNotice
+          appPath={installLocation.appPath}
+          onDismiss={() => setIsInstallNoticeDismissed(true)}
+        />
+      )}
       <DropZone
         isBusy={isBusy}
         isDragging={isDragging}

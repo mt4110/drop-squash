@@ -125,8 +125,9 @@ explicit user action.
 The desktop command `load_install_location` currently provides the read-only
 preflight for that helper: it reports the current `.app` path, whether launch is
 from `/Volumes`, whether the app is already under `/Applications`, and whether
-the app may offer an Applications move. The move/eject/delete actions are not
-implemented yet.
+the app may offer an Applications move. The desktop UI now uses that preflight
+to warn when DropSquash is running from the disk image. The move/eject/delete
+actions are not implemented yet.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the
