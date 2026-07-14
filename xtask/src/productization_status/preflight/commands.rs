@@ -9,6 +9,8 @@ pub(super) fn local_packaged_app() -> Vec<String> {
         checksum(),
         benchmark(),
         csv_check(),
+        ready_local_proof(),
+        pending_local_proof(),
         manual_check(),
         restore_state(),
     ]
@@ -61,6 +63,18 @@ fn benchmark() -> String {
 fn csv_check() -> String {
     format!(
         "preflight benchmark check: cargo run -p xtask -- benchmark-csv-check {OUTPUT_DIR}/benchmark-results.csv"
+    )
+}
+
+fn ready_local_proof() -> String {
+    format!(
+        "preflight ready local proof: cargo run -p xtask -- manual-qa-ready-local-proof {QA_MARKDOWN} {OUTPUT_DIR}/benchmark-results.csv"
+    )
+}
+
+fn pending_local_proof() -> String {
+    format!(
+        "preflight local-proof pending: cargo run -p xtask -- manual-qa-pending {QA_MARKDOWN} --section local-proof"
     )
 }
 

@@ -77,10 +77,13 @@ mod tests {
         assert!(lines[7].contains("SHA256SUMS"));
         assert!(lines[8].contains("benchmark --release-set"));
         assert!(lines[9].contains("benchmark-csv-check"));
-        assert!(lines[10].contains("manual-qa-check"));
-        assert!(lines[11].contains("--restore-state"));
-        assert!(lines[11].contains("Application Support/DropSquash"));
-        assert!(lines[11].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
+        assert!(lines[10].contains("manual-qa-ready-local-proof"));
+        assert!(lines[11].contains("manual-qa-pending"));
+        assert!(lines[11].contains("--section local-proof"));
+        assert!(lines[12].contains("manual-qa-check"));
+        assert!(lines[13].contains("--restore-state"));
+        assert!(lines[13].contains("Application Support/DropSquash"));
+        assert!(lines[13].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
     }
 
     #[test]
@@ -108,9 +111,12 @@ mod tests {
         assert!(lines[10].contains("SHA256SUMS"));
         assert!(lines[11].contains("benchmark-results.csv"));
         assert!(lines[12].contains("benchmark-csv-check"));
-        assert!(lines[13].contains("manual-qa-check"));
-        assert!(lines[14].contains("--restore-state"));
-        assert!(lines[14].contains("Application Support/DropSquash"));
-        assert!(lines[14].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
+        assert!(lines[13].contains("manual-qa-ready-local-proof"));
+        assert!(lines[14].contains("manual-qa-pending"));
+        assert!(lines[14].contains("--section local-proof"));
+        assert!(lines[15].contains("manual-qa-check"));
+        assert!(lines[16].contains("--restore-state"));
+        assert!(lines[16].contains("Application Support/DropSquash"));
+        assert!(lines[16].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
     }
 }
