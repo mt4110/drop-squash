@@ -46,11 +46,27 @@ fn manual_qa_lines(status: &str) -> Vec<String> {
 
 fn next_commands() -> Vec<String> {
     vec![
+        build_command(),
+        normalize_command(),
+        artifact_check_command(),
         manual_qa_command(),
         benchmark_command(),
         csv_check_command(),
         manual_check_command(),
     ]
+}
+
+fn build_command() -> String {
+    "preflight build: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci"
+        .to_string()
+}
+
+fn normalize_command() -> String {
+    "preflight normalize: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg".to_string()
+}
+
+fn artifact_check_command() -> String {
+    "preflight artifact check: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg".to_string()
 }
 
 fn manual_qa_command() -> String {
@@ -78,11 +94,14 @@ mod tests {
         let lines = manual_qa_lines("");
 
         assert!(lines[0].contains("can start"));
-        assert!(lines[1].contains("manual-qa-prepare"));
-        assert!(lines[1].contains("--app-artifact"));
-        assert!(lines[2].contains("benchmark --release-set"));
-        assert!(lines[3].contains("benchmark-csv-check"));
-        assert!(lines[4].contains("manual-qa-check"));
+        assert!(lines[1].contains("tauri build"));
+        assert!(lines[2].contains("normalize-dmg"));
+        assert!(lines[3].contains("artifact-check"));
+        assert!(lines[4].contains("manual-qa-prepare"));
+        assert!(lines[4].contains("--app-artifact"));
+        assert!(lines[5].contains("benchmark --release-set"));
+        assert!(lines[6].contains("benchmark-csv-check"));
+        assert!(lines[7].contains("manual-qa-check"));
     }
 
     #[test]
@@ -92,9 +111,12 @@ mod tests {
         assert!(lines[0].contains("blocked"));
         assert_eq!(lines[1], " M docs/manual-qa.md");
         assert!(lines[2].contains("rebuild the app artifact"));
-        assert!(lines[3].contains("manual-qa-prepare"));
-        assert!(lines[4].contains("benchmark-results.csv"));
-        assert!(lines[5].contains("benchmark-csv-check"));
-        assert!(lines[6].contains("manual-qa-check"));
+        assert!(lines[3].contains("tauri build"));
+        assert!(lines[4].contains("normalize-dmg"));
+        assert!(lines[5].contains("artifact-check"));
+        assert!(lines[6].contains("manual-qa-prepare"));
+        assert!(lines[7].contains("benchmark-results.csv"));
+        assert!(lines[8].contains("benchmark-csv-check"));
+        assert!(lines[9].contains("manual-qa-check"));
     }
 }
