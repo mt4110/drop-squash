@@ -64,6 +64,7 @@ mod tests {
         assert!(lines[3].contains("artifact-check"));
         assert!(lines[4].contains("manual-qa-prepare"));
         assert!(lines[4].contains("--app-artifact"));
+        assert!(lines[4].contains("--markdown-output"));
         assert!(lines[5].contains("benchmark --release-set"));
         assert!(lines[6].contains("benchmark-csv-check"));
         assert!(lines[7].contains("manual-qa-check"));
@@ -80,6 +81,7 @@ mod tests {
         assert!(lines[4].contains("normalize-dmg"));
         assert!(lines[5].contains("artifact-check"));
         assert!(lines[6].contains("manual-qa-prepare"));
+        assert!(lines[6].contains("/tmp/dropsquash-manual-qa-prepared.md"));
         assert!(lines[7].contains("benchmark-results.csv"));
         assert!(lines[8].contains("benchmark-csv-check"));
         assert!(lines[9].contains("manual-qa-check"));
