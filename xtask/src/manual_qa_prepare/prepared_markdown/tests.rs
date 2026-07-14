@@ -1,5 +1,5 @@
 use super::write;
-use crate::manual_qa_prepare::markdown;
+use crate::manual_qa_prepare::{markdown, options::Options};
 
 #[test]
 fn writes_fields_and_release_candidate_rows() {
@@ -9,10 +9,19 @@ fn writes_fields_and_release_candidate_rows() {
     std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
     let fields: Vec<markdown::Field> = vec![("App build", "DropSquash 0.1.0 git abc1234".into())];
 
-    write(&output, &fields, Some(&artifact), directory.path()).unwrap();
+    write(
+        &output,
+        &fields,
+        Some(&artifact),
+        &options(directory.path()),
+    )
+    .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(text.starts_with("Prepared manual QA draft only."));
+    assert!(text.contains("Benchmark commands:"));
+    assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
+    assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
     assert!(text.contains("Checksum command:"));
     assert!(text.contains("cargo run -p xtask -- checksum"));
     assert!(text.contains("SHA256SUMS"));
@@ -37,7 +46,13 @@ fn release_candidate_draft_contains_every_required_check() {
     std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
     let fields: Vec<markdown::Field> = vec![("App artifact", artifact.display().to_string())];
 
-    write(&output, &fields, Some(&artifact), directory.path()).unwrap();
+    write(
+        &output,
+        &fields,
+        Some(&artifact),
+        &options(directory.path()),
+    )
+    .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
     let labels = manual_qa_labels(&text);
 
@@ -54,7 +69,7 @@ fn written_draft_is_rejected_by_manual_qa_check() {
     let output = directory.path().join("prepared.md");
     let fields: Vec<markdown::Field> = vec![("App build", "DropSquash 0.1.0 git abc1234".into())];
 
-    write(&output, &fields, None, directory.path()).unwrap();
+    write(&output, &fields, None, &options(directory.path())).unwrap();
     let missing = crate::manual_qa_check::check_file(&output).unwrap();
 
     assert!(missing
@@ -70,7 +85,13 @@ fn release_candidate_draft_is_rejected_by_manual_qa_check() {
     std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
     let fields: Vec<markdown::Field> = vec![("App artifact", artifact.display().to_string())];
 
-    write(&output, &fields, Some(&artifact), directory.path()).unwrap();
+    write(
+        &output,
+        &fields,
+        Some(&artifact),
+        &options(directory.path()),
+    )
+    .unwrap();
     let missing = crate::manual_qa_check::check_file(&output).unwrap();
 
     assert!(missing
@@ -85,7 +106,7 @@ fn rejects_existing_output_file() {
     std::fs::write(&output, "keep this evidence").unwrap();
     let fields: Vec<markdown::Field> = vec![("App build", "DropSquash 0.1.0 git abc1234".into())];
 
-    let error = write(&output, &fields, None, directory.path()).unwrap_err();
+    let error = write(&output, &fields, None, &options(directory.path())).unwrap_err();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(error.contains("failed to create manual QA Markdown output"));
@@ -98,6 +119,19 @@ fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     trailer[..4].copy_from_slice(b"koly");
     bytes.extend(trailer);
     bytes
+}
+
+fn options(path: &std::path::Path) -> Options {
+    Options {
+        app_artifact: None,
+        app_state_dir: path.join("app-state"),
+        input_sample_set: None,
+        markdown_output: None,
+        output_dir: path.join("qa-output"),
+        reset_trial: false,
+        restore_state: false,
+        state_dir: path.join("state"),
+    }
 }
 
 fn manual_qa_labels(text: &str) -> Vec<String> {

@@ -3,18 +3,10 @@ use std::path::PathBuf;
 use super::options::Options;
 
 pub(super) fn print_plan(options: &Options) {
-    let csv = csv_output(options);
     println!("manual QA Benchmark command:");
-    println!(
-        "cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mov --input /absolute/path/to/medium.mov --input /absolute/path/to/large.mov --output-dir {} --csv-output {}",
-        options.output_dir.display(),
-        csv.display()
-    );
+    println!("{}", benchmark_command(options));
     println!("manual QA Benchmark CSV check:");
-    println!(
-        "cargo run -p xtask -- benchmark-csv-check {}",
-        csv.display()
-    );
+    println!("{}", csv_check_command(options));
     println!("manual QA Benchmark observation rows:");
     for row in rows() {
         println!("{row}");
@@ -23,6 +15,22 @@ pub(super) fn print_plan(options: &Options) {
 
 fn csv_output(options: &Options) -> PathBuf {
     options.output_dir.join("benchmark-results.csv")
+}
+
+pub(super) fn benchmark_command(options: &Options) -> String {
+    let csv = csv_output(options);
+    format!(
+        "cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mov --input /absolute/path/to/medium.mov --input /absolute/path/to/large.mov --output-dir {} --csv-output {}",
+        options.output_dir.display(),
+        csv.display()
+    )
+}
+
+pub(super) fn csv_check_command(options: &Options) -> String {
+    format!(
+        "cargo run -p xtask -- benchmark-csv-check {}",
+        csv_output(options).display()
+    )
 }
 
 pub(super) fn rows() -> Vec<String> {
