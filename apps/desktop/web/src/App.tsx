@@ -366,6 +366,8 @@ export function App() {
       {applicationsInstall.shouldShowNotice && applicationsInstall.appPath && (
         <InstallNotice
           appPath={applicationsInstall.appPath}
+          didCopyToApplications={applicationsInstall.didCopyToApplications}
+          installedPath={applicationsInstall.installedPath}
           isMoving={applicationsInstall.isMoving}
           onDismiss={applicationsInstall.dismissNotice}
           onMove={() => void applicationsInstall.moveToApplications()}

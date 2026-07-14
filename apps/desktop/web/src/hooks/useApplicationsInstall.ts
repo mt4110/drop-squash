@@ -6,7 +6,9 @@ import type { ApplicationsInstall } from "../lib/commands";
 
 type ApplicationsInstallState = {
   appPath?: string;
+  installedPath?: string;
   isMoving: boolean;
+  didCopyToApplications: boolean;
   shouldShowNotice: boolean;
   dismissNotice: () => void;
   moveToApplications: () => Promise<void>;
@@ -18,9 +20,11 @@ export function useApplicationsInstall(
 ): ApplicationsInstallState {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [installedPath, setInstalledPath] = useState<string>();
   const installLocation = useInstallLocation(onError);
   const shouldShowNotice =
-    Boolean(installLocation?.shouldOfferApplicationsMove) && !isDismissed;
+    (Boolean(installLocation?.shouldOfferApplicationsMove) || Boolean(installedPath)) &&
+    !isDismissed;
 
   const moveToApplications = useCallback(async () => {
     if (!isTauri()) {
@@ -31,7 +35,8 @@ export function useApplicationsInstall(
     try {
       const install = await invoke<ApplicationsInstall>("copy_to_applications");
       await revealItemInDir(install.targetPath);
-      setIsDismissed(true);
+      setInstalledPath(install.targetPath);
+      setIsDismissed(false);
       onReady();
     } catch (reason) {
       onError(String(reason));
@@ -42,7 +47,9 @@ export function useApplicationsInstall(
 
   return {
     appPath: installLocation?.appPath,
+    installedPath,
     isMoving,
+    didCopyToApplications: Boolean(installedPath),
     shouldShowNotice,
     dismissNotice: () => setIsDismissed(true),
     moveToApplications,

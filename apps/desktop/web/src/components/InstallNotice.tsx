@@ -1,20 +1,34 @@
 type InstallNoticeProps = {
   appPath: string;
+  didCopyToApplications: boolean;
+  installedPath?: string;
   isMoving: boolean;
   onDismiss: () => void;
   onMove: () => void;
 };
 
-export function InstallNotice({ appPath, isMoving, onDismiss, onMove }: InstallNoticeProps) {
+export function InstallNotice({
+  appPath,
+  didCopyToApplications,
+  installedPath,
+  isMoving,
+  onDismiss,
+  onMove,
+}: InstallNoticeProps) {
+  const message = didCopyToApplications
+    ? "DropSquash was copied to Applications. Open that copy before ejecting the disk image."
+    : "DropSquash is running from the disk image. Move it to Applications before regular use.";
+  const title = installedPath ?? appPath;
+
   return (
     <section className="install-notice" aria-label="Install notice">
-      <span title={appPath}>
-        DropSquash is running from the disk image. Move it to Applications before regular use.
-      </span>
+      <span title={title}>{message}</span>
       <div>
-        <button type="button" disabled={isMoving} onClick={onMove}>
-          {isMoving ? "Moving..." : "Move"}
-        </button>
+        {!didCopyToApplications && (
+          <button type="button" disabled={isMoving} onClick={onMove}>
+            {isMoving ? "Moving..." : "Move"}
+          </button>
+        )}
         <button type="button" disabled={isMoving} onClick={onDismiss}>OK</button>
       </div>
     </section>
