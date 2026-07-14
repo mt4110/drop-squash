@@ -63,7 +63,7 @@ fn skips_missing_state_files() {
 fn parses_custom_directories() {
     let options = Options::parse(vec![
         "--app-state-dir".to_string(),
-        "/tmp/app-state".to_string(),
+        "/tmp/Library/Application Support/DropSquash".to_string(),
         "--app-artifact".to_string(),
         "/tmp/DropSquash.app".to_string(),
         "--input-sample-set".to_string(),
@@ -90,7 +90,10 @@ fn parses_custom_directories() {
         options.markdown_output,
         Some(PathBuf::from("/tmp/manual-qa-prepared.md"))
     );
-    assert_eq!(options.app_state_dir, PathBuf::from("/tmp/app-state"));
+    assert_eq!(
+        options.app_state_dir,
+        PathBuf::from("/tmp/Library/Application Support/DropSquash")
+    );
     assert_eq!(options.output_dir, PathBuf::from("/tmp/output"));
     assert!(options.reset_trial);
     assert!(!options.restore_state);
@@ -122,7 +125,7 @@ fn prints_provided_sample_set() {
 fn reset_trial_output_names_state_directory_and_files() {
     let options = Options::parse(vec![
         "--app-state-dir".to_string(),
-        "/tmp/dropsquash-state".to_string(),
+        "/tmp/Library/Application Support/DropSquash".to_string(),
         "--input-sample-set".to_string(),
         "short, medium, and large local recordings".to_string(),
         "--reset-trial".to_string(),
@@ -131,7 +134,7 @@ fn reset_trial_output_names_state_directory_and_files() {
 
     let lines = reset_trial_lines(&options).join("\n");
 
-    assert!(lines.contains("/tmp/dropsquash-state"));
+    assert!(lines.contains("/tmp/Library/Application Support/DropSquash"));
     assert!(lines.contains("history.jsonl"));
     assert!(lines.contains("license.json"));
 }
@@ -397,6 +400,18 @@ fn rejects_app_state_source_inside_repository() {
 
     assert!(error.contains("--app-state-dir"));
     assert!(error.contains("outside the repository"));
+}
+
+#[test]
+fn rejects_app_state_source_outside_application_support() {
+    let error = Options::parse(vec![
+        "--app-state-dir".to_string(),
+        "/tmp/dropsquash-state".to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("--app-state-dir"));
+    assert!(error.contains("Application Support/DropSquash"));
 }
 
 #[test]

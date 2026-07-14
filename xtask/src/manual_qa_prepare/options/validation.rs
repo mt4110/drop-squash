@@ -25,6 +25,7 @@ pub(super) fn validate(options: &Options) -> Result<(), String> {
         );
     }
     path_policy::require_outside_repo("--app-state-dir", &options.app_state_dir)?;
+    require_app_support_dir(&options.app_state_dir)?;
     validate_markdown_output(options)?;
     path_policy::require_outside_repo("--output-dir", &options.output_dir)?;
     path_policy::require_outside_repo("--state-dir", &options.state_dir)
@@ -49,4 +50,14 @@ fn require_markdown_file(path: &Path) -> Result<(), String> {
         return Ok(());
     }
     Err("--markdown-output must point to a .md file".to_string())
+}
+
+fn require_app_support_dir(path: &Path) -> Result<(), String> {
+    let value = path.to_string_lossy();
+    if value.contains("Application Support/DropSquash")
+        || value.contains("Application Support\\DropSquash")
+    {
+        return Ok(());
+    }
+    Err("manual QA --app-state-dir must be an Application Support/DropSquash path".to_string())
 }
