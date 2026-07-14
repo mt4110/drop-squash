@@ -27,7 +27,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
         release_candidate::print_rows(path, &options.output_dir)?;
     }
     if let Some(path) = &options.markdown_output {
-        prepared_markdown::write(path, &fields, artifact.as_deref())?;
+        prepared_markdown::write(path, &fields, artifact.as_deref(), &options.output_dir)?;
     }
     Ok(())
 }

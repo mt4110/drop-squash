@@ -36,7 +36,7 @@ pub(super) fn rows(path: &Path) -> Result<Vec<String>, String> {
     ])
 }
 
-fn checksum_command(path: &Path, output_dir: &Path) -> String {
+pub(super) fn checksum_command(path: &Path, output_dir: &Path) -> String {
     let output = output_dir.join("SHA256SUMS");
     format!(
         "cargo run -p xtask -- checksum {} --output {}",
