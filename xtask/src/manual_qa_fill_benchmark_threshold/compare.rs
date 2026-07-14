@@ -1,7 +1,14 @@
 use std::collections::BTreeMap;
 use std::path::Path;
 
-pub(super) fn result(current: &Path, baseline: &Path) -> Result<String, String> {
+pub(super) fn result(current: &Path, baseline: Option<&Path>) -> Result<String, String> {
+    if baseline.is_none() {
+        return Ok(format!(
+            "first release candidate sample set establishes the same-machine release candidate baseline at {}; 20% regression comparison starts with the next release candidate sample set",
+            current.display()
+        ));
+    }
+    let baseline = baseline.expect("checked above");
     let current_rows = samples(current)?;
     let baseline_rows = samples(baseline)?;
     if current_rows.len() != baseline_rows.len() {

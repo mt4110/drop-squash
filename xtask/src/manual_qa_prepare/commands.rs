@@ -38,7 +38,7 @@ pub(super) fn fill_benchmark_command(path: &Path, csv: &Path) -> String {
 
 pub(super) fn fill_benchmark_threshold_command(path: &Path, csv: &Path) -> String {
     format!(
-        "cargo run -p xtask -- manual-qa-fill-benchmark-threshold '{}' '{}' '/absolute/path/to/baseline-results.csv'",
+        "cargo run -p xtask -- manual-qa-fill-benchmark-threshold '{}' '{}'",
         shell_single_quote(path),
         shell_single_quote(csv)
     )

@@ -150,7 +150,7 @@ fn helper_output_quotes_paths() {
     );
     assert_eq!(
         fill_benchmark_threshold_line(&markdown, &output_dir),
-        "manual QA Fill benchmark threshold command: cargo run -p xtask -- manual-qa-fill-benchmark-threshold '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv' '/absolute/path/to/baseline-results.csv'"
+        "manual QA Fill benchmark threshold command: cargo run -p xtask -- manual-qa-fill-benchmark-threshold '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
     );
     assert_eq!(
         clean_draft_line(&markdown),

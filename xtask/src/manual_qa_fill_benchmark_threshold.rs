@@ -6,27 +6,32 @@ mod markdown;
 #[cfg(test)]
 mod tests;
 
-const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-fill-benchmark-threshold <manual-qa.md> <results.csv> <baseline-results.csv>";
+const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-fill-benchmark-threshold <manual-qa.md> <results.csv> [baseline-results.csv]";
 
 pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let (manual, current, baseline) = parse_args(args)?;
     crate::benchmark_csv_check::validate_path(&current)?;
-    crate::benchmark_csv_check::validate_path(&baseline)?;
+    if let Some(path) = baseline.as_deref() {
+        crate::benchmark_csv_check::validate_path(path)?;
+    }
     let text = std::fs::read_to_string(&manual)
         .map_err(|error| format!("failed to read manual QA file: {error}"))?;
-    let filled = fill_rows(&text, &compare::result(&current, &baseline)?)?;
+    let filled = fill_rows(&text, &compare::result(&current, baseline.as_deref())?)?;
     std::fs::write(&manual, filled)
         .map_err(|error| format!("failed to write manual QA file: {error}"))?;
     println!("filled benchmark threshold row: {}", manual.display());
     Ok(())
 }
 
-fn parse_args(args: Vec<String>) -> Result<(PathBuf, PathBuf, PathBuf), String> {
+fn parse_args(args: Vec<String>) -> Result<(PathBuf, PathBuf, Option<PathBuf>), String> {
     match args.as_slice() {
+        [manual, current] if manual != "--help" && manual != "-h" => {
+            Ok((PathBuf::from(manual), PathBuf::from(current), None))
+        }
         [manual, current, baseline] if manual != "--help" && manual != "-h" => Ok((
             PathBuf::from(manual),
             PathBuf::from(current),
-            PathBuf::from(baseline),
+            Some(PathBuf::from(baseline)),
         )),
         _ => Err(USAGE.to_string()),
     }

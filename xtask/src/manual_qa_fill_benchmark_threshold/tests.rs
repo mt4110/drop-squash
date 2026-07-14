@@ -10,7 +10,7 @@ fn fills_threshold_row() {
     std::fs::write(&current, csv_text(&[10.0, 9.0, 7.5])).unwrap();
     std::fs::write(&baseline, csv_text(&[10.0, 10.0, 10.0])).unwrap();
 
-    run(paths(&manual, &current, &baseline)).unwrap();
+    run(paths(&manual, &current, Some(&baseline))).unwrap();
     let filled = std::fs::read_to_string(&manual).unwrap();
 
     assert!(filled.contains("1 sample exceeded 20% regression"));
@@ -26,7 +26,7 @@ fn rejects_two_large_regressions() {
     std::fs::write(&current, csv_text(&[7.0, 7.5, 10.0])).unwrap();
     std::fs::write(&baseline, csv_text(&[10.0, 10.0, 10.0])).unwrap();
 
-    let error = super::compare::result(&current, &baseline).unwrap_err();
+    let error = super::compare::result(&current, Some(&baseline)).unwrap_err();
 
     assert!(error.contains("2 samples exceeded 20% regression"));
 }
@@ -43,16 +43,32 @@ fn rejects_missing_threshold_row() {
     assert!(error.contains("benchmark threshold row"));
 }
 
+#[test]
+fn initializes_first_release_candidate_baseline_without_comparison_csv() {
+    let dir = tempfile::tempdir().unwrap();
+    let manual = dir.path().join("manual.md");
+    let current = dir.path().join("current.csv");
+    std::fs::write(&manual, manual_text()).unwrap();
+    std::fs::write(&current, csv_text(&[10.0, 9.0, 7.5])).unwrap();
+
+    run(paths(&manual, &current, None)).unwrap();
+    let filled = std::fs::read_to_string(&manual).unwrap();
+
+    assert!(filled.contains("first release candidate sample set establishes"));
+    assert!(filled.contains("same-machine release candidate baseline"));
+    assert!(filled.contains("20% regression comparison"));
+}
+
 fn paths(
     manual: &std::path::Path,
     current: &std::path::Path,
-    baseline: &std::path::Path,
+    baseline: Option<&std::path::Path>,
 ) -> Vec<String> {
-    vec![
-        manual.display().to_string(),
-        current.display().to_string(),
-        baseline.display().to_string(),
-    ]
+    let mut args = vec![manual.display().to_string(), current.display().to_string()];
+    if let Some(path) = baseline {
+        args.push(path.display().to_string());
+    }
+    args
 }
 
 fn manual_text() -> &'static str {
