@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use super::options::Options;
-use super::output::{manual_check_line, sample_set_line};
+use super::output::{manual_check_line, open_artifact_line, sample_set_line};
 use super::require_reset_artifact;
 use super::reset_trial_lines;
 use super::state::{backup_state, restore_state};
@@ -129,6 +129,21 @@ fn manual_check_output_quotes_markdown_path() {
         line,
         "manual QA Check command: cargo run -p xtask -- manual-qa-check '/tmp/QA Path'\\''s/prepared.md'"
     );
+}
+
+#[test]
+fn open_artifact_output_quotes_dmg_path() {
+    let line = open_artifact_line(&PathBuf::from("/tmp/QA Path's/DropSquash.dmg")).unwrap();
+
+    assert_eq!(
+        line,
+        "manual QA Open artifact command: open -- '/tmp/QA Path'\\''s/DropSquash.dmg'"
+    );
+}
+
+#[test]
+fn open_artifact_output_ignores_non_dmg_artifact() {
+    assert!(open_artifact_line(&PathBuf::from("/tmp/DropSquash.app")).is_none());
 }
 
 #[test]

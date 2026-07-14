@@ -15,6 +15,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     println!("manual QA App build: {app_build}");
     fields.push(("App build", app_build));
     print_artifact(&artifact, &mut fields);
+    print_open_artifact(&artifact);
     print_sample_set(options, &mut fields);
     benchmark::print_plan(options);
     let environment = Environment::current(options)?;
@@ -76,6 +77,22 @@ pub(super) fn manual_check_line(path: &Path) -> String {
         "manual QA Check command: {}",
         commands::manual_check_command(path)
     )
+}
+
+pub(super) fn open_artifact_line(path: &Path) -> Option<String> {
+    if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
+        return None;
+    }
+    Some(format!(
+        "manual QA Open artifact command: {}",
+        commands::open_dmg_command(path)
+    ))
+}
+
+fn print_open_artifact(artifact: &Option<std::path::PathBuf>) {
+    if let Some(line) = artifact.as_deref().and_then(open_artifact_line) {
+        println!("{line}");
+    }
 }
 
 fn print_manual_check(path: &Path) {
