@@ -1322,6 +1322,18 @@ fn reports_incomplete_packaged_app_results() {
 }
 
 #[test]
+fn reports_disk_image_notice_without_post_copy_cleanup_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Disk image launch notice | Mounted DMG | Shows notice | app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, and Finder revealed the copied app |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Disk image launch notice")));
+}
+
+#[test]
 fn reports_conversion_without_smaller_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Choose recording conversion | Small `.mov` | Creates output | saved clip.squashed.mp4 and original remained in place |\n\
@@ -1966,7 +1978,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; confirmed license cache cleared and observed app returned to trial state |\n");
         } else if check == "Disk image launch notice" {
-            text.push_str("| Disk image launch notice | Passes | app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, and Finder revealed the copied app |\n");
+            text.push_str("| Disk image launch notice | Passes | app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, and did not delete the downloaded .dmg |\n");
         } else if check == "Choose recording conversion" {
             text.push_str("| Choose recording conversion | Passes | saved smaller clip.squashed.mp4 and original remained in place |\n");
         } else if check == "Drag-and-drop conversion" {

@@ -8,6 +8,12 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["move", "copy", "copied"],
             &["without replacing", "no replace", "did not replace"],
             &["finder"],
+            &["post-copy", "copied app", "after copy"],
+            &[
+                "does not delete",
+                "did not delete",
+                "no downloaded .dmg deletion",
+            ],
         ],
         "Choose recording conversion" | "Drag-and-drop conversion" => &[
             &[".squashed.mp4"],

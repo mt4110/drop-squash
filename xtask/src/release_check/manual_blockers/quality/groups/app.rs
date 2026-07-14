@@ -10,6 +10,12 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["move", "copy", "copied"],
             &["without replacing", "no replace", "did not replace"],
             &["finder"],
+            &["post-copy", "copied app", "after copy"],
+            &[
+                "does not delete",
+                "did not delete",
+                "no downloaded .dmg deletion",
+            ],
         ]),
         "Choose recording conversion" | "Drag-and-drop conversion" => Some(&[
             &[".squashed.mp4"],

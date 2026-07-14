@@ -699,6 +699,19 @@ fn reports_packaged_macos_manual_qa_with_weak_disk_image_notice() {
 }
 
 #[test]
+fn reports_packaged_macos_manual_qa_without_cleanup_notice_evidence() {
+    let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
+    let manual = packaged_manual_qa_with(
+        "Disk image launch notice",
+        "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, and Finder revealed the copied app",
+    );
+
+    let missing = missing_manual_verified_evidence(blockers, &manual);
+
+    assert!(missing.contains(&"Packaged macOS manual QA"));
+}
+
+#[test]
 fn reports_packaged_macos_manual_qa_with_weak_batch_summary() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
@@ -1116,7 +1129,7 @@ fn packaged_result(label: &str) -> String {
         "Tester" => "Manual tester".into(),
         "Date" => "2026-07-11".into(),
         "Disk image launch notice" => {
-            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, and Finder revealed the copied app".into()
+            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, and did not delete the downloaded .dmg".into()
         }
         "Choose recording conversion" => {
             "saved smaller clip.squashed.mp4 and original remained in place".into()
