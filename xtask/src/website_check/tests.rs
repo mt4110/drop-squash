@@ -976,7 +976,7 @@ fn required_page_text(page: &str) -> &'static str {
             "license-key fingerprint does not persist the raw license key local license cache Offline grace Server-side deactivation not automatic"
         }
         "refund.html" => {
-            "draft policy checkout goes live cannot activate basic local conversion workflow order email Lemon Squeezy order flow"
+            "draft policy checkout goes live cannot activate basic local conversion workflow support.html order email Lemon Squeezy order flow"
         }
         _ => "<p>Page</p>",
     }

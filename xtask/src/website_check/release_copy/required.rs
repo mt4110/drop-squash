@@ -64,6 +64,7 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("refund.html", "checkout goes live"),
     ("refund.html", "cannot activate"),
     ("refund.html", "basic local conversion workflow"),
+    ("refund.html", "support.html"),
     ("refund.html", "order email"),
     ("refund.html", "Lemon Squeezy order flow"),
 ];
