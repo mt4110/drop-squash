@@ -19,9 +19,30 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("| Batch summary |"));
     assert!(text.contains("| Trash source policy |"));
     assert!(text.contains("| Valid sandbox activation |"));
+    assert!(text.contains("| `cargo run -p xtask -- release-check` |"));
+    assert!(text.contains("| Codesign verification |"));
     assert!(text.contains("`cargo run -p dropsquash -- license status`"));
     assert!(text.contains("artifact-check passed"));
     assert!(text.contains("SHA-256"));
+}
+
+#[test]
+fn release_candidate_draft_contains_every_required_check() {
+    let directory = tempfile::tempdir().unwrap();
+    let artifact = directory.path().join("DropSquash.dmg");
+    let output = directory.path().join("prepared.md");
+    std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
+    let fields: Vec<markdown::Field> = vec![("App artifact", artifact.display().to_string())];
+
+    write(&output, &fields, Some(&artifact)).unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+    let labels = manual_qa_labels(&text);
+
+    let missing = crate::manual_qa_check::requirements::REQUIRED_CHECKS
+        .into_iter()
+        .filter(|check| !labels.iter().any(|label| label == check))
+        .collect::<Vec<_>>();
+    assert!(missing.is_empty(), "{missing:?}");
 }
 
 #[test]
@@ -74,4 +95,14 @@ fn dmg_bytes(prefix: &[u8]) -> Vec<u8> {
     trailer[..4].copy_from_slice(b"koly");
     bytes.extend(trailer);
     bytes
+}
+
+fn manual_qa_labels(text: &str) -> Vec<String> {
+    text.lines()
+        .filter(|line| line.starts_with('|') && !line.contains("---"))
+        .filter_map(|line| line.split('|').nth(1))
+        .map(str::trim)
+        .filter(|label| !matches!(*label, "Field" | "Check"))
+        .map(str::to_string)
+        .collect()
 }

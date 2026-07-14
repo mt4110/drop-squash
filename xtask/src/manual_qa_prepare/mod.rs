@@ -10,6 +10,7 @@ mod output;
 mod packaged_app;
 mod prepared_markdown;
 mod release_candidate;
+mod release_gate;
 mod state;
 
 use artifact::qa_artifact;

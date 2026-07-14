@@ -2,7 +2,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::Path;
 
-use super::{benchmark, license_sandbox, markdown, packaged_app, release_candidate};
+use super::{benchmark, license_sandbox, markdown, packaged_app, release_candidate, release_gate};
 
 pub(super) fn write(
     path: &Path,
@@ -13,6 +13,7 @@ pub(super) fn write(
     rows.extend(packaged_app::rows());
     rows.extend(license_sandbox::rows());
     rows.extend(benchmark::rows());
+    rows.extend(release_gate::rows());
     if let Some(artifact) = artifact {
         rows.extend(release_candidate::rows(artifact)?);
     }
