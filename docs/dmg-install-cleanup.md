@@ -3,6 +3,7 @@
 ## Current Status
 
 DropSquash does not delete or move the downloaded `.dmg` file after a normal Finder install.
+This is deliberate: automatic cleanup is not a supported promise for Finder-based installs.
 
 The implemented macOS path is narrower:
 
@@ -46,7 +47,8 @@ Downloaded-DMG cleanup may only be added to the explicit in-app install flow:
 6. The disk-image copy may offer explicit cleanup actions.
 
 Cleanup must be user initiated. The UI should say something like
-`Move downloaded DMG to Trash`, not imply automatic deletion.
+`Move downloaded DMG to Trash`, not imply automatic deletion. Permanent deletion
+is out of scope.
 
 ## Implementation Timing
 

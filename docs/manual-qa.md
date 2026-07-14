@@ -33,10 +33,12 @@ cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```
 
 After a real release-set benchmark CSV exists and `benchmark-csv-check` passes,
-you can fill the benchmark command and sample-set rows from that CSV:
+you can fill the benchmark command and sample-set rows from that CSV, then fill
+the threshold row from the same-machine release candidate baseline CSV:
 
 ```sh
 cargo run -p xtask -- manual-qa-fill-benchmark /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-fill-benchmark-threshold /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv /absolute/path/to/baseline-results.csv
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```

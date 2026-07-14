@@ -3,6 +3,7 @@ mod benchmark;
 mod build_identity;
 mod commands;
 mod environment;
+mod fill_commands;
 mod git_state;
 mod license_sandbox;
 mod markdown;

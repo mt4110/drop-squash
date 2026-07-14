@@ -3,7 +3,8 @@ use std::path::PathBuf;
 use super::options::Options;
 use super::output::{manual_check_line, open_artifact_line, sample_set_line};
 use super::output_helper::{
-    clean_draft_line, fill_benchmark_line, fill_check_line, fill_release_gates_line,
+    clean_draft_line, fill_benchmark_line, fill_benchmark_threshold_line, fill_check_line,
+    fill_release_gates_line,
 };
 use super::require_reset_artifact;
 use super::reset_trial_lines;
@@ -146,6 +147,10 @@ fn helper_output_quotes_paths() {
     assert_eq!(
         fill_benchmark_line(&markdown, &output_dir),
         "manual QA Fill benchmark command: cargo run -p xtask -- manual-qa-fill-benchmark '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+    );
+    assert_eq!(
+        fill_benchmark_threshold_line(&markdown, &output_dir),
+        "manual QA Fill benchmark threshold command: cargo run -p xtask -- manual-qa-fill-benchmark-threshold '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv' '/absolute/path/to/baseline-results.csv'"
     );
     assert_eq!(
         clean_draft_line(&markdown),
