@@ -14,6 +14,7 @@ fn writes_fields_and_release_candidate_rows() {
 
     assert!(text.starts_with("Prepared manual QA draft only."));
     assert!(text.contains("| App build | DropSquash 0.1.0 git abc1234 |"));
+    assert!(text.contains("| Disk image launch notice |"));
     assert!(text.contains("artifact-check passed"));
     assert!(text.contains("SHA-256"));
 }

@@ -2,7 +2,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::Path;
 
-use super::{markdown, release_candidate};
+use super::{markdown, packaged_app, release_candidate};
 
 pub(super) fn write(
     path: &Path,
@@ -10,6 +10,7 @@ pub(super) fn write(
     artifact: Option<&Path>,
 ) -> Result<(), String> {
     let mut rows = markdown::rows(fields);
+    rows.extend(packaged_app::rows());
     if let Some(artifact) = artifact {
         rows.extend(release_candidate::rows(artifact)?);
     }

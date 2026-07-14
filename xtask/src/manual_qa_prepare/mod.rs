@@ -6,6 +6,7 @@ mod git_state;
 mod markdown;
 mod options;
 mod output;
+mod packaged_app;
 mod prepared_markdown;
 mod release_candidate;
 mod state;
