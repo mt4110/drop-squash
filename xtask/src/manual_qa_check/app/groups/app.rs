@@ -5,6 +5,9 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["/volumes", "mounted"],
             &["applications"],
             &["warn", "notice"],
+            &["move", "copy", "copied"],
+            &["without replacing", "no replace", "did not replace"],
+            &["finder"],
         ],
         "Choose recording conversion" | "Drag-and-drop conversion" => &[
             &[".squashed.mp4"],

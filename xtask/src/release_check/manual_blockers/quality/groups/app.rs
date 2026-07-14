@@ -7,6 +7,9 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["/volumes", "mounted"],
             &["applications"],
             &["warn", "notice"],
+            &["move", "copy", "copied"],
+            &["without replacing", "no replace", "did not replace"],
+            &["finder"],
         ]),
         "Choose recording conversion" | "Drag-and-drop conversion" => Some(&[
             &[".squashed.mp4"],

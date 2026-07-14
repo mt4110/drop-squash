@@ -1966,7 +1966,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
         } else if check == "Forget license on this Mac" {
             text.push_str("| Forget license on this Mac | Passes | Forgetting state disabled action; confirmed license cache cleared and observed app returned to trial state |\n");
         } else if check == "Disk image launch notice" {
-            text.push_str("| Disk image launch notice | Passes | app launched from mounted disk image under /Volumes and showed warning notice to move DropSquash to Applications |\n");
+            text.push_str("| Disk image launch notice | Passes | app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, and Finder revealed the copied app |\n");
         } else if check == "Choose recording conversion" {
             text.push_str("| Choose recording conversion | Passes | saved smaller clip.squashed.mp4 and original remained in place |\n");
         } else if check == "Drag-and-drop conversion" {

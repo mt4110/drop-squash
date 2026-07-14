@@ -1116,7 +1116,7 @@ fn packaged_result(label: &str) -> String {
         "Tester" => "Manual tester".into(),
         "Date" => "2026-07-11".into(),
         "Disk image launch notice" => {
-            "app launched from mounted disk image under /Volumes and showed warning notice to move DropSquash to Applications".into()
+            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, and Finder revealed the copied app".into()
         }
         "Choose recording conversion" => {
             "saved smaller clip.squashed.mp4 and original remained in place".into()
