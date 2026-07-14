@@ -24,7 +24,7 @@ fn artifact_check() -> String {
 }
 
 fn manual_qa() -> String {
-    "preflight after clean: cargo run -p xtask -- manual-qa-prepare --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set \"short, medium, and large local recordings\" --markdown-output /tmp/dropsquash-manual-qa-prepared.md".to_string()
+    "preflight after clean: cargo run -p xtask -- manual-qa-prepare --reset-trial --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set \"short, medium, and large local recordings\" --markdown-output /tmp/dropsquash-manual-qa-prepared.md".to_string()
 }
 
 fn benchmark() -> String {
