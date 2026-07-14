@@ -1358,6 +1358,18 @@ fn reports_disk_image_notice_without_post_copy_cleanup_evidence() {
 }
 
 #[test]
+fn reports_disk_image_notice_without_downloaded_dmg_cleanup_target() {
+    let (_directory, path) = write_manual_qa(
+        "| Disk image launch notice | Mounted DMG | Shows notice | app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, Open opened the installed app, Eject & Quit requested mounted-volume eject and closed the disk image copy, and did not delete anything automatically |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing
+        .iter()
+        .any(|error| error.contains("Disk image launch notice")));
+}
+
+#[test]
 fn reports_conversion_without_smaller_evidence() {
     let (_directory, path) = write_manual_qa(
         "| Choose recording conversion | Small `.mov` | Creates output | saved clip.squashed.mp4 and original remained in place |\n\

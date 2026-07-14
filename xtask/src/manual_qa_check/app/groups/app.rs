@@ -14,6 +14,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["eject", "ejected"],
             &["quit"],
             &["disk image copy", "mounted copy"],
+            &["downloaded .dmg", "downloaded dmg"],
             &[
                 "does not delete",
                 "did not delete",
