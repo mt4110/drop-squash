@@ -77,6 +77,28 @@ fn rejects_missing_speed_ratio() {
     assert!(error.contains("missing speed_ratio"));
 }
 
+#[test]
+fn rejects_duplicate_input_paths() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("results.csv");
+    std::fs::write(&path, csv(3, 50).replace("sample-2.mov", "sample-1.mov")).unwrap();
+
+    let error = validate_path(&path).unwrap_err();
+
+    assert!(error.contains("duplicates input path"));
+}
+
+#[test]
+fn rejects_duplicate_output_paths() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("results.csv");
+    std::fs::write(&path, csv(3, 50).replace("out-2.mp4", "out-1.mp4")).unwrap();
+
+    let error = validate_path(&path).unwrap_err();
+
+    assert!(error.contains("duplicates output path"));
+}
+
 fn csv(rows: usize, output_percent: u64) -> String {
     let mut text = String::from(
         "backend,input,output,original_bytes,output_bytes,duration_s,elapsed_s,compression_ratio,saved_percent,throughput_mib_s,speed_ratio\n",

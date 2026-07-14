@@ -23,8 +23,30 @@ pub(super) fn validate(rows: &[Vec<String>]) -> Result<(), String> {
     if body.len() < 3 {
         return Err("benchmark release-set CSV requires at least three sample rows".into());
     }
+    validate_unique_paths(body)?;
     for (index, row) in body.iter().enumerate() {
         validate_row(index + 2, row)?;
+    }
+    Ok(())
+}
+
+fn validate_unique_paths(rows: &[Vec<String>]) -> Result<(), String> {
+    let mut inputs = std::collections::HashSet::new();
+    let mut outputs = std::collections::HashSet::new();
+    for (index, row) in rows.iter().enumerate() {
+        let line = index + 2;
+        let Some(input) = row.get(1) else {
+            return Ok(());
+        };
+        let Some(output) = row.get(2) else {
+            return Ok(());
+        };
+        if !inputs.insert(input) {
+            return Err(format!("benchmark CSV line {line} duplicates input path"));
+        }
+        if !outputs.insert(output) {
+            return Err(format!("benchmark CSV line {line} duplicates output path"));
+        }
     }
     Ok(())
 }
