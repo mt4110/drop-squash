@@ -973,7 +973,7 @@ fn required_page_text(page: &str) -> &'static str {
             "FAQ What is a privacy receipt? metadata_policy = preserve Does DropSquash upload my videos? does not upload media Does it use ffmpeg? does not shell out ffprobe Do not send screen recordings app version GitHub Issues paid beta support address"
         }
         "license.html" => {
-            "license-key fingerprint does not persist the raw license key local license cache Offline grace Server-side deactivation not automatic"
+            "license-key fingerprint does not persist the raw license key local license cache Offline grace Server-side deactivation not automatic support.html refund.html"
         }
         "refund.html" => {
             "draft policy checkout goes live cannot activate basic local conversion workflow support.html order email Lemon Squeezy order flow"

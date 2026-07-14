@@ -48,6 +48,8 @@ pub(super) const TEXT: &[(&str, &str)] = &[
     ("license.html", "Offline grace"),
     ("license.html", "Server-side deactivation"),
     ("license.html", "not automatic"),
+    ("license.html", "support.html"),
+    ("license.html", "refund.html"),
     ("support.html", "Do not send screen recordings"),
     ("support.html", "FAQ"),
     ("support.html", "What is a privacy receipt?"),
