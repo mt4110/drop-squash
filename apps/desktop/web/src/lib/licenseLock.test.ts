@@ -5,8 +5,9 @@ function assert(condition: boolean, message: string) {
 }
 
 assert(
-  lockedMessage("trial-complete") === "Enter a license key to continue.",
-  "trial lock should ask for a license key",
+  lockedMessage("trial-complete")
+    === "You used 10 successful conversions. Upgrade once to keep squashing locally.",
+  "trial lock should explain the successful-conversion limit",
 );
 
 assert(

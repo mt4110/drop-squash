@@ -1,4 +1,5 @@
 import type { ConversionSummary } from "./commands.js";
+import { TRIAL_COMPLETE_MESSAGE } from "./licenseLock.js";
 
 export type QueueStatus =
   | "queued"
@@ -30,7 +31,7 @@ export type QueueSummary = {
   savedBytes: number;
 };
 
-export const LICENSE_LOCK_QUEUE_MESSAGE = "Trial complete. Enter a license key to continue.";
+export const LICENSE_LOCK_QUEUE_MESSAGE = TRIAL_COMPLETE_MESSAGE;
 
 export function nextQueued(items: QueueEntry[]) {
   return items.find((item) => item.status === "queued");
