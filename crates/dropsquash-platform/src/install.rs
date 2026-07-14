@@ -2,8 +2,10 @@ use std::path::{Path, PathBuf};
 
 use dropsquash_core::AppError;
 
+mod cleanup;
 mod copy;
 
+pub use cleanup::{cleanup_after_applications_install, InstallerCleanup};
 pub use copy::{copy_app_bundle, copy_current_app_to_applications, ApplicationsInstall};
 
 #[derive(Debug, Clone, PartialEq, Eq)]

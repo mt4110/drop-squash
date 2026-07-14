@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
 
 use dropsquash_core::{AppError, Result};
 
-use super::current_install_location;
+use super::{cleanup_after_applications_install, current_install_location, InstallerCleanup};
 
 #[cfg(test)]
 mod tests;
@@ -12,6 +12,7 @@ mod tests;
 pub struct ApplicationsInstall {
     pub source_path: PathBuf,
     pub target_path: PathBuf,
+    pub cleanup: InstallerCleanup,
 }
 
 pub fn copy_current_app_to_applications() -> Result<ApplicationsInstall> {
@@ -35,9 +36,11 @@ pub fn copy_app_bundle(app_path: &Path, applications_dir: &Path) -> Result<Appli
         )));
     }
     copy_dir(app_path, &target_path)?;
+    let cleanup = cleanup_after_applications_install(app_path, &target_path);
     Ok(ApplicationsInstall {
         source_path: app_path.to_path_buf(),
         target_path,
+        cleanup,
     })
 }
 

@@ -48,6 +48,14 @@ export type InstallLocation = {
 export type ApplicationsInstall = {
   sourcePath: string;
   targetPath: string;
+  cleanup: InstallerCleanup;
+};
+
+export type InstallerCleanup = {
+  mountedVolumePath: string | null;
+  downloadedDmgPath: string | null;
+  shouldOfferMountedVolumeEject: boolean;
+  shouldOfferDownloadedDmgTrash: boolean;
 };
 
 export type ConversionSummary = {
