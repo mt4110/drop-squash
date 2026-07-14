@@ -30,8 +30,9 @@ fn absolute_csv(token: &str) -> Option<PathBuf> {
 }
 
 fn csv_token(token: &str) -> &str {
-    let token = token
-        .trim_matches(|character: char| matches!(character, ',' | '.' | ';' | ')' | '(' | '`'));
+    let token = token.trim_matches(|character: char| {
+        matches!(character, ',' | '.' | ';' | ':' | ')' | '(' | '`')
+    });
     token
         .strip_prefix("csv=")
         .or_else(|| token.strip_prefix("CSV="))
@@ -59,4 +60,20 @@ fn normalize(path: &Path) -> PathBuf {
         }
     }
     normalized
+}
+
+#[cfg(test)]
+mod tests {
+    use super::existing_outside_repo_path;
+
+    #[test]
+    fn accepts_csv_path_followed_by_colon() {
+        let directory = tempfile::tempdir().unwrap();
+        let csv = directory.path().join("results.csv");
+        std::fs::write(&csv, "backend,input\n").unwrap();
+
+        let value = format!("CSV saved outside repo at {}: short.mov", csv.display());
+
+        assert_eq!(existing_outside_repo_path(&value), Some(csv));
+    }
 }
