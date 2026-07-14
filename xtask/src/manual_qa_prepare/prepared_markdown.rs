@@ -26,13 +26,18 @@ pub(super) fn write(
         .create_new(true)
         .open(path)
         .map_err(|error| format!("failed to create manual QA Markdown output: {error}"))?;
-    writeln!(file, "{}", markdown_text(&rows, artifact, options))
+    writeln!(file, "{}", markdown_text(&rows, fields, artifact, options))
         .map_err(|error| format!("failed to write manual QA Markdown output: {error}"))?;
     println!("manual QA Markdown output: {}", path.display());
     Ok(())
 }
 
-fn markdown_text(rows: &[String], artifact: Option<&Path>, options: &Options) -> String {
+fn markdown_text(
+    rows: &[String],
+    fields: &[markdown::Field],
+    artifact: Option<&Path>,
+    options: &Options,
+) -> String {
     let mut sections = vec![
         "Prepared manual QA draft only. Replace this file with concrete observations.".to_string(),
         format!(
@@ -40,6 +45,7 @@ fn markdown_text(rows: &[String], artifact: Option<&Path>, options: &Options) ->
             benchmark::benchmark_command(options),
             benchmark::csv_check_command(options)
         ),
+        benchmark_context(fields, options),
     ];
     if let Some(path) =
         artifact.filter(|path| path.extension().and_then(|value| value.to_str()) == Some("dmg"))
@@ -59,6 +65,24 @@ fn markdown_text(rows: &[String], artifact: Option<&Path>, options: &Options) ->
 
 fn open_dmg_command(path: &Path) -> String {
     format!("open -- '{}'", shell_single_quote(path))
+}
+
+fn benchmark_context(fields: &[markdown::Field], options: &Options) -> String {
+    let macos = field_value(fields, "macOS version");
+    let machine = field_value(fields, "Machine");
+    format!(
+        "Benchmark context to record:\n\n- CSV: {}\n- macOS: {}\n- Machine: {}",
+        options.output_dir.join("benchmark-results.csv").display(),
+        macos.unwrap_or("<record macOS version>"),
+        machine.unwrap_or("<record machine>")
+    )
+}
+
+fn field_value<'a>(fields: &'a [markdown::Field], label: &str) -> Option<&'a str> {
+    fields
+        .iter()
+        .find(|(field, _)| *field == label)
+        .map(|(_, value)| value.as_str())
 }
 
 fn shell_single_quote(path: &Path) -> String {

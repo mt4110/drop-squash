@@ -20,6 +20,7 @@ fn writes_fields_and_release_candidate_rows() {
 
     assert!(text.starts_with("Prepared manual QA draft only."));
     assert!(text.contains("Benchmark commands:"));
+    assert!(text.contains("Benchmark context to record:"));
     assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
     assert!(text.contains("Packaged app command:"));
@@ -39,6 +40,36 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("`cargo run -p dropsquash -- license status`"));
     assert!(text.contains("artifact-check passed"));
     assert!(text.contains("SHA-256"));
+}
+
+#[test]
+fn writes_benchmark_environment_context_when_available() {
+    let directory = tempfile::tempdir().unwrap();
+    let output = directory.path().join("prepared.md");
+    let fields: Vec<markdown::Field> = vec![
+        ("macOS version", "macOS 15.5".into()),
+        ("Machine", "MacBook Pro".into()),
+    ];
+
+    write(&output, &fields, None, &options(directory.path())).unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+
+    assert!(text.contains("- CSV: "));
+    assert!(text.contains("benchmark-results.csv"));
+    assert!(text.contains("- macOS: macOS 15.5"));
+    assert!(text.contains("- Machine: MacBook Pro"));
+}
+
+#[test]
+fn benchmark_context_keeps_placeholders_without_environment_fields() {
+    let directory = tempfile::tempdir().unwrap();
+    let output = directory.path().join("prepared.md");
+
+    write(&output, &[], None, &options(directory.path())).unwrap();
+    let text = std::fs::read_to_string(output).unwrap();
+
+    assert!(text.contains("- macOS: <record macOS version>"));
+    assert!(text.contains("- Machine: <record machine>"));
 }
 
 #[test]
