@@ -78,6 +78,14 @@ pub(super) fn fill_local_proof_command(path: &Path, csv: &Path) -> String {
     )
 }
 
+pub(super) fn ready_local_proof_command(path: &Path, csv: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-ready-local-proof '{}' '{}'",
+        shell_single_quote(path),
+        shell_single_quote(csv)
+    )
+}
+
 pub(super) fn fill_benchmark_command(path: &Path, csv: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-fill-benchmark '{}' '{}'",

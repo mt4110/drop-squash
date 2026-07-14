@@ -4,9 +4,13 @@ use super::{commands, options::Options};
 
 pub(super) fn block(options: &Options, output_path: &Path) -> String {
     format!(
-        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n```",
+        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n```",
         commands::fill_release_gates_command(output_path),
         commands::fill_local_proof_command(
+            output_path,
+            &options.output_dir.join("benchmark-results.csv")
+        ),
+        commands::ready_local_proof_command(
             output_path,
             &options.output_dir.join("benchmark-results.csv")
         ),
