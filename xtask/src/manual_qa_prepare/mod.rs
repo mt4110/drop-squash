@@ -8,6 +8,7 @@ mod license_sandbox;
 mod markdown;
 mod options;
 mod output;
+mod output_helper;
 mod packaged_app;
 mod prepared_markdown;
 mod release_candidate;

@@ -43,6 +43,13 @@ pub(super) fn clean_draft_command(path: &Path) -> String {
     )
 }
 
+pub(super) fn fill_check_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-fill-check '{}'",
+        shell_single_quote(path)
+    )
+}
+
 fn shell_single_quote(path: &Path) -> String {
     path.display().to_string().replace('\'', "'\\''")
 }

@@ -3,7 +3,7 @@ use std::path::Path;
 use super::{
     artifact::qa_artifact, benchmark, build_identity::BuildIdentity, commands,
     environment::Environment, license_sandbox, markdown, markdown::Field, options::Options,
-    packaged_app, prepared_markdown, release_candidate,
+    output_helper, packaged_app, prepared_markdown, release_candidate,
 };
 
 pub(super) fn print_paths(options: &Options) -> Result<(), String> {
@@ -32,7 +32,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     if let Some(path) = &options.markdown_output {
         prepared_markdown::write(path, &fields, artifact.as_deref(), options)?;
         print_manual_check(path);
-        print_helper_commands(path, &options.output_dir);
+        output_helper::print_helper_commands(path, &options.output_dir);
     }
     Ok(())
 }
@@ -80,27 +80,6 @@ pub(super) fn manual_check_line(path: &Path) -> String {
     )
 }
 
-pub(super) fn fill_release_gates_line(path: &Path) -> String {
-    format!(
-        "manual QA Fill release gates command: {}",
-        commands::fill_release_gates_command(path)
-    )
-}
-
-pub(super) fn fill_benchmark_line(path: &Path, output_dir: &Path) -> String {
-    format!(
-        "manual QA Fill benchmark command: {}",
-        commands::fill_benchmark_command(path, &output_dir.join("benchmark-results.csv"))
-    )
-}
-
-pub(super) fn clean_draft_line(path: &Path) -> String {
-    format!(
-        "manual QA Clean draft command: {}",
-        commands::clean_draft_command(path)
-    )
-}
-
 pub(super) fn open_artifact_line(path: &Path) -> Option<String> {
     if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
         return None;
@@ -119,10 +98,4 @@ fn print_open_artifact(artifact: &Option<std::path::PathBuf>) {
 
 fn print_manual_check(path: &Path) {
     println!("{}", manual_check_line(path));
-}
-
-pub(super) fn print_helper_commands(path: &Path, output_dir: &Path) {
-    println!("{}", fill_release_gates_line(path));
-    println!("{}", fill_benchmark_line(path, output_dir));
-    println!("{}", clean_draft_line(path));
 }

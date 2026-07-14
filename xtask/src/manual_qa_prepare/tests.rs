@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use super::options::Options;
-use super::output::{
-    clean_draft_line, fill_benchmark_line, fill_release_gates_line, manual_check_line,
-    open_artifact_line, sample_set_line,
+use super::output::{manual_check_line, open_artifact_line, sample_set_line};
+use super::output_helper::{
+    clean_draft_line, fill_benchmark_line, fill_check_line, fill_release_gates_line,
 };
 use super::require_reset_artifact;
 use super::reset_trial_lines;
@@ -150,6 +150,10 @@ fn helper_output_quotes_paths() {
     assert_eq!(
         clean_draft_line(&markdown),
         "manual QA Clean draft command: cargo run -p xtask -- manual-qa-clean-draft '/tmp/QA Path'\\''s/prepared.md'"
+    );
+    assert_eq!(
+        fill_check_line(&markdown),
+        "manual QA Fill check command: cargo run -p xtask -- manual-qa-fill-check '/tmp/QA Path'\\''s/prepared.md'"
     );
 }
 

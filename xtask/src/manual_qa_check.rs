@@ -27,6 +27,10 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 
 pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
+    Ok(check_text(&text))
+}
+
+pub(crate) fn check_text(text: &str) -> Vec<String> {
     let mut missing = secrets::validate(&text);
     if has_prepared_draft_marker(&text) {
         missing.push("manual QA must not contain prepared draft markers".to_string());
@@ -51,7 +55,7 @@ pub(crate) fn check_file(path: &Path) -> Result<Vec<String>, String> {
         &mut missing,
     );
     requirements::reject_duplicate_labels(&labels, &mut missing);
-    Ok(missing)
+    missing
 }
 
 fn has_prepared_draft_marker(text: &str) -> bool {
