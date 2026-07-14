@@ -42,8 +42,8 @@ Git reports a dirty tree, either commit or intentionally remove the unrelated
 local change, then rebuild the `.app` and `.dmg` before recording manual QA or
 release evidence.
 
-Use the Nix development shell for local release builds when the host Node or
-pnpm version differs from `apps/desktop/package.json`; for example:
+Use the Nix development shell for local QA and release builds so Node, pnpm,
+Rust, and desktop build inputs match the pinned development environment:
 
 ```sh
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
