@@ -81,7 +81,8 @@ fn markdown_text(
 
 fn fill_commands(options: &Options, output_path: &Path) -> String {
     format!(
-        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n```",
+        "Prepared draft helper commands:\n\n```sh\n{}\n{}\n{}\n```",
+        commands::clean_draft_command(output_path),
         commands::fill_release_gates_command(output_path),
         commands::fill_benchmark_command(
             output_path,

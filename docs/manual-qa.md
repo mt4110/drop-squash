@@ -27,6 +27,7 @@ If the prepared Markdown draft still has empty release gate rows, you can fill
 the deterministic local ones after they pass:
 
 ```sh
+cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-release-gates /tmp/dropsquash-manual-qa-prepared.md
 ```
 

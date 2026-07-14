@@ -36,6 +36,13 @@ pub(super) fn fill_benchmark_command(path: &Path, csv: &Path) -> String {
     )
 }
 
+pub(super) fn clean_draft_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-clean-draft '{}'",
+        shell_single_quote(path)
+    )
+}
+
 fn shell_single_quote(path: &Path) -> String {
     path.display().to_string().replace('\'', "'\\''")
 }
