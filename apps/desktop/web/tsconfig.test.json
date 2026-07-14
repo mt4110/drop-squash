@@ -11,6 +11,8 @@
   "include": [
     "src/lib/commands.ts",
     "src/lib/initialState.ts",
+    "src/lib/installCleanup.ts",
+    "src/lib/installCleanup.test.ts",
     "src/lib/license.ts",
     "src/lib/license.test.ts",
     "src/lib/licenseLock.ts",

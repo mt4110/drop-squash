@@ -3,6 +3,7 @@ import { invoke, isTauri } from "@tauri-apps/api/core";
 import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { useInstallLocation } from "./useInstallLocation";
 import type { ApplicationsInstall, InstallerCleanup } from "../lib/commands";
+import { visibleInstallerCleanupActions } from "../lib/installCleanup";
 
 type ApplicationsInstallState = {
   appPath?: string;
@@ -38,10 +39,8 @@ export function useApplicationsInstall(
   const shouldShowNotice =
     (Boolean(installLocation?.shouldOfferApplicationsMove) || Boolean(installedPath)) &&
     !isDismissed;
-  const shouldOfferInstallerVolumeEject =
-    Boolean(cleanup?.shouldOfferMountedVolumeEject) &&
-    Boolean(cleanup?.mountedVolumePath) &&
-    !didEjectInstallerVolume;
+  const cleanupActions = visibleInstallerCleanupActions(cleanup, didEjectInstallerVolume);
+  const shouldOfferInstallerVolumeEject = cleanupActions.includes("eject-mounted-volume");
 
   const moveToApplications = useCallback(async () => {
     if (!isTauri()) {
