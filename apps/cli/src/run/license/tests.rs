@@ -92,6 +92,8 @@ fn cache_diagnostics_report_present_identity_and_active_grace() {
         vec![
             "raw license key persisted: no".to_string(),
             "license cache identity: present".to_string(),
+            "license cache fingerprint: present 64-character lowercase hex".to_string(),
+            "license cache instance_id: present".to_string(),
             "offline grace: active until unix 200".to_string(),
         ]
     );
@@ -110,6 +112,8 @@ fn cache_diagnostics_report_missing_identity_and_expired_grace() {
         vec![
             "raw license key persisted: no".to_string(),
             "license cache identity: missing".to_string(),
+            "license cache fingerprint: missing".to_string(),
+            "license cache instance_id: missing".to_string(),
             "offline grace: expired at unix 200".to_string(),
         ]
     );
@@ -122,6 +126,28 @@ fn cache_diagnostics_report_absent_grace() {
         vec![
             "raw license key persisted: no".to_string(),
             "license cache identity: missing".to_string(),
+            "license cache fingerprint: missing".to_string(),
+            "license cache instance_id: missing".to_string(),
+            "offline grace: absent".to_string(),
+        ]
+    );
+}
+
+#[test]
+fn cache_diagnostics_reject_uppercase_fingerprint_shape() {
+    let cache = LicenseCache {
+        license_key_fingerprint: Some("A".repeat(64)),
+        instance_id: Some("instance-123".to_string()),
+        ..LicenseCache::default()
+    };
+
+    assert_eq!(
+        format_cache_diagnostics(&cache, 1),
+        vec![
+            "raw license key persisted: no".to_string(),
+            "license cache identity: missing".to_string(),
+            "license cache fingerprint: missing".to_string(),
+            "license cache instance_id: present".to_string(),
             "offline grace: absent".to_string(),
         ]
     );

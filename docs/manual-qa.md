@@ -179,6 +179,9 @@ Record concrete results. The checker requires:
 Inspect the license cache without recording the sandbox key itself or private store IDs.
 A good result says the cache path was checked, that the raw key was absent, and
 whether only the fingerprint and `instance_id` fields were present.
+Use `cargo run -p dropsquash -- license status` for local diagnostics; record
+the lines for `raw license key persisted`, `license cache fingerprint`, and
+`license cache instance_id` instead of pasting the sandbox license key.
 
 | Check | Expected | Result |
 |---|---|---|
