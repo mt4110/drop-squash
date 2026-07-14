@@ -7,7 +7,6 @@ cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
-pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
 cargo run -p xtask -- manual-qa-prepare
 --input-sample-set
 cargo run -p xtask -- manual-qa-prepare --restore-state
