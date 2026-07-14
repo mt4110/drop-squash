@@ -136,6 +136,34 @@ fn rejects_weak_distribution_evidence() {
 }
 
 #[test]
+fn rejects_release_notes_dmg_cleanup_claims() {
+    let errors = check_text(
+        r#"
+- Known limitations: Finder copy automatically deletes the downloaded .dmg after install
+"#,
+    );
+
+    assert!(errors.iter().any(|error| {
+        error.contains("unsupported DMG cleanup claim")
+            && error.contains("finder copy automatically deletes the downloaded .dmg")
+    }));
+}
+
+#[test]
+fn rejects_release_notes_copy_paste_dmg_cleanup_claims() {
+    let errors = check_text(
+        r#"
+- Support contact: Copy/paste automatically deletes the downloaded .dmg after install
+"#,
+    );
+
+    assert!(errors.iter().any(|error| {
+        error.contains("unsupported DMG cleanup claim")
+            && error.contains("copy/paste automatically deletes the downloaded .dmg")
+    }));
+}
+
+#[test]
 fn rejects_conversion_safety_without_original_remained_evidence() {
     let errors = check_text(
         r#"
