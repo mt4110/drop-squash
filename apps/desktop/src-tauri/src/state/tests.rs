@@ -39,13 +39,13 @@ fn owns_rust_queue_state_for_sequential_jobs() {
         Some(QueueEvent::Started(item)) if item.status == QueueJobStatus::Running
     ));
     let blocked = state
-        .block_queued_jobs("Trial complete. Enter a license key to continue.".into())
+        .block_queued_jobs("You used 10 successful conversions.".into())
         .unwrap();
 
     assert!(matches!(
         blocked.as_slice(),
         [QueueEvent::Blocked { error, .. }]
-            if error.contains("Trial complete")
+            if error.contains("10 successful conversions")
     ));
 }
 

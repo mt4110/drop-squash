@@ -32,7 +32,7 @@ fn rejects_locked_trial_before_starting_conversion() {
     })
     .unwrap_err();
 
-    assert!(error.contains("Trial complete"));
+    assert!(error.contains("10 successful conversions"));
 }
 
 #[test]

@@ -34,15 +34,11 @@ fn blocks_remaining_queue_jobs_with_license_lock_reason() {
         Some(QueueEvent::Started(item)) if item.status == QueueJobStatus::Running
     ));
 
-    let events = block_pending_jobs(
-        &state,
-        "Trial complete. Enter a license key to continue.".into(),
-    )
-    .unwrap();
+    let events = block_pending_jobs(&state, "You used 10 successful conversions.".into()).unwrap();
 
     assert!(matches!(
         events.as_slice(),
-        [QueueEvent::Blocked { error, .. }] if error.contains("Trial complete")
+        [QueueEvent::Blocked { error, .. }] if error.contains("10 successful conversions")
     ));
 }
 

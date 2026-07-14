@@ -17,6 +17,9 @@ use crate::state::AppState;
 
 mod input;
 
+const TRIAL_COMPLETE_MESSAGE: &str =
+    "You used 10 successful conversions. Upgrade once to keep squashing locally.";
+
 #[cfg(target_os = "macos")]
 use dropsquash_encoder::AppleNativeEncoder as NativeEncoder;
 #[cfg(target_os = "linux")]
@@ -87,7 +90,7 @@ fn reject_locked_license(state: LicenseState) -> Result<(), String> {
 
 fn locked_message(reason: LockedReason) -> &'static str {
     match reason {
-        LockedReason::TrialComplete => "Trial complete. Enter a license key to continue.",
+        LockedReason::TrialComplete => TRIAL_COMPLETE_MESSAGE,
         LockedReason::LicenseRefreshRequired => {
             "Reconnect once with your license key to refresh Pro."
         }
