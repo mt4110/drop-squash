@@ -1,6 +1,10 @@
 use super::Entry;
 
-pub(super) const ENTRIES: &[Entry] = &[
+mod site;
+
+pub(super) const SITE: &[Entry] = site::ENTRIES;
+
+pub(super) const CORE: &[Entry] = &[
     ("docs/qa-evidence.md", "docs/release-blockers.md"),
     (
         "docs/qa-evidence.md",
@@ -74,25 +78,12 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/qa-evidence.md",
         "refresh-lock queued message preservation",
     ),
-    (
-        "docs/qa-evidence.md",
-        "approved external links with host/path boundaries and no query/fragment tracking",
-    ),
     ("docs/qa-evidence.md", "updater enablement"),
     ("docs/qa-evidence.md", "Tauri updater config absence"),
     (
         "docs/qa-evidence.md",
         "missing update manifests while updater is disabled",
     ),
-    (
-        "docs/qa-evidence.md",
-        "quoted and unquoted HTML links/resources/form actions",
-    ),
-    (
-        "docs/qa-evidence.md",
-        "website-root boundary rejection for local links/resources",
-    ),
-    ("docs/qa-evidence.md", "local link fragments"),
     ("docs/qa-evidence.md", "clean git worktree preflight"),
     (
         "docs/qa-evidence.md",
@@ -114,12 +105,6 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     ("docs/qa-evidence.md", "temp cleanup evidence"),
     ("docs/qa-evidence.md", "native-encoder-unavailable message"),
-    ("docs/qa-evidence.md", "short download CTAs"),
-    ("docs/qa-evidence.md", "natural release copy"),
-    (
-        "docs/qa-evidence.md",
-        "unsupported DMG cleanup claim rejection",
-    ),
     ("docs/qa-evidence.md", "non-lowercase checksums"),
     ("docs/qa-evidence.md", "contradictory raw-key evidence"),
 ];
