@@ -124,8 +124,9 @@ drag-to-Applications install: that copy path does not execute DropSquash code,
 and the installed app cannot reliably know the original downloaded DMG path.
 A first-launch helper detects when the app is running from `/Volumes` and offers
 an explicit in-app install action. That action copies DropSquash to
-`/Applications` without replacing an existing app. It does not relaunch, eject
-the mounted installer volume, or delete the downloaded `.dmg` yet. Future
+`/Applications` without replacing an existing app. The post-copy notice can
+open the installed app through native macOS APIs. It does not eject the mounted
+installer volume or delete the downloaded `.dmg` yet. Future
 downloaded-installer cleanup must require an explicit user action, and may only
 be offered when the backing `.dmg` path is known through a deterministic macOS
 API. If that path cannot be proven, keep the mounted-volume eject only.
@@ -137,10 +138,11 @@ warn when DropSquash is running from the disk image, and `copy_to_applications`
 performs the user-triggered copy. The copy result reports whether mounted-volume
 eject may be offered, but keeps downloaded `.dmg` Trash cleanup disabled until a
 deterministic backing `.dmg` path is proven. The desktop command
-`eject_installer_volume` uses native `NSWorkspace` eject on a validated direct
-`/Volumes` mount; it does not shell out and does not delete the downloaded
-`.dmg`. Relaunch, eject execution UI, and downloaded `.dmg` cleanup remain
-future work.
+`open_installed_application` opens only a validated direct `/Applications/*.app`
+bundle with native `NSWorkspace`, and `eject_installer_volume` uses native
+`NSWorkspace` eject on a validated direct `/Volumes` mount; they do not shell
+out and do not delete the downloaded `.dmg`. Eject execution UI after
+installed-app launch and downloaded `.dmg` cleanup remain future work.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the

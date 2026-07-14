@@ -8,10 +8,12 @@ type ApplicationsInstallState = {
   appPath?: string;
   installedPath?: string;
   isMoving: boolean;
+  isOpeningInstalledApp: boolean;
   didCopyToApplications: boolean;
   shouldShowNotice: boolean;
   dismissNotice: () => void;
   moveToApplications: () => Promise<void>;
+  openInstalledApp: () => Promise<void>;
 };
 
 export function useApplicationsInstall(
@@ -20,6 +22,7 @@ export function useApplicationsInstall(
 ): ApplicationsInstallState {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [isOpeningInstalledApp, setIsOpeningInstalledApp] = useState(false);
   const [installedPath, setInstalledPath] = useState<string>();
   const installLocation = useInstallLocation(onError);
   const shouldShowNotice =
@@ -45,13 +48,31 @@ export function useApplicationsInstall(
     }
   }, [onError, onReady]);
 
+  const openInstalledApp = useCallback(async () => {
+    if (!isTauri() || !installedPath) {
+      return;
+    }
+
+    setIsOpeningInstalledApp(true);
+    try {
+      await invoke("open_installed_application", { installedAppPath: installedPath });
+      onReady();
+    } catch (reason) {
+      onError(String(reason));
+    } finally {
+      setIsOpeningInstalledApp(false);
+    }
+  }, [installedPath, onError, onReady]);
+
   return {
     appPath: installLocation?.appPath,
     installedPath,
     isMoving,
+    isOpeningInstalledApp,
     didCopyToApplications: Boolean(installedPath),
     shouldShowNotice,
     dismissNotice: () => setIsDismissed(true),
     moveToApplications,
+    openInstalledApp,
   };
 }

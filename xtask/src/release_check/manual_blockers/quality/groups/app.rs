@@ -11,6 +11,8 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["without replacing", "no replace", "did not replace"],
             &["finder"],
             &["post-copy", "copied app", "after copy"],
+            &["open", "opened"],
+            &["installed app", "applications copy"],
             &[
                 "does not delete",
                 "did not delete",

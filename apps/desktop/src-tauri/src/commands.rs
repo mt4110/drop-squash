@@ -56,6 +56,11 @@ pub fn eject_installer_volume(mounted_volume_path: String) -> std::result::Resul
 }
 
 #[tauri::command(rename_all = "camelCase")]
+pub fn open_installed_application(installed_app_path: String) -> std::result::Result<(), String> {
+    install::open_installed_application(installed_app_path)
+}
+
+#[tauri::command(rename_all = "camelCase")]
 pub async fn convert(
     app_state: tauri::State<'_, crate::state::AppState>,
     window: tauri::WebviewWindow,

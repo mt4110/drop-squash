@@ -11,6 +11,7 @@ fn main() {
             commands::load_install_location,
             commands::copy_to_applications,
             commands::eject_installer_volume,
+            commands::open_installed_application,
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,

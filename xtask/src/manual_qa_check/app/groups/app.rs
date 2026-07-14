@@ -9,6 +9,8 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
             &["without replacing", "no replace", "did not replace"],
             &["finder"],
             &["post-copy", "copied app", "after copy"],
+            &["open", "opened"],
+            &["installed app", "applications copy"],
             &[
                 "does not delete",
                 "did not delete",

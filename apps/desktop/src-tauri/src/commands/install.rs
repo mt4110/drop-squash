@@ -20,5 +20,10 @@ pub fn eject_installer_volume(mounted_volume_path: String) -> Result<(), String>
         .map_err(format_error)
 }
 
+pub fn open_installed_application(installed_app_path: String) -> Result<(), String> {
+    dropsquash_platform::open_installed_application(std::path::Path::new(&installed_app_path))
+        .map_err(format_error)
+}
+
 #[cfg(test)]
 mod tests;
