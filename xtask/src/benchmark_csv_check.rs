@@ -1,4 +1,5 @@
 mod parse;
+mod path_policy;
 mod validation;
 
 use std::path::Path;
@@ -16,6 +17,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 }
 
 pub(crate) fn validate_path(path: &Path) -> Result<(), String> {
+    path_policy::validate(path)?;
     if !path.is_file() {
         return Err(format!("benchmark CSV does not exist: {}", path.display()));
     }

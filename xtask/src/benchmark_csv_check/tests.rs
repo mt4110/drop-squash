@@ -19,6 +19,32 @@ fn rejects_missing_csv() {
 }
 
 #[test]
+fn rejects_relative_csv_path() {
+    let error = validate_path(Path::new("results.csv")).unwrap_err();
+
+    assert!(error.contains("absolute .csv path outside the repository"));
+}
+
+#[test]
+fn rejects_csv_inside_repository() {
+    let path = std::env::current_dir()
+        .unwrap()
+        .join("target")
+        .join("benchmark-results.csv");
+
+    let error = validate_path(&path).unwrap_err();
+
+    assert!(error.contains("outside the repository"));
+}
+
+#[test]
+fn rejects_non_csv_path() {
+    let error = validate_path(Path::new("/tmp/dropsquash-benchmark.txt")).unwrap_err();
+
+    assert!(error.contains("absolute .csv path outside the repository"));
+}
+
+#[test]
 fn rejects_short_release_set() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("results.csv");
