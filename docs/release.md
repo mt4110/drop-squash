@@ -118,10 +118,13 @@ Gatekeeper no-warning evidence for the signed app.
 Do not promise automatic deletion of the downloaded `.dmg` after Finder copy or
 drag-to-Applications install: that copy path does not execute DropSquash code,
 and the installed app cannot reliably know the original downloaded DMG path.
-A later first-launch helper may detect that the app is running from `/Volumes`,
-offer to move the app to `/Applications`, and eject the mounted installer volume
-after successful move. It must not delete the downloaded `.dmg` without an
-explicit user action.
+A later first-launch helper may detect that the app is running from `/Volumes`
+and offer an explicit in-app install action. That action may copy DropSquash to
+`/Applications`, relaunch from the installed app, and eject the mounted installer
+volume after a verified move. It must not delete the downloaded `.dmg` without
+an explicit user action, and it may only offer downloaded-installer cleanup when
+the backing `.dmg` path is known through a deterministic macOS API. If that path
+cannot be proven, keep the mounted-volume eject only.
 The desktop command `load_install_location` currently provides the read-only
 preflight for that helper: it reports the current `.app` path, whether launch is
 from `/Volumes`, whether the app is already under `/Applications`, and whether
