@@ -122,6 +122,11 @@ A later first-launch helper may detect that the app is running from `/Volumes`,
 offer to move the app to `/Applications`, and eject the mounted installer volume
 after successful move. It must not delete the downloaded `.dmg` without an
 explicit user action.
+The desktop command `load_install_location` currently provides the read-only
+preflight for that helper: it reports the current `.app` path, whether launch is
+from `/Volumes`, whether the app is already under `/Applications`, and whether
+the app may offer an Applications move. The move/eject/delete actions are not
+implemented yet.
 Before implementing the command runner, use `macos-signing-plan` to keep the
 macOS signing wrapper order deterministic: prepare the signed target, copy the
 unsigned DMG to that target, prepare the temporary signing keychain, apply the

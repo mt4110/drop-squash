@@ -38,6 +38,13 @@ export type DropZoneState = {
   lockedReason?: LockedReason;
 };
 
+export type InstallLocation = {
+  appPath: string;
+  runningFromDiskImage: boolean;
+  installedInApplications: boolean;
+  shouldOfferApplicationsMove: boolean;
+};
+
 export type ConversionSummary = {
   outputPath: string;
   originalBytes: number;

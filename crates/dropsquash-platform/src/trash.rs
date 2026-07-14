@@ -27,7 +27,7 @@ fn move_to_trash(path: &Path) -> Result<()> {
     let manager = NSFileManager::defaultManager();
     manager
         .trashItemAtURL_resultingItemURL_error(&url, None)
-        .map_err(|error| AppError::InvalidConfig(error.localizedDescription().to_string()))
+        .map_err(|error| AppError::InvalidConfig(error.to_string()))
 }
 
 #[cfg(not(target_os = "macos"))]

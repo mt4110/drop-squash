@@ -1,6 +1,7 @@
 mod config;
 mod conversion;
 mod dto;
+mod install;
 mod license;
 mod progress;
 pub mod queue;
@@ -37,6 +38,11 @@ pub fn save_config(
         source_policy,
         write_privacy_receipt,
     )
+}
+
+#[tauri::command(rename_all = "camelCase")]
+pub fn load_install_location() -> std::result::Result<install::InstallLocationDto, String> {
+    install::load_install_location()
 }
 
 #[tauri::command(rename_all = "camelCase")]

@@ -8,6 +8,7 @@ fn main() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             commands::load_state,
+            commands::load_install_location,
             commands::save_config,
             commands::convert,
             commands::cancel_conversion,
