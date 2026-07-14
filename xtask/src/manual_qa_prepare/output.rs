@@ -1,6 +1,6 @@
 use super::{
     artifact::qa_artifact, benchmark, build_identity::BuildIdentity, environment::Environment,
-    markdown, markdown::Field, options::Options, packaged_app, prepared_markdown,
+    license_sandbox, markdown, markdown::Field, options::Options, packaged_app, prepared_markdown,
     release_candidate,
 };
 
@@ -22,6 +22,7 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     fields.extend(environment.manual_qa_fields());
     markdown::print_fields(&fields);
     packaged_app::print_rows();
+    license_sandbox::print_plan();
     if let Some(path) = &artifact {
         release_candidate::print_rows(path)?;
     }

@@ -2,7 +2,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::Path;
 
-use super::{benchmark, markdown, packaged_app, release_candidate};
+use super::{benchmark, license_sandbox, markdown, packaged_app, release_candidate};
 
 pub(super) fn write(
     path: &Path,
@@ -11,6 +11,7 @@ pub(super) fn write(
 ) -> Result<(), String> {
     let mut rows = markdown::rows(fields);
     rows.extend(packaged_app::rows());
+    rows.extend(license_sandbox::rows());
     rows.extend(benchmark::rows());
     if let Some(artifact) = artifact {
         rows.extend(release_candidate::rows(artifact)?);

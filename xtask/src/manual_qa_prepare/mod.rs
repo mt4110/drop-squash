@@ -3,6 +3,7 @@ mod benchmark;
 mod build_identity;
 mod environment;
 mod git_state;
+mod license_sandbox;
 mod markdown;
 mod options;
 mod output;
