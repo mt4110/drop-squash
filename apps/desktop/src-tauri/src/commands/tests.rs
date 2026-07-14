@@ -45,6 +45,25 @@ fn maps_hidden_delivery_profiles_to_chat_profile() {
 }
 
 #[test]
+fn maps_hidden_privacy_profile_to_archive_profile() {
+    let config = AppConfig {
+        default_profile: Profile::Privacy,
+        ..AppConfig::default()
+    };
+
+    let state = drop_zone_state(
+        &config,
+        LicenseState::Trial(dropsquash_core::TrialState {
+            successful_conversions: 0,
+            limit: TRIAL_CONVERSION_LIMIT,
+        }),
+        vec!["mov".to_string()],
+    );
+
+    assert_eq!(state.profile, Profile::Archive);
+}
+
+#[test]
 fn exposes_license_refresh_lock_reason() {
     let state = drop_zone_state(
         &AppConfig::default(),

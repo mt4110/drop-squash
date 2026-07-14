@@ -10,7 +10,6 @@ export const initialState: DropZoneState = {
     { value: "slack", label: "Slack" },
     { value: "docs", label: "Docs" },
     { value: "archive", label: "Archive" },
-    { value: "privacy", label: "Privacy" },
   ],
   outputSizes: [
     { value: "auto", label: "Auto" },
