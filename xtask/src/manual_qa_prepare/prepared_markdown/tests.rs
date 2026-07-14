@@ -24,9 +24,9 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
     assert!(text.contains("Prepared draft helper commands:"));
-    assert!(text.contains("cargo run -p xtask -- manual-qa-clean-draft"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-release-gates"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-benchmark"));
+    assert!(text.contains("cargo run -p xtask -- manual-qa-clean-draft"));
     assert!(text.contains("Packaged app command:"));
     assert!(text.contains("open -- '"));
     assert!(text.contains("DropSquash.dmg'"));

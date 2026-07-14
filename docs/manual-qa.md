@@ -27,8 +27,8 @@ If the prepared Markdown draft still has empty release gate rows, you can fill
 the deterministic local ones after they pass:
 
 ```sh
-cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-release-gates /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 ```
 
 After a real release-set benchmark CSV exists and `benchmark-csv-check` passes,
@@ -36,6 +36,7 @@ you can fill the benchmark command and sample-set rows from that CSV:
 
 ```sh
 cargo run -p xtask -- manual-qa-fill-benchmark /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 ```
 
 For manual observation rows, do not write only `Pass`, `OK`, `Done`, `Works`,

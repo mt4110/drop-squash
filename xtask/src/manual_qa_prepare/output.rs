@@ -94,6 +94,13 @@ pub(super) fn fill_benchmark_line(path: &Path, output_dir: &Path) -> String {
     )
 }
 
+pub(super) fn clean_draft_line(path: &Path) -> String {
+    format!(
+        "manual QA Clean draft command: {}",
+        commands::clean_draft_command(path)
+    )
+}
+
 pub(super) fn open_artifact_line(path: &Path) -> Option<String> {
     if path.extension().and_then(|value| value.to_str()) != Some("dmg") {
         return None;
@@ -117,4 +124,5 @@ fn print_manual_check(path: &Path) {
 pub(super) fn print_helper_commands(path: &Path, output_dir: &Path) {
     println!("{}", fill_release_gates_line(path));
     println!("{}", fill_benchmark_line(path, output_dir));
+    println!("{}", clean_draft_line(path));
 }
