@@ -34,7 +34,7 @@ pub(super) fn public_web() -> Vec<String> {
 
 pub(super) fn distribution_signing() -> Vec<String> {
     vec![
-        format!("preflight distribution pending: cargo run -p xtask -- manual-qa-pending {QA_MARKDOWN} --section distribution"),
+        format!("preflight ready distribution: cargo run -p xtask -- manual-qa-ready-distribution {QA_MARKDOWN}"),
         "preflight signing environment: cargo run -p xtask -- macos-signing-check".to_string(),
         "preflight distribution manual gate: cargo run -p xtask -- manual-qa-check".to_string(),
     ]

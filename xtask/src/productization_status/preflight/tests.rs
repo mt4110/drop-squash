@@ -49,8 +49,7 @@ fn reports_public_web_preflight() {
 fn reports_distribution_preflight() {
     let lines = distribution_lines();
     assert!(lines[0].contains("release environment secrets"));
-    assert!(lines[1].contains("manual-qa-pending"));
-    assert!(lines[1].contains("--section distribution"));
+    assert!(lines[1].contains("manual-qa-ready-distribution"));
     assert!(lines[2].contains("macos-signing-check"));
     assert!(lines[3].contains("manual-qa-check"));
 }

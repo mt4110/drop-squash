@@ -36,7 +36,7 @@ pub(super) fn summary(track_name: &str) -> Option<String> {
             "primary command: cargo run -p xtask -- website-check".to_string(),
         ),
         "Signing and distribution proof" => Some(
-            "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section distribution".to_string(),
+            "primary command: cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md".to_string(),
         ),
         _ => None,
     }

@@ -30,6 +30,7 @@ the deterministic local ones after they pass:
 cargo run -p xtask -- manual-qa-fill-release-gates /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```
@@ -322,3 +323,8 @@ Live checkout URL, GitHub Release URL, and Homebrew tap PR URL before publish.
 phases such as Final QA Gate, Homebrew, Signing Environment, Signature
 Verification, and Gatekeeper, and prints a `phase counts:` summary before the
 row list.
+After the release-gate commands pass, prefer
+`manual-qa-ready-distribution` before the distribution/signing pass. It
+refreshes the deterministic release-gate rows, removes the prepared-draft
+marker if this is still the original prepared file, and prints the next
+`manual-qa-pending --section distribution` plus `manual-qa-check` commands.
