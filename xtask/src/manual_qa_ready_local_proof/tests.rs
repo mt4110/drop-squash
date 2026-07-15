@@ -1,4 +1,4 @@
-use super::{parse_args, run_args, USAGE};
+use super::{manual_check_command, packaged_app_pending_command, parse_args, run_args, USAGE};
 
 #[test]
 fn parses_without_baseline() {
@@ -31,4 +31,18 @@ fn forwards_optional_baseline() {
 #[test]
 fn rejects_invalid_arguments() {
     assert_eq!(parse_args(vec![]).unwrap_err(), USAGE);
+}
+
+#[test]
+fn quotes_followup_commands() {
+    let path = std::path::PathBuf::from("/tmp/QA Path's/ready.md");
+
+    assert_eq!(
+        packaged_app_pending_command(&path),
+        "cargo run -p xtask -- manual-qa-pending '/tmp/QA Path'\\''s/ready.md' --section packaged-app"
+    );
+    assert_eq!(
+        manual_check_command(&path),
+        "cargo run -p xtask -- manual-qa-check '/tmp/QA Path'\\''s/ready.md'"
+    );
 }

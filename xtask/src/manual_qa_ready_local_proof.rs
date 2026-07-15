@@ -10,6 +10,11 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     crate::manual_qa_fill_local_proof::run(run_args(&parsed))?;
     crate::manual_qa_clean_draft::run(vec![display(&parsed.0)])?;
     println!("prepared local proof draft is ready: {}", parsed.0.display());
+    println!(
+        "next packaged-app pending command: {}",
+        packaged_app_pending_command(&parsed.0)
+    );
+    println!("next manual QA check command: {}", manual_check_command(&parsed.0));
     Ok(())
 }
 
@@ -37,4 +42,22 @@ fn run_args(parsed: &(PathBuf, PathBuf, Option<PathBuf>)) -> Vec<String> {
 
 fn display(path: &PathBuf) -> String {
     path.display().to_string()
+}
+
+fn packaged_app_pending_command(path: &PathBuf) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section packaged-app",
+        shell_single_quote(path)
+    )
+}
+
+fn manual_check_command(path: &PathBuf) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-check '{}'",
+        shell_single_quote(path)
+    )
+}
+
+fn shell_single_quote(path: &PathBuf) -> String {
+    path.display().to_string().replace('\'', "'\\''")
 }
