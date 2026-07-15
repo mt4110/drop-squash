@@ -107,8 +107,9 @@ available.
 `DropSquash.app` bundle directory or a UDIF `DropSquash.dmg` file. `Date` must
 use a real `YYYY-MM-DD` calendar date in year 2000 or later.
 `App build` must include both the tested app version and the git commit, for
-example `DropSquash 0.1.0 git abc1234`, and the commit must match the current
-short `HEAD` when `manual-qa-check` is run.
+example `DropSquash 0.1.0 git abc1234`. `manual-qa-check` accepts the recorded
+build commit when the current `HEAD` is exactly that commit or when the same
+worktree only moved forward through `xtask/` or `docs/` helper commits.
 `macOS version` must look like `macOS 15.5`, `Machine` must include the CPU
 architecture, and `Output folder` must point to an existing absolute directory.
 `Input sample set` must mention the short, medium, and large local recordings
@@ -148,10 +149,11 @@ without touching unrelated local changes. If you stay in the current worktree,
 rebuild only after committing or intentionally removing the unrelated local
 change before recording packaged-app evidence.
 Run the follow-up helper commands from that same worktree too:
-`manual-qa-ready-*`, `manual-qa-pending`, and `manual-qa-check` all compare
-the recorded App build against the current `HEAD`, so running them from a
-different worktree can fail the guard even when the prepared evidence file
-itself is correct.
+`manual-qa-ready-*`, `manual-qa-pending`, and `manual-qa-check` compare the
+recorded App build against the current `HEAD`. The same worktree may keep
+moving through helper-only `xtask/` or `docs/` commits without forcing an app
+rebuild, but running from a different worktree can still fail the guard even
+when the prepared evidence file itself is correct.
 
 This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the
