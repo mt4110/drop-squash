@@ -23,6 +23,24 @@ pub(super) fn lines(report: &Report) -> Result<Vec<String>, String> {
     }
 }
 
+pub(super) fn summary(track_name: &str) -> Option<String> {
+    match track_name {
+        "Local packaged-app proof" => Some(
+            "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section local-proof".to_string(),
+        ),
+        "License sandbox proof" => Some(
+            "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section license".to_string(),
+        ),
+        "Public web proof" => Some(
+            "primary command: cargo run -p xtask -- website-check".to_string(),
+        ),
+        "Signing and distribution proof" => Some(
+            "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section distribution".to_string(),
+        ),
+        _ => None,
+    }
+}
+
 fn git_status() -> Result<String, String> {
     let output = Command::new("git")
         .args(["status", "--porcelain"])

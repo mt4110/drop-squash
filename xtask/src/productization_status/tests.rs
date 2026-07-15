@@ -36,6 +36,7 @@ fn reports_counts_tracks_and_next_track() {
     assert!(text.contains("1. Local packaged-app proof: 1/2 remaining"));
     assert!(text.contains("remaining blockers: Benchmark release set"));
     assert!(text.contains("next actions: Benchmark release set -> docs/manual-qa.md"));
+    assert!(text.contains("primary command: cargo run -p xtask -- manual-qa-pending"));
     assert!(text.contains("next track: 1. Local packaged-app proof"));
     assert!(text.contains("- Benchmark release set: Run release-set benchmark (docs/manual-qa.md)"));
 }

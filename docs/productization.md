@@ -69,8 +69,8 @@ cargo run -p xtask -- productization-status
 It summarizes `docs/release-blockers.md`, groups the remaining blockers by
 Execution Order, prints the next unfinished track, and emits preflight
 follow-up lines for the current track. It also prints the remaining blocker
-names and owner-target next actions under each incomplete track. It must not be
-used to mark manual or external evidence as complete.
+names, owner-target next actions, and one primary command under each incomplete
+track. It must not be used to mark manual or external evidence as complete.
 
 Do not start a public paid beta until all of these are true:
 

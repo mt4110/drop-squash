@@ -21,6 +21,12 @@ pub(super) fn text(report: &Report) -> String {
             .iter()
             .filter_map(|track| track_action_line(report, track)),
     );
+    lines.extend(
+        report
+            .tracks
+            .iter()
+            .filter_map(track_command_line),
+    );
     lines.extend(next_track(report));
     lines.join("\n")
 }
@@ -74,6 +80,13 @@ fn short_action(report: &Report, blocker: &str) -> Option<String> {
         .iter()
         .find(|action| action.blocker == blocker)
         .map(|action| format!("{blocker} -> {}", action.owner))
+}
+
+fn track_command_line(track: &super::model::TrackStatus) -> Option<String> {
+    (!track.remaining.is_empty())
+        .then(|| super::preflight::summary(&track.name))
+        .flatten()
+        .map(|line| format!("   {line}"))
 }
 
 fn next_action_line(report: &Report, blocker: &str) -> String {

@@ -1,4 +1,4 @@
-use super::{distribution_lines, license_sandbox_lines, manual_qa_lines, public_web_lines};
+use super::{distribution_lines, license_sandbox_lines, manual_qa_lines, public_web_lines, summary};
 
 #[test]
 fn reports_clean_manual_qa_preflight() {
@@ -50,4 +50,13 @@ fn reports_distribution_preflight() {
     assert!(lines[1].contains("--section distribution"));
     assert!(lines[2].contains("macos-signing-check"));
     assert!(lines[3].contains("manual-qa-check"));
+}
+
+#[test]
+fn reports_track_primary_command_summary() {
+    assert!(
+        summary("License sandbox proof")
+            .unwrap()
+            .contains("--section license")
+    );
 }
