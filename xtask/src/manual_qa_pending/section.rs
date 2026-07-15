@@ -32,6 +32,18 @@ pub(super) const BENCHMARK: &[&str] = &[
     "Benchmark regression threshold",
 ];
 
+pub(crate) fn filter_for_label(label: &str) -> &'static str {
+    if PACKAGED_APP.contains(&label) {
+        "packaged-app"
+    } else if LICENSE.contains(&label) {
+        "license"
+    } else if BENCHMARK.contains(&label) {
+        "benchmark"
+    } else {
+        "distribution"
+    }
+}
+
 pub(super) fn grouped(
     rows: &[(String, String)],
     filter: Option<&str>,

@@ -66,6 +66,10 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
+pub(crate) fn suggested_section(label: &str) -> &'static str {
+    section::filter_for_label(label)
+}
+
 fn parse_args(args: Vec<String>) -> Result<(PathBuf, Option<String>), String> {
     match args.as_slice() {
         [path] if path != "--help" && path != "-h" => Ok((PathBuf::from(path), None)),

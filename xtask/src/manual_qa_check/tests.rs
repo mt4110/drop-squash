@@ -204,6 +204,18 @@ fn reports_empty_four_column_results() {
 }
 
 #[test]
+fn reports_pending_hint_for_empty_packaged_app_result() {
+    let (_directory, path) = write_manual_qa(
+        "| Choose recording conversion | sample.mov | Smaller output |  |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains(
+        "manual QA pending hint: Choose recording conversion -> cargo run -p xtask -- manual-qa-pending <manual-qa.md> --section packaged-app"
+    )));
+}
+
+#[test]
 fn reports_empty_three_column_results() {
     let (_directory, path) = write_manual_qa("| Release gate | Passes |  |\n");
     let missing = check_file(&path).unwrap();

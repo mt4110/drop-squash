@@ -90,6 +90,14 @@ fn filters_benchmark_rows_to_requested_section() {
 }
 
 #[test]
+fn reports_filter_for_known_labels() {
+    assert_eq!(super::suggested_section("Choose recording conversion"), "packaged-app");
+    assert_eq!(super::suggested_section("Valid sandbox activation"), "license");
+    assert_eq!(super::suggested_section("Benchmark sample set"), "benchmark");
+    assert_eq!(super::suggested_section("Codesign verification"), "distribution");
+}
+
+#[test]
 fn local_proof_filter_includes_packaged_app_and_benchmark() {
     let groups = grouped(
         &[

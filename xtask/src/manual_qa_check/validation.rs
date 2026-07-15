@@ -3,6 +3,10 @@ pub(super) fn validate_result(label: &str, result: &str, missing: &mut Vec<Strin
     let result = result.trim();
     if result.is_empty() {
         missing.push(format!("manual QA result is empty: {label}"));
+        missing.push(format!(
+            "manual QA pending hint: {label} -> cargo run -p xtask -- manual-qa-pending <manual-qa.md> --section {}",
+            crate::manual_qa_pending::suggested_section(label)
+        ));
         return;
     }
     if has_result_placeholder(label, result) || has_vague_manual_result(label, result) {
