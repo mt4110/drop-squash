@@ -128,8 +128,15 @@ fn detects_packaged_app_group() {
 fn reports_row_notes_for_custom_inputs() {
     assert_eq!(
         row_notes::for_label("Failed conversion"),
-        Some("note: requires unsupported or intentionally bad input outside the benchmark sample set")
+        Some("note: use a throwaway unsupported or intentionally bad input outside the benchmark sample set, for example under /tmp")
     );
+}
+
+#[test]
+fn finds_packaged_app_artifact_row() {
+    let text = "| App artifact | /tmp/DropSquash.dmg |\n";
+
+    assert_eq!(super::app_artifact(text), Some("/tmp/DropSquash.dmg"));
 }
 
 #[test]

@@ -58,6 +58,9 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         for line in sample_hints::for_manual(&text) {
             println!("{line}");
         }
+        if let Some(artifact) = app_artifact(&text) {
+            println!("packaged-app artifact: {artifact}");
+        }
     }
     Ok(())
 }
@@ -97,4 +100,14 @@ fn pending_row(line: &str) -> Option<(&str, &str)> {
 
 fn includes_packaged_app(groups: &[(&str, Vec<(String, String)>)]) -> bool {
     groups.iter().any(|(name, _)| *name == "Packaged App")
+}
+
+fn app_artifact(text: &str) -> Option<&str> {
+    text.lines().find_map(|line| {
+        let cells = line.trim_matches('|').split('|').map(str::trim).collect::<Vec<_>>();
+        match cells.as_slice() {
+            ["App artifact", path] if path.ends_with(".dmg") => Some(*path),
+            _ => None,
+        }
+    })
 }

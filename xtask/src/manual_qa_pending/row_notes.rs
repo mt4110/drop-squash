@@ -2,7 +2,7 @@ pub(super) fn for_label(label: &str) -> Option<&'static str> {
     match label {
         "Disk image launch notice" => Some("note: requires launch from mounted DropSquash.dmg"),
         "Failed conversion" => Some(
-            "note: requires unsupported or intentionally bad input outside the benchmark sample set",
+            "note: use a throwaway unsupported or intentionally bad input outside the benchmark sample set, for example under /tmp",
         ),
         "`cargo run -p dropsquash -- license status`" => {
             Some("note: record diagnostic lines without pasting the sandbox key")
