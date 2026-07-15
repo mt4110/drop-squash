@@ -21,6 +21,7 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.starts_with("Prepared manual QA draft only."));
     assert!(text.contains("Benchmark commands:"));
     assert!(text.contains("Benchmark context to record:"));
+    assert!(text.contains("Recommended local-proof flow:"));
     assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
     assert!(text.contains("Prepared draft helper commands:"));
