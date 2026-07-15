@@ -33,6 +33,7 @@ cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prep
 cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-merge-prepared /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-installed-app stash /tmp/dropsquash-manual-qa-installed-app
 cargo run -p xtask -- manual-qa-link-samples /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
@@ -195,6 +196,10 @@ If packaged-app file pickers are awkward because the benchmark sample names use
 spaces or non-ASCII characters, `manual-qa-link-samples` creates ASCII symlinks
 such as `qa-small.mov`, `qa-medium.mov`, and `qa-large.mp4` beside the checked
 benchmark CSV.
+If `/Applications/DropSquash.app` already exists and blocks the mounted-DMG
+install path, `manual-qa-installed-app stash` moves that bundle into a backup
+directory without deleting it, and `manual-qa-installed-app restore` moves it
+back after the packaged-app observation is done.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, use
 absolute paths outside the repository so private app state, generated videos,
 and QA evidence cannot be committed or deleted by accident.
