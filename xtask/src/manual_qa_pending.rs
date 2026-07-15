@@ -22,6 +22,9 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         println!("{section}:");
         for (label, expected) in rows {
             println!("- {label}: {expected}");
+            if let Some(guidance) = sample_hints::guidance_for(label, &text) {
+                println!("  {guidance}");
+            }
         }
     }
     if includes_packaged_app(&groups) {
