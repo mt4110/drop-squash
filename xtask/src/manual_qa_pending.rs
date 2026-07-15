@@ -67,6 +67,7 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         if let Some(artifact) = field_value(&text, "App artifact") {
             println!("distribution artifact: {artifact}");
         }
+        println!("distribution cask path: packaging/homebrew/Casks/dropsquash.rb");
         if let Some(path) = field_value(&text, "Output folder") {
             println!("distribution checksum path: {}", Path::new(path).join("SHA256SUMS").display());
         }
