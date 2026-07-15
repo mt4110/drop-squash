@@ -131,9 +131,17 @@ checked benchmark samples print a row-specific `sample:` hint. Rows that need a
 mounted DMG or intentionally bad input print a `note:` line instead. The same
 pending output also groups packaged-app rows into practical manual-QA phases
 and prints a per-phase remaining-count summary.
+After the release-gate commands pass, prefer `manual-qa-ready-license` before
+the license sandbox pass so the prepared file refreshes deterministic gate rows
+and prints the next `manual-qa-pending --section license`,
+`cargo run -p dropsquash -- license status`, and `manual-qa-check` commands.
 The same `manual-qa-pending` phase summary now applies to `--section license`,
 so sandbox setup, activation safety, valid activation, failure recovery, and
 local diagnostics can be worked in order.
+After the same release-gate commands pass, prefer
+`manual-qa-ready-distribution` before the distribution/signing pass so the
+prepared file refreshes deterministic gate rows and prints the next
+`manual-qa-pending --section distribution` plus `manual-qa-check` commands.
 The same phase summary now also applies to `--section distribution`, so final
 manual QA, Homebrew, signing environment, signature verification, and
 Gatekeeper work can be staged in order.
