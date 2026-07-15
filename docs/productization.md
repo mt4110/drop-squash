@@ -64,6 +64,7 @@ Use this command before choosing the next productization step:
 
 ```sh
 cargo run -p xtask -- productization-status
+cargo run -p xtask -- productization-status --track "License sandbox proof"
 ```
 
 It summarizes `docs/release-blockers.md`, groups the remaining blockers by
