@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 mod phases;
+mod packaged_app;
 mod section;
 mod row_notes;
 mod sample_hints;
@@ -50,13 +51,9 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         for line in sample_hints::for_manual(&text) {
             println!("{line}");
         }
-        if let Some(artifact) = field_value(&text, "App artifact") {
-            println!("packaged-app artifact: {artifact}");
-            println!("packaged-app open command: open -- '{}'", shell_single_quote(artifact));
+        for line in packaged_app::extra_lines(&text) {
+            println!("{line}");
         }
-        if let Some(path) = field_value(&text, "Config path") { println!("packaged-app config path: {path}"); }
-        if let Some(path) = field_value(&text, "Output folder") { println!("packaged-app output folder: {path}"); }
-        if let Some(path) = field_value(&text, "History path") { println!("packaged-app history path: {path}"); }
     }
     if groups.iter().any(|(name, _)| *name == "License Sandbox") {
         if let Some(path) = field_value(&text, "License cache path") {
@@ -118,8 +115,4 @@ fn field_value<'a>(text: &'a str, label: &str) -> Option<&'a str> {
             _ => None,
         }
     })
-}
-
-fn shell_single_quote(text: &str) -> String {
-    text.replace('\'', "'\\''")
 }

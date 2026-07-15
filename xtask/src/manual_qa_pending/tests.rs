@@ -167,8 +167,10 @@ fn finds_output_and_history_rows() {
 #[test]
 fn quotes_packaged_app_open_command_path() {
     assert_eq!(
-        super::shell_single_quote("/tmp/QA Path's/DropSquash.dmg"),
-        "/tmp/QA Path'\\''s/DropSquash.dmg"
+        super::packaged_app::extra_lines(
+            "| App artifact | /tmp/QA Path's/DropSquash.dmg |\n"
+        )[1],
+        "packaged-app open command: open -- '/tmp/QA Path'\\''s/DropSquash.dmg'"
     );
 }
 
