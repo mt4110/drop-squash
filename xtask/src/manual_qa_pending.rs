@@ -54,6 +54,7 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
             println!("packaged-app artifact: {artifact}");
             println!("packaged-app open command: open -- '{}'", shell_single_quote(artifact));
         }
+        if let Some(path) = field_value(&text, "Config path") { println!("packaged-app config path: {path}"); }
         if let Some(path) = field_value(&text, "Output folder") { println!("packaged-app output folder: {path}"); }
         if let Some(path) = field_value(&text, "History path") { println!("packaged-app history path: {path}"); }
     }

@@ -64,10 +64,10 @@ When `manual-qa-check` reports an empty or missing manual row, it also prints a
 matching `manual QA pending hint:` line so you can jump back to the right
 `manual-qa-pending --section ...` view instead of guessing the section.
 The packaged-app section also prints the prepared draft's
-`packaged-app artifact:`, `packaged-app open command:`, `packaged-app output
-folder:`, and `packaged-app history path:` lines so conversion, Finder-reveal,
-and trial-history observations can keep referring to the same recorded
-evidence paths.
+`packaged-app artifact:`, `packaged-app open command:`, `packaged-app config
+path:`, `packaged-app output folder:`, and `packaged-app history path:` lines
+so conversion, Finder-reveal, config-backed settings, and trial-history
+observations can keep referring to the same recorded evidence paths.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill

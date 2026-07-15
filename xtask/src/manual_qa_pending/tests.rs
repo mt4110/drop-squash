@@ -156,8 +156,10 @@ fn finds_license_cache_path_row() {
 
 #[test]
 fn finds_output_and_history_rows() {
-    let text = "| Output folder | /tmp/output |\n| History path | /tmp/history.jsonl |\n";
+    let text =
+        "| Config path | /tmp/config.json |\n| Output folder | /tmp/output |\n| History path | /tmp/history.jsonl |\n";
 
+    assert_eq!(super::field_value(text, "Config path"), Some("/tmp/config.json"));
     assert_eq!(super::field_value(text, "Output folder"), Some("/tmp/output"));
     assert_eq!(super::field_value(text, "History path"), Some("/tmp/history.jsonl"));
 }
