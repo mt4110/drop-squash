@@ -34,6 +34,7 @@ fn reports_counts_tracks_and_next_track() {
     let text = render::text(&report);
     assert!(text.contains("release blockers: 3 total, 1 verified, 2 blocked"));
     assert!(text.contains("1. Local packaged-app proof: 1/2 remaining"));
+    assert!(text.contains("remaining blockers: Benchmark release set"));
     assert!(text.contains("next track: 1. Local packaged-app proof"));
     assert!(text.contains("- Benchmark release set: Run release-set benchmark (docs/manual-qa.md)"));
 }
