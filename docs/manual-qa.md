@@ -35,11 +35,16 @@ cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```
 
 After a real release-set benchmark CSV exists and `benchmark-csv-check` passes,
-you can fill the benchmark command and sample-set rows from that CSV. For the
-first release candidate, fill the threshold row from the current CSV so it
-records that this sample set establishes the same-machine baseline. For a later
-release candidate, pass the earlier same-machine baseline CSV as the third
-argument:
+prefer `manual-qa-ready-local-proof` for the normal local packaged-app proof
+flow. It fills the deterministic release-gate and benchmark rows in order, then
+removes the prepared-draft marker so `manual-qa-pending --section local-proof`
+shows only the remaining packaged-app observations.
+
+Use the lower-level benchmark fill commands only when you intentionally need to
+inspect or rerun one part of the flow. For the first release candidate, fill
+the threshold row from the current CSV so it records that this sample set
+establishes the same-machine baseline. For a later release candidate, pass the
+earlier same-machine baseline CSV as the third argument:
 
 ```sh
 cargo run -p xtask -- manual-qa-fill-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv

@@ -115,7 +115,10 @@ After the benchmark CSV is checked, prefer
 `manual-qa-ready-local-proof` to fill deterministic local-proof rows and remove
 the prepared-draft marker in one step. Then use
 `manual-qa-pending --section local-proof` to focus only on the remaining
-packaged-app observations before running `manual-qa-check`.
+packaged-app observations before running `manual-qa-check`. Keep
+`manual-qa-fill-benchmark` and `manual-qa-fill-benchmark-threshold` for
+intentional reruns or baseline-comparison troubleshooting rather than the
+default packaged-app QA flow.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.
