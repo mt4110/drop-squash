@@ -9,9 +9,7 @@ const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-ready-distribution <
 pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let path = parse_args(args)?;
     crate::manual_qa_release_gate_fill::run(vec![display(&path)])?;
-    if needs_cleaning(&path)? {
-        crate::manual_qa_clean_draft::run(vec![display(&path)])?;
-    }
+    finish(&path)?;
     println!("distribution proof draft is ready: {}", path.display());
     println!(
         "next distribution pending command: {}",
@@ -32,6 +30,13 @@ fn needs_cleaning(path: &PathBuf) -> Result<bool, String> {
     let text = std::fs::read_to_string(path)
         .map_err(|error| format!("failed to read manual QA file: {error}"))?;
     Ok(text.contains(DRAFT_MARKER))
+}
+
+fn finish(path: &PathBuf) -> Result<(), String> {
+    if needs_cleaning(path)? {
+        crate::manual_qa_clean_draft::run(vec![display(path)])?;
+    }
+    Ok(())
 }
 
 fn display(path: &PathBuf) -> String {

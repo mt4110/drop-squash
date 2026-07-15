@@ -1,4 +1,6 @@
-use super::{license_pending_command, manual_check_command, needs_cleaning, parse_args, USAGE};
+use super::{
+    finish, license_pending_command, manual_check_command, needs_cleaning, parse_args, USAGE,
+};
 
 #[test]
 fn parses_markdown_path() {
@@ -41,4 +43,29 @@ fn ignores_cleaned_manual_file() {
     std::fs::write(&path, "| row |\n").unwrap();
 
     assert!(!needs_cleaning(&path).unwrap());
+}
+
+#[test]
+fn finish_keeps_cleaned_manual_file() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("manual.md");
+    std::fs::write(&path, "| App build | x |\n| Check | Expected | Result |\n").unwrap();
+
+    finish(&path).unwrap();
+
+    assert_eq!(
+        std::fs::read_to_string(&path).unwrap(),
+        "| App build | x |\n| Check | Expected | Result |\n"
+    );
+}
+
+#[test]
+fn finish_cleans_prepared_draft() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("manual.md");
+    std::fs::write(&path, "Prepared manual QA draft only.\n\n| App build | x |\n").unwrap();
+
+    finish(&path).unwrap();
+
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), "| App build | x |\n");
 }
