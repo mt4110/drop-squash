@@ -135,6 +135,11 @@ worktree so the checked `DropSquash.dmg` still matches the current `HEAD`
 without touching unrelated local changes. If you stay in the current worktree,
 rebuild only after committing or intentionally removing the unrelated local
 change before recording packaged-app evidence.
+Run the follow-up helper commands from that same worktree too:
+`manual-qa-ready-*`, `manual-qa-pending`, and `manual-qa-check` all compare
+the recorded App build against the current `HEAD`, so running them from a
+different worktree can fail the guard even when the prepared evidence file
+itself is correct.
 
 This creates `/tmp/dropsquash-qa-state`, copies any existing config, history,
 and license cache there, and creates `/tmp/dropsquash-manual-qa-output` for the

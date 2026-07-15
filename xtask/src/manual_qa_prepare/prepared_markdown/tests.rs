@@ -24,7 +24,9 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("Recommended proof flow:"));
     assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
-    assert!(text.contains("Prepared draft helper commands:"));
+    assert!(text.contains(
+        "Prepared draft helper commands (run them from the same clean worktree"
+    ));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-release-gates"));
     assert!(text.contains("manual-qa-ready-all"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-local-proof"));
@@ -47,7 +49,9 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("Checksum command:"));
     assert!(text.contains("cargo run -p xtask -- checksum"));
     assert!(text.contains("SHA256SUMS"));
-    assert!(text.contains("Manual QA check command after filling observations:"));
+    assert!(text.contains(
+        "Manual QA check command after filling observations (run it from the same clean worktree"
+    ));
     assert!(text.contains("cargo run -p xtask -- manual-qa-check"));
     assert!(text.contains("prepared.md'"));
     assert!(text.contains("| App build | DropSquash 0.1.0 git abc1234 |"));

@@ -73,7 +73,7 @@ fn markdown_text(
         ));
     }
     sections.push(format!(
-        "Manual QA check command after filling observations:\n\n```sh\n{}\n```",
+        "Manual QA check command after filling observations (run it from the same clean worktree that built the App build above):\n\n```sh\n{}\n```",
         commands::manual_check_command(output_path)
     ));
     sections.push(rows.join("\n"));
