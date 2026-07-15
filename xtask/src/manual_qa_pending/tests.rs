@@ -158,3 +158,17 @@ fn reports_phase_counts_for_license_rows() {
 
     assert_eq!(counts, vec![("Setup", 1), ("Activation Safety", 2)]);
 }
+
+#[test]
+fn reports_phase_counts_for_distribution_rows() {
+    let counts = phases::counts(&[
+        ("Codesign verification".to_string(), String::new()),
+        ("Notarization staple verification".to_string(), String::new()),
+        ("Gatekeeper open test".to_string(), String::new()),
+    ]);
+
+    assert_eq!(
+        counts,
+        vec![("Signature Verification", 2), ("Gatekeeper", 1)]
+    );
+}

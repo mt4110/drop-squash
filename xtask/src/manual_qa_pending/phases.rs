@@ -14,6 +14,15 @@ pub(super) fn for_label(label: &str) -> Option<&'static str> {
         "License network failure" | "Expired license refresh"
         | "Forget license on this Mac" => Some("Failure Recovery"),
         "`cargo run -p dropsquash -- license status`" => Some("Local Diagnostics"),
+        "`cargo run -p xtask -- manual-qa-check`" => Some("Final QA Gate"),
+        "`cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md`" => {
+            Some("Homebrew")
+        }
+        "`cargo run -p xtask -- macos-signing-check`" => Some("Signing Environment"),
+        "Codesign verification" | "Notarization staple verification" => {
+            Some("Signature Verification")
+        }
+        "Gatekeeper open test" => Some("Gatekeeper"),
         _ => None,
     }
 }
@@ -61,5 +70,11 @@ mod tests {
     fn maps_license_rows_to_license_phases() {
         assert_eq!(for_label("Sandbox purchase"), Some("Setup"));
         assert_eq!(for_label("Valid sandbox activation"), Some("Valid Activation"));
+    }
+
+    #[test]
+    fn maps_distribution_rows_to_distribution_phases() {
+        assert_eq!(for_label("Codesign verification"), Some("Signature Verification"));
+        assert_eq!(for_label("Gatekeeper open test"), Some("Gatekeeper"));
     }
 }

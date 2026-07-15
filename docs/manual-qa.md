@@ -317,3 +317,8 @@ Live checkout URL, GitHub Release URL, and Homebrew tap PR URL before publish.
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
 | Notarization staple verification | Public DMG/app artifact passes notary, stapler validate or stapled status, and `spctl` assessment |  |
 | Gatekeeper open test | Signed, notarized, stapled app from public `DropSquash.dmg` matching the release notes Artifact URL opens cleanly without Gatekeeper warning |  |
+
+`manual-qa-pending --section distribution` groups these rows into practical
+phases such as Final QA Gate, Homebrew, Signing Environment, Signature
+Verification, and Gatekeeper, and prints a `phase counts:` summary before the
+row list.

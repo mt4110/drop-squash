@@ -7,6 +7,9 @@ pub(super) fn for_label(label: &str) -> Option<&'static str> {
         "`cargo run -p dropsquash -- license status`" => {
             Some("note: record diagnostic lines without pasting the sandbox key")
         }
+        "`cargo run -p xtask -- macos-signing-check`" => {
+            Some("note: requires release signing environment variables and secrets")
+        }
         _ => None,
     }
 }

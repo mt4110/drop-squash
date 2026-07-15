@@ -22,7 +22,10 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let groups = section::grouped(&pending, section.as_deref());
     for (section, rows) in &groups {
         println!("{section}:");
-        if matches!(*section, "Packaged App" | "License Sandbox") {
+        if matches!(
+            *section,
+            "Packaged App" | "License Sandbox" | "Distribution And Signing"
+        ) {
             let counts = phases::counts(rows);
             if !counts.is_empty() {
                 let summary = counts
