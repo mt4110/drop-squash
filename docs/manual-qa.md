@@ -48,7 +48,9 @@ Rows that reuse the checked benchmark samples also print a row-specific
 `sample:` hint so the next manual observation can start from the right file or
 queue set immediately. Rows that cannot be satisfied from the checked benchmark
 set print a `note:` line instead, such as the mounted-DMG requirement or the
-need for an intentionally bad input.
+need for an intentionally bad input. `manual-qa-pending --section local-proof`
+also groups packaged-app rows into practical phases such as Mounted DMG, Small
+Sample, Duplicate Sample, Large Sample, Queue Sample, and Custom Failure Input.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill

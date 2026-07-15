@@ -1,4 +1,6 @@
-use super::{includes_packaged_app, parse_args, pending_rows, row_notes, section::grouped, USAGE};
+use super::{
+    includes_packaged_app, parse_args, pending_rows, phases, row_notes, section::grouped, USAGE,
+};
 
 #[test]
 fn finds_pending_result_rows() {
@@ -128,4 +130,9 @@ fn reports_row_notes_for_custom_inputs() {
         row_notes::for_label("Failed conversion"),
         Some("note: requires unsupported or intentionally bad input outside the benchmark sample set")
     );
+}
+
+#[test]
+fn reports_phase_for_packaged_app_rows() {
+    assert_eq!(phases::for_label("Choose recording conversion"), Some("Small Sample"));
 }

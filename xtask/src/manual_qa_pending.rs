@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+mod phases;
 mod section;
 mod row_notes;
 mod sample_hints;
@@ -21,7 +22,15 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let groups = section::grouped(&pending, section.as_deref());
     for (section, rows) in &groups {
         println!("{section}:");
+        let mut current_phase = None;
         for (label, expected) in rows {
+            let next_phase = phases::for_label(label);
+            if next_phase != current_phase {
+                if let Some(phase) = next_phase {
+                    println!("  {phase}:");
+                }
+                current_phase = next_phase;
+            }
             println!("- {label}: {expected}");
             if let Some(note) = row_notes::for_label(label) {
                 println!("  {note}");
