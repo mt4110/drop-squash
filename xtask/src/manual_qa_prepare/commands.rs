@@ -29,38 +29,23 @@ pub(super) fn pending_command(path: &Path) -> String {
 }
 
 pub(super) fn pending_packaged_app_command(path: &Path) -> String {
-    format!(
-        "cargo run -p xtask -- manual-qa-pending '{}' --section packaged-app",
-        shell_single_quote(path)
-    )
+    pending_section_command(path, "packaged-app")
 }
 
 pub(super) fn pending_local_proof_command(path: &Path) -> String {
-    format!(
-        "cargo run -p xtask -- manual-qa-pending '{}' --section local-proof",
-        shell_single_quote(path)
-    )
+    pending_section_command(path, "local-proof")
 }
 
 pub(super) fn pending_license_command(path: &Path) -> String {
-    format!(
-        "cargo run -p xtask -- manual-qa-pending '{}' --section license",
-        shell_single_quote(path)
-    )
+    pending_section_command(path, "license")
 }
 
 pub(super) fn pending_benchmark_command(path: &Path) -> String {
-    format!(
-        "cargo run -p xtask -- manual-qa-pending '{}' --section benchmark",
-        shell_single_quote(path)
-    )
+    pending_section_command(path, "benchmark")
 }
 
 pub(super) fn pending_distribution_command(path: &Path) -> String {
-    format!(
-        "cargo run -p xtask -- manual-qa-pending '{}' --section distribution",
-        shell_single_quote(path)
-    )
+    pending_section_command(path, "distribution")
 }
 
 pub(super) fn fill_release_gates_command(path: &Path) -> String {
@@ -83,6 +68,20 @@ pub(super) fn ready_local_proof_command(path: &Path, csv: &Path) -> String {
         "cargo run -p xtask -- manual-qa-ready-local-proof '{}' '{}'",
         shell_single_quote(path),
         shell_single_quote(csv)
+    )
+}
+
+pub(super) fn ready_license_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-ready-license '{}'",
+        shell_single_quote(path)
+    )
+}
+
+pub(super) fn ready_distribution_command(path: &Path) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-ready-distribution '{}'",
+        shell_single_quote(path)
     )
 }
 
@@ -112,6 +111,13 @@ pub(super) fn clean_draft_command(path: &Path) -> String {
 pub(super) fn fill_check_command(path: &Path) -> String {
     format!(
         "cargo run -p xtask -- manual-qa-fill-check '{}'",
+        shell_single_quote(path)
+    )
+}
+
+fn pending_section_command(path: &Path, section: &str) -> String {
+    format!(
+        "cargo run -p xtask -- manual-qa-pending '{}' --section {section}",
         shell_single_quote(path)
     )
 }

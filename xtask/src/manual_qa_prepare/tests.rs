@@ -5,8 +5,9 @@ use super::output::{manual_check_line, open_artifact_line, sample_set_line};
 use super::output_helper::{
     clean_draft_line, fill_benchmark_line, fill_benchmark_threshold_line, fill_check_line,
     fill_local_proof_line, fill_release_gates_line, pending_benchmark_line,
-    pending_distribution_line, pending_line, pending_license_line,
-    pending_local_proof_line, pending_packaged_app_line, ready_local_proof_line,
+    pending_distribution_line, pending_line, pending_license_line, pending_local_proof_line,
+    pending_packaged_app_line, ready_distribution_line, ready_license_line,
+    ready_local_proof_line,
 };
 use super::require_reset_artifact;
 use super::reset_trial_lines;
@@ -153,6 +154,14 @@ fn helper_output_quotes_paths() {
     assert_eq!(
         ready_local_proof_line(&markdown, &output_dir),
         "manual QA Ready local proof command: cargo run -p xtask -- manual-qa-ready-local-proof '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+    );
+    assert_eq!(
+        ready_license_line(&markdown),
+        "manual QA Ready license command: cargo run -p xtask -- manual-qa-ready-license '/tmp/QA Path'\\''s/prepared.md'"
+    );
+    assert_eq!(
+        ready_distribution_line(&markdown),
+        "manual QA Ready distribution command: cargo run -p xtask -- manual-qa-ready-distribution '/tmp/QA Path'\\''s/prepared.md'"
     );
     assert_eq!(
         fill_benchmark_line(&markdown, &output_dir),

@@ -51,7 +51,7 @@ fn markdown_text(
             benchmark::csv_check_command(options)
         ),
         benchmark_context(fields, options),
-        "Recommended local-proof flow: after `benchmark-csv-check` passes, run `manual-qa-ready-local-proof` first, then `manual-qa-pending --section local-proof` to focus only on packaged-app observations.".to_string(),
+        "Recommended proof flow: after `benchmark-csv-check` passes, run `manual-qa-ready-local-proof` first, then use `manual-qa-ready-license` and `manual-qa-ready-distribution` before their respective `manual-qa-pending --section ...` passes.".to_string(),
         fill_commands::block(options, output_path),
     ];
     if let Some(path) =
