@@ -1,4 +1,6 @@
-use super::{manual_check_command, packaged_app_pending_command, parse_args, run_args, USAGE};
+use super::{
+    manual_check_command, packaged_app_pending_command, parse_args, run_args, sample_hints, USAGE,
+};
 
 #[test]
 fn parses_without_baseline() {
@@ -45,4 +47,25 @@ fn quotes_followup_commands() {
         manual_check_command(&path),
         "cargo run -p xtask -- manual-qa-check '/tmp/QA Path'\\''s/ready.md'"
     );
+}
+
+#[test]
+fn reports_sample_hints_from_csv() {
+    let directory = tempfile::tempdir().unwrap();
+    let csv = directory.path().join("results.csv");
+    std::fs::write(
+        &csv,
+        "backend,input\napple-native,/tmp/short.mov\napple-native,/tmp/medium.mov\napple-native,/tmp/large.mov\n",
+    )
+    .unwrap();
+
+    let hints = sample_hints(&csv).unwrap();
+
+    assert_eq!(hints[0], "packaged-app small sample: /tmp/short.mov");
+    assert_eq!(hints[1], "packaged-app duplicate sample: /tmp/short.mov");
+    assert_eq!(
+        hints[2],
+        "packaged-app queue sample set: /tmp/short.mov, /tmp/medium.mov, /tmp/large.mov"
+    );
+    assert_eq!(hints[3], "packaged-app large sample: /tmp/large.mov");
 }

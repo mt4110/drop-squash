@@ -15,6 +15,9 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         packaged_app_pending_command(&parsed.0)
     );
     println!("next manual QA check command: {}", manual_check_command(&parsed.0));
+    for line in sample_hints(&parsed.1)? {
+        println!("{line}");
+    }
     Ok(())
 }
 
@@ -60,4 +63,18 @@ fn manual_check_command(path: &PathBuf) -> String {
 
 fn shell_single_quote(path: &PathBuf) -> String {
     path.display().to_string().replace('\'', "'\\''")
+}
+
+fn sample_hints(csv: &PathBuf) -> Result<Vec<String>, String> {
+    let rows = crate::benchmark_csv_check::read_rows(csv)?;
+    let samples = rows.iter().skip(1).filter_map(|row| row.get(1)).collect::<Vec<_>>();
+    let [small, medium, large] = samples.as_slice() else {
+        return Err("benchmark CSV must contain exactly three sample rows".to_string());
+    };
+    Ok(vec![
+        format!("packaged-app small sample: {small}"),
+        format!("packaged-app duplicate sample: {small}"),
+        format!("packaged-app queue sample set: {small}, {medium}, {large}"),
+        format!("packaged-app large sample: {large}"),
+    ])
 }
