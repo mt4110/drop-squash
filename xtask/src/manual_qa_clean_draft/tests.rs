@@ -14,8 +14,15 @@ fn keeps_only_table_rows() {
 }
 
 #[test]
-fn rejects_non_prepared_input() {
-    assert!(clean("| App build | x |\n")
+fn keeps_cleaned_table_only_input() {
+    let cleaned = clean("| App build | x |\n| Check | Expected | Result |\n").unwrap();
+
+    assert_eq!(cleaned, "| App build | x |\n| Check | Expected | Result |\n");
+}
+
+#[test]
+fn rejects_non_prepared_non_table_input() {
+    assert!(clean("hello\n| App build | x |\n")
         .unwrap_err()
         .contains("prepared draft"));
 }

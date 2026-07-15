@@ -25,15 +25,15 @@ fn parse_args(args: Vec<String>) -> Result<PathBuf, String> {
 }
 
 fn clean(text: &str) -> Result<String, String> {
-    if !text.contains(MARKER) {
-        return Err("manual QA file does not look like a prepared draft".to_string());
-    }
     let lines = text
         .lines()
         .filter(|line| line.starts_with('|'))
         .collect::<Vec<_>>();
     if lines.is_empty() {
-        return Err("prepared manual QA draft contains no table rows".to_string());
+        return Err("manual QA file contains no table rows".to_string());
+    }
+    if !text.contains(MARKER) && !text.lines().all(|line| line.starts_with('|')) {
+        return Err("manual QA file does not look like a prepared draft".to_string());
     }
     Ok(format!("{}\n", lines.join("\n")))
 }
