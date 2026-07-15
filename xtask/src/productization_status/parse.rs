@@ -52,6 +52,7 @@ fn track_status(track: Track, blockers: &[Blocker]) -> TrackStatus {
         name: track.name,
         blockers: track.blockers,
         remaining,
+        record_target: track.record_target,
     }
 }
 
@@ -110,6 +111,7 @@ fn execution_rows(text: &str) -> Vec<Track> {
                 order,
                 name: cells[1].clone(),
                 blockers: cells[2].split(", ").map(str::to_string).collect(),
+                record_target: cells[4].clone(),
             })
         })
         .collect()

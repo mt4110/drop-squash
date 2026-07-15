@@ -15,6 +15,7 @@ pub(super) fn text(report: &Report) -> String {
         )
     }));
     lines.extend(report.tracks.iter().filter_map(track_remaining_line));
+    lines.extend(report.tracks.iter().filter_map(track_record_target_line));
     lines.extend(
         report
             .tracks
@@ -60,6 +61,10 @@ fn track_remaining_line(track: &super::model::TrackStatus) -> Option<String> {
     (!track.remaining.is_empty()).then(|| {
         format!("   remaining blockers: {}", track.remaining.join(", "))
     })
+}
+
+fn track_record_target_line(track: &super::model::TrackStatus) -> Option<String> {
+    (!track.remaining.is_empty()).then(|| format!("   record target: {}", track.record_target))
 }
 
 fn track_action_line(

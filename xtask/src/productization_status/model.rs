@@ -16,6 +16,7 @@ pub(super) struct Track {
     pub(super) order: usize,
     pub(super) name: String,
     pub(super) blockers: Vec<String>,
+    pub(super) record_target: String,
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -24,6 +25,7 @@ pub(super) struct TrackStatus {
     pub(super) name: String,
     pub(super) blockers: Vec<String>,
     pub(super) remaining: Vec<String>,
+    pub(super) record_target: String,
 }
 
 #[derive(Debug, Eq, PartialEq)]
