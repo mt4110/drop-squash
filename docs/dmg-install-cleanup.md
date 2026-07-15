@@ -16,6 +16,22 @@ The implemented macOS path is narrower:
 
 The downloaded `.dmg` file itself is not moved to Trash yet.
 
+## Requested Product Behavior
+
+The requested behavior is: after installing DropSquash from the Apple DMG
+download, the downloaded `.dmg` should clean itself up.
+
+DropSquash must split that request into two different install paths:
+
+- Finder drag-and-drop or copy-and-paste from the mounted DMG to
+  `/Applications`: not implementable as a reliable automatic cleanup promise
+- DropSquash's own in-app install flow from the mounted DMG: potentially
+  supportable later, but only as an explicit `Move downloaded DMG to Trash`
+  action after install verification
+
+That distinction matters. Treating both paths as if they were equally
+observable would be the wrong product promise.
+
 ## macOS Constraint
 
 When a user installs with Finder drag-and-drop or copy-and-paste from the DMG to
@@ -49,6 +65,10 @@ Downloaded-DMG cleanup may only be added to the explicit in-app install flow:
 Cleanup must be user initiated. The UI should say something like
 `Move downloaded DMG to Trash`, not imply automatic deletion. Permanent deletion
 is out of scope.
+
+Even in the supported future path, the product should prefer "offer cleanup
+after install" over "auto-delete at the end of install". That keeps the action
+auditable, reversible through Trash, and consistent with macOS expectations.
 
 ## Implementation Timing
 
