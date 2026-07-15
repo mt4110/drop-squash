@@ -155,6 +155,14 @@ fn finds_license_cache_path_row() {
 }
 
 #[test]
+fn finds_output_and_history_rows() {
+    let text = "| Output folder | /tmp/output |\n| History path | /tmp/history.jsonl |\n";
+
+    assert_eq!(super::field_value(text, "Output folder"), Some("/tmp/output"));
+    assert_eq!(super::field_value(text, "History path"), Some("/tmp/history.jsonl"));
+}
+
+#[test]
 fn quotes_packaged_app_open_command_path() {
     assert_eq!(
         super::shell_single_quote("/tmp/QA Path's/DropSquash.dmg"),
