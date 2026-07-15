@@ -128,7 +128,7 @@ fn detects_packaged_app_group() {
 fn reports_row_notes_for_custom_inputs() {
     assert_eq!(
         row_notes::for_label("Failed conversion"),
-        Some("note: use a throwaway unsupported or intentionally bad input outside the benchmark sample set, for example under /tmp")
+        Some("note: create a throwaway invalid .mp4 with `cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4`, then use it outside the benchmark sample set")
     );
 }
 

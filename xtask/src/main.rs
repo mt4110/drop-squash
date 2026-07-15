@@ -21,6 +21,7 @@ mod macos_signing_check;
 mod macos_signing_plan;
 mod macos_spctl_plan;
 mod macos_stapler_plan;
+mod manual_qa_bad_input;
 mod manual_qa_benchmark_fill;
 mod manual_qa_check;
 mod manual_qa_clean_draft;
@@ -73,6 +74,7 @@ fn main() {
         Some("macos-spctl-plan") => macos_spctl_plan::run(args.collect()),
         Some("macos-stapler-plan") => macos_stapler_plan::run(args.collect()),
         Some("manual-qa-clean-draft") => manual_qa_clean_draft::run(args.collect()),
+        Some("manual-qa-bad-input") => manual_qa_bad_input::run(args.collect()),
         Some("manual-qa-fill-benchmark") => manual_qa_benchmark_fill::run(args.collect()),
         Some("manual-qa-fill-benchmark-threshold") => {
             manual_qa_fill_benchmark_threshold::run(args.collect())
@@ -110,7 +112,7 @@ fn main() {
 
 fn usage() -> Result<(), String> {
     eprintln!(
-        "usage: cargo run -p xtask -- <artifact-check|benchmark|benchmark-csv-check|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-check|manual-qa-clean-draft|manual-qa-fill-benchmark|manual-qa-fill-benchmark-threshold|manual-qa-fill-check|manual-qa-fill-local-proof|manual-qa-fill-release-gates|manual-qa-pending|manual-qa-prepare|manual-qa-ready-all|manual-qa-ready-distribution|manual-qa-ready-license|manual-qa-ready-local-proof|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
+        "usage: cargo run -p xtask -- <artifact-check|benchmark|benchmark-csv-check|checksum|file-size-check|github-release-plan|homebrew-cask|homebrew-cask-check|macos-codesign-plan|macos-codesign-verify-plan|macos-keychain-cleanup-plan|macos-keychain-plan|macos-notary-plan|macos-signing-check|macos-signing-plan|macos-spctl-plan|macos-stapler-plan|manual-qa-bad-input|manual-qa-check|manual-qa-clean-draft|manual-qa-fill-benchmark|manual-qa-fill-benchmark-threshold|manual-qa-fill-check|manual-qa-fill-local-proof|manual-qa-fill-release-gates|manual-qa-pending|manual-qa-prepare|manual-qa-ready-all|manual-qa-ready-distribution|manual-qa-ready-license|manual-qa-ready-local-proof|media-policy-check|normalize-dmg|privacy-policy-check|productization-status|publish-check|release-check|release-notes-check|release-notes-prepare|signed-dmg-check|signed-dmg-copy|signed-dmg-prepare|website-check> [files...]"
     );
     std::process::exit(2);
 }
