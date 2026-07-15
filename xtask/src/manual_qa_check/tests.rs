@@ -243,6 +243,12 @@ fn reports_missing_required_checks() {
     assert!(missing.contains(&"manual QA check is missing: Reveal privacy receipt".to_string()));
     assert!(missing.contains(&"manual QA check is missing: Queued job cancellation".to_string()));
     assert!(missing.contains(&"manual QA check is missing: Batch summary".to_string()));
+    assert!(missing.iter().any(|error| error.contains(
+        "manual QA pending hint: Cancellation -> cargo run -p xtask -- manual-qa-pending <manual-qa.md> --section packaged-app"
+    )));
+    assert!(missing.iter().any(|error| error.contains(
+        "manual QA pending hint: Valid sandbox activation -> cargo run -p xtask -- manual-qa-pending <manual-qa.md> --section license"
+    )));
 }
 
 #[test]

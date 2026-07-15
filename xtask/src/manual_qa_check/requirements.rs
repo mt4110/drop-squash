@@ -63,6 +63,12 @@ pub(super) fn require_labels(
     for label in required {
         if !labels.iter().any(|value| value == label) {
             missing.push(format!("{prefix}: {label}"));
+            if prefix == "manual QA check is missing" {
+                missing.push(format!(
+                    "manual QA pending hint: {label} -> cargo run -p xtask -- manual-qa-pending <manual-qa.md> --section {}",
+                    crate::manual_qa_pending::suggested_section(label)
+                ));
+            }
         }
     }
 }
