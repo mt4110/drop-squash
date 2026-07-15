@@ -38,7 +38,10 @@ After a real release-set benchmark CSV exists and `benchmark-csv-check` passes,
 prefer `manual-qa-ready-local-proof` for the normal local packaged-app proof
 flow. It fills the deterministic release-gate and benchmark rows in order, then
 removes the prepared-draft marker so `manual-qa-pending --section local-proof`
-shows only the remaining packaged-app observations.
+shows only the remaining packaged-app observations. It also prints the sample
+paths to reuse for the small, duplicate-output, queue, and large-output manual
+checks so the packaged-app pass can continue from the same checked benchmark
+set without re-deciding file selection.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill

@@ -118,7 +118,10 @@ the prepared-draft marker in one step. Then use
 packaged-app observations before running `manual-qa-check`. Keep
 `manual-qa-fill-benchmark` and `manual-qa-fill-benchmark-threshold` for
 intentional reruns or baseline-comparison troubleshooting rather than the
-default packaged-app QA flow.
+default packaged-app QA flow. `manual-qa-ready-local-proof` also echoes the
+small, duplicate-output, queue, and large sample paths from the checked
+benchmark CSV so the remaining packaged-app observations can stay on the same
+sample set.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.
