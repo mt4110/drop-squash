@@ -12,8 +12,7 @@ mod tests;
 
 pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let (path, section) = parse_args(args)?;
-    let text = std::fs::read_to_string(&path)
-        .map_err(|error| format!("failed to read manual QA file: {error}"))?;
+    let text = std::fs::read_to_string(&path).map_err(|error| format!("failed to read manual QA file: {error}"))?;
     let pending = pending_rows(&text);
     if pending.is_empty() {
         println!("manual QA has no pending result rows");
@@ -22,17 +21,10 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let groups = section::grouped(&pending, section.as_deref());
     for (section, rows) in &groups {
         println!("{section}:");
-        if matches!(
-            *section,
-            "Packaged App" | "License Sandbox" | "Distribution And Signing"
-        ) {
+        if matches!(*section, "Packaged App" | "License Sandbox" | "Distribution And Signing") {
             let counts = phases::counts(rows);
             if !counts.is_empty() {
-                let summary = counts
-                    .iter()
-                    .map(|(phase, count)| format!("{phase}={count}"))
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                let summary = counts.iter().map(|(phase, count)| format!("{phase}={count}")).collect::<Vec<_>>().join(", ");
                 println!("  phase counts: {summary}");
             }
         }
@@ -62,6 +54,8 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
             println!("packaged-app artifact: {artifact}");
             println!("packaged-app open command: open -- '{}'", shell_single_quote(artifact));
         }
+        if let Some(path) = field_value(&text, "Output folder") { println!("packaged-app output folder: {path}"); }
+        if let Some(path) = field_value(&text, "History path") { println!("packaged-app history path: {path}"); }
     }
     if groups.iter().any(|(name, _)| *name == "License Sandbox") {
         if let Some(path) = field_value(&text, "License cache path") {
