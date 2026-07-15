@@ -60,6 +60,7 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         }
         if let Some(artifact) = app_artifact(&text) {
             println!("packaged-app artifact: {artifact}");
+            println!("packaged-app open command: open -- '{}'", shell_single_quote(artifact));
         }
     }
     Ok(())
@@ -110,4 +111,8 @@ fn app_artifact(text: &str) -> Option<&str> {
             _ => None,
         }
     })
+}
+
+fn shell_single_quote(text: &str) -> String {
+    text.replace('\'', "'\\''")
 }

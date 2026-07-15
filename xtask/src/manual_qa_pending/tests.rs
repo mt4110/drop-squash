@@ -140,6 +140,14 @@ fn finds_packaged_app_artifact_row() {
 }
 
 #[test]
+fn quotes_packaged_app_open_command_path() {
+    assert_eq!(
+        super::shell_single_quote("/tmp/QA Path's/DropSquash.dmg"),
+        "/tmp/QA Path'\\''s/DropSquash.dmg"
+    );
+}
+
+#[test]
 fn reports_phase_for_packaged_app_rows() {
     assert_eq!(phases::for_label("Choose recording conversion"), Some("Small Sample"));
 }
