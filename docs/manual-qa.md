@@ -32,6 +32,7 @@ cargo run -p xtask -- manual-qa-fill-local-proof /tmp/dropsquash-manual-qa-prepa
 cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```
@@ -52,7 +53,9 @@ that reuse the checked benchmark samples also print a row-specific `sample:`
 hint so the next manual observation can start from the right file or queue set
 immediately. Rows that cannot be satisfied from the checked benchmark set print
 a `note:` line instead, such as the mounted-DMG requirement or the need for an
-intentionally bad input. `manual-qa-pending --section local-proof` also groups
+intentionally bad input. For the failed-conversion row, `manual-qa-bad-input`
+creates a throwaway invalid `.mp4` under `/tmp` so you can keep the benchmark
+sample set untouched. `manual-qa-pending --section local-proof` also groups
 packaged-app rows into practical phases such as Mounted DMG, Small Sample,
 Duplicate Sample, Large Sample, Queue Sample, and Custom Failure Input. The
 packaged-app section also prints a `phase counts:` line so you can see how many
@@ -71,6 +74,7 @@ cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prep
 cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p dropsquash -- license status
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4
 cargo run -p xtask -- manual-qa-fill-benchmark /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-fill-benchmark-threshold /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-fill-benchmark-threshold /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv /absolute/path/to/baseline-results.csv
