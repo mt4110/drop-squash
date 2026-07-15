@@ -147,3 +147,14 @@ fn reports_phase_counts_for_packaged_rows() {
 
     assert_eq!(counts, vec![("Small Sample", 2), ("Large Sample", 1)]);
 }
+
+#[test]
+fn reports_phase_counts_for_license_rows() {
+    let counts = phases::counts(&[
+        ("Sandbox product setup".to_string(), String::new()),
+        ("Empty key activation".to_string(), String::new()),
+        ("Invalid key activation".to_string(), String::new()),
+    ]);
+
+    assert_eq!(counts, vec![("Setup", 1), ("Activation Safety", 2)]);
+}

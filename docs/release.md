@@ -127,6 +127,9 @@ checked benchmark samples print a row-specific `sample:` hint. Rows that need a
 mounted DMG or intentionally bad input print a `note:` line instead. The same
 pending output also groups packaged-app rows into practical manual-QA phases
 and prints a per-phase remaining-count summary.
+The same `manual-qa-pending` phase summary now applies to `--section license`,
+so sandbox setup, activation safety, valid activation, failure recovery, and
+local diagnostics can be worked in order.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.

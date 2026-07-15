@@ -8,6 +8,12 @@ pub(super) fn for_label(label: &str) -> Option<&'static str> {
         "Cancellation" | "Larger output" => Some("Large Sample"),
         "Multi-file queue" | "Queued job cancellation" | "Batch summary" => Some("Queue Sample"),
         "Failed conversion" => Some("Custom Failure Input"),
+        "Sandbox product setup" | "Sandbox purchase" => Some("Setup"),
+        "Empty key activation" | "Invalid key activation" => Some("Activation Safety"),
+        "Valid sandbox activation" => Some("Valid Activation"),
+        "License network failure" | "Expired license refresh"
+        | "Forget license on this Mac" => Some("Failure Recovery"),
+        "`cargo run -p dropsquash -- license status`" => Some("Local Diagnostics"),
         _ => None,
     }
 }
@@ -49,5 +55,11 @@ mod tests {
             counts,
             vec![("Small Sample", 2), ("Large Sample", 1), ("Custom Failure Input", 1)]
         );
+    }
+
+    #[test]
+    fn maps_license_rows_to_license_phases() {
+        assert_eq!(for_label("Sandbox purchase"), Some("Setup"));
+        assert_eq!(for_label("Valid sandbox activation"), Some("Valid Activation"));
     }
 }

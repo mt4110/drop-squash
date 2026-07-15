@@ -4,6 +4,9 @@ pub(super) fn for_label(label: &str) -> Option<&'static str> {
         "Failed conversion" => Some(
             "note: requires unsupported or intentionally bad input outside the benchmark sample set",
         ),
+        "`cargo run -p dropsquash -- license status`" => {
+            Some("note: record diagnostic lines without pasting the sandbox key")
+        }
         _ => None,
     }
 }
