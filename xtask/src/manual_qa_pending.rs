@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 mod section;
+mod row_notes;
 mod sample_hints;
 
 const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-pending <manual-qa.md> [--section packaged-app|license|benchmark|distribution|local-proof]";
@@ -22,6 +23,9 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         println!("{section}:");
         for (label, expected) in rows {
             println!("- {label}: {expected}");
+            if let Some(note) = row_notes::for_label(label) {
+                println!("  {note}");
+            }
             if let Some(guidance) = sample_hints::guidance_for(label, &text) {
                 println!("  {guidance}");
             }

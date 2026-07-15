@@ -1,4 +1,4 @@
-use super::{includes_packaged_app, parse_args, pending_rows, section::grouped, USAGE};
+use super::{includes_packaged_app, parse_args, pending_rows, row_notes, section::grouped, USAGE};
 
 #[test]
 fn finds_pending_result_rows() {
@@ -120,4 +120,12 @@ fn detects_packaged_app_group() {
     );
 
     assert!(includes_packaged_app(&groups));
+}
+
+#[test]
+fn reports_row_notes_for_custom_inputs() {
+    assert_eq!(
+        row_notes::for_label("Failed conversion"),
+        Some("note: requires unsupported or intentionally bad input outside the benchmark sample set")
+    );
 }

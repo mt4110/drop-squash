@@ -46,7 +46,9 @@ filled, `manual-qa-pending --section local-proof` repeats those sample hints so
 the remaining packaged-app pass can resume from the recorded evidence file.
 Rows that reuse the checked benchmark samples also print a row-specific
 `sample:` hint so the next manual observation can start from the right file or
-queue set immediately.
+queue set immediately. Rows that cannot be satisfied from the checked benchmark
+set print a `note:` line instead, such as the mounted-DMG requirement or the
+need for an intentionally bad input.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill
