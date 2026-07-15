@@ -15,6 +15,12 @@ pub(super) fn text(report: &Report) -> String {
         )
     }));
     lines.extend(report.tracks.iter().filter_map(track_remaining_line));
+    lines.extend(
+        report
+            .tracks
+            .iter()
+            .filter_map(|track| track_action_line(report, track)),
+    );
     lines.extend(next_track(report));
     lines.join("\n")
 }
@@ -48,6 +54,26 @@ fn track_remaining_line(track: &super::model::TrackStatus) -> Option<String> {
     (!track.remaining.is_empty()).then(|| {
         format!("   remaining blockers: {}", track.remaining.join(", "))
     })
+}
+
+fn track_action_line(
+    report: &Report,
+    track: &super::model::TrackStatus,
+) -> Option<String> {
+    let actions = track
+        .remaining
+        .iter()
+        .filter_map(|blocker| short_action(report, blocker))
+        .collect::<Vec<_>>();
+    (!actions.is_empty()).then(|| format!("   next actions: {}", actions.join(" | ")))
+}
+
+fn short_action(report: &Report, blocker: &str) -> Option<String> {
+    report
+        .actions
+        .iter()
+        .find(|action| action.blocker == blocker)
+        .map(|action| format!("{blocker} -> {}", action.owner))
 }
 
 fn next_action_line(report: &Report, blocker: &str) -> String {
