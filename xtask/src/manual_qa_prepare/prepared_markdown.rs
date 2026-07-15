@@ -12,6 +12,7 @@ pub(super) fn write(
     fields: &[markdown::Field],
     artifact: Option<&Path>,
     options: &Options,
+    benchmark_csv: &Path,
 ) -> Result<(), String> {
     let mut rows = markdown::rows(fields);
     rows.extend(packaged_app::rows());
@@ -29,7 +30,7 @@ pub(super) fn write(
     writeln!(
         file,
         "{}",
-        markdown_text(&rows, fields, artifact, options, path)
+        markdown_text(&rows, fields, artifact, options, path, benchmark_csv)
     )
     .map_err(|error| format!("failed to write manual QA Markdown output: {error}"))?;
     println!("manual QA Markdown output: {}", path.display());
@@ -42,17 +43,18 @@ fn markdown_text(
     artifact: Option<&Path>,
     options: &Options,
     output_path: &Path,
+    benchmark_csv: &Path,
 ) -> String {
     let mut sections = vec![
         "Prepared manual QA draft only. Replace this file with concrete observations.".to_string(),
         format!(
             "Benchmark commands:\n\n```sh\n{}\n{}\n```",
-            benchmark::benchmark_command(options),
-            benchmark::csv_check_command(options)
+            benchmark::benchmark_command(options, benchmark_csv),
+            benchmark::csv_check_command(benchmark_csv)
         ),
-        benchmark_context(fields, options),
+        benchmark_context(fields, benchmark_csv),
         "Recommended proof flow: after `benchmark-csv-check` passes, run `manual-qa-ready-all` for one deterministic pass, or run `manual-qa-ready-local-proof` first and then use `manual-qa-ready-license` plus `manual-qa-ready-distribution` before their respective `manual-qa-pending --section ...` passes.".to_string(),
-        fill_commands::block(options, output_path),
+        fill_commands::block(output_path, benchmark_csv),
     ];
     if let Some(path) =
         artifact.filter(|path| path.extension().and_then(|value| value.to_str()) == Some("dmg"))
@@ -80,10 +82,9 @@ fn markdown_text(
     sections.join("\n\n")
 }
 
-fn benchmark_context(fields: &[markdown::Field], options: &Options) -> String {
+fn benchmark_context(fields: &[markdown::Field], csv: &Path) -> String {
     let macos = field_value(fields, "macOS version");
     let machine = field_value(fields, "Machine");
-    let csv = options.output_dir.join("benchmark-results.csv");
     format!(
         "Benchmark context to record:\n\n- CSV: {}\n- macOS: {}\n- Machine: {}\n- Result skeleton: {}",
         csv.display(),

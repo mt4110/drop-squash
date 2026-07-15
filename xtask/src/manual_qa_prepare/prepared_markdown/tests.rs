@@ -14,6 +14,7 @@ fn writes_fields_and_release_candidate_rows() {
         &fields,
         Some(&artifact),
         &options(directory.path()),
+        &directory.path().join("benchmark-results-abc1234.csv"),
     )
     .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
@@ -76,11 +77,18 @@ fn writes_benchmark_environment_context_when_available() {
         ("Machine", "MacBook Pro".into()),
     ];
 
-    write(&output, &fields, None, &options(directory.path())).unwrap();
+    write(
+        &output,
+        &fields,
+        None,
+        &options(directory.path()),
+        &directory.path().join("benchmark-results-current.csv"),
+    )
+    .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(text.contains("- CSV: "));
-    assert!(text.contains("benchmark-results.csv"));
+    assert!(text.contains("benchmark-results-current.csv"));
     assert!(text.contains("- macOS: macOS 15.5"));
     assert!(text.contains("- Machine: MacBook Pro"));
     assert!(text.contains("Result skeleton: Backend: apple-native"));
@@ -93,7 +101,14 @@ fn benchmark_context_keeps_placeholders_without_environment_fields() {
     let directory = tempfile::tempdir().unwrap();
     let output = directory.path().join("prepared.md");
 
-    write(&output, &[], None, &options(directory.path())).unwrap();
+    write(
+        &output,
+        &[],
+        None,
+        &options(directory.path()),
+        &directory.path().join("benchmark-results-current.csv"),
+    )
+    .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(text.contains("- macOS: <record macOS version>"));
@@ -109,7 +124,14 @@ fn quotes_packaged_app_command_path() {
     let output = nested.join("prepared.md");
     std::fs::write(&artifact, dmg_bytes(b"dropsquash")).unwrap();
 
-    write(&output, &[], Some(&artifact), &options(directory.path())).unwrap();
+    write(
+        &output,
+        &[],
+        Some(&artifact),
+        &options(directory.path()),
+        &nested.join("benchmark-results-current.csv"),
+    )
+    .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(text.contains("open -- '"));
@@ -130,7 +152,14 @@ fn writes_restore_command_for_reset_trial() {
         .join("Application Support")
         .join("DropSquash");
 
-    write(&output, &[], None, &options).unwrap();
+    write(
+        &output,
+        &[],
+        None,
+        &options,
+        &directory.path().join("benchmark-results-current.csv"),
+    )
+    .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(text.contains("Trial state restore command:"));
@@ -152,6 +181,7 @@ fn release_candidate_draft_contains_every_required_check() {
         &fields,
         Some(&artifact),
         &options(directory.path()),
+        &directory.path().join("benchmark-results-current.csv"),
     )
     .unwrap();
     let text = std::fs::read_to_string(output).unwrap();
@@ -170,7 +200,14 @@ fn written_draft_is_rejected_by_manual_qa_check() {
     let output = directory.path().join("prepared.md");
     let fields: Vec<markdown::Field> = vec![("App build", "DropSquash 0.1.0 git abc1234".into())];
 
-    write(&output, &fields, None, &options(directory.path())).unwrap();
+    write(
+        &output,
+        &fields,
+        None,
+        &options(directory.path()),
+        &directory.path().join("benchmark-results-current.csv"),
+    )
+    .unwrap();
     let missing = crate::manual_qa_check::check_file(&output).unwrap();
 
     assert!(missing
@@ -191,6 +228,7 @@ fn release_candidate_draft_is_rejected_by_manual_qa_check() {
         &fields,
         Some(&artifact),
         &options(directory.path()),
+        &directory.path().join("benchmark-results-current.csv"),
     )
     .unwrap();
     let missing = crate::manual_qa_check::check_file(&output).unwrap();
@@ -207,7 +245,14 @@ fn rejects_existing_output_file() {
     std::fs::write(&output, "keep this evidence").unwrap();
     let fields: Vec<markdown::Field> = vec![("App build", "DropSquash 0.1.0 git abc1234".into())];
 
-    let error = write(&output, &fields, None, &options(directory.path())).unwrap_err();
+    let error = write(
+        &output,
+        &fields,
+        None,
+        &options(directory.path()),
+        &directory.path().join("benchmark-results-current.csv"),
+    )
+    .unwrap_err();
     let text = std::fs::read_to_string(output).unwrap();
 
     assert!(error.contains("failed to create manual QA Markdown output"));

@@ -141,23 +141,23 @@ fn manual_check_output_quotes_markdown_path() {
 #[test]
 fn helper_output_quotes_paths() {
     let markdown = PathBuf::from("/tmp/QA Path's/prepared.md");
-    let output_dir = PathBuf::from("/tmp/Output Path's");
+    let csv = PathBuf::from("/tmp/Output Path's/benchmark-results-abc1234.csv");
 
     assert_eq!(
         fill_release_gates_line(&markdown),
         "manual QA Fill release gates command: cargo run -p xtask -- manual-qa-fill-release-gates '/tmp/QA Path'\\''s/prepared.md'"
     );
     assert_eq!(
-        fill_local_proof_line(&markdown, &output_dir),
-        "manual QA Fill local proof command: cargo run -p xtask -- manual-qa-fill-local-proof '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+        fill_local_proof_line(&markdown, &csv),
+        "manual QA Fill local proof command: cargo run -p xtask -- manual-qa-fill-local-proof '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results-abc1234.csv'"
     );
     assert_eq!(
-        ready_local_proof_line(&markdown, &output_dir),
-        "manual QA Ready local proof command: cargo run -p xtask -- manual-qa-ready-local-proof '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+        ready_local_proof_line(&markdown, &csv),
+        "manual QA Ready local proof command: cargo run -p xtask -- manual-qa-ready-local-proof '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results-abc1234.csv'"
     );
     assert_eq!(
-        ready_all_line(&markdown, &output_dir),
-        "manual QA Ready all command: cargo run -p xtask -- manual-qa-ready-all '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+        ready_all_line(&markdown, &csv),
+        "manual QA Ready all command: cargo run -p xtask -- manual-qa-ready-all '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results-abc1234.csv'"
     );
     assert_eq!(
         ready_license_line(&markdown),
@@ -168,12 +168,12 @@ fn helper_output_quotes_paths() {
         "manual QA Ready distribution command: cargo run -p xtask -- manual-qa-ready-distribution '/tmp/QA Path'\\''s/prepared.md'"
     );
     assert_eq!(
-        fill_benchmark_line(&markdown, &output_dir),
-        "manual QA Fill benchmark command: cargo run -p xtask -- manual-qa-fill-benchmark '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+        fill_benchmark_line(&markdown, &csv),
+        "manual QA Fill benchmark command: cargo run -p xtask -- manual-qa-fill-benchmark '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results-abc1234.csv'"
     );
     assert_eq!(
-        fill_benchmark_threshold_line(&markdown, &output_dir),
-        "manual QA Fill benchmark threshold command: cargo run -p xtask -- manual-qa-fill-benchmark-threshold '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results.csv'"
+        fill_benchmark_threshold_line(&markdown, &csv),
+        "manual QA Fill benchmark threshold command: cargo run -p xtask -- manual-qa-fill-benchmark-threshold '/tmp/QA Path'\\''s/prepared.md' '/tmp/Output Path'\\''s/benchmark-results-abc1234.csv'"
     );
     assert_eq!(
         clean_draft_line(&markdown),

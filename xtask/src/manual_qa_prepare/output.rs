@@ -17,7 +17,8 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
     print_artifact(&artifact, &mut fields);
     print_open_artifact(&artifact);
     print_sample_set(options, &mut fields);
-    benchmark::print_plan(options);
+    let benchmark_csv = benchmark::csv_output(&fields, &options.output_dir);
+    benchmark::print_plan(options, &benchmark_csv);
     let environment = Environment::current(options)?;
     for line in environment.manual_qa_lines() {
         println!("{line}");
@@ -30,9 +31,9 @@ pub(super) fn print_paths(options: &Options) -> Result<(), String> {
         release_candidate::print_rows(path, &options.output_dir)?;
     }
     if let Some(path) = &options.markdown_output {
-        prepared_markdown::write(path, &fields, artifact.as_deref(), options)?;
+        prepared_markdown::write(path, &fields, artifact.as_deref(), options, &benchmark_csv)?;
         print_manual_check(path);
-        output_helper::print_helper_commands(path, &options.output_dir);
+        output_helper::print_helper_commands(path, &benchmark_csv);
     }
     Ok(())
 }

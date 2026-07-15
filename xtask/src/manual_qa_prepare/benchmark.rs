@@ -1,24 +1,29 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
-use super::options::Options;
+use super::{markdown::Field, options::Options};
 
-pub(super) fn print_plan(options: &Options) {
+pub(super) fn print_plan(options: &Options, csv: &Path) {
     println!("manual QA Benchmark command:");
-    println!("{}", benchmark_command(options));
+    println!("{}", benchmark_command(options, csv));
     println!("manual QA Benchmark CSV check:");
-    println!("{}", csv_check_command(options));
+    println!("{}", csv_check_command(csv));
     println!("manual QA Benchmark observation rows:");
     for row in rows() {
         println!("{row}");
     }
 }
 
-fn csv_output(options: &Options) -> PathBuf {
-    options.output_dir.join("benchmark-results.csv")
+pub(super) fn csv_output(fields: &[Field], output_dir: &Path) -> PathBuf {
+    let suffix = fields
+        .iter()
+        .find(|(label, _)| *label == "App build")
+        .and_then(|(_, value)| value.split_whitespace().last())
+        .filter(|value| value.len() >= 7)
+        .unwrap_or("current");
+    output_dir.join(format!("benchmark-results-{suffix}.csv"))
 }
 
-pub(super) fn benchmark_command(options: &Options) -> String {
-    let csv = csv_output(options);
+pub(super) fn benchmark_command(options: &Options, csv: &Path) -> String {
     format!(
         "cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mov --input /absolute/path/to/medium.mov --input /absolute/path/to/large.mov --output-dir {} --csv-output {}",
         options.output_dir.display(),
@@ -26,11 +31,8 @@ pub(super) fn benchmark_command(options: &Options) -> String {
     )
 }
 
-pub(super) fn csv_check_command(options: &Options) -> String {
-    format!(
-        "cargo run -p xtask -- benchmark-csv-check {}",
-        csv_output(options).display()
-    )
+pub(super) fn csv_check_command(csv: &Path) -> String {
+    format!("cargo run -p xtask -- benchmark-csv-check {}", csv.display())
 }
 
 pub(super) fn rows() -> Vec<String> {
@@ -67,10 +69,11 @@ mod tests {
             restore_state: false,
             state_dir: PathBuf::from("/tmp/state"),
         };
+        let fields = vec![("App build", "DropSquash 0.1.0 git abc1234".to_string())];
 
         assert_eq!(
-            csv_output(&options),
-            PathBuf::from("/tmp/dropsquash-manual-qa-output/benchmark-results.csv")
+            csv_output(&fields, &options.output_dir),
+            PathBuf::from("/tmp/dropsquash-manual-qa-output/benchmark-results-abc1234.csv")
         );
     }
 
