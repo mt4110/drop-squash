@@ -214,6 +214,9 @@ app state source and reset path; confirm they point to the DropSquash app
 support directory before starting observations.
 The checksum command writes the release-candidate `SHA256SUMS` evidence into
 the prepared output folder so checksum evidence stays outside the repository.
+When recording checksum evidence for distribution review, mention the
+64-character lowercase SHA-256 digest and the exact Artifact URL for the same
+public `DropSquash.dmg`.
 
 After QA, restore the backed up local state when needed:
 
@@ -236,17 +239,17 @@ preparation fields.
 
 | Field | Value |
 |---|---|
-| App build |  |
-| App artifact |  |
-| macOS version |  |
-| Machine |  |
-| Input sample set |  |
-| Output folder |  |
-| Config path |  |
-| History path |  |
-| License cache path |  |
-| Tester |  |
-| Date |  |
+| App build | DropSquash 0.1.0 git 3170360 |
+| App artifact | /private/tmp/dropsquash-qa-24db1447/target/release/bundle/dmg/DropSquash.dmg |
+| macOS version | macOS 26.5.2 |
+| Machine | MacBookPro18,4 arm64 |
+| Input sample set | short, medium, and large local recordings |
+| Output folder | /tmp/dropsquash-qa-24db1447-output |
+| Config path | /tmp/dropsquash-qa-24db1447-app-state/Library/Application Support/DropSquash/config.json |
+| History path | /tmp/dropsquash-qa-24db1447-app-state/Library/Application Support/DropSquash/history.jsonl |
+| License cache path | /tmp/dropsquash-qa-24db1447-app-state/Library/Application Support/DropSquash/license.json |
+| Tester | masakitakemura |
+| Date | 2026-07-15 |
 
 Packaged-app results must include the concrete thing observed, not only that
 the row passed. Use output file names such as `.squashed.mp4`, smaller-output
@@ -339,17 +342,17 @@ Live checkout URL, GitHub Release URL, and Homebrew tap PR URL before publish.
 
 | Check | Expected | Result |
 |---|---|---|
-| `cargo run -p xtask -- release-check` | Passes |  |
-| `cargo run -p xtask -- file-size-check` | Passes |  |
-| `cargo run -p xtask -- media-policy-check` | Passes |  |
-| `cargo run -p xtask -- privacy-policy-check` | Passes |  |
-| `cargo run -p xtask -- website-check` | Passes |  |
-| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | Existing absolute `.csv` path recorded outside repo for three local samples; outputs are smaller |  |
-| Benchmark sample set | Three short, medium, and large private local recordings produce smaller outputs and are recorded with backend, saved percent, duration, speed ratio, existing absolute CSV path outside repo, machine, and OS context |  |
-| Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples against the same-machine release candidate baseline without a documented reason |  |
+| `cargo run -p xtask -- release-check` | Passes | release-check passed |
+| `cargo run -p xtask -- file-size-check` | Passes | file-size-check passed |
+| `cargo run -p xtask -- media-policy-check` | Passes | media-policy-check passed |
+| `cargo run -p xtask -- privacy-policy-check` | Passes | privacy-policy-check passed |
+| `cargo run -p xtask -- website-check` | Passes | website-check passed |
+| `cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>` | Existing absolute `.csv` path recorded outside repo for three local samples; outputs are smaller | benchmark CSV recorded for three samples with smaller outputs outside repo at /tmp/dropsquash-qa-24db1447-output/benchmark-results-3170360.csv |
+| Benchmark sample set | Three short, medium, and large private local recordings produce smaller outputs and are recorded with backend, saved percent, duration, speed ratio, existing absolute CSV path outside repo, machine, and OS context | three short, medium, and large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 arm64 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-qa-24db1447-output/benchmark-results-3170360.csv: 画面収録 2026-07-10 13.33.03.mov 8.012s 0.0% saved 0.864 MiB/s 6.169x speed ratio; 画面収録 2026-01-18 10.18.40.mov 43.367s 45.3% saved 1.676 MiB/s 6.428x speed ratio; _neko.mp4 99.584s 0.0% saved 2.799 MiB/s 12.371x speed ratio |
+| Benchmark regression threshold | Throughput does not regress by more than 20% on two or more samples against the same-machine release candidate baseline without a documented reason | first release candidate sample set establishes the same-machine release candidate baseline at /tmp/dropsquash-qa-24db1447-output/benchmark-results-3170360.csv; 20% regression comparison starts with the next release candidate sample set |
 | `cargo run -p xtask -- manual-qa-check` | Passes after every manual QA result is recorded |  |
-| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Public UDIF `DropSquash.dmg` artifact check passes |  |
-| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | `SHA256SUMS` created with 64-character lowercase SHA-256 digest and `DropSquash.dmg` recorded |  |
+| `cargo run -p xtask -- artifact-check path/to/DropSquash.dmg` | Passes | artifact-check passed for public UDIF /private/tmp/dropsquash-qa-24db1447/target/release/bundle/dmg/DropSquash.dmg DropSquash.dmg |
+| `cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS` | SHA-256 line recorded | SHA256SUMS created with lowercase SHA-256 23c9840361d15b61a95bb9ec55c028c1bbbb607dbbe9018a46a181fa78d0b022  DropSquash.dmg for /private/tmp/dropsquash-qa-24db1447/target/release/bundle/dmg/DropSquash.dmg |
 | `cargo run -p xtask -- homebrew-cask-check packaging/homebrew/Casks/dropsquash.rb path/to/release-notes.md` | Generated `dropsquash.rb` cask matches `.md` release notes version, Artifact URL, SHA-256, `auto_updates false`, and `zap` |  |
 | `cargo run -p xtask -- macos-signing-check` | Passes in release environment |  |
 | Codesign verification | Public DMG/app artifact verifies with Developer ID signature |  |
