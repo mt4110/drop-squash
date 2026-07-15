@@ -30,7 +30,7 @@ pub(super) fn summary(track_name: &str) -> Option<String> {
             "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section local-proof".to_string(),
         ),
         "License sandbox proof" => Some(
-            "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section license".to_string(),
+            "primary command: cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md".to_string(),
         ),
         "Public web proof" => Some(
             "primary command: cargo run -p xtask -- website-check".to_string(),

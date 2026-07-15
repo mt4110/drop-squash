@@ -83,6 +83,8 @@ cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mo
 cargo run -p xtask -- benchmark-csv-check /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section local-proof
+cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section license
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section distribution
 cargo run -p xtask -- manual-qa-check

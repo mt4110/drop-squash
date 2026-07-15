@@ -30,6 +30,7 @@ the deterministic local ones after they pass:
 cargo run -p xtask -- manual-qa-fill-release-gates /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
@@ -272,6 +273,11 @@ the lines for `raw license key persisted`, `license cache fingerprint`, and
 `manual-qa-pending --section license` groups these rows into practical phases
 such as Setup, Activation Safety, Valid Activation, Failure Recovery, and
 Local Diagnostics, and prints a `phase counts:` summary before the row list.
+After the release-gate commands pass, prefer `manual-qa-ready-license` before
+the license sandbox pass. It refreshes the deterministic release-gate rows,
+removes the prepared-draft marker if this is still the original prepared file,
+and prints the next `manual-qa-pending --section license`,
+`cargo run -p dropsquash -- license status`, and `manual-qa-check` commands.
 
 | Check | Expected | Result |
 |---|---|---|

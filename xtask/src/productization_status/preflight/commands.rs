@@ -18,7 +18,7 @@ pub(super) fn local_packaged_app() -> Vec<String> {
 
 pub(super) fn license_sandbox() -> Vec<String> {
     vec![
-        format!("preflight license pending: cargo run -p xtask -- manual-qa-pending {QA_MARKDOWN} --section license"),
+        format!("preflight ready license: cargo run -p xtask -- manual-qa-ready-license {QA_MARKDOWN}"),
         "preflight license diagnostics: cargo run -p dropsquash -- license status".to_string(),
         "preflight license manual gate: cargo run -p xtask -- manual-qa-check".to_string(),
     ]

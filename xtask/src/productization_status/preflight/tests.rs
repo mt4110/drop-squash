@@ -29,8 +29,7 @@ fn reports_dirty_manual_qa_preflight() {
 fn reports_license_sandbox_preflight() {
     let lines = license_sandbox_lines();
     assert!(lines[0].contains("sandbox credentials"));
-    assert!(lines[1].contains("manual-qa-pending"));
-    assert!(lines[1].contains("--section license"));
+    assert!(lines[1].contains("manual-qa-ready-license"));
     assert!(lines[2].contains("license status"));
     assert!(lines[3].contains("manual-qa-check"));
 }
@@ -59,7 +58,7 @@ fn reports_track_primary_command_summary() {
     assert!(
         summary("License sandbox proof")
             .unwrap()
-            .contains("--section license")
+            .contains("manual-qa-ready-license")
     );
 }
 
