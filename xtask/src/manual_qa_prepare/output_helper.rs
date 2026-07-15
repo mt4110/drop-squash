@@ -39,10 +39,11 @@ pub(super) fn ready_license_line(path: &Path) -> String {
 }
 
 pub(super) fn ready_distribution_line(path: &Path) -> String {
-    line(
-        "manual QA Ready distribution command",
-        commands::ready_distribution_command(path),
-    )
+    line("manual QA Ready distribution command", commands::ready_distribution_command(path))
+}
+
+pub(super) fn bad_input_line() -> String {
+    line("manual QA Bad input command", "cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4".to_string())
 }
 
 pub(super) fn fill_benchmark_line(path: &Path, csv_path: &Path) -> String {
@@ -55,7 +56,7 @@ pub(super) fn fill_benchmark_line(path: &Path, csv_path: &Path) -> String {
 pub(super) fn fill_benchmark_threshold_line(path: &Path, csv_path: &Path) -> String {
     line(
         "manual QA Fill benchmark threshold command",
-        commands::fill_benchmark_threshold_command(path, csv_path)
+        commands::fill_benchmark_threshold_command(path, csv_path),
     )
 }
 
@@ -113,6 +114,7 @@ pub(super) fn print_helper_commands(path: &Path, csv_path: &Path) {
     println!("{}", ready_all_line(path, csv_path));
     println!("{}", ready_license_line(path));
     println!("{}", ready_distribution_line(path));
+    println!("{}", bad_input_line());
     println!("{}", fill_benchmark_line(path, csv_path));
     println!("{}", fill_benchmark_threshold_line(path, csv_path));
     println!("{}", clean_draft_line(path));
