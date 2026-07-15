@@ -33,6 +33,7 @@ cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prep
 cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-merge-prepared /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-link-samples /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
@@ -190,6 +191,10 @@ evidence cannot be overwritten. It is a preparation aid, not a substitute for
 concrete manual observations. After deterministic rows are filled there,
 `manual-qa-merge-prepared` can merge only the non-empty rows back into
 `docs/manual-qa.md` without wiping still-empty manual observation rows.
+If packaged-app file pickers are awkward because the benchmark sample names use
+spaces or non-ASCII characters, `manual-qa-link-samples` creates ASCII symlinks
+such as `qa-small.mov`, `qa-medium.mov`, and `qa-large.mp4` beside the checked
+benchmark CSV.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, use
 absolute paths outside the repository so private app state, generated videos,
 and QA evidence cannot be committed or deleted by accident.
