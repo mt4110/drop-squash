@@ -32,6 +32,7 @@ cargo run -p xtask -- manual-qa-fill-local-proof /tmp/dropsquash-manual-qa-prepa
 cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md
+cargo run -p xtask -- manual-qa-merge-prepared /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4
 cargo run -p xtask -- manual-qa-clean-draft /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
@@ -186,7 +187,9 @@ Pass `--markdown-output /tmp/dropsquash-manual-qa-prepared.md` to write those
 generated field and release-candidate rows to a temporary `.md` Markdown file
 for copying. The path must be a new file outside the repository so previous QA
 evidence cannot be overwritten. It is a preparation aid, not a substitute for
-concrete manual observations.
+concrete manual observations. After deterministic rows are filled there,
+`manual-qa-merge-prepared` can merge only the non-empty rows back into
+`docs/manual-qa.md` without wiping still-empty manual observation rows.
 If you override `--app-state-dir`, `--state-dir`, or `--output-dir`, use
 absolute paths outside the repository so private app state, generated videos,
 and QA evidence cannot be committed or deleted by accident.
