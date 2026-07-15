@@ -3,6 +3,8 @@ use std::process::Command;
 use super::model::Report;
 
 mod commands;
+#[cfg(test)]
+mod tests;
 
 pub(super) fn lines(report: &Report) -> Result<Vec<String>, String> {
     let Some(track) = report
@@ -12,11 +14,13 @@ pub(super) fn lines(report: &Report) -> Result<Vec<String>, String> {
     else {
         return Ok(Vec::new());
     };
-    if track.name != "Local packaged-app proof" {
-        return Ok(Vec::new());
+    match track.name.as_str() {
+        "Local packaged-app proof" => Ok(manual_qa_lines(&git_status()?)),
+        "License sandbox proof" => Ok(license_sandbox_lines()),
+        "Public web proof" => Ok(public_web_lines()),
+        "Signing and distribution proof" => Ok(distribution_lines()),
+        _ => Ok(Vec::new()),
     }
-    let status = git_status()?;
-    Ok(manual_qa_lines(&status))
 }
 
 fn git_status() -> Result<String, String> {
@@ -51,72 +55,26 @@ fn next_commands() -> Vec<String> {
     commands::local_packaged_app()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::manual_qa_lines;
+fn license_sandbox_lines() -> Vec<String> {
+    let mut lines = vec![
+        "preflight: license sandbox proof needs sandbox credentials and local cache inspection without recording keys".to_string(),
+    ];
+    lines.extend(commands::license_sandbox());
+    lines
+}
 
-    #[test]
-    fn reports_clean_manual_qa_preflight() {
-        let lines = manual_qa_lines("");
+fn public_web_lines() -> Vec<String> {
+    let mut lines = vec![
+        "preflight: public web proof needs production dropsquash.app URLs and a live checkout URL before blockers can move".to_string(),
+    ];
+    lines.extend(commands::public_web());
+    lines
+}
 
-        assert!(lines[0].contains("can start"));
-        assert!(lines[1].contains("apps/desktop install --frozen-lockfile"));
-        assert!(lines[2].contains("apps/desktop/web install --frozen-lockfile"));
-        assert!(lines[3].contains("nix develop --command pnpm"));
-        assert!(lines[3].contains("tauri build"));
-        assert!(lines[4].contains("normalize-dmg"));
-        assert!(lines[5].contains("artifact-check"));
-        assert!(lines[6].contains("manual-qa-prepare"));
-        assert!(lines[6].contains("--reset-trial"));
-        assert!(lines[6].contains("--app-artifact"));
-        assert!(lines[6].contains("Application Support/DropSquash"));
-        assert!(lines[6].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
-        assert!(lines[6].contains("--output-dir /tmp/dropsquash-manual-qa-output"));
-        assert!(lines[6].contains("--markdown-output"));
-        assert!(lines[7].contains("checksum"));
-        assert!(lines[7].contains("SHA256SUMS"));
-        assert!(lines[8].contains("benchmark --release-set"));
-        assert!(lines[9].contains("benchmark-csv-check"));
-        assert!(lines[10].contains("manual-qa-ready-local-proof"));
-        assert!(lines[11].contains("manual-qa-pending"));
-        assert!(lines[11].contains("--section local-proof"));
-        assert!(lines[12].contains("manual-qa-check"));
-        assert!(lines[13].contains("--restore-state"));
-        assert!(lines[13].contains("Application Support/DropSquash"));
-        assert!(lines[13].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
-    }
-
-    #[test]
-    fn reports_dirty_manual_qa_preflight() {
-        let lines = manual_qa_lines(" M docs/manual-qa.md\n");
-
-        assert!(lines[0].contains("current worktree is dirty"));
-        assert!(lines[0].contains("clean detached QA worktree"));
-        assert_eq!(lines[1], " M docs/manual-qa.md");
-        assert!(lines[2].contains("rebuild the app artifact"));
-        assert!(lines[3].contains("git worktree add --detach"));
-        assert!(lines[4].contains("apps/desktop install --frozen-lockfile"));
-        assert!(lines[5].contains("apps/desktop/web install --frozen-lockfile"));
-        assert!(lines[6].contains("nix develop --command pnpm"));
-        assert!(lines[6].contains("tauri build"));
-        assert!(lines[7].contains("normalize-dmg"));
-        assert!(lines[8].contains("artifact-check"));
-        assert!(lines[9].contains("manual-qa-prepare"));
-        assert!(lines[9].contains("--reset-trial"));
-        assert!(lines[9].contains("Application Support/DropSquash"));
-        assert!(lines[9].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
-        assert!(lines[9].contains("--output-dir /tmp/dropsquash-manual-qa-output"));
-        assert!(lines[9].contains("/tmp/dropsquash-manual-qa-prepared.md"));
-        assert!(lines[10].contains("checksum"));
-        assert!(lines[10].contains("SHA256SUMS"));
-        assert!(lines[11].contains("benchmark-results.csv"));
-        assert!(lines[12].contains("benchmark-csv-check"));
-        assert!(lines[13].contains("manual-qa-ready-local-proof"));
-        assert!(lines[14].contains("manual-qa-pending"));
-        assert!(lines[14].contains("--section local-proof"));
-        assert!(lines[15].contains("manual-qa-check"));
-        assert!(lines[16].contains("--restore-state"));
-        assert!(lines[16].contains("Application Support/DropSquash"));
-        assert!(lines[16].contains("--state-dir /tmp/dropsquash-manual-qa-state"));
-    }
+fn distribution_lines() -> Vec<String> {
+    let mut lines = vec![
+        "preflight: signing and distribution proof needs release environment secrets plus one public DropSquash.dmg carried through verification".to_string(),
+    ];
+    lines.extend(commands::distribution_signing());
+    lines
 }

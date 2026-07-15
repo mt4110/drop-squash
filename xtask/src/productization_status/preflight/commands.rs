@@ -16,6 +16,30 @@ pub(super) fn local_packaged_app() -> Vec<String> {
     ]
 }
 
+pub(super) fn license_sandbox() -> Vec<String> {
+    vec![
+        format!("preflight license pending: cargo run -p xtask -- manual-qa-pending {QA_MARKDOWN} --section license"),
+        "preflight license diagnostics: cargo run -p dropsquash -- license status".to_string(),
+        "preflight license manual gate: cargo run -p xtask -- manual-qa-check".to_string(),
+    ]
+}
+
+pub(super) fn public_web() -> Vec<String> {
+    vec![
+        "preflight public web gate: cargo run -p xtask -- website-check".to_string(),
+        "preflight publish gate: cargo run -p xtask -- publish-check /absolute/path/to/release-notes.md".to_string(),
+        "preflight production URLs: verify https://dropsquash.app/release-status https://dropsquash.app/pricing https://dropsquash.app/refund and the live store.lemonsqueezy.com/checkout/buy/<id> URL".to_string(),
+    ]
+}
+
+pub(super) fn distribution_signing() -> Vec<String> {
+    vec![
+        format!("preflight distribution pending: cargo run -p xtask -- manual-qa-pending {QA_MARKDOWN} --section distribution"),
+        "preflight signing environment: cargo run -p xtask -- macos-signing-check".to_string(),
+        "preflight distribution manual gate: cargo run -p xtask -- manual-qa-check".to_string(),
+    ]
+}
+
 const APP_STATE_DIR: &str =
     "/tmp/dropsquash-manual-qa-app-state/Library/Application Support/DropSquash";
 const STATE_DIR: &str = "/tmp/dropsquash-manual-qa-state";
