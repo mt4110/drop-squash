@@ -269,6 +269,9 @@ fn reports_app_build_for_old_head() {
     let missing = check_file(&path).unwrap();
 
     assert!(missing.iter().any(|error| error.contains("current HEAD")));
+    assert!(missing.iter().any(|error| error.contains(
+        "manual QA App build hint: run manual-qa-check from the same clean worktree that produced the App build"
+    )));
 }
 
 #[test]

@@ -8,6 +8,9 @@ pub(super) fn validate_app_build(value: &str, missing: &mut Vec<String>) {
         return;
     }
     missing.push("manual QA App build must match current HEAD".to_string());
+    missing.push(
+        "manual QA App build hint: run manual-qa-check from the same clean worktree that produced the App build, or regenerate the prepared draft after rebuilding the app artifact".to_string(),
+    );
 }
 
 pub(super) fn validate_macos_version(value: &str, missing: &mut Vec<String>) {
