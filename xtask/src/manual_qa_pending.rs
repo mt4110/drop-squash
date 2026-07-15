@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 mod phases;
 mod section;
@@ -66,6 +66,9 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     if groups.iter().any(|(name, _)| *name == "Distribution And Signing") {
         if let Some(artifact) = field_value(&text, "App artifact") {
             println!("distribution artifact: {artifact}");
+        }
+        if let Some(path) = field_value(&text, "Output folder") {
+            println!("distribution checksum path: {}", Path::new(path).join("SHA256SUMS").display());
         }
     }
     Ok(())

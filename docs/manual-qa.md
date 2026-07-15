@@ -358,6 +358,8 @@ row list.
 It also prints the `distribution artifact:` path so codesign, notarization,
 and Gatekeeper checks can keep pointing at the same `DropSquash.dmg` file that
 the prepared draft records.
+It also prints the derived `distribution checksum path:` so the checksum row
+can keep pointing at the `SHA256SUMS` file under the prepared output folder.
 After the release-gate commands pass, prefer
 `manual-qa-ready-distribution` before the distribution/signing pass. It
 refreshes the deterministic release-gate rows, removes the prepared-draft
