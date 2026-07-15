@@ -10,6 +10,8 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
             "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
             "cargo run -p xtask -- manual-qa-prepare",
             "--input-sample-set",
+            "cargo run -p xtask -- manual-qa-ready-local-proof",
+            "--section local-proof",
             "cargo run -p xtask -- manual-qa-prepare --restore-state",
             "cargo run -p xtask -- manual-qa-check",
             "cargo run -p xtask -- benchmark-csv-check",

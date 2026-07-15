@@ -81,6 +81,8 @@ cargo run -p xtask -- macos-keychain-cleanup-plan /tmp/dropsquash-signed/keychai
 cargo run -p xtask -- manual-qa-prepare --reset-trial --app-artifact target/release/bundle/dmg/DropSquash.dmg --input-sample-set "short, medium, and large local recordings" --markdown-output /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p xtask -- benchmark --release-set --input /absolute/path/to/short.mov --input /absolute/path/to/medium.mov --input /absolute/path/to/large.mov --output-dir /tmp/dropsquash-manual-qa-output --csv-output /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- benchmark-csv-check /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section local-proof
 cargo run -p xtask -- manual-qa-check
 cargo run -p xtask -- manual-qa-prepare --restore-state
 ```
@@ -109,6 +111,11 @@ It prints the benchmark command, benchmark CSV check command, and benchmark
 manual-QA rows. Keep the suggested `benchmark-results.csv` in the prepared
 output folder so benchmark outputs and CSV evidence stay together outside the
 repository.
+After the benchmark CSV is checked, prefer
+`manual-qa-ready-local-proof` to fill deterministic local-proof rows and remove
+the prepared-draft marker in one step. Then use
+`manual-qa-pending --section local-proof` to focus only on the remaining
+packaged-app observations before running `manual-qa-check`.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.
