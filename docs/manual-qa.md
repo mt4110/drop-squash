@@ -60,6 +60,9 @@ packaged-app rows into practical phases such as Mounted DMG, Small Sample,
 Duplicate Sample, Large Sample, Queue Sample, and Custom Failure Input. The
 packaged-app section also prints a `phase counts:` line so you can see how many
 observations remain in each phase before starting the pass.
+When `manual-qa-check` reports an empty or missing manual row, it also prints a
+matching `manual QA pending hint:` line so you can jump back to the right
+`manual-qa-pending --section ...` view instead of guessing the section.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill
@@ -287,7 +290,10 @@ the lines for `raw license key persisted`, `license cache fingerprint`, and
 `license cache instance_id` instead of pasting the sandbox license key.
 `manual-qa-pending --section license` groups these rows into practical phases
 such as Setup, Activation Safety, Valid Activation, Failure Recovery, and
-Local Diagnostics, and prints a `phase counts:` summary before the row list.
+Local Diagnostics, and prints a `phase counts:` summary before the row list. It
+also prints the concrete `license cache path:` from the prepared draft so the
+cache-inspection rows can reuse the exact file path that `manual-qa-check`
+expects.
 After the release-gate commands pass, prefer `manual-qa-ready-license` before
 the license sandbox pass. It refreshes the deterministic release-gate rows,
 removes the prepared-draft marker if this is still the original prepared file,
@@ -344,6 +350,9 @@ Live checkout URL, GitHub Release URL, and Homebrew tap PR URL before publish.
 phases such as Final QA Gate, Homebrew, Signing Environment, Signature
 Verification, and Gatekeeper, and prints a `phase counts:` summary before the
 row list.
+It also prints the `distribution artifact:` path so codesign, notarization,
+and Gatekeeper checks can keep pointing at the same `DropSquash.dmg` file that
+the prepared draft records.
 After the release-gate commands pass, prefer
 `manual-qa-ready-distribution` before the distribution/signing pass. It
 refreshes the deterministic release-gate rows, removes the prepared-draft
