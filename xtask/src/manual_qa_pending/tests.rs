@@ -1,4 +1,4 @@
-use super::{parse_args, pending_rows, section::grouped, USAGE};
+use super::{includes_packaged_app, parse_args, pending_rows, section::grouped, USAGE};
 
 #[test]
 fn finds_pending_result_rows() {
@@ -107,4 +107,17 @@ fn local_proof_filter_includes_packaged_app_and_benchmark() {
     assert_eq!(groups.len(), 2);
     assert_eq!(groups[0].0, "Packaged App");
     assert_eq!(groups[1].0, "Benchmark Evidence");
+}
+
+#[test]
+fn detects_packaged_app_group() {
+    let groups = grouped(
+        &[(
+            "Choose recording conversion".to_string(),
+            "Small `.mov` screen recording".to_string(),
+        )],
+        Some("packaged-app"),
+    );
+
+    assert!(includes_packaged_app(&groups));
 }

@@ -41,7 +41,9 @@ removes the prepared-draft marker so `manual-qa-pending --section local-proof`
 shows only the remaining packaged-app observations. It also prints the sample
 paths to reuse for the small, duplicate-output, queue, and large-output manual
 checks so the packaged-app pass can continue from the same checked benchmark
-set without re-deciding file selection.
+set without re-deciding file selection. Once the benchmark sample-set row is
+filled, `manual-qa-pending --section local-proof` repeats those sample hints so
+the remaining packaged-app pass can resume from the recorded evidence file.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill

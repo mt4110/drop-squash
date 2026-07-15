@@ -121,7 +121,8 @@ intentional reruns or baseline-comparison troubleshooting rather than the
 default packaged-app QA flow. `manual-qa-ready-local-proof` also echoes the
 small, duplicate-output, queue, and large sample paths from the checked
 benchmark CSV so the remaining packaged-app observations can stay on the same
-sample set.
+sample set. After the benchmark sample-set row is recorded, the same hints are
+repeated by `manual-qa-pending --section local-proof`.
 Any custom `--app-state-dir`, `--state-dir`, or `--output-dir` must stay
 outside the repository so private app state and generated QA media cannot be
 committed or deleted by accident.

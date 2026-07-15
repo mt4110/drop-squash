@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 mod section;
+mod sample_hints;
 
 const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-pending <manual-qa.md> [--section packaged-app|license|benchmark|distribution|local-proof]";
 
@@ -16,10 +17,16 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         println!("manual QA has no pending result rows");
         return Ok(());
     }
-    for (section, rows) in section::grouped(&pending, section.as_deref()) {
+    let groups = section::grouped(&pending, section.as_deref());
+    for (section, rows) in &groups {
         println!("{section}:");
         for (label, expected) in rows {
             println!("- {label}: {expected}");
+        }
+    }
+    if includes_packaged_app(&groups) {
+        for line in sample_hints::for_manual(&text) {
+            println!("{line}");
         }
     }
     Ok(())
@@ -56,4 +63,8 @@ fn pending_row(line: &str) -> Option<(&str, &str)> {
         }
         _ => None,
     }
+}
+
+fn includes_packaged_app(groups: &[(&str, Vec<(String, String)>)]) -> bool {
+    groups.iter().any(|(name, _)| *name == "Packaged App")
 }
