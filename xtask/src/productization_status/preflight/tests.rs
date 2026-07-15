@@ -1,4 +1,7 @@
-use super::{distribution_lines, license_sandbox_lines, manual_qa_lines, public_web_lines, summary};
+use super::{
+    distribution_lines, license_sandbox_lines, lines_for, manual_qa_lines, public_web_lines,
+    summary,
+};
 
 #[test]
 fn reports_clean_manual_qa_preflight() {
@@ -59,4 +62,33 @@ fn reports_track_primary_command_summary() {
             .unwrap()
             .contains("--section license")
     );
+}
+
+#[test]
+fn filters_preflight_to_requested_track() {
+    let report = crate::productization_status::parse::report(
+        "\
+| Blocker | Status | Completion evidence | Evidence reference | Record in |
+|---|---|---|---|---|
+| Public website deployment | Blocked | evidence | TBD | url |
+
+## Evidence Classes
+
+| Blocker | Class | Next action | Evidence owner |
+|---|---|---|---|
+| Public website deployment | Public web | Deploy production site | Public website URL |
+
+## Execution Order
+
+| Order | Track | Blockers | Exit condition | Record target |
+|---:|---|---|---|---|
+| 3 | Public web proof | Public website deployment | done | url |
+",
+    )
+    .unwrap();
+
+    let lines = lines_for(&report, Some("3")).unwrap();
+
+    assert!(lines[0].contains("production dropsquash.app URLs"));
+    assert!(lines[1].contains("website-check"));
 }

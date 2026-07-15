@@ -11,7 +11,7 @@ pub(super) fn text(report: &Report, track: Option<&str>) -> Result<String, Strin
     lines.extend(tracks.iter().filter_map(record_target_line));
     lines.extend(tracks.iter().filter_map(|entry| action_line(report, entry)));
     lines.extend(tracks.iter().filter_map(command_line));
-    lines.extend(next_track(report));
+    lines.extend(next_track(report, &tracks, track.is_some()));
     Ok(lines.join("\n"))
 }
 
@@ -71,8 +71,17 @@ fn command_line(track: &&super::model::TrackStatus) -> Option<String> {
         .map(|line| format!("   {line}"))
 }
 
-fn next_track(report: &Report) -> Vec<String> {
-    let Some(track) = report.tracks.iter().find(|track| !track.remaining.is_empty()) else {
+fn next_track(
+    report: &Report,
+    tracks: &[&super::model::TrackStatus],
+    filtered: bool,
+) -> Vec<String> {
+    let track = if filtered {
+        tracks.first().copied()
+    } else {
+        report.tracks.iter().find(|track| !track.remaining.is_empty())
+    };
+    let Some(track) = track else {
         return vec!["next track: complete".to_string()];
     };
     let mut lines = vec![format!("next track: {}. {}", track.order, track.name)];

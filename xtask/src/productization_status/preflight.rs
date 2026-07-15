@@ -6,12 +6,13 @@ mod commands;
 #[cfg(test)]
 mod tests;
 
-pub(super) fn lines(report: &Report) -> Result<Vec<String>, String> {
-    let Some(track) = report
+pub(super) fn lines_for(report: &Report, filter: Option<&str>) -> Result<Vec<String>, String> {
+    let tracks = report
         .tracks
         .iter()
-        .find(|track| !track.remaining.is_empty())
-    else {
+        .filter(|track| !track.remaining.is_empty())
+        .collect::<Vec<_>>();
+    let Some(track) = select_track(&tracks, filter)? else {
         return Ok(Vec::new());
     };
     match track.name.as_str() {
@@ -95,4 +96,19 @@ fn distribution_lines() -> Vec<String> {
     ];
     lines.extend(commands::distribution_signing());
     lines
+}
+
+fn select_track<'a>(
+    tracks: &[&'a super::model::TrackStatus],
+    filter: Option<&str>,
+) -> Result<Option<&'a super::model::TrackStatus>, String> {
+    let Some(filter) = filter else {
+        return Ok(tracks.first().copied());
+    };
+    tracks
+        .iter()
+        .find(|track| track.order.to_string() == filter || track.name.eq_ignore_ascii_case(filter))
+        .copied()
+        .map(Some)
+        .ok_or_else(|| format!("unknown track: {filter}"))
 }

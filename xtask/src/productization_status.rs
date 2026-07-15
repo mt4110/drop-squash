@@ -11,7 +11,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         .map_err(|error| format!("failed to read {}: {error}", path.display()))?;
     let report = parse::report(&text)?;
     let mut output = render::text(&report, track.as_deref())?;
-    let preflight = preflight::lines(&report, track.as_deref())?;
+    let preflight = preflight::lines_for(&report, track.as_deref())?;
     if !preflight.is_empty() {
         output.push('\n');
         output.push_str(&preflight.join("\n"));

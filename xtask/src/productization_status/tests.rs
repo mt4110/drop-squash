@@ -1,4 +1,4 @@
-use super::{parse, render};
+use super::{parse, parse_args, render};
 
 #[test]
 fn reports_counts_tracks_and_next_track() {
@@ -92,4 +92,11 @@ fn filters_to_requested_track() {
 
     assert!(text.contains("3. Public web proof: 1/1 remaining"));
     assert!(!text.contains("1. Local packaged-app proof"));
+}
+
+#[test]
+fn parses_track_flag_without_path() {
+    let (path, track) = parse_args(vec!["--track".into(), "3".into()]).unwrap();
+    assert_eq!(path, std::path::PathBuf::from("docs/release-blockers.md"));
+    assert_eq!(track.as_deref(), Some("3"));
 }
