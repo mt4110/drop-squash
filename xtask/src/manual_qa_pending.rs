@@ -58,9 +58,19 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
         for line in sample_hints::for_manual(&text) {
             println!("{line}");
         }
-        if let Some(artifact) = app_artifact(&text) {
+        if let Some(artifact) = field_value(&text, "App artifact") {
             println!("packaged-app artifact: {artifact}");
             println!("packaged-app open command: open -- '{}'", shell_single_quote(artifact));
+        }
+    }
+    if groups.iter().any(|(name, _)| *name == "License Sandbox") {
+        if let Some(path) = field_value(&text, "License cache path") {
+            println!("license cache path: {path}");
+        }
+    }
+    if groups.iter().any(|(name, _)| *name == "Distribution And Signing") {
+        if let Some(artifact) = field_value(&text, "App artifact") {
+            println!("distribution artifact: {artifact}");
         }
     }
     Ok(())
@@ -73,9 +83,7 @@ pub(crate) fn suggested_section(label: &str) -> &'static str {
 fn parse_args(args: Vec<String>) -> Result<(PathBuf, Option<String>), String> {
     match args.as_slice() {
         [path] if path != "--help" && path != "-h" => Ok((PathBuf::from(path), None)),
-        [path, flag, section] if *flag == "--section" => {
-            Ok((PathBuf::from(path), Some(section.clone())))
-        }
+        [path, flag, section] if *flag == "--section" => Ok((PathBuf::from(path), Some(section.clone()))),
         _ => Err(USAGE.to_string()),
     }
 }
@@ -93,12 +101,8 @@ fn pending_row(line: &str) -> Option<(&str, &str)> {
     }
     let cells = line.trim_matches('|').split('|').collect::<Vec<_>>();
     match cells.as_slice() {
-        [label, expected, result] if result.trim().is_empty() => {
-            Some((label.trim(), expected.trim()))
-        }
-        [label, expected, _, result] if result.trim().is_empty() => {
-            Some((label.trim(), expected.trim()))
-        }
+        [label, expected, result] if result.trim().is_empty() => Some((label.trim(), expected.trim())),
+        [label, expected, _, result] if result.trim().is_empty() => Some((label.trim(), expected.trim())),
         _ => None,
     }
 }
@@ -107,11 +111,11 @@ fn includes_packaged_app(groups: &[(&str, Vec<(String, String)>)]) -> bool {
     groups.iter().any(|(name, _)| *name == "Packaged App")
 }
 
-fn app_artifact(text: &str) -> Option<&str> {
+fn field_value<'a>(text: &'a str, label: &str) -> Option<&'a str> {
     text.lines().find_map(|line| {
         let cells = line.trim_matches('|').split('|').map(str::trim).collect::<Vec<_>>();
         match cells.as_slice() {
-            ["App artifact", path] if path.ends_with(".dmg") => Some(*path),
+            [found, value] if *found == label => Some(*value),
             _ => None,
         }
     })

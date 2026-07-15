@@ -144,7 +144,14 @@ fn reports_row_notes_for_custom_inputs() {
 fn finds_packaged_app_artifact_row() {
     let text = "| App artifact | /tmp/DropSquash.dmg |\n";
 
-    assert_eq!(super::app_artifact(text), Some("/tmp/DropSquash.dmg"));
+    assert_eq!(super::field_value(text, "App artifact"), Some("/tmp/DropSquash.dmg"));
+}
+
+#[test]
+fn finds_license_cache_path_row() {
+    let text = "| License cache path | /tmp/license.json |\n";
+
+    assert_eq!(super::field_value(text, "License cache path"), Some("/tmp/license.json"));
 }
 
 #[test]
