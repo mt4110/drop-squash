@@ -26,6 +26,7 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
     assert!(text.contains("Prepared draft helper commands:"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-release-gates"));
+    assert!(text.contains("manual-qa-ready-all"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-local-proof"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-ready-local-proof"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-ready-license"));

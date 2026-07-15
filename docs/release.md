@@ -116,6 +116,8 @@ manual-QA rows. Keep the suggested `benchmark-results.csv` in the prepared
 output folder so benchmark outputs and CSV evidence stay together outside the
 repository.
 After the benchmark CSV is checked, prefer
+`manual-qa-ready-all` for one deterministic pass across local proof, license,
+and distribution. If you want only the packaged-app path, use
 `manual-qa-ready-local-proof` to fill deterministic local-proof rows and remove
 the prepared-draft marker in one step. Then use
 `manual-qa-pending --section local-proof` to focus only on the remaining

@@ -37,24 +37,26 @@ cargo run -p xtask -- manual-qa-fill-check /tmp/dropsquash-manual-qa-prepared.md
 ```
 
 After a real release-set benchmark CSV exists and `benchmark-csv-check` passes,
-prefer `manual-qa-ready-local-proof` for the normal local packaged-app proof
-flow. It fills the deterministic release-gate and benchmark rows in order, then
-removes the prepared-draft marker so `manual-qa-pending --section local-proof`
-shows only the remaining packaged-app observations. It also prints the sample
-paths to reuse for the small, duplicate-output, queue, and large-output manual
-checks so the packaged-app pass can continue from the same checked benchmark
-set without re-deciding file selection. Once the benchmark sample-set row is
-filled, `manual-qa-pending --section local-proof` repeats those sample hints so
-the remaining packaged-app pass can resume from the recorded evidence file.
-Rows that reuse the checked benchmark samples also print a row-specific
-`sample:` hint so the next manual observation can start from the right file or
-queue set immediately. Rows that cannot be satisfied from the checked benchmark
-set print a `note:` line instead, such as the mounted-DMG requirement or the
-need for an intentionally bad input. `manual-qa-pending --section local-proof`
-also groups packaged-app rows into practical phases such as Mounted DMG, Small
-Sample, Duplicate Sample, Large Sample, Queue Sample, and Custom Failure Input.
-The packaged-app section also prints a `phase counts:` line so you can see how
-many observations remain in each phase before starting the pass.
+prefer `manual-qa-ready-all` for one deterministic pass across local proof,
+license, and distribution. If you want to advance only the packaged-app proof,
+run `manual-qa-ready-local-proof` instead. It fills the deterministic
+release-gate and benchmark rows in order, then removes the prepared-draft
+marker so `manual-qa-pending --section local-proof` shows only the remaining
+packaged-app observations. It also prints the sample paths to reuse for the
+small, duplicate-output, queue, and large-output manual checks so the
+packaged-app pass can continue from the same checked benchmark set without
+re-deciding file selection. Once the benchmark sample-set row is filled,
+`manual-qa-pending --section local-proof` repeats those sample hints so the
+remaining packaged-app pass can resume from the recorded evidence file. Rows
+that reuse the checked benchmark samples also print a row-specific `sample:`
+hint so the next manual observation can start from the right file or queue set
+immediately. Rows that cannot be satisfied from the checked benchmark set print
+a `note:` line instead, such as the mounted-DMG requirement or the need for an
+intentionally bad input. `manual-qa-pending --section local-proof` also groups
+packaged-app rows into practical phases such as Mounted DMG, Small Sample,
+Duplicate Sample, Large Sample, Queue Sample, and Custom Failure Input. The
+packaged-app section also prints a `phase counts:` line so you can see how many
+observations remain in each phase before starting the pass.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill
@@ -64,6 +66,7 @@ earlier same-machine baseline CSV as the third argument:
 
 ```sh
 cargo run -p xtask -- manual-qa-fill-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
+cargo run -p xtask -- manual-qa-ready-all /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-local-proof /tmp/dropsquash-manual-qa-prepared.md /tmp/dropsquash-manual-qa-output/benchmark-results.csv
 cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md
 cargo run -p dropsquash -- license status
