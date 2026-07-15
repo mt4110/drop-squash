@@ -22,6 +22,17 @@ pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let groups = section::grouped(&pending, section.as_deref());
     for (section, rows) in &groups {
         println!("{section}:");
+        if *section == "Packaged App" {
+            let counts = phases::counts(rows);
+            if !counts.is_empty() {
+                let summary = counts
+                    .iter()
+                    .map(|(phase, count)| format!("{phase}={count}"))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                println!("  phase counts: {summary}");
+            }
+        }
         let mut current_phase = None;
         for (label, expected) in rows {
             let next_phase = phases::for_label(label);

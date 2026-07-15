@@ -136,3 +136,14 @@ fn reports_row_notes_for_custom_inputs() {
 fn reports_phase_for_packaged_app_rows() {
     assert_eq!(phases::for_label("Choose recording conversion"), Some("Small Sample"));
 }
+
+#[test]
+fn reports_phase_counts_for_packaged_rows() {
+    let counts = phases::counts(&[
+        ("Choose recording conversion".to_string(), "small".to_string()),
+        ("Cancellation".to_string(), "large".to_string()),
+        ("Reveal output".to_string(), "small".to_string()),
+    ]);
+
+    assert_eq!(counts, vec![("Small Sample", 2), ("Large Sample", 1)]);
+}

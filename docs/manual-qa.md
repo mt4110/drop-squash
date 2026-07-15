@@ -51,6 +51,8 @@ set print a `note:` line instead, such as the mounted-DMG requirement or the
 need for an intentionally bad input. `manual-qa-pending --section local-proof`
 also groups packaged-app rows into practical phases such as Mounted DMG, Small
 Sample, Duplicate Sample, Large Sample, Queue Sample, and Custom Failure Input.
+The packaged-app section also prints a `phase counts:` line so you can see how
+many observations remain in each phase before starting the pass.
 
 Use the lower-level benchmark fill commands only when you intentionally need to
 inspect or rerun one part of the flow. For the first release candidate, fill

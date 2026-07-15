@@ -12,12 +12,42 @@ pub(super) fn for_label(label: &str) -> Option<&'static str> {
     }
 }
 
+pub(super) fn counts(rows: &[(String, String)]) -> Vec<(&'static str, usize)> {
+    let mut counts = Vec::new();
+    for (label, _) in rows {
+        let Some(phase) = for_label(label) else {
+            continue;
+        };
+        if let Some((_, count)) = counts.iter_mut().find(|(name, _)| *name == phase) {
+            *count += 1;
+        } else {
+            counts.push((phase, 1));
+        }
+    }
+    counts
+}
+
 #[cfg(test)]
 mod tests {
-    use super::for_label;
+    use super::{counts, for_label};
 
     #[test]
     fn maps_queue_rows_to_queue_phase() {
         assert_eq!(for_label("Batch summary"), Some("Queue Sample"));
+    }
+
+    #[test]
+    fn counts_rows_per_phase_in_order() {
+        let counts = counts(&[
+            ("Choose recording conversion".to_string(), String::new()),
+            ("Drag-and-drop conversion".to_string(), String::new()),
+            ("Cancellation".to_string(), String::new()),
+            ("Failed conversion".to_string(), String::new()),
+        ]);
+
+        assert_eq!(
+            counts,
+            vec![("Small Sample", 2), ("Large Sample", 1), ("Custom Failure Input", 1)]
+        );
     }
 }
