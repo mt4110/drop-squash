@@ -62,18 +62,18 @@ Recorded local packaged-app evidence:
 
 ```text
 Fixture: tests/fixtures/secure-share/ja-en-browser-form.html
-Window: 1440x900 browser fixture
-Frames observed: 2
-Accessibility observations: 2
-Local Vision observations: 236
+Window: 1224x968 browser fixture
+Frames observed: 3
+Accessibility observations: 1
+Local Vision observations: 156
 MaskPlan policy: strict_reveal
-MaskPlan frames: 2
-First frame regions after coalescing: 42
-Black-fill mask rects: 42
+MaskPlan frames: 3
+First frame regions after coalescing: 47
+Black-fill mask rects: 47
 First black-fill sample blackened: true
-Live frames blackened: 2
-Live text regions blackened: 236
-Live black pixel readbacks: 2
+Live frames blackened: 3
+Live text regions blackened: 156
+Live black pixel readbacks: 3
 Recognized private text stored: no
 ```
 

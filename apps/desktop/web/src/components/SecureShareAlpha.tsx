@@ -7,6 +7,7 @@ type CaptureResult = {
   liveMaskedFrameCount: number;
   liveMaskedRectCount: number;
   liveVerifiedPixelCount: number;
+  maskPlanPreview: { policy: string; frames: { regions: unknown[] }[] };
 };
 
 export function SecureShareAlpha({ disabled }: { disabled: boolean }) {
@@ -58,6 +59,9 @@ export function SecureShareAlpha({ disabled }: { disabled: boolean }) {
       {result && <p className="secure-share-result">
         {result.visionObservationCount} 件の文字候補を検出し、実フレーム {result.liveMaskedFrameCount} 枚の
         {result.liveMaskedRectCount} 領域を黒塗り、{result.liveVerifiedPixelCount} 点を読み戻し確認しました。
+        <small>
+          共有前の破壊マスク計画: Strict Reveal / {result.maskPlanPreview.frames[0]?.regions.length ?? 0} 領域
+        </small>
         <small>Local-only frame test. No video is saved yet.</small>
       </p>}
       {error && <p className="secure-share-error">{error}</p>}
