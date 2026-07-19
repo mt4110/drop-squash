@@ -13,6 +13,20 @@ export type OutputSize = "auto" | "1080p" | "720p" | "480p";
 export type SourcePolicy = "keep" | "trash" | "ask";
 export type SourceAction = "keep-original" | "ask-user" | "move-original-to-trash";
 export type LockedReason = "trial-complete" | "license-refresh-required";
+export type MaskMode = "solid_black" | "black_noise";
+export type ReceiptKind = "privacy" | "secure-share";
+
+export type MaskRect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type SecureShareOptions = {
+  maskMode: MaskMode;
+  maskRects: MaskRect[];
+};
 
 export type SelectOption<T> = {
   value: T;
@@ -66,8 +80,16 @@ export type ConversionSummary = {
   reductionPercent: number;
   sourceAction: SourceAction;
   sourcePath: string;
+  receiptPath?: string;
+  receiptKind?: ReceiptKind;
   privacyReceiptPath?: string;
 };
+
+export type ConversionOutcome =
+  | { Converted: ConversionSummary }
+  | { converted: ConversionSummary }
+  | { KeptOriginal: { message: string } }
+  | { keptOriginal: { message: string } };
 
 export type SourceActionDecision = {
   action: SourceAction;
@@ -85,4 +107,5 @@ export type SavedConfig = {
 
 export type ConvertRequest = SavedConfig & {
   inputPath: string;
+  secureShare?: SecureShareOptions;
 };

@@ -10,12 +10,75 @@ rust-version.workspace = true
 dropsquash-core.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+dispatch2 = { version = "0.3.1", default-features = false, features = ["alloc", "objc2"] }
 objc2 = "0.6.4"
 objc2-app-kit = { version = "0.3.2", default-features = false, features = ["NSWorkspace", "std"] }
 objc2-foundation = { version = "0.3.2", default-features = false, features = [
+  "NSArray",
+  "NSDictionary",
   "NSError",
   "NSFileManager",
+  "NSGeometry",
+  "NSString",
+  "NSObject",
+  "NSObjCRuntime",
   "NSURL",
+  "NSValue",
+  "objc2-core-foundation",
+  "std",
+] }
+objc2-core-foundation = { version = "0.3.2", default-features = false, features = [
+  "CFArray",
+  "CFDictionary",
+  "CFCGTypes",
+  "CFNumber",
+  "CFString",
+  "std",
+] }
+objc2-core-graphics = { version = "0.3.2", default-features = false, features = ["std"] }
+objc2-core-media = { version = "0.3.2", default-features = false, features = [
+  "CMAttachment",
+  "CMSampleBuffer",
+  "objc2-core-video",
+  "std",
+] }
+objc2-core-video = { version = "0.3.2", default-features = false, features = [
+  "CVBase",
+  "CVBuffer",
+  "CVImageBuffer",
+  "CVPixelBuffer",
+  "CVReturn",
+  "std",
+] }
+objc2-application-services = { version = "0.3.2", default-features = false, features = [
+  "AXError",
+  "AXUIElement",
+  "AXValue",
+  "HIServices",
+  "libc",
+  "std",
+] }
+objc2-screen-capture-kit = { version = "0.3.2", default-features = false, features = [
+  "block2",
+  "dispatch2",
+  "libc",
+  "objc2-core-foundation",
+  "objc2-core-graphics",
+  "objc2-core-media",
+  "SCShareableContent",
+  "SCStream",
+  "std",
+] }
+objc2-vision = { version = "0.3.2", default-features = false, features = [
+  "objc2-core-foundation",
+  "objc2-core-media",
+  "VNDetectTextRectanglesRequest",
+  "VNObservation",
+  "VNRecognizeTextRequest",
+  "VNRequest",
+  "VNRequestHandler",
+  "VNTypes",
   "std",
 ] }
 

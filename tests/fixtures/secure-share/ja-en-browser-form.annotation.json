@@ -1,0 +1,87 @@
+{
+  "scenario_id": "ja-en-browser-form-001",
+  "fixture": "ja-en-browser-form.html",
+  "languages": ["ja", "en"],
+  "capture_scope": "single_window_browser",
+  "policy": "strict_reveal",
+  "coordinate_status": "selector_seed",
+  "viewport_hint": {
+    "width": 1280,
+    "height": 900
+  },
+  "safe_selectors": [
+    {
+      "id": "static_app_chrome",
+      "selector": "[data-safe-id='static_app_chrome']",
+      "reason": "explicit product chrome allowlist candidate"
+    }
+  ],
+  "sensitive_selectors": [
+    {
+      "id": "ticket_title",
+      "selector": "[data-sensitive-id='ticket_title']",
+      "reason": "Japanese and English ticket title"
+    },
+    {
+      "id": "customer_name",
+      "selector": "[data-sensitive-id='customer_name']",
+      "reason": "Japanese personal name"
+    },
+    {
+      "id": "customer_email",
+      "selector": "[data-sensitive-id='customer_email']",
+      "reason": "email address"
+    },
+    {
+      "id": "customer_phone",
+      "selector": "[data-sensitive-id='customer_phone']",
+      "reason": "phone number"
+    },
+    {
+      "id": "customer_address",
+      "selector": "[data-sensitive-id='customer_address']",
+      "reason": "Japanese address"
+    },
+    {
+      "id": "low_contrast_note",
+      "selector": "[data-sensitive-id='low_contrast_note']",
+      "reason": "low-contrast Japanese auth code"
+    },
+    {
+      "id": "api_token",
+      "selector": "[data-sensitive-id='api_token']",
+      "reason": "English token-like secret"
+    },
+    {
+      "id": "callback_url",
+      "selector": "[data-sensitive-id='callback_url']",
+      "reason": "URL"
+    },
+    {
+      "id": "mixed_filename",
+      "selector": "[data-sensitive-id='mixed_filename']",
+      "reason": "Japanese and English filename"
+    },
+    {
+      "id": "transient_notice",
+      "selector": "[data-sensitive-id='transient_notice']",
+      "reason": "notification with auth code"
+    },
+    {
+      "id": "modal_title",
+      "selector": "[data-sensitive-id='modal_title']",
+      "reason": "modal title"
+    },
+    {
+      "id": "modal_body",
+      "selector": "[data-sensitive-id='modal_body']",
+      "reason": "modal body with email and auth code"
+    }
+  ],
+  "acceptance": {
+    "minimum_vision_observations": 12,
+    "minimum_ax_observations": 1,
+    "must_not_store_recognized_text": true,
+    "must_fail_closed_if_observation_errors": true
+  }
+}

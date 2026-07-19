@@ -5,20 +5,36 @@ use tokio_util::sync::CancellationToken;
 
 use crate::{EncodeProgressReporter, EncoderBackend, EncoderCapabilities};
 
+#[cfg(target_os = "macos")]
+mod auto_detect;
 mod capabilities;
 #[cfg(target_os = "macos")]
 mod encode;
 #[cfg(target_os = "macos")]
 mod finalize;
 #[cfg(target_os = "macos")]
+mod mask;
+#[cfg(target_os = "macos")]
 mod paths;
 #[cfg(target_os = "macos")]
+mod pixel_buffer;
+#[cfg(target_os = "macos")]
 mod presets;
+#[cfg(target_os = "macos")]
+mod secure_share;
+#[cfg(target_os = "macos")]
+mod secure_share_flow;
+#[cfg(target_os = "macos")]
+mod secure_share_settings;
 #[cfg(target_os = "macos")]
 mod session;
 #[cfg(not(target_os = "macos"))]
 mod unavailable;
 
+#[cfg(target_os = "macos")]
+pub(crate) use auto_detect::detect_auto_mask_rects;
+#[cfg(target_os = "macos")]
+pub(crate) use mask::apply_destructive_mask_rgba_for_proof;
 #[cfg(target_os = "macos")]
 use objc2::rc::autoreleasepool;
 

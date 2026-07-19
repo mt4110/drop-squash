@@ -16,10 +16,15 @@ dropsquash-platform.workspace = true
 dropsquash-postprocess.workspace = true
 dropsquash-privacy.workspace = true
 dropsquash-queue.workspace = true
+libc = "0.2"
+objc2-app-kit = { version = "0.3.2", features = ["NSRunningApplication"] }
+objc2-foundation = { version = "0.3.2", features = ["NSArray", "NSString"] }
 serde.workspace = true
+serde_json.workspace = true
 tauri = { version = "2.11.5", features = [] }
 tauri-plugin-dialog = "2.7.1"
 tauri-plugin-opener = "2.5.4"
+tauri-plugin-single-instance = "2.4.2"
 tokio-util.workspace = true
 
 [build-dependencies]

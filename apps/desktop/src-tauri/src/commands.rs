@@ -1,9 +1,10 @@
 mod config;
 mod conversion;
 mod dto;
-mod install;
+pub mod install;
 mod license;
 mod progress;
+pub mod qa;
 pub mod queue;
 mod source;
 
@@ -11,7 +12,11 @@ use dropsquash_core::SourcePolicy;
 use dropsquash_core::{OutputSize, Profile};
 
 fn format_error(error: dropsquash_core::AppError) -> String {
-    error.to_string()
+    error.user_message()
+}
+
+pub fn record_window_event(event: &tauri::WindowEvent) {
+    qa::record_window_event(event);
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -70,9 +75,7 @@ pub fn quit_after_installer_volume_eject(
     app: tauri::AppHandle,
     mounted_volume_path: String,
 ) -> std::result::Result<(), String> {
-    install::eject_installer_volume(mounted_volume_path)?;
-    app.exit(0);
-    Ok(())
+    install::quit_after_installer_volume_eject(app, mounted_volume_path)
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -80,7 +83,7 @@ pub async fn convert(
     app_state: tauri::State<'_, crate::state::AppState>,
     window: tauri::WebviewWindow,
     request: dto::ConvertRequest,
-) -> std::result::Result<dto::ConversionSummary, String> {
+) -> std::result::Result<dto::ConversionOutcome, String> {
     conversion::convert(app_state, window, request).await
 }
 
@@ -89,6 +92,11 @@ pub fn cancel_conversion(
     app_state: tauri::State<'_, crate::state::AppState>,
 ) -> std::result::Result<bool, String> {
     app_state.cancel_conversion()
+}
+
+#[tauri::command]
+pub fn record_manual_qa_event(kind: String, detail: String) -> std::result::Result<(), String> {
+    qa::record_manual_qa_event(kind, detail)
 }
 
 #[tauri::command(rename_all = "camelCase")]

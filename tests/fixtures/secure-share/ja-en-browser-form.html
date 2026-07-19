@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DropSquash Secure Share Fixture</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+          "Yu Gothic", "Segoe UI", sans-serif;
+        background: #f5f5f7;
+        color: #1d1d1f;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .chrome {
+        height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        border-bottom: 1px solid #d2d2d7;
+        background: #ffffff;
+        font-weight: 700;
+      }
+
+      main {
+        width: min(1040px, calc(100vw - 48px));
+        margin: 24px auto;
+        display: grid;
+        grid-template-columns: 1.4fr 0.8fr;
+        gap: 18px;
+      }
+
+      section,
+      aside,
+      .modal {
+        border: 1px solid #d2d2d7;
+        border-radius: 10px;
+        background: #ffffff;
+      }
+
+      section,
+      aside {
+        padding: 20px;
+      }
+
+      h1,
+      h2 {
+        margin: 0 0 14px;
+      }
+
+      .field,
+      .row {
+        display: grid;
+        grid-template-columns: 170px 1fr;
+        gap: 14px;
+        padding: 10px 0;
+        border-top: 1px solid #ebebef;
+      }
+
+      .label {
+        color: #6e6e73;
+      }
+
+      code,
+      output {
+        font: 14px ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .low-contrast {
+        color: #8d8d92;
+      }
+
+      .toast {
+        position: fixed;
+        right: 28px;
+        top: 78px;
+        width: 310px;
+        padding: 14px 16px;
+        border: 1px solid #d2d2d7;
+        border-radius: 10px;
+        background: #fff7d6;
+        box-shadow: 0 14px 44px rgba(0, 0, 0, 0.16);
+      }
+
+      .modal {
+        position: fixed;
+        left: 50%;
+        bottom: 46px;
+        transform: translateX(-50%);
+        width: 520px;
+        padding: 18px 20px;
+        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.18);
+      }
+    </style>
+  </head>
+  <body data-scenario-id="ja-en-browser-form-001">
+    <header class="chrome" data-safe-id="static_app_chrome">
+      DropSquash Secure Share Fixture
+    </header>
+
+    <main>
+      <section aria-label="Japanese customer support form">
+        <h1 data-sensitive-id="ticket_title">
+          支払い失敗の再現調査 / Billing failure repro
+        </h1>
+        <div class="field">
+          <span class="label">顧客名</span>
+          <output data-sensitive-id="customer_name">山田 花子</output>
+        </div>
+        <div class="field">
+          <span class="label">メール</span>
+          <output data-sensitive-id="customer_email">hanako@example.test</output>
+        </div>
+        <div class="field">
+          <span class="label">電話番号</span>
+          <output data-sensitive-id="customer_phone">080-0000-1234</output>
+        </div>
+        <div class="field">
+          <span class="label">住所</span>
+          <output data-sensitive-id="customer_address">
+            東京都清瀬市中里1-2-3 テストマンション101
+          </output>
+        </div>
+        <div class="field low-contrast">
+          <span class="label">低コントラスト</span>
+          <output data-sensitive-id="low_contrast_note">
+            認証コード 493-821 を確認
+          </output>
+        </div>
+      </section>
+
+      <aside aria-label="English integration details">
+        <h2 data-sensitive-id="settings_title">Integration settings</h2>
+        <div class="row">
+          <span class="label">API token</span>
+          <code data-sensitive-id="api_token">sk_test_dsq_9f83a7b1</code>
+        </div>
+        <div class="row">
+          <span class="label">Callback URL</span>
+          <code data-sensitive-id="callback_url">
+            https://example.test/hooks/drop
+          </code>
+        </div>
+        <div class="row">
+          <span class="label">File</span>
+          <code data-sensitive-id="mixed_filename">
+            画面収録_顧客A_take01.mov
+          </code>
+        </div>
+      </aside>
+    </main>
+
+    <div class="toast" data-sensitive-id="transient_notice">
+      認証コード 493-821 をコピーしました
+    </div>
+
+    <div class="modal" role="dialog" aria-modal="true">
+      <h2 data-sensitive-id="modal_title">ログイン情報の再入力</h2>
+      <p data-sensitive-id="modal_body">
+        user@example.test のセッションが切れました。確認コードは 771244 です。
+      </p>
+    </div>
+  </body>
+</html>

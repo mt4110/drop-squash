@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import { DropZone } from "./components/DropZone";
 import { HelpPopover } from "./components/HelpPopover";
 import { InstallNotice } from "./components/InstallNotice";
 import { LicensePanel } from "./components/LicensePanel";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
+import { SecureShareAlpha } from "./components/SecureShareAlpha";
 import { TrialBanner } from "./components/TrialBanner";
 import { useApplicationsInstall } from "./hooks/useApplicationsInstall";
 import { useConversionProgress } from "./hooks/useConversionProgress";
 import { useRecordingDropEvents } from "./hooks/useRecordingDropEvents";
+import { useWindowHeight } from "./hooks/useWindowHeight";
 import type {
+  ConversionOutcome,
   ConversionSummary,
   ConvertRequest,
   DropZoneState,
@@ -32,6 +34,7 @@ import {
   failActiveQueueJob,
   finishActiveQueueJob,
   startNextQueueJob,
+  unchangedActiveQueueJob,
 } from "./lib/queueCommands";
 import type { QueueEntry } from "./lib/queue";
 import {
@@ -43,6 +46,7 @@ import {
   markRunning,
   markSourceAction,
   markSucceeded,
+  markUnchanged,
   nextQueued,
 } from "./lib/queue";
 import {
@@ -51,9 +55,12 @@ import {
   queueEntryFromRustItem,
   requestFromRustItem,
 } from "./lib/queueWire";
-import { lockedMessage } from "./lib/licenseLock";
+import { isLockedMessage, lockedMessage } from "./lib/licenseLock";
 import { savedConfigFromState, stateWithSavedConfigPatch } from "./lib/settings";
+import { convertedSummary, keptOriginalMessage } from "./lib/conversionOutcomeWire";
+import { normalizeConversionSummary } from "./lib/conversionSummaryWire";
 import { applySourceActionDecision, sourceActionError } from "./lib/sourceAction";
+import { isNotSmallerMessage, userErrorMessage } from "./lib/errorMessage";
 
 export function App() {
   const [state, setState] = useState<DropZoneState>(initialState);
@@ -66,27 +73,39 @@ export function App() {
   const [inputPath, setInputPath] = useState<string>();
   const [progress, setProgress] = useState<number>();
   const [queue, setQueue] = useState<QueueEntry[]>([]);
+  const shellRef = useRef<HTMLElement>(null);
   const stateRef = useRef<DropZoneState>(initialState);
   const activeQueueId = useRef<number | undefined>(undefined);
+  const showError = useCallback((reason: unknown) => {
+    setError(userErrorMessage(reason));
+  }, []);
   const currentLockedMessage = lockedMessage(state.lockedReason);
-  const applicationsInstall = useApplicationsInstall(
-    setError,
-    () => setError(undefined),
-  );
+  const applicationsInstall = useApplicationsInstall(showError, () => setError(undefined));
+  useWindowHeight(shellRef, [
+    state.isPro,
+    state.isLocked,
+    applicationsInstall.shouldShowNotice,
+    queue.length,
+    Boolean(error),
+    Boolean(result?.receiptPath ?? result?.privacyReceiptPath),
+    result?.sourceAction ?? "keep-original",
+  ]);
 
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
 
-  const refreshState = useCallback(async () => {
+  const loadState = useCallback(async () => {
     if (!isTauri()) {
-      return;
+      return undefined;
     }
 
     const nextState = await invoke<DropZoneState>("load_state");
     setState(nextState);
+    return nextState;
   }, []);
 
+  const refreshState = useCallback(async () => { await loadState(); }, [loadState]);
   const persistSettings = useCallback(async (settings: SavedConfig) => {
     if (!isTauri()) {
       return;
@@ -95,9 +114,9 @@ export function App() {
     try {
       await invoke<SavedConfig>("save_config", settings);
     } catch (reason) {
-      setError(String(reason));
+      showError(reason);
     }
-  }, []);
+  }, [showError]);
 
   const updateConfig = useCallback((patch: Partial<SavedConfig>) => {
     const nextState = stateWithSavedConfigPatch(stateRef.current, patch);
@@ -137,8 +156,8 @@ export function App() {
         setResult(undefined);
         setQueue((current) => [...current, ...entries]);
       }
-    })().catch((reason) => setError(String(reason)));
-  }, [requestForInput, state.isLocked]);
+    })().catch(showError);
+  }, [requestForInput, showError, state.isLocked]);
 
   const runQueued = useCallback(async (entry: QueueEntry) => {
     if (!isTauri() || isBusy || state.isLocked || activeQueueId.current) {
@@ -161,9 +180,17 @@ export function App() {
         started.Started,
         entry.writePrivacyReceipt ?? stateRef.current.writePrivacyReceipt,
       );
-      const summary = await invoke<ConversionSummary>("convert", {
+      const outcome = await invoke<ConversionOutcome>("convert", {
         request,
       });
+      const unchangedMessage = keptOriginalMessage(outcome);
+      if (unchangedMessage) {
+        await unchangedActiveQueueJob(unchangedMessage);
+        setQueue((current) => markUnchanged(current, entry.id, unchangedMessage));
+        await refreshState();
+        return;
+      }
+      const summary = convertedSummary(outcome);
       setResult(summary);
       const finished = await finishActiveQueueJob(encodeResultFromSummary(summary, request.profile));
       if (!isFinishedQueueEvent(finished, entry.id)) {
@@ -173,22 +200,31 @@ export function App() {
       await refreshState();
     } catch (reason) {
       const status = isCancelReason(reason) ? "cancelled" : "failed";
-      const message = String(reason);
+      const message = userErrorMessage(reason);
       if (status === "cancelled") {
         await cancelActiveQueueJob();
+        setQueue((current) => markFailed(current, entry.id, status, message));
       } else {
         await failActiveQueueJob(message);
-      }
-      setQueue((current) => markFailed(current, entry.id, status, message));
-      if (status === "failed") {
-        setError(message);
+        const nextState = await loadState();
+        const queueMessage = nextState?.isLocked ? lockedMessage(nextState.lockedReason) : message;
+        await (isLockedMessage(queueMessage) ? blockQueuedJobs(queueMessage) : Promise.resolve());
+        setQueue((current) => {
+          const failed = markFailed(current, entry.id, status, message);
+          return isLockedMessage(queueMessage) ? blockQueued(failed, queueMessage) : failed;
+        });
+        if (isLockedMessage(queueMessage)) {
+          setError(undefined);
+          return;
+        }
+        setError(isNotSmallerMessage(message) ? undefined : message);
       }
     } finally {
       activeQueueId.current = undefined;
       setIsBusy(false);
       setProgress(undefined);
     }
-  }, [isBusy, refreshState, state.isLocked]);
+  }, [isBusy, loadState, state.isLocked]);
   useEffect(() => {
     if (isBusy || state.isLocked) {
       return;
@@ -202,12 +238,10 @@ export function App() {
 
   useEffect(() => {
     if (state.isLocked) {
-      void blockQueuedJobs(currentLockedMessage).catch((reason) => {
-        setError(String(reason));
-      });
+      void blockQueuedJobs(currentLockedMessage).catch(showError);
       setQueue((current) => blockQueued(current, currentLockedMessage));
     }
-  }, [currentLockedMessage, state.isLocked]);
+  }, [currentLockedMessage, showError, state.isLocked]);
 
   useConversionProgress({ activeQueueId, setProgress, setQueue });
 
@@ -226,7 +260,7 @@ export function App() {
     const inputPath = await open({
       filters: [{ name: "Screen recordings", extensions: state.inputExtensions }],
       multiple: false,
-      title: "Choose a recording",
+      title: "録画を選ぶ / Choose a recording",
     });
     if (typeof inputPath === "string") {
       enqueueInputs([inputPath]);
@@ -242,7 +276,7 @@ export function App() {
       defaultPath: state.outputDir,
       directory: true,
       multiple: false,
-      title: "Choose an output folder",
+      title: "保存先を選ぶ / Choose an output folder",
     });
     if (typeof outputDir === "string") {
       updateConfig({ outputDir });
@@ -271,11 +305,11 @@ export function App() {
     }
 
     try {
-      await revealItemInDir(outputPath);
+      await invoke("reveal_finder_item", { path: outputPath });
     } catch (reason) {
-      setError(String(reason));
+      showError(reason);
     }
-  }, []);
+  }, [showError]);
 
   const cancelConversion = useCallback(async () => {
     if (!isTauri()) {
@@ -285,9 +319,9 @@ export function App() {
     try {
       await invoke<boolean>("cancel_conversion");
     } catch (reason) {
-      setError(String(reason));
+      showError(reason);
     }
-  }, []);
+  }, [showError]);
 
   const trashOriginal = useCallback(async (sourcePath: string, outputPath: string) => {
     if (!isTauri()) {
@@ -308,11 +342,11 @@ export function App() {
         return;
       }
     } catch (reason) {
-      setError(String(reason));
+      showError(reason);
     } finally {
       setIsTrashingOriginal(false);
     }
-  }, []);
+  }, [showError]);
 
   const activateLicense = useCallback(async (licenseKey: string) => {
     if (!isTauri()) {
@@ -324,9 +358,9 @@ export function App() {
       setState(nextState);
       setError(undefined);
     } catch (reason) {
-      setError(String(reason));
+      showError(reason);
     }
-  }, []);
+  }, [showError]);
 
   const forgetLicense = useCallback(async () => {
     if (!isTauri()) {
@@ -338,28 +372,47 @@ export function App() {
       setState(nextState);
       setError(undefined);
     } catch (reason) {
-      setError(String(reason));
+      showError(reason);
     }
-  }, []);
+  }, [showError]);
 
-  const shellClassName = [
-    "shell",
-    queue.length > 0 ? "has-queue" : "",
-    applicationsInstall.shouldShowNotice ? "has-install-notice" : "",
-  ].filter(Boolean).join(" ");
+  const shellClassName = ["shell", state.isPro ? "is-pro" : "", queue.length > 0 ? "has-queue" : "", applicationsInstall.shouldShowNotice ? "has-install-notice" : ""].filter(Boolean).join(" ");
+  const hasQueue = queue.length > 0;
+  const queuePanel = (
+    <QueuePanel
+      items={queue}
+      onCancelQueued={(id) => {
+        void cancelQueuedJob(id)
+          .then((event) => {
+            if (event && "Cancelled" in event) {
+              setQueue((current) => cancelQueued(current, id));
+            }
+          })
+          .catch(showError);
+      }}
+      onClearFinished={() => {
+        void clearCompletedQueueJobs()
+          .then(() => setQueue((current) => clearFinished(current)))
+          .catch(showError);
+      }}
+      onRevealOutput={(outputPath) => void revealOutput(outputPath)}
+      onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
+    />
+  );
 
   return (
-    <main className={shellClassName}>
-      <button aria-label="Show quick tips" className="help-button" title="Show quick tips" type="button" onClick={() => setIsHelpOpen(true)}>?</button>
+    <main ref={shellRef} className={shellClassName}>
+      <button aria-label="使い方 / Quick tips" className="help-button" title="使い方 / Quick tips" type="button" onClick={() => setIsHelpOpen(true)}>?</button>
       <TrialBanner
         successfulConversions={state.successfulConversions}
         trialLimit={state.trialLimit}
         isPro={state.isPro}
         isLocked={state.isLocked}
-        lockedMessage={currentLockedMessage}
+        lockedReason={state.lockedReason}
       />
       <LicensePanel
         isPro={state.isPro}
+        lockedReason={state.lockedReason}
         onActivate={activateLicense}
         onForget={forgetLicense}
       />
@@ -400,6 +453,7 @@ export function App() {
         onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
         onTrashOriginal={(sourcePath, outputPath) => void trashOriginal(sourcePath, outputPath)}
       />
+      <SecureShareAlpha disabled={isBusy} />
       <SettingsDrawer
         outputDir={state.outputDir}
         profile={state.profile}
@@ -415,25 +469,7 @@ export function App() {
         onSourcePolicyChange={changeSourcePolicy}
         onWritePrivacyReceiptChange={changeWritePrivacyReceipt}
       />
-      <QueuePanel
-        items={queue}
-        onCancelQueued={(id) => {
-          void cancelQueuedJob(id)
-            .then((event) => {
-              if (event && "Cancelled" in event) {
-                setQueue((current) => cancelQueued(current, id));
-              }
-            })
-            .catch((reason) => setError(String(reason)));
-        }}
-        onClearFinished={() => {
-          void clearCompletedQueueJobs()
-            .then(() => setQueue((current) => clearFinished(current)))
-            .catch((reason) => setError(String(reason)));
-        }}
-        onRevealOutput={(outputPath) => void revealOutput(outputPath)}
-        onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
-      />
+      {hasQueue && queuePanel}
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>
   );

@@ -1,12 +1,16 @@
 mod backend;
 mod gstreamer;
 mod media_foundation;
+mod secure_share;
 mod verify;
 mod videotoolbox;
 
 pub use backend::{EncodeProgressReporter, EncoderBackend, EncoderCapabilities};
 pub use gstreamer::GStreamerEncoder;
 pub use media_foundation::MediaFoundationEncoder;
+pub use secure_share::{
+    prove_mask_plan_solid_black_fill, resolve_secure_share_options, MaskPlanBlackFillProof,
+};
 pub use verify::{verify_output, OutputVerification};
 pub use videotoolbox::AppleNativeEncoder;
 
@@ -44,6 +48,7 @@ mod tests {
                     profile: dropsquash_core::Profile::Auto,
                     output_size: dropsquash_core::OutputSize::Auto,
                     source_policy: dropsquash_core::SourcePolicy::Keep,
+                    secure_share: None,
                 })
                 .await
                 .unwrap_err();

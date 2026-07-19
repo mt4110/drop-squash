@@ -10,21 +10,21 @@ use tokio_util::sync::CancellationToken;
 
 use crate::EncodeProgressReporter;
 
-use super::presets::preset_for;
-
 mod status;
 
 pub(super) fn export_session_for(
     job: &EncodeJob,
     temporary_output: &std::path::Path,
+    preset: &objc2_foundation::NSString,
 ) -> Result<Retained<AVAssetExportSession>> {
     let input_url = file_url(&job.input_path)?;
     let output_url = file_url(temporary_output)?;
     let asset = unsafe { AVURLAsset::URLAssetWithURL_options(&input_url, None) };
-    let export_session = unsafe {
-        AVAssetExportSession::exportSessionWithAsset_presetName(&asset, preset_for(job)?)
-    }
-    .ok_or_else(|| AppError::Encoder("no compatible Apple export preset was found".to_string()))?;
+    let export_session =
+        unsafe { AVAssetExportSession::exportSessionWithAsset_presetName(&asset, preset) }
+            .ok_or_else(|| {
+                AppError::Encoder("no compatible Apple export preset was found".to_string())
+            })?;
     configure_export_session(&export_session, &output_url)?;
     Ok(export_session)
 }
@@ -58,7 +58,7 @@ fn configure_export_session(
     Ok(())
 }
 
-fn file_url(path: &std::path::Path) -> Result<Retained<NSURL>> {
+pub(super) fn file_url(path: &std::path::Path) -> Result<Retained<NSURL>> {
     NSURL::from_file_path(path).ok_or_else(|| {
         AppError::Encoder(format!(
             "could not create a file URL for {}",

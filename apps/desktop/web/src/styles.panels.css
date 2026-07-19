@@ -1,0 +1,380 @@
+.settings {
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 0 0 12px 12px;
+  border-top: 0;
+  display: grid;
+  gap: 4px;
+  padding: 9px 16px 11px;
+}
+
+.shell.has-queue .settings {
+  border-radius: 0;
+  gap: 6px;
+  padding: 10px 16px 10px;
+}
+
+.settings div,
+.settings label,
+.settings-row {
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  gap: 12px;
+  justify-content: space-between;
+  min-height: 31px;
+  min-width: 0;
+}
+
+.settings span {
+  color: #6e6e73;
+}
+
+.setting-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 88px;
+}
+
+.setting-copy strong {
+  color: #1d1d1f;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.setting-copy small {
+  color: #7a7a80;
+  font-size: 10px;
+}
+
+.settings select {
+  background: transparent;
+  border: 0;
+  box-sizing: border-box;
+  color: #1d1d1f;
+  font: inherit;
+  max-width: 206px;
+  min-width: 0;
+  padding: 0;
+  text-align: right;
+  width: 206px;
+}
+
+.output-picker {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #1d1d1f;
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 0;
+  text-align: right;
+}
+
+.output-picker span {
+  color: #1d1d1f;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.output-picker strong {
+  color: #146ef5;
+  flex: 0 0 auto;
+  font-weight: 600;
+}
+
+.output-picker small,
+.setting-value small {
+  color: #7a7a80;
+  flex: 0 0 auto;
+  font-size: 10px;
+}
+
+.privacy-note {
+  align-items: baseline;
+}
+
+.settings-help {
+  color: #6e6e73;
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  gap: 2px;
+  margin: -2px 0 1px;
+  padding-left: 100px;
+}
+
+.settings-help small {
+  color: #7a7a80;
+  font-size: 10px;
+}
+
+.secure-share-alpha {
+  background: #f8faff;
+  border: 1px solid #c9d8f2;
+  border-radius: 10px;
+  display: grid;
+  gap: 8px;
+  padding: 11px 13px;
+}
+
+.secure-share-heading,
+.secure-share-controls {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.secure-share-heading span {
+  display: grid;
+  gap: 1px;
+}
+
+.secure-share-heading strong { color: #1d1d1f; font-size: 12px; }
+.secure-share-alpha small { color: #6e6e73; font-size: 10px; }
+
+.secure-share-alpha button {
+  background: transparent;
+  border: 0;
+  color: #146ef5;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 0;
+}
+
+.secure-share-alpha button:disabled { color: #8e8e93; cursor: default; }
+
+.secure-share-controls select {
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  color: #1d1d1f;
+  flex: 1;
+  font: inherit;
+  font-size: 11px;
+  min-width: 0;
+  padding: 5px 7px;
+}
+
+.secure-share-result,
+.secure-share-note,
+.secure-share-error {
+  color: #4f6475;
+  display: grid;
+  font-size: 11px;
+  gap: 2px;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.secure-share-error { color: #b42318; }
+
+.setting-value {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: right;
+}
+
+.queue {
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 0 0 12px 12px;
+  border-top: 0;
+  max-height: 114px;
+  overflow: auto;
+}
+
+.queue-row {
+  align-items: center;
+  border-top: 1px solid #f0f0f2;
+  display: grid;
+  font-size: 12px;
+  gap: 6px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 7px 16px;
+}
+
+.queue-actions {
+  align-items: flex-start;
+  border-top: 1px solid #f0f0f2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 8px 16px 7px;
+}
+
+.queue-actions span {
+  color: #6e6e73;
+  font-size: 11px;
+}
+
+.queue-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-summary strong {
+  color: #1d1d1f;
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.queue-summary small,
+.queue-result-copy small {
+  color: #7a7a80;
+  display: block;
+  font-size: 9.5px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.queue-row:first-child {
+  border-top: 0;
+}
+
+.queue-row span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queue-source {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.queue-row .queue-result {
+  display: flex;
+  gap: 8px;
+  min-width: max-content;
+  overflow: visible;
+}
+
+.queue-result-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  text-align: right;
+}
+
+.queue-result-copy strong {
+  color: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.queue-row button,
+.queue-row strong,
+.queue-actions button {
+  background: transparent;
+  border: 0;
+  color: #6e6e73;
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+}
+
+.queue-row .queue-note {
+  color: #4f6475;
+}
+
+.help-backdrop {
+  align-items: center;
+  background: rgba(29, 29, 31, 0.16);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+}
+
+.help-popover {
+  background: #ffffff;
+  border: 1px solid #d2d2d7;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(29, 29, 31, 0.2);
+  box-sizing: border-box;
+  font-size: 13px;
+  max-width: 320px;
+  padding: 18px 18px 16px;
+}
+
+.help-popover p {
+  margin: 0;
+}
+
+.help-popover button {
+  background: #146ef5;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  display: inline-flex;
+  font: inherit;
+  justify-content: center;
+  padding: 6px 10px;
+  width: 100%;
+}
+
+@media (max-width: 520px) {
+  .settings div,
+  .settings label,
+  .settings-row,
+  .settings-help,
+  .privacy-note {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .settings-help {
+    padding-left: 0;
+  }
+
+  .setting-copy,
+  .setting-value {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .settings select,
+  .output-picker {
+    justify-content: space-between;
+    max-width: none;
+    text-align: left;
+    width: 100%;
+  }
+
+  .queue-row {
+    gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .queue-row .queue-result {
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  .install-notice div {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

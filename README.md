@@ -13,6 +13,32 @@ macOS MVP. The desktop app can convert user-selected `.mov`, `.mp4`, and `.m4v` 
 
 Packaged-app manual QA remains for cancellation, multi-file queueing, Trash handling, and live license activation. The release pipeline can build an unsigned macOS `.app` and `.dmg`, run artifact/checksum gates, and block publication until signing is ready. Windows Media Foundation, Linux GStreamer, signing, notarization, and public release publication are still planned work.
 
+Current Build Week target: Phase 3 alpha / high-assurance Secure Share R&D
+prototype. The goal is to show local macOS observation evidence for Japanese
+and English screen-recording privacy cases, not to claim completed leak-zero
+masking. See [docs/build-week-submission.md](docs/build-week-submission.md).
+
+Build Week judging notes:
+
+- Repository may stay private if shared with `testing@devpost.com` and
+  `build-week-event@openai.com`.
+- Demo fixture:
+  [tests/fixtures/secure-share/ja-en-browser-form.html](tests/fixtures/secure-share/ja-en-browser-form.html)
+- Demo script:
+  [docs/build-week-demo-script.md](docs/build-week-demo-script.md)
+- Devpost draft:
+  [docs/build-week-devpost-draft.md](docs/build-week-devpost-draft.md)
+- Judge runbook:
+  [docs/build-week-judge-runbook.md](docs/build-week-judge-runbook.md)
+- Redacted evidence summary:
+  [docs/build-week-evidence.json](docs/build-week-evidence.json)
+- Current alpha evidence: packaged macOS app observed a 1440x900 browser
+  fixture with 2 frames, 2 Accessibility observations, 236 local Vision
+  observations, a Strict Reveal `MaskPlan` preview with 42 coalesced
+  first-frame regions, 2 live ScreenCaptureKit frames blackened across 236
+  text regions with 2 pixel readbacks, and
+  `blackFillProof.firstSampleBlackened = true`.
+
 ## Principles
 
 - Local-first
@@ -23,6 +49,25 @@ Packaged-app manual QA remains for cancellation, multi-file queueing, Trash hand
 - Screen-recording aware compression
 - Small UI
 - Scriptable core
+
+## Product Readiness Policy
+
+DropSquash is developed toward a real sellable product, but phase labels are
+only planning markers. If a P2 or P3 result still feels weak, misleading, or
+unfinished, development continues until the product quality is convincing.
+
+Public business surfaces, checkout links, and production payment onboarding are
+not opened just because an intermediate checklist passed. They stay private,
+owner-only, or deferred until product truth, UX quality, legal surface, and
+distribution quality are all strong enough to publish on purpose.
+
+The current product-quality bet is high-assurance Secure Share. Manual
+rectangles and fixed-bar masking are not enough to justify a privacy claim or a
+sales route. Production checkout stays paused until DropSquash can combine
+ScreenCaptureKit frame metadata, Accessibility structure, local Vision
+text/shape observations, deterministic MaskPlan generation, Strict Reveal
+fail-closed export, and independent final-output verification in a packaged
+macOS app.
 
 ## Local Commands
 
