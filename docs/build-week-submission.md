@@ -238,7 +238,8 @@ Status: ok
 Demo capture status:
 
 ```text
-Recorded locally: 34.98 seconds
+Recorded locally: 43 seconds
+Sequence: 8-second synthetic Japanese/English fixture, then packaged-app test
 Frame: DropSquash Secure Share Fixture (1224 x 968) selected
 Result: 156 Vision candidates, 3 captured frames, 156 blackened regions,
 3 pixel readbacks
