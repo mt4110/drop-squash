@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "project": "DropSquash",
   "submissionTarget": "Phase 3 alpha / high-assurance Secure Share R&D prototype",
-  "capturedAt": "2026-07-19T12:21:40Z",
+  "capturedAt": "2026-07-19T12:25:36Z",
   "localOnly": true,
   "recognizedPrivateTextStored": false,
   "fixture": {
@@ -14,23 +14,23 @@
   },
   "packagedAppObservation": {
     "appPath": "target/release/bundle/macos/DropSquash.app",
-    "windowId": 3301,
-    "frameWidth": 1440,
-    "frameHeight": 900,
-    "frameCount": 2,
-    "accessibilityObservationCount": 2,
-    "visionObservationCount": 236,
-    "liveMaskedFrameCount": 2,
-    "liveMaskedRectCount": 236,
-    "liveVerifiedPixelCount": 2,
-    "eventLog": "/tmp/dsq-build-week-live-mask-1784462500.jsonl",
+    "windowId": 4352,
+    "frameWidth": 1224,
+    "frameHeight": 968,
+    "frameCount": 3,
+    "accessibilityObservationCount": 1,
+    "visionObservationCount": 156,
+    "liveMaskedFrameCount": 3,
+    "liveMaskedRectCount": 156,
+    "liveVerifiedPixelCount": 3,
+    "eventLog": "/tmp/dsq-build-week-live-mask-after-tcc-retry.jsonl",
     "status": "ok"
   },
   "maskPlanPreview": {
     "schemaVersion": 1,
     "policy": "strict_reveal",
-    "frameCount": 2,
-    "firstFrameRegionCount": 42,
+    "frameCount": 3,
+    "firstFrameRegionCount": 47,
     "unmatchedObservationCount": 0,
     "verificationRequiredFrameCount": 0,
     "verificationExpectations": {
@@ -58,23 +58,23 @@
   },
   "blackFillProof": {
     "frameIndex": 0,
-    "frameWidth": 1440,
-    "frameHeight": 900,
-    "maskRectCount": 42,
+    "frameWidth": 1224,
+    "frameHeight": 968,
+    "maskRectCount": 47,
     "firstSampleBlackened": true,
     "firstRect": {
-      "x": 232,
-      "y": 82,
-      "width": 1208,
-      "height": 818
+      "x": 0,
+      "y": 0,
+      "width": 1224,
+      "height": 968
     }
   },
   "liveFrameBlackFill": {
     "source": "ScreenCaptureKit CMSampleBuffer",
     "mode": "solid_black",
-    "maskedFrameCount": 2,
-    "maskedRectCount": 236,
-    "verifiedPixelCount": 2,
+    "maskedFrameCount": 3,
+    "maskedRectCount": 156,
+    "verifiedPixelCount": 3,
     "recognizedPrivateTextStored": false
   },
   "notYetClaimed": [

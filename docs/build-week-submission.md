@@ -150,7 +150,6 @@ Have the demoable alpha and README ready before sleeping on July 21 JST.
 
 These cannot be fully completed from the repository alone:
 
-- record the 30-60 second demo video
 - upload the demo video to public YouTube
 - run `/feedback` in the main Codex build thread and copy the session ID
 - paste the Devpost draft text into the submission form
@@ -218,22 +217,32 @@ Packaged macOS app observation run:
 
 ```text
 Date: Sunday, July 19, 2026
-Window ID: 3301
-Frame size: 1440x900
-Frame count: 2
-Accessibility observations: 2
-Vision observations: 236
+Window ID: 4352
+Frame size: 1224x968
+Frame count: 3
+Accessibility observations: 1
+Vision observations: 156
 MaskPlan policy: strict_reveal
-MaskPlan frames: 2
-First frame regions after coalescing: 42
+MaskPlan frames: 3
+First frame regions after coalescing: 47
 MaskPlan audit unmatched observations: 0
 MaskPlan verification-required frames: 0
-Live ScreenCaptureKit frames blackened: 2
-Live text regions blackened: 236
-Live black pixel readbacks: 2
+Live ScreenCaptureKit frames blackened: 3
+Live text regions blackened: 156
+Live black pixel readbacks: 3
 First black-fill sample blackened: true
-Event log: /tmp/dsq-build-week-live-mask-1784462500.jsonl
+Event log: /tmp/dsq-build-week-live-mask-after-tcc-retry.jsonl
 Status: ok
+```
+
+Demo capture status:
+
+```text
+Recorded locally: 34.98 seconds
+Frame: DropSquash Secure Share Fixture (1224 x 968) selected
+Result: 156 Vision candidates, 3 captured frames, 156 blackened regions,
+3 pixel readbacks
+Public upload: pending
 ```
 
 This proves the packaged GUI-hosted path can observe a Japanese/English browser

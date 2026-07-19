@@ -1,11 +1,11 @@
-use std::time::Duration;
+use std::{sync::mpsc::sync_channel, time::Duration};
 
 use dropsquash_platform::{
     request_shareable_content_snapshot, SckShareableContentRequest, SckWindowCandidate,
 };
 use serde::Serialize;
 
-use super::{observe_window, SecureShareObservationDto};
+use super::SecureShareObservationDto;
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -25,19 +25,30 @@ pub async fn secure_share_alpha_windows() -> Result<Vec<SecureShareWindowDto>, S
 
 #[tauri::command(rename_all = "camelCase")]
 pub async fn secure_share_alpha_capture(
+    app: tauri::AppHandle,
     window_id: u32,
 ) -> Result<SecureShareObservationDto, String> {
+    let (sender, receiver) = sync_channel(1);
+    app.run_on_main_thread(move || {
+        super::observe_window_callback(window_id, 1_000, 10_000, move |result| {
+            let _ = sender.send(result);
+        });
+    })
+    .map_err(|error| format!("Secure Share alpha start failed: {error}"))?;
     tauri::async_runtime::spawn_blocking(move || {
-        let report = observe_window(window_id, 1_000, 10_000)?;
-        if report.live_masked_frame_count == 0 || report.live_verified_pixel_count == 0 {
-            return Err(
-                "No text pixels were blackened. Select a window with readable text.".into(),
-            );
-        }
-        Ok(report)
+        receiver
+            .recv_timeout(Duration::from_millis(10_500))
+            .map_err(|_| "Secure Share alpha capture timed out".to_string())?
     })
     .await
-    .map_err(|error| format!("Secure Share alpha capture failed: {error}"))?
+    .map_err(|error| format!("Secure Share alpha capture task failed: {error}"))?
+    .and_then(|report| {
+        if report.live_masked_frame_count == 0 || report.live_verified_pixel_count == 0 {
+            Err("No text pixels were blackened. Select a window with readable text.".into())
+        } else {
+            Ok(report)
+        }
+    })
 }
 
 fn list_windows() -> Result<Vec<SecureShareWindowDto>, String> {
