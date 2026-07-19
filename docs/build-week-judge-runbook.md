@@ -24,6 +24,16 @@ and independent final-output verification are the next gates.
 - Google Chrome or another browser for the fixture
 - Rust/Node/pnpm through `nix develop` if rebuilding from source
 
+### Grant macOS Permissions
+
+At the first capture attempt, macOS shows a native permission dialog. Choose
+`Open System Settings`, then enable `DropSquash` in `Privacy & Security` >
+`Screen Recording`. Enable it in `Accessibility` as well when inspecting AX
+observations. Quit and reopen DropSquash after changing either permission.
+
+These permissions are an OS security boundary; the app never attempts to
+enable them programmatically.
+
 ## Build
 
 ```bash
