@@ -34,6 +34,12 @@ observations. Quit and reopen DropSquash after changing either permission.
 These permissions are an OS security boundary; the app never attempts to
 enable them programmatically.
 
+Grant permission to the final signed app bundle. An ad-hoc development build
+and a Developer ID-signed bundle are different TCC identities in practice; do
+not rebuild or re-sign the bundle after granting permission. If macOS keeps
+showing the request while its switch is on, turn that `DropSquash` switch off
+and on after the final signing step, then relaunch the exact same bundle.
+
 ## Build
 
 ```bash
