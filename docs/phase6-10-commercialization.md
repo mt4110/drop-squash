@@ -162,6 +162,9 @@ Goal: turn the Phase 5 alpha into a reproducible engineering baseline.
 - Define the Windows Media Foundation / Windows Graphics Capture bridge with
   the same copied-value ABI boundary, capture-time metadata, and fail-closed
   rules. It is a first-class BtoB target, not a later portability cleanup.
+- Review and satisfy the Windows implementation entry gate in
+  [docs/windows-secure-share-entry-gate.md](/Users/masakitakemura/_workspace/drop-squash/docs/windows-secure-share-entry-gate.md)
+  before creating Windows product UI or claims.
 - Re-run the adversarial corpus with packaged-app artifacts and record pass,
   fail-closed, or out-of-scope status per threat.
 - Preserve conversion, trial, license, original handling, JA/EN UI, and
