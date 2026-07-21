@@ -51,7 +51,8 @@ They must not say that text is selectively removed automatically.
    frame count; a missing fact rejects the export.
 4. A labeled, public-safe Strict Shield fixture produces an MP4, signed
    redacted MaskPlan receipt, and independent verification record from a
-   packaged macOS app. Create the record with
+   Developer ID-signed packaged macOS app. The record must bind the fixture,
+   app bundle ID/version, and executable SHA-256. Create it with
    `scripts/collect-secure-share-phase6-evidence.sh` after the output is saved.
 5. Fault injection for a missing writer fact, observation discontinuity, or
    writer append failure produces no final MP4.

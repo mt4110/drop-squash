@@ -35,7 +35,7 @@ setup time.
 1. Start Secure Share against the stationary fixture and stop after five seconds.
 2. Confirm one final MP4 and one `.mask-plan.json` sidecar exist.
 3. Run `scripts/collect-secure-share-phase6-evidence.sh native-ax-baseline v1
-   <video.mp4> <video.mask-plan.json>` and retain its redacted
+   <Developer-ID-signed-DropSquash.app> <video.mp4> <video.mask-plan.json>` and retain its redacted
    `.phase6-evidence.json` beside the output.
 4. Confirm the sidecar has `verificationPolicyVersion` set to
    `phase5-native-bridge-v1`, `captureContinuityAttested` set to `true`, and
