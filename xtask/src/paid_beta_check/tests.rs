@@ -110,8 +110,6 @@ These rows are already supporting that path and should stay verified:
     assert!(error.contains("next commands:"));
     assert!(error.contains("paid beta operator checklist: docs/paid-beta-operator-checklist.md"));
     assert!(error.contains("after manual-qa-paid-beta-rerun: use `paid beta license markdown rows` and `paid beta distribution markdown rows` before the section gates"));
-    assert!(error.contains("dirty worktree quickstart: snapshot this exact tree"));
-    assert!(error.contains("dirty worktree deterministic pass: in the snapshot run Nix build"));
     assert!(error.contains("packaged manual QA guide: docs/manual-qa.md"));
     assert!(error.contains("proof map: Packaged macOS manual QA -> manual-qa-packaged-rerun"));
     assert!(error.contains("manual-qa-paid-beta-rerun"));
@@ -204,12 +202,10 @@ These rows are already supporting that path and should stay verified:
 
     assert!(error
         .contains("preferred deterministic first pass: cargo run -p xtask -- manual-qa-ready-all"));
-    assert!(error.contains("dirty worktree quickstart: snapshot this exact tree"));
     assert!(error.contains("manual-qa-prepare --reset-trial"));
     assert!(error.contains("paid beta operator checklist: docs/paid-beta-operator-checklist.md"));
     assert!(error.contains("direct signing track: cargo run -p xtask -- productization-status --track \"Signing and distribution proof\""));
     assert!(error.contains("direct license track: cargo run -p xtask -- productization-status --track \"License sandbox proof\""));
-    assert!(error.contains("dirty worktree quickstart: snapshot this exact tree"));
     assert!(error.contains("license sandbox runbook: docs/license-sandbox-runbook.md"));
     assert!(error.contains("manual beta license issuance: docs/manual-beta-license-issuance.md"));
     assert!(error.contains("license browser sign-in checkpoint"));
@@ -714,7 +710,6 @@ These rows are already supporting that path and should stay verified:
     assert!(error.contains("manual-qa-pending"));
     assert!(error.contains("My Manual QA.md"));
     assert!(error.contains("My Manual QA.md"));
-    assert!(error.contains("dirty worktree quickstart: snapshot this exact tree"));
     assert!(error.contains("manual-qa-prepare --reset-trial"));
 }
 

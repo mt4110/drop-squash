@@ -21,8 +21,12 @@ libwebkit2gtk-4.1-dev
 with:
   components: rustfmt, clippy
 run: cargo fmt --all -- --check
-run: cargo clippy --workspace --all-targets -- -D warnings
-run: cargo test --workspace
+name: clippy macOS
+run: cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings
+name: test macOS
+run: cargo test --workspace --exclude dropsquash-desktop
+name: clippy portable crates
+name: test portable crates
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- manual-qa-check
@@ -106,8 +110,12 @@ fn reports_missing_release_workflow_gates() {
             "libwebkit2gtk-4.1-dev",
             "components: rustfmt, clippy",
             "cargo fmt --all -- --check",
-            "cargo clippy --workspace --all-targets -- -D warnings",
-            "cargo test --workspace",
+            "clippy macOS",
+            "cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings",
+            "test macOS",
+            "cargo test --workspace --exclude dropsquash-desktop",
+            "clippy portable crates",
+            "test portable crates",
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- manual-qa-check",
@@ -221,8 +229,12 @@ libwebkit2gtk-4.1-dev
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- release-check
-run: cargo clippy --workspace --all-targets -- -D warnings
-run: cargo test --workspace
+name: clippy macOS
+run: cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings
+name: test macOS
+run: cargo test --workspace --exclude dropsquash-desktop
+name: clippy portable crates
+name: test portable crates
 uses: cachix/install-nix-action@v31
 run: nix flake check --no-build --all-systems
 "#,
@@ -252,8 +264,12 @@ fn reports_missing_ci_workflow_gates() {
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- release-check",
-            "cargo clippy --workspace --all-targets -- -D warnings",
-            "cargo test --workspace",
+            "clippy macOS",
+            "cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings",
+            "test macOS",
+            "cargo test --workspace --exclude dropsquash-desktop",
+            "clippy portable crates",
+            "test portable crates",
             "cachix/install-nix-action@v31",
             "nix flake check --no-build --all-systems"
         ]
@@ -272,6 +288,7 @@ libwebkit2gtk-4.1-dev
 run: pnpm --dir apps/desktop/web test
 run: pnpm --dir apps/desktop/web build
 uses: dtolnay/rust-toolchain@1.95.0
+name: desktop-rust-macos
 run: cargo test -p dropsquash-desktop
 "#,
     );
@@ -288,11 +305,10 @@ fn reports_missing_desktop_workflow_gates() {
         vec![
             "permissions:",
             "contents: read",
-            "Install Linux desktop dependencies",
-            "libwebkit2gtk-4.1-dev",
             "pnpm --dir apps/desktop/web install --frozen-lockfile",
             "pnpm --dir apps/desktop/web build",
             "dtolnay/rust-toolchain@1.95.0",
+            "desktop-rust-macos",
             "cargo test -p dropsquash-desktop"
         ]
     );

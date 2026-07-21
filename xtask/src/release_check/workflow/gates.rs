@@ -7,8 +7,12 @@ pub(super) const CI: &[&str] = &[
     "cargo run -p xtask -- file-size-check",
     "cargo run -p xtask -- website-check",
     "cargo run -p xtask -- release-check",
-    "cargo clippy --workspace --all-targets -- -D warnings",
-    "cargo test --workspace",
+    "clippy macOS",
+    "cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings",
+    "test macOS",
+    "cargo test --workspace --exclude dropsquash-desktop",
+    "clippy portable crates",
+    "test portable crates",
     "cachix/install-nix-action@v31",
     "nix flake check --no-build --all-systems",
 ];
@@ -102,6 +106,7 @@ pub(super) const DESKTOP: &[&str] = &[
     "pnpm --dir apps/desktop/web test",
     "pnpm --dir apps/desktop/web build",
     "dtolnay/rust-toolchain@1.95.0",
+    "desktop-rust-macos",
     "cargo test -p dropsquash-desktop",
 ];
 
