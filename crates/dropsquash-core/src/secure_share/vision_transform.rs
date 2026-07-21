@@ -64,8 +64,8 @@ fn pixel_rect(
     if right <= left || bottom <= top {
         return None;
     }
-    let x = (left * frame_size.width as f64).floor();
-    let y = (top * frame_size.height as f64).floor();
+    let x = floor_pixel(left * frame_size.width as f64);
+    let y = floor_pixel(top * frame_size.height as f64);
     let x2 = ceil_pixel(right * frame_size.width as f64);
     let y2 = ceil_pixel(bottom * frame_size.height as f64);
     Some(PixelRect {
@@ -82,4 +82,8 @@ fn clamp(value: f64, min: f64, max: f64) -> f64 {
 
 fn ceil_pixel(value: f64) -> f64 {
     (value - 1e-9).ceil()
+}
+
+fn floor_pixel(value: f64) -> f64 {
+    (value + 1e-9).floor()
 }

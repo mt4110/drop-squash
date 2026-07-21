@@ -25,15 +25,15 @@ fn accepts_a_text_element_without_text_content() {
     let value = NativeAccessibilityObservation {
         frame_index: 0,
         kind: 1,
-        x: 10,
-        y: 20,
+        x: 110,
+        y: 220,
         width: 30,
         height: 40,
     };
     let observation =
         native_observation(value, &target(), size(), &[frame()]).expect("text geometry is valid");
-    assert_eq!(observation.rect.x, 10);
-    assert_eq!(observation.rect.width, 30);
+    assert_eq!(observation.rect.x, 20);
+    assert_eq!(observation.rect.width, 60);
 }
 
 #[test]
@@ -41,8 +41,8 @@ fn keeps_focused_text_geometry_distinct_from_tree_text() {
     let value = NativeAccessibilityObservation {
         frame_index: 0,
         kind: 2,
-        x: 10,
-        y: 20,
+        x: 110,
+        y: 220,
         width: 30,
         height: 40,
     };

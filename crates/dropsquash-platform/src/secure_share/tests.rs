@@ -535,7 +535,7 @@ fn stream_output_rejects_a_large_presentation_time_gap() {
         .expect_err("large gaps must fail closed")
         .to_string();
 
-    assert!(error.contains("time gap exceeded"));
+    assert!(error.contains("presentation time gap"));
 }
 
 #[cfg(target_os = "macos")]

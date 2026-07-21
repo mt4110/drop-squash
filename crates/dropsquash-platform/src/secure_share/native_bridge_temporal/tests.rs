@@ -25,7 +25,7 @@ fn maps_native_change_to_its_frame_time() {
         result[0].rect,
         PixelRect {
             x: 100,
-            y: 100,
+            y: 50,
             width: 200,
             height: 50
         }
