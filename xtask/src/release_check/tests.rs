@@ -21,12 +21,8 @@ libwebkit2gtk-4.1-dev
 with:
   components: rustfmt, clippy
 run: cargo fmt --all -- --check
-name: clippy macOS
-run: cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings
-name: test macOS
-run: cargo test --workspace --exclude dropsquash-desktop
-name: clippy portable crates
-name: test portable crates
+run: cargo clippy --workspace --all-targets -- -D warnings
+run: cargo test --workspace
 run: cargo run -p xtask -- file-size-check
 run: cargo run -p xtask -- website-check
 run: cargo run -p xtask -- manual-qa-check
@@ -110,12 +106,8 @@ fn reports_missing_release_workflow_gates() {
             "libwebkit2gtk-4.1-dev",
             "components: rustfmt, clippy",
             "cargo fmt --all -- --check",
-            "clippy macOS",
-            "cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings",
-            "test macOS",
-            "cargo test --workspace --exclude dropsquash-desktop",
-            "clippy portable crates",
-            "test portable crates",
+            "cargo clippy --workspace --all-targets -- -D warnings",
+            "cargo test --workspace",
             "cargo run -p xtask -- file-size-check",
             "cargo run -p xtask -- website-check",
             "cargo run -p xtask -- manual-qa-check",
@@ -305,6 +297,8 @@ fn reports_missing_desktop_workflow_gates() {
         vec![
             "permissions:",
             "contents: read",
+            "Install Linux desktop dependencies",
+            "libwebkit2gtk-4.1-dev",
             "pnpm --dir apps/desktop/web install --frozen-lockfile",
             "pnpm --dir apps/desktop/web build",
             "dtolnay/rust-toolchain@1.95.0",

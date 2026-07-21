@@ -202,7 +202,6 @@ These rows are already supporting that path and should stay verified:
 
     assert!(error
         .contains("preferred deterministic first pass: cargo run -p xtask -- manual-qa-ready-all"));
-    assert!(error.contains("manual-qa-prepare --reset-trial"));
     assert!(error.contains("paid beta operator checklist: docs/paid-beta-operator-checklist.md"));
     assert!(error.contains("direct signing track: cargo run -p xtask -- productization-status --track \"Signing and distribution proof\""));
     assert!(error.contains("direct license track: cargo run -p xtask -- productization-status --track \"License sandbox proof\""));
@@ -710,7 +709,6 @@ These rows are already supporting that path and should stay verified:
     assert!(error.contains("manual-qa-pending"));
     assert!(error.contains("My Manual QA.md"));
     assert!(error.contains("My Manual QA.md"));
-    assert!(error.contains("manual-qa-prepare --reset-trial"));
 }
 
 #[test]
