@@ -4,6 +4,11 @@ DropSquash is a Rust workspace with thin app shells and testable domain crates.
 
 Tauri provides one UI across macOS, Windows, and Linux. Rust owns orchestration and safety policy. Encoding is delegated through `EncoderBackend` to the native platform stack without starting an external media executable.
 
+Evidence-mode architecture extends the same backbone. The formal plan for
+deterministic naming, safe segment extraction, evidence manifests, verification,
+and the practical macOS-native stack boundary lives in
+`docs/evidence-core-architecture.md`.
+
 The intended flow is:
 
 ```text
@@ -40,6 +45,10 @@ Tauri command / CLI
 | Linux | GStreamer through `gstreamer-rs`, using an explicit plugin allowlist and excluding `gst-libav` |
 
 `probe_capabilities` reports what the current machine can actually do. Compile-time OS detection is not proof that a codec or hardware path exists.
+
+For evidence mode on macOS, the planned deeper native path is
+`AVAssetReader/AVAssetWriter + CoreMedia + VTCompressionSession`, while
+`AVAssetExportSession` remains the current whole-file compatibility path.
 
 ## Isolation
 

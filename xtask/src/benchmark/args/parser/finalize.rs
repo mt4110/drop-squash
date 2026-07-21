@@ -13,6 +13,7 @@ pub(super) fn finish(
     output_size: OutputSize,
 ) -> Result<BenchmarkArgs, String> {
     require_inputs(&inputs, release_set)?;
+    reject_prior_outputs(&inputs, release_set)?;
     let output_dir =
         output_dir.ok_or_else(|| format!("benchmark requires --output-dir\n{}", usage::text()))?;
     output_dir_policy::validate(release_set, &output_dir)?;
@@ -41,4 +42,23 @@ fn require_inputs(inputs: &[PathBuf], release_set: bool) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+fn reject_prior_outputs(inputs: &[PathBuf], release_set: bool) -> Result<(), String> {
+    if !release_set {
+        return Ok(());
+    }
+    if let Some(path) = inputs.iter().find(|path| is_prior_output(path)) {
+        return Err(format!(
+            "benchmark --release-set inputs must be original local recordings, not prior .squashed outputs: {}",
+            path.display()
+        ));
+    }
+    Ok(())
+}
+
+fn is_prior_output(path: &std::path::Path) -> bool {
+    path.file_name()
+        .and_then(|value| value.to_str())
+        .is_some_and(|value| value.to_ascii_lowercase().contains(".squashed"))
 }

@@ -2,6 +2,7 @@ use crate::{media_policy_check, privacy_policy_check, website_check};
 mod blockers;
 mod changelog;
 mod desktop_capability;
+mod desktop_runtime;
 mod dev_environment;
 mod evidence;
 mod manual_blockers;
@@ -19,11 +20,16 @@ use std::path::Path;
 pub fn run() -> Result<(), String> {
     dev_environment::reject_parallel_version_manager(Path::new("."))?;
     dev_environment::require_nix_systems(Path::new("flake.nix"))?;
+    dev_environment::require_web_toolchain_contract(
+        Path::new("flake.nix"),
+        Path::new("apps/desktop/web/package.json"),
+    )?;
     secret_files::reject_secret_files(Path::new("."))?;
     secret_files::require_local_agent_ignore(Path::new(".gitignore"))?;
     desktop_capability::check_default_capability(Path::new(
         "apps/desktop/src-tauri/capabilities/default.json",
     ))?;
+    desktop_runtime::check_runtime_guards()?;
     media_policy_check::check_default_roots()?;
     privacy_policy_check::check_default_roots()?;
     website_check::check_default_root()?;

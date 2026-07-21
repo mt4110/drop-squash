@@ -27,7 +27,7 @@ fn dirty_paths(status: &str) -> String {
 
 fn dirty_worktree_error(status: &str) -> String {
     format!(
-        "manual QA preparation requires a clean git worktree; dirty paths:\n{}\nuse a detached QA worktree with `git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD`, or commit, stash, or intentionally remove these changes, then rebuild the app artifact before recording manual QA evidence",
+        "manual QA preparation requires a clean git worktree; dirty paths:\n{}\nuse a detached QA worktree with `git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD`; if the QA candidate currently lives only in this dirty tree, create a snapshot with `scripts/manual-qa-snapshot-worktree.sh`; otherwise commit, stash, or intentionally remove these changes, then rebuild the app artifact before recording manual QA evidence",
         dirty_paths(status)
     )
 }
@@ -58,6 +58,7 @@ mod tests {
         let error = dirty_worktree_error(" M docs/manual-qa.md\n");
 
         assert!(error.contains("git worktree add --detach"));
+        assert!(error.contains("scripts/manual-qa-snapshot-worktree.sh"));
         assert!(error.contains("commit, stash, or intentionally remove"));
         assert!(error.contains("rebuild the app artifact"));
     }

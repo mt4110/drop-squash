@@ -41,6 +41,20 @@ Use at least three private local samples before a release candidate:
 - A medium recording around 2 to 5 minutes.
 - A large recording that is painful to share without compression.
 
+Release-set sample selection rules:
+
+- Use original local recordings for the short, medium, and large inputs. Do not
+  feed an earlier `.squashed.mp4` back into the release-set benchmark.
+- Keep `--profile` and `--size` aligned with the exact shipping setting under
+  test before recording release evidence.
+- Favor recordings with ordinary screen-recording structure: readable duration,
+  visible motion or text changes, and enough length to expose real savings.
+- Avoid previously squashed or otherwise re-encoded delivery files, clips that
+  are already unusually small for their duration, and very short or nearly
+  static recordings that are unlikely to show normal savings.
+- If a clip turns out `not smaller`, treat that as failure evidence for the
+  packaged-app `Larger output` row and replace it in the benchmark set.
+
 Use `--release-set` for release-candidate evidence. It requires at least three
 `--input` values so the release benchmark cannot accidentally be recorded from a
 single convenient sample. It also requires an absolute `--output-dir` outside
@@ -78,3 +92,7 @@ Release candidate rule:
   on two or more samples without a documented reason.
 - Any sample that fails to produce a smaller output blocks the release
   candidate until the profile, sample, or encoder behavior is understood.
+- Do not record a `not smaller` clip as release-set evidence. Move that clip to
+  the packaged-app `Larger output` QA row, then rerun the release set with a
+  different real recording or the exact shipping size setting you are trying to
+  validate.

@@ -3,6 +3,7 @@ use super::shell_arg;
 pub(super) fn lines(artifact_path: &str, artifact_url: &str) -> Vec<String> {
     vec![
         "## macOS Verification".into(),
+        "Signed DMG runbook: docs/signed-dmg-runbook.md".into(),
         "macOS verification commands:".into(),
         format!(
             "codesign --verify --deep --strict --verbose=4 {}",
@@ -48,6 +49,7 @@ mod tests {
         )
         .join("\n");
 
+        assert!(generated.contains("Signed DMG runbook: docs/signed-dmg-runbook.md"));
         for label in [
             "`codesign`",
             "`spctl`",

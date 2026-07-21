@@ -2,16 +2,20 @@ pub use super::attachments::{
     core_media_attachment_binding_name, ensure_required_sck_frame_attachments,
     raw_sck_frame_info_from_sample_buffer, NativeSampleBuffer, SckFrameAttachmentPresence,
 };
+#[cfg(target_os = "macos")]
+pub use super::decoded_residual::{decoded_text_residual_report, DecodedTextResidualReport};
 pub use super::frame_info::{RawSckFrameInfo, RawSckFrameStatus};
 pub use super::native_frame::{
     screen_capture_kit_binding_name, NativeFrameInfoKey, NativeFrameMetadataProvider,
 };
 #[cfg(target_os = "macos")]
 pub use super::native_vision::{
-    sample_buffer_request_handler, vision_binding_name, NativeVisionImageOption,
-    NativeVisionImageRequestHandler, NativeVisionObservationProvider, NativeVisionRequest,
-    NativeVisionTextRequest, NativeVisionTextShapeRequest,
+    pixel_buffer_request_handler, sample_buffer_request_handler, vision_binding_name,
+    NativeVisionImageOption, NativeVisionImageRequestHandler, NativeVisionObservationProvider,
+    NativeVisionRequest, NativeVisionTextRequest, NativeVisionTextShapeRequest,
 };
+#[cfg(target_os = "macos")]
+pub use super::native_vision_observe::observe_pixel_buffer;
 #[cfg(target_os = "macos")]
 pub use super::native_vision_request::{
     make_text_request, make_text_shape_request, perform_text_requests, NativeVisionRequests,
@@ -30,6 +34,14 @@ pub use super::providers::{
     EmptyAccessibilityObservationProvider, EmptyVisionObservationProvider, FrameMetadataProvider,
     VisionObservationProvider,
 };
+#[cfg(target_os = "macos")]
+pub use super::recording_callback::{
+    record_window_once_callback, record_window_once_callback_with_policy,
+};
+#[cfg(target_os = "macos")]
+pub use super::recording_probe::{record_window_once, SckRecordingProbeReport};
+#[cfg(target_os = "macos")]
+pub use super::recording_session_callback::record_window_until_stopped_callback;
 
 #[cfg(target_os = "macos")]
 pub use super::live_mask::SckLiveMaskEvidence;
@@ -37,6 +49,10 @@ pub use super::live_mask::SckLiveMaskEvidence;
 pub use super::sample_buffer_provider::{
     NativeSampleBufferProvider, SampleBufferFrameMetadataProvider,
 };
+#[cfg(target_os = "macos")]
+pub use super::screen_permission::{request_screen_capture_access, screen_capture_access_granted};
+#[cfg(target_os = "macos")]
+pub use super::selected_window::{select_attested_window_target, SckWindowSelection};
 #[cfg(target_os = "macos")]
 pub use super::shareable_content::{
     snapshot_shareable_content, SckDisplayCandidate, SckShareableContentSnapshot,
@@ -48,6 +64,8 @@ pub use super::shareable_request::{
 };
 #[cfg(target_os = "macos")]
 pub use super::stream_output::SckStreamFrameMetadataOutput;
+#[cfg(target_os = "macos")]
+pub use super::stream_plan::build_stream_capture_plan_for_output;
 #[cfg(target_os = "macos")]
 pub use super::stream_plan::{build_stream_capture_plan, SckStreamCapturePlan};
 #[cfg(target_os = "macos")]

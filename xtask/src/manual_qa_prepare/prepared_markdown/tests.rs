@@ -25,15 +25,16 @@ fn writes_fields_and_release_candidate_rows() {
     assert!(text.contains("Recommended proof flow:"));
     assert!(text.contains("cargo run -p xtask -- benchmark --release-set"));
     assert!(text.contains("cargo run -p xtask -- benchmark-csv-check"));
-    assert!(text.contains(
-        "Prepared draft helper commands (run them from the same clean worktree"
-    ));
+    assert!(text.contains("Prepared draft helper commands (run them from the same clean worktree"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-release-gates"));
     assert!(text.contains("manual-qa-ready-all"));
+    assert!(text.contains("standard deterministic pass"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-local-proof"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-ready-local-proof"));
-    assert!(text.contains("cargo run -p xtask -- manual-qa-ready-license"));
-    assert!(text.contains("cargo run -p xtask -- manual-qa-ready-distribution"));
+    assert!(text.contains("packaged-only alternative"));
+    assert!(text.contains("`manual-qa-license-rerun`"));
+    assert!(text.contains("cargo run -p xtask -- manual-qa-license-rerun"));
+    assert!(text.contains("cargo run -p xtask -- manual-qa-distribution-rerun"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-bad-input"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-benchmark"));
     assert!(text.contains("cargo run -p xtask -- manual-qa-fill-benchmark-threshold"));

@@ -45,7 +45,8 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
         "Larger output" => &[
             &["larger"],
             &["not smaller", "cannot be made smaller"],
-            &["failure", "failed"],
+            &["friendly", "could not be made smaller"],
+            &["kept original", "original kept"],
             &[
                 "original remained",
                 "original remains",

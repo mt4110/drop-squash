@@ -59,12 +59,20 @@ pub fn select_explicit_window_target(
         .iter()
         .find(|candidate| candidate.window_id == window_id)
         .ok_or_else(|| selection_error("requested window candidate was not found"))?;
+    if !is_explicit_window_candidate(window) {
+        return Err(selection_error(
+            "requested window is no longer eligible for capture",
+        ));
+    }
     Ok(window_target(window))
 }
 
 fn is_strict_reveal_window_candidate(window: &&SckWindowCandidate) -> bool {
+    window.active && is_explicit_window_candidate(window)
+}
+
+fn is_explicit_window_candidate(window: &SckWindowCandidate) -> bool {
     window.on_screen
-        && window.active
         && window.has_owner
         && window.layer == 0
         && window.frame.width > 0

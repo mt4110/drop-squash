@@ -99,6 +99,14 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/manual-qa.md",
         "Manual QA does not replace the required release notes URL fields",
     ),
+    (
+        "docs/manual-qa.md",
+        "scripts/manual-qa-distribution-handoff.sh",
+    ),
+    (
+        "docs/manual-qa.md",
+        "productization-status --track \"Paid beta\"",
+    ),
     ("docs/manual-qa.md", "clean git worktree"),
     ("docs/manual-qa.md", "CSV path outside repo"),
     ("docs/manual-qa.md", "Application Support/DropSquash"),

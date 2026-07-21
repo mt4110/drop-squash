@@ -31,7 +31,7 @@ pub(crate) fn read(path: &Path, label: &str) -> Result<Vec<u8>, String> {
 
 fn read_bytes(path: &Path) -> Option<Result<Vec<u8>, std::io::Error>> {
     for attempt in 0..=READ_RETRIES {
-        if path.is_file() {
+        if path.exists() {
             return Some(std::fs::read(path));
         }
         if attempt < READ_RETRIES {

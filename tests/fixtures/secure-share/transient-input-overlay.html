@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Secure Share Transient Input Fixture</title>
+    <style>
+      :root { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; color: #1d1d1f; background: #f5f5f7; }
+      body { margin: 0; }
+      main { width: min(720px, calc(100vw - 48px)); margin: 48px auto; padding: 28px; border: 1px solid #d2d2d7; border-radius: 12px; background: #fff; }
+      label, strong { display: block; margin: 18px 0 8px; }
+      input { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #86868b; border-radius: 8px; font: inherit; }
+      button { margin-top: 20px; padding: 10px 16px; border: 0; border-radius: 8px; background: #0071e3; color: #fff; font: inherit; }
+      .overlay { position: fixed; z-index: 10; display: none; width: 340px; padding: 14px; border: 1px solid #d2d2d7; border-radius: 10px; background: #fff; box-shadow: 0 16px 48px rgb(0 0 0 / 18%); }
+      .overlay.visible { display: block; }
+      #candidate { left: 50%; top: 44%; transform: translateX(-50%); }
+      #autofill { right: 28px; top: 88px; }
+      #notice { left: 28px; bottom: 28px; background: #fff7d6; }
+      #spelling { left: 50%; top: 56%; transform: translateX(-50%); }
+      #confirm { left: 50%; top: 26%; transform: translateX(-50%); background: #fff7d6; }
+      small { color: #6e6e73; }
+    </style>
+  </head>
+  <body data-scenario-id="transient-input-overlay-001">
+    <main>
+      <h1>入力中の一時表示 / Transient input states</h1>
+      <p>録画を開始してから、下の再現ボタンを1回押してください。</p>
+      <label for="customer">顧客名 / Customer name</label>
+      <input id="customer" value="山田 花子" />
+      <label for="email">Email</label>
+      <input id="email" value="hanako@example.test" />
+      <button id="trigger" type="button">一時表示を再現 / Trigger transient states</button>
+      <small>合成データのみ。実際のIMEやブラウザの実装差は別途検証対象です。</small>
+    </main>
+    <div class="overlay" data-sensitive-id="ime_candidate" id="candidate">変換候補: 山田 花子 / Yamada Hanako</div>
+    <div class="overlay" data-sensitive-id="browser_autofill" id="autofill">Autofill: hanako@example.test</div>
+    <div class="overlay" data-sensitive-id="paste_notice" id="notice">確認コード 771244 を貼り付けました</div>
+    <div class="overlay" data-sensitive-id="spelling_popover" id="spelling">候補: 顧客番号 390-281</div>
+    <div class="overlay" data-sensitive-id="confirmation_dialog" id="confirm">削除を確認: project-azuma@example.test</div>
+    <script>
+      const trigger = document.querySelector("#trigger");
+      const overlays = ["#candidate", "#autofill", "#notice", "#spelling", "#confirm"].map(
+        (selector) => document.querySelector(selector),
+      );
+      trigger.addEventListener("click", () => {
+        overlays.forEach((overlay, index) => {
+          window.setTimeout(() => overlay.classList.add("visible"), index * 160);
+          window.setTimeout(() => overlay.classList.remove("visible"), 540 + index * 160);
+        });
+      });
+    </script>
+  </body>
+</html>

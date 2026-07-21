@@ -20,7 +20,9 @@ fn merges_filled_rows_and_preserves_text() {
     let merged = merge(target, source).unwrap();
 
     assert!(merged.contains("| App build | DropSquash 0.1.0 git abc1234 |"));
-    assert!(merged.contains("| `cargo run -p xtask -- release-check` | Passes | Passes | release-check passed |"));
+    assert!(merged.contains(
+        "| `cargo run -p xtask -- release-check` | Passes | Passes | release-check passed |"
+    ));
     assert!(merged.starts_with("# Manual QA"));
 }
 

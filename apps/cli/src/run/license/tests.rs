@@ -1,7 +1,9 @@
 use dropsquash_core::{LicenseState, LockedReason, TrialState};
 use dropsquash_license::{license_key_fingerprint, LicenseCache};
 
-use super::{diagnostics::format_cache_diagnostics, forget_at_path, forget_lines, format_state};
+use super::{
+    diagnostics::format_cache_diagnostics, forget_at_path, forget_lines, format_state, state,
+};
 
 #[test]
 fn formats_pro_state_without_trial_count() {
@@ -13,11 +15,11 @@ fn formats_trial_state_with_usage() {
     assert_eq!(
         format_state(LicenseState::Trial(TrialState {
             successful_conversions: 3,
-            limit: 10,
+            limit: 20,
         })),
         vec![
             "license state: Trial".to_string(),
-            "trial: 3/10 successful conversions used".to_string(),
+            "trial: 3/20 successful conversions used".to_string(),
         ]
     );
 }
@@ -28,13 +30,13 @@ fn formats_locked_state_with_usage() {
         format_state(LicenseState::Locked {
             reason: LockedReason::TrialComplete,
             trial: TrialState {
-                successful_conversions: 10,
-                limit: 10,
+                successful_conversions: 20,
+                limit: 20,
             },
         }),
         vec![
             "license state: Locked".to_string(),
-            "trial: 10/10 successful conversions used".to_string(),
+            "trial: 20/20 successful conversions used".to_string(),
         ]
     );
 }
@@ -73,6 +75,29 @@ fn forget_output_says_server_activation_is_unchanged() {
             "server-side license activation unchanged".to_string(),
         ]
     );
+}
+
+#[tokio::test]
+async fn state_reads_custom_cache_path() {
+    let directory = tempfile::tempdir().unwrap();
+    let history = directory.path().join("history.jsonl");
+    let path = directory.path().join("license.json");
+    std::fs::write(&history, "").unwrap();
+    LicenseCache {
+        valid: true,
+        instance_name: Some("DropSquash CLI".to_string()),
+        instance_id: Some("instance-123".to_string()),
+        license_key_fingerprint: Some(license_key_fingerprint("LS-SECRET-RAW-KEY")),
+        activation_id: None,
+        validated_at_unix: Some(1),
+        offline_grace_until_unix: Some(u64::MAX),
+    }
+    .save_to_path(&path)
+    .unwrap();
+
+    let state = state(&history, &path).await.unwrap();
+
+    assert_eq!(state, LicenseState::Pro);
 }
 
 #[test]

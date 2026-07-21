@@ -4,17 +4,42 @@ mod attachment_rect;
 mod attachment_value;
 mod attachments;
 #[cfg(target_os = "macos")]
+mod ax_capture;
+#[cfg(all(test, target_os = "macos"))]
+mod ax_capture_tests;
+#[cfg(target_os = "macos")]
 mod ax_observation;
 #[cfg(target_os = "macos")]
 mod ax_permission;
 #[cfg(target_os = "macos")]
 mod ax_probe;
+#[cfg(all(test, target_os = "macos"))]
+mod ax_probe_tests;
 #[cfg(target_os = "macos")]
 mod ax_rect;
+mod ax_tree;
+#[cfg(target_os = "macos")]
+mod core_graphics_window;
+#[cfg(target_os = "macos")]
+mod decoded_residual;
+#[cfg(target_os = "macos")]
+mod display_watch;
 mod exports;
+#[cfg(target_os = "macos")]
+mod frame_continuity;
 mod frame_info;
 #[cfg(target_os = "macos")]
 mod live_mask;
+#[cfg(target_os = "macos")]
+mod mach_clock;
+#[cfg(target_os = "macos")]
+mod native_bridge_accessibility;
+#[cfg(target_os = "macos")]
+mod native_bridge_metadata;
+#[cfg(target_os = "macos")]
+mod native_bridge_temporal;
+#[cfg(target_os = "macos")]
+mod native_bridge_vision;
 mod native_frame;
 #[cfg(target_os = "macos")]
 mod native_vision;
@@ -28,7 +53,18 @@ mod native_vision_result;
 mod observation_callback;
 #[cfg(target_os = "macos")]
 mod observation_probe;
+mod output_size;
 mod providers;
+#[cfg(target_os = "macos")]
+mod recording_callback;
+#[cfg(target_os = "macos")]
+mod recording_probe;
+#[cfg(target_os = "macos")]
+mod recording_session;
+#[cfg(target_os = "macos")]
+mod recording_session_callback;
+#[cfg(target_os = "macos")]
+mod recording_writer;
 #[cfg(target_os = "macos")]
 mod sample_attachments;
 #[cfg(target_os = "macos")]
@@ -38,9 +74,12 @@ mod sample_buffer_provider;
 #[cfg(target_os = "macos")]
 mod screen_permission;
 #[cfg(target_os = "macos")]
+mod selected_window;
+#[cfg(target_os = "macos")]
 mod shareable_content;
 #[cfg(target_os = "macos")]
 mod shareable_request;
+mod snapshot;
 #[cfg(target_os = "macos")]
 mod stream_config;
 #[cfg(target_os = "macos")]
@@ -57,72 +96,15 @@ mod stream_registration;
 mod target_policy;
 
 pub use exports::*;
-
-use dropsquash_core::{
-    AxObservation, CaptureFrameMetadata, FrameSize, MaskPlan, MaskPlanDraft, MaskPolicy, Result,
-    VerificationExpectations, VisionObservation,
-};
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct SecureShareObservationSnapshot {
-    pub frame_size: FrameSize,
-    pub frames: Vec<CaptureFrameMetadata>,
-    pub accessibility: Vec<AxObservation>,
-    pub vision: Vec<VisionObservation>,
-}
-
-impl SecureShareObservationSnapshot {
-    pub fn into_mask_plan(
-        self,
-        capture_id: String,
-        policy: MaskPolicy,
-        verification_expectations: VerificationExpectations,
-    ) -> MaskPlan {
-        MaskPlanDraft {
-            capture_id,
-            frame_size: self.frame_size,
-            frames: self.frames,
-            accessibility: self.accessibility,
-            vision: self.vision,
-            policy,
-            verification_expectations,
-        }
-        .into_mask_plan()
-    }
-}
-
-#[derive(Debug, Clone, Default)]
-pub struct SecureShareProbe;
-
-pub trait SecureShareSnapshotProvider {
-    fn capture_snapshot(&self) -> Result<SecureShareObservationSnapshot>;
-}
-
-impl SecureShareProbe {
-    pub fn capture_snapshot(&self) -> Result<SecureShareObservationSnapshot> {
-        self.capture_snapshot_with(&NativeSecureShareSnapshotProvider)
-    }
-
-    pub fn capture_snapshot_with(
-        &self,
-        provider: &impl SecureShareSnapshotProvider,
-    ) -> Result<SecureShareObservationSnapshot> {
-        provider.capture_snapshot()
-    }
-}
-
-#[derive(Debug, Clone, Default)]
-struct NativeSecureShareSnapshotProvider;
-
-impl SecureShareSnapshotProvider for NativeSecureShareSnapshotProvider {
-    fn capture_snapshot(&self) -> Result<SecureShareObservationSnapshot> {
-        capture_snapshot_from_providers(
-            &NativeFrameMetadataProvider,
-            &EmptyAccessibilityObservationProvider,
-            &EmptyVisionObservationProvider,
-        )
-    }
-}
+#[cfg(target_os = "macos")]
+pub use native_bridge_accessibility::accessibility_observations_from_native;
+#[cfg(target_os = "macos")]
+pub use native_bridge_metadata::capture_frame_metadata_from_native;
+#[cfg(target_os = "macos")]
+pub use native_bridge_temporal::temporal_observations_from_native;
+#[cfg(target_os = "macos")]
+pub use native_bridge_vision::vision_observations_from_native;
+pub use snapshot::{SecureShareObservationSnapshot, SecureShareProbe, SecureShareSnapshotProvider};
 
 #[cfg(test)]
 mod tests;

@@ -71,16 +71,16 @@ impl Profile {
 
     pub fn display_name(self) -> &'static str {
         match self {
-            Self::Auto => "Auto",
-            Self::Slack => "Slack",
-            Self::Teams => "Microsoft Teams",
-            Self::Discord => "Discord",
-            Self::Chatwork => "Chatwork",
+            Self::Auto => "自動 / Auto",
+            Self::Slack => "共有 / Slack",
+            Self::Teams => "会議 / Microsoft Teams",
+            Self::Discord => "会話 / Discord",
+            Self::Chatwork => "業務連絡 / Chatwork",
             Self::Line => "LINE",
             Self::WhatsApp => "WhatsApp",
-            Self::Docs => "Docs",
-            Self::Archive => "Archive",
-            Self::Privacy => "Privacy",
+            Self::Docs => "文書 / Docs",
+            Self::Archive => "保管 / Archive",
+            Self::Privacy => "秘匿 / Privacy",
         }
     }
 }

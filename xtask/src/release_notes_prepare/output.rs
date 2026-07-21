@@ -29,7 +29,7 @@ pub(super) fn lines(fields: Fields<'_>) -> Vec<String> {
     ));
     lines.extend([
         "## Productization Evidence".into(),
-        "- Public website URL: pending production deployment; replace with https://dropsquash.app/release-status".into(),
+        "- Public website URL: pending production deployment; replace with https://dropsquash.app/release-status after that page links release-status, privacy, pricing, terms, license, support, and download".into(),
         "- Pricing URL: pending final pricing; replace with https://dropsquash.app/pricing after draft price copy is removed".into(),
         "- Refund policy URL: pending final refund policy; replace with https://dropsquash.app/refund".into(),
         "- Live checkout URL: pending live checkout; replace with the tested https://store.lemonsqueezy.com/checkout/buy/<id> URL".into(),
@@ -77,6 +77,24 @@ mod tests {
             .collect::<Vec<_>>();
 
         assert!(untracked.is_empty(), "{untracked:?}");
+    }
+
+    #[test]
+    fn public_website_draft_keeps_public_web_proof_copy() {
+        let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+        let generated = lines(Fields {
+            version: "0.1.0",
+            artifact_path: "/tmp/DropSquash.dmg",
+            artifact_url:
+                "https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg",
+            sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            commit: "abc1234",
+        });
+        let expected =
+            "after that page links release-status, privacy, pricing, terms, license, support, and download";
+
+        assert!(template.contains(expected));
+        assert!(generated.iter().any(|line| line.contains(expected)));
     }
 
     fn field_label(line: &str) -> Option<&str> {

@@ -619,7 +619,10 @@ fn reports_packaged_macos_manual_qa_with_placeholder_state_path() {
 #[test]
 fn reports_packaged_macos_manual_qa_without_manual_check_result() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
-    let manual = packaged_manual_qa_with("`cargo run -p xtask -- manual-qa-check`", "not run yet");
+    let manual = packaged_manual_qa_with(
+        "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`",
+        "not run yet",
+    );
 
     let missing = missing_manual_verified_evidence(blockers, &manual);
 
@@ -872,7 +875,7 @@ fn accepts_packaged_macos_manual_qa_with_specific_evidence() {
     let blockers = "| Packaged macOS manual QA | Verified | Filled manual QA table | `docs/manual-qa.md` | `docs/manual-qa.md` |\n";
     let manual = packaged_manual_qa_with(
         "Choose recording conversion",
-        "saved smaller clip.squashed.mp4 and original remained in place",
+        "saved smaller clip.squashed.mp4 and original remained in place; relaunch returned focus to the existing mounted-DMG window without increasing the mounted app pid count, pid list stayed unchanged, AX window count stayed at 1, and the full license field plus Choose recording action stayed visible without clipping",
     );
 
     assert!(missing_manual_verified_evidence(blockers, &manual).is_empty());
@@ -1143,13 +1146,13 @@ fn packaged_result(label: &str) -> String {
         "Tester" => "Manual tester".into(),
         "Date" => "2026-07-11".into(),
         "Disk image launch notice" => {
-            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, Open opened the installed app, Eject & Quit requested mounted-volume eject and closed the disk image copy, and did not delete the downloaded .dmg".into()
+            "app launched from mounted disk image under /Volumes, showed warning notice, Move copied DropSquash.app to Applications without replacing an existing app, Finder revealed the copied app, post-copy notice stayed visible, Open opened the installed app, Eject & Quit requested mounted-volume eject and closed the disk image copy, relaunch focused the existing window instead of leaving multiple windows, the notice plus the license field stayed visible without clipping, and did not delete the downloaded .dmg".into()
         }
         "Choose recording conversion" => {
-            "saved smaller clip.squashed.mp4 and original remained in place".into()
+            "saved smaller clip.squashed.mp4 and original remained in place; the full license field and Choose recording action stayed visible without clipping".into()
         }
         "Drag-and-drop conversion" => {
-            "saved smaller drag.squashed.mp4 and original remained in place".into()
+            "saved smaller drag.squashed.mp4 and original remained in place; the full license field and Choose recording action stayed visible without clipping".into()
         }
         "Privacy receipt sidecar" => {
             "clip.privacy.json recorded uploaded_bytes = 0, metadata_policy = preserve, file names instead of absolute paths".into()
@@ -1176,10 +1179,12 @@ fn packaged_result(label: &str) -> String {
             "friendly error appeared; original remained and trial count unchanged after failure".into()
         }
         "Larger output" => {
-            "larger not smaller result failed; original remained and trial count unchanged".into()
+            "could not be made smaller friendly kept-original result appeared; larger not smaller output kept original; original remained and trial count unchanged".into()
         }
         "Reveal output" => "Finder opened with clip.squashed.mp4 selected".into(),
-        "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed".into(),
+        "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`" => {
+            "manual-qa-check local-proof passed".into()
+        }
         _ => "concrete evidence".into(),
     }
 }

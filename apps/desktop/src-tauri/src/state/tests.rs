@@ -39,13 +39,13 @@ fn owns_rust_queue_state_for_sequential_jobs() {
         Some(QueueEvent::Started(item)) if item.status == QueueJobStatus::Running
     ));
     let blocked = state
-        .block_queued_jobs("You used 10 successful conversions.".into())
+        .block_queued_jobs("You used 20 successful conversions.".into())
         .unwrap();
 
     assert!(matches!(
         blocked.as_slice(),
         [QueueEvent::Blocked { error, .. }]
-            if error.contains("10 successful conversions")
+            if error.contains("20 successful conversions")
     ));
 }
 
@@ -146,6 +146,27 @@ fn fails_or_cancels_active_queue_job_without_touching_pending() {
     ));
 }
 
+#[test]
+fn marks_kept_original_queue_job_without_touching_pending() {
+    let state = AppState::default();
+    state.enqueue_job(job("first.mov")).unwrap();
+    state.enqueue_job(job("second.mov")).unwrap();
+    state.start_next_job().unwrap();
+
+    let unchanged = state
+        .unchanged_active_queue_job("kept original".into())
+        .unwrap();
+
+    assert!(matches!(
+        unchanged,
+        Some(QueueEvent::Unchanged { error, .. }) if error == "kept original"
+    ));
+    assert!(matches!(
+        state.start_next_job().unwrap(),
+        Some(QueueEvent::Started(_))
+    ));
+}
+
 fn job(path: &str) -> EncodeJob {
     EncodeJob {
         input_path: path.into(),
@@ -153,6 +174,7 @@ fn job(path: &str) -> EncodeJob {
         profile: Profile::Auto,
         output_size: OutputSize::Auto,
         source_policy: SourcePolicy::Ask,
+        secure_share: None,
     }
 }
 

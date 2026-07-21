@@ -8,21 +8,35 @@
   </head>
   <body>
     <main class="shell page">
-      <p><a href="index.html">DropSquash</a></p>
+      <nav class="subnav">
+        <a class="brand" href="index.html">DropSquash</a>
+        <div class="links">
+          <a href="download.html">Download</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="terms.html">Terms</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="license.html">License</a>
+        </div>
+      </nav>
       <h1>Support</h1>
+      <p>DropSquash support is currently handled through <a href="https://github.com/mt4110/drop-squash/issues">GitHub Issues</a> while the paid beta is being prepared.</p>
       <h2>FAQ</h2>
       <h3>Does DropSquash upload my videos?</h3>
       <p>No. DropSquash does not upload media for compression. Video compression runs locally on your computer.</p>
       <h3>Does it delete originals?</h3>
       <p>No. Originals are kept by default. Cleanup only moves originals to Trash after a successful verified conversion.</p>
       <h3>Does a failed conversion count?</h3>
-      <p>No. Failed or cancelled conversions do not count toward the 10-conversion trial.</p>
-      <h3>Does it use ffmpeg?</h3>
-      <p>No. The product media path does not shell out to ffmpeg or ffprobe.</p>
+      <p>No. Failed, cancelled, or not-smaller conversions do not count toward the current 20-conversion beta trial.</p>
+      <h3>What is supported right now?</h3>
+      <p>The current public surface is macOS only: a single-file local post-processing path for MOV, MP4, and M4V screen recordings that become smaller MP4 outputs.</p>
+      <h3>Does it use command-line media tools?</h3>
+      <p>No. The product media path does not shell out to command-line media tools.</p>
       <h3>What is a privacy receipt?</h3>
       <p>When enabled, DropSquash writes a local JSON receipt next to the output file with <code>uploaded_bytes = 0</code>, <code>metadata_policy = preserve</code>, and file names instead of absolute paths.</p>
       <h3>Where is the refund policy?</h3>
       <p>The <a href="refund.html">refund policy draft</a> is published for review before checkout goes live.</p>
+      <h3>Where are the product-use terms?</h3>
+      <p>The draft <a href="terms.html">Terms of Service</a> are published separately from the license policy.</p>
       <h2>Conversion help</h2>
       <p>For a conversion issue, include the app version, macOS version, input file type, approximate original size, selected profile, selected output size, and the exact error text.</p>
       <p>Contact support through <a href="https://github.com/mt4110/drop-squash/issues">GitHub Issues</a> until the paid beta support address is published.</p>

@@ -5,6 +5,7 @@ use dropsquash_core::{AppError, Result};
 use super::response::LicenseApiResponse;
 
 const API_BASE: &str = "https://api.lemonsqueezy.com/v1/licenses";
+const API_BASE_ENV: &str = "DROP_SQUASH_LICENSE_API_BASE_URL";
 
 #[derive(Debug, Clone)]
 pub struct LicenseApiClient {
@@ -20,7 +21,7 @@ impl LicenseApiClient {
             .expect("license HTTP client should be constructible");
         Self {
             client,
-            base_url: API_BASE.to_string(),
+            base_url: resolve_base_url(std::env::var(API_BASE_ENV).ok()),
         }
     }
 
@@ -50,5 +51,33 @@ impl LicenseApiClient {
         response.json::<LicenseApiResponse>().await.map_err(|_| {
             AppError::License("License server returned an unreadable response.".to_string())
         })
+    }
+}
+
+fn resolve_base_url(value: Option<String>) -> String {
+    value
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| API_BASE.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::resolve_base_url;
+
+    #[test]
+    fn uses_override_when_present() {
+        assert_eq!(
+            resolve_base_url(Some(" http://127.0.0.1:9/licenses ".to_string())),
+            "http://127.0.0.1:9/licenses"
+        );
+    }
+
+    #[test]
+    fn falls_back_for_blank_override() {
+        assert_eq!(
+            resolve_base_url(Some("   ".to_string())),
+            "https://api.lemonsqueezy.com/v1/licenses"
+        );
     }
 }

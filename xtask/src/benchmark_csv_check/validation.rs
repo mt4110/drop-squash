@@ -57,6 +57,7 @@ fn validate_row(line: usize, row: &[String]) -> Result<(), String> {
     }
     require_text(line, row, 0, "backend")?;
     require_text(line, row, 1, "input")?;
+    crate::benchmark_csv_check::sample_policy::validate(line, &row[1])?;
     require_text(line, row, 2, "output")?;
     let original = require_u64(line, row, 3, "original_bytes")?;
     let output = require_u64(line, row, 4, "output_bytes")?;

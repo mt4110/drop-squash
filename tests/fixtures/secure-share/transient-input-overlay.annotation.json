@@ -1,0 +1,27 @@
+{
+  "scenario_id": "transient-input-overlay-001",
+  "fixture": "transient-input-overlay.html",
+  "languages": ["ja", "en"],
+  "capture_scope": "single_window_browser",
+  "policy": "strict_reveal",
+  "coordinate_status": "selector_seed_with_timing",
+  "sequence": [
+    { "action": "start_recording" },
+    { "action": "click", "selector": "#trigger" },
+    { "action": "wait_ms", "value": 1600 },
+    { "action": "stop_recording" }
+  ],
+  "sensitive_selectors": [
+    { "id": "ime_candidate", "selector": "[data-sensitive-id='ime_candidate']", "reason": "synthetic Japanese IME candidate" },
+    { "id": "browser_autofill", "selector": "[data-sensitive-id='browser_autofill']", "reason": "synthetic browser autofill" },
+    { "id": "paste_notice", "selector": "[data-sensitive-id='paste_notice']", "reason": "short-lived paste confirmation" },
+    { "id": "spelling_popover", "selector": "[data-sensitive-id='spelling_popover']", "reason": "synthetic spell-check suggestion" },
+    { "id": "confirmation_dialog", "selector": "[data-sensitive-id='confirmation_dialog']", "reason": "short-lived confirmation dialog" }
+  ],
+  "acceptance": {
+    "must_capture_transient_frames": true,
+    "must_not_store_recognized_text": true,
+    "strict_shield_must_destroy_every_captured_frame": true,
+    "selective_masking_status": "not_claimed"
+  }
+}

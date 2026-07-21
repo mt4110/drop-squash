@@ -28,6 +28,10 @@ export function failActiveQueueJob(error: string) {
   return invoke<RustQueueEvent | null>("fail_active_queue_job", { error });
 }
 
+export function unchangedActiveQueueJob(error: string) {
+  return invoke<RustQueueEvent | null>("unchanged_active_queue_job", { error });
+}
+
 export function cancelActiveQueueJob() {
   return invoke<RustQueueEvent | null>("cancel_active_queue_job");
 }

@@ -1,99 +1,96 @@
-use super::{model::Report, preflight};
+mod lines;
+mod stats;
+mod tracks;
 
-pub(super) fn text(report: &Report, track: Option<&str>) -> Result<String, String> {
-    let tracks = filtered_tracks(report, track)?;
-    let mut lines = vec![
+use super::{model::Report, scope::Scope};
+
+pub(super) fn text(report: &Report, track: Option<&str>, scope: &Scope) -> Result<String, String> {
+    let scoped = track.is_none();
+    let tracks = tracks::filtered(report, track, scope, scoped)?;
+    let mut output = vec![
         "Productization status".to_string(),
-        format!("release blockers: {}", counts(report)),
+        format!("release blockers: {}", stats::all(report)),
     ];
-    lines.extend(tracks.iter().map(summary_line));
-    lines.extend(tracks.iter().filter_map(remaining_line));
-    lines.extend(tracks.iter().filter_map(record_target_line));
-    lines.extend(tracks.iter().filter_map(|entry| action_line(report, entry)));
-    lines.extend(tracks.iter().filter_map(command_line));
-    lines.extend(next_track(report, &tracks, track.is_some()));
-    Ok(lines.join("\n"))
-}
-
-fn counts(report: &Report) -> String {
-    format!("{} total, {} verified, {} blocked", report.total, report.verified, report.blocked)
-}
-
-fn filtered_tracks<'a>(
-    report: &'a Report,
-    track: Option<&str>,
-) -> Result<Vec<&'a super::model::TrackStatus>, String> {
-    let Some(track) = track else {
-        return Ok(report.tracks.iter().collect());
-    };
-    let tracks = report
-        .tracks
-        .iter()
-        .filter(|entry| entry.order.to_string() == track || entry.name.eq_ignore_ascii_case(track))
-        .collect::<Vec<_>>();
-    (!tracks.is_empty())
-        .then_some(tracks)
-        .ok_or_else(|| format!("unknown track: {track}"))
-}
-
-fn summary_line(track: &&super::model::TrackStatus) -> String {
-    format!(
-        "{}. {}: {}/{} remaining",
-        track.order,
-        track.name,
-        track.remaining.len(),
-        track.blockers.len()
-    )
-}
-
-fn remaining_line(track: &&super::model::TrackStatus) -> Option<String> {
-    (!track.remaining.is_empty()).then(|| format!("   remaining blockers: {}", track.remaining.join(", ")))
-}
-
-fn record_target_line(track: &&super::model::TrackStatus) -> Option<String> {
-    (!track.remaining.is_empty()).then(|| format!("   record target: {}", track.record_target))
-}
-
-fn action_line(report: &Report, track: &&super::model::TrackStatus) -> Option<String> {
-    let actions = track
-        .remaining
-        .iter()
-        .filter_map(|blocker| report.actions.iter().find(|action| action.blocker == *blocker))
-        .map(|action| format!("{} -> {}", action.blocker, action.owner))
-        .collect::<Vec<_>>();
-    (!actions.is_empty()).then(|| format!("   next actions: {}", actions.join(" | ")))
-}
-
-fn command_line(track: &&super::model::TrackStatus) -> Option<String> {
-    (!track.remaining.is_empty())
-        .then(|| preflight::summary(&track.name))
-        .flatten()
-        .map(|line| format!("   {line}"))
-}
-
-fn next_track(
-    report: &Report,
-    tracks: &[&super::model::TrackStatus],
-    filtered: bool,
-) -> Vec<String> {
-    let track = if filtered {
-        tracks.first().copied()
-    } else {
-        report.tracks.iter().find(|track| !track.remaining.is_empty())
-    };
-    let Some(track) = track else {
-        return vec!["next track: complete".to_string()];
-    };
-    let mut lines = vec![format!("next track: {}. {}", track.order, track.name)];
-    lines.extend(track.remaining.iter().map(|blocker| next_action_line(report, blocker)));
-    lines
-}
-
-fn next_action_line(report: &Report, blocker: &str) -> String {
-    report
-        .actions
-        .iter()
-        .find(|action| action.blocker == blocker)
-        .map(|action| format!("- {blocker}: {} ({})", action.next_action, action.owner))
-        .unwrap_or_else(|| format!("- {blocker}"))
+    if scoped {
+        output.push(format!("paid beta now: {}", stats::scoped(report, scope)));
+        output.push(format!(
+            "deferred from paid-beta technical proof: {}",
+            scope.deferred().join(", ")
+        ));
+        output.push(
+            "these deferred items still remain required before production payment onboarding or a public paid beta"
+                .to_string(),
+        );
+        output.push(
+            "when paid-beta technical proof is complete, continue with: docs/public-beta-operator-checklist.md"
+                .to_string(),
+        );
+        output.push(
+            "deferred track detail: cargo run -p xtask -- productization-status --track \"Public web proof\""
+                .to_string(),
+        );
+        if tracks.iter().any(|entry| !entry.remaining.is_empty()) {
+            output.push("paid beta proof map: docs/paid-beta-readiness.md".to_string());
+            output.push(
+                "paid beta operator checklist: docs/paid-beta-operator-checklist.md".to_string(),
+            );
+            output.push(
+                "paid beta manual QA helper: cargo run -p xtask -- manual-qa-paid-beta-rerun"
+                    .to_string(),
+            );
+            output.push(
+                "after paid beta manual QA helper: use `paid beta license markdown rows` and `paid beta distribution markdown rows` before section gates when only the remaining copy-ready rows are needed".to_string(),
+            );
+            output.push(
+                "paid beta deterministic helper: if you have a fresh prepared manual-QA draft and checked benchmark CSV, run cargo run -p xtask -- manual-qa-ready-all <manual-qa.md> <results.csv> before section reruns".to_string(),
+            );
+            if tracks
+                .iter()
+                .any(|entry| entry.name == "Signing and distribution proof")
+            {
+                output.push(
+                    "paid beta direct signing track: cargo run -p xtask -- productization-status --track \"Signing and distribution proof\""
+                        .to_string(),
+                );
+            }
+            if tracks
+                .iter()
+                .any(|entry| entry.name == "License sandbox proof")
+            {
+                output.push(
+                    "paid beta direct license track: cargo run -p xtask -- productization-status --track \"License sandbox proof\""
+                        .to_string(),
+                );
+            }
+        }
+    }
+    output.extend(
+        tracks
+            .iter()
+            .map(|entry| lines::summary(entry, scope, scoped)),
+    );
+    output.extend(
+        tracks
+            .iter()
+            .filter_map(|entry| lines::remaining(entry, scope, scoped)),
+    );
+    output.extend(tracks.iter().filter_map(lines::record_target));
+    output.extend(
+        tracks
+            .iter()
+            .filter_map(|entry| lines::actions(report, entry, scope, scoped)),
+    );
+    output.extend(
+        tracks
+            .iter()
+            .filter_map(|entry| lines::command(entry, scope, scoped)),
+    );
+    output.extend(lines::next_track(
+        report,
+        &tracks,
+        track.is_some(),
+        scope,
+        scoped,
+    ));
+    Ok(output.join("\n"))
 }

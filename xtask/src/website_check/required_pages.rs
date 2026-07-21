@@ -5,11 +5,11 @@ const REQUIRED: [&str; 9] = [
     "release-status/index.html",
     "download.html",
     "pricing.html",
+    "terms.html",
     "privacy.html",
     "support.html",
     "license.html",
     "refund.html",
-    "changelog.html",
 ];
 
 pub(super) fn check(root: &Path, errors: &mut Vec<String>) {

@@ -1,5 +1,7 @@
 use super::Entry;
 
+mod operator_docs;
+
 pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "release-notes-prepare"),
     (
@@ -27,9 +29,18 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/release.md", "`Pricing finalized`"),
     ("docs/release.md", "draft pricing"),
     ("docs/release.md", "Pricing URL"),
+    ("docs/release.md", "public-web-ready"),
     (
         "docs/release.md",
         "Artifact URL, Public website URL, Pricing URL, Refund policy URL",
+    ),
+    (
+        "docs/release-notes-template.md",
+        "after that page links release-status, privacy, pricing, terms, license, support, and download",
+    ),
+    (
+        "xtask/src/release_notes_prepare/output.rs",
+        "after that page links release-status, privacy, pricing, terms, license, support, and download",
     ),
     (
         "docs/release.md",
@@ -60,6 +71,14 @@ pub(super) const ENTRIES: &[Entry] = &[
     (
         "docs/release.md",
         "The Signing and distribution proof must show",
+    ),
+    (
+        "docs/release.md",
+        "scripts/manual-qa-distribution-handoff.sh",
+    ),
+    (
+        "docs/release.md",
+        "productization-status --track \"Paid beta\"",
     ),
     (
         "docs/release.md",
@@ -94,3 +113,5 @@ pub(super) const ENTRIES: &[Entry] = &[
         "nix develop --command pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
     ),
 ];
+
+pub(super) const OPERATOR: &[Entry] = operator_docs::ENTRIES;

@@ -1,5 +1,21 @@
+mod guidance;
+
+use super::fields::table_result;
+const PANEL_DIR: &str = "/tmp/dropsquash-qa-open-panel";
+
+#[cfg(test)]
+mod tests;
+
 pub(super) fn for_manual(text: &str) -> Vec<String> {
-    samples(text).map(|set| set.summary_lines()).unwrap_or_default()
+    samples(text)
+        .map(|set| set.summary_lines())
+        .unwrap_or_default()
+}
+
+pub(super) fn for_benchmark(text: &str) -> Vec<String> {
+    samples(text)
+        .map(|set| set.benchmark_lines())
+        .unwrap_or_default()
 }
 
 pub(super) fn guidance_for(label: &str, text: &str) -> Option<String> {
@@ -16,19 +32,27 @@ struct SampleSet {
     small: String,
     medium: String,
     large: String,
+    small_alias: String,
+    medium_alias: String,
+    large_alias: String,
+    not_smaller: String,
 }
 
 impl SampleSet {
     fn from_csv(csv: &std::path::Path) -> Result<Self, String> {
         let rows = crate::benchmark_csv_check::read_rows(csv)?;
-        let samples = rows.iter().skip(1).filter_map(|row| row.get(1)).collect::<Vec<_>>();
+        let samples = rows.iter().skip(1).take(3).collect::<Vec<_>>();
         let [small, medium, large] = samples.as_slice() else {
             return Err("benchmark CSV must contain exactly three sample rows".to_string());
         };
         Ok(Self {
-            small: (*small).clone(),
-            medium: (*medium).clone(),
-            large: (*large).clone(),
+            small: row_input(small, "small")?,
+            medium: row_input(medium, "medium")?,
+            large: row_input(large, "large")?,
+            small_alias: alias_name("small", small)?,
+            medium_alias: alias_name("medium", medium)?,
+            large_alias: alias_name("large", large)?,
+            not_smaller: row_output(small, "small")?,
         })
     }
 
@@ -41,85 +65,45 @@ impl SampleSet {
                 self.small, self.medium, self.large
             ),
             format!("packaged-app large sample: {}", self.large),
+            format!("packaged-app not-smaller sample: {}", self.not_smaller),
+            format!(
+                "packaged-app sample aliases: {0}/{1}, {0}/{2}, {0}/{3}, {0}/qa-not-smaller.mp4",
+                PANEL_DIR, self.small_alias, self.medium_alias, self.large_alias
+            ),
+        ]
+    }
+
+    fn benchmark_lines(&self) -> Vec<String> {
+        vec![
+            format!("benchmark release-set inputs: short={}, medium={}, large={}", self.small, self.medium, self.large),
+            "benchmark release-set rule: use original local recordings for short/medium/large, not prior .squashed outputs".to_string(),
+            "benchmark release-set rule: keep profile and size aligned with the shipping setting under test".to_string(),
+            format!("benchmark release-set fallback: treat {}/qa-not-smaller.mp4 as a candidate only; if it still saves bytes under the current shipping profile and size, relink a different kept-original candidate before recording Larger output or rerunning the benchmark set", PANEL_DIR),
         ]
     }
 
     fn guidance(&self, label: &str) -> Option<String> {
-        match label {
-            "Choose recording conversion" | "Drag-and-drop conversion"
-            | "Privacy receipt sidecar" | "Reveal privacy receipt"
-            | "Ask source policy" | "Trash source policy" | "Reveal output" => {
-                Some(format!("sample: small ({})", self.small))
-            }
-            "Duplicate output naming" => Some(format!("sample: duplicate ({})", self.small)),
-            "Cancellation" | "Larger output" => {
-                Some(format!("sample: large ({})", self.large))
-            }
-            "Multi-file queue" | "Queued job cancellation" | "Batch summary" => Some(format!(
-                "sample: queue set ({}, {}, {})",
-                self.small, self.medium, self.large
-            )),
-            _ => None,
-        }
+        guidance::for_label(self, label)
     }
 }
 
-fn table_result<'a>(text: &'a str, label: &str) -> Option<&'a str> {
-    text.lines().find_map(|line| {
-        let cells = line.trim_matches('|').split('|').map(str::trim).collect::<Vec<_>>();
-        match cells.as_slice() {
-            [row, _, result] | [row, _, _, result] if *row == label => Some(*result),
-            _ => None,
-        }
-    })
+fn row_input(row: &[String], label: &str) -> Result<String, String> {
+    row.get(1)
+        .cloned()
+        .ok_or_else(|| format!("benchmark CSV row is missing input column: {label}"))
 }
 
-#[cfg(test)]
-mod tests {
-    use super::{for_manual, guidance_for};
+fn row_output(row: &[String], label: &str) -> Result<String, String> {
+    row.get(2)
+        .cloned()
+        .ok_or_else(|| format!("benchmark CSV row is missing output column: {label}"))
+}
 
-    fn manual_text(csv: &std::path::Path) -> String {
-        format!(
-            "| Benchmark sample set | Three samples | CSV saved outside repo at {} |\n",
-            csv.display()
-        )
-    }
-
-    fn write_csv() -> (tempfile::TempDir, std::path::PathBuf) {
-        let directory = tempfile::tempdir().unwrap();
-        let csv = directory.path().join("results.csv");
-        std::fs::write(
-            &csv,
-            "backend,input\napple-native,/tmp/short.mov\napple-native,/tmp/medium.mov\napple-native,/tmp/large.mov\n",
-        )
-        .unwrap();
-        (directory, csv)
-    }
-
-    #[test]
-    fn reports_hints_from_benchmark_sample_set_csv() {
-        let (_directory, csv) = write_csv();
-        let hints = for_manual(&manual_text(&csv));
-        assert_eq!(hints[0], "packaged-app small sample: /tmp/short.mov");
-        assert_eq!(hints[1], "packaged-app duplicate sample: /tmp/short.mov");
-        assert_eq!(
-            hints[2],
-            "packaged-app queue sample set: /tmp/short.mov, /tmp/medium.mov, /tmp/large.mov"
-        );
-        assert_eq!(hints[3], "packaged-app large sample: /tmp/large.mov");
-    }
-
-    #[test]
-    fn reports_row_specific_guidance() {
-        let (_directory, csv) = write_csv();
-        let text = manual_text(&csv);
-        assert_eq!(
-            guidance_for("Batch summary", &text).as_deref(),
-            Some("sample: queue set (/tmp/short.mov, /tmp/medium.mov, /tmp/large.mov)")
-        );
-        assert_eq!(
-            guidance_for("Trash source policy", &text).as_deref(),
-            Some("sample: small (/tmp/short.mov)")
-        );
-    }
+fn alias_name(label: &str, row: &[String]) -> Result<String, String> {
+    let input = row_input(row, label)?;
+    let extension = std::path::Path::new(&input)
+        .extension()
+        .and_then(|value| value.to_str())
+        .ok_or_else(|| format!("benchmark CSV row is missing file extension: {label}"))?;
+    Ok(format!("qa-{label}.{extension}"))
 }

@@ -27,6 +27,10 @@ mod secure_share_flow;
 #[cfg(target_os = "macos")]
 mod secure_share_settings;
 #[cfg(target_os = "macos")]
+mod secure_share_track_policy;
+#[cfg(target_os = "macos")]
+mod secure_share_verify;
+#[cfg(target_os = "macos")]
 mod session;
 #[cfg(not(target_os = "macos"))]
 mod unavailable;
@@ -37,6 +41,10 @@ pub(crate) use auto_detect::detect_auto_mask_rects;
 pub(crate) use mask::apply_destructive_mask_rgba_for_proof;
 #[cfg(target_os = "macos")]
 use objc2::rc::autoreleasepool;
+#[cfg(target_os = "macos")]
+pub(crate) use secure_share_verify::verify_experimental_masked_output;
+#[cfg(target_os = "macos")]
+pub(crate) use secure_share_verify::verify_masked_output;
 
 #[derive(Debug, Clone, Default)]
 pub struct AppleNativeEncoder;

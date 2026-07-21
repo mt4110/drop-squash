@@ -11,6 +11,7 @@ fn job(path: &str) -> EncodeJob {
         profile: Profile::Auto,
         output_size: OutputSize::Auto,
         source_policy: SourcePolicy::Ask,
+        secure_share: None,
     }
 }
 
@@ -95,4 +96,22 @@ fn clears_completed_items_without_touching_active_job() {
     assert_eq!(cleared.len(), 1);
     assert_eq!(cleared[0].id, queued);
     assert!(worker.active().is_some());
+}
+
+#[test]
+fn emits_unchanged_event_for_kept_original_result() {
+    let mut worker = QueueWorker::default();
+    worker.enqueue(job("first.mov"));
+    let id = match worker.start_next() {
+        Some(QueueEvent::Started(item)) => item.id,
+        other => panic!("unexpected event: {other:?}"),
+    };
+
+    assert_eq!(
+        worker.unchanged_active("kept original".to_string()),
+        Some(QueueEvent::Unchanged {
+            id,
+            error: "kept original".to_string(),
+        })
+    );
 }

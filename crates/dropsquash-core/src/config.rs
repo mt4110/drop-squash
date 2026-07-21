@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{default_output_dir, OutputSize, Profile, SourcePolicy};
 
-pub const TRIAL_CONVERSION_LIMIT: u32 = 10;
+pub const TRIAL_CONVERSION_LIMIT: u32 = 20;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]

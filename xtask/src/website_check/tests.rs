@@ -14,7 +14,10 @@ fn accepts_local_links() {
     write(
         directory.path(),
         "index.html",
-        r#"Release status <a href="pricing.html">Pricing</a>"#,
+        &format!(
+            r#"{} <a href="pricing.html">Pricing</a>"#,
+            required_page_text("index.html")
+        ),
     );
     write(
         directory.path(),
@@ -32,12 +35,18 @@ fn accepts_local_links_with_fragments() {
     write(
         directory.path(),
         "index.html",
-        r##"Release status <a href="pricing.html#plans">Pricing</a>"##,
+        &format!(
+            r##"{} <a href="pricing.html#plans">Pricing</a>"##,
+            required_page_text("index.html")
+        ),
     );
     write(
         directory.path(),
         "pricing.html",
-        r#"<section id="plans">Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy</section>"#,
+        &format!(
+            r#"<section id="plans">{}</section>"#,
+            required_page_text("pricing.html")
+        ),
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -50,7 +59,10 @@ fn accepts_same_page_fragments() {
     write(
         directory.path(),
         "index.html",
-        r##"Release status <a href="#top">Top</a><main id="top"></main>"##,
+        &format!(
+            r##"{} <a href="#top">Top</a><main id="top"></main>"##,
+            required_page_text("index.html")
+        ),
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -105,12 +117,18 @@ fn accepts_nested_release_status_page() {
     write(
         directory.path(),
         "index.html",
-        r#"Release status <a href="release-status/">Release status</a>"#,
+        &format!(
+            r#"{} <a href="release-status/">Release status</a>"#,
+            required_page_text("index.html")
+        ),
     );
     write(
         directory.path(),
         "release-status/index.html",
-        r#"Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../license.html ../support.html ../refund.html <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
+        &format!(
+            r#"{} <link rel="stylesheet" href="../styles.css" /><a href="../index.html">Home</a>"#,
+            required_page_text("release-status/index.html")
+        ),
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -132,6 +150,21 @@ fn rejects_release_status_without_license_link() {
 }
 
 #[test]
+fn rejects_release_status_without_terms_link() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(
+        directory.path(),
+        "release-status/index.html",
+        "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../license.html ../support.html ../refund.html",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| error.contains("../terms.html")));
+}
+
+#[test]
 fn accepts_local_resources_with_cache_busters() {
     let directory = tempfile::tempdir().unwrap();
     write_required_pages(directory.path());
@@ -139,7 +172,10 @@ fn accepts_local_resources_with_cache_busters() {
     write(
         directory.path(),
         "index.html",
-        r#"Release status <script src="styles.css?v=1"></script>"#,
+        &format!(
+            r#"{} <script src="styles.css?v=1"></script>"#,
+            required_page_text("index.html")
+        ),
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -152,7 +188,10 @@ fn rejects_missing_local_links() {
     write(
         directory.path(),
         "index.html",
-        r#"Release status <a href="missing.html">Missing</a>"#,
+        &format!(
+            r#"{} <a href="missing.html">Missing</a>"#,
+            required_page_text("index.html")
+        ),
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -201,7 +240,10 @@ fn accepts_external_links_and_valid_anchors() {
     write(
         directory.path(),
         "index.html",
-        r##"Release status <a href="#top">Top</a><main id="top"></main><a href="https://github.com/mt4110/drop-squash">External</a>"##,
+        &format!(
+            r##"{} <a href="#top">Top</a><main id="top"></main><a href="https://github.com/mt4110/drop-squash">External</a>"##,
+            required_page_text("index.html")
+        ),
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -214,7 +256,10 @@ fn accepts_github_issues_link() {
     write(
         directory.path(),
         "index.html",
-        r#"Release status <a href="https://github.com/mt4110/drop-squash/issues">Issues</a>"#,
+        &format!(
+            r#"{} <a href="https://github.com/mt4110/drop-squash/issues">Issues</a>"#,
+            required_page_text("index.html")
+        ),
     );
 
     assert!(check_root(directory.path()).unwrap().is_empty());
@@ -587,7 +632,7 @@ fn rejects_missing_pricing_refund_link() {
     write(
         directory.path(),
         "pricing.html",
-        "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy",
+        "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Your recordings stay local Failed, cancelled, or larger-result conversions do not count License policy",
     );
 
     let errors = check_root(directory.path()).unwrap();
@@ -604,7 +649,7 @@ fn rejects_pre_release_cta_copy() {
         "download.html",
         "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Download now",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Buy now");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Your recordings stay local Failed, cancelled, or larger-result conversions do not count License policy Buy now");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -621,7 +666,7 @@ fn rejects_pre_release_beta_and_checkout_cta_copy() {
         "download.html",
         "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Download the beta",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy Start checkout");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Failed, cancelled, or larger-result conversions do not count License policy Start checkout");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -640,7 +685,7 @@ fn rejects_pre_release_product_and_platform_cta_copy() {
         "download.html",
         "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Download DropSquash. Download for macOS.",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Buy DropSquash");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Failed, cancelled, or larger-result conversions do not count License policy refund.html Buy DropSquash");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -662,7 +707,7 @@ fn rejects_pre_release_get_and_trial_cta_copy() {
         "download.html",
         "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/ Get DropSquash",
     );
-    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free Failed or cancelled conversions do not count License policy refund.html Start free trial");
+    write(directory.path(), "pricing.html", "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Failed, cancelled, or larger-result conversions do not count License policy refund.html Start free trial");
 
     let errors = check_root(directory.path()).unwrap();
 
@@ -1013,11 +1058,11 @@ fn write_required_pages(root: &std::path::Path) {
         "release-status/index.html",
         "download.html",
         "pricing.html",
+        "terms.html",
         "privacy.html",
         "support.html",
         "license.html",
         "refund.html",
-        "changelog.html",
     ] {
         write(root, page, required_page_text(page));
     }
@@ -1025,30 +1070,68 @@ fn write_required_pages(root: &std::path::Path) {
 
 fn required_page_text(page: &str) -> &'static str {
     match page {
-        "index.html" => "Release status",
+        "index.html" => {
+            "Release status DropSquash is the automatic local post-processor for Mac screen recordings. include built-in screen recording or automatic privacy masking in the current beta"
+        }
         "release-status/index.html" => {
-            "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../license.html ../support.html ../refund.html"
+            "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation automatic local post-processor for Mac screen recordings future candidates, not current release promises ../download.html ../pricing.html ../privacy.html ../terms.html ../license.html ../support.html ../refund.html"
         }
         "download.html" => {
             "macOS beta Developer ID signing DropSquash.dmg notarization checksum release-status/"
         }
         "pricing.html" => {
-            "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 10 successful conversions are free refund.html Failed or cancelled conversions do not count License policy"
+            "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Your recordings stay local refund.html not as a recorder or timeline editor does not include built-in recording or automatic privacy masking in Pro Failed, cancelled, or larger-result conversions do not count License policy"
+        }
+        "terms.html" => {
+            "draft terms local-first macOS app License policy Support Refund Policy paid beta"
         }
         "privacy.html" => {
             "does not upload media Telemetry is off by default privacy receipts uploaded_bytes = 0 metadata_policy = preserve file names instead of absolute paths License activation contacts Lemon Squeezy updater is disabled"
         }
         "support.html" => {
-            "FAQ What is a privacy receipt? metadata_policy = preserve Does DropSquash upload my videos? does not upload media Does it use ffmpeg? does not shell out ffprobe Do not send screen recordings app version GitHub Issues paid beta support address"
+            "FAQ What is a privacy receipt? metadata_policy = preserve Does DropSquash upload my videos? does not upload media Does it use command-line media tools? does not shell out command-line media tools Do not send screen recordings app version GitHub Issues paid beta support address"
         }
         "license.html" => {
-            "license-key fingerprint does not persist the raw license key local license cache Offline grace Server-side deactivation not automatic support.html refund.html"
+            "Your recordings stay local license-key fingerprint does not persist the raw license key local license cache Offline grace refresh Pro on that Mac Server-side deactivation not automatic support.html refund.html"
         }
         "refund.html" => {
             "draft policy checkout goes live cannot activate basic local conversion workflow support.html order email Lemon Squeezy order flow"
         }
         _ => "<p>Page</p>",
     }
+}
+
+#[test]
+fn rejects_missing_scope_copy_for_future_features() {
+    let directory = tempfile::tempdir().unwrap();
+    write_required_pages(directory.path());
+    write(directory.path(), "index.html", "Release status");
+    write(
+        directory.path(),
+        "release-status/index.html",
+        "Paid beta is not public yet Developer ID signed and notarized docs/release-blockers.md Evidence reference Lemon Squeezy sandbox validation ../download.html ../pricing.html ../privacy.html ../terms.html ../license.html ../support.html ../refund.html",
+    );
+    write(
+        directory.path(),
+        "pricing.html",
+        "Checkout opens after Developer ID signing and notarization Lemon Squeezy sandbox validation No checkout link is live yet release-status/ Beta price is draft 20 successful smaller conversions are free Your recordings stay local refund.html Failed, cancelled, or larger-result conversions do not count License policy",
+    );
+
+    let errors = check_root(directory.path()).unwrap();
+
+    assert!(errors.iter().any(|error| {
+        error
+            .contains("DropSquash is the automatic local post-processor for Mac screen recordings.")
+    }));
+    assert!(errors
+        .iter()
+        .any(|error| { error.contains("future candidates, not current release promises") }));
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("not as a recorder or timeline editor")));
+    assert!(errors.iter().any(|error| {
+        error.contains("does not include built-in recording or automatic privacy masking in Pro")
+    }));
 }
 
 fn write(root: &std::path::Path, name: &str, text: &str) {

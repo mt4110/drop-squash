@@ -12,7 +12,7 @@ pub(crate) const REQUIRED_FIELDS: [&str; 11] = [
     "Date",
 ];
 
-pub(crate) const REQUIRED_CHECKS: [&str; 39] = [
+pub(crate) const REQUIRED_CHECKS: [&str; 40] = [
     "Disk image launch notice",
     "Choose recording conversion",
     "Drag-and-drop conversion",
@@ -44,6 +44,7 @@ pub(crate) const REQUIRED_CHECKS: [&str; 39] = [
     "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`",
     "Benchmark sample set",
     "Benchmark regression threshold",
+    "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`",
     "`cargo run -p xtask -- manual-qa-check`",
     "`cargo run -p xtask -- artifact-check path/to/DropSquash.dmg`",
     "`cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS`",

@@ -3,5 +3,11 @@
   "identifier": "default",
   "description": "Main DropSquash window permissions for choosing recordings and revealing completed outputs.",
   "windows": ["main"],
-  "permissions": ["core:event:default", "dialog:allow-open", "opener:allow-reveal-item-in-dir"]
+  "permissions": [
+    "core:event:default",
+    "core:window:allow-set-min-size",
+    "core:window:allow-set-size",
+    "dialog:allow-open",
+    "opener:allow-reveal-item-in-dir"
+  ]
 }

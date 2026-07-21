@@ -5,6 +5,8 @@ fn accepts_minimal_desktop_permissions() {
     let (_directory, path) = capability(
         r#"[
   "core:event:default",
+  "core:window:allow-set-min-size",
+  "core:window:allow-set-size",
   "dialog:allow-open",
   "opener:allow-reveal-item-in-dir"
 ]"#,
@@ -18,6 +20,8 @@ fn rejects_url_open_permission() {
     let (_directory, path) = capability(
         r#"[
   "core:event:default",
+  "core:window:allow-set-min-size",
+  "core:window:allow-set-size",
   "dialog:allow-open",
   "opener:allow-reveal-item-in-dir",
   "opener:allow-open-url"

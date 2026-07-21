@@ -1,18 +1,31 @@
 use dropsquash_core::{
-    AppError, CaptureFrameMetadata, FrameSize, Result, TimeRangeNs, VisionObservation,
+    AppError, CaptureFrameMetadata, FrameSize, PixelRect, Result, VisionObservation,
 };
 
-use super::{
-    raw_sck_frame_info_from_sample_buffer, NativeSampleBuffer, RawSckFrameInfo, SckLiveMaskEvidence,
-};
+use super::frame_continuity::FrameContinuity;
+use super::{RawSckFrameInfo, SckLiveMaskEvidence};
+use std::path::PathBuf;
+
+mod admission;
+mod capture;
+mod recording;
+
+pub(crate) use capture::frame_time_range;
 
 #[derive(Debug)]
 pub struct SckStreamOutputState {
     frame_size: FrameSize,
     frame_infos: Vec<RawSckFrameInfo>,
+    continuity: FrameContinuity,
     vision: Vec<VisionObservation>,
+    fixed_mask_rects: Vec<PixelRect>,
     live_mask: SckLiveMaskEvidence,
+    recording: recording::RecordingState,
     errors: Vec<String>,
+    next_frame_index: u64,
+    last_written_time_ns: Option<u64>,
+    vision_frame_limit: usize,
+    admitted_vision_frames: usize,
 }
 
 impl SckStreamOutputState {
@@ -20,51 +33,41 @@ impl SckStreamOutputState {
         Self {
             frame_size,
             frame_infos: Vec::new(),
+            continuity: FrameContinuity::default(),
             vision: Vec::new(),
+            fixed_mask_rects: Vec::new(),
             live_mask: SckLiveMaskEvidence::default(),
+            recording: recording::RecordingState::disabled(),
             errors: Vec::new(),
+            next_frame_index: 0,
+            last_written_time_ns: None,
+            vision_frame_limit: usize::MAX,
+            admitted_vision_frames: 0,
         }
+    }
+
+    pub fn with_recording(
+        frame_size: FrameSize,
+        output_path: PathBuf,
+        fixed_mask_rects: Vec<PixelRect>,
+        vision_frame_limit: usize,
+    ) -> Self {
+        let mut state = Self::new(frame_size);
+        state.recording = recording::RecordingState::enabled(output_path);
+        state.fixed_mask_rects = fixed_mask_rects;
+        state.vision_frame_limit = vision_frame_limit;
+        state
     }
 
     pub fn frame_size(&self) -> FrameSize {
         self.frame_size
     }
 
-    pub fn capture_sample_buffer(&mut self, sample_buffer: &NativeSampleBuffer) {
-        match raw_sck_frame_info_from_sample_buffer(sample_buffer, self.frame_infos.len() as u64) {
-            Ok(frame_info) => self.capture_accepted_sample_buffer(sample_buffer, frame_info),
-            Err(error) => self.errors.push(error.to_string()),
-        }
-    }
-
-    fn capture_accepted_sample_buffer(
-        &mut self,
-        sample_buffer: &NativeSampleBuffer,
-        frame_info: RawSckFrameInfo,
-    ) {
-        match super::native_vision_observe::observe_sample_buffer(
-            sample_buffer,
-            self.frame_size,
-            frame_time_range(frame_info.presentation_time_ns),
-        ) {
-            Ok(mut vision) => {
-                match super::live_mask::blacken_observed_text(sample_buffer, &vision) {
-                    Ok(proof) => {
-                        self.live_mask.record(proof);
-                        self.frame_infos.push(frame_info);
-                        self.vision.append(&mut vision);
-                    }
-                    Err(error) => self.errors.push(error.to_string()),
-                }
-            }
-            Err(error) => self.errors.push(error.to_string()),
-        }
-    }
-
     pub fn frames(&self) -> Result<Vec<CaptureFrameMetadata>> {
         if let Some(error) = self.errors.first() {
             return Err(AppError::InvalidConfig(format!(
-                "Secure Share ScreenCaptureKit stream output rejected frame metadata: {error}"
+                "Secure Share ScreenCaptureKit stream output rejected frame metadata: {error}{}",
+                self.live_mask.vision_summary()
             )));
         }
         if self.frame_infos.is_empty() {
@@ -83,7 +86,8 @@ impl SckStreamOutputState {
     pub fn vision_observations(&self) -> Result<Vec<VisionObservation>> {
         if let Some(error) = self.errors.first() {
             return Err(AppError::InvalidConfig(format!(
-                "Secure Share ScreenCaptureKit stream output rejected Vision observation: {error}"
+                "Secure Share ScreenCaptureKit stream output rejected Vision observation: {error}{}",
+                self.live_mask.vision_summary()
             )));
         }
         Ok(self.vision.clone())
@@ -93,11 +97,15 @@ impl SckStreamOutputState {
         self.vision_observations()?;
         Ok(self.live_mask)
     }
-}
 
-fn frame_time_range(start_ns: u64) -> TimeRangeNs {
-    TimeRangeNs {
-        start_ns,
-        end_ns: start_ns.saturating_add(1),
+    pub fn finish_recording(&mut self) -> Result<Option<PathBuf>> {
+        if let Some(error) = self.errors.first() {
+            return Err(AppError::InvalidConfig(error.clone()));
+        }
+        self.recording.finish()
+    }
+
+    pub fn discard_recording(&mut self) {
+        self.recording.discard();
     }
 }

@@ -14,6 +14,7 @@ pub(super) const PACKAGED_APP: &[&str] = &[
     "Failed conversion",
     "Larger output",
     "Reveal output",
+    "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`",
 ];
 pub(super) const LICENSE: &[&str] = &[
     "Sandbox product setup",
@@ -42,6 +43,10 @@ pub(crate) fn filter_for_label(label: &str) -> &'static str {
     } else {
         "distribution"
     }
+}
+
+pub(crate) fn matches_requested_filter(label: &str, filter: &str) -> bool {
+    matches_filter_name(filter_for_label(label), filter)
 }
 
 pub(super) fn grouped(
@@ -83,18 +88,24 @@ fn push_group(
     rows: Vec<(String, String)>,
     filter: Option<&str>,
 ) {
-    let include = filter.is_none_or(|value| matches_filter(name, value));
+    let include = filter.map_or(true, |value| matches_filter(name, value));
     if include && !rows.is_empty() {
         groups.push((name, rows));
     }
 }
 
 fn matches_filter(name: &str, filter: &str) -> bool {
+    matches_filter_name(name, filter)
+}
+
+fn matches_filter_name(name: &str, filter: &str) -> bool {
     let normalized = filter.to_ascii_lowercase();
     matches!(
         (name, normalized.as_str()),
-        ("Packaged App", "packaged-app" | "packaged" | "app" | "local-proof")
-            | ("License Sandbox", "license-sandbox" | "license")
+        (
+            "Packaged App",
+            "packaged-app" | "packaged" | "app" | "local-proof"
+        ) | ("License Sandbox", "license-sandbox" | "license")
             | ("Benchmark Evidence", "benchmark" | "local-proof")
             | ("Distribution And Signing", "distribution" | "signing")
     )

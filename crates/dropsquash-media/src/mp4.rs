@@ -1,4 +1,5 @@
 mod box_header;
+mod metadata_boxes;
 mod mvhd;
 
 use std::fs::File;
@@ -7,6 +8,8 @@ use std::time::Duration;
 
 use box_header::read_box_header;
 use mvhd::read_mvhd_duration;
+
+pub use metadata_boxes::has_untrusted_metadata_boxes;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub struct Mp4Inspection {

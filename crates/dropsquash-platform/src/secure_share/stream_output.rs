@@ -1,18 +1,22 @@
-use std::sync::{Arc, Mutex};
-
-use dropsquash_core::{AppError, CaptureFrameMetadata, FrameSize, Result, VisionObservation};
+use super::{FrameMetadataProvider, NativeSampleBuffer, SckLiveMaskEvidence};
+use crate::secure_share::stream_output_state::SckStreamOutputState;
+use dropsquash_core::{CaptureFrameMetadata, FrameSize, PixelRect, Result, VisionObservation};
 use objc2::rc::Retained;
 use objc2::runtime::ProtocolObject;
 use objc2::{define_class, msg_send, AnyThread, DefinedClass};
 use objc2_foundation::{NSObject, NSObjectProtocol};
 use objc2_screen_capture_kit::{SCStream, SCStreamOutput, SCStreamOutputType};
-
-use super::{FrameMetadataProvider, NativeSampleBuffer, SckLiveMaskEvidence};
-use crate::secure_share::stream_output_state::SckStreamOutputState;
+use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
+mod analysis;
+mod capture;
+mod state;
+use state::lock_state;
 
 #[derive(Clone)]
 struct StreamOutputIvars {
     state: Arc<Mutex<SckStreamOutputState>>,
+    analysis: Arc<analysis::AnalysisGate>,
 }
 
 define_class!(
@@ -33,9 +37,7 @@ define_class!(
             if output_type != SCStreamOutputType::Screen {
                 return;
             }
-            if let Ok(mut state) = self.ivars().state.lock() {
-                state.capture_sample_buffer(sample_buffer);
-            }
+            capture::frame(&self.ivars().state, &self.ivars().analysis, sample_buffer);
         }
     }
 );
@@ -45,11 +47,34 @@ pub struct SckStreamFrameMetadataOutput {
     state: Arc<Mutex<SckStreamOutputState>>,
 }
 
+// State crosses concurrent callbacks and finalization under a mutex.
 impl SckStreamFrameMetadataOutput {
+    #[allow(clippy::arc_with_non_send_sync)]
     pub fn new(frame_size: FrameSize) -> Self {
         let state = Arc::new(Mutex::new(SckStreamOutputState::new(frame_size)));
         let object = SckStreamOutputObject::new(StreamOutputIvars {
             state: Arc::clone(&state),
+            analysis: Arc::new(analysis::AnalysisGate::default()),
+        });
+        Self { object, state }
+    }
+
+    #[allow(clippy::arc_with_non_send_sync)]
+    pub fn new_recording(
+        frame_size: FrameSize,
+        output_path: PathBuf,
+        fixed_mask_rects: Vec<PixelRect>,
+        vision_frame_limit: usize,
+    ) -> Self {
+        let state = Arc::new(Mutex::new(SckStreamOutputState::with_recording(
+            frame_size,
+            output_path,
+            fixed_mask_rects,
+            vision_frame_limit,
+        )));
+        let object = SckStreamOutputObject::new(StreamOutputIvars {
+            state: Arc::clone(&state),
+            analysis: Arc::new(analysis::AnalysisGate::default()),
         });
         Self { object, state }
     }
@@ -64,6 +89,16 @@ impl SckStreamFrameMetadataOutput {
 
     pub fn live_mask_evidence(&self) -> Result<SckLiveMaskEvidence> {
         lock_state(&self.state).and_then(|state| state.live_mask_evidence())
+    }
+
+    pub fn finish_recording(&self) -> Result<Option<PathBuf>> {
+        lock_state(&self.state)?.finish_recording()
+    }
+
+    pub fn discard_recording(&self) {
+        if let Ok(mut state) = self.state.lock() {
+            state.discard_recording();
+        }
     }
 }
 
@@ -82,14 +117,4 @@ impl SckStreamOutputObject {
         let this = Self::alloc().set_ivars(ivars);
         unsafe { msg_send![super(this), init] }
     }
-}
-
-fn lock_state(
-    state: &Mutex<SckStreamOutputState>,
-) -> Result<std::sync::MutexGuard<'_, SckStreamOutputState>> {
-    state.lock().map_err(|_| {
-        AppError::InvalidConfig(
-            "Secure Share ScreenCaptureKit stream output state is poisoned".to_string(),
-        )
-    })
 }

@@ -1,6 +1,7 @@
 use super::{
-    ensure_manual_qa_complete, ensure_release_notes_complete, ensure_website_complete,
-    read_release_blockers, run, unverified_blockers, unverified_blockers_error,
+    ensure_manual_qa_complete, ensure_publishable_site_surface, ensure_release_notes_complete,
+    ensure_website_complete, read_release_blockers, run, unverified_blockers,
+    unverified_blockers_error,
 };
 
 #[test]
@@ -30,7 +31,8 @@ fn accepts_all_verified_blockers() {
         })
         .collect::<String>();
 
-    assert!(unverified_blockers(&text).is_empty());
+    let unverified = unverified_blockers(&text);
+    assert!(unverified.is_empty(), "{unverified:?}");
 }
 
 #[test]
@@ -382,6 +384,16 @@ fn publish_requires_valid_website() {
 }
 
 #[test]
+fn publish_requires_deployable_site_surface() {
+    let directory = tempfile::tempdir().unwrap();
+
+    let error = ensure_publishable_site_surface(directory.path()).unwrap_err();
+
+    assert!(error.contains("deployable site surface must pass before publish"));
+    assert!(error.contains("package.json"));
+}
+
+#[test]
 fn publish_requires_final_release_notes() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("release-notes.md");
@@ -603,7 +615,7 @@ fn evidence(blocker: &str) -> &'static str {
             "brew install --cask installed versioned artifact DropSquash.dmg from the release notes Artifact URL with matching lowercase SHA-256, brew uninstall --cask removes it cleanly, auto_updates false, and zap"
         }
         "Packaged macOS manual QA" => {
-            "Tested the public DropSquash.dmg artifact matching the release notes Artifact URL with manual-qa-check evidence recorded"
+            "Tested the public DropSquash.dmg artifact matching the release notes Artifact URL with manual-qa-check local-proof evidence recorded"
         }
         "Empty key activation" => {
             "Activate stays disabled, local cache was checked, and raw key, fingerprint, and instance are absent from local cache"

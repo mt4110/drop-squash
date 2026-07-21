@@ -15,7 +15,7 @@ pub enum FrameStatus {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FrameMaskPlan {
     pub frame_index: u64,
     pub presentation_time_ns: u64,

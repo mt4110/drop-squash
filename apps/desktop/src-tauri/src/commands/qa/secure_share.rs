@@ -27,6 +27,9 @@ pub struct SecureShareObservationDto {
     pub live_masked_frame_count: usize,
     pub live_masked_rect_count: usize,
     pub live_verified_pixel_count: usize,
+    pub vision_frame_count: usize,
+    pub vision_total_ns: u64,
+    pub vision_max_ns: u64,
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -102,6 +105,9 @@ fn dto(window_id: u32, report: SckObservationProbeReport) -> SecureShareObservat
         live_masked_frame_count: report.live_mask_evidence.masked_frame_count,
         live_masked_rect_count: report.live_mask_evidence.masked_rect_count,
         live_verified_pixel_count: report.live_mask_evidence.verified_pixel_count,
+        vision_frame_count: report.live_mask_evidence.vision_frame_count,
+        vision_total_ns: report.live_mask_evidence.vision_total_ns,
+        vision_max_ns: report.live_mask_evidence.vision_max_ns,
     }
 }
 

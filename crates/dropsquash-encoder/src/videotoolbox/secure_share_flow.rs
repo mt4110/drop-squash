@@ -5,7 +5,7 @@ use objc2_av_foundation::{
     AVAssetReader, AVAssetReaderStatus, AVAssetWriter, AVAssetWriterInput, AVAssetWriterStatus,
 };
 
-use super::pixel_buffer::mask_sample_buffer;
+use super::pixel_buffer::{mask_sample_buffer, sample_frame_size};
 use super::secure_share::PipelineBootstrap;
 
 pub(super) fn run_masked_export(
@@ -46,7 +46,9 @@ pub(super) fn run_masked_export(
             };
             started = true;
         }
-        mask_sample_buffer(&sample, options, frame)?;
+        let frame_options =
+            crate::secure_share::options_for_frame(options, frame, sample_frame_size(&sample)?)?;
+        mask_sample_buffer(&sample, &frame_options, frame)?;
         if !unsafe { pipeline.input.appendSampleBuffer(&sample) } {
             return Err(writer_error(
                 "Secure Share frame append failed",

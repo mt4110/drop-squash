@@ -11,12 +11,19 @@ and verified.
 
 macOS MVP. The desktop app can convert user-selected `.mov`, `.mp4`, and `.m4v` recordings to numbered `.squashed.mp4` outputs through Apple's native AVFoundation export pipeline. The shared Rust workspace also contains deterministic safety logic, cancellation, a sequential queue model, safe source postprocessing, JSONL history, local trial counting, license activation plumbing, and backend contracts for Windows and Linux.
 
-Packaged-app manual QA remains for cancellation, multi-file queueing, Trash handling, and live license activation. The release pipeline can build an unsigned macOS `.app` and `.dmg`, run artifact/checksum gates, and block publication until signing is ready. Windows Media Foundation, Linux GStreamer, signing, notarization, and public release publication are still planned work.
+Packaged-app manual QA remains for cancellation, multi-file queueing, Trash
+handling, and live license activation. The release pipeline can build macOS
+artifacts and block publication until evidence is current. The Build Week
+evidence artifact is Developer ID signed, notarized, stapled, and Gatekeeper
+accepted; public release publication is still deferred. Windows Media
+Foundation and Linux GStreamer remain planned work.
 
-Current Build Week target: Phase 3 alpha / high-assurance Secure Share R&D
-prototype. The goal is to show local macOS observation evidence for Japanese
-and English screen-recording privacy cases, not to claim completed leak-zero
-masking. See [docs/build-week-submission.md](docs/build-week-submission.md).
+Current Build Week target: Phase 5 alpha / high-assurance Secure Share R&D
+prototype. It produces a local Strict Shield recording path: native macOS
+observations become a redacted MaskPlan, unknown client-area pixels are
+destroyed before encoding, and the final MP4 is independently verified. It does
+not claim leak-zero or completed selective masking. See
+[docs/build-week-submission.md](docs/build-week-submission.md).
 
 Build Week judging notes:
 
@@ -26,18 +33,51 @@ Build Week judging notes:
   [tests/fixtures/secure-share/ja-en-browser-form.html](tests/fixtures/secure-share/ja-en-browser-form.html)
 - Demo script:
   [docs/build-week-demo-script.md](docs/build-week-demo-script.md)
+- Final submit packet:
+  [docs/build-week-submit-packet.md](docs/build-week-submit-packet.md)
+- Devpost field copy:
+  [docs/build-week-devpost-fields.md](docs/build-week-devpost-fields.md)
+- Final Devpost entry sheet:
+  [docs/build-week-final-entry-sheet.md](docs/build-week-final-entry-sheet.md)
+- Devpost checklist:
+  [docs/build-week-devpost-checklist.md](docs/build-week-devpost-checklist.md)
 - Devpost draft:
   [docs/build-week-devpost-draft.md](docs/build-week-devpost-draft.md)
 - Judge runbook:
   [docs/build-week-judge-runbook.md](docs/build-week-judge-runbook.md)
-- Redacted evidence summary:
+- Current Phase 5 signed native evidence:
+  [docs/build-week-phase5-evidence.json](docs/build-week-phase5-evidence.json)
+  records the 144-frame Strict Reveal baseline from the packaged app and its
+  independently verified MP4 and signed sidecar.
+- Phase 5 claim gate:
+  `cargo run -p xtask -- build-week-phase5-check`
+  verifies the evidence JSON and the Build Week/Phase 5 docs do not overclaim
+  coverage, selective masking, enterprise readiness, or leak-zero behavior.
+- Local submit gate:
+  `cargo run -p xtask -- build-week-local-submit-check`
+  verifies the notarized DMG checksum, code signature, stapled ticket,
+  mounted-app Gatekeeper acceptance, and required Devpost packet fields, while
+  leaving demo video URL, `/feedback`, and final Devpost submission as manual
+  external steps.
+- Local submit package:
+  `cargo run -p xtask -- build-week-submit-package`
+  creates the clean `/tmp` zip after the local submit gate passes.
+- Historical browser observation summary:
   [docs/build-week-evidence.json](docs/build-week-evidence.json)
-- Current alpha evidence: packaged macOS app observed a 1440x900 browser
-  fixture with 2 frames, 2 Accessibility observations, 236 local Vision
-  observations, a Strict Reveal `MaskPlan` preview with 42 coalesced
-  first-frame regions, 2 live ScreenCaptureKit frames blackened across 236
-  text regions with 2 pixel readbacks, and
-  `blackFillProof.firstSampleBlackened = true`.
+- Historical Phase 4 Strict Shield evidence:
+  [docs/phase4-strict-shield-evidence.json](docs/phase4-strict-shield-evidence.json)
+  records an earlier packaged native JA/EN fixture run. The current Phase 5
+  coverage and newer native IME/popover evidence are recorded in
+  [docs/phase5-alpha.md](docs/phase5-alpha.md).
+- Historical signed-app browser-fixture evidence:
+  [docs/build-week-ui-fixture-evidence.json](docs/build-week-ui-fixture-evidence.json)
+  records an earlier actual UI flow: choose the JA/EN Chrome fixture window,
+  record, stop and safely save, then independently verify the MP4 and signed
+  sidecar.
+- Historical UI demo evidence:
+  [docs/phase4-demo-evidence.json](docs/phase4-demo-evidence.json). Current
+  Phase 5 demo claims must follow
+  [docs/build-week-demo-script.md](docs/build-week-demo-script.md).
 
 ## Principles
 

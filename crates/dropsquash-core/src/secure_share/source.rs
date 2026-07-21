@@ -6,6 +6,7 @@ pub enum ObservationSource {
     ScreenCaptureKitFrame,
     AccessibilityWindow,
     AccessibilityText,
+    AccessibilityFocusedText,
     AccessibilityModal,
     VisionTextRecognition,
     VisionTextRectangle,

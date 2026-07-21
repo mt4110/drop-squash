@@ -1,5 +1,6 @@
 mod parse;
 mod path_policy;
+mod sample_policy;
 mod validation;
 
 use std::path::Path;

@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use super::{OutputSize, Profile, SecureShareOptions, SourcePolicy};
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncodeJob {
     pub input_path: PathBuf,
     pub output_dir: PathBuf,

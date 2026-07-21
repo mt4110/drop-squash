@@ -96,6 +96,30 @@ fn signing_distribution_blockers_map_to_template_fields() {
 }
 
 #[test]
+fn public_web_blockers_map_to_template_fields() {
+    let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+    let blockers_text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+    for blocker in [
+        "Public website deployment",
+        "Pricing finalized",
+        "Refund policy finalized",
+        "Live checkout link",
+    ] {
+        assert!(blockers_text.contains(blocker), "{blocker}");
+        let (_, fields) = blockers::MAPPING
+            .iter()
+            .find(|(mapped, _)| *mapped == blocker)
+            .expect(blocker);
+        for field in *fields {
+            assert!(
+                template.contains(&format!("- {field}:")),
+                "{blocker}: {field}"
+            );
+        }
+    }
+}
+
+#[test]
 fn signing_distribution_execution_order_maps_to_release_fields() {
     let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
     let blockers_text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
@@ -108,6 +132,35 @@ fn signing_distribution_execution_order_maps_to_release_fields() {
             "Gatekeeper clean-machine open",
             "Published checksum",
             "Homebrew cask install",
+        ]
+    );
+
+    for blocker in blockers {
+        let (_, fields) = blockers::MAPPING
+            .iter()
+            .find(|(mapped, _)| *mapped == blocker)
+            .expect(blocker);
+        for field in *fields {
+            assert!(
+                template.contains(&format!("- {field}:")),
+                "{blocker}: {field}"
+            );
+        }
+    }
+}
+
+#[test]
+fn public_web_execution_order_maps_to_release_fields() {
+    let template = std::fs::read_to_string("../docs/release-notes-template.md").unwrap();
+    let blockers_text = std::fs::read_to_string("../docs/release-blockers.md").unwrap();
+    let blockers = execution_order_blockers(&blockers_text, "Public web proof");
+    assert_eq!(
+        blockers,
+        vec![
+            "Public website deployment",
+            "Pricing finalized",
+            "Refund policy finalized",
+            "Live checkout link",
         ]
     );
 

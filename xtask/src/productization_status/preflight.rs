@@ -1,20 +1,36 @@
 use std::process::Command;
 
-use super::model::Report;
+use super::{model::Report, scope::Scope};
 
 mod commands;
+mod summary;
 #[cfg(test)]
 mod tests;
 
-pub(super) fn lines_for(report: &Report, filter: Option<&str>) -> Result<Vec<String>, String> {
-    let tracks = report
+pub(crate) use summary::summary;
+
+pub(super) fn lines_for(
+    report: &Report,
+    filter: Option<&str>,
+    scope: &Scope,
+) -> Result<Vec<String>, String> {
+    let visible = report
         .tracks
         .iter()
-        .filter(|track| !track.remaining.is_empty())
+        .filter(|track| has_visible_remaining(track, scope, filter.is_none()))
         .collect::<Vec<_>>();
-    let Some(track) = select_track(&tracks, filter)? else {
+    let all_tracks = report.tracks.iter().collect::<Vec<_>>();
+    let selected = if filter.is_some() {
+        &all_tracks
+    } else {
+        &visible
+    };
+    let Some(track) = select_track(selected, filter)? else {
         return Ok(Vec::new());
     };
+    if !has_visible_remaining(track, scope, false) {
+        return Ok(Vec::new());
+    }
     match track.name.as_str() {
         "Local packaged-app proof" => Ok(manual_qa_lines(&git_status()?)),
         "License sandbox proof" => Ok(license_sandbox_lines()),
@@ -24,22 +40,14 @@ pub(super) fn lines_for(report: &Report, filter: Option<&str>) -> Result<Vec<Str
     }
 }
 
-pub(super) fn summary(track_name: &str) -> Option<String> {
-    match track_name {
-        "Local packaged-app proof" => Some(
-            "primary command: cargo run -p xtask -- manual-qa-pending /tmp/dropsquash-manual-qa-prepared.md --section local-proof".to_string(),
-        ),
-        "License sandbox proof" => Some(
-            "primary command: cargo run -p xtask -- manual-qa-ready-license /tmp/dropsquash-manual-qa-prepared.md".to_string(),
-        ),
-        "Public web proof" => Some(
-            "primary command: cargo run -p xtask -- website-check".to_string(),
-        ),
-        "Signing and distribution proof" => Some(
-            "primary command: cargo run -p xtask -- manual-qa-ready-distribution /tmp/dropsquash-manual-qa-prepared.md".to_string(),
-        ),
-        _ => None,
+fn has_visible_remaining(track: &super::model::TrackStatus, scope: &Scope, scoped: bool) -> bool {
+    if !scoped {
+        return !track.remaining.is_empty();
     }
+    track
+        .remaining
+        .iter()
+        .any(|blocker| !scope.is_deferred(blocker))
 }
 
 fn git_status() -> Result<String, String> {
@@ -57,21 +65,17 @@ fn manual_qa_lines(status: &str) -> Vec<String> {
     if crate::git_status::is_clean(status) {
         let mut lines =
             vec!["preflight: manual QA can start from a clean git worktree".to_string()];
-        lines.extend(next_commands());
+        lines.extend(commands::local_packaged_app());
         return lines;
     }
     let mut lines = vec![
         "preflight: current worktree is dirty; use a clean detached QA worktree or clean these changes before rebuilding the app artifact".to_string(),
         crate::git_status::dirty_paths(status),
         "preflight current-worktree option: commit, stash, or intentionally remove these changes, then rebuild the app artifact".to_string(),
-        "preflight clean worktree option: git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD".to_string(),
+        "preflight clean worktree option: git worktree add --detach /tmp/dropsquash-qa-$(git rev-parse --short HEAD) HEAD, or snapshot this exact dirty tree with `scripts/manual-qa-snapshot-worktree.sh /tmp/dropsquash-qa-snapshot-$(git rev-parse --short HEAD)`".to_string(),
     ];
-    lines.extend(next_commands());
+    lines.extend(commands::local_packaged_app());
     lines
-}
-
-fn next_commands() -> Vec<String> {
-    commands::local_packaged_app()
 }
 
 fn license_sandbox_lines() -> Vec<String> {

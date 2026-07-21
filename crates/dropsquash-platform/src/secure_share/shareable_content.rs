@@ -12,6 +12,7 @@ pub struct SckWindowCandidate {
     pub active: bool,
     pub has_title: bool,
     pub has_owner: bool,
+    pub owner_name: Option<String>,
     pub owner_pid: Option<i32>,
 }
 
@@ -52,6 +53,10 @@ pub fn snapshot_shareable_content(
 
 fn snapshot_window(window: &SCWindow) -> Result<SckWindowCandidate> {
     let title = unsafe { window.title() }.map(|title| title.to_string());
+    let owner = unsafe { window.owningApplication() };
+    let owner_name = owner
+        .as_ref()
+        .map(|app| unsafe { app.applicationName() }.to_string());
     Ok(SckWindowCandidate {
         window_id: unsafe { window.windowID() },
         has_title: title.is_some(),
@@ -60,8 +65,9 @@ fn snapshot_window(window: &SCWindow) -> Result<SckWindowCandidate> {
         layer: unsafe { window.windowLayer() },
         on_screen: unsafe { window.isOnScreen() },
         active: unsafe { window.isActive() },
-        has_owner: unsafe { window.owningApplication().is_some() },
-        owner_pid: unsafe { window.owningApplication().map(|app| app.processID()) },
+        has_owner: owner.is_some(),
+        owner_name,
+        owner_pid: owner.map(|app| unsafe { app.processID() }),
     })
 }
 

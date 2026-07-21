@@ -3,8 +3,10 @@ use std::path::Path;
 
 use serde_json::Value;
 
-const REQUIRED_PERMISSIONS: [&str; 3] = [
+const REQUIRED_PERMISSIONS: [&str; 5] = [
     "core:event:default",
+    "core:window:allow-set-min-size",
+    "core:window:allow-set-size",
     "dialog:allow-open",
     "opener:allow-reveal-item-in-dir",
 ];

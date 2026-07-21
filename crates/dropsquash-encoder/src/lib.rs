@@ -1,4 +1,5 @@
 mod backend;
+mod experimental;
 mod gstreamer;
 mod media_foundation;
 mod secure_share;
@@ -6,10 +7,12 @@ mod verify;
 mod videotoolbox;
 
 pub use backend::{EncodeProgressReporter, EncoderBackend, EncoderCapabilities};
+pub use experimental::verify_experimental_mask_plan_output;
 pub use gstreamer::GStreamerEncoder;
 pub use media_foundation::MediaFoundationEncoder;
 pub use secure_share::{
-    prove_mask_plan_solid_black_fill, resolve_secure_share_options, MaskPlanBlackFillProof,
+    prove_mask_plan_solid_black_fill, resolve_secure_share_options, verify_mask_plan_output,
+    MaskPlanBlackFillProof,
 };
 pub use verify::{verify_output, OutputVerification};
 pub use videotoolbox::AppleNativeEncoder;

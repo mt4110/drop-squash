@@ -28,7 +28,7 @@ pub struct CaptureFrameMetadata {
 
 impl CaptureFrameMetadata {
     pub fn to_mask_frame(self, frame_size: FrameSize, strict_reveal: bool) -> FrameMaskPlan {
-        let regions = if strict_reveal && self.frame_status != FrameStatus::Complete {
+        let regions = if strict_reveal {
             vec![unknown_frame_region(frame_size)]
         } else {
             Vec::new()
@@ -53,11 +53,7 @@ fn unknown_frame_region(frame_size: FrameSize) -> MaskRegion {
         policy: RegionPolicy::Unknown,
         reason: MaskReason::UnknownRegion,
         sources: vec![ObservationSource::ScreenCaptureKitFrame],
-        confidence: Confidence {
-            detection: 1.0,
-            transform: 0.0,
-            policy: 1.0,
-        },
+        confidence: Confidence::CERTAIN,
         expansion_px: 0,
     }
 }

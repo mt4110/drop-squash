@@ -1,10 +1,12 @@
 use serde::{Deserialize, Serialize};
 
+use super::agreement::measure;
 use super::coalesce::coalesce_frame_regions;
 use super::resolver::{assign_observation, count_verification_required_frames};
+use super::smart_mask::refined_accessibility;
 use super::{
-    AxObservation, CaptureFrameMetadata, FrameSize, MaskPlan, MaskPlanAudit, MaskPolicy,
-    VerificationExpectations, VisionObservation,
+    AxObservation, AxObservationKind, CaptureFrameMetadata, FrameSize, MaskPlan, MaskPlanAudit,
+    MaskPolicy, TemporalObservation, VerificationExpectations, VisionObservation,
 };
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -15,6 +17,7 @@ pub struct MaskPlanDraft {
     pub frames: Vec<CaptureFrameMetadata>,
     pub accessibility: Vec<AxObservation>,
     pub vision: Vec<VisionObservation>,
+    pub temporal: Vec<TemporalObservation>,
     pub policy: MaskPolicy,
     pub verification_expectations: VerificationExpectations,
 }
@@ -28,25 +31,45 @@ impl MaskPlanDraft {
             .map(|frame| frame.to_mask_frame(self.frame_size, strict_reveal))
             .collect::<Vec<_>>();
         let mut audit = MaskPlanAudit::clean();
-        for observation in self.accessibility {
-            assign_observation(
-                &mut frames,
-                &mut audit,
-                self.frame_size,
-                strict_reveal,
-                observation.time_range,
-                observation.to_region(),
-            );
-        }
-        for observation in self.vision {
-            assign_observation(
-                &mut frames,
-                &mut audit,
-                self.frame_size,
-                strict_reveal,
-                observation.time_range,
-                observation.to_region(),
-            );
+        audit.record_observation_agreement(measure(&self.accessibility, &self.vision));
+        audit.record_focused_text_count(
+            self.accessibility
+                .iter()
+                .filter(|item| item.kind == AxObservationKind::FocusedTextElement)
+                .count(),
+        );
+        audit.record_temporal_count(self.temporal.len());
+        if !strict_reveal {
+            for observation in refined_accessibility(self.accessibility, &self.vision) {
+                assign_observation(
+                    &mut frames,
+                    &mut audit,
+                    self.frame_size,
+                    false,
+                    observation.time_range,
+                    observation.to_region(),
+                );
+            }
+            for observation in self.vision {
+                assign_observation(
+                    &mut frames,
+                    &mut audit,
+                    self.frame_size,
+                    false,
+                    observation.time_range,
+                    observation.to_region(),
+                );
+            }
+            for observation in self.temporal {
+                assign_observation(
+                    &mut frames,
+                    &mut audit,
+                    self.frame_size,
+                    false,
+                    observation.time_range,
+                    observation.to_region(),
+                );
+            }
         }
         coalesce_frame_regions(&mut frames);
         audit.verification_required_frame_count = count_verification_required_frames(&frames);

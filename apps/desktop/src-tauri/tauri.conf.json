@@ -13,10 +13,12 @@
     "windows": [
       {
         "title": "DropSquash",
-        "width": 420,
-        "height": 360,
+        "width": 820,
+        "height": 720,
+        "minWidth": 480,
+        "minHeight": 520,
         "dragDropEnabled": true,
-        "resizable": false
+        "resizable": true
       }
     ],
     "security": {
@@ -41,6 +43,9 @@
   "bundle": {
     "active": true,
     "targets": ["app", "dmg"],
+    "macOS": {
+      "minimumSystemVersion": "14.0"
+    },
     "icon": ["icons/icon.icns", "icons/icon.ico"]
   }
 }

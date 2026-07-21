@@ -3,29 +3,31 @@
 DropSquash should enter OpenAI Build Week as:
 
 ```text
-Phase 3 alpha / high-assurance Secure Share R&D prototype
+Phase 5 alpha / high-assurance Secure Share R&D prototype
 ```
 
 This is not a finished enterprise security product and must not be described
 as leak-zero. The submission should show the serious technical direction:
 local-first screen-recording evidence, native macOS capture signals, local
 Vision observations, deterministic `MaskPlan` data, and an honest path toward
-Strict Reveal fail-closed export.
+Strict Shield fail-closed export.
 
 ## Submission Goal
 
 Build a working alpha that judges can understand in under three minutes:
 
 1. open a Japanese/English adversarial screen fixture
-2. run DropSquash's packaged macOS observation harness
-3. show ScreenCaptureKit frame metadata, Accessibility count, and local Vision
-   text/shape observation count
-4. emit a redacted `MaskPlan` JSON that contains geometry, source, reason,
-   confidence, and timing, but no recognized private text
-5. prove local Vision candidates drive solid-black destructive overwrite on
-   the same ScreenCaptureKit frame, with a black pixel readback
-6. explain that final-video destructive export and independent final-output
-   verification are the next fail-closed gates before any commercial claim
+2. select its window in DropSquash, start recording, then explicitly stop and
+   blacken it before saving
+3. show the saved MP4 and its redacted `MaskPlan` sidecar
+4. show ScreenCaptureKit frame metadata and redacted Accessibility, focused-input,
+   Vision, and changed-region aggregate counts behind that saved result
+5. emit a redacted `MaskPlan` JSON containing only the canonical full-frame
+   region and aggregate counts, never recognized text or observation geometry
+6. prove Strict Shield destructively overwrites every accepted
+   ScreenCaptureKit frame with solid black, with a black pixel readback
+7. save a final MP4 only after independent final-output verification, then
+   show its redacted, locally signed MaskPlan sidecar
 
 ## Track
 
@@ -54,8 +56,10 @@ Safe claims:
 - native macOS observation path
 - ScreenCaptureKit frame metadata foundation
 - Accessibility structure foundation
+- per-frame focused-input geometry tied to the selected window
 - local Apple Vision text/shape observations
-- redacted evidence, `MaskPlan` prototype, and live-frame black-fill proof
+- redacted evidence, final-video `MaskPlan`, independent decode verification,
+  and a locally signed sidecar
 - designed for QA teams sharing screen recordings
 
 Unsafe claims:
@@ -113,7 +117,7 @@ Current repository access evidence:
 Repository: mt4110/drop-squash
 Visibility: private
 Invitation 326181116: build-week-event@openai.com email invite, read
-Invitation 326181039: devposttesting, read
+Collaborator: devposttesting, read
 Expired: false
 ```
 
@@ -138,11 +142,12 @@ Have the demoable alpha and README ready before sleeping on July 21 JST.
 2. add a Japanese/English adversarial browser fixture with annotations
 3. run packaged-app SCK/AX/Vision observation against the fixture
 4. generate a `MaskPlan` preview from the observation snapshot
-5. overwrite local Vision regions on actual captured pixels and read back black
-6. add a short demo script
-7. add README setup and judging instructions
-8. verify tests and policy checks
-9. decide repository visibility
+5. overwrite planned regions on actual captured pixels and save a final clip
+6. independently decode the clip, verify masks/audio/metadata, and sign its
+   redacted sidecar
+7. add a short demo script
+8. add README setup and judging instructions
+9. verify tests and policy checks
 10. record and upload the demo video
 11. submit through Devpost
 
@@ -161,13 +166,13 @@ These cannot be fully completed from the repository alone:
 
 Thirty to sixty seconds is enough:
 
-1. show a normal screen recording is compressed locally
-2. show the adversarial fixture with Japanese and English sensitive text
-3. run the observation harness
-4. show the alpha UI, redacted counts, `MaskPlan` preview, and live-frame proof
-5. state the boundary: this alpha does not store recognized text and does not
-   claim completed privacy protection until final-video destructive export and
-   independent verification pass
+1. show the adversarial fixture with Japanese and English sensitive text
+2. select its window in the alpha UI
+3. start blackening verification, then stop and save the verification
+4. show the all-black MP4 and signed redacted sidecar
+5. show independent local verification, then state the boundary:
+   this alpha does not store recognized text and does not claim completed
+   privacy protection
 
 Voiceover draft:
 
@@ -178,14 +183,15 @@ teams that need to share recordings without leaking sensitive UI text.
 
 This fixture contains synthetic Japanese and English private-looking data. The
 packaged Mac app captures native ScreenCaptureKit frame metadata, reads
-Accessibility structure, and runs local Apple Vision text and shape detection.
-The log shows counts, a redacted MaskPlan preview, and a black-fill proof:
-geometry, reason, source, confidence, timing, and `firstSampleBlackened=true`,
-but no recognized private text.
+Accessibility structure and focused-input geometry tied to the selected window,
+and runs local Apple Vision text and shape detection.
+The log shows aggregate counts, a redacted MaskPlan, and a black-fill proof.
+Strict Shield records the canonical full-frame region, but never recognized
+private text or observation geometry.
 
-This is intentionally not marketed as leak-zero. The remaining gates are
-final-video Strict Reveal destructive pixel overwrite, independent final-output
-verification, and fail-closed deletion before any commercial security claim.
+The final clip is independently decoded before publication, and a corrupt
+signing key fails closed without leaving an output. This is intentionally not
+marketed as leak-zero or enterprise audit-ready.
 Codex helped build the Rust/Tauri architecture, split files under strict size
 rules, add the fixture, and turn the R&D goal into verifiable evidence.
 ```
@@ -194,13 +200,28 @@ rules, add the fixture, and turn the R&D goal into verifiable evidence.
 
 The submission is acceptable when:
 
+- `cargo run -p xtask -- build-week-phase5-check` passes, including the
+  Phase 5 documentation honesty lint
 - the repository can be checked by a judge
 - a fresh user can follow README setup instructions
 - the demo video shows the app or harness working
 - the fixture and annotation exist
 - local observation evidence exists for the fixture
-- redacted evidence summary exists:
-  [docs/build-week-evidence.json](/Users/masakitakemura/_workspace/drop-squash/docs/build-week-evidence.json)
+- a local Build Week artifact exists at
+  `target/release/bundle/dmg/DropSquash_0.1.0_aarch64.dmg`
+  with SHA-256
+  `6c0d82d6d11d351cec9fb9886f46529ecc7c3aba3d327a7870643c7c1dd721b0`
+- Apple notarization submission `42774ba8-fe01-4439-99d1-6c8565e499aa`
+  returned `Accepted`; `xcrun stapler staple` and `xcrun stapler validate`
+  succeeded
+- the mounted app assessed as `accepted` with
+  `source=Notarized Developer ID`
+- redacted evidence summaries exist:
+  [docs/build-week-phase5-evidence.json](/Users/masakitakemura/_workspace/drop-squash/docs/build-week-phase5-evidence.json)
+  as the current signed native baseline, plus historical
+  [docs/build-week-evidence.json](/Users/masakitakemura/_workspace/drop-squash/docs/build-week-evidence.json),
+  [docs/phase4-strict-shield-evidence.json](/Users/masakitakemura/_workspace/drop-squash/docs/phase4-strict-shield-evidence.json),
+  and [docs/build-week-ui-fixture-evidence.json](/Users/masakitakemura/_workspace/drop-squash/docs/build-week-ui-fixture-evidence.json)
 - judge runbook exists:
   [docs/build-week-judge-runbook.md](/Users/masakitakemura/_workspace/drop-squash/docs/build-week-judge-runbook.md)
 - no private key or personal data is included
@@ -210,52 +231,41 @@ The submission is acceptable when:
 
 Fixture:
 
-- [tests/fixtures/secure-share/ja-en-browser-form.html](/Users/masakitakemura/_workspace/drop-squash/tests/fixtures/secure-share/ja-en-browser-form.html)
-- [tests/fixtures/secure-share/ja-en-browser-form.annotation.json](/Users/masakitakemura/_workspace/drop-squash/tests/fixtures/secure-share/ja-en-browser-form.annotation.json)
+- [NativeAccessibilityFixture.swift](/Users/masakitakemura/_workspace/drop-squash/tests/fixtures/secure-share/NativeAccessibilityFixture.swift)
+- [native fixture annotation](/Users/masakitakemura/_workspace/drop-squash/tests/fixtures/secure-share/native-accessibility-fixture.annotation.json)
 
-Packaged macOS app observation run:
+Packaged macOS Strict Shield run:
 
 ```text
-Date: Sunday, July 19, 2026
-Window ID: 4352
-Frame size: 1224x968
-Frame count: 3
-Accessibility observations: 1
-Vision observations: 156
-MaskPlan policy: strict_reveal
-MaskPlan frames: 3
-First frame regions after coalescing: 47
-MaskPlan audit unmatched observations: 0
-MaskPlan verification-required frames: 0
-Live ScreenCaptureKit frames blackened: 3
-Live text regions blackened: 156
-Live black pixel readbacks: 3
-First black-fill sample blackened: true
-Event log: /tmp/dsq-build-week-live-mask-after-tcc-retry.jsonl
+Date: Tuesday, July 21, 2026
+Fixture window size: 760x652 native Japanese/English accessibility fixture
+Frame count: 144
+Accessibility observations: 70 aggregate-only
+Vision observations: 80 aggregate-only
+MaskPlan policy: strict_reveal / Strict Shield
+Full-frame destructive regions: 144
+Live ScreenCaptureKit frames blackened: 144
+Live black pixel readbacks: 144
+Final output verification: passed
+Output sidecar: redacted, SHA-256-bound, Ed25519 signed
+MP4 SHA-256: fb3da3c40c285bf70194eabae611adc0ddd148d0853a05457b88d829c6d834cf
 Status: ok
 ```
 
 Demo capture status:
 
 ```text
-Recorded locally: 43 seconds
-Sequence: 8-second synthetic Japanese/English fixture, then packaged-app test
-Frame: DropSquash Secure Share Fixture (1224 x 968) selected
-Result: 156 Vision candidates, 3 captured frames, 156 blackened regions,
-3 pixel readbacks
+Recorded locally: signed packaged-app UI with native Japanese/English fixture states
+The recording shows fixture content, Strict Shield blackening,
+and independent verification. It does not present a selectively redacted result
+as shareable. Evidence: docs/phase5-alpha.md
 Public upload: pending
 ```
 
-This proves the packaged GUI-hosted path can observe a Japanese/English browser
+This proves the packaged GUI-hosted path can observe the native Japanese/English
 fixture locally with ScreenCaptureKit frame metadata, Accessibility count, and
-Vision observation count, then create a redacted Strict Reveal `MaskPlan`
-preview, then destructively blacken local Vision regions on the actual
-ScreenCaptureKit buffers and read back black pixels. It still does not prove
-final-video destructive export or final-output residual verification.
-
-Next required implementation:
-
-```text
-Connect the MaskPlan to final-video destructive pixel overwrite and independent
-residual verification.
-```
+Vision observation count, then create a redacted Strict Reveal `MaskPlan`,
+destructively blacken the captured buffers, independently decode the final MP4,
+and sign the output-bound sidecar. The next manual work is to update and upload
+the demo so it visibly shows the Strict Shield boundary. Do not upload the
+current all-black export as evidence of usable automatic redaction.

@@ -41,6 +41,9 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["same-machine", "same machine"],
             &["release candidate baseline"],
         ]),
+        "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`" => {
+            Some(&[&["manual-qa-check"], &["local-proof"], &["passed", "passes"]])
+        }
         "`cargo run -p xtask -- manual-qa-check`" => {
             Some(&[&["manual-qa-check"], &["passed", "passes"]])
         }

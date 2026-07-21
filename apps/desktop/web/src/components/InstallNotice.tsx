@@ -30,38 +30,73 @@ export function InstallNotice({
   onQuitCurrentApp,
 }: InstallNoticeProps) {
   const message = didOpenInstalledApp
-    ? "The Applications copy is open. Eject this disk image copy, or quit it manually."
+    ? "Applications copy is open. Eject this disk image copy, or quit it manually."
     : didCopyToApplications
       ? "DropSquash was copied to Applications. Open that copy, then eject the disk image."
       : "DropSquash is running from the disk image. Move it to Applications before regular use.";
+  const messageMain = didOpenInstalledApp
+    ? "Applications版を開きました"
+    : didCopyToApplications
+      ? "Applicationsへコピーしました"
+      : "ディスクイメージから起動しています";
+  const statusMain = didOpenInstalledApp
+    ? "このコピーは閉じて大丈夫です"
+    : didCopyToApplications
+      ? "Applications版へ切り替えてください"
+      : "通常利用の前に移動してください";
   const title = installedPath ?? appPath;
   const isBusy = isMoving || isOpeningInstalledApp || isQuittingAfterEject;
 
   return (
-    <section className="install-notice" aria-label="Install notice">
-      <span title={title}>{message}</span>
+    <section className="install-notice" aria-label="インストール案内 / Install notice">
+      <span title={title}>
+        <span className="ui-copy">
+          <span className="ui-main">{messageMain}</span>
+          <span className="ui-main ui-main-inline">{statusMain}</span>
+          <span className="ui-sub">{message}</span>
+        </span>
+      </span>
       <div>
         {!didCopyToApplications && (
           <button type="button" disabled={isBusy} onClick={onMove}>
-            {isMoving ? "Moving..." : "Move"}
+            <span className="ui-copy ui-copy-center">
+              <span className="ui-main">{isMoving ? "移動中" : "移動"}</span>
+              <span className="ui-sub">{isMoving ? "Moving..." : "Move"}</span>
+            </span>
           </button>
         )}
         {didCopyToApplications && (
           <button type="button" disabled={isBusy} onClick={onOpenInstalledApp}>
-            {isOpeningInstalledApp ? "Opening..." : "Open"}
+            <span className="ui-copy ui-copy-center">
+              <span className="ui-main">{isOpeningInstalledApp ? "起動中" : "開く"}</span>
+              <span className="ui-sub">{isOpeningInstalledApp ? "Opening..." : "Open"}</span>
+            </span>
           </button>
         )}
         {didOpenInstalledApp && (
           shouldOfferInstallerVolumeEject && (
             <button type="button" disabled={isBusy} onClick={onQuitAfterInstallerVolumeEject}>
-              {isQuittingAfterEject ? "Ejecting..." : "Eject & Quit"}
+              <span className="ui-copy ui-copy-center">
+                <span className="ui-main">{isQuittingAfterEject ? "取り出し中" : "取り出して終了"}</span>
+                <span className="ui-sub">{isQuittingAfterEject ? "Ejecting..." : "Eject & Quit"}</span>
+              </span>
             </button>
           )
         )}
         {didOpenInstalledApp && (
-          <button type="button" disabled={isBusy} onClick={onQuitCurrentApp}>Quit</button>
+          <button type="button" disabled={isBusy} onClick={onQuitCurrentApp}>
+            <span className="ui-copy ui-copy-center">
+              <span className="ui-main">終了</span>
+              <span className="ui-sub">Quit</span>
+            </span>
+          </button>
         )}
-        <button type="button" disabled={isBusy} onClick={onDismiss}>OK</button>
+        <button type="button" disabled={isBusy} onClick={onDismiss}>
+          <span className="ui-copy ui-copy-center">
+            <span className="ui-main">閉じる</span>
+            <span className="ui-sub">OK</span>
+          </span>
+        </button>
       </div>
     </section>
   );

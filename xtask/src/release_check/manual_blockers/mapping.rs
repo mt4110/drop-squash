@@ -25,7 +25,7 @@ pub(super) const PACKAGED_MACOS_EVIDENCE: &[&str] = &[
     "Failed conversion",
     "Larger output",
     "Reveal output",
-    "`cargo run -p xtask -- manual-qa-check`",
+    "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`",
 ];
 
 const METADATA_FIELDS: &[&str] = &[

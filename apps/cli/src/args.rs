@@ -2,8 +2,10 @@ use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
 
+mod secure_share;
 mod values;
 
+pub use secure_share::{MaskModeArg, MaskRectArg};
 pub use values::{OutputSizeArg, ProfileArg};
 
 #[derive(Debug, Parser)]
@@ -26,6 +28,10 @@ pub enum Command {
         output_size: OutputSizeArg,
         #[arg(long)]
         history: Option<PathBuf>,
+        #[arg(long, value_enum)]
+        secure_share_mode: Option<MaskModeArg>,
+        #[arg(long = "secure-share-rect")]
+        secure_share_rects: Vec<MaskRectArg>,
     },
     Stats {
         #[arg(long)]
@@ -38,6 +44,14 @@ pub enum Command {
     Receipt {
         output: PathBuf,
     },
+    VerifyEvidence {
+        video: PathBuf,
+        sidecar: PathBuf,
+    },
+    VerifySecureShareOutput {
+        video: PathBuf,
+        sidecar: PathBuf,
+    },
     Doctor,
 }
 
@@ -46,6 +60,11 @@ pub enum LicenseCommand {
     Status {
         #[arg(long)]
         history: Option<PathBuf>,
+        #[arg(long)]
+        cache_path: Option<PathBuf>,
     },
-    Forget,
+    Forget {
+        #[arg(long)]
+        cache_path: Option<PathBuf>,
+    },
 }

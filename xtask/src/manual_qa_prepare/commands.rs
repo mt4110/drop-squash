@@ -77,11 +77,11 @@ pub(super) fn ready_all_command(path: &Path, csv: &Path) -> String {
 }
 
 pub(super) fn ready_license_command(path: &Path) -> String {
-    quoted_command(path, "manual-qa-ready-license")
+    quoted_command(path, "manual-qa-license-rerun")
 }
 
 pub(super) fn ready_distribution_command(path: &Path) -> String {
-    quoted_command(path, "manual-qa-ready-distribution")
+    quoted_command(path, "manual-qa-distribution-rerun")
 }
 
 pub(super) fn fill_benchmark_command(path: &Path, csv: &Path) -> String {

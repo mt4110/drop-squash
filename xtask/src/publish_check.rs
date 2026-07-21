@@ -6,6 +6,7 @@ mod blockers;
 mod evidence;
 mod manual_qa;
 mod references;
+mod site_surface;
 mod source_commit;
 mod urls;
 
@@ -18,6 +19,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
     };
     crate::release_check::run()?;
     ensure_website_complete(Path::new("website"))?;
+    ensure_publishable_site_surface(Path::new("apps/site"))?;
     ensure_manual_qa_complete(Path::new("docs/manual-qa.md"))?;
     let notes_path = PathBuf::from(notes);
     ensure_release_notes_complete(&notes_path)?;
@@ -38,6 +40,11 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
 fn ensure_website_complete(path: &Path) -> Result<(), String> {
     crate::website_check::check_path(path)
         .map_err(|error| format!("website must pass before publish:\n{error}"))
+}
+
+fn ensure_publishable_site_surface(path: &Path) -> Result<(), String> {
+    site_surface::check(path)
+        .map_err(|error| format!("deployable site surface must pass before publish:\n{error}"))
 }
 
 fn ensure_manual_qa_complete(path: &Path) -> Result<(), String> {

@@ -18,7 +18,7 @@ pub(super) const CORE: &[Entry] = &[
     ),
     (
         "docs/productization.md",
-        "larger output is treated as failure",
+        "larger output keeps the original without counting trial",
     ),
     (
         "docs/productization.md",

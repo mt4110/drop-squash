@@ -33,6 +33,7 @@ fn secure_share_missing_input_fails_before_native_bootstrap() {
             width: 2,
             height: 2,
         }],
+        mask_plan: None,
     });
 
     let error =
@@ -57,6 +58,7 @@ fn destructive_mask_overwrites_only_target_rect() {
                 width: 2,
                 height: 2,
             }],
+            mask_plan: None,
         },
         7,
     )
@@ -108,6 +110,7 @@ fn black_noise_mask_is_destructive_and_deterministic() {
                 width: 2,
                 height: 1,
             }],
+            mask_plan: None,
         },
         99,
     )
@@ -137,6 +140,7 @@ fn destructive_mask_rejects_invalid_frame_shape() {
                 width: 1,
                 height: 1,
             }],
+            mask_plan: None,
         },
         0,
     )
@@ -161,6 +165,7 @@ fn destructive_mask_supports_padded_rows() {
                 width: 2,
                 height: 2,
             }],
+            mask_plan: None,
         },
         0,
     )

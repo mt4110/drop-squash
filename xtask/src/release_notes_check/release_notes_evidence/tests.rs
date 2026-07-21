@@ -29,10 +29,10 @@ fn accepts_concrete_production_urls() {
 - Gatekeeper clean-machine open: Gatekeeper opened signed, notarized, stapled app from public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg cleanly in fresh account without Gatekeeper warning
 - `docs/release-blockers.md` status: docs/release-blockers.md has all rows Verified
 - Manual QA record: docs/manual-qa.md tested public https://github.com/mt4110/drop-squash/releases/download/v0.1.0/DropSquash.dmg and manual-qa-check passed
-- Conversion safety evidence: cancellation returned ready after temp cleanup; failed conversion and larger output not smaller failure preserved original with trial count unchanged; history showed no new success
+- Conversion safety evidence: cancellation returned ready after temp cleanup; failed conversion and larger output not smaller friendly kept-original result preserved original with trial count unchanged; history showed no new success
 - Queue evidence: multi-file queue, queued row cancellation, and batch summary showed trial lock blocked pending jobs with finished count 2, saved bytes 123456, failed 0, cancelled 1, and blocked 1
 - Trash source policy: Moving original state disabled action; original moved to Trash only after verified smaller output
-- Benchmark sample set: three short medium large local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
+- Benchmark sample set: three short medium large original local recordings produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at {}
 - Benchmark regression threshold: no sample exceeded 20 percent regression against the same-machine release candidate baseline
 - Lemon Squeezy product setup: DropSquash sandbox intended product has license keys enabled and private store IDs not recorded
 - Lemon Squeezy sandbox purchase: sandbox checkout completed for intended product test buyer order abc123
@@ -167,7 +167,7 @@ fn rejects_release_notes_copy_paste_dmg_cleanup_claims() {
 fn rejects_conversion_safety_without_original_remained_evidence() {
     let errors = check_text(
         r#"
-- Conversion safety evidence: cancellation, failed conversion, and larger output not smaller failure checked original with trial count unchanged
+- Conversion safety evidence: cancellation, failed conversion, and larger output not smaller kept-original result checked original with trial count unchanged
 "#,
     );
 
@@ -180,7 +180,7 @@ fn rejects_conversion_safety_without_original_remained_evidence() {
 fn rejects_conversion_safety_without_temp_cleanup_evidence() {
     let errors = check_text(
         r#"
-- Conversion safety evidence: cancellation, failed conversion, and larger output not smaller failure preserved original with trial count unchanged; history showed no new success
+- Conversion safety evidence: cancellation, failed conversion, and larger output not smaller kept-original result preserved original with trial count unchanged; history showed no new success
 "#,
     );
 
@@ -193,7 +193,7 @@ fn rejects_conversion_safety_without_temp_cleanup_evidence() {
 fn rejects_conversion_safety_without_history_success_evidence() {
     let errors = check_text(
         r#"
-- Conversion safety evidence: cancellation returned ready after temp cleanup; failed conversion and larger output not smaller failure preserved original with trial count unchanged
+- Conversion safety evidence: cancellation returned ready after temp cleanup; failed conversion and larger output not smaller kept-original result preserved original with trial count unchanged
 "#,
     );
 
@@ -1740,6 +1740,20 @@ fn rejects_benchmark_sample_set_without_backend() {
     );
 
     assert!(errors.iter().any(|error| error.contains("backend")));
+}
+
+#[test]
+fn rejects_benchmark_sample_set_without_local_recordings_context() {
+    let errors = check_text(
+        r#"
+- Benchmark sample set: three short medium large samples produced smaller outputs with backend apple-native, saved percent, duration, and speed ratio on MacBookPro18,4 macOS 26.5.2 with CSV saved outside repo at /tmp/dropsquash-bench/results.csv
+- Benchmark regression threshold: no sample exceeded 20% regression against the same-machine release candidate baseline
+"#,
+    );
+
+    assert!(errors
+        .iter()
+        .any(|error| error.contains("original local recordings")));
 }
 
 #[test]

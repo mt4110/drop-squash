@@ -8,6 +8,7 @@ use super::{
 #[serde(rename_all = "snake_case")]
 pub enum AxObservationKind {
     TextElement,
+    FocusedTextElement,
     ModalBody,
     UnknownClientArea,
 }
@@ -37,12 +38,24 @@ pub struct VisionObservation {
     pub confidence: Confidence,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TemporalObservation {
+    pub rect: PixelRect,
+    pub time_range: TimeRangeNs,
+    pub confidence: Confidence,
+}
+
 impl AxObservation {
     pub fn to_region(self) -> MaskRegion {
         let (reason, source) = match self.kind {
             AxObservationKind::TextElement => (
                 MaskReason::AxTextElement,
                 ObservationSource::AccessibilityText,
+            ),
+            AxObservationKind::FocusedTextElement => (
+                MaskReason::AxFocusedTextElement,
+                ObservationSource::AccessibilityFocusedText,
             ),
             AxObservationKind::ModalBody => (
                 MaskReason::AxModalBody,
@@ -70,6 +83,17 @@ impl VisionObservation {
             ),
         };
         region(self.rect, reason, source, self.confidence)
+    }
+}
+
+impl TemporalObservation {
+    pub fn to_region(self) -> MaskRegion {
+        region(
+            self.rect,
+            MaskReason::UnknownRegion,
+            ObservationSource::TemporalTracker,
+            self.confidence,
+        )
     }
 }
 

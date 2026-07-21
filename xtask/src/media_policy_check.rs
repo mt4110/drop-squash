@@ -46,11 +46,19 @@ fn scan_file(path: &Path, violations: &mut Vec<String>) -> Result<(), String> {
     let text = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let lower = text.to_lowercase();
     for needle in markers::DISALLOWED {
+        if is_allowed_non_media_command(path, needle) {
+            continue;
+        }
         if lower.contains(needle) {
             violations.push(format!("{} contains disallowed {needle}", path.display()));
         }
     }
     Ok(())
+}
+
+fn is_allowed_non_media_command(path: &Path, needle: &str) -> bool {
+    matches!(needle, "command::new" | "std::process::command")
+        && path.ends_with("apps/desktop/src-tauri/src/commands/install.rs")
 }
 
 fn is_text_source(path: &Path) -> bool {

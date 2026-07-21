@@ -49,6 +49,7 @@ async fn run_async(args: BenchmarkArgs) -> Result<(), String> {
                 profile: args.profile,
                 output_size: args.output_size,
                 source_policy: SourcePolicy::Keep,
+                secure_share: None,
             })
             .await
             .map_err(|error| error.to_string())?;

@@ -191,6 +191,9 @@ fn renders_prepared_release_notes_fields() {
     assert!(text.contains("signed, notarized, stapled, and no warning"));
     assert!(text.contains("## Productization Evidence"));
     assert!(text.contains("- Public website URL: pending production deployment"));
+    assert!(text.contains(
+        "after that page links release-status, privacy, pricing, terms, license, support, and download"
+    ));
     assert!(text.contains("- Pricing URL: pending final pricing"));
     assert!(text.contains("- Refund policy URL: pending final refund policy"));
     assert!(text.contains("- Live checkout URL: pending live checkout"));

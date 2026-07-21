@@ -32,7 +32,10 @@ pub(super) fn benchmark_command(options: &Options, csv: &Path) -> String {
 }
 
 pub(super) fn csv_check_command(csv: &Path) -> String {
-    format!("cargo run -p xtask -- benchmark-csv-check {}", csv.display())
+    format!(
+        "cargo run -p xtask -- benchmark-csv-check {}",
+        csv.display()
+    )
 }
 
 pub(super) fn rows() -> Vec<String> {

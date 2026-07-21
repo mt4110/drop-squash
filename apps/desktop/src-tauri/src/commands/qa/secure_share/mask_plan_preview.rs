@@ -8,6 +8,7 @@ pub(super) fn from_report(window_id: u32, report: &SckObservationProbeReport) ->
         frames: report.frames.clone(),
         accessibility: report.accessibility.clone(),
         vision: report.vision.clone(),
+        temporal: Vec::new(),
         policy: MaskPolicy::StrictReveal,
         verification_expectations: VerificationExpectations {
             no_audio: true,

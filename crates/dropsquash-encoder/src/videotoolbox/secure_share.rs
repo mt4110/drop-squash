@@ -14,6 +14,7 @@ use super::finalize::finalize_verified_output;
 use super::paths::output_path_for;
 use super::secure_share_flow::run_masked_export;
 use super::secure_share_settings::{reader_output_settings, writer_output_settings};
+use super::secure_share_verify::verify_masked_output;
 use super::session::file_url;
 
 pub(super) fn encode_with_reader_writer(job: &EncodeJob) -> Result<EncodeResult> {
@@ -29,6 +30,7 @@ pub(super) fn encode_with_reader_writer(job: &EncodeJob) -> Result<EncodeResult>
     if !verification.is_valid_output {
         return Err(verification_error(Some(verification)));
     }
+    verify_masked_output(&temp_output, required_options(job)?)?;
     finalize_verified_output(&temp_output, &output_path)?;
     Ok(EncodeResult {
         input_path: job.input_path.clone(),
@@ -86,7 +88,7 @@ fn bootstrap(job: &EncodeJob, temp_output: &std::path::Path) -> Result<PipelineB
     })
 }
 
-fn video_track(asset: &AVURLAsset) -> Result<Retained<AVAssetTrack>> {
+pub(super) fn video_track(asset: &AVURLAsset) -> Result<Retained<AVAssetTrack>> {
     let visual = unsafe { AVMediaCharacteristicVisual }.unwrap();
     unsafe { asset.tracks() }
         .to_vec()

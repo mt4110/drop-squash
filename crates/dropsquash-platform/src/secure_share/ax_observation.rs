@@ -24,7 +24,7 @@ fn observations_from_windows(
     for index in 0..windows.count() {
         let window = unsafe { windows.value_at_index(index) };
         if !window.is_null() {
-            observations.push(observation_from_window(window, time_range)?);
+            observations.extend(observations_from_window(window, time_range)?);
         }
     }
     if observations.is_empty() {
@@ -33,33 +33,37 @@ fn observations_from_windows(
     Ok(observations)
 }
 
-fn observation_from_window(
+fn observations_from_window(
     window: *const c_void,
     time_range: TimeRangeNs,
-) -> Result<AxObservation> {
+) -> Result<Vec<AxObservation>> {
     let window = unsafe { &*(window.cast::<AXUIElement>()) };
-    super::ax_rect::observation_from_point_size(
+    let text = super::ax_tree::text_observations(window, time_range);
+    if !text.is_empty() {
+        return Ok(text);
+    }
+    Ok(vec![super::ax_rect::observation_from_point_size(
         copy_ax_point(window, "AXPosition")?,
         copy_ax_size(window, "AXSize")?,
         time_range,
-    )
+    )?])
 }
 
-fn copy_ax_point(element: &AXUIElement, name: &str) -> Result<CGPoint> {
+pub(super) fn copy_ax_point(element: &AXUIElement, name: &str) -> Result<CGPoint> {
     let value = copy_attribute(element, name)?
         .downcast::<AXValue>()
         .map_err(|_| invalid("AXPosition was not an AXValue"))?;
     decode_ax_value(&value, AXValueType::CGPoint)
 }
 
-fn copy_ax_size(element: &AXUIElement, name: &str) -> Result<CGSize> {
+pub(super) fn copy_ax_size(element: &AXUIElement, name: &str) -> Result<CGSize> {
     let value = copy_attribute(element, name)?
         .downcast::<AXValue>()
         .map_err(|_| invalid("AXSize was not an AXValue"))?;
     decode_ax_value(&value, AXValueType::CGSize)
 }
 
-fn copy_attribute(element: &AXUIElement, name: &str) -> Result<CFRetained<CFType>> {
+pub(super) fn copy_attribute(element: &AXUIElement, name: &str) -> Result<CFRetained<CFType>> {
     let attribute = cf_string(name)?;
     let mut raw: *const CFType = std::ptr::null();
     let error = unsafe { element.copy_attribute_value(&attribute, NonNull::from(&mut raw)) };

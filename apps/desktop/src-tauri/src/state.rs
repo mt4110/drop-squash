@@ -60,6 +60,14 @@ impl AppState {
         Ok(self.queue.lock().map_err(lock_error)?.fail_active(error))
     }
 
+    pub fn unchanged_active_queue_job(&self, error: String) -> Result<Option<QueueEvent>, String> {
+        Ok(self
+            .queue
+            .lock()
+            .map_err(lock_error)?
+            .unchanged_active(error))
+    }
+
     pub fn cancel_active_queue_job(&self) -> Result<Option<QueueEvent>, String> {
         Ok(self.queue.lock().map_err(lock_error)?.cancel_active())
     }

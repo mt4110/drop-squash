@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "project": "DropSquash",
-  "submissionTarget": "Phase 3 alpha / high-assurance Secure Share R&D prototype",
-  "capturedAt": "2026-07-19T12:25:36Z",
+  "submissionTarget": "Phase 4 alpha / high-assurance Secure Share R&D prototype",
+  "capturedAt": "2026-07-19T17:23:27Z",
   "localOnly": true,
   "recognizedPrivateTextStored": false,
   "fixture": {
@@ -17,26 +17,26 @@
     "windowId": 4352,
     "frameWidth": 1224,
     "frameHeight": 968,
-    "frameCount": 3,
+    "frameCount": 9,
     "accessibilityObservationCount": 1,
-    "visionObservationCount": 156,
-    "liveMaskedFrameCount": 3,
-    "liveMaskedRectCount": 156,
-    "liveVerifiedPixelCount": 3,
-    "eventLog": "/tmp/dsq-build-week-live-mask-after-tcc-retry.jsonl",
+    "visionObservationCount": 466,
+    "liveMaskedFrameCount": 9,
+    "liveMaskedRectCount": 421,
+    "liveVerifiedPixelCount": 9,
+    "eventLog": null,
     "status": "ok"
   },
   "maskPlanPreview": {
     "schemaVersion": 1,
     "policy": "strict_reveal",
-    "frameCount": 3,
-    "firstFrameRegionCount": 47,
+    "frameCount": 9,
+    "firstFrameRegionCount": 48,
     "unmatchedObservationCount": 0,
     "verificationRequiredFrameCount": 0,
     "verificationExpectations": {
       "noAudio": true,
       "stripMetadata": true,
-      "verificationPolicyVersion": "build-week-alpha-preview-v1"
+      "verificationPolicyVersion": "phase4-alpha-v1"
     },
     "sampleRegion": {
       "policy": "sensitive",
@@ -56,33 +56,63 @@
       }
     }
   },
-  "blackFillProof": {
-    "frameIndex": 0,
-    "frameWidth": 1224,
-    "frameHeight": 968,
-    "maskRectCount": 47,
-    "firstSampleBlackened": true,
-    "firstRect": {
-      "x": 0,
-      "y": 0,
-      "width": 1224,
-      "height": 968
-    }
-  },
   "liveFrameBlackFill": {
     "source": "ScreenCaptureKit CMSampleBuffer",
     "mode": "solid_black",
-    "maskedFrameCount": 3,
-    "maskedRectCount": 156,
-    "verifiedPixelCount": 3,
+    "maskedFrameCount": 9,
+    "maskedRectCount": 421,
+    "verifiedPixelCount": 9,
     "recognizedPrivateTextStored": false
+  },
+  "packagedRecordedExport": {
+    "outputFileName": "secure-share-alpha-1784481804528-51667.mp4",
+    "outputBytes": 1813,
+    "outputSha256": "3fd000c52e3a52d7980724216e35e1ff84f50bcbb659ef86fee2df494a00a214",
+    "redactedMaskPlanFileName": "secure-share-alpha-1784481804528-51667.mask-plan.json",
+    "frameCount": 9,
+    "visionObservationCount": 466,
+    "maskedRegionCount": 421,
+    "fullyMaskedFrameCount": 9,
+    "sharingSuitability": "not_shareable_when_accessibility_returns_only_window_scope",
+    "independentDecodeVerification": "passed",
+    "independentEvidenceVerifier": {
+      "command": "cargo run -p dropsquash -- verify-evidence <video.mp4> <video.mask-plan.json>",
+      "checks": ["Ed25519 signature", "output filename binding", "output SHA-256 binding", "raw observation field rejection"],
+      "result": "passed"
+    },
+    "independentOutputVerifier": {
+      "command": "cargo run -p dropsquash -- verify-secure-share-output <video.mp4> <video.mask-plan.json>",
+      "checks": ["signed evidence binding", "decoded black mask regions", "no audio track", "no asset or track metadata"],
+      "result": "passed"
+    },
+    "audioTrack": "absent",
+    "assetAndTrackMetadata": "absent",
+    "recognizedPrivateTextStored": false,
+    "signature": {
+      "algorithm": "ed25519",
+      "payloadVerifiedBeforePublish": true,
+      "privateKeyStorage": "local app support with mode 0600",
+      "hardwareBacked": false
+    }
+  },
+  "failClosedEvidence": {
+    "maskPlanFrameSizeMismatch": {
+      "coverage": "encoder unit test",
+      "result": "rejected before finalization"
+    },
+    "corruptSigningKeyPackagedRun": {
+      "result": "rejected",
+      "error": "Secure Share evidence signature key is invalid",
+      "newOutputOrSidecarFilesAfterRun": 0,
+      "partialArtifactsAfterRun": 0,
+      "signingKeyRestored": true
+    }
   },
   "notYetClaimed": [
     "completed privacy protection",
     "enterprise audit-ready",
     "automatic PII protection",
     "commercial security release",
-    "final-video destructive export",
-    "independent residual verification"
+    "leak-zero guarantee"
   ]
 }

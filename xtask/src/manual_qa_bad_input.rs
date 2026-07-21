@@ -14,9 +14,7 @@ fn parse_path(args: Vec<String>) -> Result<PathBuf, String> {
     match args.as_slice() {
         [] => Ok(PathBuf::from(DEFAULT_PATH)),
         [path] => Ok(PathBuf::from(path)),
-        _ => Err(
-            "usage: cargo run -p xtask -- manual-qa-bad-input [output.mp4]".to_string(),
-        ),
+        _ => Err("usage: cargo run -p xtask -- manual-qa-bad-input [output.mp4]".to_string()),
     }
 }
 

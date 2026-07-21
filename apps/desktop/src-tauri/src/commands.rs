@@ -6,17 +6,15 @@ mod license;
 mod progress;
 pub mod qa;
 pub mod queue;
+pub mod secure_share;
 mod source;
+pub mod window_events;
 
 use dropsquash_core::SourcePolicy;
 use dropsquash_core::{OutputSize, Profile};
 
 fn format_error(error: dropsquash_core::AppError) -> String {
     error.user_message()
-}
-
-pub fn record_window_event(event: &tauri::WindowEvent) {
-    qa::record_window_event(event);
 }
 
 #[tauri::command(rename_all = "camelCase")]

@@ -2,6 +2,7 @@ use dropsquash_core::{AppError, Result, VisionObservation};
 use objc2::rc::Retained;
 use objc2::runtime::AnyObject;
 use objc2::AnyThread;
+use objc2_core_video::CVPixelBuffer;
 use objc2_foundation::NSDictionary;
 
 use super::{raw_sck_frame_info_from_sample_buffer, NativeSampleBuffer, VisionObservationProvider};
@@ -36,6 +37,32 @@ pub fn sample_buffer_request_handler(
         )
     };
     Ok(handler)
+}
+
+pub fn pixel_buffer_request_handler(
+    pixel_buffer: &CVPixelBuffer,
+) -> Retained<NativeVisionImageRequestHandler> {
+    let options = NSDictionary::<NativeVisionImageOption, AnyObject>::dictionary();
+    unsafe {
+        NativeVisionImageRequestHandler::initWithCVPixelBuffer_options(
+            NativeVisionImageRequestHandler::alloc(),
+            pixel_buffer,
+            &options,
+        )
+    }
+}
+
+pub(super) fn decoded_sample_buffer_request_handler(
+    sample_buffer: &NativeSampleBuffer,
+) -> Retained<NativeVisionImageRequestHandler> {
+    let options = NSDictionary::<NativeVisionImageOption, AnyObject>::dictionary();
+    unsafe {
+        NativeVisionImageRequestHandler::initWithCMSampleBuffer_options(
+            NativeVisionImageRequestHandler::alloc(),
+            sample_buffer,
+            &options,
+        )
+    }
 }
 
 pub fn vision_binding_name() -> &'static str {

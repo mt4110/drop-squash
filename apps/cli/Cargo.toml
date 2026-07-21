@@ -10,6 +10,7 @@ rust-version.workspace = true
 clap.workspace = true
 dropsquash-core.workspace = true
 dropsquash-encoder.workspace = true
+dropsquash-fileguard.workspace = true
 dropsquash-history.workspace = true
 dropsquash-license.workspace = true
 dropsquash-privacy.workspace = true

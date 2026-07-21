@@ -16,6 +16,9 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
             &["eject", "ejected"],
             &["quit"],
             &["disk image copy", "mounted copy"],
+            &["relaunch", "existing window", "multiple windows"],
+            &["license field"],
+            &["visible", "without clipping", "unclipped"],
             &[
                 "does not delete",
                 "did not delete",
@@ -105,7 +108,8 @@ pub(super) fn for_check(check: &str) -> Option<Groups> {
         "Larger output" => Some(&[
             &["larger"],
             &["not smaller", "cannot be made smaller"],
-            &["failure", "failed"],
+            &["friendly", "could not be made smaller"],
+            &["kept original", "original kept"],
             &[
                 "original remained",
                 "original remains",

@@ -4,12 +4,13 @@ use std::path::PathBuf;
 mod tests;
 
 const USAGE: &str = "usage: cargo run -p xtask -- manual-qa-fill-release-gates <manual-qa.md>";
+const MAIN_MANUAL_QA: &str = "docs/manual-qa.md";
 
 pub(crate) fn run(args: Vec<String>) -> Result<(), String> {
     let path = parse_args(args)?;
     let text = std::fs::read_to_string(&path)
         .map_err(|error| format!("failed to read manual QA file: {error}"))?;
-    let filled = fill_release_gate_rows(&text, &results()?)?;
+    let filled = fill_release_gate_rows(&text, &results(&path)?)?;
     std::fs::write(&path, filled)
         .map_err(|error| format!("failed to write manual QA file: {error}"))?;
     println!("filled release gate rows: {}", path.display());
@@ -23,17 +24,15 @@ fn parse_args(args: Vec<String>) -> Result<PathBuf, String> {
     }
 }
 
-fn results() -> Result<[(&'static str, &'static str); 5], String> {
-    crate::release_check::run()?;
+fn results(path: &PathBuf) -> Result<Vec<(&'static str, &'static str)>, String> {
+    if uses_main_manual_qa(path) {
+        crate::release_check::run()?;
+    }
     crate::file_size_check::run(vec![])?;
     crate::media_policy_check::run()?;
     crate::privacy_policy_check::run()?;
     crate::website_check::run(vec![])?;
-    Ok([
-        (
-            "`cargo run -p xtask -- release-check`",
-            "release-check passed",
-        ),
+    let mut rows = vec![
         (
             "`cargo run -p xtask -- file-size-check`",
             "file-size-check passed",
@@ -50,7 +49,21 @@ fn results() -> Result<[(&'static str, &'static str); 5], String> {
             "`cargo run -p xtask -- website-check`",
             "website-check passed",
         ),
-    ])
+    ];
+    if uses_main_manual_qa(path) {
+        rows.insert(
+            0,
+            (
+                "`cargo run -p xtask -- release-check`",
+                "release-check passed",
+            ),
+        );
+    }
+    Ok(rows)
+}
+
+fn uses_main_manual_qa(path: &PathBuf) -> bool {
+    path == &PathBuf::from(MAIN_MANUAL_QA)
 }
 
 fn fill_release_gate_rows(text: &str, results: &[(&str, &str)]) -> Result<String, String> {
@@ -69,7 +82,7 @@ fn fill_release_gate_rows(text: &str, results: &[(&str, &str)]) -> Result<String
     }
 }
 
-fn replace_row<'a>(line: &'a str, results: &[(&str, &str)], missing: &mut Vec<&str>) -> String {
+fn replace_row(line: &str, results: &[(&str, &str)], missing: &mut Vec<&str>) -> String {
     let cells = cells(line);
     let Some(label) = cells.first().copied() else {
         return line.to_string();

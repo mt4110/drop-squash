@@ -1,4 +1,4 @@
-use dropsquash_core::{AppError, FrameSize, Result};
+use dropsquash_core::{AppError, FrameSize, OutputSize, Result};
 use objc2::rc::Retained;
 use objc2::AnyThread;
 use objc2_foundation::NSArray;
@@ -19,11 +19,20 @@ pub fn build_stream_capture_plan(
     content: &SCShareableContent,
     target: &SckCaptureTarget,
 ) -> Result<SckStreamCapturePlan> {
+    build_stream_capture_plan_for_output(content, target, OutputSize::Auto)
+}
+
+pub fn build_stream_capture_plan_for_output(
+    content: &SCShareableContent,
+    target: &SckCaptureTarget,
+    output_size: OutputSize,
+) -> Result<SckStreamCapturePlan> {
     let filter = match target.kind {
         SckCaptureTargetKind::Window => window_filter(content, target.id)?,
         SckCaptureTargetKind::Display => display_filter(content, target.id)?,
     };
-    let frame_size = frame_size_from_filter(&filter)?;
+    let frame_size =
+        super::output_size::final_frame_size(frame_size_from_filter(&filter)?, output_size);
     let configuration = stream_configuration(frame_size);
     Ok(SckStreamCapturePlan {
         filter,

@@ -12,10 +12,12 @@ use super::{FrameMetadataProvider, SckLiveMaskEvidence, SckStreamFrameMetadataOu
 use crate::secure_share::stream_lifecycle::{start_stream_capture, stop_stream_capture};
 use crate::secure_share::stream_plan::SckStreamCapturePlan;
 
+mod recording;
+
 pub struct SckFrameMetadataStreamRegistration {
     stream: Retained<SCStream>,
     output: SckStreamFrameMetadataOutput,
-    _queue: DispatchRetained<DispatchQueue>,
+    output_queue: DispatchRetained<DispatchQueue>,
 }
 
 impl SckFrameMetadataStreamRegistration {
@@ -28,10 +30,21 @@ impl SckFrameMetadataStreamRegistration {
         configuration: &SCStreamConfiguration,
         frame_size: FrameSize,
     ) -> Result<Self> {
-        let output = SckStreamFrameMetadataOutput::new(frame_size);
+        Self::with_output(
+            filter,
+            configuration,
+            SckStreamFrameMetadataOutput::new(frame_size),
+        )
+    }
+
+    fn with_output(
+        filter: &SCContentFilter,
+        configuration: &SCStreamConfiguration,
+        output: SckStreamFrameMetadataOutput,
+    ) -> Result<Self> {
         let queue = DispatchQueue::new(
             "app.dropsquash.secure-share.frames",
-            DispatchQueueAttr::SERIAL,
+            DispatchQueueAttr::concurrent(),
         );
         let stream = unsafe {
             SCStream::initWithFilter_configuration_delegate(
@@ -53,7 +66,7 @@ impl SckFrameMetadataStreamRegistration {
         Ok(Self {
             stream,
             output,
-            _queue: queue,
+            output_queue: queue,
         })
     }
 
@@ -66,7 +79,9 @@ impl SckFrameMetadataStreamRegistration {
     }
 
     pub fn stop_capture(&self, timeout: Duration) -> Result<()> {
-        stop_stream_capture(&self.stream, timeout)
+        stop_stream_capture(&self.stream, timeout)?;
+        self.output_queue.barrier_sync(|| {});
+        Ok(())
     }
 
     pub fn observe_for(

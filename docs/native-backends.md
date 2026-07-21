@@ -10,6 +10,12 @@ DropSquash uses a backend-neutral Rust contract and one implementation per opera
 
 The current macOS path uses AVFoundation's export session and reports H.264 MP4 support for `.mov`, `.mp4`, and `.m4v` inputs. It should not be described as a verified explicit VideoToolbox hardware encoder path until runtime capability reporting proves that path.
 
+For evidence mode, the planned macOS-native core is deeper than the current
+export-session path: `AVAssetReader/AVAssetWriter + CoreMedia +
+VTCompressionSession`. That path is the target for deterministic segment
+extraction, richer verification, and analyzer insertion points. See
+`docs/evidence-core-architecture.md`.
+
 ## Product Invariants
 
 - No external media executable is executed, linked, downloaded, or bundled.
@@ -20,6 +26,10 @@ The current macOS path uses AVFoundation's export session and reports H.264 MP4 
 - There is no silent software fallback or runtime plugin download.
 
 The Linux implementation is deliberately stricter because GStreamer can discover dynamic plugins. Production packaging must set an app-owned registry and plugin path, enumerate every permitted element, reject `gst-libav`, and include a license/security review for each shipped plugin.
+
+GStreamer is therefore an optional adapter strategy, not the default macOS
+core. On macOS, DropSquash should prefer Apple-native primitives before adding
+cross-platform abstraction cost.
 
 ## Why Not Pure-Rust Codecs
 

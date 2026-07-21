@@ -1,4 +1,6 @@
-use super::dev_environment::{reject_parallel_version_manager, require_nix_systems};
+use super::dev_environment::{
+    reject_parallel_version_manager, require_nix_systems, require_web_toolchain_contract,
+};
 use super::secret_files::{is_secret_file, reject_secret_files, require_local_agent_ignore};
 use super::workflow::{
     forbidden_release_workflow_values, missing_ci_workflow_gates, missing_desktop_workflow_gates,
@@ -524,6 +526,39 @@ fn reports_missing_intel_macos_nix_dev_shell_system() {
     let error = require_nix_systems(&path).unwrap_err();
 
     assert!(error.contains("x86_64-darwin"));
+}
+
+#[test]
+fn accepts_aligned_nix_and_web_toolchain_contract() {
+    let directory = tempfile::tempdir().unwrap();
+    let flake = directory.path().join("flake.nix");
+    let package = directory.path().join("package.json");
+    std::fs::write(&flake, "nodejs_24 pnpm_10").unwrap();
+    std::fs::write(
+        &package,
+        r#"{ "packageManager": "pnpm@10.34.0", "engines": { "node": ">=24 <25" } }"#,
+    )
+    .unwrap();
+
+    require_web_toolchain_contract(&flake, &package).unwrap();
+}
+
+#[test]
+fn reports_when_web_toolchain_contract_drifts() {
+    let directory = tempfile::tempdir().unwrap();
+    let flake = directory.path().join("flake.nix");
+    let package = directory.path().join("package.json");
+    std::fs::write(&flake, "nodejs_24").unwrap();
+    std::fs::write(
+        &package,
+        r#"{ "packageManager": "pnpm@9.0.0", "engines": { "node": ">=25 <26" } }"#,
+    )
+    .unwrap();
+
+    let error = require_web_toolchain_contract(&flake, &package).unwrap_err();
+
+    assert!(error.contains("missing markers"));
+    assert!(error.contains("pnpm_10") || error.contains("\"node\": \">=24 <25\""));
 }
 
 #[test]

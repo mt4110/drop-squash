@@ -5,18 +5,30 @@ pub(super) fn check_line(
     missing: &mut Vec<String>,
     labels: &mut Vec<String>,
     rows: &mut Vec<(String, String)>,
+    section: Option<&str>,
 ) {
     if !line.starts_with('|') || line.contains("---") {
         return;
     }
     let cells = cells(line);
-    if let Some(label) = cells.first().map(|value| value.trim()) {
+    let Some(label) = cells.first().map(|value| value.trim()) else {
+        return;
+    };
+    let is_field_row = cells.len() == 2;
+    let in_scope = is_field_row
+        || section.map_or(true, |filter| {
+            crate::manual_qa_pending::section::matches_requested_filter(label, filter)
+        });
+    if !in_scope {
+        return;
+    }
+    {
         labels.push(label.to_string());
     }
     if !matches!(cells.len(), 2..=4) {
         missing.push(format!(
             "manual QA row has unexpected column count: {}",
-            cells[0].trim()
+            label
         ));
         return;
     }

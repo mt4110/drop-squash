@@ -5,7 +5,7 @@ use super::requirements::{REQUIRED_CHECKS, REQUIRED_FIELDS};
 fn rejects_extra_manual_qa_arguments() {
     let error = super::run(vec!["docs/manual-qa.md".into(), "extra.md".into()]).unwrap_err();
 
-    assert!(error.contains("at most one"));
+    assert!(error.contains("--section"));
 }
 
 #[test]
@@ -205,14 +205,26 @@ fn reports_empty_four_column_results() {
 
 #[test]
 fn reports_pending_hint_for_empty_packaged_app_result() {
-    let (_directory, path) = write_manual_qa(
-        "| Choose recording conversion | sample.mov | Smaller output |  |\n",
-    );
+    let (_directory, path) =
+        write_manual_qa("| Choose recording conversion | sample.mov | Smaller output |  |\n");
     let missing = check_file(&path).unwrap();
 
     assert!(missing.iter().any(|error| error.contains(
         "manual QA pending hint: Choose recording conversion -> cargo run -p xtask -- manual-qa-pending <manual-qa.md> --section packaged-app"
     )));
+}
+
+#[test]
+fn section_check_ignores_other_sections() {
+    let (_directory, path) = write_manual_qa(
+        "| Choose recording conversion | sample.mov | Smaller output | chose sample and saved output |\n\
+| Valid sandbox activation | Expected |  |\n",
+    );
+    let missing = super::check_file_section(&path, Some("packaged-app")).unwrap();
+
+    assert!(!missing
+        .iter()
+        .any(|error| error.contains("Valid sandbox activation")));
 }
 
 #[test]
@@ -1581,7 +1593,7 @@ fn reports_failed_conversion_without_original_remained_evidence() {
 #[test]
 fn reports_larger_output_without_original_evidence() {
     let (_directory, path) = write_manual_qa(
-        "| Larger output | Input that cannot be made smaller | Treated as failure | failed and trial count unchanged |\n",
+        "| Larger output | Input that cannot be made smaller | Treated as failure | could not be made smaller and failed; trial count unchanged |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1591,7 +1603,7 @@ fn reports_larger_output_without_original_evidence() {
 #[test]
 fn reports_larger_output_without_original_remained_evidence() {
     let (_directory, path) = write_manual_qa(
-        "| Larger output | Input that cannot be made smaller | Treated as failure | larger not smaller result failed; original checked and trial count unchanged |\n",
+        "| Larger output | Input that cannot be made smaller | Kept original | could not be made smaller; kept original; original checked and trial count unchanged |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -1601,7 +1613,17 @@ fn reports_larger_output_without_original_remained_evidence() {
 #[test]
 fn reports_larger_output_without_larger_evidence() {
     let (_directory, path) = write_manual_qa(
-        "| Larger output | Input that cannot be made smaller | Treated as failure | result failed, original remained, and trial count unchanged |\n",
+        "| Larger output | Input that cannot be made smaller | Kept original | friendly kept-original result appeared; original remained, and trial count unchanged |\n",
+    );
+    let missing = check_file(&path).unwrap();
+
+    assert!(missing.iter().any(|error| error.contains("Larger output")));
+}
+
+#[test]
+fn reports_larger_output_without_kept_original_evidence() {
+    let (_directory, path) = write_manual_qa(
+        "| Larger output | Input that cannot be made smaller | Kept original | larger not smaller result appeared; original remained and trial count unchanged |\n",
     );
     let missing = check_file(&path).unwrap();
 
@@ -2088,7 +2110,7 @@ fn complete_manual_qa(artifact: &std::path::Path) -> String {
             text.push_str("| Failed conversion | Passes | friendly error shown; original remained and trial count unchanged after failure |\n");
         } else if check == "Larger output" {
             text.push_str(
-                "| Larger output | Passes | larger not smaller result failed, original remained, and trial count unchanged |\n",
+                "| Larger output | Passes | could not be made smaller friendly kept-original result appeared; larger not smaller output kept original, original remained, and trial count unchanged |\n",
             );
         } else if check == "Reveal output" {
             text.push_str(
@@ -2143,6 +2165,9 @@ fn command_result(check: &str, artifact: &std::path::Path) -> String {
         "`cargo run -p xtask -- privacy-policy-check`" => "privacy-policy-check passed".to_string(),
         "`cargo run -p xtask -- website-check`" => "website-check passed".to_string(),
         "`cargo run -p xtask -- manual-qa-check`" => "manual-qa-check passed".to_string(),
+        "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`" => {
+            "manual-qa-check local-proof passed for packaged DropSquash.dmg".to_string()
+        }
         "`cargo run -p xtask -- benchmark --release-set --input <short> --input <medium> --input <large> --output-dir <tmp> --csv-output <tmp/results.csv>`" => {
             "CSV recorded for three samples, outputs were smaller, saved outside repo at /tmp/dropsquash-bench/results.csv".to_string()
         }

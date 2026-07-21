@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "ja-en-browser-fixture-ui-recording-001",
+  "capturedAt": "2026-07-20T14:48:22+09:00",
+  "source": "signed packaged macOS app UI",
+  "fixture": {
+    "html": "tests/fixtures/secure-share/ja-en-browser-form.html",
+    "containsOnlySyntheticPrivateData": true,
+    "languages": ["ja", "en"]
+  },
+  "localOnly": true,
+  "recognizedPrivateTextStored": false,
+  "capture": {
+    "kind": "selected_window",
+    "captureId": "secure-share-recording-window-4352",
+    "frameSize": { "width": 640, "height": 506 },
+    "frameCount": 23,
+    "maskedRegionCount": 184,
+    "fullyMaskedFrameCount": 23
+  },
+  "output": {
+    "fileName": "secure-share-recording-1784526502370-14355.mp4",
+    "bytes": 2400,
+    "sha256": "1b6fd5c8479771270360313a920b168b301397ef3b115d920a76d4bf0e5aad5a",
+    "sidecarFileName": "secure-share-recording-1784526502370-14355.mask-plan.json",
+    "sidecarBytes": 100455,
+    "manualVisualOutputCheck": "passed: generated MP4 thumbnail is fully black under Strict Shield",
+    "independentDecodeVerification": "passed",
+    "evidenceSignatureVerification": "passed"
+  },
+  "maskPlan": {
+    "policy": "strict_reveal",
+    "shareMode": "strict_shield",
+    "unknownClientAreaDestroyed": true,
+    "unmatchedObservationCount": 0,
+    "verificationRequiredFrameCount": 0,
+    "signatureAlgorithm": "ed25519"
+  },
+  "limitations": [
+    "Strict Shield destroys unknown client-area pixels.",
+    "Selective masking is not shareable in Phase 4 alpha.",
+    "This is not a leak-zero or enterprise audit-ready claim."
+  ]
+}

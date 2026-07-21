@@ -8,8 +8,8 @@ DropSquash Secure Share Alpha
 
 ## Tagline
 
-Local-first screen-recording evidence for QA teams, with native macOS
-observation and redacted MaskPlan previews.
+Local-first screen-recording evidence for QA teams, with native macOS masking,
+independent verification, and redacted signed MaskPlans.
 
 ## Track
 
@@ -19,17 +19,18 @@ Developer Tools
 
 DropSquash started as a local Mac app for compressing screen recordings without
 uploading media. For Build Week, it now has a Secure Share R&D alpha: a native
-macOS observation pipeline that uses ScreenCaptureKit frame metadata,
-Accessibility structure, and local Apple Vision text/shape observations to
-preview where sensitive screen regions should be destructively masked. It also
-destructively blackens local Vision regions on the same ScreenCaptureKit frame
-and reads back black pixels without storing recognized text.
+macOS window recorder using ScreenCaptureKit frame metadata, Accessibility
+structure plus focused-input geometry tied to the selected window, and local
+Apple Vision text/shape observations. Its Phase 5 Strict
+Shield path destroys the full captured frame before encoding, independently
+decodes the MP4 to verify that destructive region, and writes a redacted
+Ed25519-signed MaskPlan sidecar without storing recognized text or observation
+geometry.
 
 The alpha does not claim completed privacy protection. It produces redacted
-evidence, a Strict Reveal `MaskPlan` preview, and a black-fill proof without
-storing recognized private OCR text. The next gates are final-video
-destructive export, independent final-output residual verification, and
-fail-closed deletion before any commercial security claim.
+evidence, a Strict Reveal `MaskPlan`, and independent final-output verification
+without storing recognized private OCR text. Signature, metadata, or pixel
+verification failures fail closed before output publication.
 
 ## What It Does
 
@@ -39,9 +40,12 @@ fail-closed deletion before any commercial security claim.
 - observes the selected browser window from the packaged macOS app
 - records ScreenCaptureKit frame size and frame count
 - records Accessibility observation count
+- records focused-input geometry count without input values
 - records local Vision text/shape observation count
-- emits a redacted Strict Reveal `MaskPlan` preview
-- blackens Vision regions on the live captured frame and reads back black pixels
+- emits a redacted `MaskPlan` sidecar bound to the MP4 SHA-256
+- records only redacted AX/focused-input/Vision aggregate counts, while Strict Shield destroys
+  every captured frame before encoding and independently checks decoded output
+- signs and verifies the sidecar locally with Ed25519 before publication
 - keeps recognized private text out of evidence JSON
 
 ## Why It Matters
@@ -53,33 +57,44 @@ audit. DropSquash is exploring a stricter route: local native observation,
 deterministic mask planning, destructive pixel overwrite, and independent
 verification before a recording can be shared.
 
-The current Build Week submission is the R&D alpha that proves the observation
-and planning foundation, not the final security product.
+The current Build Week submission is an R&D alpha, not the final security
+product or a leak-zero claim.
 
 ## Demo Evidence
 
 Recorded local packaged-app evidence:
 
 ```text
-Fixture: tests/fixtures/secure-share/ja-en-browser-form.html
-Window: 1224x968 browser fixture
-Frames observed: 3
-Accessibility observations: 1
-Local Vision observations: 156
-MaskPlan policy: strict_reveal
-MaskPlan frames: 3
-First frame regions after coalescing: 47
-Black-fill mask rects: 47
-First black-fill sample blackened: true
-Live frames blackened: 3
-Live text regions blackened: 156
-Live black pixel readbacks: 3
-Recognized private text stored: no
+Fixture: tests/fixtures/secure-share/NativeAccessibilityFixture.swift
+Window: 760x652 native Japanese/English accessibility fixture
+Frames: 144
+Accessibility observations: 70 aggregate-only
+Local Vision observations: 80 aggregate-only
+MaskPlan policy: strict_reveal / Strict Shield
+Full-frame destructive regions: 144
+Independent decoded output verification: passed
+Audio and metadata: absent
+Sidecar signature: Ed25519 verified before publication
+Recognized private text or observation geometry stored: no
+MP4 SHA-256: fb3da3c40c285bf70194eabae611adc0ddd148d0853a05457b88d829c6d834cf
+```
+
+Build Week local artifact:
+
+```text
+DMG: target/release/bundle/dmg/DropSquash_0.1.0_aarch64.dmg
+SHA-256: 6c0d82d6d11d351cec9fb9886f46529ecc7c3aba3d327a7870643c7c1dd721b0
+Apple notarization: Accepted
+Notary submission: 42774ba8-fe01-4439-99d1-6c8565e499aa
+Staple/validate: passed
+Mounted app Gatekeeper assessment: accepted, source=Notarized Developer ID
 ```
 
 See:
 
-- `docs/build-week-evidence.json`
+- `docs/phase5-alpha.md`
+- `docs/build-week-phase5-evidence.json`
+- `docs/build-week-ui-fixture-evidence.json`
 - `docs/build-week-judge-runbook.md`
 - `docs/build-week-demo-script.md`
 
@@ -89,28 +104,16 @@ See:
 nix develop
 pnpm --dir apps/desktop tauri build
 open -a "Google Chrome" tests/fixtures/secure-share/ja-en-browser-form.html
-cargo run -p xtask -- manual-qa-secure-share-observe list
+open target/release/bundle/macos/DropSquash.app
 ```
 
-Then run the packaged app harness with the browser window ID:
+In the app, choose the fixture window, record it, and use **Stop and save
+verification**. The saved state provides controls to reveal the all-black MP4 and its
+signed MaskPlan sidecar.
 
-```bash
-env \
-  DROP_SQUASH_QA_INSTANCE_ID=build_week_maskplan_preview \
-  DROP_SQUASH_QA_SCK_OBSERVE=1 \
-  DROP_SQUASH_QA_SCK_OBSERVE_WINDOW_ID=3301 \
-  DROP_SQUASH_QA_SCK_OBSERVE_CAPTURE_MS=1000 \
-  DROP_SQUASH_QA_SCK_OBSERVE_TIMEOUT_MS=15000 \
-  DROP_SQUASH_QA_SCK_OBSERVE_QUIT_AFTER=1 \
-  DROP_SQUASH_MANUAL_QA_EVENT_LOG=/tmp/dsq-build-week-maskplan-preview.jsonl \
-  target/release/bundle/macos/DropSquash.app/Contents/MacOS/dropsquash-desktop
-```
-
-Inspect the final JSONL event:
-
-```bash
-tail -n 1 /tmp/dsq-build-week-maskplan-preview.jsonl
-```
+For the submitted local artifact, use the notarized DMG above instead of
+claiming a public release. It is a Build Week evidence artifact, not a paid
+beta distribution.
 
 ## How Codex And GPT-5.6 Were Used
 
@@ -121,20 +124,21 @@ Codex was used as the primary engineering partner for:
 - splitting Rust/Tauri work under strict file-size limits
 - adding the Japanese/English adversarial fixture and annotation sidecar
 - wiring the packaged-app ScreenCaptureKit, Accessibility, and Vision
-  observation evidence into a redacted `MaskPlan` preview and live-frame proof
+  observation evidence into a redacted MaskPlan, final-video verification, and
+  signed sidecar
 - preparing README, judging runbook, evidence summary, and demo script
 - keeping no-upload, no-ffmpeg, original-safety, and local-first constraints
   visible while the prototype evolved
 
 ## What Is Not Finished Yet
 
-- final-video destructive CVPixelBuffer overwrite from the `MaskPlan`
-- independent final-output residual verification
-- fail-closed output deletion when verification fails
-- production Secure Share recording/export UI
+- selective Secure Share redaction that preserves useful non-sensitive pixels
+- audio capture, display capture, and any general-purpose recorder workflow
+- endpoint protection against other recording, screenshot, clipboard-sync, or
+  remote-control software on the same Mac
 - Windows/Linux Secure Share support
 - commercial checkout
-- any claim that the app is leak-zero or enterprise audit-ready
+- do not claim that the app is leak-zero or enterprise audit-ready
 
 ## Repository Access
 
@@ -153,8 +157,9 @@ access to source, setup instructions, fixtures, and evidence.
 DropSquash Secure Share Alpha is a local-first macOS prototype for QA teams
 that need safer screen-recording evidence. The demo shows a synthetic
 Japanese/English sensitive-data fixture, packaged-app ScreenCaptureKit +
-Accessibility + local Vision observation, and a redacted Strict Reveal
-MaskPlan preview that stores geometry/reasons/sources/confidence but not
-recognized private OCR text. It also shows a black-fill proof. This is an R&D
-alpha, not a leak-zero claim.
+Accessibility + local Vision observation, Strict Shield full-frame destructive
+black masking, and a redacted Strict Reveal MaskPlan sidecar that stores the
+canonical full-frame region plus aggregate counts, but no recognized private
+OCR text or observation geometry. The final MP4 is independently decoded before
+publication. This is an R&D alpha, not a leak-zero claim.
 ```

@@ -5,6 +5,11 @@ use dropsquash_core::{
 };
 use serde::Serialize;
 
+mod plan_options;
+pub(crate) use plan_options::options_for_frame;
+#[cfg(test)]
+mod plan_options_tests;
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MaskPlanBlackFillProof {
@@ -22,9 +27,23 @@ pub fn resolve_secure_share_options(
 ) -> Result<Option<SecureShareOptions>> {
     match options {
         None => Ok(None),
-        Some(options) if !options.mask_rects.is_empty() => Ok(Some(options.clone())),
+        Some(options) if options.mask_plan.is_some() || !options.mask_rects.is_empty() => {
+            Ok(Some(options.clone()))
+        }
         Some(options) => resolve_auto_detected(input_path, options).map(Some),
     }
+}
+
+#[cfg(target_os = "macos")]
+pub fn verify_mask_plan_output(path: &Path, options: &SecureShareOptions) -> Result<()> {
+    crate::videotoolbox::verify_masked_output(path, options)
+}
+
+#[cfg(not(target_os = "macos"))]
+pub fn verify_mask_plan_output(_path: &Path, _options: &SecureShareOptions) -> Result<()> {
+    Err(AppError::UnsupportedMedia(
+        "Secure Share output verification is currently macOS-only".to_string(),
+    ))
 }
 
 #[cfg(target_os = "macos")]
@@ -90,6 +109,7 @@ fn resolve_auto_detected(
     Ok(SecureShareOptions {
         mask_mode: options.mask_mode,
         mask_rects: crate::videotoolbox::detect_auto_mask_rects(input_path)?,
+        mask_plan: None,
     })
 }
 

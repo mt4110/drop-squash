@@ -19,3 +19,8 @@ browser fetch calls, generic HTTP clients, and Tauri HTTP plugin imports.
 The updater is disabled for the first paid beta. If an updater is enabled in a
 future release, update checks must be explicit release infrastructure traffic
 and must not send media contents, media-derived metadata, or raw license keys.
+
+Evidence mode extends this local-only rule. Any semantic naming analyzer,
+segment planner, manifest builder, or verifier must run locally and must not
+upload media, transcripts, OCR text, or media-derived metadata. The planned
+evidence sidecar model is documented in `docs/evidence-core-architecture.md`.

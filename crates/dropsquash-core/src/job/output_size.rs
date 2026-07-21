@@ -27,10 +27,10 @@ impl OutputSize {
 
     pub fn display_name(self) -> &'static str {
         match self {
-            Self::Auto => "Auto",
-            Self::P1080 => "1920 x 1080",
-            Self::P720 => "1280 x 720",
-            Self::P480 => "640 x 480",
+            Self::Auto => "自動 / Auto",
+            Self::P1080 => "大 / 1920 x 1080",
+            Self::P720 => "中 / 1280 x 720",
+            Self::P480 => "小 / 640 x 480",
         }
     }
 }

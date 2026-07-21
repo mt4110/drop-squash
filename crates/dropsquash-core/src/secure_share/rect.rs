@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::{Confidence, MaskReason, ObservationSource, RegionPolicy};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PixelRect {
     pub x: u32,
     pub y: u32,
@@ -12,7 +12,7 @@ pub struct PixelRect {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MaskRegion {
     pub rect: PixelRect,
     pub policy: RegionPolicy,

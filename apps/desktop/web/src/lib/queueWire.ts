@@ -1,10 +1,13 @@
 import type { ConversionSummary, ConvertRequest, Profile } from "./commands.js";
+import { normalizeConversionSummary } from "./conversionSummaryWire.js";
+import { isNotSmallerMessage, userErrorMessage } from "./errorMessage.js";
 import type { QueueEntry, QueueStatus } from "./queue.js";
 
 export type RustQueueStatus =
   | "Queued"
   | "Running"
   | "Succeeded"
+  | "Unchanged"
   | "Failed"
   | "Cancelled"
   | "Blocked";
@@ -17,6 +20,7 @@ export type RustQueueItem = {
     profile: ConvertRequest["profile"];
     output_size: ConvertRequest["outputSize"];
     source_policy: ConvertRequest["sourcePolicy"];
+    secure_share?: ConvertRequest["secureShare"];
   };
   status: RustQueueStatus;
   error?: string | null;
@@ -36,16 +40,18 @@ export type RustQueueEvent =
   | { Enqueued: RustQueueItem }
   | { Started: RustQueueItem }
   | { Finished: { id: number; result: RustEncodeResult } }
+  | { Unchanged: { id: number; error: string } }
   | { Cancelled: number }
   | { Blocked: { id: number; error: string } }
   | { Failed: { id: number; error: string } };
 
 export function queueEntryFromRustItem(item: RustQueueItem): QueueEntry {
+  const status = queueStatusFromRust(item.status);
   return {
     id: item.id,
     inputPath: item.job.input_path,
-    status: queueStatusFromRust(item.status),
-    error: item.error ?? undefined,
+    status: status === "failed" && isNotSmallerMessage(item.error) ? "unchanged" : status,
+    error: item.error ? userErrorMessage(item.error) : undefined,
   };
 }
 
@@ -60,6 +66,7 @@ export function requestFromRustItem(
     outputSize: item.job.output_size,
     sourcePolicy: item.job.source_policy,
     writePrivacyReceipt,
+    secureShare: item.job.secure_share,
   };
 }
 
@@ -67,12 +74,13 @@ export function encodeResultFromSummary(
   summary: ConversionSummary,
   profile: Profile,
 ): RustEncodeResult {
+  const normalized = normalizeConversionSummary(summary);
   return {
-    input_path: summary.sourcePath,
-    output_path: summary.outputPath,
+    input_path: normalized.sourcePath,
+    output_path: normalized.outputPath,
     profile,
-    original_bytes: summary.originalBytes,
-    output_bytes: summary.outputBytes,
+    original_bytes: normalized.originalBytes,
+    output_bytes: normalized.outputBytes,
     success: true,
     error_message: null,
   };
@@ -90,6 +98,8 @@ export function queueStatusFromRust(status: RustQueueStatus): QueueStatus {
       return "running";
     case "Succeeded":
       return "succeeded";
+    case "Unchanged":
+      return "unchanged";
     case "Failed":
       return "failed";
     case "Cancelled":

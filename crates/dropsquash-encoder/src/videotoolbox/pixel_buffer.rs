@@ -1,4 +1,4 @@
-use dropsquash_core::{AppError, Result, SecureShareOptions};
+use dropsquash_core::{AppError, FrameSize, Result, SecureShareOptions};
 use objc2_core_media::CMSampleBuffer;
 use objc2_core_video::{
     kCVPixelFormatType_32BGRA, kCVReturnSuccess, CVPixelBuffer, CVPixelBufferGetBaseAddress,
@@ -10,6 +10,7 @@ use objc2_core_video::{
 use super::mask::apply_destructive_mask_rgba_stride;
 
 mod signals;
+pub(crate) mod verify;
 pub(super) use signals::{read_sample_buffer_row_signals, RowSignals};
 
 pub(super) fn mask_sample_buffer(
@@ -21,6 +22,16 @@ pub(super) fn mask_sample_buffer(
         AppError::UnsupportedMedia("Secure Share requires decoded video frames".to_string())
     })?;
     mask_pixel_buffer(&image, options, frame_seed)
+}
+
+pub(super) fn sample_frame_size(sample: &CMSampleBuffer) -> Result<FrameSize> {
+    let image = unsafe { sample.image_buffer() }.ok_or_else(|| {
+        AppError::UnsupportedMedia("Secure Share requires decoded video frames".to_string())
+    })?;
+    Ok(FrameSize {
+        width: CVPixelBufferGetWidth(&image) as u32,
+        height: CVPixelBufferGetHeight(&image) as u32,
+    })
 }
 
 fn mask_pixel_buffer(

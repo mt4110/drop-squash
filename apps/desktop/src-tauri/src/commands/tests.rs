@@ -1,8 +1,8 @@
 use dropsquash_core::{
-    AppConfig, LicenseState, LockedReason, OutputSize, Profile, TRIAL_CONVERSION_LIMIT,
+    AppConfig, AppError, LicenseState, LockedReason, OutputSize, Profile, TRIAL_CONVERSION_LIMIT,
 };
 
-use super::dto::drop_zone_state;
+use super::{dto::drop_zone_state, format_error};
 
 #[test]
 fn exposes_placeholder_drop_zone_state() {
@@ -79,4 +79,16 @@ fn exposes_license_refresh_lock_reason() {
 
     assert!(state.is_locked);
     assert_eq!(state.locked_reason, Some("license-refresh-required"));
+}
+
+#[test]
+fn formats_not_smaller_encoder_errors_for_desktop_ui() {
+    let message = format_error(AppError::Encoder(
+        "output is not smaller than original".to_string(),
+    ));
+
+    assert_eq!(
+        message,
+        "This recording could not be made smaller. It may already be small, so DropSquash kept the original and did not count the attempt. Try a smaller Size setting for this clip."
+    );
 }

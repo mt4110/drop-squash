@@ -28,6 +28,28 @@ pub(super) const CORE: &[Entry] = &[
     ("docs/release-blockers.md", "Signing and distribution proof"),
     (
         "docs/release-blockers.md",
+        "docs/license-sandbox-runbook.md",
+    ),
+    ("docs/release-blockers.md", "docs/signed-dmg-runbook.md"),
+    (
+        "docs/release-blockers.md",
+        "docs/public-beta-operator-checklist.md",
+    ),
+    ("docs/release-blockers.md", "Short Execution Memo"),
+    ("docs/release-blockers.md", "public-web-ready"),
+    ("docs/release-blockers.md", "manual-qa-packaged-rerun"),
+    (
+        "docs/release-blockers.md",
+        "manual-qa-pending docs/manual-qa.md --section license",
+    ),
+    (
+        "docs/release-blockers.md",
+        "disk-image notice, license field",
+    ),
+    ("docs/release-blockers.md", "benchmark --release-set"),
+    ("docs/release-blockers.md", "benchmark-csv-check"),
+    (
+        "docs/release-blockers.md",
         "matching the release notes Artifact URL",
     ),
     ("docs/release-blockers.md", "brew uninstall --cask"),

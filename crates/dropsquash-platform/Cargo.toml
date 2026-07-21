@@ -5,40 +5,51 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 rust-version.workspace = true
+build = "build.rs"
 
 [dependencies]
 dropsquash-core.workspace = true
+
+[build-dependencies]
+cc = "1.2.66"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 block2 = "0.6"
 dispatch2 = { version = "0.3.1", default-features = false, features = ["alloc", "objc2"] }
 objc2 = "0.6.4"
-objc2-app-kit = { version = "0.3.2", default-features = false, features = ["NSWorkspace", "std"] }
+objc2-av-foundation = { version = "0.3.2", default-features = false, features = ["std", "AVAsset", "AVAssetReader", "AVAssetReaderOutput", "AVAssetTrack", "AVAssetWriter", "AVAssetWriterInput", "AVMediaFormat", "AVVideoSettings", "objc2-core-media", "objc2-core-video"] }
+objc2-app-kit = { version = "0.3.2", default-features = false, features = ["libc", "NSRunningApplication", "NSWorkspace", "std"] }
 objc2-foundation = { version = "0.3.2", default-features = false, features = [
   "NSArray",
   "NSDictionary",
   "NSError",
   "NSFileManager",
   "NSGeometry",
+  "NSNotification",
+  "NSOperation",
   "NSString",
   "NSObject",
   "NSObjCRuntime",
   "NSURL",
   "NSValue",
+  "block2",
   "objc2-core-foundation",
   "std",
 ] }
 objc2-core-foundation = { version = "0.3.2", default-features = false, features = [
   "CFArray",
   "CFDictionary",
+  "CFRunLoop",
   "CFCGTypes",
   "CFNumber",
   "CFString",
   "std",
 ] }
-objc2-core-graphics = { version = "0.3.2", default-features = false, features = ["std"] }
+objc2-core-graphics = { version = "0.3.2", default-features = false, features = ["CGGeometry", "CGWindow", "std"] }
+objc2-core-image = { version = "0.3.2", default-features = false, features = ["CIContext", "CIImage", "objc2-core-video", "std"] }
 objc2-core-media = { version = "0.3.2", default-features = false, features = [
   "CMAttachment",
+  "CMFormatDescription",
   "CMSampleBuffer",
   "objc2-core-video",
   "std",
@@ -48,9 +59,13 @@ objc2-core-video = { version = "0.3.2", default-features = false, features = [
   "CVBuffer",
   "CVImageBuffer",
   "CVPixelBuffer",
+  "CVPixelBufferPool",
+  "CVPixelBufferIOSurface",
+  "objc2-io-surface",
   "CVReturn",
   "std",
 ] }
+objc2-io-surface = { version = "0.3.2", default-features = false, features = ["IOSurfaceRef", "IOSurfaceTypes", "libc", "objc2-core-foundation", "std"] }
 objc2-application-services = { version = "0.3.2", default-features = false, features = [
   "AXError",
   "AXUIElement",
@@ -73,6 +88,7 @@ objc2-screen-capture-kit = { version = "0.3.2", default-features = false, featur
 objc2-vision = { version = "0.3.2", default-features = false, features = [
   "objc2-core-foundation",
   "objc2-core-media",
+  "objc2-core-video",
   "VNDetectTextRectanglesRequest",
   "VNObservation",
   "VNRecognizeTextRequest",

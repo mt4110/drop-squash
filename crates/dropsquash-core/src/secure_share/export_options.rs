@@ -1,4 +1,4 @@
-use super::{FrameMaskPlan, MaskPlan, PixelRect, RegionPolicy};
+use super::{FrameMaskPlan, FrameSize, MaskPlan, PixelRect, RegionPolicy};
 use crate::{MaskMode, MaskRect, SecureShareOptions};
 
 pub fn mask_options_for_frame(
@@ -13,19 +13,32 @@ pub fn mask_options_for_frame(
     Some(SecureShareOptions {
         mask_mode,
         mask_rects: frame_mask_rects(frame, plan.frame_size.width, plan.frame_size.height),
+        mask_plan: None,
     })
 }
 
 fn frame_mask_rects(frame: &FrameMaskPlan, width: u32, height: u32) -> Vec<MaskRect> {
+    effective_rects(frame, FrameSize { width, height })
+        .into_iter()
+        .map(|rect| MaskRect {
+            x: rect.x,
+            y: rect.y,
+            width: rect.width,
+            height: rect.height,
+        })
+        .collect()
+}
+
+pub(crate) fn effective_rects(frame: &FrameMaskPlan, size: FrameSize) -> Vec<PixelRect> {
     frame
         .regions
         .iter()
         .filter(|region| region.policy != RegionPolicy::Safe)
-        .filter_map(|region| expanded(region.rect, region.expansion_px, width, height))
+        .filter_map(|region| expanded(region.rect, region.expansion_px, size.width, size.height))
         .collect()
 }
 
-fn expanded(rect: PixelRect, amount: u32, width: u32, height: u32) -> Option<MaskRect> {
+fn expanded(rect: PixelRect, amount: u32, width: u32, height: u32) -> Option<PixelRect> {
     let left = rect.x.saturating_sub(amount);
     let top = rect.y.saturating_sub(amount);
     let right = rect.x.saturating_add(rect.width).saturating_add(amount);
@@ -35,7 +48,7 @@ fn expanded(rect: PixelRect, amount: u32, width: u32, height: u32) -> Option<Mas
     if right <= left || bottom <= top {
         return None;
     }
-    Some(MaskRect {
+    Some(PixelRect {
         x: left,
         y: top,
         width: right - left,

@@ -1,11 +1,12 @@
 use std::path::PathBuf;
 
 use dropsquash_core::{
-    default_history_path, AppError, EncodeJob, LicenseState, LockedReason, SourcePolicy,
+    default_history_path, default_license_cache_path, AppError, EncodeJob, LicenseState,
+    LockedReason, MaskPlan, SecureShareOptions, SourcePolicy, NOT_SMALLER_MESSAGE,
 };
-use dropsquash_encoder::EncoderBackend;
+use dropsquash_encoder::{resolve_secure_share_options, EncoderBackend};
 use dropsquash_history::{append_successful_record, read_records, HistoryMetrics};
-use dropsquash_privacy::PrivacyReceipt;
+use dropsquash_privacy::{PrivacyReceipt, SecureShareReceipt};
 
 use crate::args::{OutputSizeArg, ProfileArg};
 
@@ -24,27 +25,39 @@ pub async fn run(
     profile: ProfileArg,
     output_size: OutputSizeArg,
     history: Option<PathBuf>,
+    secure_share: Option<SecureShareOptions>,
 ) -> dropsquash_core::Result<()> {
     let history = history.unwrap_or_else(default_history_path);
     ensure_trial_available(&history).await?;
-    let result = NativeEncoder
+    let secure_share = resolve_secure_share_options(&input, secure_share.as_ref())?;
+    let result = match NativeEncoder
         .encode(EncodeJob {
             input_path: input,
             output_dir,
             profile: profile.into(),
             output_size: output_size.into(),
             source_policy: SourcePolicy::Ask,
+            secure_share: secure_share.clone(),
         })
-        .await?;
-    let receipt_path = PrivacyReceipt::save_for_result(&result)?;
+        .await
+    {
+        Ok(result) => result,
+        Err(error) if is_not_smaller_error(&error) => {
+            println!("{NOT_SMALLER_MESSAGE}");
+            license::print_state(license::state(&history, &default_license_cache_path()).await?);
+            return Ok(());
+        }
+        Err(error) => return Err(error),
+    };
+    let receipt_path = save_receipt(&result, secure_share.as_ref(), None)?;
     append_successful_record(&history, result.clone()).await?;
     println!("output: {}", result.output_path.display());
-    println!("privacy receipt: {}", receipt_path.display());
+    println!("receipt: {}", receipt_path.display());
     println!("original bytes: {}", result.original_bytes);
     println!("squashed bytes: {}", result.output_bytes);
     println!("saved bytes: {}", result.saved_bytes());
     println!("reduction: {:.2}%", result.reduction_percent());
-    license::print_state(license::state(&history).await?);
+    license::print_state(license::state(&history, &default_license_cache_path()).await?);
     Ok(())
 }
 
@@ -65,3 +78,24 @@ fn locked_message(reason: LockedReason) -> &'static str {
         }
     }
 }
+
+fn is_not_smaller_error(error: &AppError) -> bool {
+    error.user_message() == NOT_SMALLER_MESSAGE
+}
+
+fn save_receipt(
+    result: &dropsquash_core::EncodeResult,
+    secure_share: Option<&dropsquash_core::SecureShareOptions>,
+    mask_plan: Option<&MaskPlan>,
+) -> dropsquash_core::Result<PathBuf> {
+    if let Some(options) = secure_share {
+        return match mask_plan {
+            Some(plan) => SecureShareReceipt::save_for_result_with_mask_plan(result, options, plan),
+            None => SecureShareReceipt::save_for_result(result, options),
+        };
+    }
+    PrivacyReceipt::save_for_result(result)
+}
+
+#[cfg(test)]
+mod tests;

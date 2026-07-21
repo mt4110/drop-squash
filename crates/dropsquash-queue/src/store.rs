@@ -37,6 +37,10 @@ impl InMemoryQueue {
         self.complete_active(QueueJobStatus::Failed, Some(error))
     }
 
+    pub fn unchanged_active(&mut self, error: String) -> Option<QueueItem> {
+        self.complete_active(QueueJobStatus::Unchanged, Some(error))
+    }
+
     pub fn cancel_active(&mut self) -> Option<QueueItem> {
         self.complete_active(QueueJobStatus::Cancelled, None)
     }

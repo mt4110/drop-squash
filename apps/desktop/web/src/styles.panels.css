@@ -165,6 +165,48 @@
   padding: 5px 7px;
 }
 
+.secure-share-stop {
+  background: #d93025 !important;
+  border: 1px solid #b3261e !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  padding: 6px 10px !important;
+}
+
+.secure-share-prompt {
+  color: #4f6475;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.secure-share-status {
+  border-left: 3px solid #8aa7c7;
+  color: #324a61;
+  display: grid;
+  font-size: 12px;
+  gap: 3px;
+  margin: 0;
+  padding: 2px 0 2px 9px;
+}
+
+.secure-share-status p {
+  align-items: center;
+  display: flex;
+  gap: 7px;
+  margin: 0;
+}
+
+.secure-share-status.is-recording { border-color: #d93025; color: #a01d19; }
+
+.secure-share-status span {
+  animation: recording-pulse 1.2s ease-in-out infinite;
+  background: #d93025;
+  border-radius: 50%;
+  height: 7px;
+  width: 7px;
+}
+
 .secure-share-result,
 .secure-share-note,
 .secure-share-error {
@@ -176,7 +218,23 @@
   margin: 0;
 }
 
-.secure-share-error { color: #b42318; }
+.secure-share-result {
+  border-left: 3px solid #1f9d55;
+  color: #216b3d;
+  padding-left: 9px;
+}
+
+.secure-share-result span { display: flex; gap: 12px; }
+
+.secure-share-error {
+  border-left: 3px solid #d93025;
+  color: #a01d19;
+  padding-left: 9px;
+}
+
+@keyframes recording-pulse {
+  50% { opacity: 0.35; }
+}
 
 .setting-value {
   display: flex;
@@ -334,6 +392,18 @@
 }
 
 @media (max-width: 520px) {
+  .secure-share-heading,
+  .secure-share-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .secure-share-heading button,
+  .secure-share-controls button {
+    min-height: 32px;
+    text-align: center;
+  }
+
   .settings div,
   .settings label,
   .settings-row,

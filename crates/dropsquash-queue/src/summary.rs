@@ -5,6 +5,7 @@ pub struct QueueSummary {
     pub total: usize,
     pub finished: usize,
     pub succeeded: usize,
+    pub unchanged: usize,
     pub failed: usize,
     pub cancelled: usize,
     pub blocked: usize,
@@ -35,6 +36,10 @@ impl QueueSummary {
             QueueEvent::Failed { .. } => {
                 self.finished += 1;
                 self.failed += 1;
+            }
+            QueueEvent::Unchanged { .. } => {
+                self.finished += 1;
+                self.unchanged += 1;
             }
             QueueEvent::Cancelled(_) => {
                 self.finished += 1;

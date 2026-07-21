@@ -12,6 +12,7 @@ fn job(path: &str) -> EncodeJob {
         profile: Profile::Auto,
         output_size: OutputSize::Auto,
         source_policy: SourcePolicy::Ask,
+        secure_share: None,
     }
 }
 
@@ -64,6 +65,19 @@ fn failed_active_job_releases_next_pending_job() {
     let failed = queue.fail_active("decode failed".to_string()).unwrap();
 
     assert_eq!(failed.status, QueueJobStatus::Failed);
+    assert_eq!(queue.start_next().map(|item| item.id), Some(second.id));
+}
+
+#[test]
+fn unchanged_active_job_releases_next_pending_job() {
+    let mut queue = InMemoryQueue::default();
+    queue.enqueue(job("first.mov"));
+    let second = queue.enqueue(job("second.mov"));
+
+    queue.start_next();
+    let unchanged = queue.unchanged_active("kept original".to_string()).unwrap();
+
+    assert_eq!(unchanged.status, QueueJobStatus::Unchanged);
     assert_eq!(queue.start_next().map(|item| item.id), Some(second.id));
 }
 

@@ -1,4 +1,5 @@
 use super::options::Options;
+use dropsquash_core::AppConfig;
 
 pub(super) const RESET_FILES: [&str; 2] = ["history.jsonl", "license.json"];
 const STATE_FILES: [&str; 3] = ["config.json", RESET_FILES[0], RESET_FILES[1]];
@@ -10,6 +11,7 @@ pub(super) fn backup_state(options: &Options) -> Result<Vec<String>, String> {
     if options.reset_trial {
         reset_trial_state(options)?;
     }
+    seed_manual_qa_config(options)?;
     Ok(copied)
 }
 
@@ -57,4 +59,13 @@ fn reset_trial_state(options: &Options) -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+fn seed_manual_qa_config(options: &Options) -> Result<(), String> {
+    let path = options.app_state_dir.join("config.json");
+    let mut config = AppConfig::load_or_default(&path).map_err(|error| error.to_string())?;
+    config.output_dir = options.output_dir.clone();
+    config
+        .save_to_path(&path)
+        .map_err(|error| error.to_string())
 }

@@ -67,6 +67,22 @@ fn rejects_not_smaller_outputs() {
 }
 
 #[test]
+fn rejects_prior_squashed_inputs() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("results.csv");
+    std::fs::write(
+        &path,
+        csv(3, 50).replace("sample-1.mov", "sample-1.squashed.mp4"),
+    )
+    .unwrap();
+
+    let error = validate_path(&path).unwrap_err();
+
+    assert!(error.contains("original local recording"));
+    assert!(error.contains(".squashed"));
+}
+
+#[test]
 fn rejects_missing_speed_ratio() {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("results.csv");

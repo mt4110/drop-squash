@@ -5,6 +5,7 @@ import { DropZone } from "./components/DropZone";
 import { HelpPopover } from "./components/HelpPopover";
 import { InstallNotice } from "./components/InstallNotice";
 import { LicensePanel } from "./components/LicensePanel";
+import { LocaleSwitch, type Locale } from "./components/LocaleSwitch";
 import { QueuePanel } from "./components/QueuePanel";
 import { SettingsDrawer } from "./components/SettingsDrawer";
 import { SecureShareAlpha } from "./components/SecureShareAlpha";
@@ -63,6 +64,9 @@ import { applySourceActionDecision, sourceActionError } from "./lib/sourceAction
 import { isNotSmallerMessage, userErrorMessage } from "./lib/errorMessage";
 
 export function App() {
+  const [locale, setLocale] = useState<Locale>(() =>
+    window.localStorage.getItem("dropsquash-locale") === "en" ? "en" : "ja",
+  );
   const [state, setState] = useState<DropZoneState>(initialState);
   const [result, setResult] = useState<ConversionSummary>();
   const [error, setError] = useState<string>();
@@ -94,6 +98,11 @@ export function App() {
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    window.localStorage.setItem("dropsquash-locale", locale);
+  }, [locale]);
 
   const loadState = useCallback(async () => {
     if (!isTauri()) {
@@ -260,12 +269,12 @@ export function App() {
     const inputPath = await open({
       filters: [{ name: "Screen recordings", extensions: state.inputExtensions }],
       multiple: false,
-      title: "録画を選ぶ / Choose a recording",
+      title: locale === "en" ? "Choose a recording" : "録画を選ぶ",
     });
     if (typeof inputPath === "string") {
       enqueueInputs([inputPath]);
     }
-  }, [enqueueInputs, state.inputExtensions]);
+  }, [enqueueInputs, locale, state.inputExtensions]);
 
   const chooseOutputDirectory = useCallback(async () => {
     if (!isTauri()) {
@@ -276,12 +285,12 @@ export function App() {
       defaultPath: state.outputDir,
       directory: true,
       multiple: false,
-      title: "保存先を選ぶ / Choose an output folder",
+      title: locale === "en" ? "Choose an output folder" : "保存先を選ぶ",
     });
     if (typeof outputDir === "string") {
       updateConfig({ outputDir });
     }
-  }, [state.outputDir, updateConfig]);
+  }, [locale, state.outputDir, updateConfig]);
 
   const changeProfile = useCallback((profile: Profile) => {
     updateConfig({ profile });
@@ -376,7 +385,7 @@ export function App() {
     }
   }, [showError]);
 
-  const shellClassName = ["shell", state.isPro ? "is-pro" : "", queue.length > 0 ? "has-queue" : "", applicationsInstall.shouldShowNotice ? "has-install-notice" : ""].filter(Boolean).join(" ");
+  const shellClassName = ["shell", `locale-${locale}`, state.isPro ? "is-pro" : "", queue.length > 0 ? "has-queue" : "", applicationsInstall.shouldShowNotice ? "has-install-notice" : ""].filter(Boolean).join(" ");
   const hasQueue = queue.length > 0;
   const queuePanel = (
     <QueuePanel
@@ -403,16 +412,21 @@ export function App() {
   return (
     <main ref={shellRef} className={shellClassName}>
       <button aria-label="使い方 / Quick tips" className="help-button" title="使い方 / Quick tips" type="button" onClick={() => setIsHelpOpen(true)}>?</button>
-      <TrialBanner
-        successfulConversions={state.successfulConversions}
-        trialLimit={state.trialLimit}
-        isPro={state.isPro}
-        isLocked={state.isLocked}
-        lockedReason={state.lockedReason}
-      />
+      <div className="top-bar">
+        <LocaleSwitch locale={locale} onChange={setLocale} />
+        <TrialBanner
+          successfulConversions={state.successfulConversions}
+          trialLimit={state.trialLimit}
+          isPro={state.isPro}
+          isLocked={state.isLocked}
+          lockedReason={state.lockedReason}
+          locale={locale}
+        />
+      </div>
       <LicensePanel
         isPro={state.isPro}
         lockedReason={state.lockedReason}
+        locale={locale}
         onActivate={activateLicense}
         onForget={forgetLicense}
       />
@@ -435,40 +449,53 @@ export function App() {
           onQuitCurrentApp={() => void applicationsInstall.quitCurrentApp()}
         />
       )}
-      <DropZone
-        isBusy={isBusy}
-        isDragging={isDragging}
-        isLocked={state.isLocked}
-        lockedReason={state.lockedReason}
-        lockedMessage={currentLockedMessage}
-        progress={progress}
-        result={result}
-        error={error}
-        inputPath={inputPath}
-        inputExtensions={state.inputExtensions}
-        isTrashingOriginal={isTrashingOriginal}
-        onPick={() => void chooseRecording()}
-        onCancel={() => void cancelConversion()}
-        onRevealOutput={(outputPath) => void revealOutput(outputPath)}
-        onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
-        onTrashOriginal={(sourcePath, outputPath) => void trashOriginal(sourcePath, outputPath)}
-      />
-      <SecureShareAlpha disabled={isBusy} />
-      <SettingsDrawer
-        outputDir={state.outputDir}
-        profile={state.profile}
-        outputSize={state.outputSize}
-        sourcePolicy={state.sourcePolicy}
-        writePrivacyReceipt={state.writePrivacyReceipt}
-        profiles={state.profiles}
-        outputSizes={state.outputSizes}
-        sourcePolicies={state.sourcePolicies}
-        onChooseOutput={() => void chooseOutputDirectory()}
-        onProfileChange={changeProfile}
-        onOutputSizeChange={changeOutputSize}
-        onSourcePolicyChange={changeSourcePolicy}
-        onWritePrivacyReceiptChange={changeWritePrivacyReceipt}
-      />
+      <div className="app-workspace">
+        <section className="conversion-column" aria-label="変換 / Convert">
+          <DropZone
+            isBusy={isBusy}
+            isDragging={isDragging}
+            isLocked={state.isLocked}
+            lockedReason={state.lockedReason}
+            lockedMessage={currentLockedMessage}
+            progress={progress}
+            result={result}
+            error={error}
+            inputPath={inputPath}
+            inputExtensions={state.inputExtensions}
+            isTrashingOriginal={isTrashingOriginal}
+            onPick={() => void chooseRecording()}
+            onCancel={() => void cancelConversion()}
+            onRevealOutput={(outputPath) => void revealOutput(outputPath)}
+            onRevealReceipt={(receiptPath) => void revealOutput(receiptPath)}
+            onTrashOriginal={(sourcePath, outputPath) => void trashOriginal(sourcePath, outputPath)}
+          />
+        </section>
+        <aside className="control-column" aria-label="共有と設定 / Secure Share and settings">
+          <SecureShareAlpha
+            disabled={isBusy}
+            locale={locale}
+            outputDir={state.outputDir}
+            outputSize={state.outputSize}
+            onRevealOutput={(outputPath) => void revealOutput(outputPath)}
+          />
+          <SettingsDrawer
+            outputDir={state.outputDir}
+            profile={state.profile}
+            outputSize={state.outputSize}
+            sourcePolicy={state.sourcePolicy}
+            writePrivacyReceipt={state.writePrivacyReceipt}
+            profiles={state.profiles}
+            outputSizes={state.outputSizes}
+            sourcePolicies={state.sourcePolicies}
+            onChooseOutput={() => void chooseOutputDirectory()}
+            onProfileChange={changeProfile}
+            onOutputSizeChange={changeOutputSize}
+            onSourcePolicyChange={changeSourcePolicy}
+            onWritePrivacyReceiptChange={changeWritePrivacyReceipt}
+            locale={locale}
+          />
+        </aside>
+      </div>
       {hasQueue && queuePanel}
       {isHelpOpen && <HelpPopover onClose={() => setIsHelpOpen(false)} />}
     </main>

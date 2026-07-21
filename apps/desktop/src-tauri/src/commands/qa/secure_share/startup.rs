@@ -4,12 +4,19 @@ use std::sync::Arc;
 use serde_json::json;
 use tauri::AppHandle;
 
+mod startup_recording;
+
 const WINDOW_ID: &str = "DROP_SQUASH_QA_SCK_OBSERVE_WINDOW_ID";
+const RECORD_WINDOW_ID: &str = "DROP_SQUASH_QA_SCK_RECORD_WINDOW_ID";
 const CAPTURE_MS: &str = "DROP_SQUASH_QA_SCK_OBSERVE_CAPTURE_MS";
 const TIMEOUT_MS: &str = "DROP_SQUASH_QA_SCK_OBSERVE_TIMEOUT_MS";
 const QUIT_AFTER: &str = "DROP_SQUASH_QA_SCK_OBSERVE_QUIT_AFTER";
 
 pub(super) fn run(app: AppHandle) {
+    if let Some(window_id) = read_u32(RECORD_WINDOW_ID) {
+        startup_recording::run(app, window_id);
+        return;
+    }
     let Some(window_id) = read_u32(WINDOW_ID) else {
         return;
     };

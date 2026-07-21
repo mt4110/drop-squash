@@ -45,9 +45,9 @@ pub fn size_options(values: [OutputSize; 4]) -> Vec<OutputSizeOption> {
 
 pub fn source_policy_options() -> Vec<SourcePolicyOption> {
     [
-        (SourcePolicy::Ask, "Ask after saving"),
-        (SourcePolicy::Keep, "Keep original"),
-        (SourcePolicy::Trash, "Move to Trash"),
+        (SourcePolicy::Ask, "保存後に確認 / Ask after save"),
+        (SourcePolicy::Keep, "元を残す / Keep original"),
+        (SourcePolicy::Trash, "ゴミ箱へ移動 / Move to Trash"),
     ]
     .into_iter()
     .map(|(value, label)| SourcePolicyOption { value, label })

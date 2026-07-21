@@ -1,11 +1,13 @@
 use std::path::PathBuf;
 
+use dropsquash_core::AppConfig;
+
 use super::options::Options;
 use super::output::{manual_check_line, open_artifact_line, sample_set_line};
 use super::output_helper::{
     bad_input_line, clean_draft_line, fill_benchmark_line, fill_benchmark_threshold_line,
     fill_check_line, fill_local_proof_line, fill_release_gates_line, pending_benchmark_line,
-    pending_distribution_line, pending_line, pending_license_line, pending_local_proof_line,
+    pending_distribution_line, pending_license_line, pending_line, pending_local_proof_line,
     pending_packaged_app_line, ready_all_line, ready_distribution_line, ready_license_line,
     ready_local_proof_line,
 };
@@ -21,7 +23,9 @@ fn creates_output_and_backs_up_existing_state_files() {
     let state_dir = directory.path().join("state");
     let output_dir = directory.path().join("output");
     std::fs::create_dir(&app_state_dir).unwrap();
-    std::fs::write(app_state_dir.join("config.json"), "config").unwrap();
+    AppConfig::default()
+        .save_to_path(&app_state_dir.join("config.json"))
+        .unwrap();
     std::fs::write(app_state_dir.join("history.jsonl"), "history").unwrap();
 
     let copied = backup_state(&Options {
@@ -38,8 +42,8 @@ fn creates_output_and_backs_up_existing_state_files() {
 
     assert_eq!(copied, vec!["config.json", "history.jsonl"]);
     assert_eq!(
-        std::fs::read_to_string(state_dir.join("config.json")).unwrap(),
-        "config"
+        AppConfig::load_or_default(&state_dir.join("config.json")).unwrap(),
+        AppConfig::default()
     );
     assert!(output_dir.is_dir());
 }
@@ -64,6 +68,31 @@ fn skips_missing_state_files() {
     .unwrap();
 
     assert!(copied.is_empty());
+}
+
+#[test]
+fn seeds_manual_qa_config_output_dir_when_missing() {
+    let directory = tempfile::tempdir().unwrap();
+    let app_state_dir = directory.path().join("app-state");
+    let state_dir = directory.path().join("state");
+    let output_dir = directory.path().join("output");
+
+    let copied = backup_state(&Options {
+        app_artifact: None,
+        app_state_dir: app_state_dir.clone(),
+        input_sample_set: None,
+        markdown_output: None,
+        output_dir: output_dir.clone(),
+        reset_trial: false,
+        restore_state: false,
+        state_dir,
+    })
+    .unwrap();
+
+    assert!(copied.is_empty());
+    let config =
+        dropsquash_core::AppConfig::load_or_default(&app_state_dir.join("config.json")).unwrap();
+    assert_eq!(config.output_dir, output_dir);
 }
 
 #[test]
@@ -161,11 +190,11 @@ fn helper_output_quotes_paths() {
     );
     assert_eq!(
         ready_license_line(&markdown),
-        "manual QA Ready license command: cargo run -p xtask -- manual-qa-ready-license '/tmp/QA Path'\\''s/prepared.md'"
+        "manual QA License rerun command: cargo run -p xtask -- manual-qa-license-rerun '/tmp/QA Path'\\''s/prepared.md'"
     );
     assert_eq!(
         ready_distribution_line(&markdown),
-        "manual QA Ready distribution command: cargo run -p xtask -- manual-qa-ready-distribution '/tmp/QA Path'\\''s/prepared.md'"
+        "manual QA Distribution rerun command: cargo run -p xtask -- manual-qa-distribution-rerun '/tmp/QA Path'\\''s/prepared.md'"
     );
     assert_eq!(
         bad_input_line(),
@@ -284,7 +313,9 @@ fn resets_trial_state_after_backup_when_requested() {
     let state_dir = directory.path().join("state");
     let output_dir = directory.path().join("output");
     std::fs::create_dir(&app_state_dir).unwrap();
-    std::fs::write(app_state_dir.join("config.json"), "config").unwrap();
+    AppConfig::default()
+        .save_to_path(&app_state_dir.join("config.json"))
+        .unwrap();
     std::fs::write(app_state_dir.join("history.jsonl"), "history").unwrap();
     std::fs::write(app_state_dir.join("license.json"), "license").unwrap();
 

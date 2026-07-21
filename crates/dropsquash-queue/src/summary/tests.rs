@@ -15,6 +15,7 @@ fn job() -> EncodeJob {
         profile: Profile::Auto,
         output_size: OutputSize::Auto,
         source_policy: SourcePolicy::Keep,
+        secure_share: None,
     }
 }
 
@@ -45,9 +46,13 @@ fn summarizes_batch_events() {
             id: QueueJobId(2),
             error: "decode failed".to_string(),
         },
-        QueueEvent::Cancelled(QueueJobId(3)),
+        QueueEvent::Unchanged {
+            id: QueueJobId(3),
+            error: "kept original".to_string(),
+        },
+        QueueEvent::Cancelled(QueueJobId(4)),
         QueueEvent::Blocked {
-            id: QueueJobId(4),
+            id: QueueJobId(5),
             error: "trial locked".to_string(),
         },
     ];
@@ -55,8 +60,9 @@ fn summarizes_batch_events() {
     let summary = QueueSummary::from_events(&events);
 
     assert_eq!(summary.total, 4);
-    assert_eq!(summary.finished, 4);
+    assert_eq!(summary.finished, 5);
     assert_eq!(summary.succeeded, 1);
+    assert_eq!(summary.unchanged, 1);
     assert_eq!(summary.failed, 1);
     assert_eq!(summary.cancelled, 1);
     assert_eq!(summary.blocked, 1);

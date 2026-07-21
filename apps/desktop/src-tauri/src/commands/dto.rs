@@ -1,9 +1,13 @@
 mod options;
+mod outcome;
 mod summary;
 
-pub use summary::ConversionSummary;
+pub use outcome::ConversionOutcome;
+pub use summary::{ConversionSummary, ReceiptSummary};
 
-use dropsquash_core::{AppConfig, LicenseState, LockedReason, OutputSize, Profile, SourcePolicy};
+use dropsquash_core::{
+    AppConfig, LicenseState, LockedReason, OutputSize, Profile, SecureShareOptions, SourcePolicy,
+};
 use serde::{Deserialize, Serialize};
 
 use options::{
@@ -51,6 +55,8 @@ pub struct ConvertRequest {
     pub output_size: OutputSize,
     pub source_policy: SourcePolicy,
     pub write_privacy_receipt: bool,
+    #[serde(default)]
+    pub secure_share: Option<SecureShareOptions>,
 }
 
 pub fn drop_zone_state(

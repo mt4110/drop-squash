@@ -14,6 +14,7 @@ fn secure_share_payload_uses_stable_wire_names() {
             width: 320,
             height: 180,
         }],
+        mask_plan: None,
     };
 
     let value = serde_json::to_value(&options).unwrap();

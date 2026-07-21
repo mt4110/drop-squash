@@ -6,11 +6,13 @@ mod cleanup;
 mod copy;
 mod eject;
 mod open;
+mod reveal;
 
 pub use cleanup::{cleanup_after_applications_install, InstallerCleanup};
 pub use copy::{copy_app_bundle, copy_current_app_to_applications, ApplicationsInstall};
 pub use eject::{eject_mounted_volume, validate_mounted_volume_path};
 pub use open::{open_installed_application, validate_installed_app_path};
+pub use reveal::reveal_finder_item;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InstallLocation {

@@ -36,6 +36,7 @@ const GROUPS: &[&[Entry]] = &[
     distribution_docs::CORE,
     distribution_docs::LICENSE,
     release_docs::ENTRIES,
+    release_docs::OPERATOR,
     release_signing_docs::ENTRIES,
     signed_publication_docs::ENTRIES,
     website_docs::ENTRIES,

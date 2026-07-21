@@ -22,6 +22,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
         .iter()
         .all(|needle| lower.contains(needle))
         && has_three_sample_context(&lower)
+        && has_local_recordings_context(&lower)
         && lower.contains("smaller")
         && lower.contains("backend")
         && lower.contains("saved")
@@ -34,7 +35,7 @@ fn validate_sample_set(text: &str) -> Option<String> {
         return None;
     }
     Some(
-        "Benchmark sample set must mention short, medium, large, three samples, smaller outputs, backend, saved percent, duration, speed ratio, existing CSV path outside repo, machine, and OS context"
+        "Benchmark sample set must mention short, medium, large, three samples, original local recordings, smaller outputs, backend, saved percent, duration, speed ratio, existing CSV path outside repo, machine, and OS context"
             .to_string(),
     )
 }
@@ -80,6 +81,10 @@ fn has_three_sample_context(value: &str) -> bool {
     value
         .split(|character: char| !character.is_ascii_alphanumeric())
         .any(|part| part == "three" || part == "3")
+}
+
+fn has_local_recordings_context(value: &str) -> bool {
+    value.contains("local recording") || value.contains("local recordings")
 }
 
 fn has_csv_path_context(value: &str) -> bool {

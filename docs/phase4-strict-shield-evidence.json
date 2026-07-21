@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "ja-en-native-accessibility-001",
+  "capturedAt": "2026-07-20T03:52:36+09:00",
+  "localOnly": true,
+  "recognizedPrivateTextStored": false,
+  "capture": {
+    "kind": "single_native_window",
+    "frameSize": { "width": 760, "height": 392 },
+    "frameCount": 20,
+    "accessibilityObservationCount": 5,
+    "visionObservationCount": 200
+  },
+  "policy": {
+    "name": "strict_reveal",
+    "shareMode": "strict_shield",
+    "unknownClientAreaDestroyed": true,
+    "fullyMaskedFrameCount": 20,
+    "maskedRegionCount": 240
+  },
+  "output": {
+    "format": "mp4",
+    "sha256": "ee50d7e5fd3d6cb8d335aa8f934da40de55fff9e25176412231f0f7763c52e6d",
+    "audioTrack": "absent",
+    "assetAndTrackMetadata": "absent",
+    "independentDecodeVerification": "passed",
+    "evidenceSignatureVerification": "passed"
+  },
+  "limitations": [
+    "Selective masking is not shareable in Phase 4 alpha.",
+    "Strict Shield destroys the unknown client area.",
+    "This is not a leak-zero or enterprise audit-ready claim."
+  ]
+}

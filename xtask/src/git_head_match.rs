@@ -44,7 +44,10 @@ fn git_ok(args: [&str; 4]) -> Result<bool, String> {
 }
 
 fn git_stdout(args: [&str; 3]) -> Result<String, String> {
-    let output = std::process::Command::new("git").args(args).output().map_err(|error| error.to_string())?;
+    let output = std::process::Command::new("git")
+        .args(args)
+        .output()
+        .map_err(|error| error.to_string())?;
     if !output.status.success() {
         return Err("git command failed".to_string());
     }

@@ -2,7 +2,11 @@ import {
   LICENSE_LOCK_QUEUE_MESSAGE,
   blockQueued,
   blockQueuedForLicenseLock,
+  markFailed,
+  markUnchanged,
   markSourceAction,
+  queueDisplayItems,
+  queueHeadline,
   queueSummary,
   type QueueEntry,
 } from "./queue.js";
@@ -67,6 +71,71 @@ function sourceActionUpdatesOnlyMatchingOutput() {
   );
 }
 
+function failureRowsUseFriendlyMessages() {
+  const items = markFailed([
+    entry(1, "running"),
+  ], 1, "failed", "encoder failed: native export failed output verification: output is not smaller (1177000 bytes -> 1234571 bytes)");
+
+  assert(items[0]?.status === "unchanged", "not-smaller row should keep the original");
+  assert(
+    items[0]?.error === "この録画はこれ以上小さくできませんでした。すでに十分小さい可能性があるため、元ファイルを保持し、この試行は回数に数えません / This recording could not be made smaller. DropSquash kept the original and did not count the attempt. Try a smaller Size setting if needed.",
+    "failed row should use the friendly not-smaller message",
+  );
+}
+
+function friendlyNotSmallerRowsStillKeepOriginal() {
+  const items = markFailed([
+    { ...entry(1, "running"), progress: 50 },
+  ], 1, "failed", "This recording could not be made smaller. It may already be small, so DropSquash kept the original and did not count the attempt. Try a smaller Size setting for this clip.");
+
+  assert(items[0]?.status === "unchanged", "friendly not-smaller row should keep the original");
+  assert(items[0]?.progress === undefined, "finished not-smaller row should not keep stale progress");
+}
+
+function unchangedRowsUseFriendlyMessagesDirectly() {
+  const items = markUnchanged([
+    { ...entry(1, "running"), progress: 50 },
+  ], 1, "encoder failed: native export failed output verification: output is not smaller (1177000 bytes -> 1234571 bytes)");
+
+  assert(items[0]?.status === "unchanged", "unchanged row should keep the original");
+  assert(items[0]?.progress === undefined, "unchanged row should not keep stale progress");
+  assert(
+    items[0]?.error === "この録画はこれ以上小さくできませんでした。すでに十分小さい可能性があるため、元ファイルを保持し、この試行は回数に数えません / This recording could not be made smaller. DropSquash kept the original and did not count the attempt. Try a smaller Size setting if needed.",
+    "unchanged row should use the friendly not-smaller message",
+  );
+}
+
+function queueHeadlineIncludesActiveAndFinishedCounts() {
+  const headline = queueHeadline(queueSummary([
+    entry(1, "running"),
+    entry(2, "queued"),
+    entry(3, "succeeded", { savedBytes: 80 }),
+    entry(4, "unchanged"),
+    entry(5, "blocked"),
+  ]));
+
+  assert(headline.includes("合計 5 件"), "headline should include total count");
+  assert(headline.includes("進行中 1 件"), "headline should include active count");
+  assert(headline.includes("待機 1 件"), "headline should include queued count");
+  assert(headline.includes("完了 3 件"), "headline should include finished count");
+  assert(headline.includes("80 bytes 節約"), "headline should include saved bytes");
+  assert(headline.includes("元維持 1 件"), "headline should include unchanged count");
+  assert(headline.includes("ロック 1 件"), "headline should include blocked count");
+}
+
+function activeAndQueuedRowsSortAboveFinishedRows() {
+  const sorted = queueDisplayItems([
+    entry(3, "succeeded"),
+    entry(4, "blocked"),
+    entry(2, "queued"),
+    entry(1, "running"),
+  ]);
+
+  assert(sorted[0]?.status === "running", "running row should be first");
+  assert(sorted[1]?.status === "queued", "queued row should stay near the top");
+  assert(sorted[sorted.length - 1]?.status === "succeeded", "finished success should sink");
+}
+
 function entry(
   id: number,
   status: QueueEntry["status"],
@@ -84,3 +153,8 @@ licenseLockBlocksOnlyQueuedJobs();
 licenseLockSummaryCountsBlockedJobsAsFinished();
 refreshLockKeepsReconnectMessage();
 sourceActionUpdatesOnlyMatchingOutput();
+failureRowsUseFriendlyMessages();
+friendlyNotSmallerRowsStillKeepOriginal();
+unchangedRowsUseFriendlyMessagesDirectly();
+queueHeadlineIncludesActiveAndFinishedCounts();
+activeAndQueuedRowsSortAboveFinishedRows();

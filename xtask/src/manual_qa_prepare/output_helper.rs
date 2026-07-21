@@ -1,6 +1,6 @@
-use std::path::Path;
-
 use super::commands;
+use std::path::Path;
+mod print;
 
 fn line(label: &str, command: String) -> String {
     format!("{label}: {command}")
@@ -35,15 +35,25 @@ pub(super) fn ready_all_line(path: &Path, csv_path: &Path) -> String {
 }
 
 pub(super) fn ready_license_line(path: &Path) -> String {
-    line("manual QA Ready license command", commands::ready_license_command(path))
+    line(
+        "manual QA License rerun command",
+        commands::ready_license_command(path),
+    )
 }
 
 pub(super) fn ready_distribution_line(path: &Path) -> String {
-    line("manual QA Ready distribution command", commands::ready_distribution_command(path))
+    line(
+        "manual QA Distribution rerun command",
+        commands::ready_distribution_command(path),
+    )
 }
 
 pub(super) fn bad_input_line() -> String {
-    line("manual QA Bad input command", "cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4".to_string())
+    line(
+        "manual QA Bad input command",
+        "cargo run -p xtask -- manual-qa-bad-input /tmp/dropsquash-manual-qa-invalid.mp4"
+            .to_string(),
+    )
 }
 
 pub(super) fn fill_benchmark_line(path: &Path, csv_path: &Path) -> String {
@@ -61,11 +71,17 @@ pub(super) fn fill_benchmark_threshold_line(path: &Path, csv_path: &Path) -> Str
 }
 
 pub(super) fn clean_draft_line(path: &Path) -> String {
-    line("manual QA Clean draft command", commands::clean_draft_command(path))
+    line(
+        "manual QA Clean draft command",
+        commands::clean_draft_command(path),
+    )
 }
 
 pub(super) fn fill_check_line(path: &Path) -> String {
-    line("manual QA Fill check command", commands::fill_check_command(path))
+    line(
+        "manual QA Fill check command",
+        commands::fill_check_command(path),
+    )
 }
 
 pub(super) fn pending_line(path: &Path) -> String {
@@ -108,21 +124,5 @@ pub(super) fn pending_distribution_line(path: &Path) -> String {
 }
 
 pub(super) fn print_helper_commands(path: &Path, csv_path: &Path) {
-    println!("{}", fill_release_gates_line(path));
-    println!("{}", fill_local_proof_line(path, csv_path));
-    println!("{}", ready_local_proof_line(path, csv_path));
-    println!("{}", ready_all_line(path, csv_path));
-    println!("{}", ready_license_line(path));
-    println!("{}", ready_distribution_line(path));
-    println!("{}", bad_input_line());
-    println!("{}", fill_benchmark_line(path, csv_path));
-    println!("{}", fill_benchmark_threshold_line(path, csv_path));
-    println!("{}", clean_draft_line(path));
-    println!("{}", pending_line(path));
-    println!("{}", pending_packaged_app_line(path));
-    println!("{}", pending_local_proof_line(path));
-    println!("{}", pending_license_line(path));
-    println!("{}", pending_benchmark_line(path));
-    println!("{}", pending_distribution_line(path));
-    println!("{}", fill_check_line(path));
+    print::print_helper_commands(path, csv_path);
 }

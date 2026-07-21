@@ -43,4 +43,46 @@ pub(super) const ENTRIES: &[Entry] = &[
     ("docs/productization.md", "signed DMG target preparation"),
     ("docs/productization.md", "signed DMG copy isolation"),
     ("docs/productization.md", "signed DMG artifact guard"),
+    ("docs/signed-dmg-runbook.md", "## Short Execution Memo"),
+    (
+        "docs/signed-dmg-runbook.md",
+        "scripts/manual-qa-distribution-handoff.sh",
+    ),
+    (
+        "docs/signed-dmg-runbook.md",
+        "productization-status --track \"Paid beta\"",
+    ),
+    ("docs/signed-dmg-runbook.md", "distribution quickstart 7"),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "## Short Execution Memo",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "Published checksum",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "release notes Artifact URL",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "lowercase SHA-256 line",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "versioned `DropSquash.dmg`",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "`brew uninstall --cask`",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "Homebrew tap PR URL",
+    ),
+    (
+        "docs/public-beta-operator-checklist.md",
+        "GitHub Release URL",
+    ),
 ];

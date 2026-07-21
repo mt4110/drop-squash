@@ -116,8 +116,8 @@ pub(super) fn fail_closed(reason: &str) -> AppError {
     ))
 }
 
-fn ensure_screen_capture_access() -> Result<()> {
-    if super::screen_permission::preflight_screen_capture_access() {
+pub(super) fn ensure_screen_capture_access() -> Result<()> {
+    if super::screen_permission::screen_capture_access_granted() {
         Ok(())
     } else {
         Err(fail_closed("Screen Recording permission is missing"))

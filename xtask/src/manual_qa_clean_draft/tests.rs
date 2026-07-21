@@ -17,7 +17,10 @@ fn keeps_only_table_rows() {
 fn keeps_cleaned_table_only_input() {
     let cleaned = clean("| App build | x |\n| Check | Expected | Result |\n").unwrap();
 
-    assert_eq!(cleaned, "| App build | x |\n| Check | Expected | Result |\n");
+    assert_eq!(
+        cleaned,
+        "| App build | x |\n| Check | Expected | Result |\n"
+    );
 }
 
 #[test]

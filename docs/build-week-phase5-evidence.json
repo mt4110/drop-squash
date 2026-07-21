@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "project": "DropSquash",
+  "submissionTarget": "Phase 5 alpha / high-assurance Secure Share R&D prototype",
+  "capturedAt": "2026-07-21",
+  "source": "Developer ID-signed macOS app native-bridge-v1 Strict Shield baseline; 2026-07-21 native accessibility fixture",
+  "localOnly": true,
+  "recognizedPrivateTextStored": false,
+  "fixture": {
+    "path": "tests/fixtures/secure-share/NativeAccessibilityFixture.swift",
+    "containsOnlySyntheticPrivateData": true,
+    "languages": ["ja", "en"]
+  },
+  "capture": {
+    "kind": "selected_window",
+    "policy": "strict_reveal",
+    "frameCount": 144,
+    "fullyMaskedFrameCount": 144,
+    "accessibilityObservationCount": 70,
+    "visionObservationCount": 80,
+    "continuityWatches": [
+      "display_configuration",
+      "core_graphics_window",
+      "accessibility_geometry",
+      "accessibility_window_events",
+      "macos_lifecycle_notifications",
+      "foreground_activation_pid_allowlist"
+    ]
+  },
+  "output": {
+    "independentDecodeVerification": "passed",
+    "evidenceSignatureVerification": "passed",
+    "evidenceSchema": 2,
+    "captureContinuityAttested": true,
+    "temporalContinuityEvidence": "normalized-time native-bridge packaged-app baseline: 144 frames accepted and independently decoded",
+    "captureContinuityWatchEvidenceRequired": true,
+    "exposureCoverageEvidenceRequired": true,
+    "requiredExposurePaths": [
+      "typed_text",
+      "ime_composition_candidate",
+      "transient_dialog_popover",
+      "notification_overlay",
+      "browser_autofill_password_manager",
+      "focus_or_foreground_change",
+      "display_geometry_or_scale_change",
+      "frame_drop_or_discontinuity",
+      "target_selection_mistake",
+      "multi_display_scaling_transform",
+      "accessibility_vision_disagreement",
+      "audio_track",
+      "media_metadata",
+      "external_capture_or_endpoint_exfiltration"
+    ],
+    "exposureClassification": [
+      {
+        "path": "typed_text",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Every accepted selected-window frame is destructively blackened before encode; text is not retained.",
+        "evidence": "historical signed transient-input-overlay fixture; native bridge rerun pending"
+      },
+      {
+        "path": "ime_composition_candidate",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Selected-window pixels are blackened; a real IME candidate surface is not asserted to be observable on every macOS input path.",
+        "evidence": "synthetic IME-like fixture only; real IME remains unproven"
+      },
+      {
+        "path": "transient_dialog_popover",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Accepted selected-window pixels are blackened; native sheet and popover source-surface coverage needs a fresh native-bridge run.",
+        "evidence": "historical signed native sheet and popover fixtures exist; current native-bridge rerun pending"
+      },
+      {
+        "path": "notification_overlay",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Any pixels delivered in the selected-window frame are blackened; Notification Center compositing is not fully attested.",
+        "evidence": "synthetic overlay fixture and historical notification dispatch; OS compositor proof absent"
+      },
+      {
+        "path": "browser_autofill_password_manager",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Any pixels delivered in the selected-window frame are blackened; private browser and password-manager surfaces are not fully observed.",
+        "evidence": "browser-like synthetic fixture only; private surfaces are untested"
+      },
+      {
+        "path": "focus_or_foreground_change",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "fail-closed",
+        "boundary": "Third-party foreground activation latches a native failure and discards the partial artifact.",
+        "evidence": "deterministic activation allowlist test and historical Finder-switch run"
+      },
+      {
+        "path": "display_geometry_or_scale_change",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Display callbacks, AX/CoreGraphics attestation, and per-frame geometry or scale disagreement reject publication.",
+        "evidence": "deterministic move/resize/display callback probes; native bridge rerun pending"
+      },
+      {
+        "path": "frame_drop_or_discontinuity",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Non-complete, repeated, reversed, or over-five-interval presentation-time frames reject publication.",
+        "evidence": "native metadata unit probes; normalized-time packaged-app rerun pending"
+      },
+      {
+        "path": "target_selection_mistake",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "fail-closed",
+        "boundary": "The selected window ID, owner PID, and frame are attested before and during capture; a missing or mismatched target discards the artifact.",
+        "evidence": "invalid window-ID deterministic probe and native attestation implementation"
+      },
+      {
+        "path": "multi_display_scaling_transform",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "Invalid scale or geometry changes reject publication. Signed AX coordinates map relative to the selected window, but multi-display device QA and overlay proof are not complete.",
+        "evidence": "coordinate transform unit tests; no multi-display device run"
+      },
+      {
+        "path": "accessibility_vision_disagreement",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "detected-but-not-covered",
+        "boundary": "The signed sidecar records aggregate overlap and source-only counts without text content; disagreement does not unlock selective sharing.",
+        "evidence": "MaskPlan audit agreement counters; selective sharing remains blocked"
+      },
+      {
+        "path": "audio_track",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "covered",
+        "boundary": "Native capture disables audio and independent final-asset verification rejects audio tracks.",
+        "evidence": "independent final-asset verifier and current signed strict-shield output"
+      },
+      {
+        "path": "media_metadata",
+        "outputPixelStatus": "covered",
+        "sourceSurfaceStatus": "covered",
+        "boundary": "Independent final-asset verification rejects asset and track metadata.",
+        "evidence": "MP4-box verifier and current signed strict-shield output"
+      },
+      {
+        "path": "external_capture_or_endpoint_exfiltration",
+        "outputPixelStatus": "not_applicable",
+        "sourceSurfaceStatus": "out-of-scope",
+        "boundary": "Other local recording, screenshots, remote control, clipboard sync, or endpoint exfiltration require separate OS or endpoint controls.",
+        "evidence": "Secure Share threat model explicitly excludes channels outside the exported MP4 and sidecar boundary"
+      }
+    ],
+    "exposureMitigation": "strict_shield_full_frame_destruction",
+    "sha256": "fb3da3c40c285bf70194eabae611adc0ddd148d0853a05457b88d829c6d834cf",
+    "audioTrack": "absent",
+    "assetAndTrackMetadata": "absent"
+  },
+  "adversarialFailure": {
+    "scenario": "2026-07-21 Developer ID-signed native fixture: 80-point move and 100ms return during recording",
+    "result": "selected window changed; recording stopped without saving",
+    "reason": "native AX/CoreGraphics target continuity failure",
+    "mp4Published": false,
+    "maskPlanPublished": false,
+    "partialArtifactPublished": false
+  },
+  "invalidTargetProbe": {
+    "scenario": "non-existent selected window ID 4294967295",
+    "result": "rejected before capture",
+    "reason": "requested window candidate was not found",
+    "mp4Published": false,
+    "maskPlanPublished": false,
+    "partialArtifactPublished": false
+  },
+  "smartMaskResearchOnly": {
+    "fixture": "NativeAccessibilityFixture focused 50ms input updates",
+    "truthMode": "union of four synthetic input-value glyph bounds",
+    "frameCount": 20,
+    "captureVisionObservationCount": 220,
+    "decodedUnmaskedTextCount": 0,
+    "rawPlanUnionTruthCoveragePpm": 975768,
+    "rawPlanMissingTruthCoveragePpm": 24232,
+    "frameSpecificTruthInstrumentation": "implemented; signed packaged-app rerun pending",
+    "shareable": false,
+    "reason": "raw-plan metric predates encoder expansion; final effective-mask precision requires rerun"
+  },
+  "deterministicLifecycleProbe": {
+    "scenario": "posted NSWorkspaceScreensDidSleepNotification during lifecycle watcher",
+    "result": "publication rejected",
+    "storesNotificationPayload": false,
+    "manualLockSleepQaComplete": false
+  },
+  "deterministicForegroundProbe": {
+    "scenario": "NSWorkspace activation PID allowlist",
+    "allowedPids": ["selected target process", "DropSquash recorder process"],
+    "thirdPartyActivation": "publication rejected by deterministic unit test; failure remains latched after target returns",
+    "packagedFinderSwitch": "2026-07-21 Finder activation during production recording returned third-party application became active; no MP4, sidecar, or partial artifact was published",
+    "manualFinderSwitchQaComplete": true
+  },
+  "notYetClaimed": [
+    "complete z-order or overlay focus attestation",
+    "manual lock, sleep, wake, and screen-saver lifecycle QA",
+    "notification compositing coverage",
+    "all IME or private input surface coverage",
+    "binding thread-safety attestation",
+    "completed selective masking",
+    "adversarial frame continuity coverage",
+    "enterprise audit readiness",
+    "leak-zero guarantee"
+  ]
+}

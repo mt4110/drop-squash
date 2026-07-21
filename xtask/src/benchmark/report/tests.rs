@@ -16,7 +16,7 @@ fn escapes_csv_path_cells() {
 
     assert!(text.contains("\"My, Recording.mov\""));
     assert!(text.contains("\"out \"\"quoted\"\".mp4\""));
-    assert!(text.contains(",8.000,2.000000,0.500,50.000000,0.500,4.000"));
+    assert!(text.contains(",8.000,2.000,0.500000,50.000000,0.500,4.000"));
 }
 
 #[test]
@@ -38,7 +38,7 @@ fn leaves_duration_and_speed_blank_when_probe_has_no_duration() {
         ..row()
     }]);
 
-    assert!(text.contains(",524288,,2.000000,0.500,50.000000,0.500,\n"));
+    assert!(text.contains(",524288,,2.000,0.500000,50.000000,0.500,\n"));
 }
 
 #[test]

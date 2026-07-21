@@ -131,6 +131,7 @@ fn options() -> SecureShareOptions {
             width: 30,
             height: 40,
         }],
+        mask_plan: None,
     }
 }
 

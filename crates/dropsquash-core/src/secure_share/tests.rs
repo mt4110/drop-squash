@@ -2,10 +2,10 @@ use serde_json::{json, Value};
 
 use super::{
     mask_options_for_frame, AxObservation, AxObservationKind, CaptureFrameMetadata, CaptureRect,
-    Confidence, CoordinateSpace, FrameMaskPlan, FrameSize, FrameStatus, MaskPlan, MaskPlanAudit,
-    MaskPlanDraft, MaskPolicy, MaskReason, MaskRegion, ObservationSource, PixelRect, RegionPolicy,
-    TimeRangeNs, VerificationExpectations, VisionNormalizedRect, VisionObservation,
-    VisionObservationKind,
+    Confidence, CoordinateSpace, ExposureCoverageStatus, FrameMaskPlan, FrameSize, FrameStatus,
+    MaskPlan, MaskPlanAudit, MaskPlanDraft, MaskPolicy, MaskReason, MaskRegion, ObservationSource,
+    PixelRect, RegionPolicy, TemporalObservation, TimeRangeNs, VerificationExpectations,
+    VisionNormalizedRect, VisionObservation, VisionObservationKind,
 };
 
 #[test]
@@ -40,6 +40,58 @@ fn mask_plan_round_trips_without_private_text() {
 }
 
 #[test]
+fn legacy_plan_omits_unattested_continuity() {
+    let value = serde_json::to_value(sample_plan()).unwrap();
+
+    assert!(value["audit"].get("captureContinuityAttested").is_none());
+    assert!(value["audit"].get("captureContinuityWatches").is_none());
+}
+
+#[test]
+fn attested_continuity_uses_redacted_watch_names() {
+    let mut plan = sample_plan();
+    plan.schema_version = 2;
+    plan.audit.capture_continuity_attested = Some(true);
+    plan.audit.capture_continuity_watches = super::required_capture_continuity_watches()
+        .iter()
+        .map(|watch| (*watch).to_string())
+        .collect();
+    let value = serde_json::to_value(plan).unwrap();
+
+    assert_eq!(value["audit"]["captureContinuityAttested"], json!(true));
+    assert_eq!(
+        value["audit"]["captureContinuityWatches"][0],
+        json!("display_configuration")
+    );
+    assert_no_key_named_text(&value);
+}
+
+#[test]
+fn strict_shield_exposure_coverage_names_risky_input_paths() {
+    let coverage = super::strict_shield_exposure_coverage();
+
+    assert!(coverage.iter().any(|item| item.path == "typed_text"));
+    assert!(coverage
+        .iter()
+        .any(|item| item.path == "ime_composition_candidate"));
+    assert!(coverage
+        .iter()
+        .any(|item| item.path == "audio_track" && item.status == ExposureCoverageStatus::Covered));
+    assert!(coverage
+        .iter()
+        .any(|item| item.path == "target_selection_mistake"
+            && item.status == ExposureCoverageStatus::FailClosed));
+    assert!(coverage.iter().any(
+        |item| item.path == "external_capture_or_endpoint_exfiltration"
+            && item.status == ExposureCoverageStatus::OutOfScope
+    ));
+    assert!(coverage
+        .iter()
+        .any(|item| item.path == "accessibility_vision_disagreement"
+            && item.status == ExposureCoverageStatus::DetectedNotCovered));
+}
+
+#[test]
 fn destructive_policy_wins_when_regions_merge() {
     assert_eq!(
         RegionPolicy::Safe.merged(RegionPolicy::Unknown),
@@ -52,13 +104,16 @@ fn destructive_policy_wins_when_regions_merge() {
 }
 
 #[test]
-fn complete_capture_frame_does_not_create_default_mask() {
+fn strict_reveal_destroys_complete_capture_frame() {
     let frame =
         sample_capture_frame(FrameStatus::Complete).to_mask_frame(sample_frame_size(), true);
 
     assert_eq!(frame.frame_index, 42);
     assert_eq!(frame.presentation_time_ns, 1_250_000_000);
-    assert!(frame.regions.is_empty());
+    assert_eq!(frame.regions.len(), 1);
+    assert_eq!(frame.regions[0].reason, MaskReason::UnknownRegion);
+    assert_eq!(frame.regions[0].rect, sample_full_frame_rect());
+    assert_eq!(frame.regions[0].confidence, Confidence::CERTAIN);
 }
 
 #[test]
@@ -97,6 +152,49 @@ fn accessibility_text_observation_becomes_sensitive_region() {
     assert_eq!(region.reason, MaskReason::AxTextElement);
     assert_eq!(region.sources, vec![ObservationSource::AccessibilityText]);
     assert_eq!(region.rect, sample_text_rect());
+}
+
+#[test]
+fn focused_accessibility_text_has_its_own_mask_plan_reason() {
+    let region = AxObservation {
+        rect: sample_text_rect(),
+        time_range: sample_time_range(),
+        kind: AxObservationKind::FocusedTextElement,
+        confidence: Confidence::CERTAIN,
+    }
+    .to_region();
+
+    assert_eq!(region.reason, MaskReason::AxFocusedTextElement);
+    assert_eq!(
+        region.sources,
+        vec![ObservationSource::AccessibilityFocusedText]
+    );
+}
+
+#[test]
+fn strict_shield_audits_focused_text_without_retaining_pixels() {
+    let plan = MaskPlanDraft {
+        capture_id: "capture-focused-001".to_string(),
+        frame_size: sample_frame_size(),
+        frames: vec![sample_capture_frame(FrameStatus::Complete)],
+        accessibility: vec![AxObservation {
+            rect: sample_text_rect(),
+            time_range: sample_time_range(),
+            kind: AxObservationKind::FocusedTextElement,
+            confidence: Confidence::CERTAIN,
+        }],
+        vision: Vec::new(),
+        temporal: Vec::new(),
+        policy: MaskPolicy::StrictReveal,
+        verification_expectations: sample_verification(),
+    }
+    .into_mask_plan();
+
+    assert_eq!(plan.audit.focused_text_observation_count, 1);
+    assert_eq!(plan.frames[0].regions[0].rect, sample_full_frame_rect());
+    let value = serde_json::to_value(plan).unwrap();
+    assert_eq!(value["audit"]["focusedTextObservationCount"], json!(1));
+    assert_no_key_named_text(&value);
 }
 
 #[test]
@@ -251,6 +349,7 @@ fn mask_plan_draft_combines_capture_ax_and_vision_observations() {
         frames: vec![sample_capture_frame(FrameStatus::Complete)],
         accessibility: vec![sample_ax_observation()],
         vision: vec![sample_vision_observation()],
+        temporal: Vec::new(),
         policy: MaskPolicy::StrictReveal,
         verification_expectations: sample_verification(),
     }
@@ -258,15 +357,13 @@ fn mask_plan_draft_combines_capture_ax_and_vision_observations() {
 
     assert_eq!(plan.schema_version, 1);
     assert_eq!(plan.frames.len(), 1);
-    assert_eq!(plan.frames[0].regions.len(), 2);
-    assert!(plan.frames[0]
-        .regions
-        .iter()
-        .any(|region| region.reason == MaskReason::AxTextElement));
-    assert!(plan.frames[0]
-        .regions
-        .iter()
-        .any(|region| region.reason == MaskReason::VisionText));
+    assert_eq!(plan.frames[0].regions.len(), 1);
+    assert_eq!(plan.audit.accessibility_observation_count, 1);
+    assert_eq!(plan.audit.vision_observation_count, 1);
+    assert_eq!(plan.audit.cross_source_overlap_count, 0);
+    assert_eq!(plan.audit.accessibility_only_count, 1);
+    assert_eq!(plan.audit.vision_only_count, 1);
+    assert_eq!(plan.frames[0].regions[0].reason, MaskReason::UnknownRegion);
 }
 
 #[test]
@@ -277,12 +374,13 @@ fn strict_reveal_draft_keeps_untrusted_frame_mask() {
         frames: vec![sample_capture_frame(FrameStatus::Idle)],
         accessibility: vec![sample_ax_observation()],
         vision: Vec::new(),
+        temporal: Vec::new(),
         policy: MaskPolicy::StrictReveal,
         verification_expectations: sample_verification(),
     }
     .into_mask_plan();
 
-    assert_eq!(plan.frames[0].regions.len(), 2);
+    assert_eq!(plan.frames[0].regions.len(), 1);
     assert_eq!(plan.frames[0].regions[0].reason, MaskReason::UnknownRegion);
     assert_eq!(plan.frames[0].regions[0].rect, sample_full_frame_rect());
 }
@@ -307,15 +405,46 @@ fn mask_plan_draft_assigns_observations_by_frame_time() {
             confidence: Confidence::CERTAIN,
         }],
         vision: Vec::new(),
-        policy: MaskPolicy::StrictReveal,
+        temporal: Vec::new(),
+        policy: MaskPolicy::SmartMask,
         verification_expectations: sample_verification(),
     }
     .into_mask_plan();
 
-    assert!(plan.frames[0].regions.is_empty());
+    assert_eq!(plan.frames[0].regions.len(), 0);
     assert_eq!(plan.frames[1].regions.len(), 1);
-    assert!(plan.frames[2].regions.is_empty());
-    assert_eq!(plan.frames[1].regions[0].reason, MaskReason::AxTextElement);
+    assert_eq!(plan.frames[2].regions.len(), 0);
+    assert!(plan.frames[1]
+        .regions
+        .iter()
+        .any(|region| region.reason == MaskReason::AxTextElement));
+}
+
+#[test]
+fn smart_mask_treats_native_pixel_change_as_sensitive() {
+    let plan = MaskPlanDraft {
+        capture_id: "capture-temporal-001".to_string(),
+        frame_size: sample_frame_size(),
+        frames: vec![sample_capture_frame(FrameStatus::Complete)],
+        accessibility: Vec::new(),
+        vision: Vec::new(),
+        temporal: vec![TemporalObservation {
+            rect: sample_text_rect(),
+            time_range: sample_time_range(),
+            confidence: Confidence::CERTAIN,
+        }],
+        policy: MaskPolicy::SmartMask,
+        verification_expectations: sample_verification(),
+    }
+    .into_mask_plan();
+
+    let region = &plan.frames[0].regions[0];
+    assert_eq!(region.reason, MaskReason::UnknownRegion);
+    assert_eq!(region.sources, vec![ObservationSource::TemporalTracker]);
+    assert_eq!(plan.audit.temporal_observation_count, 1);
+    let value = serde_json::to_value(plan).unwrap();
+    assert_eq!(value["audit"]["temporalObservationCount"], json!(1));
+    assert_no_key_named_text(&value);
 }
 
 #[test]
@@ -339,14 +468,20 @@ fn mask_plan_coalesces_nearby_same_source_regions() {
                 height: 16,
             }),
         ],
-        policy: MaskPolicy::StrictReveal,
+        temporal: Vec::new(),
+        policy: MaskPolicy::SmartMask,
         verification_expectations: sample_verification(),
     }
     .into_mask_plan();
 
     assert_eq!(plan.frames[0].regions.len(), 1);
+    let vision = plan.frames[0]
+        .regions
+        .iter()
+        .find(|region| region.reason == MaskReason::VisionText)
+        .unwrap();
     assert_eq!(
-        plan.frames[0].regions[0].rect,
+        vision.rect,
         PixelRect {
             x: 100,
             y: 200,
@@ -379,7 +514,8 @@ fn mask_plan_does_not_coalesce_different_sources() {
             width: 40,
             height: 16,
         })],
-        policy: MaskPolicy::StrictReveal,
+        temporal: Vec::new(),
+        policy: MaskPolicy::SmartMask,
         verification_expectations: sample_verification(),
     }
     .into_mask_plan();
@@ -434,7 +570,7 @@ fn mask_options_for_frame_expands_and_clamps_regions() {
 }
 
 #[test]
-fn strict_reveal_marks_unmatched_observations_for_verification() {
+fn strict_reveal_omits_unmatched_observation_geometry() {
     let plan = MaskPlanDraft {
         capture_id: "capture-unmatched-001".to_string(),
         frame_size: sample_frame_size(),
@@ -453,23 +589,15 @@ fn strict_reveal_marks_unmatched_observations_for_verification() {
             confidence: Confidence::CERTAIN,
         }],
         vision: Vec::new(),
+        temporal: Vec::new(),
         policy: MaskPolicy::StrictReveal,
         verification_expectations: sample_verification(),
     }
     .into_mask_plan();
 
     assert_eq!(plan.frames[0].regions.len(), 1);
-    assert_eq!(plan.audit.unmatched_observations.len(), 1);
-    assert_eq!(plan.audit.verification_required_frame_count, 1);
-    assert_eq!(
-        plan.audit.unmatched_observations[0].source,
-        ObservationSource::AccessibilityText
-    );
-    assert_eq!(
-        plan.frames[0].regions[0].reason,
-        MaskReason::VerificationRequired
-    );
-    assert_eq!(plan.frames[0].regions[0].rect, sample_full_frame_rect());
+    assert!(plan.audit.unmatched_observations.is_empty());
+    assert_eq!(plan.audit.verification_required_frame_count, 0);
 }
 
 fn sample_plan() -> MaskPlan {

@@ -97,6 +97,29 @@ fn release_set_requires_three_inputs() {
 }
 
 #[test]
+fn release_set_rejects_prior_squashed_inputs() {
+    let output_dir = tempfile::tempdir().unwrap();
+    let csv_dir = tempfile::tempdir().unwrap();
+    let error = BenchmarkArgs::parse(vec![
+        "--release-set".to_string(),
+        "--input".to_string(),
+        "short.mov".to_string(),
+        "--input".to_string(),
+        "medium.squashed.mp4".to_string(),
+        "--input".to_string(),
+        "large.squashed-2.mp4".to_string(),
+        "--output-dir".to_string(),
+        output_dir.path().display().to_string(),
+        "--csv-output".to_string(),
+        csv_dir.path().join("results.csv").display().to_string(),
+    ])
+    .unwrap_err();
+
+    assert!(error.contains("original local recordings"));
+    assert!(error.contains(".squashed"));
+}
+
+#[test]
 fn release_set_requires_output_outside_repository() {
     let csv = tempfile::tempdir().unwrap().path().join("results.csv");
     let error = BenchmarkArgs::parse(vec![

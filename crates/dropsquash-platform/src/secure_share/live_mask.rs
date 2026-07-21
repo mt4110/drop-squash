@@ -1,19 +1,26 @@
 use std::slice;
 
-use dropsquash_core::{AppError, MaskRect, Result, VisionObservation};
+use dropsquash_core::{AppError, MaskRect, PixelRect, Result};
 use objc2_core_media::CMSampleBuffer;
 use objc2_core_video::{
-    kCVPixelFormatType_32BGRA, kCVReturnSuccess, CVPixelBufferGetBaseAddress,
-    CVPixelBufferGetBytesPerRow, CVPixelBufferGetHeight, CVPixelBufferGetPixelFormatType,
-    CVPixelBufferGetWidth, CVPixelBufferLockBaseAddress, CVPixelBufferLockFlags,
-    CVPixelBufferUnlockBaseAddress,
+    kCVPixelFormatType_32BGRA, kCVReturnSuccess, CVPixelBufferGetBytesPerRow,
+    CVPixelBufferGetHeight, CVPixelBufferGetPixelFormatType, CVPixelBufferGetWidth,
+    CVPixelBufferLockBaseAddress, CVPixelBufferLockFlags, CVPixelBufferUnlockBaseAddress,
 };
+
+mod copy;
+mod regions;
+mod surface;
+pub(crate) use copy::copied_blackened;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct SckLiveMaskEvidence {
     pub masked_frame_count: usize,
     pub masked_rect_count: usize,
     pub verified_pixel_count: usize,
+    pub vision_frame_count: usize,
+    pub vision_total_ns: u64,
+    pub vision_max_ns: u64,
 }
 
 impl SckLiveMaskEvidence {
@@ -22,16 +29,33 @@ impl SckLiveMaskEvidence {
         self.masked_rect_count += proof.rect_count;
         self.verified_pixel_count += usize::from(proof.first_pixel_black);
     }
+
+    pub(super) fn record_vision(&mut self, elapsed: std::time::Duration) {
+        let elapsed_ns = elapsed.as_nanos().min(u128::from(u64::MAX)) as u64;
+        self.vision_frame_count += 1;
+        self.vision_total_ns = self.vision_total_ns.saturating_add(elapsed_ns);
+        self.vision_max_ns = self.vision_max_ns.max(elapsed_ns);
+    }
+
+    pub(super) fn vision_summary(&self) -> String {
+        if self.vision_frame_count == 0 {
+            return String::new();
+        }
+        format!(
+            "; local Vision analyzed {} frames, total {}ns, max {}ns",
+            self.vision_frame_count, self.vision_total_ns, self.vision_max_ns
+        )
+    }
 }
 
-pub(super) struct FrameMaskProof {
+pub(crate) struct FrameMaskProof {
     rect_count: usize,
     first_pixel_black: bool,
 }
 
-pub(super) fn blacken_observed_text(
+pub(super) fn blacken_regions(
     sample: &CMSampleBuffer,
-    observations: &[VisionObservation],
+    regions: &[PixelRect],
 ) -> Result<FrameMaskProof> {
     let image = unsafe { sample.image_buffer() }
         .ok_or_else(|| AppError::UnsupportedMedia("Secure Share requires frame pixels".into()))?;
@@ -46,19 +70,20 @@ pub(super) fn blacken_observed_text(
             "Secure Share could not lock captured pixels".into(),
         ));
     }
-    let result = blacken_locked(&image, observations);
+    let result = surface::locked_base(&image)
+        .and_then(|base| blacken_locked(&image, base.as_ptr(), regions));
     let _ = unsafe { CVPixelBufferUnlockBaseAddress(&image, flags) };
     result
 }
 
-fn blacken_locked(
+pub(super) fn blacken_locked(
     pixel: &objc2_core_video::CVPixelBuffer,
-    observations: &[VisionObservation],
+    base: *mut u8,
+    regions: &[PixelRect],
 ) -> Result<FrameMaskProof> {
     let width = CVPixelBufferGetWidth(pixel) as u32;
     let height = CVPixelBufferGetHeight(pixel) as u32;
     let row = CVPixelBufferGetBytesPerRow(pixel);
-    let base = CVPixelBufferGetBaseAddress(pixel).cast::<u8>();
     if base.is_null() {
         return Err(AppError::Encoder(
             "Secure Share pixels are unavailable".into(),
@@ -68,10 +93,7 @@ fn blacken_locked(
         .checked_mul(height as usize)
         .ok_or_else(|| AppError::InvalidConfig("Secure Share frame size is invalid".into()))?;
     let bytes = unsafe { slice::from_raw_parts_mut(base, len) };
-    let rects = observations
-        .iter()
-        .filter_map(|item| expand(item.rect, width, height))
-        .collect::<Vec<_>>();
+    let rects = regions::expanded(regions, width, height);
     for rect in &rects {
         fill_black(bytes, row, *rect);
     }
@@ -81,27 +103,6 @@ fn blacken_locked(
     Ok(FrameMaskProof {
         rect_count: rects.len(),
         first_pixel_black,
-    })
-}
-
-fn expand(rect: dropsquash_core::PixelRect, width: u32, height: u32) -> Option<MaskRect> {
-    let x = rect.x.saturating_sub(8);
-    let y = rect.y.saturating_sub(8);
-    let right = rect
-        .x
-        .saturating_add(rect.width)
-        .saturating_add(8)
-        .min(width);
-    let bottom = rect
-        .y
-        .saturating_add(rect.height)
-        .saturating_add(8)
-        .min(height);
-    (right > x && bottom > y).then_some(MaskRect {
-        x,
-        y,
-        width: right - x,
-        height: bottom - y,
     })
 }
 

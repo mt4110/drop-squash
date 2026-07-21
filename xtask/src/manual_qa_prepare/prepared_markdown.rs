@@ -53,7 +53,7 @@ fn markdown_text(
             benchmark::csv_check_command(benchmark_csv)
         ),
         benchmark_context(fields, benchmark_csv),
-        "Recommended proof flow: after `benchmark-csv-check` passes, run `manual-qa-ready-all` for one deterministic pass, or run `manual-qa-ready-local-proof` first and then use `manual-qa-ready-license` plus `manual-qa-ready-distribution` before their respective `manual-qa-pending --section ...` passes.".to_string(),
+        "Recommended proof flow: after `benchmark-csv-check` passes, run `manual-qa-ready-all` for the standard deterministic pass. If you only need packaged-app and local-proof evidence first, use `manual-qa-ready-local-proof` as the packaged-only alternative, then run `manual-qa-license-rerun` plus `manual-qa-distribution-rerun` before their respective `manual-qa-pending --section ...` passes.".to_string(),
         fill_commands::block(output_path, benchmark_csv),
     ];
     if let Some(path) =
@@ -90,7 +90,7 @@ fn benchmark_context(fields: &[markdown::Field], csv: &Path) -> String {
         csv.display(),
         macos.unwrap_or("<record macOS version>"),
         machine.unwrap_or("<record machine>"),
-        result_skeleton(machine, macos, &csv)
+        result_skeleton(machine, macos, csv)
     )
 }
 

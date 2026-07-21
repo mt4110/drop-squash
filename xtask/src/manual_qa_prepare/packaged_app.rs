@@ -7,9 +7,9 @@ pub(super) fn print_rows() {
 
 pub(super) fn rows() -> Vec<String> {
     vec![
-        "| Disk image launch notice | Launch from mounted `DropSquash.dmg` before copying to Applications | App warns that it is running from the disk image; Move copies `DropSquash.app` to `/Applications` without replacing an existing app, reveals the copied app in Finder, keeps a post-copy notice visible, opens the installed app on request, can request mounted-volume eject and quit the disk image copy, and does not delete the downloaded `.dmg` |  |".to_string(),
-        "| Choose recording conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |".to_string(),
-        "| Drag-and-drop conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains |  |".to_string(),
+        "| Disk image launch notice | Launch from mounted `DropSquash.dmg` before copying to Applications | App warns that it is running from the disk image; Move copies `DropSquash.app` to `/Applications` without replacing an existing app, reveals the copied app in Finder, keeps a post-copy notice visible, opens the installed app on request, can request mounted-volume eject and quit the disk image copy, relaunch returns focus to the existing mounted-DMG window without increasing the mounted app pid count, the AX window count stays at 1, the notice plus the license field stay fully visible without clipping, and it does not delete the downloaded `.dmg` |  |".to_string(),
+        "| Choose recording conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains; when the trial banner, license input, and install notice are visible together, the full license field and `Choose recording` action remain visible |  |".to_string(),
+        "| Drag-and-drop conversion | Small `.mov` screen recording | Creates smaller `.squashed.mp4`; original remains; when the trial banner, license input, and install notice are visible together, the full license field and `Choose recording` action remain visible |  |".to_string(),
         "| Privacy receipt sidecar | Successful conversion | Creates matching `.privacy.json` with file names, `uploaded_bytes = 0`, and `metadata_policy = preserve` |  |".to_string(),
         "| Reveal privacy receipt | Successful conversion with receipts enabled | Finder opens with generated `.privacy.json` selected |  |".to_string(),
         "| Duplicate output naming | Same recording twice | Second output uses `.squashed-2.mp4` style numbered suffix |  |".to_string(),
@@ -20,7 +20,7 @@ pub(super) fn rows() -> Vec<String> {
         "| Ask source policy | Successful conversion | User can choose Trash or Keep while original remains unchanged |  |".to_string(),
         "| Trash source policy | Successful conversion | Trash button shows moving/disabled state; original moves to Trash only after verified smaller output |  |".to_string(),
         "| Failed conversion | Unsupported or intentionally bad input | Friendly error appears; original remains; trial count unchanged |  |".to_string(),
-        "| Larger output | Input that cannot be made smaller | Larger/not-smaller result is treated as failure; original remains; trial count unchanged |  |".to_string(),
+        "| Larger output | Input that cannot be made smaller | Larger/not-smaller result keeps the original; trial count unchanged |  |".to_string(),
         "| Reveal output | Completed output link | Finder opens with generated `.squashed.mp4` selected |  |".to_string(),
     ]
 }

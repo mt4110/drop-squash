@@ -33,6 +33,18 @@ fn rejects_process_command_construction() {
 }
 
 #[test]
+fn allows_non_media_install_helper_command() {
+    let directory = tempfile::tempdir().unwrap();
+    write(
+        directory.path(),
+        "apps/desktop/src-tauri/src/commands/install.rs",
+        "std::process::Command::new(\"helper\")",
+    );
+
+    assert!(check_roots(&[directory.path().join("apps")]).is_ok());
+}
+
+#[test]
 fn rejects_path_lookup_helpers() {
     let directory = tempfile::tempdir().unwrap();
     write(

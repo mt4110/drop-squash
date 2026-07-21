@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{QueueItem, QueueJobId};
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum QueueEvent {
     Enqueued(QueueItem),
     Started(QueueItem),
@@ -12,6 +12,10 @@ pub enum QueueEvent {
         result: EncodeResult,
     },
     Failed {
+        id: QueueJobId,
+        error: String,
+    },
+    Unchanged {
         id: QueueJobId,
         error: String,
     },

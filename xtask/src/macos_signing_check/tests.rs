@@ -163,6 +163,20 @@ fn rejects_placeholder_certificate() {
 }
 
 #[test]
+fn rejects_partial_local_certificate_signing() {
+    let env = env([
+        ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("local certificate signing is incomplete"));
+    assert!(error.contains("APPLE_CERTIFICATE_PASSWORD"));
+}
+
+#[test]
 fn rejects_placeholder_secret_values() {
     let env = env([
         ("APPLE_CERTIFICATE", TEST_CERTIFICATE),
@@ -211,6 +225,32 @@ fn rejects_missing_notarization_group() {
 }
 
 #[test]
+fn rejects_partial_api_key_notarization() {
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_API_KEY", "ABCDEF1234"),
+        ("APPLE_API_ISSUER", "12345678-1234-1234-1234-123456789abc"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("App Store Connect notarization is incomplete"));
+    assert!(error.contains("APPLE_API_KEY_PATH"));
+}
+
+#[test]
+fn rejects_partial_apple_id_notarization() {
+    let env = env([
+        ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "abcd-efgh-ijkl-mnop"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("Apple ID notarization is incomplete"));
+    assert!(error.contains("APPLE_TEAM_ID"));
+}
+
+#[test]
 fn rejects_malformed_team_id() {
     let env = env([
         ("APPLE_SIGNING_IDENTITY", "Developer ID Application"),
@@ -233,6 +273,23 @@ fn rejects_missing_signing_source() {
     let error = check(&env).unwrap_err();
 
     assert!(error.contains("macOS signing requires"));
+    assert!(error.contains("APPLE_CERTIFICATE_PASSWORD"));
+    assert!(error.contains("APPLE_API_KEY/APPLE_API_ISSUER/APPLE_API_KEY_PATH"));
+    assert!(error.contains("APPLE_ID/APPLE_PASSWORD/APPLE_TEAM_ID"));
+}
+
+#[test]
+fn ci_signing_error_lists_keychain_and_codesign_identity() {
+    let env = env([
+        ("GITHUB_ACTIONS", "true"),
+        ("APPLE_ID", "dev@example.com"),
+        ("APPLE_PASSWORD", "@env:APPLE_APP_PASSWORD"),
+        ("APPLE_TEAM_ID", "ABCDE12345"),
+    ]);
+    let error = check(&env).unwrap_err();
+
+    assert!(error.contains("APPLE_KEYCHAIN_PASSWORD"));
+    assert!(error.contains("APPLE_CODESIGN_IDENTITY"));
 }
 
 #[test]

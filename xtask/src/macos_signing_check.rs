@@ -3,7 +3,10 @@ use std::collections::BTreeMap;
 mod api_key;
 mod env;
 mod secret_value;
-use env::{all_present, present, require_pair, value};
+use env::{
+    all_present, check_team_id, incomplete_error, is_base64_char, present,
+    require_keychain_password, require_pair, value,
+};
 
 pub fn run() -> Result<(), String> {
     let env = std::env::vars().collect();
@@ -28,7 +31,7 @@ fn check_signing(env: &BTreeMap<String, String>) -> Result<(), String> {
             env,
             "APPLE_CERTIFICATE",
             "APPLE_CERTIFICATE_PASSWORD",
-            "CI macOS signing requires APPLE_CERTIFICATE with password",
+            "CI macOS signing requires APPLE_CERTIFICATE with APPLE_CERTIFICATE_PASSWORD, plus APPLE_KEYCHAIN_PASSWORD and APPLE_CODESIGN_IDENTITY",
         )
         .and_then(|()| require_keychain_password(env))
         .and_then(|()| check_ci_codesign_identity(env));
@@ -36,23 +39,41 @@ fn check_signing(env: &BTreeMap<String, String>) -> Result<(), String> {
     if present(env, "APPLE_SIGNING_IDENTITY") {
         return check_signing_identity(env);
     }
+    if let Some(error) = incomplete_error(
+        env,
+        &["APPLE_CERTIFICATE", "APPLE_CERTIFICATE_PASSWORD"],
+        "local certificate signing is incomplete",
+    ) {
+        return Err(error);
+    }
     require_pair(
         env,
         "APPLE_CERTIFICATE",
         "APPLE_CERTIFICATE_PASSWORD",
-        "macOS signing requires APPLE_SIGNING_IDENTITY or APPLE_CERTIFICATE with password",
+        "macOS signing requires APPLE_SIGNING_IDENTITY or APPLE_CERTIFICATE with APPLE_CERTIFICATE_PASSWORD; notarization also needs APPLE_API_KEY/APPLE_API_ISSUER/APPLE_API_KEY_PATH or APPLE_ID/APPLE_PASSWORD/APPLE_TEAM_ID",
     )
 }
 
 fn check_notarization(env: &BTreeMap<String, String>) -> Result<(), String> {
-    let api_key = all_present(
-        env,
-        &["APPLE_API_KEY", "APPLE_API_ISSUER", "APPLE_API_KEY_PATH"],
-    );
-    let apple_id = all_present(env, &["APPLE_ID", "APPLE_PASSWORD", "APPLE_TEAM_ID"]);
+    let api_keys = ["APPLE_API_KEY", "APPLE_API_ISSUER", "APPLE_API_KEY_PATH"];
+    let apple_id_keys = ["APPLE_ID", "APPLE_PASSWORD", "APPLE_TEAM_ID"];
+    let api_key = all_present(env, &api_keys);
+    let apple_id = all_present(env, &apple_id_keys);
     if api_key || apple_id {
         check_team_id(env)?;
         return Ok(());
+    }
+    if let Some(error) = incomplete_error(
+        env,
+        &api_keys,
+        "App Store Connect notarization is incomplete",
+    ) {
+        return Err(error);
+    }
+    if let Some(error) =
+        incomplete_error(env, &apple_id_keys, "Apple ID notarization is incomplete")
+    {
+        return Err(error);
     }
     Err("notarization requires APPLE_API_KEY/APPLE_API_ISSUER/APPLE_API_KEY_PATH or APPLE_ID/APPLE_PASSWORD/APPLE_TEAM_ID".to_string())
 }
@@ -87,30 +108,6 @@ fn check_certificate(env: &BTreeMap<String, String>) -> Result<(), String> {
         return Ok(());
     }
     Err("APPLE_CERTIFICATE must be base64-encoded certificate data".to_string())
-}
-
-fn require_keychain_password(env: &BTreeMap<String, String>) -> Result<(), String> {
-    if present(env, "APPLE_KEYCHAIN_PASSWORD") {
-        return Ok(());
-    }
-    Err(
-        "CI macOS signing requires APPLE_KEYCHAIN_PASSWORD for temporary keychain import"
-            .to_string(),
-    )
-}
-
-fn is_base64_char(value: char) -> bool {
-    value.is_ascii_alphanumeric() || matches!(value, '+' | '/' | '=')
-}
-
-fn check_team_id(env: &BTreeMap<String, String>) -> Result<(), String> {
-    let Some(team_id) = value(env, "APPLE_TEAM_ID") else {
-        return Ok(());
-    };
-    if team_id.len() == 10 && team_id.chars().all(|value| value.is_ascii_alphanumeric()) {
-        return Ok(());
-    }
-    Err("APPLE_TEAM_ID must be a 10-character Apple team id".to_string())
 }
 
 #[cfg(test)]

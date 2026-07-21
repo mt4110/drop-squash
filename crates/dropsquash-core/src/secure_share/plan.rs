@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::{FrameMaskPlan, MaskPlanAudit, VerificationExpectations};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FrameSize {
     pub width: u32,
     pub height: u32,
@@ -17,7 +17,7 @@ pub enum MaskPolicy {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MaskPlan {
     pub schema_version: u32,
     pub capture_id: String,

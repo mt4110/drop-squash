@@ -9,12 +9,13 @@ pub enum QueueJobStatus {
     Queued,
     Running,
     Succeeded,
+    Unchanged,
     Failed,
     Cancelled,
     Blocked,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueueItem {
     pub id: QueueJobId,
     pub job: EncodeJob,
@@ -39,6 +40,12 @@ impl QueueItem {
 
     pub fn failed(mut self, error: String) -> Self {
         self.status = QueueJobStatus::Failed;
+        self.error = Some(error);
+        self
+    }
+
+    pub fn unchanged(mut self, error: String) -> Self {
+        self.status = QueueJobStatus::Unchanged;
         self.error = Some(error);
         self
     }

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-07-20T14:48:22+09:00",
+  "source": "signed packaged macOS app",
+  "localPath": "/private/tmp/dropsquash-build-week-demo/DropSquash-Phase4-Strict-Shield-UI-20260720-explicit-target.mov",
+  "durationSeconds": 33.985,
+  "sha256": "3b03d6371d9df86ca5c5dadc147784758c07e7c3c5e0731f56bb4d900f57c8a9",
+  "shows": [
+    "JA primary UI with EN secondary labels",
+    "synthetic Japanese and English fixture",
+    "explicit selection of DropSquash Secure Share Fixture (1224 x 968)",
+    "Secure Share recording start and stop",
+    "safe-save completion state"
+  ],
+  "doesNotClaim": [
+    "selectively shareable output",
+    "leak-zero",
+    "enterprise audit readiness"
+  ],
+  "publicUpload": "pending"
+}

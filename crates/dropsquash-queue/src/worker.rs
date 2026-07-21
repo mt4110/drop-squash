@@ -29,6 +29,11 @@ impl QueueWorker {
         Some(QueueEvent::Failed { id: item.id, error })
     }
 
+    pub fn unchanged_active(&mut self, error: String) -> Option<QueueEvent> {
+        let item = self.queue.unchanged_active(error.clone())?;
+        Some(QueueEvent::Unchanged { id: item.id, error })
+    }
+
     pub fn cancel_active(&mut self) -> Option<QueueEvent> {
         self.queue
             .cancel_active()

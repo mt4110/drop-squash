@@ -14,6 +14,7 @@ fn fills_benchmark_rows() {
     let filled = fill_rows(text, &summary(&csv, text).unwrap()).unwrap();
 
     assert!(filled.contains("benchmark CSV recorded for three samples"));
+    assert!(filled.contains("original local recordings"));
     assert!(filled.contains("backend apple-native"));
     assert!(filled.contains("short.mov 8.000s 50.0% saved"));
 }

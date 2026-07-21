@@ -8,6 +8,8 @@ use dropsquash_core::{
 use super::shareable_request::request_shareable_content_snapshot_with;
 #[cfg(target_os = "macos")]
 use super::stream_lifecycle::wait_for_stream_completion;
+#[cfg(target_os = "macos")]
+use super::stream_output_state::SckStreamOutputState;
 use super::{
     capture_snapshot_from_providers, core_media_attachment_binding_name,
     ensure_required_sck_frame_attachments, screen_capture_kit_binding_name,
@@ -18,11 +20,14 @@ use super::{
 #[cfg(target_os = "macos")]
 use super::{make_text_request, make_text_shape_request, native_vision_result};
 #[cfg(target_os = "macos")]
+use super::{select_attested_window_target, SckWindowSelection};
+#[cfg(target_os = "macos")]
 use super::{
-    select_explicit_display_target, select_strict_reveal_window_target, NativeSampleBuffer,
-    NativeSampleBufferProvider, NativeVisionObservationProvider, SampleBufferFrameMetadataProvider,
-    SckCaptureTargetKind, SckDisplayCandidate, SckShareableContentRequest,
-    SckShareableContentSnapshot, SckStreamFrameMetadataOutput, SckWindowCandidate,
+    select_explicit_display_target, select_explicit_window_target,
+    select_strict_reveal_window_target, NativeSampleBuffer, NativeSampleBufferProvider,
+    NativeVisionObservationProvider, SampleBufferFrameMetadataProvider, SckCaptureTargetKind,
+    SckDisplayCandidate, SckShareableContentRequest, SckShareableContentSnapshot,
+    SckStreamFrameMetadataOutput, SckWindowCandidate,
 };
 #[cfg(target_os = "macos")]
 use objc2_core_foundation::{CGPoint, CGRect, CGSize};
@@ -197,7 +202,11 @@ fn snapshot_builds_strict_reveal_mask_plan() {
 
     assert_eq!(plan.capture_id, "capture-platform-001");
     assert_eq!(plan.frames.len(), 1);
-    assert_eq!(plan.frames[0].regions[0].reason, MaskReason::AxTextElement);
+    assert!(plan.frames[0]
+        .regions
+        .iter()
+        .any(|region| region.reason == MaskReason::UnknownRegion));
+    assert_eq!(plan.frames[0].regions.len(), 1);
 }
 
 #[test]
@@ -214,7 +223,11 @@ fn probe_accepts_injected_snapshot_provider() {
 
     assert_eq!(plan.capture_id, "capture-provider-001");
     assert_eq!(plan.frames.len(), 1);
-    assert_eq!(plan.frames[0].regions[0].reason, MaskReason::AxTextElement);
+    assert!(plan.frames[0]
+        .regions
+        .iter()
+        .any(|region| region.reason == MaskReason::UnknownRegion));
+    assert_eq!(plan.frames[0].regions.len(), 1);
 }
 
 #[test]
@@ -229,15 +242,11 @@ fn snapshot_can_be_composed_from_separate_signal_providers() {
     );
 
     assert_eq!(plan.frames.len(), 1);
-    assert_eq!(plan.frames[0].regions.len(), 2);
+    assert_eq!(plan.frames[0].regions.len(), 1);
     assert!(plan.frames[0]
         .regions
         .iter()
-        .any(|region| region.reason == MaskReason::AxTextElement));
-    assert!(plan.frames[0]
-        .regions
-        .iter()
-        .any(|region| region.reason == MaskReason::VisionText));
+        .any(|region| region.reason == MaskReason::UnknownRegion));
 }
 
 #[cfg(target_os = "macos")]
@@ -316,6 +325,217 @@ fn explicit_display_policy_requires_matching_display() {
     assert_eq!(target.kind, SckCaptureTargetKind::Display);
     assert_eq!(target.id, 7);
     assert!(error.contains("display"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn explicit_window_policy_rejects_a_window_that_left_the_screen() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].on_screen = false;
+    let error = select_explicit_window_target(&snapshot, 42)
+        .expect_err("off-screen selection must fail closed")
+        .to_string();
+
+    assert!(error.contains("target selection"));
+    assert!(error.contains("no longer eligible"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn explicit_window_policy_rejects_a_window_without_an_owner() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].has_owner = false;
+    let error = select_explicit_window_target(&snapshot, 42)
+        .expect_err("ownerless selection must fail closed")
+        .to_string();
+
+    assert!(error.contains("target selection"));
+    assert!(error.contains("no longer eligible"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn attested_window_policy_rejects_owner_replacement() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].owner_pid = Some(999);
+    let error = select_attested_window_target(&snapshot, &sample_window_selection())
+        .expect_err("owner replacement must fail closed")
+        .to_string();
+
+    assert!(error.contains("selected window changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn attested_window_policy_rejects_geometry_replacement() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].frame.width = 801;
+    let error = select_attested_window_target(&snapshot, &sample_window_selection())
+        .expect_err("geometry replacement must fail closed")
+        .to_string();
+
+    assert!(error.contains("selected window changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn attested_window_policy_allows_selected_window_to_lose_focus() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].active = false;
+    let target = select_attested_window_target(&snapshot, &sample_window_selection())
+        .expect("recorder controls can take focus after selection");
+
+    assert_eq!(target.id, 42);
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn post_capture_revalidation_rejects_a_changed_window() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].frame.x += 1;
+    let error = super::recording_session::revalidation::verify_snapshot(
+        &snapshot,
+        &sample_window_selection(),
+    )
+    .expect_err("post-capture window changes must fail closed")
+    .to_string();
+
+    assert!(error.contains("selected window changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn post_capture_revalidation_rejects_a_changed_window_title() {
+    let mut snapshot = sample_shareable_snapshot();
+    snapshot.windows[0].title = Some("different title".to_string());
+    let error = super::recording_session::revalidation::verify_snapshot(
+        &snapshot,
+        &sample_window_selection(),
+    )
+    .expect_err("post-capture title changes must fail closed")
+    .to_string();
+
+    assert!(error.contains("selected window changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn stream_output_rejects_a_noncomplete_frame_status() {
+    let mut state = SckStreamOutputState::new(sample_frame_size());
+    state.reject_noncomplete_frame(RawSckFrameStatus::Suspended);
+    let error = state
+        .frames()
+        .expect_err("suspended capture must fail closed")
+        .to_string();
+
+    assert!(error.contains("non-complete"));
+    assert!(error.contains("Suspended"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn rejected_frame_removes_the_partial_recording_immediately() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join(".recording.partial.mp4");
+    std::fs::write(&path, b"partial").unwrap();
+    let mut state =
+        SckStreamOutputState::with_recording(sample_frame_size(), path.clone(), vec![], usize::MAX);
+
+    state.reject_noncomplete_frame(RawSckFrameStatus::Suspended);
+
+    assert!(!path.exists());
+    assert!(state.finish_recording().is_err());
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn stream_output_rejects_repeated_presentation_time() {
+    let mut state = SckStreamOutputState::new(sample_frame_size());
+
+    let first = sample_raw_sck_frame_info();
+    assert!(state.accept_frame_continuity(first));
+    assert!(!state.accept_frame_continuity(first));
+    let error = state
+        .frames()
+        .expect_err("repeated presentation time must fail closed")
+        .to_string();
+
+    assert!(error.contains("non-monotonic"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn stream_output_rejects_changed_capture_geometry() {
+    let mut state = SckStreamOutputState::new(sample_frame_size());
+    let first = sample_raw_sck_frame_info();
+    let mut changed = first;
+    changed.presentation_time_ns += 1;
+    changed.content_rect.width += 1;
+
+    assert!(state.accept_frame_continuity(first));
+    assert!(!state.accept_frame_continuity(changed));
+    let error = state
+        .frames()
+        .expect_err("geometry change must fail closed")
+        .to_string();
+
+    assert!(error.contains("geometry or scale changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn stream_output_rejects_changed_capture_scale() {
+    let mut state = SckStreamOutputState::new(sample_frame_size());
+    let first = sample_raw_sck_frame_info();
+    let mut changed = first;
+    changed.presentation_time_ns += 1;
+    changed.scale_factor = 1.0;
+
+    assert!(state.accept_frame_continuity(first));
+    assert!(!state.accept_frame_continuity(changed));
+    let error = state
+        .frames()
+        .expect_err("scale change must fail closed")
+        .to_string();
+
+    assert!(error.contains("geometry or scale changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn stream_output_rejects_changed_content_scale() {
+    let mut state = SckStreamOutputState::new(sample_frame_size());
+    let first = sample_raw_sck_frame_info();
+    let mut changed = first;
+    changed.presentation_time_ns += 1;
+    changed.content_scale = 2.0;
+
+    assert!(state.accept_frame_continuity(first));
+    assert!(!state.accept_frame_continuity(changed));
+    let error = state
+        .frames()
+        .expect_err("content scale change must fail closed")
+        .to_string();
+
+    assert!(error.contains("geometry or scale changed"));
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn stream_output_rejects_a_large_presentation_time_gap() {
+    let mut state = SckStreamOutputState::new(sample_frame_size());
+    let first = sample_raw_sck_frame_info();
+    let mut delayed = first;
+    delayed.presentation_time_ns += super::frame_continuity::MAX_FRAME_GAP_NS + 1;
+
+    assert!(state.accept_frame_continuity(first));
+    assert!(!state.accept_frame_continuity(delayed));
+    let error = state
+        .frames()
+        .expect_err("large gaps must fail closed")
+        .to_string();
+
+    assert!(error.contains("time gap exceeded"));
 }
 
 #[cfg(target_os = "macos")]
@@ -557,7 +777,19 @@ fn sample_window(window_id: u32) -> SckWindowCandidate {
         active: true,
         has_title: true,
         has_owner: true,
+        owner_name: Some("Fixture app".to_string()),
         owner_pid: Some(1234),
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn sample_window_selection() -> SckWindowSelection {
+    let window = sample_window(42);
+    SckWindowSelection {
+        window_id: window.window_id,
+        owner_pid: window.owner_pid.unwrap(),
+        title: window.title,
+        frame: window.frame,
     }
 }
 

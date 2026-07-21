@@ -34,6 +34,9 @@ pub(super) fn for_label(label: &str) -> Option<&'static [&'static [&'static str]
                 &["outside repo", "outside repository"],
             ]
         }
+        "`cargo run -p xtask -- manual-qa-check <manual-qa.md> --section local-proof`" => {
+            &[&["manual-qa-check"], &["local-proof"], &["passed", "passes"]]
+        }
         "`cargo run -p xtask -- manual-qa-check`" => {
             &[&["manual-qa-check"], &["passed", "passes"]]
         }

@@ -1,6 +1,9 @@
 use dropsquash_core::FrameSize;
 use objc2::rc::Retained;
+use objc2_core_media::CMTime;
 use objc2_screen_capture_kit::SCStreamConfiguration;
+
+const CAPTURE_FRAMES_PER_SECOND: i32 = 30;
 
 pub fn stream_configuration(frame_size: FrameSize) -> Retained<SCStreamConfiguration> {
     let configuration = unsafe { SCStreamConfiguration::new() };
@@ -13,6 +16,7 @@ pub fn stream_configuration(frame_size: FrameSize) -> Retained<SCStreamConfigura
         configuration.setCapturesAudio(false);
         configuration.setScalesToFit(false);
         configuration.setPreservesAspectRatio(true);
+        configuration.setMinimumFrameInterval(CMTime::new(1, CAPTURE_FRAMES_PER_SECOND));
     }
     configuration
 }

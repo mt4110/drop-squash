@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use dropsquash_core::{EncodeJob, EncodeResult};
+use dropsquash_core::{normalize_encoder_message, EncodeJob, EncodeResult, NOT_SMALLER_MESSAGE};
 use dropsquash_queue::{QueueEvent, QueueItem, QueueJobId};
 
 use super::dto::ConvertRequest;
@@ -42,7 +42,15 @@ pub fn fail_active_queue_job(
     app_state: tauri::State<'_, AppState>,
     error: String,
 ) -> Result<Option<QueueEvent>, String> {
-    app_state.fail_active_queue_job(error)
+    fail_or_unchanged_active_queue_job(&app_state, error)
+}
+
+#[tauri::command(rename_all = "camelCase")]
+pub fn unchanged_active_queue_job(
+    app_state: tauri::State<'_, AppState>,
+    error: String,
+) -> Result<Option<QueueEvent>, String> {
+    app_state.unchanged_active_queue_job(normalize_queue_error(error))
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -82,11 +90,27 @@ fn job_from_request(request: ConvertRequest) -> EncodeJob {
         profile: request.profile,
         output_size: request.output_size,
         source_policy: request.source_policy,
+        secure_share: request.secure_share,
     }
 }
 
 fn block_pending_jobs(app_state: &AppState, error: String) -> Result<Vec<QueueEvent>, String> {
     app_state.block_queued_jobs(error)
+}
+
+fn fail_or_unchanged_active_queue_job(
+    app_state: &AppState,
+    error: String,
+) -> Result<Option<QueueEvent>, String> {
+    let error = normalize_queue_error(error);
+    if error == NOT_SMALLER_MESSAGE {
+        return app_state.unchanged_active_queue_job(error);
+    }
+    app_state.fail_active_queue_job(error)
+}
+
+fn normalize_queue_error(error: String) -> String {
+    normalize_encoder_message(&error)
 }
 
 #[cfg(test)]

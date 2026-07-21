@@ -7,6 +7,11 @@ const REQUIRED_NIX_SYSTEMS: [&str; 4] = [
     "aarch64-linux",
     "x86_64-linux",
 ];
+const REQUIRED_FLAKE_PACKAGES: [&str; 2] = ["nodejs_24", "pnpm_10"];
+const REQUIRED_WEB_MARKERS: [&str; 2] = [
+    r#""node": ">=24 <25""#,
+    r#""packageManager": "pnpm@10.34.0""#,
+];
 
 pub(super) fn require_nix_systems(path: &Path) -> Result<(), String> {
     let text = std::fs::read_to_string(path)
@@ -26,6 +31,22 @@ pub(super) fn require_nix_systems(path: &Path) -> Result<(), String> {
     ))
 }
 
+pub(super) fn require_web_toolchain_contract(
+    flake_path: &Path,
+    package_json_path: &Path,
+) -> Result<(), String> {
+    require_markers(
+        flake_path,
+        &REQUIRED_FLAKE_PACKAGES,
+        "Nix dev shell toolchain",
+    )?;
+    require_markers(
+        package_json_path,
+        &REQUIRED_WEB_MARKERS,
+        "desktop web toolchain contract",
+    )
+}
+
 pub(super) fn reject_parallel_version_manager(root: &Path) -> Result<(), String> {
     for path in repo_files(root)? {
         let name = path.file_name().and_then(|value| value.to_str());
@@ -37,6 +58,24 @@ pub(super) fn reject_parallel_version_manager(root: &Path) -> Result<(), String>
         }
     }
     Ok(())
+}
+
+fn require_markers(path: &Path, markers: &[&str], label: &str) -> Result<(), String> {
+    let text = std::fs::read_to_string(path)
+        .map_err(|error| format!("failed to read {}: {error}", path.display()))?;
+    let missing = markers
+        .iter()
+        .filter(|marker| !text.contains(**marker))
+        .copied()
+        .collect::<Vec<_>>();
+    if missing.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "{label} changed in {}; missing markers: {}",
+        path.display(),
+        missing.join(", ")
+    ))
 }
 
 fn repo_files(root: &Path) -> Result<Vec<PathBuf>, String> {

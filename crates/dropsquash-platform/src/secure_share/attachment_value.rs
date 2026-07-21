@@ -37,9 +37,10 @@ pub fn display_time(sample_buffer: &CMSampleBuffer) -> Result<u64> {
         unsafe { SCStreamFrameInfoDisplayTime },
         |number| Ok(number.as_i64()),
     )?;
-    u64::try_from(value).map_err(|_| {
+    let ticks = u64::try_from(value).map_err(|_| {
         AppError::InvalidConfig("Secure Share SCK display time is negative".to_string())
-    })
+    })?;
+    super::mach_clock::nanoseconds(ticks)
 }
 
 pub fn scale_factor(sample_buffer: &CMSampleBuffer) -> Result<f32> {

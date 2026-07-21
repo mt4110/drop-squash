@@ -49,7 +49,7 @@ fn summary(csv: &Path, manual: &str) -> Result<(String, String), String> {
             csv.display()
         ),
         format!(
-            "three short, medium, and large samples produced smaller outputs with backend {backend}, saved percent, duration, and speed ratio on {machine} {macos} with CSV saved outside repo at {}: {}; {}; {}",
+            "three short, medium, and large original local recordings produced smaller outputs with backend {backend}, saved percent, duration, and speed ratio on {machine} {macos} with CSV saved outside repo at {}: {}; {}; {}",
             csv.display(),
             metric(a)?,
             metric(b)?,

@@ -46,13 +46,15 @@ fn merge(target: &str, source: &str) -> Result<String, String> {
     let mut merged = 0usize;
     let lines = target
         .lines()
-        .map(|line| match row_label(line).and_then(|label| updates.get(label)) {
-            Some(update) => {
-                merged += 1;
-                update.clone()
-            }
-            None => line.to_string(),
-        })
+        .map(
+            |line| match row_label(line).and_then(|label| updates.get(label)) {
+                Some(update) => {
+                    merged += 1;
+                    update.clone()
+                }
+                None => line.to_string(),
+            },
+        )
         .collect::<Vec<_>>();
     if merged == 0 {
         return Err("prepared manual QA did not match any target rows".to_string());

@@ -44,7 +44,7 @@ pub(super) const ENTRIES: &[Entry] = &[
     ),
     (
         "docs/qa-evidence.md",
-        "Public web proof completion evidence for release-status, privacy, pricing, license, support, download, checkout, and refund",
+        "Public web proof completion evidence for release-status, privacy, pricing, terms, license, support, download, checkout, and refund",
     ),
     (
         "docs/release-blockers.md",

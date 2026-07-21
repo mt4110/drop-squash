@@ -101,3 +101,15 @@ fn equal_size_output_keeps_original() {
     assert_eq!(decision.action, SourceAction::KeepOriginal);
     assert_eq!(decision.reason, "output is not smaller than original");
 }
+
+#[test]
+fn source_action_serializes_for_desktop_ui() {
+    assert_eq!(
+        serde_json::to_string(&SourceAction::AskUser).unwrap(),
+        "\"ask-user\""
+    );
+    assert_eq!(
+        serde_json::to_string(&SourceAction::MoveOriginalToTrash).unwrap(),
+        "\"move-original-to-trash\""
+    );
+}

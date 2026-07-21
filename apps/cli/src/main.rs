@@ -10,7 +10,7 @@ async fn main() -> ExitCode {
     match run::run(args::Cli::parse()).await {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
-            eprintln!("error: {error}");
+            eprintln!("error: {}", error.user_message());
             ExitCode::FAILURE
         }
     }

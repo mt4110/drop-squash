@@ -19,20 +19,24 @@ pub fn gate() -> dropsquash_core::Result<LicenseGate> {
     })
 }
 
-pub async fn status(history: Option<PathBuf>) -> dropsquash_core::Result<()> {
+pub async fn status(
+    history: Option<PathBuf>,
+    cache_path: Option<PathBuf>,
+) -> dropsquash_core::Result<()> {
     let history = history.unwrap_or_else(default_history_path);
-    let state = state(&history).await?;
-    let cache = LicenseCache::load_or_default(&default_license_cache_path())?;
+    let cache_path = cache_path.unwrap_or_else(default_license_cache_path);
+    let state = state(&history, &cache_path).await?;
+    let cache = LicenseCache::load_or_default(&cache_path)?;
     print_state(state);
-    println!("license cache: {}", default_license_cache_path().display());
+    println!("license cache: {}", cache_path.display());
     for line in diagnostics::format_cache_diagnostics(&cache, now_unix()) {
         println!("{line}");
     }
     Ok(())
 }
 
-pub fn forget() -> dropsquash_core::Result<()> {
-    forget_at_path(&default_license_cache_path())?;
+pub fn forget(cache_path: Option<PathBuf>) -> dropsquash_core::Result<()> {
+    forget_at_path(&cache_path.unwrap_or_else(default_license_cache_path))?;
     for line in forget_lines() {
         println!("{line}");
     }
@@ -50,10 +54,19 @@ fn forget_lines() -> Vec<String> {
     ]
 }
 
-pub async fn state(history: &Path) -> dropsquash_core::Result<LicenseState> {
+pub async fn state(history: &Path, cache_path: &Path) -> dropsquash_core::Result<LicenseState> {
     let records = read_records(history).await?;
     let metrics = HistoryMetrics::from_records(&records);
-    Ok(gate()?.state_for_metrics(metrics))
+    let cache = LicenseCache::load_or_default(cache_path)?;
+    Ok(license_gate(&cache, now_unix()).state_for_metrics(metrics))
+}
+
+fn license_gate(cache: &LicenseCache, now: u64) -> LicenseGate {
+    LicenseGate {
+        trial_limit: TRIAL_CONVERSION_LIMIT,
+        has_valid_license: cache.permits_pro(now),
+        license_refresh_required: cache.requires_license_refresh(now),
+    }
 }
 
 pub fn print_state(state: LicenseState) {

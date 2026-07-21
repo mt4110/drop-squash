@@ -42,4 +42,17 @@ pub(super) const ENTRIES: &[Entry] = &[
         "docs/manual-qa.md",
         "Forgetting state disables action; confirmed license cache removed",
     ),
+    ("docs/license-sandbox-runbook.md", "## Short Execution Memo"),
+    ("docs/license-sandbox-runbook.md", "Sign in to Lemon Squeezy"),
+    ("docs/license-sandbox-runbook.md", "auth.lemonsqueezy.com/login"),
+    ("docs/license-sandbox-runbook.md", "license browser sign-in checkpoint"),
+    (
+        "docs/license-sandbox-runbook.md",
+        "scripts/manual-qa-license-sandbox-handoff.sh",
+    ),
+    (
+        "docs/license-sandbox-runbook.md",
+        "productization-status --track \"Paid beta\"",
+    ),
+    ("docs/license-sandbox-runbook.md", "sandbox quickstart 4"),
 ];

@@ -1,11 +1,15 @@
 use std::{sync::mpsc::sync_channel, time::Duration};
 
 use dropsquash_platform::{
-    request_shareable_content_snapshot, SckShareableContentRequest, SckWindowCandidate,
+    request_shareable_content_snapshot, screen_capture_access_granted, SckShareableContentRequest,
+    SckWindowCandidate,
 };
 use serde::Serialize;
 
 use super::SecureShareObservationDto;
+
+pub(crate) mod evidence;
+pub mod recording;
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -52,6 +56,9 @@ pub async fn secure_share_alpha_capture(
 }
 
 fn list_windows() -> Result<Vec<SecureShareWindowDto>, String> {
+    if !screen_capture_access_granted() {
+        return Err("Secure Share requires Screen Recording permission".to_string());
+    }
     let snapshot = request_shareable_content_snapshot(SckShareableContentRequest {
         exclude_desktop_windows: true,
         on_screen_windows_only: true,
