@@ -17,6 +17,7 @@ mod ax_probe;
 mod ax_probe_tests;
 #[cfg(target_os = "macos")]
 mod ax_rect;
+#[cfg(target_os = "macos")]
 mod ax_tree;
 #[cfg(target_os = "macos")]
 mod core_graphics_window;

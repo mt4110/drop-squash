@@ -31,6 +31,7 @@ pub use keychain::KeychainStore;
 pub use notify::NotificationService;
 #[cfg(target_os = "macos")]
 pub use secure_share::accessibility_observations_from_native;
+#[cfg(target_os = "macos")]
 pub use secure_share::{
     build_stream_capture_plan, build_stream_capture_plan_for_output,
     capture_frame_metadata_from_native, capture_snapshot_from_providers,
