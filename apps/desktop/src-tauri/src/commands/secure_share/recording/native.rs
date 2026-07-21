@@ -78,7 +78,7 @@ fn run(
         temporal_observations_from_native(native_temporal, &frames, FrameSize { width, height })
             .map_err(|error| error.user_message())?;
     recording(
-        Ok(report::build(
+        Ok(report::build(report::ReportInput {
             selection,
             width,
             height,
@@ -87,7 +87,7 @@ fn run(
             vision,
             temporal,
             paths,
-        )),
+        })),
         paths.clone(),
         permit.clone(),
     )

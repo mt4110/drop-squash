@@ -90,12 +90,15 @@ fn qa_capture_duration() -> Duration {
 }
 
 fn qa_policy() -> MaskPolicy {
-    (std::env::var("DROP_SQUASH_QA_SCK_RECORD_POLICY")
+    if std::env::var("DROP_SQUASH_QA_SCK_RECORD_POLICY")
         .ok()
         .as_deref()
-        == Some("strict_reveal"))
-    .then_some(MaskPolicy::StrictReveal)
-    .unwrap_or(MaskPolicy::SmartMask)
+        == Some("strict_reveal")
+    {
+        MaskPolicy::StrictReveal
+    } else {
+        MaskPolicy::SmartMask
+    }
 }
 
 #[derive(Clone)]

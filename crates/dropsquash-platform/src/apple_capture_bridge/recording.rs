@@ -5,7 +5,6 @@ pub type VisionObservationCallback =
     unsafe extern "C" fn(u64, *const NativeVisionObservation, *mut std::ffi::c_void) -> i32;
 pub type AccessibilityObservationCallback =
     unsafe extern "C" fn(u64, *const NativeAccessibilityObservation, *mut std::ffi::c_void) -> i32;
-
 mod temporal;
 pub use temporal::{NativeTemporalObservation, TemporalObservationCallback};
 
