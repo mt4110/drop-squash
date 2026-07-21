@@ -21,7 +21,7 @@ claim automatic PII removal.
 | Local observations | Accessibility, local Vision, and temporal observations are copied through the Apple bridge | Research only |
 | Strict Shield destruction | Each accepted frame is overwritten to black in a new final-size pixel buffer before encoding | Bounded research evidence |
 | Output verification | The saved MP4 is independently decoded and checked against a generated MaskPlan | Bounded research evidence |
-| Receipt and plan | Local signed sidecar generation and signature verification exist | Not an audit-ready claim |
+| Receipt and plan | Signed sidecar binds native policy and per-frame destruction counts; packaged-fixture rerun is pending | Not an audit-ready claim |
 | Selective output | The native writer currently uses full-frame black, not a frame-exact selective plan | No |
 | Windows Secure Share | No Media Foundation native capture bridge or packaged evidence exists | No |
 | Notarized distribution | Developer ID signing exists; notarization evidence is still absent | No public distribution |
