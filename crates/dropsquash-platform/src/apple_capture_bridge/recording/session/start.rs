@@ -11,13 +11,14 @@ use super::super::{
     start_strict_recording_with_metadata, AttestedTemporalCallbacks,
 };
 use super::callbacks::{
-    accessibility_callback, metadata_callback, recording_callback, temporal_callback,
-    vision_callback,
+    accessibility_callback, destruction_callback, metadata_callback, recording_callback,
+    temporal_callback, vision_callback,
 };
 use super::{CallbackContext, NativeStrictRecordingHandle};
 
 const FRAME_EVENT_CAPACITY: usize = 120;
 const ACCESSIBILITY_EVENT_CAPACITY: usize = 2_048;
+const DESTRUCTION_EVENT_CAPACITY: usize = 120;
 
 pub fn start_native_strict_recording(
     window_id: u32,
@@ -63,6 +64,7 @@ pub fn start_attested_native_strict_recording(
                 vision: vision_callback,
                 accessibility: accessibility_callback,
                 temporal: temporal_callback,
+                destruction: destruction_callback,
             },
         )
     })
@@ -79,12 +81,14 @@ fn start(
     let (vision_sender, vision) = sync_channel(FRAME_EVENT_CAPACITY);
     let (accessibility_sender, accessibility) = sync_channel(ACCESSIBILITY_EVENT_CAPACITY);
     let (temporal_sender, temporal) = sync_channel(FRAME_EVENT_CAPACITY);
+    let (destruction_sender, destruction) = sync_channel(DESTRUCTION_EVENT_CAPACITY);
     let context = Arc::new(CallbackContext {
         events: events_sender,
         metadata: metadata_sender,
         vision: vision_sender,
         accessibility: accessibility_sender,
         temporal: temporal_sender,
+        destruction: destruction_sender,
     });
     let native_context = Arc::into_raw(Arc::clone(&context))
         .cast_mut()
@@ -101,6 +105,7 @@ fn start(
         vision,
         accessibility,
         temporal,
+        destruction,
         _context: context,
     })
 }

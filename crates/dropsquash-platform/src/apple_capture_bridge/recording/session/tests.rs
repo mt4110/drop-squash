@@ -1,6 +1,6 @@
 use super::callbacks::{
-    accessibility_callback, metadata_callback, recording_callback, temporal_callback,
-    vision_callback,
+    accessibility_callback, destruction_callback, metadata_callback, recording_callback,
+    temporal_callback, vision_callback,
 };
 use super::*;
 use std::sync::mpsc::sync_channel;
@@ -12,12 +12,14 @@ fn callbacks_emit_only_value_events() {
     let (vision, _vision_receiver) = sync_channel(1);
     let (accessibility_sender, _accessibility_receiver) = sync_channel(1);
     let (temporal, _temporal_receiver) = sync_channel(1);
+    let (destruction, _destruction_receiver) = sync_channel(1);
     let context = Arc::new(CallbackContext {
         events,
         metadata,
         vision,
         accessibility: accessibility_sender,
         temporal,
+        destruction,
     });
     let pointer = Arc::into_raw(Arc::clone(&context)).cast_mut().cast();
 
@@ -40,12 +42,14 @@ fn metadata_backpressure_rejects_the_native_session() {
     let (vision, _vision_receiver) = sync_channel(1);
     let (accessibility, _accessibility_receiver) = sync_channel(1);
     let (temporal, _temporal_receiver) = sync_channel(1);
+    let (destruction, _destruction_receiver) = sync_channel(1);
     let context = Arc::new(CallbackContext {
         events,
         metadata,
         vision,
         accessibility,
         temporal,
+        destruction,
     });
     let pointer = Arc::into_raw(context).cast_mut().cast();
 
@@ -68,12 +72,14 @@ fn vision_callbacks_emit_only_geometry_values() {
     let (vision_sender, receiver) = sync_channel(1);
     let (accessibility, _accessibility_receiver) = sync_channel(1);
     let (temporal, _temporal_receiver) = sync_channel(1);
+    let (destruction, _destruction_receiver) = sync_channel(1);
     let context = Arc::new(CallbackContext {
         events,
         metadata,
         vision: vision_sender,
         accessibility,
         temporal,
+        destruction,
     });
     let pointer = Arc::into_raw(context).cast_mut().cast();
 
@@ -89,12 +95,14 @@ fn accessibility_callbacks_emit_only_geometry_values() {
     let (vision, _vision_receiver) = sync_channel(1);
     let (accessibility_sender, receiver) = sync_channel(1);
     let (temporal, _temporal_receiver) = sync_channel(1);
+    let (destruction, _destruction_receiver) = sync_channel(1);
     let context = Arc::new(CallbackContext {
         events,
         metadata,
         vision,
         accessibility: accessibility_sender,
         temporal,
+        destruction,
     });
     let pointer = Arc::into_raw(context).cast_mut().cast();
 
@@ -113,12 +121,14 @@ fn temporal_callbacks_emit_only_change_geometry() {
     let (vision, _vision_receiver) = sync_channel(1);
     let (accessibility, _accessibility_receiver) = sync_channel(1);
     let (temporal_sender, receiver) = sync_channel(1);
+    let (destruction, _destruction_receiver) = sync_channel(1);
     let context = Arc::new(CallbackContext {
         events,
         metadata,
         vision,
         accessibility,
         temporal: temporal_sender,
+        destruction,
     });
     let pointer = Arc::into_raw(context).cast_mut().cast();
 
@@ -128,18 +138,46 @@ fn temporal_callbacks_emit_only_change_geometry() {
 }
 
 #[test]
+fn destruction_callbacks_emit_only_writer_facts() {
+    let (events, _receiver) = sync_channel(1);
+    let (metadata, _metadata_receiver) = sync_channel(1);
+    let (vision, _vision_receiver) = sync_channel(1);
+    let (accessibility, _accessibility_receiver) = sync_channel(1);
+    let (temporal, _temporal_receiver) = sync_channel(1);
+    let (destruction_sender, receiver) = sync_channel(1);
+    let context = Arc::new(CallbackContext {
+        events,
+        metadata,
+        vision,
+        accessibility,
+        temporal,
+        destruction: destruction_sender,
+    });
+    let pointer = Arc::into_raw(context).cast_mut().cast();
+
+    assert_eq!(
+        unsafe { destruction_callback(7, &destruction(), pointer) },
+        0
+    );
+    unsafe { recording_callback(3, 6, 7, 1, pointer) };
+    assert_eq!(receiver.recv().unwrap(), destruction());
+}
+
+#[test]
 fn accessibility_backpressure_rejects_the_native_session() {
     let (events, receiver) = sync_channel(1);
     let (metadata, _metadata_receiver) = sync_channel(1);
     let (vision, _vision_receiver) = sync_channel(1);
     let (accessibility_sender, _accessibility_receiver) = sync_channel(1);
     let (temporal, _temporal_receiver) = sync_channel(1);
+    let (destruction, _destruction_receiver) = sync_channel(1);
     let context = Arc::new(CallbackContext {
         events,
         metadata,
         vision,
         accessibility: accessibility_sender,
         temporal,
+        destruction,
     });
     let pointer = Arc::into_raw(context).cast_mut().cast();
 
@@ -209,5 +247,15 @@ fn temporal() -> NativeTemporalObservation {
         y: 0.2,
         width: 0.3,
         height: 0.4,
+    }
+}
+
+fn destruction() -> NativeDestructionEvidence {
+    NativeDestructionEvidence {
+        frame_index: 0,
+        policy: 1,
+        region_count: 1,
+        output_width: 2,
+        output_height: 2,
     }
 }

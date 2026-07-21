@@ -2,8 +2,8 @@ use std::sync::mpsc::{Receiver, SyncSender};
 use std::sync::Arc;
 
 use super::{
-    stop_strict_recording, NativeAccessibilityObservation, NativeFrameMetadata,
-    NativeTemporalObservation, NativeVisionObservation,
+    stop_strict_recording, NativeAccessibilityObservation, NativeDestructionEvidence,
+    NativeFrameMetadata, NativeTemporalObservation, NativeVisionObservation,
 };
 
 mod callbacks;
@@ -29,6 +29,7 @@ pub struct NativeStrictRecordingHandle {
     pub vision: Receiver<NativeVisionObservation>,
     pub accessibility: Receiver<NativeAccessibilityObservation>,
     pub temporal: Receiver<NativeTemporalObservation>,
+    pub destruction: Receiver<NativeDestructionEvidence>,
     _context: Arc<CallbackContext>,
 }
 
@@ -50,6 +51,7 @@ pub(super) struct CallbackContext {
     pub(super) vision: SyncSender<NativeVisionObservation>,
     pub(super) accessibility: SyncSender<NativeAccessibilityObservation>,
     pub(super) temporal: SyncSender<NativeTemporalObservation>,
+    pub(super) destruction: SyncSender<NativeDestructionEvidence>,
 }
 
 mod start;

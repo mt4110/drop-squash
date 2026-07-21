@@ -40,6 +40,14 @@ typedef struct {
 typedef int32_t (*DSQTemporalObservationCallback)(uint64_t, const DSQTemporalObservation *, void *);
 typedef struct {
     uint64_t frameIndex;
+    uint32_t policy;
+    uint32_t regionCount;
+    uint32_t outputWidth;
+    uint32_t outputHeight;
+} DSQDestructionEvidence;
+typedef int32_t (*DSQDestructionEvidenceCallback)(uint64_t, const DSQDestructionEvidence *, void *);
+typedef struct {
+    uint64_t frameIndex;
     int32_t kind;
     int32_t x;
     int32_t y;
@@ -74,5 +82,5 @@ uint64_t dropsquash_secure_share_bridge_start_attested_strict_recording_with_all
 uint64_t dropsquash_secure_share_bridge_start_attested_strict_recording_with_temporal_observations(
     uint32_t, int32_t, int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, const char *, void *,
     DSQRecordingCallback, DSQFrameMetadataCallback, DSQVisionObservationCallback,
-    DSQAccessibilityObservationCallback, DSQTemporalObservationCallback
+    DSQAccessibilityObservationCallback, DSQTemporalObservationCallback, DSQDestructionEvidenceCallback
 );

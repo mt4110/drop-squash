@@ -13,10 +13,10 @@ pub use recording::{
     start_attested_strict_recording_with_temporal_observations, start_native_strict_recording,
     start_strict_recording, start_strict_recording_with_metadata, stop_strict_recording,
     AttestedObservationCallbacks, AttestedRecordingRequest, AttestedTemporalCallbacks,
-    FrameMetadataCallback, NativeAccessibilityObservation, NativeFrameMetadata,
-    NativeRecordingEvent, NativeRecordingFailure, NativeStrictRecordingHandle,
-    NativeTemporalObservation, NativeVisionObservation, RecordingCallback,
-    TemporalObservationCallback, VisionObservationCallback,
+    DestructionEvidenceCallback, FrameMetadataCallback, NativeAccessibilityObservation,
+    NativeDestructionEvidence, NativeFrameMetadata, NativeRecordingEvent, NativeRecordingFailure,
+    NativeStrictRecordingHandle, NativeTemporalObservation, NativeVisionObservation,
+    RecordingCallback, TemporalObservationCallback, VisionObservationCallback,
 };
 
 #[cfg(target_os = "macos")]

@@ -1,29 +1,24 @@
-use std::sync::mpsc::{Receiver, SyncSender, TryRecvError};
+use std::sync::mpsc::{Receiver, SyncSender};
 use std::time::Duration;
 
-use dropsquash_core::CaptureFrameMetadata;
-use dropsquash_platform::{
-    capture_frame_metadata_from_native, NativeAccessibilityObservation, NativeRecordingEvent,
-    NativeStrictRecordingHandle, NativeTemporalObservation, NativeVisionObservation,
-};
+use dropsquash_platform::{NativeRecordingEvent, NativeStrictRecordingHandle};
 
 mod accessibility;
+mod destruction;
+mod drain;
 mod frame_validation;
 mod temporal;
 mod terminal;
+mod values;
 mod vision;
 use accessibility::drain_accessibility;
+use destruction::drain as drain_destruction;
+use drain::values as drain;
 use frame_validation::validate;
 use temporal::drain as drain_temporal;
 use terminal::reject_early;
+use values::StoppedValues;
 use vision::drain as drain_vision;
-
-type StoppedValues = (
-    Vec<CaptureFrameMetadata>,
-    Vec<NativeVisionObservation>,
-    Vec<NativeAccessibilityObservation>,
-    Vec<NativeTemporalObservation>,
-);
 
 pub(super) fn wait_started(
     events: &Receiver<NativeRecordingEvent>,
@@ -53,6 +48,7 @@ pub(super) fn wait_stopped(
     let mut vision = Vec::new();
     let mut accessibility = Vec::new();
     let mut temporal = Vec::new();
+    let mut destruction = Vec::new();
     loop {
         drain(
             handle,
@@ -60,6 +56,7 @@ pub(super) fn wait_stopped(
             &mut vision,
             &mut accessibility,
             &mut temporal,
+            &mut destruction,
         )?;
         reject_early(&handle.events)?;
         match stop.recv_timeout(Duration::from_millis(10)) {
@@ -78,6 +75,7 @@ pub(super) fn wait_stopped(
             &mut vision,
             &mut accessibility,
             &mut temporal,
+            &mut destruction,
         )?;
         match handle.events.recv_timeout(Duration::from_millis(10)) {
             Ok(NativeRecordingEvent::Completed { frame_count }) => {
@@ -87,10 +85,14 @@ pub(super) fn wait_stopped(
                     &mut vision,
                     &mut accessibility,
                     &mut temporal,
+                    &mut destruction,
                 )?;
                 if frame_count == frames.len() as u64 {
                     validate(&frames)?;
-                    return Ok((frames, vision, accessibility, temporal));
+                    if destruction.len() == frames.len() {
+                        return Ok((frames, vision, accessibility, temporal, destruction));
+                    }
+                    return Err("Secure Share native destruction evidence mismatch".to_string());
                 }
                 return Err("Secure Share native frame count mismatch".to_string());
             }
@@ -102,27 +104,4 @@ pub(super) fn wait_stopped(
             Err(_) => return Err("Secure Share native recording callback disconnected".to_string()),
         }
     }
-}
-
-fn drain(
-    handle: &NativeStrictRecordingHandle,
-    frames: &mut Vec<CaptureFrameMetadata>,
-    vision: &mut Vec<NativeVisionObservation>,
-    accessibility: &mut Vec<NativeAccessibilityObservation>,
-    temporal: &mut Vec<NativeTemporalObservation>,
-) -> Result<(), String> {
-    loop {
-        match handle.metadata.try_recv() {
-            Ok(value) => frames.push(
-                capture_frame_metadata_from_native(value).map_err(|error| error.user_message())?,
-            ),
-            Err(TryRecvError::Empty) => break,
-            Err(TryRecvError::Disconnected) => {
-                return Err("Secure Share native metadata callback disconnected".to_string())
-            }
-        }
-    }
-    drain_vision(handle, vision)?;
-    drain_accessibility(handle, accessibility)?;
-    drain_temporal(handle, temporal)
 }

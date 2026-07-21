@@ -2,8 +2,8 @@ use std::ffi::c_void;
 use std::sync::Arc;
 
 use super::{
-    CallbackContext, NativeAccessibilityObservation, NativeFrameMetadata, NativeRecordingEvent,
-    NativeTemporalObservation, NativeVisionObservation,
+    CallbackContext, NativeAccessibilityObservation, NativeDestructionEvidence,
+    NativeFrameMetadata, NativeRecordingEvent, NativeTemporalObservation, NativeVisionObservation,
 };
 
 pub(super) unsafe extern "C" fn recording_callback(
@@ -69,6 +69,16 @@ pub(super) unsafe extern "C" fn temporal_callback(
 ) -> i32 {
     callback_value(context, value, |context, value| {
         context.temporal.try_send(value)
+    })
+}
+
+pub(super) unsafe extern "C" fn destruction_callback(
+    _session_id: u64,
+    value: *const NativeDestructionEvidence,
+    context: *mut c_void,
+) -> i32 {
+    callback_value(context, value, |context, value| {
+        context.destruction.try_send(value)
     })
 }
 

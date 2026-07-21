@@ -19,7 +19,8 @@
           metadataCallback:(DSQFrameMetadataCallback)metadataCallback
             visionCallback:(DSQVisionObservationCallback)visionCallback
      accessibilityCallback:(DSQAccessibilityObservationCallback)accessibilityCallback
-         temporalCallback:(DSQTemporalObservationCallback)temporalCallback;
+         temporalCallback:(DSQTemporalObservationCallback)temporalCallback
+       destructionCallback:(DSQDestructionEvidenceCallback)destructionCallback;
 - (void)start;
 - (void)stop;
 @end
@@ -75,6 +76,7 @@ typedef NS_ENUM(int32_t, DSQRecordingFailure) {
 @property(nonatomic) DSQVisionObservationCallback visionCallback;
 @property(nonatomic) DSQAccessibilityObservationCallback accessibilityCallback;
 @property(nonatomic) DSQTemporalObservationCallback temporalCallback;
+@property(nonatomic) DSQDestructionEvidenceCallback destructionCallback;
 @property(nonatomic) uint64_t frameCount;
 @property(nonatomic) BOOL started;
 @property(nonatomic) BOOL stopping;
@@ -120,7 +122,8 @@ typedef NS_ENUM(int32_t, DSQRecordingFailure) {
           metadataCallback:(DSQFrameMetadataCallback)metadataCallback
             visionCallback:(DSQVisionObservationCallback)visionCallback
      accessibilityCallback:(DSQAccessibilityObservationCallback)accessibilityCallback
-         temporalCallback:(DSQTemporalObservationCallback)temporalCallback {
+         temporalCallback:(DSQTemporalObservationCallback)temporalCallback
+       destructionCallback:(DSQDestructionEvidenceCallback)destructionCallback {
     self = [super init];
     if (self != nil) {
         _sessionID = sessionID;
@@ -134,6 +137,7 @@ typedef NS_ENUM(int32_t, DSQRecordingFailure) {
         _visionCallback = visionCallback;
         _accessibilityCallback = accessibilityCallback;
         _temporalCallback = temporalCallback;
+        _destructionCallback = destructionCallback;
         _frameQueue = dispatch_queue_create("app.dropsquash.secure-share.frames", DISPATCH_QUEUE_SERIAL);
         _visionQueue = dispatch_queue_create("app.dropsquash.secure-share.vision", DISPATCH_QUEUE_SERIAL);
         _visionGroup = dispatch_group_create();
@@ -658,6 +662,13 @@ typedef NS_ENUM(int32_t, DSQRecordingFailure) {
         BOOL appended = [self.adaptor appendPixelBuffer:pixel withPresentationTime:time];
         CVPixelBufferRelease(pixel);
         if (!appended) { [self fail:DSQRecordingFailureWriter]; return; }
+        if (self.destructionCallback != NULL) {
+            DSQDestructionEvidence evidence = { .frameIndex = self.frameCount, .policy = 1,
+                .regionCount = 1, .outputWidth = self.width, .outputHeight = self.height };
+            if (self.destructionCallback(self.sessionID, &evidence, self.context) != 0) {
+                [self fail:DSQRecordingFailureContinuity]; return;
+            }
+        }
         self.frameCount += 1;
     }
 }
@@ -736,7 +747,7 @@ uint64_t dropsquash_secure_share_bridge_start_strict_recording_with_metadata(
     uint64_t sessionID = __sync_fetch_and_add(&DSQNextSessionID, 1);
     DSQStrictRecordingSession *session = [[DSQStrictRecordingSession alloc]
         initWithID:sessionID windowID:windowID width:width height:height
-        path:[NSString stringWithUTF8String:path] context:context callback:callback metadataCallback:metadataCallback visionCallback:NULL accessibilityCallback:NULL temporalCallback:NULL];
+        path:[NSString stringWithUTF8String:path] context:context callback:callback metadataCallback:metadataCallback visionCallback:NULL accessibilityCallback:NULL temporalCallback:NULL destructionCallback:NULL];
     @synchronized (DSQSessions()) { DSQSessions()[@(sessionID)] = session; }
     [session start];
     return sessionID;
@@ -781,7 +792,7 @@ uint64_t dropsquash_secure_share_bridge_start_attested_strict_recording_with_all
     uint64_t sessionID = __sync_fetch_and_add(&DSQNextSessionID, 1);
     DSQStrictRecordingSession *session = [[DSQStrictRecordingSession alloc]
         initWithID:sessionID windowID:windowID width:outputWidth height:outputHeight
-        path:[NSString stringWithUTF8String:path] context:context callback:callback metadataCallback:metadataCallback visionCallback:visionCallback accessibilityCallback:accessibilityCallback temporalCallback:NULL];
+        path:[NSString stringWithUTF8String:path] context:context callback:callback metadataCallback:metadataCallback visionCallback:visionCallback accessibilityCallback:accessibilityCallback temporalCallback:NULL destructionCallback:NULL];
     session.requiresAttestation = YES;
     session.expectedOwnerPID = ownerPID;
     session.expectedFrame = CGRectMake(x, y, windowWidth, windowHeight);
@@ -796,14 +807,15 @@ uint64_t dropsquash_secure_share_bridge_start_attested_strict_recording_with_tem
     uint32_t windowID, int32_t ownerPID, int32_t x, int32_t y, uint32_t windowWidth, uint32_t windowHeight,
     uint32_t outputWidth, uint32_t outputHeight, const char *path, void *context,
     DSQRecordingCallback callback, DSQFrameMetadataCallback metadataCallback, DSQVisionObservationCallback visionCallback,
-    DSQAccessibilityObservationCallback accessibilityCallback, DSQTemporalObservationCallback temporalCallback
+    DSQAccessibilityObservationCallback accessibilityCallback, DSQTemporalObservationCallback temporalCallback,
+    DSQDestructionEvidenceCallback destructionCallback
 ) {
     if (ownerPID <= 0 || windowWidth == 0 || windowHeight == 0) return 0;
     if (callback == NULL || path == NULL || outputWidth == 0 || outputHeight == 0) return 0;
     uint64_t sessionID = __sync_fetch_and_add(&DSQNextSessionID, 1);
     DSQStrictRecordingSession *session = [[DSQStrictRecordingSession alloc]
         initWithID:sessionID windowID:windowID width:outputWidth height:outputHeight
-        path:[NSString stringWithUTF8String:path] context:context callback:callback metadataCallback:metadataCallback visionCallback:visionCallback accessibilityCallback:accessibilityCallback temporalCallback:temporalCallback];
+        path:[NSString stringWithUTF8String:path] context:context callback:callback metadataCallback:metadataCallback visionCallback:visionCallback accessibilityCallback:accessibilityCallback temporalCallback:temporalCallback destructionCallback:destructionCallback];
     session.requiresAttestation = YES;
     session.expectedOwnerPID = ownerPID;
     session.expectedFrame = CGRectMake(x, y, windowWidth, windowHeight);

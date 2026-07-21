@@ -1,15 +1,16 @@
 use std::path::Path;
 
-use dropsquash_core::{
-    mask_options_for_frame, AppError, MaskMode, MaskPlan, MaskRect, Result, SecureShareOptions,
-};
+#[cfg(target_os = "macos")]
+use dropsquash_core::{mask_options_for_frame, MaskMode};
+use dropsquash_core::{AppError, MaskPlan, MaskRect, Result, SecureShareOptions};
 use serde::Serialize;
 
+#[cfg(target_os = "macos")]
 mod plan_options;
+#[cfg(target_os = "macos")]
 pub(crate) use plan_options::options_for_frame;
-#[cfg(test)]
+#[cfg(all(test, target_os = "macos"))]
 mod plan_options_tests;
-
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MaskPlanBlackFillProof {
@@ -82,6 +83,7 @@ pub fn prove_mask_plan_solid_black_fill(_plan: &MaskPlan) -> Result<MaskPlanBlac
     ))
 }
 
+#[cfg(target_os = "macos")]
 fn proof_pixels(width: u32, height: u32) -> Result<Vec<u8>> {
     let len = (width as usize)
         .checked_mul(height as usize)
@@ -90,11 +92,13 @@ fn proof_pixels(width: u32, height: u32) -> Result<Vec<u8>> {
     Ok(vec![200u8; len])
 }
 
+#[cfg(target_os = "macos")]
 fn is_black_at(frame: &[u8], width: u32, rect: MaskRect) -> bool {
     let offset = ((rect.y * width + rect.x) * 4) as usize;
     frame.get(offset..offset + 4) == Some(&[0, 0, 0, 255])
 }
 
+#[cfg(target_os = "macos")]
 fn proof_error(message: &str) -> AppError {
     AppError::InvalidConfig(format!(
         "Secure Share MaskPlan black-fill proof failed: {message}"

@@ -59,7 +59,7 @@ fn run(
     )
     .map_err(|error| startup_failure(&ready, error))?;
     wait_started(&handle.events, &ready)?;
-    let (frames, native_vision, native_accessibility, native_temporal) =
+    let (frames, native_vision, native_accessibility, native_temporal, destruction) =
         wait_stopped(&handle, stop)?;
     let vision = vision_observations_from_native(
         native_vision,
@@ -77,20 +77,18 @@ fn run(
     let temporal =
         temporal_observations_from_native(native_temporal, &frames, FrameSize { width, height })
             .map_err(|error| error.user_message())?;
-    recording(
-        Ok(report::build(report::ReportInput {
-            selection,
-            width,
-            height,
-            frames,
-            accessibility,
-            vision,
-            temporal,
-            paths,
-        })),
-        paths.clone(),
-        permit.clone(),
-    )
+    let report = report::build(report::ReportInput {
+        selection,
+        width,
+        height,
+        frames,
+        accessibility,
+        vision,
+        temporal,
+        destruction,
+        paths,
+    })?;
+    recording(Ok(report), paths.clone(), permit.clone())
 }
 
 fn startup_failure(ready: &SyncSender<Result<(), String>>, error: String) -> String {

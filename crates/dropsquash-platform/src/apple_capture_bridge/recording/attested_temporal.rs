@@ -2,8 +2,8 @@ use std::ffi::{c_char, c_void};
 
 use super::attested::AttestedRecordingRequest;
 use super::{
-    AccessibilityObservationCallback, FrameMetadataCallback, RecordingCallback,
-    TemporalObservationCallback, VisionObservationCallback,
+    AccessibilityObservationCallback, DestructionEvidenceCallback, FrameMetadataCallback,
+    RecordingCallback, TemporalObservationCallback, VisionObservationCallback,
 };
 
 pub struct AttestedTemporalCallbacks {
@@ -12,6 +12,7 @@ pub struct AttestedTemporalCallbacks {
     pub vision: VisionObservationCallback,
     pub accessibility: AccessibilityObservationCallback,
     pub temporal: TemporalObservationCallback,
+    pub destruction: DestructionEvidenceCallback,
 }
 
 unsafe extern "C" {
@@ -31,6 +32,7 @@ unsafe extern "C" {
         vision: VisionObservationCallback,
         accessibility: AccessibilityObservationCallback,
         temporal: TemporalObservationCallback,
+        destruction: DestructionEvidenceCallback,
     ) -> u64;
 }
 
@@ -58,6 +60,7 @@ pub unsafe fn start_attested_strict_recording_with_temporal_observations(
             callbacks.vision,
             callbacks.accessibility,
             callbacks.temporal,
+            callbacks.destruction,
         )
     }
 }

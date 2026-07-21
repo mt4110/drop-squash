@@ -15,8 +15,9 @@ pub use apple_capture_bridge::{
     start_attested_strict_recording_with_temporal_observations, start_native_strict_recording,
     start_strict_recording, start_strict_recording_with_metadata, stop_strict_recording,
     AttestedObservationCallbacks, AttestedRecordingRequest, AttestedTemporalCallbacks,
-    DiscoveryCallback, FrameCallback, FrameMetadataCallback, NativeAccessibilityObservation,
-    NativeFrameMetadata, NativeRecordingEvent, NativeRecordingFailure, NativeStrictRecordingHandle,
+    DestructionEvidenceCallback, DiscoveryCallback, FrameCallback, FrameMetadataCallback,
+    NativeAccessibilityObservation, NativeDestructionEvidence, NativeFrameMetadata,
+    NativeRecordingEvent, NativeRecordingFailure, NativeStrictRecordingHandle,
     NativeTemporalObservation, NativeVisionObservation, RecordingCallback,
     TemporalObservationCallback, VisionObservationCallback,
 };

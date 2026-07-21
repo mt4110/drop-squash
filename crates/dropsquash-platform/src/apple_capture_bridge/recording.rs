@@ -5,9 +5,10 @@ pub type VisionObservationCallback =
     unsafe extern "C" fn(u64, *const NativeVisionObservation, *mut std::ffi::c_void) -> i32;
 pub type AccessibilityObservationCallback =
     unsafe extern "C" fn(u64, *const NativeAccessibilityObservation, *mut std::ffi::c_void) -> i32;
+mod destruction;
+pub use destruction::{DestructionEvidenceCallback, NativeDestructionEvidence};
 mod temporal;
 pub use temporal::{NativeTemporalObservation, TemporalObservationCallback};
-
 #[repr(C)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct NativeFrameMetadata {
@@ -25,7 +26,6 @@ pub struct NativeFrameMetadata {
     pub bounding_width: u32,
     pub bounding_height: u32,
 }
-
 #[repr(C)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct NativeVisionObservation {
