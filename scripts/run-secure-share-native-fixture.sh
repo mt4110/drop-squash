@@ -3,8 +3,8 @@ set -eu
 
 root=$(git rev-parse --show-toplevel)
 fixture="$root/tests/fixtures/secure-share/NativeAccessibilityFixture.swift"
-binary=/tmp/DropSquashNativeAccessibilityFixture
-log=/tmp/DropSquashNativeAccessibilityFixture.log
+bundle=/tmp/DropSquashNativeAccessibilityFixture.app
+binary="$bundle/Contents/MacOS/DropSquashNativeAccessibilityFixture"
 scenario=${1:-baseline}
 
 case "$scenario" in
@@ -26,9 +26,23 @@ case "$scenario" in
     ;;
 esac
 
+rm -rf "$bundle"
+mkdir -p "$bundle/Contents/MacOS"
 swiftc "$fixture" -o "$binary"
-nohup "$binary" >"$log" 2>&1 &
-pid=$!
+cat >"$bundle/Contents/Info.plist" <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleExecutable</key><string>DropSquashNativeAccessibilityFixture</string>
+<key>CFBundleIdentifier</key><string>app.dropsquash.native-fixture</string>
+<key>CFBundleName</key><string>DropSquash Native Fixture</string>
+<key>CFBundlePackageType</key><string>APPL</string>
+</dict></plist>
+EOF
+open -n "$bundle"
+sleep 1
+pid=$(pgrep -f "$binary" | head -n 1 || true)
+[ -n "$pid" ] || { echo "fixture did not start" >&2; exit 1; }
 echo "fixture scenario: $scenario"
 echo "fixture pid: $pid"
-echo "fixture log: $log"
+echo "fixture bundle: $bundle"
