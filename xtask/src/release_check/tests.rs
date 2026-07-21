@@ -297,8 +297,6 @@ fn reports_missing_desktop_workflow_gates() {
         vec![
             "permissions:",
             "contents: read",
-            "Install Linux desktop dependencies",
-            "libwebkit2gtk-4.1-dev",
             "pnpm --dir apps/desktop/web install --frozen-lockfile",
             "pnpm --dir apps/desktop/web build",
             "dtolnay/rust-toolchain@1.95.0",

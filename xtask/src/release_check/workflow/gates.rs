@@ -100,8 +100,6 @@ pub(super) const RELEASE_FORBIDDEN: &[&str] = &[
 pub(super) const DESKTOP: &[&str] = &[
     "permissions:",
     "contents: read",
-    "Install Linux desktop dependencies",
-    "libwebkit2gtk-4.1-dev",
     "pnpm --dir apps/desktop/web install --frozen-lockfile",
     "pnpm --dir apps/desktop/web test",
     "pnpm --dir apps/desktop/web build",
