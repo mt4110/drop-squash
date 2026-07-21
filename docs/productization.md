@@ -3,6 +3,8 @@
 > Current commercial design: after the Build Week submission, the authoritative
 > Phase 6-10 plan is
 > [docs/phase6-10-commercialization.md](/Users/masakitakemura/_workspace/drop-squash/docs/phase6-10-commercialization.md).
+> The current implementation boundary is recorded in
+> [docs/phase6-readiness-audit.md](/Users/masakitakemura/_workspace/drop-squash/docs/phase6-readiness-audit.md).
 > Historical Build Week sections below record how the R&D alpha was prepared;
 > they do not authorize a public release, payment onboarding, or broad claim.
 
