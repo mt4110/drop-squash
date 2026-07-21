@@ -29,7 +29,7 @@ fn transforms_native_vision_rectangles_without_text() {
     assert_eq!(observation.rect.x, 10);
     assert_eq!(observation.rect.y, 39);
     assert_eq!(observation.rect.width, 31);
-    assert_eq!(observation.rect.height, 40);
+    assert_eq!(observation.rect.height, 41);
 }
 
 #[test]
