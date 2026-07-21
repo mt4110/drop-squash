@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   release-readiness:
+    if: startsWith(github.ref, 'refs/tags/v')
     strategy:
       fail-fast: false
       matrix:
