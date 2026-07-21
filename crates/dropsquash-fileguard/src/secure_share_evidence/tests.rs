@@ -165,6 +165,10 @@ fn rejects_native_bridge_evidence_without_frame_destruction_counts() {
     let sidecar = directory.path().join("clip.mask-plan.json");
     fs::write(&video, b"video").unwrap();
     let mut evidence = evidence_for(&video);
+    evidence
+        .plan
+        .verification_expectations
+        .verification_policy_version = "phase5-native-bridge-v1".into();
     evidence.plan.audit.native_verified_frame_count = 0;
     write_signed(&sidecar, evidence, directory.path().join("key"));
 
