@@ -60,3 +60,6 @@ fn strict_shield_evidence(input: &ReportInput<'_>) -> Result<SckLiveMaskEvidence
         ..SckLiveMaskEvidence::default()
     })
 }
+
+#[cfg(test)]
+mod tests;
