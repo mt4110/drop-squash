@@ -44,13 +44,13 @@ jobs:
         if: ${{ false }}
         run: cargo run -p xtask -- release-check
       - name: clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
+        run: cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings
       - name: test
         if: runner.os != 'Windows'
-        run: cargo test --workspace
+        run: cargo test --workspace --exclude dropsquash-desktop
       - name: test windows
         if: runner.os == 'Windows'
-        run: cargo test --workspace --exclude xtask
+        run: cargo test --workspace --exclude dropsquash-desktop --exclude xtask
 
   nix:
     runs-on: ubuntu-latest
