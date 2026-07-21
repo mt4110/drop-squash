@@ -9,8 +9,8 @@ use super::super::{
 fn calculates_union_without_double_counting_overlaps() {
     let plan = plan(vec![rect(0, 0, 50, 50), rect(25, 0, 50, 50)]);
     let coverage = destructive_coverage(&plan);
-    assert_eq!(coverage.max_frame_ppm, 750_000);
-    assert_eq!(coverage.mean_frame_ppm, 750_000);
+    assert_eq!(coverage.max_frame_ppm, 375_000);
+    assert_eq!(coverage.mean_frame_ppm, 375_000);
 }
 
 #[test]
