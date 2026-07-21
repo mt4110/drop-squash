@@ -159,6 +159,20 @@ fn rejects_native_bridge_evidence_without_native_capture_boundary() {
 }
 
 #[test]
+fn rejects_native_bridge_evidence_without_frame_destruction_counts() {
+    let directory = tempfile::tempdir().unwrap();
+    let video = directory.path().join("clip.mp4");
+    let sidecar = directory.path().join("clip.mask-plan.json");
+    fs::write(&video, b"video").unwrap();
+    let mut evidence = evidence_for(&video);
+    evidence.plan.audit.native_verified_frame_count = 0;
+    write_signed(&sidecar, evidence, directory.path().join("key"));
+
+    let error = verify_secure_share_evidence(&video, &sidecar).unwrap_err();
+    assert!(error.to_string().contains("per-frame native destruction"));
+}
+
+#[test]
 fn rejects_a_validly_signed_legacy_mask_plan_schema() {
     let directory = tempfile::tempdir().unwrap();
     let video = directory.path().join("clip.mp4");
@@ -502,6 +516,7 @@ fn plan() -> MaskPlan {
     let mut audit = MaskPlanAudit::clean();
     audit.capture_continuity_attested = Some(true);
     audit.capture_backend = Some("apple_native_capture_v1".into());
+    audit.record_native_destruction(1, 1, 1);
     audit.capture_continuity_watches = required_capture_continuity_watches()
         .iter()
         .map(|watch| (*watch).to_string())

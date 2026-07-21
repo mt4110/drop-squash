@@ -3,6 +3,8 @@ use dropsquash_core::{
     FrameStatus, MaskPlan, MaskPolicy, MaskReason, ObservationSource, RegionPolicy,
 };
 
+use super::native_evidence::require_native_destruction;
+
 const STRICT_CAPTURE_ID: &str = "secure-share-recording-local";
 
 pub(super) fn require_redacted_strict_plan(plan: &MaskPlan) -> Result<(), AppError> {
@@ -20,7 +22,7 @@ pub(super) fn require_redacted_strict_plan(plan: &MaskPlan) -> Result<(), AppErr
         ));
     }
     require_capture_continuity(plan)?;
-    require_native_capture_backend(plan)?;
+    require_native_destruction(plan)?;
     require_exposure_coverage(plan)?;
     if plan.frames.is_empty() {
         return Err(invalid("contains no Strict Shield capture frames"));
@@ -103,16 +105,6 @@ fn require_capture_continuity(plan: &MaskPlan) -> Result<(), AppError> {
         return Err(invalid("is missing capture continuity watch evidence"));
     }
     Ok(())
-}
-
-fn require_native_capture_backend(plan: &MaskPlan) -> Result<(), AppError> {
-    if plan.verification_expectations.verification_policy_version != "phase5-native-bridge-v1" {
-        return Ok(());
-    }
-    if plan.audit.capture_backend.as_deref() == Some("apple_native_capture_v1") {
-        return Ok(());
-    }
-    Err(invalid("is missing Apple-native capture boundary evidence"))
 }
 
 fn invalid(reason: &str) -> AppError {

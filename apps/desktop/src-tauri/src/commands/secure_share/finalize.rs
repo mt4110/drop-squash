@@ -63,6 +63,11 @@ fn verified(
     plan.schema_version = 2;
     plan.audit.capture_continuity_attested = Some(true);
     plan.audit.capture_backend = Some("apple_native_capture_v1".to_string());
+    plan.audit.record_native_destruction(
+        report.live_mask_evidence.masked_frame_count,
+        report.live_mask_evidence.masked_rect_count,
+        report.live_mask_evidence.verified_pixel_count,
+    );
     plan.audit.capture_continuity_watches = required_capture_continuity_watches()
         .iter()
         .map(|watch| (*watch).to_string())

@@ -20,6 +20,12 @@ pub struct MaskPlanAudit {
     pub capture_continuity_attested: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub capture_backend: Option<String>,
+    #[serde(default, skip_serializing_if = "is_zero")]
+    pub native_destroyed_frame_count: usize,
+    #[serde(default, skip_serializing_if = "is_zero")]
+    pub native_destroyed_region_count: usize,
+    #[serde(default, skip_serializing_if = "is_zero")]
+    pub native_verified_frame_count: usize,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub capture_continuity_watches: Vec<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -48,6 +54,9 @@ impl MaskPlanAudit {
             vision_only_count: 0,
             capture_continuity_attested: None,
             capture_backend: None,
+            native_destroyed_frame_count: 0,
+            native_destroyed_region_count: 0,
+            native_verified_frame_count: 0,
             capture_continuity_watches: Vec::new(),
             exposure_coverage: Vec::new(),
         }
@@ -83,6 +92,12 @@ impl MaskPlanAudit {
 
     pub(super) fn record_focused_text_count(&mut self, count: usize) {
         self.focused_text_observation_count = count;
+    }
+
+    pub fn record_native_destruction(&mut self, frames: usize, regions: usize, verified: usize) {
+        self.native_destroyed_frame_count = frames;
+        self.native_destroyed_region_count = regions;
+        self.native_verified_frame_count = verified;
     }
 }
 

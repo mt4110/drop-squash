@@ -6,6 +6,7 @@ use serde_json::Value;
 
 use crate::{sha256_hex_for_file, verify_evidence_signature, EvidenceSignature};
 
+mod native_evidence;
 mod strict_plan;
 
 const CANONICAL_EVIDENCE_SCHEMA_VERSION: u32 = 2;
