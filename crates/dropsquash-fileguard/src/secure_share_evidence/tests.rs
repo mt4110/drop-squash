@@ -151,6 +151,7 @@ fn rejects_native_bridge_evidence_without_native_capture_boundary() {
         .plan
         .verification_expectations
         .verification_policy_version = "phase5-native-bridge-v1".into();
+    evidence.plan.audit.capture_backend = None;
     write_signed(&sidecar, evidence, directory.path().join("key"));
 
     let error = verify_secure_share_evidence(&video, &sidecar).unwrap_err();
