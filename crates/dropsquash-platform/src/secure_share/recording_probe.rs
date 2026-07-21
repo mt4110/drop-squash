@@ -59,13 +59,15 @@ pub(super) fn record_from_content_with_policy(
         let _ = stop.send(());
     });
     super::recording_session::record_until_stopped_from_content(
-        selection,
-        output_path,
-        OutputSize::Auto,
-        policy,
-        request,
-        content,
-        receiver,
+        super::recording_session::request::RecordingSessionRequest {
+            selection,
+            output_path,
+            output_size: OutputSize::Auto,
+            policy,
+            probe: request,
+            content,
+            stop: receiver,
+        },
         |_| {},
     )
 }

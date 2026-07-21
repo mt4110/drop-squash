@@ -12,6 +12,7 @@ pub use recording::{
     start_attested_native_strict_recording, start_attested_strict_recording_with_observations,
     start_attested_strict_recording_with_temporal_observations, start_native_strict_recording,
     start_strict_recording, start_strict_recording_with_metadata, stop_strict_recording,
+    AttestedObservationCallbacks, AttestedRecordingRequest, AttestedTemporalCallbacks,
     FrameMetadataCallback, NativeAccessibilityObservation, NativeFrameMetadata,
     NativeRecordingEvent, NativeRecordingFailure, NativeStrictRecordingHandle,
     NativeTemporalObservation, NativeVisionObservation, RecordingCallback,
@@ -37,7 +38,7 @@ unsafe extern "C" {
 pub fn apple_capture_bridge_abi_version() -> i32 {
     #[cfg(target_os = "macos")]
     unsafe {
-        return dropsquash_secure_share_bridge_abi_version();
+        dropsquash_secure_share_bridge_abi_version()
     }
     #[cfg(not(target_os = "macos"))]
     0

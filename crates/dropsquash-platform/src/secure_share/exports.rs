@@ -41,7 +41,9 @@ pub use super::recording_callback::{
 #[cfg(target_os = "macos")]
 pub use super::recording_probe::{record_window_once, SckRecordingProbeReport};
 #[cfg(target_os = "macos")]
-pub use super::recording_session_callback::record_window_until_stopped_callback;
+pub use super::recording_session_callback::{
+    record_window_until_stopped_callback, RecordingCallbackRequest,
+};
 
 #[cfg(target_os = "macos")]
 pub use super::live_mask::SckLiveMaskEvidence;

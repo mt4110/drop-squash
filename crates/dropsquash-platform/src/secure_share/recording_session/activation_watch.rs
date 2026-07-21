@@ -103,12 +103,12 @@ fn result_from(rejected_pid: Option<i32>) -> Result<()> {
 }
 
 fn fail_closed(pid: i32) -> AppError {
-    let diagnostic = std::env::var("DROP_SQUASH_QA_ACTIVATION_DIAGNOSTIC")
-        .ok()
-        .as_deref()
-        .is_some_and(|value| value == "1")
-        .then(|| format!(" (pid {pid})"))
-        .unwrap_or_default();
+    let diagnostic =
+        if std::env::var("DROP_SQUASH_QA_ACTIVATION_DIAGNOSTIC").is_ok_and(|value| value == "1") {
+            format!(" (pid {pid})")
+        } else {
+            String::new()
+        };
     AppError::InvalidConfig(format!(
         "Secure Share foreground application changed during capture: third-party application became active{diagnostic}"
     ))

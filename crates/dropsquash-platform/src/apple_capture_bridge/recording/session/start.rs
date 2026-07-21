@@ -5,9 +5,10 @@ use std::sync::Arc;
 
 use dropsquash_core::CaptureRect;
 
+use super::super::attested::AttestedRecordingRequest;
 use super::super::{
     start_attested_strict_recording_with_temporal_observations,
-    start_strict_recording_with_metadata,
+    start_strict_recording_with_metadata, AttestedTemporalCallbacks,
 };
 use super::callbacks::{
     accessibility_callback, metadata_callback, recording_callback, temporal_callback,
@@ -47,18 +48,22 @@ pub fn start_attested_native_strict_recording(
 ) -> Result<NativeStrictRecordingHandle, String> {
     start(path, |path, context| unsafe {
         start_attested_strict_recording_with_temporal_observations(
-            window_id,
-            owner_pid,
-            frame,
-            width,
-            height,
-            path,
-            context,
-            recording_callback,
-            metadata_callback,
-            vision_callback,
-            accessibility_callback,
-            temporal_callback,
+            AttestedRecordingRequest {
+                window_id,
+                owner_pid,
+                frame,
+                output_width: width,
+                output_height: height,
+                path,
+                context,
+            },
+            AttestedTemporalCallbacks {
+                recording: recording_callback,
+                metadata: metadata_callback,
+                vision: vision_callback,
+                accessibility: accessibility_callback,
+                temporal: temporal_callback,
+            },
         )
     })
 }

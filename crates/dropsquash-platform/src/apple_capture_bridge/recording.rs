@@ -114,9 +114,14 @@ pub fn stop_strict_recording(session_id: u64) {
 }
 
 mod attested;
-pub use attested::start_attested_strict_recording_with_observations;
+pub use attested::{
+    start_attested_strict_recording_with_observations, AttestedObservationCallbacks,
+    AttestedRecordingRequest,
+};
 mod attested_temporal;
-pub use attested_temporal::start_attested_strict_recording_with_temporal_observations;
+pub use attested_temporal::{
+    start_attested_strict_recording_with_temporal_observations, AttestedTemporalCallbacks,
+};
 mod session;
 pub use session::{
     start_attested_native_strict_recording, start_native_strict_recording, NativeRecordingEvent,

@@ -2,9 +2,12 @@ use std::fs::{File, OpenOptions};
 use std::os::fd::AsRawFd;
 use std::path::{Path, PathBuf};
 
-use objc2_app_kit::{NSApplicationActivationOptions, NSRunningApplication};
-use objc2_foundation::ns_string;
 use tauri::Manager;
+
+#[cfg(target_os = "macos")]
+use objc2_app_kit::{NSApplicationActivationOptions, NSRunningApplication};
+#[cfg(target_os = "macos")]
+use objc2_foundation::ns_string;
 
 use super::Guard;
 
@@ -55,6 +58,7 @@ fn try_lock(file: &File) -> std::io::Result<()> {
     Err(std::io::Error::last_os_error())
 }
 
+#[cfg(target_os = "macos")]
 fn activate_existing() -> std::io::Result<()> {
     let running = NSRunningApplication::runningApplicationsWithBundleIdentifier(ns_string!(
         "io.github.mt4110.dropsquash"
@@ -65,6 +69,11 @@ fn activate_existing() -> std::io::Result<()> {
     app.activateWithOptions(NSApplicationActivationOptions::ActivateAllWindows)
         .then_some(())
         .ok_or_else(std::io::Error::last_os_error)
+}
+
+#[cfg(not(target_os = "macos"))]
+fn activate_existing() -> std::io::Result<()> {
+    Ok(())
 }
 
 fn lock_path() -> PathBuf {

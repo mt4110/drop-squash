@@ -1,35 +1,27 @@
-use dropsquash_core::{MaskPolicy, OutputSize, Result};
-use objc2::rc::Retained;
-use objc2_screen_capture_kit::SCShareableContent;
-use std::path::PathBuf;
-use std::sync::mpsc::Receiver;
+use dropsquash_core::Result;
 
 mod activation_watch;
 mod ax_event_watch;
 mod finish;
 mod lifecycle_watch;
 mod prepare;
+pub(super) mod request;
 pub(super) mod revalidation;
 mod watch;
-use super::{SckObservationProbeRequest, SckRecordingProbeReport};
+use super::SckRecordingProbeReport;
 use prepare::prepare;
+use request::RecordingSessionRequest;
 
 pub(super) fn record_until_stopped_from_content(
-    selection: super::SckWindowSelection,
-    output_path: PathBuf,
-    output_size: OutputSize,
-    policy: MaskPolicy,
-    request: SckObservationProbeRequest,
-    content: Retained<SCShareableContent>,
-    stop: Receiver<()>,
+    request: RecordingSessionRequest,
     started: impl FnOnce(std::result::Result<(), String>),
 ) -> Result<SckRecordingProbeReport> {
     let prepared = prepare(
-        &selection,
-        output_path.clone(),
-        output_size,
-        policy,
-        content,
+        &request.selection,
+        request.output_path.clone(),
+        request.output_size,
+        request.policy,
+        request.content,
     );
     let (target, frame_size, accessibility, stream) = match prepared {
         Ok(value) => value,
@@ -46,7 +38,7 @@ pub(super) fn record_until_stopped_from_content(
             return Err(error);
         }
     };
-    let attestation = match super::core_graphics_window::attest(&selection) {
+    let attestation = match super::core_graphics_window::attest(&request.selection) {
         Ok(attestation) => attestation,
         Err(error) => {
             stream.discard_recording();
@@ -54,7 +46,7 @@ pub(super) fn record_until_stopped_from_content(
             return Err(error);
         }
     };
-    let ax_watch = match ax_event_watch::AxEventWatch::start(&selection) {
+    let ax_watch = match ax_event_watch::AxEventWatch::start(&request.selection) {
         Ok(watch) => watch,
         Err(error) => {
             stream.discard_recording();
@@ -63,8 +55,8 @@ pub(super) fn record_until_stopped_from_content(
         }
     };
     let lifecycle_watch = lifecycle_watch::LifecycleWatch::start();
-    let activation_watch = activation_watch::ActivationWatch::start(selection.owner_pid);
-    if let Err(error) = stream.start_capture(request.completion_timeout) {
+    let activation_watch = activation_watch::ActivationWatch::start(request.selection.owner_pid);
+    if let Err(error) = stream.start_capture(request.probe.completion_timeout) {
         stream.discard_recording();
         let _ = activation_watch.finish();
         let _ = lifecycle_watch.finish();
@@ -73,9 +65,9 @@ pub(super) fn record_until_stopped_from_content(
         return Err(error);
     }
     started(Ok(()));
-    let watch = watch::WindowWatch::start(selection.clone(), display_epoch, attestation);
-    let stopped = stop.recv().is_ok();
-    let stop_result = stream.stop_capture(request.completion_timeout);
+    let watch = watch::WindowWatch::start(request.selection.clone(), display_epoch, attestation);
+    let stopped = request.stop.recv().is_ok();
+    let stop_result = stream.stop_capture(request.probe.completion_timeout);
     let activation_watch_result = activation_watch.finish();
     let lifecycle_watch_result = lifecycle_watch.finish();
     let watch_result = watch.finish();
@@ -108,11 +100,11 @@ pub(super) fn record_until_stopped_from_content(
     }
     let result = finish::report(
         &stream,
-        request,
-        &selection,
+        request.probe,
+        &request.selection,
         target,
         frame_size,
-        output_path,
+        request.output_path,
         accessibility,
     );
     if result.is_err() {
