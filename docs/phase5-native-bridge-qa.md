@@ -36,7 +36,10 @@ setup time.
 2. Confirm one final MP4 and one `.mask-plan.json` sidecar exist.
 3. Confirm the sidecar has `verificationPolicyVersion` set to
    `phase5-native-bridge-v1`, `captureContinuityAttested` set to `true`, and
-   `captureBackend` set to `apple_native_capture_v1`.
+   `captureBackend` set to `apple_native_capture_v1`. Confirm
+   `nativeDestroyedFrameCount`, `nativeDestroyedRegionCount`, and
+   `nativeVerifiedFrameCount` all equal the final frame count. A missing or
+   mismatched count must reject publication.
 4. Run the independent evidence verifier and inspect decoded frames.
 5. Record only the count of native AX text-element rectangles. Confirm that no
    AX value, title, role name, or recognized text appears in the sidecar or log.
