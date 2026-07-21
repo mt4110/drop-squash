@@ -49,8 +49,10 @@ They must not say that text is selectively removed automatically.
    reference types or pixel-buffer pointers across the boundary.
 3. The signed sidecar records the native writer policy and every accepted
    frame count; a missing fact rejects the export.
-4. A labeled, public-safe Strict Shield fixture produces an MP4, plan, receipt,
-   and independent verification result from a packaged macOS app.
+4. A labeled, public-safe Strict Shield fixture produces an MP4, signed
+   redacted MaskPlan receipt, and independent verification record from a
+   packaged macOS app. Create the record with
+   `scripts/collect-secure-share-phase6-evidence.sh` after the output is saved.
 5. Fault injection for a missing writer fact, observation discontinuity, or
    writer append failure produces no final MP4.
 
