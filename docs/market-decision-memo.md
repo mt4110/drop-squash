@@ -1,51 +1,38 @@
 # Market Decision Memo
 
-## Summary
+## Current Decision
 
-- Date: 2026-07-18
-- Evaluated variant: Work Screen Recordings
-- Recommendation: stay focused on Mac screen recordings
+- Date: 2026-07-22
+- Status: no sales decision yet
+- Recommendation: finish the bounded macOS Secure Share evidence path before
+  choosing a commercial lead lane
 
-## Evidence
+## Product Truth
 
-- Repeat usage: as of Saturday, July 18, 2026, not enough paid beta evidence yet
-- Three-file completion: instrumentation and manual tracking are prepared, but
-  cohort results are not yet recorded
-- Willingness to pay: hypothesis only; no interview batch summarized yet
-- Actual paid beta purchases: not enough evidence yet
+- C2C Pro: local Mac recording conversion, original safety, and no default
+  upload are the only current product claims.
+- B2B Secure Share: native selected-window capture, full-frame Strict Shield,
+  redacted observations, and independent verification are research evidence.
+- Selective privacy masking, Windows Secure Share, notarized distribution, and
+  paid checkout are not currently offered.
 
-## What Users Should Hire DropSquash For
+## Evidence Status
 
-- Primary job: make Mac screen recordings smaller before sending or storing them
-- Secondary job: keep the process local and low-friction
-- Most trusted product claim: local-only conversion with original safety
-- Biggest hesitation: reliability and trust before repeated paid use
-
-## Decision
-
-1. Keep the next release focused on the paid beta core:
-   single-file Mac screen-recording conversion, trial, license, and signed
-   release proof.
-2. Keep broad formats, editing, advertising SDKs, YouTube downloading, and
-   media-library features explicitly out of scope.
-3. Do not expand until the validation gates in
-   [docs/market-validation.md](/Users/masakitakemura/_workspace/drop-squash/docs/market-validation.md)
-   are measured with real beta usage.
-
-## Reasoning
-
-- The clearest current product story is still `Work Screen Recordings`.
-- The local-first promise is already differentiated enough to test.
-- The remaining technical risk is in release trust, not adjacent workflow
-  breadth.
-- Expanding now would confuse whether users are paying for smaller Mac screen
-  recordings or for a broader, still-unproven media tool.
+- CI: macOS, Windows, Ubuntu, and Nix checks passed for the current branch.
+- macOS Strict Shield: native per-frame destruction evidence and a signed
+  redacted plan are implemented; latest packaged-fixture evidence is pending.
+- Selective output: unavailable. A black-only recording is not a useful
+  customer deliverable and is not represented as one.
+- Demand: no private cohort, willingness-to-pay study, or paid purchase result
+  is yet sufficient for a commercial decision.
 
 ## Next Move
 
-- Finish the paid beta blockers in
-  [docs/paid-beta-readiness.md](/Users/masakitakemura/_workspace/drop-squash/docs/paid-beta-readiness.md)
-- Run the 30-second demo, feedback form, and interview loop against real beta
-  users
-- Revisit this memo after enough cohort evidence exists to judge the four
-  validation gates
+1. Finish Phase 6 packaged macOS fixtures and fail-closed evidence.
+2. Run Phase 7 only on a published fixture matrix; promote selective output
+   only when decoded residual checks pass.
+3. Run separate C2C and B2B private validation cohorts in Phase 8.
+4. Use the finite Phase 10 package to choose `Go`, `Iterate`, or `Stop`.
+
+The decision conditions and evidence ledger are in
+[docs/phase10-decision-package.md](/Users/masakitakemura/_workspace/drop-squash/docs/phase10-decision-package.md).
