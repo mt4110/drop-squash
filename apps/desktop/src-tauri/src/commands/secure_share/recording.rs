@@ -92,7 +92,11 @@ fn finalization_error(stop_sent: bool, error: std::sync::mpsc::RecvTimeoutError)
     } else {
         "Secure Share recording ended before stop"
     };
-    format!("{phase}: {error}")
+    let reason = match error {
+        std::sync::mpsc::RecvTimeoutError::Timeout => "timed out",
+        std::sync::mpsc::RecvTimeoutError::Disconnected => "disconnected",
+    };
+    format!("{phase}: {reason}")
 }
 
 fn discard(state: &SecureShareRecordingState, paths: &RecordingPaths) {
