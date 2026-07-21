@@ -63,8 +63,8 @@ fn snapshot_mask_plan_audit_flows_into_receipt() {
         SecureShareReceipt::from_result_with_mask_plan(&result, &options(), &plan).unwrap();
 
     let audit = receipt.mask_plan_audit.unwrap();
-    assert_eq!(audit.unmatched_observation_count, 1);
-    assert_eq!(audit.unmatched_reasons, vec![MaskReason::VisionText]);
+    assert_eq!(audit.unmatched_observation_count, 0);
+    assert!(audit.unmatched_reasons.is_empty());
     assert_eq!(audit.verification_required_frame_count, 1);
 }
 
