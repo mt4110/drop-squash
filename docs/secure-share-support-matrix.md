@@ -1,18 +1,37 @@
-# Secure Share Support Matrix
+# Secure Share Research Coverage Matrix
 
-This matrix defines the first supported scope for high-assurance Secure Share.
+This matrix defines the fixture and research scope for high-assurance Secure
+Share. It is not a customer support matrix and does not authorize a privacy or
+enterprise product claim.
 
 Nothing outside this matrix may be used in public claims until it has matching
 implementation and QA evidence.
 
+## Phase 6 Product Truth
+
+The current native macOS writer is `Strict Shield`: every accepted frame is
+written as a new all-black final-size buffer before encoding. The saved MP4 is
+independently decoded and checked, and a signed redacted MaskPlan sidecar is
+verified before publication.
+
+This proves a narrow destructive-output baseline, not a useful selectively
+shareable recording. The current packaged fixture rerun and its labeled Phase
+6 evidence record remain required before this baseline can leave research.
+
+| Capability | Current status | Customer claim |
+| --- | --- | --- |
+| Selected-window native capture | Research implementation | None |
+| Strict Shield all-frame destruction | Bounded research baseline | None |
+| Independent final-output verification | Implemented research gate | None |
+| Selective text/shape masking | Not supported | Forbidden |
+| Windows Secure Share | Not implemented | Forbidden |
+| Notarized distribution | Not evidenced | Forbidden |
+
 ## Current Native Bridge Boundary
 
-The current `phase5-native-bridge-v1` path has one Developer ID-signed
-packaged-app baseline against the synthetic native accessibility fixture. That
-run produced 144 accepted frames, full-frame Strict Shield destruction,
-independent decoded-output verification, and signed-evidence verification.
-This supports only the narrow claim that accepted selected-window pixels in
-that fixture were destroyed before publication.
+The historical `phase5-native-bridge-v1` signed-app fixture result is retained
+as engineering context. It is not Phase 6 release evidence: the exact current
+build and fixture must be rerun, labeled, and independently verified.
 
 Earlier `phase5-alpha-v1` fixture records demonstrate an older route and must
 not be mixed into the native bridge evidence. Historical references below to
@@ -52,25 +71,10 @@ a claim that every macOS 14 configuration has completed QA.
 | Canvas/custom rendering | Best effort first gate | Strict Reveal destroys unknown regions |
 | Video inside recording | Out of scope first gate | Treat as unknown unless explicitly supported |
 
-The QA-only `SmartMask` path is limited to the synthetic Japanese/English
-fixture. It verifies declared black regions after encoding but has no
-safe-preservation proof for the remaining pixels, so it is not a supported
-capture scope or product feature.
-
-The experimental recorder also has a decoded-frame local-Vision residual gate:
-detected text outside the resolved destructive regions rejects the partial
-output. This is a leakage detector, not an assurance claim, because Vision can
-itself miss text. A 2026-07-21 signed-package native-fixture run decoded 20
-frames, observed 220 text candidates, and found zero outside the destructive
-regions. That validates the rejection path only, not selective-sharing safety.
-
-On 2026-07-21, a Developer ID-signed packaged-app fixture run independently
-decoded 11 selective-mask frames and verified 154 declared black regions. Its
-declared region union was 227,435ppm (22.7435%) before live encoder guard
-expansion, and it retained visible synthetic background rather than producing a
-full-black video. This validates the experimental pixel-write path only: broad
-AX text containers still produce broad black bands, and no real recording may
-rely on the unmasked pixels.
+The QA-only `SmartMask` and residual-Vision paths remain historical experiments.
+They are not a supported capture scope, product feature, or proof that any
+unmasked pixel is safe to share. Phase 7 may revisit them only after the Phase
+6 Strict Shield evidence record is complete.
 
 ## Capture Scope
 
