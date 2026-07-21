@@ -1,6 +1,7 @@
 name: desktop-ci
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - "apps/desktop/**"
