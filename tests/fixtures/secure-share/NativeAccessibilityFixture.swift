@@ -65,6 +65,10 @@ final class FixtureDelegate: NSObject, NSApplicationDelegate {
     stack.alignment = .leading
     stack.spacing = 18
     stack.edgeInsets = NSEdgeInsets(top: 32, left: 36, bottom: 32, right: 36)
+    let slate = NSTextField(labelWithString: "DropSquash Secure Share Test / テスト専用フィクスチャ")
+    slate.font = .systemFont(ofSize: 15, weight: .semibold)
+    slate.textColor = .secondaryLabelColor
+    stack.addArrangedSubview(slate)
     [
       "支払い失敗の再現調査 / Billing failure repro",
       "顧客名: 山田 花子 / Customer: Hanako Yamada",

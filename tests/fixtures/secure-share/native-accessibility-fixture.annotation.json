@@ -1,6 +1,7 @@
 {
   "scenario_id": "ja-en-native-accessibility-001",
   "fixture": "NativeAccessibilityFixture.swift",
+  "visible_test_slate": "DropSquash Secure Share Test / テスト専用フィクスチャ",
   "languages": ["ja", "en"],
   "capture_scope": "single_native_window",
   "policy": "strict_reveal",
