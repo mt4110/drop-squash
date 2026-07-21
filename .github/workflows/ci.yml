@@ -43,14 +43,27 @@ jobs:
       - name: release readiness
         if: ${{ false }}
         run: cargo run -p xtask -- release-check
-      - name: clippy
+      - name: clippy macOS
+        if: runner.os == 'macOS'
         run: cargo clippy --workspace --exclude dropsquash-desktop --all-targets -- -D warnings
-      - name: test
-        if: runner.os != 'Windows'
+      - name: test macOS
+        if: runner.os == 'macOS'
         run: cargo test --workspace --exclude dropsquash-desktop
-      - name: test windows
-        if: runner.os == 'Windows'
-        run: cargo test --workspace --exclude dropsquash-desktop --exclude xtask
+      - name: clippy portable crates
+        if: runner.os != 'macOS'
+        run: >-
+          cargo clippy
+          -p dropsquash-core -p dropsquash-encoder -p dropsquash-fileguard
+          -p dropsquash-history -p dropsquash-license -p dropsquash-media
+          -p dropsquash-postprocess -p dropsquash-profiles -p dropsquash-queue
+          --all-targets -- -D warnings
+      - name: test portable crates
+        if: runner.os != 'macOS'
+        run: >-
+          cargo test
+          -p dropsquash-core -p dropsquash-encoder -p dropsquash-fileguard
+          -p dropsquash-history -p dropsquash-license -p dropsquash-media
+          -p dropsquash-postprocess -p dropsquash-profiles -p dropsquash-queue
 
   nix:
     runs-on: ubuntu-latest
