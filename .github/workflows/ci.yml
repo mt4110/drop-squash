@@ -40,6 +40,9 @@ jobs:
       - name: website
         if: runner.os == 'Linux'
         run: cargo run -p xtask -- website-check
+      - name: Secure Share evidence script syntax
+        if: runner.os == 'Linux'
+        run: sh -n scripts/collect-secure-share-phase6-evidence.sh
       - name: release readiness
         if: ${{ false }}
         run: cargo run -p xtask -- release-check
