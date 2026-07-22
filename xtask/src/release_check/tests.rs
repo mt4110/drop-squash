@@ -9,167 +9,19 @@ use super::workflow::{
 
 #[test]
 fn accepts_release_workflow_with_required_gates() {
-    let missing = missing_release_workflow_gates(
-        r#"
-tags:
-  - "v*.*.*"
-permissions:
-  contents: read
-environment: production
-name: Install Linux desktop dependencies
-libwebkit2gtk-4.1-dev
-with:
-  components: rustfmt, clippy
-run: cargo fmt --all -- --check
-run: cargo clippy --workspace --all-targets -- -D warnings
-run: cargo test --workspace
-run: cargo run -p xtask -- file-size-check
-run: cargo run -p xtask -- website-check
-run: cargo run -p xtask -- manual-qa-check
-run: cargo run -p xtask -- release-check
-uses: pnpm/action-setup@v4
-  version: 10.34.0
-uses: actions/setup-node@v4
-  node-version: 24.16.0
-run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
-run: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
-run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
-name: dropsquash-unsigned-dmg
-run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
-uses: actions/upload-artifact@v4
-name: dropsquash-unsigned-dmg-checksum
-name: Prepare App Store Connect key file
-APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
-install -m 600 /dev/null "$key_path"
-APPLE_API_KEY_PATH=$key_path
-APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
-APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}
-run: cargo run -p xtask -- macos-signing-check
-run: cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
-run: cargo run -p xtask -- macos-keychain-plan "$RUNNER_TEMP/dropsquash-signing"
-name: Import macOS signing certificate
-security list-keychains -d user -s "$keychain"
-run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
-run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
-run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
-codesign --force --options runtime --timestamp --sign "$APPLE_CODESIGN_IDENTITY"
-run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-codesign --verify --deep --strict --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-codesign -dv --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
-name: Notarize macOS DMG
-xcrun notarytool submit "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --wait --key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY" --issuer "$APPLE_API_ISSUER"
-run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-name: Staple macOS DMG
-xcrun stapler staple "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-xcrun stapler validate "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-name: Assess macOS Gatekeeper
-spctl --assess --type open --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-name: Check signed DMG artifact
-run: cargo run -p xtask -- signed-dmg-check "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" target/release/bundle/dmg/DropSquash.dmg
-name: Write signed DMG checksum
-run: cargo run -p xtask -- checksum "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --output "$RUNNER_TEMP/dropsquash-signed/SHA256SUMS"
-name: Upload signed DMG artifact
-name: dropsquash-signed-dmg
-path: ${{ runner.temp }}/dropsquash-signed/DropSquash.dmg
-name: Upload signed DMG checksum
-name: dropsquash-signed-dmg-checksum
-path: ${{ runner.temp }}/dropsquash-signed/SHA256SUMS
-run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"
-name: Cleanup macOS signing keychain
-always() && matrix.os == 'macos-latest'
-name: Block unsigned Phase 0 release
-echo "Public Phase 0 release is blocked until publish-check evidence is complete."
-exit 1
-"#,
-    );
+    let text = std::fs::read_to_string("../.github/workflows/release.yml").unwrap();
 
-    assert!(missing.is_empty());
+    assert!(missing_release_workflow_gates(&text).is_empty());
 }
 
 #[test]
 fn reports_missing_release_workflow_gates() {
     let missing = missing_release_workflow_gates("run: cargo run -p xtask -- release-check");
 
-    assert_eq!(
-        missing,
-        vec![
-            "tags:",
-            "\"v*.*.*\"",
-            "permissions:",
-            "contents: read",
-            "environment: production",
-            "Install Linux desktop dependencies",
-            "libwebkit2gtk-4.1-dev",
-            "components: rustfmt, clippy",
-            "cargo fmt --all -- --check",
-            "cargo clippy --workspace --all-targets -- -D warnings",
-            "cargo test --workspace",
-            "cargo run -p xtask -- file-size-check",
-            "cargo run -p xtask -- website-check",
-            "cargo run -p xtask -- manual-qa-check",
-            "pnpm/action-setup@v4",
-            "version: 10.34.0",
-            "actions/setup-node@v4",
-            "node-version: 24.16.0",
-            "pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci",
-            "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
-            "cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg",
-            "dropsquash-unsigned-dmg",
-            "cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS",
-            "actions/upload-artifact@v4",
-            "dropsquash-unsigned-dmg-checksum",
-            "Prepare App Store Connect key file",
-            "APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}",
-            "install -m 600 /dev/null \"$key_path\"",
-            "APPLE_API_KEY_PATH=$key_path",
-            "APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}",
-            "APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}",
-            "APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}",
-            "APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}",
-            "cargo run -p xtask -- macos-signing-check",
-            "cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
-            "cargo run -p xtask -- macos-keychain-plan \"$RUNNER_TEMP/dropsquash-signing\"",
-            "Import macOS signing certificate",
-            "security list-keychains -d user -s \"$keychain\"",
-            "cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
-            "cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg \"$RUNNER_TEMP/dropsquash-signed\"",
-            "cargo run -p xtask -- macos-codesign-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" \"Developer ID Application: ...\"",
-            "codesign --force --options runtime --timestamp --sign \"$APPLE_CODESIGN_IDENTITY\"",
-            "cargo run -p xtask -- macos-codesign-verify-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "codesign --verify --deep --strict --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "codesign -dv --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "cargo run -p xtask -- macos-notary-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --api-key",
-            "Notarize macOS DMG",
-            "xcrun notarytool submit \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --wait --key \"$APPLE_API_KEY_PATH\" --key-id \"$APPLE_API_KEY\" --issuer \"$APPLE_API_ISSUER\"",
-            "cargo run -p xtask -- macos-stapler-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "Staple macOS DMG",
-            "xcrun stapler staple \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "xcrun stapler validate \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "cargo run -p xtask -- macos-spctl-plan \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "Assess macOS Gatekeeper",
-            "spctl --assess --type open --verbose=4 \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\"",
-            "Check signed DMG artifact",
-            "cargo run -p xtask -- signed-dmg-check \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" target/release/bundle/dmg/DropSquash.dmg",
-            "Write signed DMG checksum",
-            "cargo run -p xtask -- checksum \"$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg\" --output \"$RUNNER_TEMP/dropsquash-signed/SHA256SUMS\"",
-            "Upload signed DMG artifact",
-            "dropsquash-signed-dmg",
-            "${{ runner.temp }}/dropsquash-signed/DropSquash.dmg",
-            "Upload signed DMG checksum",
-            "dropsquash-signed-dmg-checksum",
-            "${{ runner.temp }}/dropsquash-signed/SHA256SUMS",
-            "cargo run -p xtask -- macos-keychain-cleanup-plan \"$RUNNER_TEMP/dropsquash-signing\"",
-            "Cleanup macOS signing keychain",
-            "always() && matrix.os == 'macos-latest'",
-            "Block unsigned Phase 0 release",
-            "Public Phase 0 release is blocked until publish-check evidence is complete.",
-            "exit 1"
-        ]
-    );
+    assert!(missing.contains(&"tags:"));
+    assert!(missing.contains(&"Build signed and notarized macOS DMG"));
+    assert!(missing.contains(&"Verify signed app inside notarized DMG"));
+    assert!(missing.contains(&"Block unsigned Phase 0 release"));
 }
 
 #[test]

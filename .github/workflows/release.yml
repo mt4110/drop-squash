@@ -65,30 +65,6 @@ jobs:
       - name: Install desktop web package
         if: matrix.os == 'macos-latest'
         run: pnpm --dir apps/desktop/web install --frozen-lockfile
-      - name: Build unsigned macOS DMG
-        if: matrix.os == 'macos-latest'
-        run: pnpm --dir apps/desktop tauri build --bundles app,dmg --no-sign --ci
-      - name: Normalize unsigned DMG name
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
-      - name: Check unsigned DMG artifact
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
-      - name: Upload unsigned DMG artifact
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: dropsquash-unsigned-dmg
-          path: target/release/bundle/dmg/DropSquash.dmg
-      - name: Write unsigned DMG checksum
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
-      - name: Upload unsigned DMG checksum
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: dropsquash-unsigned-dmg-checksum
-          path: SHA256SUMS
       - name: Prepare App Store Connect key file
         if: matrix.os == 'macos-latest'
         shell: bash
@@ -115,9 +91,6 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: cargo run -p xtask -- macos-signing-check
-      - name: Plan macOS signing commands
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- macos-signing-plan target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
       - name: Plan macOS temporary keychain commands
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-keychain-plan "$RUNNER_TEMP/dropsquash-signing"
@@ -141,66 +114,48 @@ jobs:
           security list-keychains -d user -s "$keychain"
           security import "$cert" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
           security set-key-partition-list -S apple-tool:,apple: -s -k "$APPLE_KEYCHAIN_PASSWORD" "$keychain"
-      - name: Prepare signed DMG target
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- signed-dmg-prepare target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
-      - name: Copy DMG to signing target
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- signed-dmg-copy target/release/bundle/dmg/DropSquash.dmg "$RUNNER_TEMP/dropsquash-signed"
-      - name: Plan macOS codesign command
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- macos-codesign-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" "Developer ID Application: ..."
-      - name: Sign macOS DMG
+      - name: Build signed and notarized macOS DMG
         if: matrix.os == 'macos-latest'
         env:
-          APPLE_CODESIGN_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}
-        run: codesign --force --options runtime --timestamp --sign "$APPLE_CODESIGN_IDENTITY" "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-      - name: Plan macOS codesign verification commands
+          APPLE_SIGNING_IDENTITY: ${{ vars.APPLE_CODESIGN_IDENTITY }}
+        run: pnpm --dir apps/desktop tauri build --bundles app,dmg --ci
+      - name: Normalize signed DMG name
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- macos-codesign-verify-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-      - name: Verify macOS codesign
+        run: cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
+      - name: Verify signed app inside notarized DMG
         if: matrix.os == 'macos-latest'
+        shell: bash
         run: |
-          codesign --verify --deep --strict --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-          codesign -dv --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-      - name: Plan macOS notarization command
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- macos-notary-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --api-key
-      - name: Notarize macOS DMG
-        if: matrix.os == 'macos-latest'
-        run: xcrun notarytool submit "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --wait --key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY" --issuer "$APPLE_API_ISSUER"
-      - name: Plan macOS stapler commands
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- macos-stapler-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-      - name: Staple macOS DMG
-        if: matrix.os == 'macos-latest'
-        run: |
-          xcrun stapler staple "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-          xcrun stapler validate "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-      - name: Plan macOS Gatekeeper assessment
-        if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- macos-spctl-plan "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
-      - name: Assess macOS Gatekeeper
-        if: matrix.os == 'macos-latest'
-        run: spctl --assess --type open --verbose=4 "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg"
+          set -euo pipefail
+          dmg="target/release/bundle/dmg/DropSquash.dmg"
+          mount="$RUNNER_TEMP/dropsquash-mounted"
+          mkdir -p "$mount"
+          hdiutil attach "$dmg" -nobrowse -readonly -mountpoint "$mount"
+          trap 'hdiutil detach "$mount" -force || true' EXIT
+          app="$mount/DropSquash.app"
+          test -d "$app"
+          codesign --verify --deep --strict --verbose=4 "$app"
+          codesign -dv --verbose=4 "$app"
+          xcrun stapler validate "$dmg"
+          spctl --assess --type exec --verbose=4 "$app"
       - name: Check signed DMG artifact
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- signed-dmg-check "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" target/release/bundle/dmg/DropSquash.dmg
+        run: cargo run -p xtask -- artifact-check target/release/bundle/dmg/DropSquash.dmg
       - name: Write signed DMG checksum
         if: matrix.os == 'macos-latest'
-        run: cargo run -p xtask -- checksum "$RUNNER_TEMP/dropsquash-signed/DropSquash.dmg" --output "$RUNNER_TEMP/dropsquash-signed/SHA256SUMS"
+        run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
       - name: Upload signed DMG artifact
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: dropsquash-signed-dmg
-          path: ${{ runner.temp }}/dropsquash-signed/DropSquash.dmg
+          path: target/release/bundle/dmg/DropSquash.dmg
       - name: Upload signed DMG checksum
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: dropsquash-signed-dmg-checksum
-          path: ${{ runner.temp }}/dropsquash-signed/SHA256SUMS
+          path: SHA256SUMS
       - name: Plan macOS temporary keychain cleanup
         if: matrix.os == 'macos-latest'
         run: cargo run -p xtask -- macos-keychain-cleanup-plan "$RUNNER_TEMP/dropsquash-signing"

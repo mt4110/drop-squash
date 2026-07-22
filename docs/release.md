@@ -24,9 +24,11 @@ checkout or a public paid beta.
 The desktop bundle configuration produces both the macOS `.app` and `.dmg`
 artifacts. Use unsigned local builds only for QA; public release artifacts must
 be signed, notarized, stapled, checked, and checksummed before publication.
-The tag release workflow builds an unsigned macOS DMG, checks it, uploads the
-unsigned DMG as a QA artifact, writes and uploads `SHA256SUMS`, then blocks
-publication until signed packaging exists.
+The tag release workflow imports the Developer ID certificate before building.
+It passes `APPLE_SIGNING_IDENTITY` to Tauri, so Tauri signs the `.app`,
+notarizes the DMG, and staples the ticket during packaging. The workflow mounts
+the resulting DMG and verifies the contained `.app` with `codesign` and
+`spctl`; signing only the outer DMG is not an acceptable substitute.
 The macOS job maps signing and notarization secrets into `macos-signing-check`,
 writes the App Store Connect `.p8` key only into the runner temporary directory,
 and fails deterministically before signed packaging is enabled when CI
@@ -36,15 +38,13 @@ For local macOS proof, that preflight currently requires either
 `APPLE_CERTIFICATE_PASSWORD`, plus either
 `APPLE_API_KEY` / `APPLE_API_ISSUER` / `APPLE_API_KEY_PATH` or
 `APPLE_ID` / `APPLE_PASSWORD` / `APPLE_TEAM_ID` for notarization.
-It now runs `Import macOS signing certificate`, `Sign macOS DMG`,
-`Verify macOS codesign`, `Notarize macOS DMG`, `Staple macOS DMG`,
-`Assess macOS Gatekeeper`, `Check signed DMG artifact`,
-`Write signed DMG checksum`, `Upload signed DMG artifact`,
-`Upload signed DMG checksum`, and `Cleanup macOS signing keychain` against the
-isolated signing target with `APPLE_CODESIGN_IDENTITY`. The signed uploads are
-private CI artifacts for review; public GitHub Release publication remains
-blocked until release notes, manual QA evidence, and distribution evidence are
-complete.
+It runs `Import macOS signing certificate`, `Build signed and notarized macOS
+DMG`, `Verify signed app inside notarized DMG`, `Check signed DMG artifact`,
+`Write signed DMG checksum`, `Upload signed DMG artifact`, `Upload signed DMG
+checksum`, and `Cleanup macOS signing keychain` with
+`APPLE_CODESIGN_IDENTITY`. The signed uploads are private CI artifacts for
+review; public GitHub Release publication remains blocked until release notes,
+manual QA evidence, and distribution evidence are complete.
 
 Build public QA and release artifacts from a clean git worktree. If Tauri or
 Git reports a dirty tree, either commit or intentionally remove the unrelated
