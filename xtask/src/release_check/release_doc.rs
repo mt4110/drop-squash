@@ -24,7 +24,7 @@ const REQUIRED_SECTIONS: &[(&str, &[&str])] = &[
             "cargo run -p xtask -- normalize-dmg target/release/bundle/dmg",
             "cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS",
             "cargo run -p dropsquash -- license status",
-            "unsigned DMG as a QA artifact",
+            "Verify signed app inside notarized DMG",
         ],
     ),
     (

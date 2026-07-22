@@ -23,7 +23,7 @@ cargo run -p xtask -- benchmark-csv-check
 cargo run -p xtask -- normalize-dmg target/release/bundle/dmg
 cargo run -p xtask -- checksum path/to/DropSquash.dmg --output SHA256SUMS
 cargo run -p dropsquash -- license status
-unsigned DMG as a QA artifact
+Verify signed app inside notarized DMG
 No signing secrets belong in the repository
 `ffmpeg`, `ffprobe`, shell
 do not upload media files
