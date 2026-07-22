@@ -43,6 +43,27 @@ and [CreateFreeThreaded](https://learn.microsoft.com/en-us/uwp/api/windows.graph
 | W6 Evidence | Shared Rust schema binds output hash, plan, bridge version, and copied destruction facts | Signature or hash mismatch deletes the final output |
 | W7 Packaging | Exact signed build is tested on a clean Windows account or machine | No download or pilot offer before this evidence |
 
+## Mandatory Rejection Conditions
+
+The bridge must reject rather than guess when any of these conditions occurs:
+
+- protected-content, secure-desktop, lock-screen, session switch, remote-session,
+  or capture-permission transition;
+- an HWND becomes minimized, cloaked, replaced, reparented, or moves to a
+  different desktop or monitor configuration;
+- a Direct3D device reset, texture sharing/fence failure, frame-pool recreation,
+  format change, HDR state change, or unsupported color-space transition;
+- a missing UI Automation/OCR observation required by the active policy, or an
+  observation that cannot be reduced to copied redacted geometry before it
+  reaches Rust; and
+- an unsigned native bridge DLL, an unrecorded bridge version, or a mismatch
+  between the capture bridge and the evidence receipt.
+
+The first Windows experiment has no permissive fallback. If a condition makes
+the source or final-size texture ambiguous, it emits no final MP4. A future
+Strict Shield fallback is allowed only after the exact state transition has a
+fixture result and independently decoded destructive output evidence.
+
 ## First Supported Matrix
 
 The first experiment is intentionally narrow:
