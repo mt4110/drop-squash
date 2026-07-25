@@ -146,13 +146,13 @@ jobs:
         run: cargo run -p xtask -- checksum target/release/bundle/dmg/DropSquash.dmg --output SHA256SUMS
       - name: Upload signed DMG artifact
         if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dropsquash-signed-dmg
           path: target/release/bundle/dmg/DropSquash.dmg
       - name: Upload signed DMG checksum
         if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dropsquash-signed-dmg-checksum
           path: SHA256SUMS
